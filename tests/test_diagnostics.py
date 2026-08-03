@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 from ember.config import EmberConfig
+from ember.core import binance_history
 from ember.research.synthetic import mixed_regime_synthetic_data, trending_synthetic_data
 from ember.simulation.backtester import Backtester
-from scripts import fetch_binance
 
 
 def test_backtester_rejection_accounting_is_complete() -> None:
@@ -69,8 +69,8 @@ def test_paginated_fetch_history_assembles_multiple_pages(monkeypatch: Any) -> N
             for index in indices
         ]
 
-    monkeypatch.setattr(fetch_binance, "_request_klines", fake_request)
-    frame = fetch_binance.fetch_history("DOGEUSDT", "15m", 15)
+    monkeypatch.setattr(binance_history, "request_klines", fake_request)
+    frame = binance_history.fetch_history("DOGEUSDT", "15m", 15)
     assert frame.height == 15
     assert len(calls) == 2
     assert frame.get_column("time").is_sorted()
