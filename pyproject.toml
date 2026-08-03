@@ -30,7 +30,7 @@ ember-paper-server = "ember.cli:run_paper_server"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ember*"]
+include = ["ember*", "scripts*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
