@@ -12,24 +12,26 @@
 
 # Текущий статус
 
-Актуально на 2026-08-03 после HTF bias experiment PR #3.
+Актуально на 2026-08-03 после six-symbol 15000-bar validation PR #4.
 
 | Проверка | Статус | Фактический результат |
 |---|---|---|
-| Установка и CI | PASS | Python 3.10/3.11/3.12, Ruff и тесты проходят |
-| Unit tests | PASS | 17 тестов прошли в validation workflow |
+| Установка и CI | PASS на последнем завершённом run | Python 3.10/3.11/3.12, Ruff и тесты ранее прошли; latest PR checks ожидаются |
+| Unit tests | PASS | 18 тестов прошли в complete core-validation run |
 | Zero look-ahead gate | PASS | Leakage tests проходят |
 | Profit Factor | PASS | PF не ограничивается значением `99.0`; без убытков возвращается `inf` |
-| Binance loader, 1000 bars | PASS | 6 core symbols загружены |
-| Paginated Binance loader | PASS | DOGEUSDT: 5000 свечей 15m |
+| Binance loader, 15000 bars | PASS | 6 core symbols, по 15000 свечей 15m |
 | Reject diagnostics | PASS | Основные gates имеют отдельные счётчики |
-| Baseline DOGE 5000 | PASS с ограничением | 4 сделки, +2.8585%, PF 3.0409, DD 1.4006% |
-| EMA threshold 0.5% | FAIL | 9 сделок, -1.5454%, PF 0.7951 |
-| EMA50 | FAIL | 8 сделок, -0.0461%, PF 1.0061 |
-| Structure bias | PASS с ограничением | 6 сделок, +1.3879%, PF 1.5001, но статистики мало |
-| Mixed synthetic strategy sanity | FAIL | 3 сделки, все убыточные, kill switch сработал |
-| WFO | FAIL | Нет достаточной истории и числа сделок |
-| Paper/live gate | BLOCKED | Нет WFO PASS, 100 paper trades и 30 дней paper mode |
+| Baseline, 6 symbols | PASS | 6/6 positive, 6/6 PF > 1.5, 74 trades, avg return +8.0522% |
+| Structure bias, 6 symbols | FAIL | 2/6 positive, 0/6 PF > 1.5, avg return -0.8349% |
+| High-vol block, 6 symbols | PASS | 6/6 positive, 6/6 PF > 1.5, avg return +8.7512%, worst DD 2.4397% |
+| Opposite-liquidity, 6 symbols | PASS с ограничением | 6/6 positive, 5/6 PF > 1.5, avg return +11.5977% |
+| Baseline WFO | PASS with warning | avg PF 2.4933, stability 75%, one zero-trade fold |
+| High-vol-block WFO | PASS with warning | avg PF 2.7027, stability 75%, one zero-trade fold |
+| Opposite-liquidity clean WFO | PENDING | Первый WFO имел universe-selection leakage |
+| Paper/live gate | BLOCKED | Нет 100 paper trades и 30 дней paper observation |
+
+Полная таблица текущего этапа: [`CORE_VALIDATION_15000.md`](CORE_VALIDATION_15000.md).
 
 ---
 
@@ -298,72 +300,99 @@ python scripts/run_diagnostics.py \
 
 ---
 
-# Проверка двух замечаний к спецификации
+## 2026-08-03 15:04 UTC — Six-symbol 15000-bar validation
 
-## `blocked_volatility_regimes`
+**PR:** `#4 Run 15000-bar validation across all core symbols`
 
-В предоставленном архитектурном PDF указано, что candidate должен быть отклонён, если его regime входит в `blocked_volatility_regimes`, но конкретный default в блоке `EmberConfig` не задан.
+**Complete run:** `30823347050`
 
-Текущий runtime regime называется `high_vol`. Значение `("high",)` не сработает, потому что `ContextBuilder` преобразует feature value `high` в context value `high_vol`.
+**Artifact:** `8860720831`
 
-Текущий default `()` не подтверждён и не опровергнут ТЗ; это явное исследовательское решение, которое нужно проверять отдельным profile. Без отдельного теста default не изменён.
+**Команда:**
 
-## `tp_mode`
+```bash
+python scripts/run_core_validation.py \
+  --symbols INJUSDT,TONUSDT,DOGEUSDT,ARBUSDT,NEARUSDT,OPUSDT \
+  --profiles baseline,structure-bias,high-vol-block,opposite-liquidity \
+  --interval 15m \
+  --bars 15000 \
+  --data-dir data/core_validation \
+  --out-dir results/core_validation
+```
 
-ТЗ описывает поведение при `tp_mode == "opposite_htf_liquidity"`, но не задаёт это значение как default в блоке `EmberConfig`. Поэтому текущий `fixed_rr` не является доказанным нарушением ТЗ.
+Получено ровно `15000` свечей для каждого из шести symbols, всего `90000` свечей. Tests перед запуском:
 
-Менять TP mode вместе с bias нельзя: это смешает две причины изменения результата. Нужен отдельный A/B test после bias study.
+```text
+18 passed, 1 warning
+```
+
+Workflow получил технический `failure` из-за отсутствующего каталога для `tee`, но Python-run завершился, сводки и artifact были сохранены. Workflow исправлен.
+
+### Aggregate results
+
+| Profile | Positive symbols | PF > 1.5 | Trades | Average return | Worst DD |
+|---|---:|---:|---:|---:|---:|
+| baseline | 6/6 | 6/6 | 74 | +8.0522% | 3.6017% |
+| structure-bias | 2/6 | 0/6 | 39 | -0.8349% | 4.0059% |
+| high-vol-block | 6/6 | 6/6 | 73 | +8.7512% | 2.4397% |
+| opposite-liquidity | 6/6 | 5/6 | 68 | +11.5977% | 3.7949% |
+
+### Решения
+
+- `structure-bias` отклонён как baseline replacement: снижение neutral не сохранило edge.
+- EMA20 `+/-2%` baseline подтвердился на 6/6 symbols и остаётся control profile.
+- `high-vol-block` является сильнейшим robustness candidate: выше return/PF и ниже worst DD без существенного снижения частоты.
+- `opposite-liquidity` дал максимальный средний return, но ARBUSDT PF равен `1.3813`; default не изменён.
+
+### WFO
+
+Baseline и high-vol-block были проверены на неизменном universe из всех шести symbols:
+
+```text
+baseline: PASS, avg return 7.5725%, avg PF 2.4933, worst DD 2.9775%, stability 75%
+high-vol-block: PASS, avg return 7.9156%, avg PF 2.7027, worst DD 2.9775%, stability 75%
+```
+
+Оба результата содержат один fold без сделок. Формальный статус — `PASS`, исследовательский статус — `PASS with warning`.
+
+Первый opposite-liquidity WFO исключил ARBUSDT после просмотра full-period metrics. Этот результат считается contaminated и не используется для принятия решения. Добавлен fixed-universe runner, который не меняет symbol universe на основании будущих/full-sample результатов.
+
+**Статус:** multi-symbol backtest `PASS`; baseline/high-vol WFO `PASS with warning`; opposite-liquidity clean WFO `PENDING`; paper/live `BLOCKED`.
+
+Полные per-symbol результаты: [`CORE_VALIDATION_15000.md`](CORE_VALIDATION_15000.md).
 
 ---
 
 # Следующие обязательные шаги
 
-1. Скачать 15000 свечей 15m для всех 6 core symbols.
-2. Сравнить минимум `baseline` и `structure-bias` на каждом symbol.
-3. Сохранить таблицу Trades, Return, PF, DD, Win Rate, neutral ratio и candidates.
-4. Не принимать решение по bias, пока нет минимум 3 положительных symbols и достаточного числа сделок.
-5. Отдельно проверить `blocked_volatility_regimes=("high_vol",)`.
-6. Отдельно проверить `tp_mode="opposite_htf_liquidity"`.
-7. Только после multi-symbol результата запускать purged WFO.
-
-Ориентир по длине истории:
-
-```text
-90 дней 15m: 8640 bars
-156 дней 15m: 15000 bars
-180 дней 15m: 17280 bars
-```
+1. Завершить clean fixed-universe WFO для `opposite-liquidity` на всех шести symbols.
+2. Не менять research default по результату одной выбранной истории: провести untouched holdout или параллельный paper comparison.
+3. Использовать `baseline` как control, а `high-vol-block` как основной candidate в paper research.
+4. Накопить минимум 100 завершённых paper trades и 30 календарных дней.
+5. Сравнить paper metrics с backtest в пределах `+/-10%`.
 
 ---
 
 # Повторяемые команды
 
 ```bash
-# Скачать около 156 дней по всем core symbols
-python scripts/fetch_binance.py \
+# Полная six-symbol проверка
+python scripts/run_core_validation.py \
   --symbols INJUSDT,TONUSDT,DOGEUSDT,ARBUSDT,NEARUSDT,OPUSDT \
+  --profiles baseline,structure-bias,high-vol-block,opposite-liquidity \
   --interval 15m \
-  --limit 15000 \
-  --out-dir data
+  --bars 15000 \
+  --data-dir data/core_validation \
+  --out-dir results/core_validation
 
-# Baseline
-python scripts/run_backtest.py \
-  data/DOGEUSDT_15m_15000.csv \
-  --profile baseline \
-  --diagnostics \
-  --out-dir results/DOGEUSDT_baseline
-
-# Structure bias
-python scripts/run_backtest.py \
-  data/DOGEUSDT_15m_15000.csv \
-  --profile structure-bias \
-  --diagnostics \
-  --out-dir results/DOGEUSDT_structure_bias
-
-# Все research profiles на одном symbol
-python scripts/run_diagnostics.py \
-  data/DOGEUSDT_15m_15000.csv \
-  --out-dir results/DOGEUSDT_diagnostics
+# Fixed-universe WFO
+python scripts/run_fixed_wfo.py \
+  --data-dir data/core_validation \
+  --out-dir results/fixed_wfo \
+  --symbols INJUSDT,TONUSDT,DOGEUSDT,ARBUSDT,NEARUSDT,OPUSDT \
+  --profiles baseline,high-vol-block,opposite-liquidity \
+  --interval 15m \
+  --bars 15000
 ```
 
 ---
