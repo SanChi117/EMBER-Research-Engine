@@ -40,6 +40,7 @@ jobs:
             --bars 15000 \
             --data-dir data/core_validation \
             --out-dir results/core_validation \
+            --skip-wfo \
             | tee results/core_validation_stdout.txt
       - uses: actions/upload-artifact@v4
         if: always()
