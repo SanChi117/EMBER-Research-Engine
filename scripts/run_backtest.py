@@ -4,31 +4,10 @@ import argparse
 import json
 from pathlib import Path
 
-from ember.config import EmberConfig
 from ember.core.data_engine import DataEngine
+from ember.research.profiles import PROFILE_NAMES, config_for_profile
 from ember.research.report_engine import ReportEngine
 from ember.simulation.backtester import Backtester
-
-
-def config_for_profile(profile: str) -> EmberConfig:
-    config = EmberConfig()
-    if profile == "baseline":
-        return config
-    if profile == "both-directions":
-        return config.model_copy(
-            update={"allowed_direction_contexts": ("bull", "bear")}
-        )
-    if profile == "wide":
-        return config.model_copy(
-            update={
-                "allowed_direction_contexts": ("bull", "bear"),
-                "min_confidence": 20.0,
-                "min_volume_ratio": 0.5,
-                "min_rr": 1.2,
-                "atr_stop_multiplier": 1.0,
-            }
-        )
-    raise ValueError(f"unknown profile: {profile}")
 
 
 def main() -> None:
@@ -38,7 +17,7 @@ def main() -> None:
     parser.add_argument("--equity", type=float, default=10_000.0)
     parser.add_argument(
         "--profile",
-        choices=("baseline", "both-directions", "wide"),
+        choices=PROFILE_NAMES,
         default="baseline",
     )
     parser.add_argument("--diagnostics", action="store_true")
@@ -62,6 +41,9 @@ def main() -> None:
 
     metrics = result.metrics
     print(f"Profile: {args.profile}")
+    print(f"HTF bias mode: {config.htf_bias_mode}")
+    print(f"HTF EMA period: {config.htf_ema_period}")
+    print(f"HTF EMA threshold: {config.htf_ema_threshold_pct:.3f}%")
     print(f"Return: {metrics.total_return:.6f}%")
     print(f"PF: {metrics.profit_factor}")
     print(f"DD: {metrics.max_drawdown:.6f}%")
