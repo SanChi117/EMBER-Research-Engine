@@ -70,11 +70,13 @@ pytest tests/test_no_leakage.py -v
 
 `tests/test_no_leakage.py` covers future-price isolation, future-only exits, completed-trade-only learning, no placeholder results, uncapped PF and OHLC validation.
 
-## Synthetic sanity demo
+## Mixed-regime synthetic sanity demo
 
 ```bash
-python scripts/run_demo.py --out-dir results/demo --bars 1000
+python scripts/run_demo.py --demo --bars 5000 --wfo --out-dir results/demo
 ```
+
+The generator is deterministic and includes `trend_up`, `trend_down`, `range` and `high_vol` segments. It also includes adverse reversals so a perfect win rate is not assumed.
 
 Outputs:
 
@@ -83,17 +85,77 @@ results/demo/backtest_report.md
 results/demo/backtest_trades.csv
 results/demo/backtest_trades.parquet
 results/demo/wfo_report.md
+results/demo/reject_diagnostics.json
 ```
 
-A positive synthetic PF is only a deterministic sanity check. It is not evidence of live profitability.
+Synthetic results test pipeline behavior only. They are not evidence of live profitability.
 
 ## Backtest a local CSV
 
 ```bash
-python scripts/run_backtest.py data/candles.csv --out-dir results/backtest --equity 10000
+python scripts/run_backtest.py \
+  data/candles.csv \
+  --out-dir results/backtest \
+  --equity 10000
 ```
 
-The CSV is read through `polars.scan_csv`, so a 22GB file is not loaded into RAM at once.
+The CSV is read through `polars.scan_csv`, so a large file is not loaded into RAM at once.
+
+### Reject diagnostics
+
+```bash
+python scripts/run_backtest.py \
+  data/DOGEUSDT_15m_5000.csv \
+  --profile baseline \
+  --diagnostics \
+  --out-dir results/doge_baseline
+```
+
+Available profiles:
+
+```text
+baseline         specification defaults, including down-only context
+both-directions bull and bear context, all other defaults unchanged
+wide             diagnostic-only relaxed confidence/volume/RR/ATR values
+```
+
+The backtester reports exactly where bars and candidates are rejected: context, direction, regime, setup, confidence, volume, risk, RR, costs, quality, structure, missing future data, portfolio overlap and kill switches.
+
+### Compare all diagnostic profiles
+
+```bash
+python scripts/run_diagnostics.py \
+  data/DOGEUSDT_15m_5000.csv \
+  --out-dir results/doge_diagnostics
+```
+
+This writes separate reports for each profile and a combined `summary.json`.
+
+## Public Binance data
+
+For one API page, use `DataEngine.fetch_binance`:
+
+```python
+from ember.core.data_engine import DataEngine
+
+candles = DataEngine.fetch_binance(
+    symbols=["DOGEUSDT"],
+    interval="15m",
+    limit=1000,
+)
+```
+
+For longer histories, use the paginated public downloader:
+
+```bash
+python scripts/fetch_binance.py \
+  --symbols DOGEUSDT \
+  --interval 15m \
+  --limit 5000 \
+  --out-dir data
+```
+
+Multiple symbols are comma-separated. No API keys are accepted or required. The downloader paginates with `endTime`, retries failed requests, prefers Binance Vision and falls back to Futures `fapi`.
 
 ## Purged walk-forward
 
@@ -109,20 +171,6 @@ avg_pf >= 1.5
 worst_dd < 10%
 avg_return > 0
 ```
-
-## Public Binance data
-
-```python
-from ember.core.data_engine import DataEngine
-
-candles = DataEngine.fetch_binance(
-    symbols=["DOGEUSDT"],
-    interval="15m",
-    limit=1000,
-)
-```
-
-The loader uses public endpoints only, retries three times with 1/2/4-second backoff, rate-limits requests, prefers Binance Vision, and falls back to Futures `fapi`.
 
 ## Virtual-only paper server
 
@@ -163,7 +211,7 @@ No exchange keys or secrets are used by the paper server.
 
 Defaults are defined in `ember/config.py` and mirrored in `config/ember.example.json`.
 
-The specification default `allowed_direction_contexts=("down",)` is preserved. The detector maps `down` to bearish context and also accepts explicit `bull`/`bear` aliases.
+The specification default `allowed_direction_contexts=("down",)` is preserved. The detector maps `down` to bearish context. Alternative directions are tested through diagnostic profiles rather than silently changing the production baseline.
 
 ## Scope and known limitations
 
@@ -174,6 +222,7 @@ The document itself identifies several research TODOs. Version 0.2.0 keeps them 
 - resampling assumes the input timeframe is complete and regularly spaced.
 - Binance Vision provides spot klines; Futures `fapi` is the fallback.
 - leverage is a research sizing model and does not model liquidation or funding.
+- a positive result from a handful of trades is not statistically sufficient.
 
 ## Live gate
 
