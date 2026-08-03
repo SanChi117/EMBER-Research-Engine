@@ -2,16 +2,16 @@
 
 Этот документ является единым журналом проверки проекта EMBER Research Engine.
 
-Здесь должны сохраняться все выполненные шаги, команды, наборы данных, результаты, найденные ошибки, исправления и итоговые решения. Записи не удаляются задним числом: новые проверки добавляются ниже отдельными блоками.
+Здесь сохраняются выполненные шаги, точные команды, наборы данных, фактические результаты, обнаруженные ошибки, исправления и принятые решения. Записи не удаляются задним числом: новые проверки добавляются отдельными блоками.
 
 ## Правила ведения журнала
 
-Для каждой новой проверки обязательно указывать:
+Для каждой новой проверки указываются:
 
-1. дату и время UTC;
-2. версию или commit SHA;
+1. дата и время UTC;
+2. версия или commit SHA;
 3. цель проверки;
-4. точную команду;
+4. точная команда;
 5. использованные данные;
 6. фактический результат;
 7. итоговый статус: `PASS`, `FAIL` или `BLOCKED`;
@@ -24,19 +24,24 @@
 
 # Сводный статус проекта
 
-Актуально на 2026-08-03.
+Актуально на 2026-08-03 после PR #2.
 
 | Проверка | Статус | Краткий результат |
 |---|---|---|
 | Установка проекта | PASS | Пакет устанавливается через `pip install -e ".[dev]"` |
-| Unit tests | PASS | Полный набор тестов проходит в GitHub Actions |
-| Leakage gate | PASS | Тесты zero-look-ahead проходят |
-| Binance public loader | PASS | По 1000 свечей получено для 6 core symbols |
-| Synthetic pipeline execution | PASS | Backtest и отчёты запускаются после исправления WFO |
-| Synthetic realism | FAIL | 46 сделок, 100% win rate, PF `inf`; сценарий слишком идеализирован |
-| Synthetic WFO | FAIL | 1000 свечей 15m недостаточно для 30-дневного train window |
-| Real-data strategy sanity | FAIL | Всего 4 сделки на 6 символах, все убыточные |
-| Live gate | BLOCKED | Нет 100 paper trades, 30 дней paper mode и WFO PASS |
+| Unit tests | PASS | 14 тестов прошли в GitHub Actions |
+| Leakage gate | PASS | Zero-look-ahead тесты проходят |
+| Binance public loader, 1000 bars | PASS | По 1000 свечей получено для 6 core symbols |
+| Binance paginated loader, 5000 bars | PASS | DOGEUSDT: ровно 5000 свечей 15m |
+| Reject diagnostics | PASS | Все основные gates имеют отдельные счётчики |
+| Bias comparison | PASS | Baseline и `bull+bear` дали одинаковые 4 сделки |
+| Wide diagnostic profile | FAIL | `min_rr=1.2` полностью блокируется обязательным cost gate |
+| Mixed synthetic execution | PASS | 5000 mixed-regime свечей обрабатываются полностью |
+| Mixed synthetic strategy sanity | FAIL | 3 сделки, все убыточные, kill switch остановил тест |
+| Real DOGE 5000-bar baseline | PASS с ограничением | +2.8585%, PF 3.0409, DD 1.4006%, но только 4 сделки |
+| Real-data statistical sufficiency | FAIL | 4 сделки недостаточны для вывода об edge |
+| WFO | FAIL | Требуется более длинная история и достаточное число сделок |
+| Live gate | BLOCKED | Нет WFO PASS, 100 paper trades и 30 дней paper mode |
 
 ---
 
@@ -135,7 +140,7 @@ d5d387f9de2d0185675c2b3005f845d6b0bdecba
 
 ---
 
-## 2026-08-03 — Повторный Synthetic Sanity Check
+## 2026-08-03 — Повторный старый Synthetic Sanity Check
 
 **Команда:**
 
@@ -156,37 +161,15 @@ Final Equity: 18439.8349
 WFO: FAIL
 ```
 
-**Ожидаемый ориентир sanity check:**
+**Вывод:** технически pipeline работал, но synthetic dataset был слишком идеализирован. Результат нельзя было использовать как доказательство качества стратегии.
 
-```text
-Return: +30..60%
-PF: 1.5..3.0
-DD: < 5%
-Trades: 15..30
-```
+**Причина WFO FAIL:** 1000 свечей 15m охватывают примерно 10.4 дня, а train window требует 30 дней.
 
-**Вывод:**
-
-- технически synthetic pipeline работает;
-- значения не являются реалистичными;
-- 46 сделок, 100% win rate и PF `inf` показывают, что synthetic dataset слишком идеализирован;
-- этот результат нельзя использовать как доказательство качества стратегии.
-
-**Причина WFO FAIL:**
-
-1000 свечей 15m охватывают примерно 10.4 дня. Конфигурация WFO требует 30 дней только для train window, поэтому полноценные folds не сформировались.
-
-**Статус:**
-
-- Pipeline execution: `PASS`;
-- Synthetic realism: `FAIL`;
-- WFO: `FAIL`.
+**Статус:** pipeline `PASS`, realism `FAIL`, WFO `FAIL`.
 
 ---
 
-## 2026-08-03 — Загрузка реальных данных Binance
-
-**Цель:** проверить публичный Binance loader и получить реальные данные для первых backtests.
+## 2026-08-03 — Загрузка 1000 реальных свечей Binance для 6 symbols
 
 **Параметры:**
 
@@ -211,13 +194,9 @@ Symbols: INJUSDT, TONUSDT, DOGEUSDT, ARBUSDT, NEARUSDT, OPUSDT
 
 ---
 
-## 2026-08-03 — Первые backtests на реальных данных
-
-**Цель:** проверить, находит ли текущая стратегия сделки и имеет ли положительную базовую статистику.
+## 2026-08-03 — Первые backtests на 1000 реальных свечах
 
 **Конфигурация:** baseline `EmberConfig()` без ручной оптимизации.
-
-**Результаты:**
 
 | Symbol | Trades | Return | PF | Max DD | Win Rate |
 |---|---:|---:|---:|---:|---:|
@@ -228,25 +207,286 @@ Symbols: INJUSDT, TONUSDT, DOGEUSDT, ARBUSDT, NEARUSDT, OPUSDT
 | NEARUSDT | 2 | -2.8383% | 0.0 | 2.8383% | 0.0% |
 | OPUSDT | 1 | -1.4867% | 0.0 | 1.4867% | 0.0% |
 
-**Сводка:**
+**Сводка:** 4 сделки, 0 прибыльных, 3 symbols без сделок.
+
+**Статус:** `FAIL`.
+
+---
+
+## 2026-08-03 12:18 UTC — Добавление reject diagnostics
+
+**PR:** `#2 Add diagnostics, 5000-bar Binance fetch, and mixed synthetic sanity`
+
+**Проверенный head commit:**
 
 ```text
-Всего символов: 6
-Всего сделок: 4
-Прибыльных сделок: 0
-Символов без сделок: 3
-Общий качественный вывод: стратегия sanity check не прошла
+4fdbcf20416da29d0c4c4915f52afca807153856
+```
+
+**Добавленные счётчики:**
+
+```text
+bars_seen
+neutral_context
+direction_reject
+regime_reject
+no_setup
+setup_blocked
+confidence_low
+volume_low
+candidate_passed
+risk_none
+rr_low
+cost_gate
+quality_reject
+structure_reject
+no_future
+overlap_reject
+portfolio_reject
+halted
+executed
+```
+
+Setup detector и risk engine теперь возвращают стабильную причину отказа. Счётчики сохраняются в `Backtester.last_diagnostics` и могут печататься через `diagnostics=True`.
+
+**Проверка:**
+
+```bash
+pytest tests/ -v
+```
+
+**Результат:**
+
+```text
+14 passed, 1 warning
+```
+
+**Статус:** `PASS`.
+
+---
+
+## 2026-08-03 12:18 UTC — Новый mixed-regime synthetic, 5000 bars
+
+**Команда:**
+
+```bash
+python scripts/run_demo.py --demo --bars 5000 --wfo --out-dir results/demo
+```
+
+**Данные:** детерминированные режимы `trend_up`, `trend_down`, `range`, `high_vol`, seed `42`, намеренно добавленные adverse reversals.
+
+**Reject diagnostics:**
+
+```text
+bars_seen: 4940
+neutral_context: 1008
+direction_reject: 0
+regime_reject: 0
+no_setup: 3637
+setup_blocked: 0
+confidence_low: 0
+volume_low: 7
+candidate_passed: 288
+risk_none: 0
+rr_low: 0
+cost_gate: 0
+quality_reject: 46
+structure_reject: 86
+no_future: 0
+overlap_reject: 1
+portfolio_reject: 0
+halted: 1
+executed: 3
+```
+
+**Метрики:**
+
+```text
+Return: -3.9040%
+PF: 0.0000
+DD: 3.9040%
+Trades: 3
+Win rate: 0.0000%
+WFO: FAIL
 ```
 
 **Интерпретация:**
 
-- engine и data pipeline технически работают;
-- текущие setup filters создают слишком мало входов;
-- найденные входы не показали положительного edge;
-- 1000 свечей на символ недостаточно для серьёзного исследования, но достаточно, чтобы зафиксировать проблему частоты и качества входов;
-- оптимизация параметров без диагностики причин отбраковки будет слепой подгонкой.
+- synthetic больше не выдаёт фальшивые 100% win rate и PF `inf`;
+- текущая стратегия не прошла mixed-regime sanity check;
+- после трёх убыточных сделок сработал обязательный kill switch;
+- генератор содержит смешанные рыночные режимы, однако при текущих filters стратегия успела исполнить только три проигрышных входа.
 
-**Статус:** `FAIL`.
+**Статус:** execution `PASS`, strategy sanity `FAIL`, WFO `FAIL`.
+
+---
+
+## 2026-08-03 12:18 UTC — Загрузка 5000 свечей DOGEUSDT
+
+**Команда:**
+
+```bash
+python scripts/fetch_binance.py \
+  --symbols DOGEUSDT \
+  --interval 15m \
+  --limit 5000 \
+  --out-dir data
+```
+
+**Результат:**
+
+```text
+DOGEUSDT: 5000 rows -> data/DOGEUSDT_15m_5000.csv
+```
+
+Загрузчик использует пагинацию `endTime`; API key не требуется.
+
+**Важно:** 5000 свечей 15m — это около 52 дней, а не 90 дней. Этого достаточно для первичной диагностики, но мало для надёжного multi-fold WFO с 30-дневным train window.
+
+**Статус:** `PASS`.
+
+---
+
+## 2026-08-03 12:18 UTC — Сравнение bias и wide profile на DOGEUSDT
+
+**Команда:**
+
+```bash
+python scripts/run_diagnostics.py \
+  data/DOGEUSDT_15m_5000.csv \
+  --out-dir results/doge_diagnostics
+```
+
+### Профиль `baseline`
+
+Конфигурация сохраняет требование архитектурного ТЗ:
+
+```python
+allowed_direction_contexts = ("down",)
+min_confidence = 43.0
+min_volume_ratio = 0.70
+min_rr = 1.8
+atr_stop_multiplier = 1.5
+```
+
+**Reject diagnostics:**
+
+```text
+bars_seen: 4940
+neutral_context: 3644
+direction_reject: 336
+no_setup: 952
+volume_low: 2
+candidate_passed: 6
+quality_reject: 1
+overlap_reject: 1
+executed: 4
+```
+
+Остальные counters: `0`.
+
+**Метрики:**
+
+```text
+Return: +2.858547%
+PF: 3.040922336505632
+DD: 1.400590%
+Trades: 4
+Win rate: 75.000000%
+```
+
+**Статус:** технически `PASS`, статистическая достаточность `FAIL` из-за четырёх сделок.
+
+### Профиль `both-directions`
+
+```python
+allowed_direction_contexts = ("bull", "bear")
+```
+
+**Reject diagnostics:**
+
+```text
+bars_seen: 4940
+neutral_context: 3644
+direction_reject: 0
+no_setup: 1286
+volume_low: 4
+candidate_passed: 6
+quality_reject: 1
+overlap_reject: 1
+executed: 4
+```
+
+**Метрики:** полностью совпали с baseline.
+
+```text
+Return: +2.858547%
+PF: 3.040922336505632
+DD: 1.400590%
+Trades: 4
+Win rate: 75.000000%
+```
+
+**Вывод по bias:** `down`-only не является главным bottleneck на этой выборке. Разрешение `bull+bear` не добавило ни одной исполненной сделки. 336 direction rejects перешли в `no_setup`, потому что на этих барах detector всё равно не сформировал валидный setup.
+
+**Статус:** `PASS` как диагностический эксперимент; production default не изменён.
+
+### Профиль `wide`
+
+```python
+allowed_direction_contexts = ("bull", "bear")
+min_confidence = 20.0
+min_volume_ratio = 0.5
+min_rr = 1.2
+atr_stop_multiplier = 1.0
+```
+
+**Reject diagnostics:**
+
+```text
+bars_seen: 4940
+neutral_context: 3644
+no_setup: 1286
+volume_low: 4
+candidate_passed: 6
+cost_gate: 6
+executed: 0
+```
+
+**Метрики:**
+
+```text
+Return: 0.000000%
+PF: 0.0
+DD: 0.000000%
+Trades: 0
+```
+
+**Причина:** профиль `min_rr=1.2` несовместим с обязательным cost gate при текущих параметрах.
+
+```text
+risk_fraction = 0.01
+round_trip_cost = 0.0024
+net_edge = (1.2 - 1.0) * 0.01 - 0.0024
+net_edge = -0.0004
+```
+
+Для положительного `net_edge` RR должен быть строго выше `1.24`. Cost gate отключать нельзя, поскольку он является обязательным требованием архитектуры.
+
+**Статус:** `FAIL`, но причина точно определена: `cost_gate`.
+
+---
+
+# Текущие выводы
+
+1. Главный фильтр на DOGEUSDT — `neutral_context`: 3644 из 4940 анализируемых баров.
+2. Второй главный источник отказов — отсутствие базового setup после разрешённого контекста.
+3. `down`-only не объясняет низкую частоту: `bull+bear` оставил те же 4 сделки.
+4. Ослабление `min_confidence` не помогло, потому что кандидаты и раньше не отбраковывались по confidence.
+5. Ослабление `min_volume_ratio` почти не влияет: volume gate отклоняет единицы баров.
+6. `min_rr=1.2` нельзя использовать с текущими costs: все кандидаты блокируются cost gate.
+7. Baseline результат на 5000 DOGE bars положительный, но 4 сделки не доказывают наличие устойчивого edge.
+8. Mixed synthetic выявил три последовательных убытка и корректную работу kill switch.
 
 ---
 
@@ -256,42 +496,35 @@ Symbols: INJUSDT, TONUSDT, DOGEUSDT, ARBUSDT, NEARUSDT, OPUSDT
 
 **Статус:** исправлено.
 
-**Описание:** `min(time)` и `max(time)` создавали одинаковое имя столбца.
-
-## P1 — Synthetic dataset слишком идеален
+## P1 — Недостаточная доля направленного HTF context
 
 **Статус:** открыто.
 
-**Признаки:**
+**Признак:** `neutral_context=3644` из `4940` DOGE bars.
 
-- 100% win rate;
-- PF `inf`;
-- 0% drawdown;
-- 46 сделок вместо ожидаемых 15–30.
-
-**Риск:** synthetic demo проверяет только связность pipeline, но не устойчивость логики к проигрышам, drawdown и смешанным режимам.
-
-## P1 — Недостаточная частота реальных сделок
+## P1 — Низкая частота setup candidates
 
 **Статус:** открыто.
 
-**Признаки:** 4 сделки на 6000 входных свечей по 6 символам.
+**Признак:** только 6 candidates прошли setup gates на 5000 DOGE bars.
 
-**Неизвестно:** какой именно gate чаще всего отклоняет кандидатов.
+## P1 — Wide RR конфликтует с costs
 
-## P1 — Отрицательный результат всех реальных сделок
+**Статус:** причина найдена.
 
-**Статус:** открыто.
+**Признак:** 6 из 6 candidates отклонены `cost_gate` при `min_rr=1.2`.
 
-**Признаки:** 0 прибыльных сделок из 4, PF 0.0.
-
-**Ограничение:** выборка слишком мала для статистического вывода, но недостаточна для продолжения к paper mode.
-
-## P1 — Недостаточно данных для WFO
+## P1 — Недостаточная статистическая выборка
 
 **Статус:** открыто.
 
-**Признаки:** 1000 свечей 15m дают около 10.4 дня при train window 30 дней.
+**Признак:** 4 исполненные сделки на 5000 DOGE bars.
+
+## P1 — Mixed synthetic strategy failure
+
+**Статус:** открыто.
+
+**Признак:** 3 сделки, 0 wins, return `-3.9040%`, затем kill switch.
 
 ---
 
@@ -299,72 +532,29 @@ Symbols: INJUSDT, TONUSDT, DOGEUSDT, ARBUSDT, NEARUSDT, OPUSDT
 
 ## Шаг 4 — Диагностические счётчики фильтров
 
-Добавить в исследовательский pipeline счётчики:
-
-```text
-bars_seen
-neutral_context_rejects
-direction_rejects
-regime_rejects
-no_impulse_rejects
-location_rejects
-rejection_candle_rejects
-volume_rejects
-confidence_rejects
-risk_rejects
-quality_gate_rejects
-structure_gate_rejects
-no_future_exit_rejects
-executed_trades
-```
-
-**Цель:** точно определить, где исчезают сделки.
-
-**Статус:** `PENDING`.
+**Статус:** `DONE`.
 
 ## Шаг 5 — Более длинная реальная история
 
-Скачать минимум 5000–10000 свечей 15m на каждый core symbol или получить эквивалентную локальную историю.
+DOGEUSDT 5000 bars загружены.
 
-**Цель:** сформировать достаточную выборку для частоты входов, режимов рынка и WFO.
-
-**Статус:** `PENDING`.
+**Статус:** `PARTIAL` — для полноценного WFO нужны 90–180 дней, то есть примерно 8640–17280 свечей 15m на symbol.
 
 ## Шаг 6 — Диагностический backtest до оптимизации
 
-Для каждого символа сохранить:
+Baseline, both-directions и wide профили выполнены на DOGEUSDT.
 
-- количество bars;
-- количество setup candidates;
-- причины отклонения;
-- executed trades;
-- gross PF;
-- net PF после costs;
-- return;
-- max drawdown;
-- win rate;
-- average R;
-- распределение по setup type и regime.
-
-**Статус:** `PENDING`.
+**Статус:** `PARTIAL` — требуется повторить минимум на всех 6 core symbols и сохранить распределение по setup type/regime.
 
 ## Шаг 7 — Исправление synthetic dataset
 
-Synthetic должен содержать:
+Mixed-regime generator добавлен, детерминирован и покрыт тестом.
 
-- выигрышные и проигрышные сделки;
-- trend, range и high-vol режимы;
-- неоднозначные свечи;
-- realistic costs;
-- ненулевой drawdown;
-- PF в конечном диапазоне;
-- достаточную длительность для WFO folds.
-
-**Статус:** `PENDING`.
+**Статус:** `PARTIAL` — генератор больше не идеален, но текущая стратегия исполняет на нём только три проигрышные сделки. Нужна дальнейшая калибровка generator sanity contract без подгонки под прибыль.
 
 ## Шаг 8 — Purged WFO на достаточной истории
 
-Критерии PASS остаются неизменными:
+Критерии PASS неизменны:
 
 ```text
 stability_score >= 70%
@@ -373,11 +563,9 @@ worst_dd < 10%
 avg_return > 0
 ```
 
-**Статус:** `BLOCKED` до выполнения шагов 4–7.
+**Статус:** `BLOCKED` до получения 90–180 дней данных и достаточного количества сделок.
 
 ## Шаг 9 — Paper mode
-
-Разрешается только после приемлемого real-data backtest и WFO PASS.
 
 Минимальный live gate:
 
@@ -390,6 +578,34 @@ all leakage tests PASS
 ```
 
 **Статус:** `BLOCKED`.
+
+---
+
+# Повторяемые команды
+
+```bash
+# Mixed synthetic sanity
+python scripts/run_demo.py --demo --bars 5000 --wfo --out-dir results/demo
+
+# 5000 public Binance bars
+python scripts/fetch_binance.py \
+  --symbols DOGEUSDT \
+  --interval 15m \
+  --limit 5000 \
+  --out-dir data
+
+# Сравнение baseline, both-directions и wide
+python scripts/run_diagnostics.py \
+  data/DOGEUSDT_15m_5000.csv \
+  --out-dir results/doge_diagnostics
+
+# Один профиль с подробными counters
+python scripts/run_backtest.py \
+  data/DOGEUSDT_15m_5000.csv \
+  --profile baseline \
+  --diagnostics \
+  --out-dir results/doge_baseline
+```
 
 ---
 
