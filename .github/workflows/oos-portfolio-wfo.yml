@@ -1,0 +1,93 @@
+name: EMBER OOS Portfolio WFO
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/oos-portfolio-wfo
+    paths:
+      - "scripts/run_fixed_wfo.py"
+      - ".github/workflows/oos-portfolio-wfo.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/run_fixed_wfo.py"
+      - ".github/workflows/oos-portfolio-wfo.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: ember-oos-portfolio-wfo
+  cancel-in-progress: true
+
+jobs:
+  portfolio-wfo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Static checks and tests
+        run: |
+          ruff check ember/ tests/ scripts/
+          pytest tests/ -v
+          pytest tests/test_no_leakage.py -v
+      - name: Download frozen OOS datasets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p frozen_oos
+          gh run download 30842493927 \
+            --repo "${{ github.repository }}" \
+            --name ember-oos-4alts-validation \
+            --dir frozen_oos
+          for symbol in PEPEUSDT FETUSDT WIFUSDT SUIUSDT; do
+            test -f "frozen_oos/data/oos_4alts/${symbol}_15m_15000.csv"
+          done
+      - name: Run fixed-universe portfolio WFO
+        run: |
+          mkdir -p results/oos_portfolio_wfo docs
+          python scripts/run_fixed_wfo.py \
+            --data-dir frozen_oos/data/oos_4alts \
+            --out-dir results/oos_portfolio_wfo \
+            --symbols PEPEUSDT,FETUSDT,WIFUSDT,SUIUSDT \
+            --profiles high-vol-block \
+            --interval 15m \
+            --bars 15000 \
+            | tee results/oos_portfolio_wfo_stdout.txt
+      - name: Persist portfolio WFO result
+        if: github.event_name != 'pull_request'
+        run: |
+          cp results/oos_portfolio_wfo/summary.md docs/OOS_PORTFOLIO_WFO.md
+          cp results/oos_portfolio_wfo/summary.json docs/OOS_PORTFOLIO_WFO.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/OOS_PORTFOLIO_WFO.md docs/OOS_PORTFOLIO_WFO.json
+          if git diff --cached --quiet; then
+            echo "No result changes to commit"
+          else
+            git commit -m "Record OOS portfolio WFO results"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ember-oos-portfolio-wfo
+          path: |
+            results/oos_portfolio_wfo/
+            results/oos_portfolio_wfo_stdout.txt
+            docs/OOS_PORTFOLIO_WFO.md
+            docs/OOS_PORTFOLIO_WFO.json
+          if-no-files-found: warn
