@@ -18,6 +18,12 @@
     "engine_status": "FAIL",
     "portfolio_mode": true,
     "universe_policy": "fixed_all_requested_symbols",
+    "symbols": [
+      "PEPEUSDT",
+      "FETUSDT",
+      "WIFUSDT",
+      "SUIUSDT"
+    ],
     "folds": 4,
     "zero_trade_folds": 2,
     "total_trades": 8,
