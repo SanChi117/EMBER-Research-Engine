@@ -1,0 +1,85 @@
+{
+  "symbols": [
+    "PEPEUSDT",
+    "FETUSDT",
+    "WIFUSDT",
+    "SUIUSDT"
+  ],
+  "profiles": [
+    "high-vol-block"
+  ],
+  "interval": "15m",
+  "bars_per_symbol": 15000,
+  "source_oos_run": 30842493927,
+  "workflow_run": 30847701247,
+  "artifact_id": 8869390031,
+  "artifact_sha256": "eac603f9d2e2677adef0dab60f374cfa9773b0fc52dd9e0b5ae2091b7f2f5803",
+  "results": {
+    "high-vol-block": {
+      "status": "FAIL",
+      "universe_policy": "fixed_all_requested_symbols",
+      "universe_symbols": [
+        "PEPEUSDT",
+        "FETUSDT",
+        "WIFUSDT",
+        "SUIUSDT"
+      ],
+      "folds": 4,
+      "zero_trade_folds": 2,
+      "avg_return": 1.6860238787344044,
+      "avg_pf": "inf",
+      "worst_dd": 2.4591928889393504,
+      "stability_score": 50.0,
+      "fold_details": [
+        {
+          "fold": 1,
+          "train_start": "2026-02-28T12:45:00+00:00",
+          "train_end": "2026-03-30T12:45:00+00:00",
+          "test_start": "2026-03-30T13:30:00+00:00",
+          "test_end": "2026-04-24T13:30:00+00:00",
+          "return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_drawdown": 0.0,
+          "num_trades": 0,
+          "positive": false
+        },
+        {
+          "fold": 2,
+          "train_start": "2026-03-25T12:45:00+00:00",
+          "train_end": "2026-04-24T12:45:00+00:00",
+          "test_start": "2026-04-24T13:30:00+00:00",
+          "test_end": "2026-05-19T13:30:00+00:00",
+          "return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_drawdown": 0.0,
+          "num_trades": 0,
+          "positive": false
+        },
+        {
+          "fold": 3,
+          "train_start": "2026-04-19T12:45:00+00:00",
+          "train_end": "2026-05-19T12:45:00+00:00",
+          "test_start": "2026-05-19T13:30:00+00:00",
+          "test_end": "2026-06-13T13:30:00+00:00",
+          "return_pct": 0.6423938977615398,
+          "profit_factor": 1.2749749891726243,
+          "max_drawdown": 2.4591928889393504,
+          "num_trades": 4,
+          "positive": true
+        },
+        {
+          "fold": 4,
+          "train_start": "2026-05-14T12:45:00+00:00",
+          "train_end": "2026-06-13T12:45:00+00:00",
+          "test_start": "2026-06-13T13:30:00+00:00",
+          "test_end": "2026-07-08T13:30:00+00:00",
+          "return_pct": 6.101701617176078,
+          "profit_factor": "inf",
+          "max_drawdown": 0.0,
+          "num_trades": 4,
+          "positive": true
+        }
+      ]
+    }
+  }
+}
