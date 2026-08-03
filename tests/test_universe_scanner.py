@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from scripts.scan_universe import filter_usdt_perpetual_symbols, qualifies
+from scripts.scan_universe import (
+    filter_usdt_perpetual_symbols,
+    parse_quote_volumes,
+    qualifies,
+    rank_symbols_by_volume,
+)
 
 
 def test_futures_universe_filter_is_deterministic() -> None:
@@ -8,26 +13,37 @@ def test_futures_universe_filter_is_deterministic() -> None:
         "symbols": [
             {
                 "symbol": "AAAUSDT",
+                "baseAsset": "AAA",
                 "status": "TRADING",
                 "contractType": "PERPETUAL",
                 "quoteAsset": "USDT",
             },
             {
                 "symbol": "BBBUSDT",
+                "baseAsset": "BBB",
                 "status": "BREAK",
                 "contractType": "PERPETUAL",
                 "quoteAsset": "USDT",
             },
             {
                 "symbol": "CCCUSDC",
+                "baseAsset": "CCC",
                 "status": "TRADING",
                 "contractType": "PERPETUAL",
                 "quoteAsset": "USDC",
             },
             {
                 "symbol": "DDDUSDT",
+                "baseAsset": "DDD",
                 "status": "TRADING",
                 "contractType": "CURRENT_QUARTER",
+                "quoteAsset": "USDT",
+            },
+            {
+                "symbol": "AAAUPUSDT",
+                "baseAsset": "AAAUP",
+                "status": "TRADING",
+                "contractType": "PERPETUAL",
                 "quoteAsset": "USDT",
             },
         ]
@@ -35,6 +51,19 @@ def test_futures_universe_filter_is_deterministic() -> None:
 
     assert filter_usdt_perpetual_symbols(payload, set()) == ["AAAUSDT"]
     assert filter_usdt_perpetual_symbols(payload, {"AAAUSDT"}) == []
+
+
+def test_volume_ranking_is_descending_and_deterministic() -> None:
+    volumes = parse_quote_volumes(
+        [
+            {"symbol": "AAAUSDT", "quoteVolume": "100"},
+            {"symbol": "BBBUSDT", "quoteVolume": "300"},
+            {"symbol": "CCCUSDT", "quoteVolume": "300"},
+        ]
+    )
+    assert rank_symbols_by_volume(
+        ["AAAUSDT", "CCCUSDT", "BBBUSDT"], volumes
+    ) == ["BBBUSDT", "CCCUSDT", "AAAUSDT"]
 
 
 def test_scanner_thresholds_are_strict() -> None:
