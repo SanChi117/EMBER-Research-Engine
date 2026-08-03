@@ -6,6 +6,8 @@ on:
     branches:
       - agent/out-of-sample-4alts
     paths:
+      - "pyproject.toml"
+      - "scripts/__init__.py"
       - "scripts/run_oos_validation.py"
       - "tests/test_oos_validation.py"
       - ".github/workflows/oos-4alts-validation.yml"
@@ -13,6 +15,8 @@ on:
     branches:
       - main
     paths:
+      - "pyproject.toml"
+      - "scripts/__init__.py"
       - "scripts/run_oos_validation.py"
       - "tests/test_oos_validation.py"
       - ".github/workflows/oos-4alts-validation.yml"
