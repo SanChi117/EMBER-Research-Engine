@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 
 from scripts.run_portfolio_wfo import (
@@ -12,7 +12,7 @@ from scripts.run_portfolio_wfo import (
 
 
 def _fold(number: int, trades: int, positive: bool = True) -> SimpleNamespace:
-    start = datetime(2026, 1, 1, tzinfo=UTC) + timedelta(days=number * 10)
+    start = datetime(2026, 1, 1, tzinfo=timezone.utc) + timedelta(days=number * 10)
     return SimpleNamespace(
         fold=number,
         train_start=start,
