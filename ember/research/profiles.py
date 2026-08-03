@@ -1,7 +1,5 @@
 """Named research configurations used for controlled diagnostic comparisons."""
 
-from __future__ import annotations
-
 from ember.config import EmberConfig
 
 
