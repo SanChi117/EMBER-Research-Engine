@@ -7,9 +7,14 @@ on:
       - agent/implement-portfolio-wfo-tz
     paths:
       - "scripts/run_portfolio_wfo.py"
+      - "scripts/run_universe_expansion.py"
+      - "scripts/scan_universe.py"
       - "tests/test_portfolio_wfo.py"
+      - "tests/test_universe_expansion.py"
+      - "tests/test_universe_scanner.py"
       - "docs/PORTFOLIO_WFO_OOS.md"
       - "docs/PORTFOLIO_WFO_OOS.json"
+      - "docs/UNIVERSE_EXPANSION_20.md"
       - "docs/VALIDATION_LOG.md"
       - ".github/workflows/oos-portfolio-wfo.yml"
   pull_request:
@@ -17,9 +22,14 @@ on:
       - main
     paths:
       - "scripts/run_portfolio_wfo.py"
+      - "scripts/run_universe_expansion.py"
+      - "scripts/scan_universe.py"
       - "tests/test_portfolio_wfo.py"
+      - "tests/test_universe_expansion.py"
+      - "tests/test_universe_scanner.py"
       - "docs/PORTFOLIO_WFO_OOS.md"
       - "docs/PORTFOLIO_WFO_OOS.json"
+      - "docs/UNIVERSE_EXPANSION_20.md"
       - "docs/VALIDATION_LOG.md"
       - ".github/workflows/oos-portfolio-wfo.yml"
 
@@ -99,6 +109,24 @@ jobs:
           assert generated["result"]["stability_score"] == 50.0
           print("Recorded Portfolio WFO result is reproducible")
           PY
+      - name: Verify universe expansion remains blocked
+        run: |
+          set +e
+          python scripts/run_universe_expansion.py \
+            --portfolio-report docs/PORTFOLIO_WFO_OOS.json \
+            --universe-file data/universe_20.json \
+            --interval 15m \
+            --bars 15000 \
+            --initial-equity 10000 \
+            --no-download \
+            --out-dir results/universe_expansion_20 \
+            --report-path results/universe_expansion_20/UNIVERSE_EXPANSION_20.md
+          exit_code=$?
+          set -e
+          test "$exit_code" -eq 3
+          grep -q '"status": "BLOCKED"' results/universe_expansion_20/summary.json
+          grep -q 'no tier result is fabricated' results/universe_expansion_20/UNIVERSE_EXPANSION_20.md
+          echo "Universe expansion correctly blocked by failed Portfolio WFO prerequisite"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -106,6 +134,8 @@ jobs:
           path: |
             results/portfolio_wfo_oos/
             results/portfolio_wfo_oos_stdout.txt
+            results/universe_expansion_20/
             docs/PORTFOLIO_WFO_OOS.md
             docs/PORTFOLIO_WFO_OOS.json
+            docs/UNIVERSE_EXPANSION_20.md
           if-no-files-found: warn
