@@ -23,7 +23,14 @@ class WalkForwardValidator:
         test_days: int | None = None,
     ) -> WFOSummary:
         lazy = candles.lazy() if isinstance(candles, pl.DataFrame) else candles
-        bounds = lazy.select(pl.col("time").min(), pl.col("time").max()).collect().row(0)
+        bounds = (
+            lazy.select(
+                pl.col("time").min().alias("start_time"),
+                pl.col("time").max().alias("end_time"),
+            )
+            .collect()
+            .row(0)
+        )
         start, end = bounds
         if not isinstance(start, datetime) or not isinstance(end, datetime):
             return self._empty()
