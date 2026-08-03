@@ -1,0 +1,56 @@
+name: Apply profit factor fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/fix-profit-factor.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fix uncapped profit factor behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          utils = Path("ember/utils.py")
+          text = utils.read_text(encoding="utf-8")
+          text = text.replace(
+              '"""Return a finite PF, capped at 99 when no losing trades exist."""',
+              '"""Return the standard gross-profit / gross-loss ratio."""',
+          )
+          text = text.replace(
+              'return 99.0 if gross_profit > 0 else 0.0',
+              'return float("inf") if gross_profit > 0 else 0.0',
+          )
+          text = text.replace(
+              'return min(99.0, gross_profit / gross_loss)',
+              'return gross_profit / gross_loss',
+          )
+          utils.write_text(text, encoding="utf-8")
+
+          test = Path("tests/test_no_leakage.py")
+          text = test.read_text(encoding="utf-8")
+          text = text.replace(
+              'assert profit_factor([1.0, 2.0, 0.5]) == 99.0',
+              'assert profit_factor([1.0, 2.0, 0.5]) == float("inf")',
+          )
+          test.write_text(text, encoding="utf-8")
+          PY
+
+          rm .github/workflows/fix-profit-factor.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ember/utils.py tests/test_no_leakage.py .github/workflows/fix-profit-factor.yml
+          git commit -m "Fix uncapped profit factor calculation"
+          git push origin main
