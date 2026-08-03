@@ -1,9 +1,6 @@
 """Named research configurations used for controlled diagnostic comparisons."""
 
-from __future__ import annotations
-
 from ember.config import EmberConfig
-
 
 PROFILE_NAMES = (
     "baseline",
@@ -11,12 +8,14 @@ PROFILE_NAMES = (
     "ema-tight",
     "ema50",
     "structure-bias",
+    "high-vol-block",
+    "opposite-liquidity",
     "wide",
 )
 
 
 def diagnostic_profiles() -> dict[str, EmberConfig]:
-    """Return profiles where each bias experiment changes one main assumption."""
+    """Return profiles where each experiment changes one declared assumption."""
 
     baseline = EmberConfig()
     both_directions = baseline.model_copy(
@@ -33,6 +32,12 @@ def diagnostic_profiles() -> dict[str, EmberConfig]:
         ),
         "structure-bias": both_directions.model_copy(
             update={"htf_bias_mode": "structure"}
+        ),
+        "high-vol-block": baseline.model_copy(
+            update={"blocked_volatility_regimes": ("high_vol",)}
+        ),
+        "opposite-liquidity": baseline.model_copy(
+            update={"tp_mode": "opposite_htf_liquidity"}
         ),
         "wide": both_directions.model_copy(
             update={

@@ -114,3 +114,27 @@ def test_bias_profiles_change_only_declared_assumptions() -> None:
     assert ema50.htf_ema_threshold_pct == baseline.htf_ema_threshold_pct
     assert structure.htf_bias_mode == "structure"
     assert structure.min_rr == baseline.min_rr
+
+
+def test_volatility_and_target_profiles_are_isolated() -> None:
+    profiles = diagnostic_profiles()
+    baseline = profiles["baseline"]
+    high_vol = profiles["high-vol-block"]
+    opposite = profiles["opposite-liquidity"]
+
+    assert high_vol.blocked_volatility_regimes == ("high_vol",)
+    assert high_vol.tp_mode == baseline.tp_mode
+    assert high_vol.allowed_direction_contexts == baseline.allowed_direction_contexts
+    assert opposite.tp_mode == "opposite_htf_liquidity"
+    assert opposite.blocked_volatility_regimes == baseline.blocked_volatility_regimes
+    assert opposite.allowed_direction_contexts == baseline.allowed_direction_contexts
+
+    baseline_data = baseline.model_dump()
+    high_vol_data = high_vol.model_dump()
+    opposite_data = opposite.model_dump()
+    high_vol_data["blocked_volatility_regimes"] = baseline_data[
+        "blocked_volatility_regimes"
+    ]
+    opposite_data["tp_mode"] = baseline_data["tp_mode"]
+    assert high_vol_data == baseline_data
+    assert opposite_data == baseline_data
