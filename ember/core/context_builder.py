@@ -34,17 +34,9 @@ class ContextBuilder:
         if not rows:
             return self._neutral_context(symbol, entry_time, entry_row)
 
-        closes = [float(row["close"]) for row in rows]
-        ema20 = self._ema(closes, span=20)
-        last_close = closes[-1]
-        if last_close > ema20 * 1.02:
-            bias = "bull"
-        elif last_close < ema20 * 0.98:
-            bias = "bear"
-        else:
-            bias = "neutral"
-
         structure = self._structure(rows)
+        bias = self._bias(rows, structure)
+
         volatility = str(rows[-1].get("volatility_regime") or "normal")
         if volatility == "high":
             regime = "high_vol"
@@ -102,6 +94,24 @@ class ContextBuilder:
             if frame.height:
                 return frame
         return pl.DataFrame()
+
+    def _bias(self, rows: list[dict[str, Any]], structure: str) -> str:
+        if self.config.htf_bias_mode == "structure":
+            if structure == "uptrend":
+                return "bull"
+            if structure == "downtrend":
+                return "bear"
+            return "neutral"
+
+        closes = [float(row["close"]) for row in rows]
+        ema = self._ema(closes, span=self.config.htf_ema_period)
+        last_close = closes[-1]
+        threshold = self.config.htf_ema_threshold_pct / 100.0
+        if last_close > ema * (1.0 + threshold):
+            return "bull"
+        if last_close < ema * (1.0 - threshold):
+            return "bear"
+        return "neutral"
 
     @staticmethod
     def _ema(values: list[float], span: int) -> float:
