@@ -114,10 +114,15 @@ python scripts/run_backtest.py \
 Available profiles:
 
 ```text
-baseline         specification defaults, including down-only context
-both-directions bull and bear context, all other defaults unchanged
+baseline         specification EMA20 +/-2% and down-only context
+both-directions EMA20 +/-2% with bull and bear context
+ema-tight        EMA20 +/-0.5% with bull and bear context
+ema50            EMA50 +/-2% with bull and bear context
+structure-bias   swing-structure bias with bull and bear context
 wide             diagnostic-only relaxed confidence/volume/RR/ATR values
 ```
+
+`baseline` remains the production research default. The other profiles are controlled experiments and do not silently change the architecture contract.
 
 The backtester reports exactly where bars and candidates are rejected: context, direction, regime, setup, confidence, volume, risk, RR, costs, quality, structure, missing future data, portfolio overlap and kill switches.
 
@@ -211,7 +216,17 @@ No exchange keys or secrets are used by the paper server.
 
 Defaults are defined in `ember/config.py` and mirrored in `config/ember.example.json`.
 
-The specification default `allowed_direction_contexts=("down",)` is preserved. The detector maps `down` to bearish context. Alternative directions are tested through diagnostic profiles rather than silently changing the production baseline.
+The specification default `allowed_direction_contexts=("down",)` and EMA20 +/-2% bias are preserved. Alternative direction, threshold, EMA-period and structure-bias modes are tested through named research profiles.
+
+The configuration supports:
+
+```text
+htf_bias_mode: ema | structure
+htf_ema_period: positive integer
+htf_ema_threshold_pct: positive percentage
+```
+
+`ContextBuilder` emits the volatility regime name `high_vol`; a block list intended to reject it must therefore contain `high_vol`, not `high`.
 
 ## Scope and known limitations
 
