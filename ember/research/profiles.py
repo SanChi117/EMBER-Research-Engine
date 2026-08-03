@@ -2,7 +2,6 @@
 
 from ember.config import EmberConfig
 
-
 PROFILE_NAMES = (
     "baseline",
     "both-directions",
