@@ -12,12 +12,12 @@
 
 # Текущий статус
 
-Актуально после Portfolio WFO OOS и реализации ТЗ `EMBER Research Engine — Portfolio WFO & Universe Expansion`, версия 1.0.
+Актуально после Portfolio WFO OOS и полной реализации ТЗ `EMBER Research Engine — Portfolio WFO & Universe Expansion`, версия 1.0.
 
 | Проверка | Статус | Фактический результат |
 |---|---|---|
-| Установка и CI | PASS | Python 3.10/3.11/3.12, Ruff и leakage tests проходят на последнем завершённом этапе |
-| Unit tests | PASS | 22 теста прошли в Portfolio WFO run; новый protocol gate покрыт отдельными тестами |
+| Установка и CI | PASS | Python 3.10/3.11/3.12, Ruff и leakage tests проходят на PR #7 |
+| Unit tests | PASS | 33 теста прошли; отдельно 7 leakage tests прошли |
 | Zero look-ahead gate | PASS | Leakage tests проходят |
 | Profit Factor | PASS | PF не ограничивается `99.0`; при прибыли без убытков возвращается `inf` |
 | Binance loader, 15000 bars | PASS | 6 core symbols и 4 frozen OOS symbols, по 15000 свечей 15m |
@@ -32,7 +32,8 @@
 | OOS 4 alts, full period | PASS with warning | 3/4 positive с PF > 1.5, но всего 22 сделки |
 | OOS 4 alts, per-symbol WFO | FAIL | Только FET PASS_WITH_WARNING; 7/16 folds без сделок |
 | OOS 4 alts, portfolio WFO | FAIL | stability 50%, total test trades 8, folds `0/0/4/4` |
-| Universe Expansion 20 | BLOCKED | По ТЗ разрешён только после Portfolio WFO PASS |
+| Universe Expansion runner | COMPLETE | Gated runner, top-volume scanner output, tier logic, Markdown/JSON/CSV outputs и tests реализованы |
+| Universe Expansion 20 execution | BLOCKED | По ТЗ разрешён только после Portfolio WFO PASS; tier results не создавались |
 | Paper gate | BLOCKED | Нет 100 completed paper trades и 30 дней observation |
 | Live gate | BLOCKED | Формальные paper/live условия не выполнены |
 
@@ -41,6 +42,7 @@
 - [`CORE_VALIDATION_15000.md`](CORE_VALIDATION_15000.md)
 - [`OUT_OF_SAMPLE_4ALTS.md`](OUT_OF_SAMPLE_4ALTS.md)
 - [`PORTFOLIO_WFO_OOS.md`](PORTFOLIO_WFO_OOS.md)
+- [`UNIVERSE_EXPANSION_20.md`](UNIVERSE_EXPANSION_20.md)
 
 ---
 
@@ -400,38 +402,66 @@ PEPE нельзя удалить задним числом: это universe-sele
 
 ## 2026-08-04 — Реализация ТЗ Portfolio WFO & Universe Expansion v1.0
 
-Добавлены и приведены к именам из ТЗ:
+Добавлены и приведены к именам и контрактам из ТЗ:
 
 ```text
 scripts/run_portfolio_wfo.py
+scripts/run_universe_expansion.py
+scripts/scan_universe.py
 docs/PORTFOLIO_WFO_OOS.md
 docs/PORTFOLIO_WFO_OOS.json
+docs/UNIVERSE_EXPANSION_20.md
 tests/test_portfolio_wfo.py
+tests/test_universe_expansion.py
+tests/test_universe_scanner.py
 ```
 
-Runner:
+Portfolio runner:
 
 - загружает ровно четыре frozen CSV;
 - проверяет `15000` строк и symbol column каждого файла;
 - объединяет данные в один multi-symbol Polars DataFrame;
 - использует один `WalkForwardValidator` для portfolio mode;
 - фиксирует 4 folds, 30-day lookback и 3-bar embargo;
-- применяет дополнительный protocol gate `total_trades >= 20`;
+- применяет полный protocol gate, включая `total_trades >= 20`;
 - выдаёт понятную ошибку без traceback для ожидаемых input failures;
 - сохраняет Markdown и JSON;
 - имеет `if __name__ == "__main__"` guard и type hints.
 
-Workflow повторно скачивает неизменный OOS artifact, запускает canonical runner и сравнивает с сохранённым factual JSON.
+Universe expansion implementation:
 
-Universe Expansion scripts/data не создавались и test не запускался, потому что условие ТЗ `Portfolio WFO = PASS` не выполнено.
+- scanner предварительно исключает top pairs из ТЗ, Core 6, OOS 4 и leveraged suffixes;
+- scanner сортирует eligible Binance USD-M perpetual USDT pairs по 24h `quoteVolume` до backtest;
+- фиксированный top-20 сохраняется в `data/universe_20.json`;
+- batch runner принимает ровно 20 уникальных USDT symbols;
+- batch runner проверяет `docs/PORTFOLIO_WFO_OOS.json` и не допускает обход prerequisite;
+- каждый symbol должен иметь ровно 15000 баров 15m и проверяется неизменным `high-vol-block` profile;
+- Tier 1/2/3 и aggregate PASS/PARTIAL/FAIL rules реализованы;
+- Markdown/JSON/CSV output contracts реализованы;
+- при текущем Portfolio WFO `FAIL` runner создаёт только factual `BLOCKED` report и не скачивает данные;
+- tier-результаты, `data/universe_20.json` и 20-symbol backtest не создавались, потому что prerequisite не выполнен.
 
-**Статус:** Task 1 `COMPLETE / FAIL result`; Task 2 `COMPLETE`; Task 3 `BLOCKED BY SPEC`.
+Verification:
+
+```text
+Ruff: PASS
+Python 3.10/3.11/3.12: PASS
+33 tests: PASS
+7 leakage tests: PASS
+Canonical Portfolio WFO rerun: PASS as reproducibility check
+Portfolio strategy verdict: FAIL
+Universe Expansion gate check: BLOCKED as required
+```
+
+**Статус:** Task 1 `COMPLETE / FAIL result`; Task 2 `COMPLETE`; Task 3 implementation `COMPLETE`, execution `BLOCKED BY SPEC`.
+
+**Документ:** [`UNIVERSE_EXPANSION_20.md`](UNIVERSE_EXPANSION_20.md).
 
 ---
 
 # Следующие обязательные шаги
 
-1. Не запускать Universe Expansion 20 по текущему ТЗ: prerequisite Portfolio WFO PASS не выполнен.
+1. Не запускать market-data Universe Expansion 20 по текущему ТЗ: prerequisite Portfolio WFO PASS не выполнен.
 2. Не исключать PEPE и не менять `min_confidence`, `min_rr` или setup detector по просмотренному OOS результату.
 3. Любую новую universe-selection hypothesis заранее зафиксировать и проверять на новом непересекающемся периоде или новом predeclared universe.
 4. Завершить clean fixed-universe WFO для `opposite-liquidity` на всех шести core symbols как отдельную незавершённую проверку.
@@ -470,6 +500,26 @@ python scripts/run_portfolio_wfo.py \
   --initial-equity 10000 \
   --out-dir results/portfolio_wfo_oos \
   --report-path docs/PORTFOLIO_WFO_OOS.md
+
+# Conditional universe scanner — authorized only after Portfolio WFO PASS
+python scripts/scan_universe.py \
+  --max-symbols 20 \
+  --interval 15m \
+  --bars 15000 \
+  --universe-output data/universe_20.json \
+  --data-dir data/universe_scan \
+  --out-dir results/universe_scan
+
+# Conditional universe expansion batch — currently returns BLOCKED
+python scripts/run_universe_expansion.py \
+  --portfolio-report docs/PORTFOLIO_WFO_OOS.json \
+  --universe-file data/universe_20.json \
+  --interval 15m \
+  --bars 15000 \
+  --initial-equity 10000 \
+  --data-dir data/universe_expansion_20 \
+  --out-dir results/universe_expansion_20 \
+  --report-path docs/UNIVERSE_EXPANSION_20.md
 ```
 
 ---
