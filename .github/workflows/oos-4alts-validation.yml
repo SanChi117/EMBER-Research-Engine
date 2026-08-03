@@ -9,6 +9,13 @@ on:
       - "scripts/run_oos_validation.py"
       - "tests/test_oos_validation.py"
       - ".github/workflows/oos-4alts-validation.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/run_oos_validation.py"
+      - "tests/test_oos_validation.py"
+      - ".github/workflows/oos-4alts-validation.yml"
 
 permissions:
   contents: write
@@ -49,6 +56,7 @@ jobs:
             --out-dir results/oos_4alts \
             | tee results/oos_4alts_stdout.txt
       - name: Persist results in repository
+        if: github.event_name != 'pull_request'
         run: |
           cp results/oos_4alts/summary.md docs/OUT_OF_SAMPLE_4ALTS.md
           cp results/oos_4alts/summary.json docs/OUT_OF_SAMPLE_4ALTS.json
