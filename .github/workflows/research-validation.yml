@@ -1,0 +1,55 @@
+name: EMBER Research Validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "ember/**"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/research-validation.yml"
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Tests
+        run: pytest tests/ -v
+      - name: Mixed-regime synthetic sanity
+        run: |
+          mkdir -p results
+          python scripts/run_demo.py --demo --bars 5000 --wfo --out-dir results/demo \
+            | tee results/synthetic_stdout.txt
+      - name: Fetch 5000 DOGEUSDT bars
+        run: |
+          python scripts/fetch_binance.py \
+            --symbols DOGEUSDT \
+            --interval 15m \
+            --limit 5000 \
+            --out-dir data
+      - name: Compare diagnostic profiles
+        run: |
+          python scripts/run_diagnostics.py \
+            data/DOGEUSDT_15m_5000.csv \
+            --out-dir results/doge_diagnostics \
+            | tee results/doge_diagnostics_stdout.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ember-research-validation
+          path: |
+            results/
+            data/DOGEUSDT_15m_5000.csv
+          if-no-files-found: warn
