@@ -4,6 +4,8 @@ from typing import Any
 
 from ember.config import EmberConfig
 from ember.core import binance_history
+from ember.core.context_builder import ContextBuilder
+from ember.research.profiles import diagnostic_profiles
 from ember.research.synthetic import mixed_regime_synthetic_data, trending_synthetic_data
 from ember.simulation.backtester import Backtester
 
@@ -74,3 +76,41 @@ def test_paginated_fetch_history_assembles_multiple_pages(monkeypatch: Any) -> N
     assert frame.height == 15
     assert len(calls) == 2
     assert frame.get_column("time").is_sorted()
+
+
+def test_tighter_ema_band_changes_neutral_to_directional() -> None:
+    rows = [{"close": 100.0} for _ in range(20)] + [{"close": 101.0}]
+    baseline = ContextBuilder(EmberConfig())
+    tighter = ContextBuilder(EmberConfig(htf_ema_threshold_pct=0.5))
+
+    assert baseline._bias(rows, "consolidation") == "neutral"  # noqa: SLF001
+    assert tighter._bias(rows, "consolidation") == "bull"  # noqa: SLF001
+
+
+def test_structure_bias_maps_structure_without_ema_override() -> None:
+    builder = ContextBuilder(EmberConfig(htf_bias_mode="structure"))
+    rows = [{"close": 100.0}]
+
+    assert builder._bias(rows, "uptrend") == "bull"  # noqa: SLF001
+    assert builder._bias(rows, "downtrend") == "bear"  # noqa: SLF001
+    assert builder._bias(rows, "consolidation") == "neutral"  # noqa: SLF001
+
+
+def test_bias_profiles_change_only_declared_assumptions() -> None:
+    profiles = diagnostic_profiles()
+    baseline = profiles["baseline"]
+    both = profiles["both-directions"]
+    tight = profiles["ema-tight"]
+    ema50 = profiles["ema50"]
+    structure = profiles["structure-bias"]
+
+    assert baseline.htf_bias_mode == "ema"
+    assert baseline.htf_ema_period == 20
+    assert baseline.htf_ema_threshold_pct == 2.0
+    assert both.allowed_direction_contexts == ("bull", "bear")
+    assert tight.htf_ema_threshold_pct == 0.5
+    assert tight.htf_ema_period == baseline.htf_ema_period
+    assert ema50.htf_ema_period == 50
+    assert ema50.htf_ema_threshold_pct == baseline.htf_ema_threshold_pct
+    assert structure.htf_bias_mode == "structure"
+    assert structure.min_rr == baseline.min_rr
