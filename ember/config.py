@@ -38,6 +38,15 @@ class EmberConfig(BaseModel):
     )
     # Kept exactly as specified. The setup detector maps "down" to bearish context.
     allowed_direction_contexts: tuple[str, ...] = ("down",)
+
+    # The specification baseline is EMA20 with a +/-2% neutral band. Alternative
+    # modes are research profiles and do not silently replace the baseline.
+    htf_bias_mode: Literal["ema", "structure"] = "ema"
+    htf_ema_period: int = 20
+    htf_ema_threshold_pct: float = 2.0
+
+    # ContextBuilder emits "high_vol", not "high". An empty tuple means that the
+    # setup layer observes high-volatility candidates instead of blocking them.
     blocked_volatility_regimes: tuple[str, ...] = ()
     min_confidence: float = 43.0
     min_volume_ratio: float = 0.70
@@ -76,6 +85,7 @@ class EmberConfig(BaseModel):
         "fee_rate",
         "slippage_rate",
         "leverage",
+        "htf_ema_threshold_pct",
     )
     @classmethod
     def _positive(cls, value: float) -> float:
@@ -93,6 +103,7 @@ class EmberConfig(BaseModel):
         "wfo_embargo_bars",
         "paper_min_trades",
         "paper_min_days",
+        "htf_ema_period",
     )
     @classmethod
     def _positive_int(cls, value: int) -> int:
