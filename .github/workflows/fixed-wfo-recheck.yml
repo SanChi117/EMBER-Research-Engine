@@ -2,14 +2,16 @@ name: EMBER Fixed Universe WFO Recheck
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
+    branches:
+      - agent/core-15000-validation
     paths:
       - "scripts/run_fixed_wfo.py"
       - "scripts/run_core_validation.py"
       - ".github/workflows/fixed-wfo-recheck.yml"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ember-fixed-universe-wfo-core-15000
   cancel-in-progress: true
 
 jobs:
