@@ -1,0 +1,20 @@
+{
+  "status": "BLOCKED",
+  "reason": "Portfolio WFO OOS status is FAIL; PASS required",
+  "portfolio_wfo_status": "FAIL",
+  "universe_file": "data/universe_20.json",
+  "symbols": [],
+  "interval": "15m",
+  "bars_per_symbol": 15000,
+  "profile": "high-vol-block",
+  "results": [],
+  "tier_counts": {
+    "Tier 1": 0,
+    "Tier 2": 0,
+    "Tier 3": 0
+  },
+  "universe_list_created": false,
+  "market_batch_executed": false,
+  "paper_gate": "BLOCKED",
+  "live_gate": "BLOCKED"
+}
