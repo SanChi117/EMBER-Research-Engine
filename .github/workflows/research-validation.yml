@@ -9,6 +9,10 @@ on:
       - "tests/**"
       - ".github/workflows/research-validation.yml"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   diagnostics:
     runs-on: ubuntu-latest
