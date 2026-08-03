@@ -152,7 +152,7 @@ def test_no_placeholder_results() -> None:
 
 
 def test_pf_no_division_by_zero() -> None:
-    assert profit_factor([1.0, 2.0, 0.5]) == 99.0
+    assert profit_factor([1.0, 2.0, 0.5]) == float("inf")
 
 
 def test_ohlc_validation() -> None:

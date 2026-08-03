@@ -39,14 +39,14 @@ def safe_mean(values: Iterable[float], default: float = 0.0) -> float:
 
 
 def profit_factor(result_rs: Iterable[float]) -> float:
-    """Return a finite PF, capped at 99 when no losing trades exist."""
+    """Return the standard gross-profit / gross-loss ratio."""
 
     values = [float(value) for value in result_rs if math.isfinite(float(value))]
     gross_profit = sum(value for value in values if value > 0)
     gross_loss = abs(sum(value for value in values if value < 0))
     if gross_loss == 0:
-        return 99.0 if gross_profit > 0 else 0.0
-    return min(99.0, gross_profit / gross_loss)
+        return float("inf") if gross_profit > 0 else 0.0
+    return gross_profit / gross_loss
 
 
 def median_bar_minutes(times: list[datetime], default: int = 15) -> int:
