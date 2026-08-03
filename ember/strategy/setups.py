@@ -23,24 +23,51 @@ class SetupDetector:
     ) -> SetupCandidate | None:
         """Return the best allowed setup from data ending at the candidate bar."""
 
-        if past_df.is_empty():
-            return None
-        if context.regime in self.config.blocked_volatility_regimes:
-            return None
-        if not self._direction_allowed(context.bias):
-            return None
+        candidate, _ = self.detect_with_reason(past_df, context)
+        return candidate
 
-        candidates = [
+    def detect_with_reason(
+        self,
+        past_df: pl.DataFrame,
+        context: MTFContext,
+    ) -> tuple[SetupCandidate | None, str | None]:
+        """Return the best setup and a stable rejection reason for diagnostics."""
+
+        if past_df.is_empty():
+            return None, "no_setup"
+        if context.bias == "neutral":
+            return None, "neutral_context"
+        if context.regime in self.config.blocked_volatility_regimes:
+            return None, "regime_reject"
+        if not self._direction_allowed(context.bias):
+            return None, "direction_reject"
+
+        raw_candidates = [
             candidate
             for candidate in (
                 self._detect_pullback(past_df, context),
                 self._detect_ignition(past_df, context),
             )
-            if candidate is not None and self._candidate_allowed(candidate, context)
+            if candidate is not None
         ]
-        if not candidates:
-            return None
-        return max(candidates, key=lambda candidate: candidate.confidence)
+        if not raw_candidates:
+            return None, "no_setup"
+
+        allowed_candidates = [
+            candidate
+            for candidate in raw_candidates
+            if candidate.setup_type in self.config.allowed_setups
+            and candidate.setup_type not in self.config.blocked_setups
+        ]
+        if not allowed_candidates:
+            return None, "setup_blocked"
+
+        best = max(allowed_candidates, key=lambda candidate: candidate.confidence)
+        if best.confidence < self.config.min_confidence:
+            return None, "confidence_low"
+        if context.volume_ratio < self.config.min_volume_ratio:
+            return None, "volume_low"
+        return best, None
 
     def _detect_pullback(
         self,
@@ -67,7 +94,7 @@ class SetupDetector:
             location_ok = context.pda_position > 0.6
             rejection = (float(row["high"]) - float(row["close"])) / candle_range > 0.3
             depth = (context.pda_position - 0.6) / 0.4
-        if not location_ok or not rejection or context.volume_ratio < 0.7:
+        if not location_ok or not rejection:
             return None
 
         confidence = bounded(55.0 + bounded(depth, 0.0, 1.0) * 50.0, 0.0, 100.0)
@@ -137,18 +164,6 @@ class SetupDetector:
             direction_ok = float(row["close"]) < float(row["open"])
         return direction_ok and body > atr * 1.2
 
-    def _candidate_allowed(
-        self,
-        candidate: SetupCandidate,
-        context: MTFContext,
-    ) -> bool:
-        return (
-            candidate.setup_type in self.config.allowed_setups
-            and candidate.setup_type not in self.config.blocked_setups
-            and candidate.confidence >= self.config.min_confidence
-            and context.volume_ratio >= self.config.min_volume_ratio
-        )
-
     def _direction_allowed(self, bias: str) -> bool:
         normalized = {
             "up": "bull",
@@ -156,7 +171,10 @@ class SetupDetector:
             "long": "bull",
             "short": "bear",
         }
-        allowed = {normalized.get(value.lower(), value.lower()) for value in self.config.allowed_direction_contexts}
+        allowed = {
+            normalized.get(value.lower(), value.lower())
+            for value in self.config.allowed_direction_contexts
+        }
         return bias in allowed
 
     @staticmethod
