@@ -4,6 +4,14 @@ EMBER is a **research-only** cryptocurrency strategy engine implementing the HYB
 
 It does not place live orders, does not accept exchange API keys, and does not contain a live execution adapter.
 
+## Current validation status
+
+All completed checks, commands, datasets, metrics, discovered bugs, fixes and next steps are recorded in:
+
+[`docs/VALIDATION_LOG.md`](docs/VALIDATION_LOG.md)
+
+The validation log is the project’s persistent source of truth. New research steps must be appended there with their actual results and a `PASS`, `FAIL` or `BLOCKED` verdict.
+
 ## Non-negotiable research rules
 
 1. **Zero Look-Ahead** - entry features, MTF context and setup detection only use bars at or before `entry_time`.
@@ -60,7 +68,7 @@ pytest tests/ -v
 pytest tests/test_no_leakage.py -v
 ```
 
-`tests/test_no_leakage.py` covers future-price isolation, future-only exits, completed-trade-only learning, no placeholder results, finite PF and OHLC validation.
+`tests/test_no_leakage.py` covers future-price isolation, future-only exits, completed-trade-only learning, no placeholder results, uncapped PF and OHLC validation.
 
 ## Synthetic sanity demo
 
