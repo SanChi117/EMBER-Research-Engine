@@ -4,23 +4,31 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - agent/oos-portfolio-wfo
+      - agent/implement-portfolio-wfo-tz
     paths:
-      - "scripts/run_fixed_wfo.py"
+      - "scripts/run_portfolio_wfo.py"
+      - "tests/test_portfolio_wfo.py"
+      - "docs/PORTFOLIO_WFO_OOS.md"
+      - "docs/PORTFOLIO_WFO_OOS.json"
+      - "docs/VALIDATION_LOG.md"
       - ".github/workflows/oos-portfolio-wfo.yml"
   pull_request:
     branches:
       - main
     paths:
-      - "scripts/run_fixed_wfo.py"
+      - "scripts/run_portfolio_wfo.py"
+      - "tests/test_portfolio_wfo.py"
+      - "docs/PORTFOLIO_WFO_OOS.md"
+      - "docs/PORTFOLIO_WFO_OOS.json"
+      - "docs/VALIDATION_LOG.md"
       - ".github/workflows/oos-portfolio-wfo.yml"
 
 permissions:
   actions: read
-  contents: write
+  contents: read
 
 concurrency:
-  group: ember-oos-portfolio-wfo
+  group: ember-oos-portfolio-wfo-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -56,38 +64,48 @@ jobs:
           for symbol in PEPEUSDT FETUSDT WIFUSDT SUIUSDT; do
             test -f "frozen_oos/data/oos_4alts/${symbol}_15m_15000.csv"
           done
-      - name: Run fixed-universe portfolio WFO
+      - name: Run canonical portfolio WFO
         run: |
-          mkdir -p results/oos_portfolio_wfo docs
-          python scripts/run_fixed_wfo.py \
+          mkdir -p results/portfolio_wfo_oos
+          python scripts/run_portfolio_wfo.py \
             --data-dir frozen_oos/data/oos_4alts \
-            --out-dir results/oos_portfolio_wfo \
+            --out-dir results/portfolio_wfo_oos \
+            --report-path results/portfolio_wfo_oos/PORTFOLIO_WFO_OOS.md \
             --symbols PEPEUSDT,FETUSDT,WIFUSDT,SUIUSDT \
-            --profiles high-vol-block \
+            --profile high-vol-block \
             --interval 15m \
             --bars 15000 \
-            | tee results/oos_portfolio_wfo_stdout.txt
-      - name: Persist portfolio WFO result
-        if: github.event_name != 'pull_request'
+            --initial-equity 10000 \
+            | tee results/portfolio_wfo_oos_stdout.txt
+      - name: Verify recorded factual result
         run: |
-          cp results/oos_portfolio_wfo/summary.md docs/OOS_PORTFOLIO_WFO.md
-          cp results/oos_portfolio_wfo/summary.json docs/OOS_PORTFOLIO_WFO.json
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/OOS_PORTFOLIO_WFO.md docs/OOS_PORTFOLIO_WFO.json
-          if git diff --cached --quiet; then
-            echo "No result changes to commit"
-          else
-            git commit -m "Record OOS portfolio WFO results"
-            git push origin HEAD:${GITHUB_REF_NAME}
-          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          generated = json.loads(
+              Path("results/portfolio_wfo_oos/summary.json").read_text(encoding="utf-8")
+          )
+          recorded = json.loads(
+              Path("docs/PORTFOLIO_WFO_OOS.json").read_text(encoding="utf-8")
+          )
+          assert generated["symbols"] == recorded["symbols"]
+          assert generated["profile"] == recorded["profile"]
+          assert generated["interval"] == recorded["interval"]
+          assert generated["bars_per_symbol"] == recorded["bars_per_symbol"]
+          assert generated["result"] == recorded["result"]
+          assert generated["result"]["status"] == "FAIL"
+          assert generated["result"]["total_trades"] == 8
+          assert generated["result"]["stability_score"] == 50.0
+          print("Recorded Portfolio WFO result is reproducible")
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ember-oos-portfolio-wfo
+          name: ember-portfolio-wfo-oos
           path: |
-            results/oos_portfolio_wfo/
-            results/oos_portfolio_wfo_stdout.txt
-            docs/OOS_PORTFOLIO_WFO.md
-            docs/OOS_PORTFOLIO_WFO.json
+            results/portfolio_wfo_oos/
+            results/portfolio_wfo_oos_stdout.txt
+            docs/PORTFOLIO_WFO_OOS.md
+            docs/PORTFOLIO_WFO_OOS.json
           if-no-files-found: warn
