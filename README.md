@@ -6,11 +6,28 @@ It does not place live orders, does not accept exchange API keys, and does not c
 
 ## Current validation status
 
-All completed checks, commands, datasets, metrics, discovered bugs, fixes and next steps are recorded in:
+The persistent validation history is stored in:
 
 [`docs/VALIDATION_LOG.md`](docs/VALIDATION_LOG.md)
 
-The validation log is the project’s persistent source of truth. New research steps must be appended there with their actual results and a `PASS`, `FAIL` or `BLOCKED` verdict.
+The latest six-symbol, 15000-bar study is stored separately with all per-symbol metrics, aggregate results, decisions and WFO warnings:
+
+[`docs/CORE_VALIDATION_15000.md`](docs/CORE_VALIDATION_15000.md)
+
+Current research status:
+
+```text
+Six-symbol baseline backtest: PASS
+Baseline WFO: PASS with one zero-trade fold warning
+High-vol-block backtest: PASS
+High-vol-block WFO: PASS with one zero-trade fold warning
+Structure-bias replacement: FAIL
+Opposite-liquidity clean fixed-universe WFO: PENDING
+Paper gate: BLOCKED
+Live gate: BLOCKED
+```
+
+A `PASS` applies only to the named validation stage. It does not authorize live trading.
 
 ## Non-negotiable research rules
 
@@ -114,19 +131,21 @@ python scripts/run_backtest.py \
 Available profiles:
 
 ```text
-baseline         specification EMA20 +/-2% and down-only context
-both-directions EMA20 +/-2% with bull and bear context
-ema-tight        EMA20 +/-0.5% with bull and bear context
-ema50            EMA50 +/-2% with bull and bear context
-structure-bias   swing-structure bias with bull and bear context
-wide             diagnostic-only relaxed confidence/volume/RR/ATR values
+baseline             specification EMA20 +/-2% and down-only context
+both-directions      EMA20 +/-2% with bull and bear context
+ema-tight            EMA20 +/-0.5% with bull and bear context
+ema50                EMA50 +/-2% with bull and bear context
+structure-bias       swing-structure bias with bull and bear context
+high-vol-block       baseline plus blocked high_vol regime
+opposite-liquidity   baseline plus opposite HTF liquidity target
+wide                 diagnostic-only relaxed confidence/volume/RR/ATR values
 ```
 
 `baseline` remains the production research default. The other profiles are controlled experiments and do not silently change the architecture contract.
 
 The backtester reports exactly where bars and candidates are rejected: context, direction, regime, setup, confidence, volume, risk, RR, costs, quality, structure, missing future data, portfolio overlap and kill switches.
 
-### Compare all diagnostic profiles
+### Compare diagnostic profiles
 
 ```bash
 python scripts/run_diagnostics.py \
@@ -135,6 +154,41 @@ python scripts/run_diagnostics.py \
 ```
 
 This writes separate reports for each profile and a combined `summary.json`.
+
+## Six-symbol 15000-bar validation
+
+Download and test approximately 156 days for every core symbol:
+
+```bash
+python scripts/run_core_validation.py \
+  --symbols INJUSDT,TONUSDT,DOGEUSDT,ARBUSDT,NEARUSDT,OPUSDT \
+  --profiles baseline,structure-bias,high-vol-block,opposite-liquidity \
+  --interval 15m \
+  --bars 15000 \
+  --data-dir data/core_validation \
+  --out-dir results/core_validation
+```
+
+The runner writes:
+
+```text
+results/core_validation/summary.csv
+results/core_validation/summary.json
+results/core_validation/summary.md
+results/core_validation/reports/<symbol>/<profile>/...
+```
+
+Run WFO on one fixed, predeclared universe without selecting symbols from full-period performance:
+
+```bash
+python scripts/run_fixed_wfo.py \
+  --data-dir data/core_validation \
+  --out-dir results/fixed_wfo \
+  --symbols INJUSDT,TONUSDT,DOGEUSDT,ARBUSDT,NEARUSDT,OPUSDT \
+  --profiles baseline,high-vol-block,opposite-liquidity \
+  --interval 15m \
+  --bars 15000
+```
 
 ## Public Binance data
 
@@ -177,6 +231,8 @@ worst_dd < 10%
 avg_return > 0
 ```
 
+Zero-trade folds are reported separately. A formal threshold pass with a zero-trade fold is recorded as a warning and is not sufficient for live readiness.
+
 ## Virtual-only paper server
 
 ```bash
@@ -216,7 +272,7 @@ No exchange keys or secrets are used by the paper server.
 
 Defaults are defined in `ember/config.py` and mirrored in `config/ember.example.json`.
 
-The specification default `allowed_direction_contexts=("down",)` and EMA20 +/-2% bias are preserved. Alternative direction, threshold, EMA-period and structure-bias modes are tested through named research profiles.
+The specification default `allowed_direction_contexts=("down",)` and EMA20 +/-2% bias are preserved. Alternative direction, threshold, EMA-period, structure-bias, volatility-block and TP modes are tested through named research profiles.
 
 The configuration supports:
 
@@ -224,6 +280,8 @@ The configuration supports:
 htf_bias_mode: ema | structure
 htf_ema_period: positive integer
 htf_ema_threshold_pct: positive percentage
+blocked_volatility_regimes: tuple of runtime regime names
+tp_mode: fixed_rr | opposite_htf_liquidity
 ```
 
 `ContextBuilder` emits the volatility regime name `high_vol`; a block list intended to reject it must therefore contain `high_vol`, not `high`.
@@ -237,7 +295,8 @@ The document itself identifies several research TODOs. Version 0.2.0 keeps them 
 - resampling assumes the input timeframe is complete and regularly spaced.
 - Binance Vision provides spot klines; Futures `fapi` is the fallback.
 - leverage is a research sizing model and does not model liquidation or funding.
-- a positive result from a handful of trades is not statistically sufficient.
+- profile selection on one historical sample creates meta-selection risk.
+- a positive result from a small number of trades is not statistically sufficient.
 
 ## Live gate
 
@@ -246,6 +305,7 @@ Live trading remains prohibited until all conditions are met:
 - at least 100 completed paper trades;
 - at least 30 calendar days of paper observation;
 - paper metrics within +/-10% of backtest expectations;
-- WFO result is `PASS`.
+- WFO result is `PASS`;
+- all leakage tests pass.
 
 See `docs/LIVE_GATE.md`.
