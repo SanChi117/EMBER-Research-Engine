@@ -15,6 +15,7 @@ on:
       - "docs/PORTFOLIO_WFO_OOS.md"
       - "docs/PORTFOLIO_WFO_OOS.json"
       - "docs/UNIVERSE_EXPANSION_20.md"
+      - "docs/UNIVERSE_EXPANSION_20.json"
       - "docs/VALIDATION_LOG.md"
       - ".github/workflows/oos-portfolio-wfo.yml"
   pull_request:
@@ -30,6 +31,7 @@ on:
       - "docs/PORTFOLIO_WFO_OOS.md"
       - "docs/PORTFOLIO_WFO_OOS.json"
       - "docs/UNIVERSE_EXPANSION_20.md"
+      - "docs/UNIVERSE_EXPANSION_20.json"
       - "docs/VALIDATION_LOG.md"
       - ".github/workflows/oos-portfolio-wfo.yml"
 
@@ -138,4 +140,5 @@ jobs:
             docs/PORTFOLIO_WFO_OOS.md
             docs/PORTFOLIO_WFO_OOS.json
             docs/UNIVERSE_EXPANSION_20.md
+            docs/UNIVERSE_EXPANSION_20.json
           if-no-files-found: warn
