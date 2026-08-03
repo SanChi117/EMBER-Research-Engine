@@ -124,6 +124,14 @@ def _qualifies_for_wfo(row: dict[str, Any]) -> bool:
     )
 
 
+def _fixed_portfolio(frames: dict[str, pl.DataFrame]) -> pl.DataFrame:
+    """Build one immutable WFO universe from every requested symbol."""
+
+    if not frames:
+        raise ValueError("at least one symbol frame is required")
+    return pl.concat(list(frames.values()), how="vertical").sort(["time", "symbol"])
+
+
 def _write_csv(rows: list[dict[str, Any]], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
@@ -189,30 +197,35 @@ def _conditional_wfo(
     out_dir: Path,
     equity: float,
 ) -> dict[str, Any]:
-    portfolio = pl.concat(list(frames.values()), how="vertical").sort(["time", "symbol"])
+    portfolio = _fixed_portfolio(frames)
+    universe_symbols = sorted(frames)
     summaries: dict[str, Any] = {}
     for profile in profiles:
-        eligible = [
+        qualifying_symbols = [
             row["symbol"]
             for row in rows
             if row["profile"] == profile and _qualifies_for_wfo(row)
         ]
-        if len(eligible) < 3:
+        if len(qualifying_symbols) < 3:
             summaries[profile] = {
                 "status": "BLOCKED",
                 "reason": "fewer than 3 symbols have positive return and PF > 1.5",
-                "eligible_symbols": eligible,
+                "qualifying_symbols": qualifying_symbols,
+                "universe_policy": "fixed_all_requested_symbols",
+                "universe_symbols": universe_symbols,
             }
             continue
 
-        selected = portfolio.filter(pl.col("symbol").is_in(eligible))
         config = config_for_profile(profile)
-        summary = WalkForwardValidator(config).run(selected, initial_equity=equity)
+        summary = WalkForwardValidator(config).run(portfolio, initial_equity=equity)
         ReportEngine().write_wfo(summary, out_dir / "wfo" / profile)
         summaries[profile] = {
             "status": summary.pass_fail,
-            "eligible_symbols": eligible,
+            "qualifying_symbols": qualifying_symbols,
+            "universe_policy": "fixed_all_requested_symbols",
+            "universe_symbols": universe_symbols,
             "folds": len(summary.folds),
+            "zero_trade_folds": sum(fold.num_trades == 0 for fold in summary.folds),
             "avg_return": _metric_value(float(summary.avg_return)),
             "avg_pf": _metric_value(float(summary.avg_pf)),
             "worst_dd": float(summary.worst_dd),
