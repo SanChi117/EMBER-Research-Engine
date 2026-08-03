@@ -33,6 +33,7 @@ jobs:
         run: pytest tests/ -v
       - name: Download and validate six core symbols
         run: |
+          mkdir -p results
           python scripts/run_core_validation.py \
             --symbols INJUSDT,TONUSDT,DOGEUSDT,ARBUSDT,NEARUSDT,OPUSDT \
             --profiles baseline,structure-bias,high-vol-block,opposite-liquidity \
