@@ -1,0 +1,82 @@
+name: EMBER Validation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Synthetic sanity check
+        run: |
+          mkdir -p validation results/demo
+          python scripts/run_demo.py --out-dir results/demo --bars 1000 | tee validation/synthetic_stdout.txt
+          cat results/demo/backtest_report.md | tee validation/synthetic_backtest_report.txt
+          cat results/demo/wfo_report.md | tee validation/synthetic_wfo_report.txt
+
+      - name: Fetch Binance data and run real backtests
+        continue-on-error: true
+        run: |
+          mkdir -p data validation results/real
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from ember.core.data_engine import DataEngine
+          from ember.config import EmberConfig
+          from ember.simulation.backtester import Backtester
+
+          symbols = ["INJUSDT", "TONUSDT", "DOGEUSDT", "ARBUSDT", "NEARUSDT", "OPUSDT"]
+          Path("data").mkdir(exist_ok=True)
+          summary = {}
+          for symbol in symbols:
+              item = {}
+              try:
+                  frame = DataEngine.fetch_binance([symbol], "15m", limit=1000)
+                  path = Path("data") / f"{symbol}_15m.csv"
+                  frame.write_csv(path)
+                  item["rows"] = frame.height
+                  if frame.height:
+                      result = Backtester(EmberConfig()).run(frame)
+                      item.update({
+                          "num_trades": result.metrics.num_trades,
+                          "total_return": result.metrics.total_return,
+                          "profit_factor": result.metrics.profit_factor,
+                          "max_drawdown": result.metrics.max_drawdown,
+                          "win_rate": result.metrics.win_rate,
+                          "final_equity": result.metrics.final_equity,
+                      })
+              except Exception as exc:
+                  item["error"] = f"{type(exc).__name__}: {exc}"
+              summary[symbol] = item
+              print(symbol, item)
+          Path("validation/real_summary.json").write_text(
+              json.dumps(summary, indent=2, allow_nan=True), encoding="utf-8"
+          )
+          PY
+          cat validation/real_summary.json
+
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-validation
+          path: |
+            validation/
+            results/
+            data/
+          if-no-files-found: warn
