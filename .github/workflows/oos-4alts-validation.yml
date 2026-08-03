@@ -1,0 +1,74 @@
+name: EMBER OOS 4-Alts Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/out-of-sample-4alts
+    paths:
+      - "scripts/run_oos_validation.py"
+      - "tests/test_oos_validation.py"
+      - ".github/workflows/oos-4alts-validation.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ember-oos-4alts
+  cancel-in-progress: true
+
+jobs:
+  out-of-sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Static checks and tests
+        run: |
+          ruff check ember/ tests/ scripts/
+          pytest tests/ -v
+          pytest tests/test_no_leakage.py -v
+      - name: Run predeclared four-symbol OOS validation
+        run: |
+          mkdir -p results docs
+          python scripts/run_oos_validation.py \
+            --symbols PEPEUSDT,FETUSDT,WIFUSDT,SUIUSDT \
+            --interval 15m \
+            --bars 15000 \
+            --data-dir data/oos_4alts \
+            --out-dir results/oos_4alts \
+            | tee results/oos_4alts_stdout.txt
+      - name: Persist results in repository
+        run: |
+          cp results/oos_4alts/summary.md docs/OUT_OF_SAMPLE_4ALTS.md
+          cp results/oos_4alts/summary.json docs/OUT_OF_SAMPLE_4ALTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/OUT_OF_SAMPLE_4ALTS.md docs/OUT_OF_SAMPLE_4ALTS.json
+          if git diff --cached --quiet; then
+            echo "No result changes to commit"
+          else
+            git commit -m "Record four-alt out-of-sample results"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ember-oos-4alts-validation
+          path: |
+            results/oos_4alts/
+            results/oos_4alts_stdout.txt
+            data/oos_4alts/
+            docs/OUT_OF_SAMPLE_4ALTS.md
+            docs/OUT_OF_SAMPLE_4ALTS.json
+          if-no-files-found: warn
