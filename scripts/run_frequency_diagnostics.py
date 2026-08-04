@@ -40,8 +40,8 @@ def run_frequency_diagnostics(
     seed: int,
     out_dir: Path,
 ) -> dict[str, Any]:
-    if bars <= 60:
-        raise ValueError("bars must be greater than 60")
+    if bars < 500:
+        raise ValueError("bars must be at least 500")
 
     candles = mixed_regime_synthetic_data(bars=bars, seed=seed)
     sample_days = bars / 96.0
