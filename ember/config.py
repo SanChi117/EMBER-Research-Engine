@@ -36,18 +36,20 @@ class EmberConfig(BaseModel):
         "liquidity_reclaim",
         "watch",
     )
-    # Kept exactly as specified. The setup detector maps "down" to bearish context.
-    allowed_direction_contexts: tuple[str, ...] = ("down",)
 
-    # The specification baseline is EMA20 with a +/-2% neutral band. Alternative
-    # modes are research profiles and do not silently replace the baseline.
+    # Default research hypothesis: directional EMA20 contexts are eligible in both
+    # directions. Neutral remains blocked by the setup layer.
+    allowed_direction_contexts: tuple[str, ...] = ("bull", "bear")
+
+    # The architecture baseline is EMA20 with a +/-2% neutral band. Alternative
+    # modes are research profiles and do not silently replace this assumption.
     htf_bias_mode: Literal["ema", "structure"] = "ema"
     htf_ema_period: int = 20
     htf_ema_threshold_pct: float = 2.0
 
-    # ContextBuilder emits "high_vol", not "high". An empty tuple means that the
-    # setup layer observes high-volatility candidates instead of blocking them.
-    blocked_volatility_regimes: tuple[str, ...] = ()
+    # ContextBuilder emits "high_vol". The default research hypothesis blocks it;
+    # historical controls remain available as explicit diagnostic profiles.
+    blocked_volatility_regimes: tuple[str, ...] = ("high_vol",)
     min_confidence: float = 43.0
     min_volume_ratio: float = 0.70
     risk_per_trade_pct: float = 1.0
