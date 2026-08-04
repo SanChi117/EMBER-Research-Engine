@@ -2,44 +2,13 @@ name: EMBER Config Frequency 30000
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - agent/config-sync-frequency-30000
-    paths:
-      - "ember/config.py"
-      - "ember/cli.py"
-      - "ember/research/profiles.py"
-      - "scripts/run_frequency_diagnostics.py"
-      - "scripts/run_portfolio_wfo.py"
-      - "tests/test_diagnostics.py"
-      - "tests/test_frequency_diagnostics.py"
-      - "tests/test_portfolio_wfo.py"
-      - ".github/workflows/config-frequency-30000.yml"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "ember/config.py"
-      - "ember/cli.py"
-      - "ember/research/profiles.py"
-      - "scripts/run_frequency_diagnostics.py"
-      - "scripts/run_portfolio_wfo.py"
-      - "tests/test_diagnostics.py"
-      - "tests/test_frequency_diagnostics.py"
-      - "tests/test_portfolio_wfo.py"
-      - "docs/CONFIG_FREQUENCY_30000.md"
-      - "docs/CONFIG_FREQUENCY_30000.json"
-      - "docs/PORTFOLIO_WFO_EXTENDED_30000.md"
-      - "docs/PORTFOLIO_WFO_EXTENDED_30000.json"
-      - "docs/VALIDATION_LOG.md"
-      - ".github/workflows/config-frequency-30000.yml"
 
 permissions:
   contents: read
 
 concurrency:
-  group: ember-config-frequency-30000-${{ github.ref }}
-  cancel-in-progress: true
+  group: ember-config-frequency-30000
+  cancel-in-progress: false
 
 jobs:
   validate:
