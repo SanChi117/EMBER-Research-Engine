@@ -1,0 +1,132 @@
+{
+  "report_title": "Portfolio WFO — Extended History 30000",
+  "evidence_class": "extended_overlapping_history",
+  "symbols": [
+    "PEPEUSDT",
+    "FETUSDT",
+    "WIFUSDT",
+    "SUIUSDT"
+  ],
+  "profile": "bidirectional-high-vol-block",
+  "interval": "15m",
+  "bars_per_symbol": 30000,
+  "initial_equity": 10000.0,
+  "config": {
+    "allowed_direction_contexts": ["bull", "bear"],
+    "blocked_volatility_regimes": ["high_vol"],
+    "min_confidence": 43.0,
+    "min_volume_ratio": 0.7,
+    "min_rr": 1.8,
+    "max_positions": 1
+  },
+  "data_manifest": [
+    {
+      "symbol": "PEPEUSDT",
+      "path": "data/oos_4alts_30000/PEPEUSDT_15m_30000.csv",
+      "rows": 30000,
+      "start": "2025-09-26T01:45:00+00:00",
+      "end": "2026-08-04T13:30:00+00:00",
+      "sha256": "ab951df979c99e697f0308244485a31f1f8571b7a4e5981433cbd4aea3d2c53e"
+    },
+    {
+      "symbol": "FETUSDT",
+      "path": "data/oos_4alts_30000/FETUSDT_15m_30000.csv",
+      "rows": 30000,
+      "start": "2025-09-26T01:45:00+00:00",
+      "end": "2026-08-04T13:30:00+00:00",
+      "sha256": "859da03ecebe30a6c562ce358e950912ffe339e0da577276101292da410a3ede"
+    },
+    {
+      "symbol": "WIFUSDT",
+      "path": "data/oos_4alts_30000/WIFUSDT_15m_30000.csv",
+      "rows": 30000,
+      "start": "2025-09-26T01:45:00+00:00",
+      "end": "2026-08-04T13:30:00+00:00",
+      "sha256": "0257122569d738d2edc20f6cf2d36f6be041eeba8ae1c18998eac6e2224e0902"
+    },
+    {
+      "symbol": "SUIUSDT",
+      "path": "data/oos_4alts_30000/SUIUSDT_15m_30000.csv",
+      "rows": 30000,
+      "start": "2025-09-26T01:45:00+00:00",
+      "end": "2026-08-04T13:30:00+00:00",
+      "sha256": "6ddaba31910294ff99874e0f441d33725860b4751c339024352f1faa7e1ef20c"
+    }
+  ],
+  "result": {
+    "status": "FAIL",
+    "engine_status": "FAIL",
+    "portfolio_mode": true,
+    "universe_policy": "fixed_all_requested_symbols",
+    "symbols": [
+      "PEPEUSDT",
+      "FETUSDT",
+      "WIFUSDT",
+      "SUIUSDT"
+    ],
+    "folds": 4,
+    "zero_trade_folds": 0,
+    "total_trades": 46,
+    "avg_return": -0.7355444479800963,
+    "avg_pf": 0.8388446487158107,
+    "worst_dd": 4.145555319879098,
+    "stability_score": 50.0,
+    "pass_gate": {
+      "stability_score_gte": 70.0,
+      "avg_pf_gte": 1.5,
+      "worst_dd_lt": 10.0,
+      "avg_return_gt": 0.0,
+      "total_trades_gte": 20
+    },
+    "fold_details": [
+      {
+        "fold": 1,
+        "train_start": "2025-09-26T01:45:00+00:00",
+        "train_end": "2025-10-26T01:45:00+00:00",
+        "test_start": "2025-10-26T02:30:00+00:00",
+        "test_end": "2025-12-21T02:30:00+00:00",
+        "return_pct": -2.1410943789185692,
+        "profit_factor": 0.42929133405107456,
+        "max_drawdown": 3.4455863227274195,
+        "num_trades": 5,
+        "positive": false
+      },
+      {
+        "fold": 2,
+        "train_start": "2025-11-21T01:45:00+00:00",
+        "train_end": "2025-12-21T01:45:00+00:00",
+        "test_start": "2025-12-21T02:30:00+00:00",
+        "test_end": "2026-02-15T02:30:00+00:00",
+        "return_pct": 0.01268446899654009,
+        "profit_factor": 1.0150156252665703,
+        "max_drawdown": 3.7360874767385983,
+        "num_trades": 17,
+        "positive": true
+      },
+      {
+        "fold": 3,
+        "train_start": "2026-01-16T01:45:00+00:00",
+        "train_end": "2026-02-15T01:45:00+00:00",
+        "test_start": "2026-02-15T02:30:00+00:00",
+        "test_end": "2026-04-12T02:30:00+00:00",
+        "return_pct": -3.053351837140217,
+        "profit_factor": 0.6211314228337104,
+        "max_drawdown": 4.145555319879098,
+        "num_trades": 10,
+        "positive": false
+      },
+      {
+        "fold": 4,
+        "train_start": "2026-03-13T01:45:00+00:00",
+        "train_end": "2026-04-12T01:45:00+00:00",
+        "test_start": "2026-04-12T02:30:00+00:00",
+        "test_end": "2026-06-07T02:30:00+00:00",
+        "return_pct": 2.2395839551418613,
+        "profit_factor": 1.2899402127118873,
+        "max_drawdown": 3.1406294808982853,
+        "num_trades": 14,
+        "positive": true
+      }
+    ]
+  }
+}
