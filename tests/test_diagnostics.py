@@ -78,10 +78,10 @@ def test_paginated_fetch_history_assembles_multiple_pages(monkeypatch: Any) -> N
     assert frame.get_column("time").is_sorted()
 
 
-def test_default_configuration_uses_bidirectional_high_vol_block() -> None:
+def test_default_configuration_preserves_validated_baseline() -> None:
     config = EmberConfig()
-    assert config.allowed_direction_contexts == ("bull", "bear")
-    assert config.blocked_volatility_regimes == ("high_vol",)
+    assert config.allowed_direction_contexts == ("down",)
+    assert config.blocked_volatility_regimes == ()
 
 
 def test_tighter_ema_band_changes_neutral_to_directional() -> None:
@@ -107,6 +107,8 @@ def test_bias_profiles_change_only_declared_assumptions() -> None:
     baseline = profiles["baseline"]
     legacy = profiles["legacy-baseline"]
     both = profiles["both-directions"]
+    high_vol = profiles["high-vol-block"]
+    combined = profiles["bidirectional-high-vol-block"]
     tight = profiles["ema-tight"]
     ema50 = profiles["ema50"]
     structure = profiles["structure-bias"]
@@ -114,12 +116,15 @@ def test_bias_profiles_change_only_declared_assumptions() -> None:
     assert baseline.htf_bias_mode == "ema"
     assert baseline.htf_ema_period == 20
     assert baseline.htf_ema_threshold_pct == 2.0
-    assert baseline.allowed_direction_contexts == ("bull", "bear")
-    assert baseline.blocked_volatility_regimes == ("high_vol",)
-    assert legacy.allowed_direction_contexts == ("down",)
-    assert legacy.blocked_volatility_regimes == ()
+    assert baseline.allowed_direction_contexts == ("down",)
+    assert baseline.blocked_volatility_regimes == ()
+    assert legacy == baseline
     assert both.allowed_direction_contexts == ("bull", "bear")
     assert both.blocked_volatility_regimes == ()
+    assert high_vol.allowed_direction_contexts == ("down",)
+    assert high_vol.blocked_volatility_regimes == ("high_vol",)
+    assert combined.allowed_direction_contexts == ("bull", "bear")
+    assert combined.blocked_volatility_regimes == ("high_vol",)
     assert tight.htf_ema_threshold_pct == 0.5
     assert tight.htf_ema_period == baseline.htf_ema_period
     assert ema50.htf_ema_period == 50
@@ -130,26 +135,26 @@ def test_bias_profiles_change_only_declared_assumptions() -> None:
 
 def test_historical_high_vol_profile_remains_reproducible() -> None:
     profiles = diagnostic_profiles()
-    legacy = profiles["legacy-baseline"]
+    baseline = profiles["baseline"]
     high_vol = profiles["high-vol-block"]
 
-    assert high_vol.allowed_direction_contexts == ("down",)
-    assert high_vol.blocked_volatility_regimes == ("high_vol",)
     high_vol_data = high_vol.model_dump()
-    legacy_data = legacy.model_dump()
-    high_vol_data["blocked_volatility_regimes"] = legacy_data[
+    baseline_data = baseline.model_dump()
+    high_vol_data["blocked_volatility_regimes"] = baseline_data[
         "blocked_volatility_regimes"
     ]
-    assert high_vol_data == legacy_data
+    assert high_vol_data == baseline_data
 
 
-def test_current_target_profiles_are_isolated() -> None:
+def test_failed_combined_profile_remains_isolated() -> None:
     profiles = diagnostic_profiles()
     baseline = profiles["baseline"]
-    current_alias = profiles["bidirectional-high-vol-block"]
+    combined = profiles["bidirectional-high-vol-block"]
     opposite = profiles["opposite-liquidity"]
 
-    assert current_alias == baseline
+    assert combined != baseline
+    assert combined.allowed_direction_contexts == ("bull", "bear")
+    assert combined.blocked_volatility_regimes == ("high_vol",)
     assert opposite.tp_mode == "opposite_htf_liquidity"
     assert opposite.blocked_volatility_regimes == baseline.blocked_volatility_regimes
     assert opposite.allowed_direction_contexts == baseline.allowed_direction_contexts
