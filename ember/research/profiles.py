@@ -17,33 +17,34 @@ PROFILE_NAMES = (
 
 
 def diagnostic_profiles() -> dict[str, EmberConfig]:
-    """Return profiles with explicit historical controls and isolated hypotheses.
+    """Return historical controls and isolated research hypotheses.
 
-    ``baseline`` and ``bidirectional-high-vol-block`` use the current default
-    configuration. ``legacy-baseline``, ``both-directions`` and
-    ``high-vol-block`` preserve the exact assumptions used by earlier reports so
-    those results remain reproducible after the default configuration changes.
+    The default ``baseline`` remains the configuration used by the original
+    validation reports. The proposed bidirectional/high-vol-block combination is
+    retained as an explicit profile because its controlled synthetic and
+    30000-bar portfolio validations failed; it must not silently replace the
+    baseline.
     """
 
     baseline = EmberConfig()
-    legacy_baseline = baseline.model_copy(
-        update={
-            "allowed_direction_contexts": ("down",),
-            "blocked_volatility_regimes": (),
-        }
-    )
-    both_directions = legacy_baseline.model_copy(
+    both_directions = baseline.model_copy(
         update={"allowed_direction_contexts": ("bull", "bear")}
     )
-    historical_high_vol_block = legacy_baseline.model_copy(
+    high_vol_block = baseline.model_copy(
         update={"blocked_volatility_regimes": ("high_vol",)}
+    )
+    bidirectional_high_vol_block = baseline.model_copy(
+        update={
+            "allowed_direction_contexts": ("bull", "bear"),
+            "blocked_volatility_regimes": ("high_vol",),
+        }
     )
     return {
         "baseline": baseline,
-        "legacy-baseline": legacy_baseline,
+        "legacy-baseline": baseline,
         "both-directions": both_directions,
-        "high-vol-block": historical_high_vol_block,
-        "bidirectional-high-vol-block": baseline,
+        "high-vol-block": high_vol_block,
+        "bidirectional-high-vol-block": bidirectional_high_vol_block,
         "ema-tight": baseline.model_copy(update={"htf_ema_threshold_pct": 0.5}),
         "ema50": baseline.model_copy(update={"htf_ema_period": 50}),
         "structure-bias": baseline.model_copy(update={"htf_bias_mode": "structure"}),
