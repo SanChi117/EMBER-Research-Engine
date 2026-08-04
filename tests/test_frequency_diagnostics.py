@@ -15,7 +15,7 @@ def test_frequency_profile_order_is_isolated() -> None:
 
 
 def test_frequency_diagnostics_writes_reject_summary(tmp_path: Path) -> None:
-    payload = run_frequency_diagnostics(bars=400, seed=7, out_dir=tmp_path)
+    payload = run_frequency_diagnostics(bars=500, seed=7, out_dir=tmp_path)
     assert set(payload["results"]) == set(PROFILE_ORDER)
     assert (tmp_path / "summary.json").exists()
     assert (tmp_path / "summary.md").exists()
