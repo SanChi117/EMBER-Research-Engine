@@ -74,10 +74,47 @@ def test_markdown_contains_required_summary_and_blocked_next_step() -> None:
         "interval": "15m",
         "bars_per_symbol": 15000,
         "initial_equity": 10000.0,
+        "config": {
+            "allowed_direction_contexts": ["down"],
+            "blocked_volatility_regimes": ["high_vol"],
+            "min_confidence": 43.0,
+            "min_volume_ratio": 0.70,
+            "min_rr": 1.8,
+            "max_positions": 1,
+        },
+        "data_manifest": [],
         "result": result,
     }
     report = render_markdown(payload)
     assert "# Portfolio WFO — OOS 4 Alts" in report
     assert "- Total Trades: 8" in report
     assert "- Status: **FAIL**" in report
-    assert "Universe expansion is blocked" in report
+    assert "Keep universe expansion, paper and live blocked" in report
+
+
+def test_markdown_labels_extended_history_evidence() -> None:
+    summary = _summary(stability=75.0, trades_per_fold=5)
+    result = serialize_summary(summary, ("AUSDT", "BUSDT", "CUSDT", "DUSDT"))
+    payload = {
+        "report_title": "Portfolio WFO — Extended History 30000",
+        "evidence_class": "extended_overlapping_history",
+        "symbols": ["AUSDT", "BUSDT", "CUSDT", "DUSDT"],
+        "profile": "bidirectional-high-vol-block",
+        "interval": "15m",
+        "bars_per_symbol": 30000,
+        "initial_equity": 10000.0,
+        "config": {
+            "allowed_direction_contexts": ["bull", "bear"],
+            "blocked_volatility_regimes": ["high_vol"],
+            "min_confidence": 43.0,
+            "min_volume_ratio": 0.70,
+            "min_rr": 1.8,
+            "max_positions": 1,
+        },
+        "data_manifest": [],
+        "result": result,
+    }
+    report = render_markdown(payload)
+    assert "# Portfolio WFO — Extended History 30000" in report
+    assert "extended_overlapping_history" in report
+    assert "not a fresh independent OOS proof" in report
