@@ -37,9 +37,10 @@ class EmberConfig(BaseModel):
         "watch",
     )
 
-    # Default research hypothesis: directional EMA20 contexts are eligible in both
-    # directions. Neutral remains blocked by the setup layer.
-    allowed_direction_contexts: tuple[str, ...] = ("bull", "bear")
+    # Keep the validated historical baseline as the default. Bidirectional and
+    # high-vol-block variants are explicit research profiles and must not replace
+    # this assumption after a failed controlled validation.
+    allowed_direction_contexts: tuple[str, ...] = ("down",)
 
     # The architecture baseline is EMA20 with a +/-2% neutral band. Alternative
     # modes are research profiles and do not silently replace this assumption.
@@ -47,9 +48,7 @@ class EmberConfig(BaseModel):
     htf_ema_period: int = 20
     htf_ema_threshold_pct: float = 2.0
 
-    # ContextBuilder emits "high_vol". The default research hypothesis blocks it;
-    # historical controls remain available as explicit diagnostic profiles.
-    blocked_volatility_regimes: tuple[str, ...] = ("high_vol",)
+    blocked_volatility_regimes: tuple[str, ...] = ()
     min_confidence: float = 43.0
     min_volume_ratio: float = 0.70
     risk_per_trade_pct: float = 1.0
