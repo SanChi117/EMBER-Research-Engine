@@ -1,14 +1,15 @@
-"""Run portfolio-level WFO for the frozen four-symbol OOS universe.
+"""Run portfolio-level WFO for a fixed four-symbol research universe.
 
-This entry point implements the Portfolio WFO protocol from the project
-specification.  All symbols are concatenated into one multi-symbol Polars
-DataFrame and passed to one WalkForwardValidator, so every fold uses one
-shared PortfolioSimulator and one equity curve.
+All symbols are concatenated into one multi-symbol Polars DataFrame and passed
+through one WalkForwardValidator, so each fold uses one shared portfolio state
+and one equity curve. Historical 15000-bar evidence and extended-history
+research remain explicitly distinguishable in the output metadata.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import sys
@@ -23,6 +24,7 @@ from ember.simulation.walk_forward import WalkForwardValidator
 
 DEFAULT_SYMBOLS = ("PEPEUSDT", "FETUSDT", "WIFUSDT", "SUIUSDT")
 DEFAULT_PROFILE = "high-vol-block"
+ALLOWED_PROFILES = ("high-vol-block", "bidirectional-high-vol-block")
 MIN_TOTAL_TRADES = 20
 MIN_STABILITY = 70.0
 MIN_AVG_PF = 1.5
@@ -51,6 +53,14 @@ def _display_metric(value: float | str, digits: int = 4) -> str:
     if isinstance(value, str):
         return value
     return f"{value:.{digits}f}"
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def load_portfolio_data(
@@ -93,6 +103,29 @@ def load_portfolio_data(
             f"expected {bars * len(symbols)}, received {portfolio.height}"
         )
     return portfolio
+
+
+def build_data_manifest(
+    data_dir: Path,
+    symbols: tuple[str, ...],
+    interval: str,
+    bars: int,
+) -> list[dict[str, Any]]:
+    manifest: list[dict[str, Any]] = []
+    for symbol in symbols:
+        path = data_dir / f"{symbol}_{interval}_{bars}.csv"
+        frame = DataEngine.load_csv(path).collect()
+        manifest.append(
+            {
+                "symbol": symbol,
+                "path": str(path),
+                "rows": frame.height,
+                "start": frame.get_column("time").min().isoformat(),
+                "end": frame.get_column("time").max().isoformat(),
+                "sha256": _sha256(path),
+            }
+        )
+    return manifest
 
 
 def protocol_passes(summary: Any, total_trades: int) -> bool:
@@ -151,8 +184,9 @@ def serialize_summary(summary: Any, symbols: tuple[str, ...]) -> dict[str, Any]:
 def render_markdown(payload: dict[str, Any]) -> str:
     result = payload["result"]
     symbols = ", ".join(payload["symbols"])
+    title = payload.get("report_title", "Portfolio WFO — OOS 4 Alts")
     lines = [
-        "# Portfolio WFO — OOS 4 Alts",
+        f"# {title}",
         "",
         "## Setup",
         "",
@@ -160,9 +194,20 @@ def render_markdown(payload: dict[str, Any]) -> str:
         f"- Interval: {payload['interval']}",
         f"- Bars per symbol: {payload['bars_per_symbol']}",
         f"- Profile: {payload['profile']}",
+        f"- Evidence class: {payload.get('evidence_class', 'fixed_oos_replay')}",
         "- WFO: 4 folds, 30-day lookback, 3-bar embargo",
         "- Portfolio mode: one shared PortfolioSimulator and equity curve per fold",
         "- Universe policy: fixed before validation; no symbol removal",
+        "",
+        "## Configuration",
+        "",
+        f"- Allowed directions: {', '.join(payload['config']['allowed_direction_contexts'])}",
+        "- Blocked volatility regimes: "
+        + (", ".join(payload["config"]["blocked_volatility_regimes"]) or "none"),
+        f"- min_confidence: {payload['config']['min_confidence']}",
+        f"- min_volume_ratio: {payload['config']['min_volume_ratio']}",
+        f"- min_rr: {payload['config']['min_rr']}",
+        f"- max_positions: {payload['config']['max_positions']}",
         "",
         "## Results",
         "",
@@ -198,19 +243,27 @@ def render_markdown(payload: dict[str, Any]) -> str:
             f"- Zero-trade folds: {result['zero_trade_folds']}",
             f"- Status: **{result['status']}**",
             "",
-            "## Interpretation",
+            "## Data manifest",
             "",
+            "| Symbol | Rows | Start | End | SHA-256 |",
+            "|---|---:|---|---|---|",
         ]
     )
+    for item in payload.get("data_manifest", []):
+        lines.append(
+            f"| {item['symbol']} | {item['rows']} | {item['start']} | {item['end']} | `{item['sha256']}` |"
+        )
+
+    lines.extend(["", "## Interpretation", ""])
     if result["status"] == "PASS":
         lines.extend(
             [
-                "The fixed OOS portfolio satisfies every predeclared gate, including the minimum of 20 completed test trades.",
-                "This is portfolio-level research evidence only and does not unlock live trading.",
+                "The fixed portfolio satisfies every predeclared numerical gate, including the minimum of 20 completed test trades.",
+                "A PASS on extended overlapping history is research evidence, not a fresh independent OOS proof and not a live-trading authorization.",
                 "",
                 "## Next Step",
                 "",
-                "Proceed to the separately predeclared universe-expansion protocol and paper research.",
+                "Freeze a fresh non-overlapping period before any paper promotion or filter change.",
             ]
         )
     else:
@@ -234,11 +287,11 @@ def render_markdown(payload: dict[str, Any]) -> str:
                 "The portfolio does not satisfy the complete predeclared PASS gate: "
                 + "; ".join(failed)
                 + ".",
-                "The result is statistically insufficient; no symbol may be removed retroactively to improve it.",
+                "No symbol may be removed retroactively and no multi-filter relaxation may be inferred from this result.",
                 "",
                 "## Next Step",
                 "",
-                "Universe expansion is blocked by the specification because Portfolio WFO did not pass. Preserve the result, keep paper/live blocked, and validate any new hypothesis on a fresh predeclared period or universe.",
+                "Keep universe expansion, paper and live blocked. Any filter relaxation must be a single predeclared hypothesis on fresh non-overlapping data.",
             ]
         )
     return "\n".join(lines) + "\n"
@@ -246,7 +299,7 @@ def render_markdown(payload: dict[str, Any]) -> str:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run fixed-universe portfolio WFO for the four OOS alts"
+        description="Run fixed-universe portfolio WFO for the four research alts"
     )
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument(
@@ -256,12 +309,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--report-path", type=Path, default=Path("docs/PORTFOLIO_WFO_OOS.md")
     )
     parser.add_argument(
+        "--report-title", default="Portfolio WFO — OOS 4 Alts"
+    )
+    parser.add_argument(
+        "--evidence-class", default="fixed_oos_replay"
+    )
+    parser.add_argument(
         "--symbols",
         type=_parse_symbols,
         default=DEFAULT_SYMBOLS,
         help="comma-separated fixed universe",
     )
-    parser.add_argument("--profile", choices=(DEFAULT_PROFILE,), default=DEFAULT_PROFILE)
+    parser.add_argument(
+        "--profile", choices=ALLOWED_PROFILES, default=DEFAULT_PROFILE
+    )
     parser.add_argument("--interval", default="15m")
     parser.add_argument("--bars", type=int, default=15_000)
     parser.add_argument("--initial-equity", type=float, default=10_000.0)
@@ -284,11 +345,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     )
     result = serialize_summary(summary, symbols)
     payload = {
+        "report_title": args.report_title,
+        "evidence_class": args.evidence_class,
         "symbols": list(symbols),
         "profile": args.profile,
         "interval": args.interval,
         "bars_per_symbol": args.bars,
         "initial_equity": args.initial_equity,
+        "config": {
+            "allowed_direction_contexts": list(config.allowed_direction_contexts),
+            "blocked_volatility_regimes": list(config.blocked_volatility_regimes),
+            "min_confidence": config.min_confidence,
+            "min_volume_ratio": config.min_volume_ratio,
+            "min_rr": config.min_rr,
+            "max_positions": config.max_positions,
+        },
+        "data_manifest": build_data_manifest(
+            args.data_dir, symbols, args.interval, args.bars
+        ),
         "result": result,
     }
 
@@ -307,8 +381,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         json.dumps(payload, indent=2, allow_nan=False), encoding="utf-8"
     )
 
-    print("Portfolio WFO — OOS 4 Alts")
-    print("==========================")
+    print(args.report_title)
+    print("=" * len(args.report_title))
     print(f"Symbols: {', '.join(symbols)}")
     print(f"Period: {args.bars} bars per symbol")
     print(f"Profile: {args.profile}")

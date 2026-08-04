@@ -1,0 +1,177 @@
+{
+  "protocol": {
+    "dataset": "mixed_regime_synthetic_data",
+    "bars": 15000,
+    "seed": 42,
+    "sample_days_15m": 156.25,
+    "profiles": [
+      "legacy-baseline",
+      "both-directions",
+      "high-vol-block",
+      "bidirectional-high-vol-block"
+    ],
+    "attribution_policy": "legacy -> direction-only -> volatility-only -> combined; one fixed sample, no parameter tuning"
+  },
+  "results": {
+    "legacy-baseline": {
+      "config": {
+        "allowed_direction_contexts": ["down"],
+        "blocked_volatility_regimes": [],
+        "min_confidence": 43.0,
+        "min_volume_ratio": 0.7,
+        "min_rr": 1.8,
+        "max_positions": 1
+      },
+      "metrics": {
+        "trades": 30,
+        "trades_per_day": 0.192,
+        "estimated_trades_per_25_day_fold": 4.8,
+        "return_pct": 19.284159989934977,
+        "profit_factor": 2.3873164766926624,
+        "max_drawdown_pct": 2.616712853457999,
+        "win_rate_pct": 66.66666666666666
+      },
+      "rejects": {
+        "bars_seen": 14940,
+        "neutral_context": 3424,
+        "direction_reject": 3924,
+        "regime_reject": 0,
+        "no_setup": 7116,
+        "setup_blocked": 0,
+        "confidence_low": 0,
+        "volume_low": 7,
+        "candidate_passed": 469,
+        "risk_none": 0,
+        "rr_low": 0,
+        "cost_gate": 0,
+        "quality_reject": 32,
+        "structure_reject": 36,
+        "no_future": 0,
+        "overlap_reject": 23,
+        "portfolio_reject": 0,
+        "halted": 1,
+        "executed": 30
+      }
+    },
+    "both-directions": {
+      "config": {
+        "allowed_direction_contexts": ["bull", "bear"],
+        "blocked_volatility_regimes": [],
+        "min_confidence": 43.0,
+        "min_volume_ratio": 0.7,
+        "min_rr": 1.8,
+        "max_positions": 1
+      },
+      "metrics": {
+        "trades": 3,
+        "trades_per_day": 0.0192,
+        "estimated_trades_per_25_day_fold": 0.48,
+        "return_pct": -3.9040196002447556,
+        "profit_factor": 0.0,
+        "max_drawdown_pct": 3.9040196002447556,
+        "win_rate_pct": 0.0
+      },
+      "rejects": {
+        "bars_seen": 14940,
+        "neutral_context": 3424,
+        "direction_reject": 0,
+        "regime_reject": 0,
+        "no_setup": 10724,
+        "setup_blocked": 0,
+        "confidence_low": 0,
+        "volume_low": 11,
+        "candidate_passed": 781,
+        "risk_none": 0,
+        "rr_low": 0,
+        "cost_gate": 0,
+        "quality_reject": 46,
+        "structure_reject": 86,
+        "no_future": 0,
+        "overlap_reject": 1,
+        "portfolio_reject": 0,
+        "halted": 1,
+        "executed": 3
+      }
+    },
+    "high-vol-block": {
+      "config": {
+        "allowed_direction_contexts": ["down"],
+        "blocked_volatility_regimes": ["high_vol"],
+        "min_confidence": 43.0,
+        "min_volume_ratio": 0.7,
+        "min_rr": 1.8,
+        "max_positions": 1
+      },
+      "metrics": {
+        "trades": 30,
+        "trades_per_day": 0.192,
+        "estimated_trades_per_25_day_fold": 4.8,
+        "return_pct": 19.284159989934977,
+        "profit_factor": 2.3873164766926624,
+        "max_drawdown_pct": 2.616712853457999,
+        "win_rate_pct": 66.66666666666666
+      },
+      "rejects": {
+        "bars_seen": 14940,
+        "neutral_context": 3424,
+        "direction_reject": 3028,
+        "regime_reject": 1728,
+        "no_setup": 6287,
+        "setup_blocked": 0,
+        "confidence_low": 0,
+        "volume_low": 6,
+        "candidate_passed": 467,
+        "risk_none": 0,
+        "rr_low": 0,
+        "cost_gate": 0,
+        "quality_reject": 32,
+        "structure_reject": 36,
+        "no_future": 0,
+        "overlap_reject": 23,
+        "portfolio_reject": 0,
+        "halted": 1,
+        "executed": 30
+      }
+    },
+    "bidirectional-high-vol-block": {
+      "config": {
+        "allowed_direction_contexts": ["bull", "bear"],
+        "blocked_volatility_regimes": ["high_vol"],
+        "min_confidence": 43.0,
+        "min_volume_ratio": 0.7,
+        "min_rr": 1.8,
+        "max_positions": 1
+      },
+      "metrics": {
+        "trades": 3,
+        "trades_per_day": 0.0192,
+        "estimated_trades_per_25_day_fold": 0.48,
+        "return_pct": -3.9040196002447556,
+        "profit_factor": 0.0,
+        "max_drawdown_pct": 3.9040196002447556,
+        "win_rate_pct": 0.0
+      },
+      "rejects": {
+        "bars_seen": 14940,
+        "neutral_context": 3424,
+        "direction_reject": 0,
+        "regime_reject": 1728,
+        "no_setup": 9012,
+        "setup_blocked": 0,
+        "confidence_low": 0,
+        "volume_low": 6,
+        "candidate_passed": 770,
+        "risk_none": 0,
+        "rr_low": 0,
+        "cost_gate": 0,
+        "quality_reject": 46,
+        "structure_reject": 86,
+        "no_future": 0,
+        "overlap_reject": 1,
+        "portfolio_reject": 0,
+        "halted": 1,
+        "executed": 3
+      }
+    }
+  }
+}

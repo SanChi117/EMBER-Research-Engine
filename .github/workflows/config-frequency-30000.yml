@@ -1,0 +1,78 @@
+name: EMBER Config Frequency 30000
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ember-config-frequency-30000
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Static checks and tests
+        run: |
+          ruff check ember/ tests/ scripts/
+          pytest tests/ -v
+          pytest tests/test_no_leakage.py -v
+      - name: Prepare output directories
+        run: |
+          mkdir -p results/frequency_diagnostics
+          mkdir -p results/portfolio_wfo_extended_30000
+          mkdir -p data/oos_4alts_30000
+      - name: Synthetic frequency diagnostics 15000
+        run: |
+          python scripts/run_frequency_diagnostics.py \
+            --bars 15000 \
+            --seed 42 \
+            --out-dir results/frequency_diagnostics \
+            | tee results/frequency_diagnostics_stdout.txt
+      - name: Fetch 30000 bars for fixed OOS 4
+        run: |
+          python scripts/fetch_binance.py \
+            --symbols PEPEUSDT,FETUSDT,WIFUSDT,SUIUSDT \
+            --interval 15m \
+            --limit 30000 \
+            --out-dir data/oos_4alts_30000 \
+            | tee results/fetch_30000_stdout.txt
+          for symbol in PEPEUSDT FETUSDT WIFUSDT SUIUSDT; do
+            test -f "data/oos_4alts_30000/${symbol}_15m_30000.csv"
+          done
+      - name: Extended-history portfolio WFO 30000
+        run: |
+          python scripts/run_portfolio_wfo.py \
+            --data-dir data/oos_4alts_30000 \
+            --out-dir results/portfolio_wfo_extended_30000 \
+            --report-path results/portfolio_wfo_extended_30000/PORTFOLIO_WFO_EXTENDED_30000.md \
+            --report-title "Portfolio WFO — Extended History 30000" \
+            --evidence-class extended_overlapping_history \
+            --symbols PEPEUSDT,FETUSDT,WIFUSDT,SUIUSDT \
+            --profile bidirectional-high-vol-block \
+            --interval 15m \
+            --bars 30000 \
+            --initial-equity 10000 \
+            | tee results/portfolio_wfo_extended_30000_stdout.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ember-config-frequency-30000
+          path: |
+            results/
+            data/oos_4alts_30000/
+          if-no-files-found: error
