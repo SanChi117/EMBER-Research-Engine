@@ -25,7 +25,7 @@ def run_demo() -> None:
     parser.add_argument("--wfo", action=argparse.BooleanOptionalAction, default=True)
     args = parser.parse_args()
 
-    config = EmberConfig()
+    config = EmberConfig(allowed_direction_contexts=("bull", "bear"))
     candles = mixed_regime_synthetic_data(bars=args.bars, seed=args.seed)
     backtester = Backtester(config)
     backtest = backtester.run(candles, diagnostics=True)
