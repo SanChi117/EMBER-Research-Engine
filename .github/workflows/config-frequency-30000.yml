@@ -28,7 +28,10 @@ on:
       - "tests/test_frequency_diagnostics.py"
       - "tests/test_portfolio_wfo.py"
       - "docs/CONFIG_FREQUENCY_30000.md"
+      - "docs/CONFIG_FREQUENCY_30000.json"
       - "docs/PORTFOLIO_WFO_EXTENDED_30000.md"
+      - "docs/PORTFOLIO_WFO_EXTENDED_30000.json"
+      - "docs/VALIDATION_LOG.md"
       - ".github/workflows/config-frequency-30000.yml"
 
 permissions:
@@ -59,6 +62,11 @@ jobs:
           ruff check ember/ tests/ scripts/
           pytest tests/ -v
           pytest tests/test_no_leakage.py -v
+      - name: Prepare output directories
+        run: |
+          mkdir -p results/frequency_diagnostics
+          mkdir -p results/portfolio_wfo_extended_30000
+          mkdir -p data/oos_4alts_30000
       - name: Synthetic frequency diagnostics 15000
         run: |
           python scripts/run_frequency_diagnostics.py \
