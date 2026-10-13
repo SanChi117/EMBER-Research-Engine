@@ -62,18 +62,10 @@ jobs:
           set -euo pipefail
           python src/get_history_vision.py \
             --symbols BTCUSDT,ETHUSDT,SOLUSDT,XRPUSDT,BCHUSDT \
-            --start-15m 2025-01-01T00:00:00Z \
+            --start-15m 2025-02-01T00:00:00Z \
             --start-1d 2024-01-01T00:00:00Z \
             --end 2026-01-01T00:00:00Z \
             --out data/oos_2025
-
-      - name: Quarantine Jan-29 monthly archive volume defect via official daily Vision checksum
-        working-directory: mtf_route
-        run: |
-          set -euo pipefail
-          python src/repair_vision_jan29_2025.py \
-            --data-dir data/oos_2025 \
-            --out results_05/JAN29_DATA_QA.json
 
       - name: Run exact frozen 2025 holdout (no parameter search)
         working-directory: mtf_route
@@ -100,7 +92,7 @@ jobs:
           for name,v in x['scenarios'].items():
               m=v['portfolio']
               lines.append(f"| {name} | {m['completed_model_trades']} | {100*m['win_rate_resolved'] if m['win_rate_resolved'] is not None else 'N/A'} | {m['PF_resolved']} | {m['closed_equity_return_pct']} | {m['max_bar_close_MTM_drawdown_pct']} |")
-          lines += ['', 'This is a historical out-of-period sample BEFORE 2026, not a prospective test.',
+          lines += ['', '2025 Feb-Dec only: Jan excluded BEFORE trade testing because Binance Vision 15m/day volume mismatch; not a prospective test.',
                     'Model proxy; not course-verified structure, original 3–5m BOS, actual fills, funding or liquidation.']
           report='\n'.join(lines)+'\n'
           print(report)

@@ -19,11 +19,11 @@ from paper_portfolio_v03 import portfolio
 from replay_portfolio_scoped_v04 import scope_row,route_stats
 
 SYMBOLS = ('BTCUSDT','ETHUSDT','SOLUSDT','XRPUSDT','BCHUSDT')
-START_15M = '2025-01-01T00:00:00Z'
+START_15M = '2025-02-01T00:00:00Z'
 START_1D = '2024-01-01T00:00:00Z'
 END = '2026-01-01T00:00:00Z'
 PHASES_2025 = (
-    ('JAN_APR','2025-01-01T00:00:00Z','2025-05-01T00:00:00Z'),
+    ('FEB_APR','2025-02-01T00:00:00Z','2025-05-01T00:00:00Z'),
     ('MAY_AUG','2025-05-01T00:00:00Z','2025-09-01T00:00:00Z'),
     ('SEP_DEC','2025-09-01T00:00:00Z','2026-01-01T00:00:00Z'),
 )
@@ -106,13 +106,13 @@ def execute(data_dir,out):
                             'by_signal_phase':phase_stats,'source_idea_sha256':proof,
                             'trade_file_sha256':sha(dst/'TRADES.jsonl'),
                             'independent_route_stats':independent['results'][key]['ALL_SYMBOLS_INDEPENDENT']}
-    record={'status':'OOS_2025_RETROSPECTIVE_COMPLETE','historical_split':'previously untested 2025, earlier than 2026 benchmark; not prospective',
+    record={'status':'OOS_2025_RETROSPECTIVE_COMPLETE','historical_split':'previously untested 2025 Feb-Dec; January EXCLUDED after pre-trade data QA, not prospective',
             'source':'Binance Data Vision futures/um checked against archived checksums',
-            'period_15m':'2025-01-01..2025-12-31 UTC inclusive',
+            'period_15m':'2025-02-01..2025-12-31 UTC inclusive',
             'period_1d':'2024-01-01..2025-12-31 UTC inclusive',
             'universe':list(SYMBOLS),'frozen_core_check':c,
             'training_or_threshold_fitting_on_2025':False,
-            'macro_filter_implemented':False,'course_visual_examples_verified':0,
+            'macro_filter_implemented':False,'course_visual_examples_verified':0,'excluded_utc_dates':'2025-01-01..2025-01-31 due to confirmed official Vision 15m/native1d volume mismatch on 2025-01-29 across all five symbols',
             'bos_route':'15m PROXY ONLY, not 3–5m course BOS',
             'execution':'15m OHLC candle-touch model; no book spreads/funding/mark-price/forced liquidations',
             'risk':'1000 USD start, 0.5% per idea, max two active, cap 3x equity',
