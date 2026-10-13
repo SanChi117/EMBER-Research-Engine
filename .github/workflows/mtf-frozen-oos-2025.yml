@@ -1,0 +1,113 @@
+name: MTF frozen v0.4 — USD-M 2025 holdout PAPER
+
+on:
+  push:
+    branches:
+      - research/mtf-frozen-oos-2025
+    paths:
+      - '.github/workflows/mtf-frozen-oos-2025.yml'
+      - 'research/mtf-oos-2025/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frozen-mtf-oos-2025-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  course-audit-and-retrospective-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONUNBUFFERED: '1'
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+    steps:
+      - name: Checkout isolated research branch
+        uses: actions/checkout@v4
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Expand frozen core and evidence fixtures unchanged
+        run: |
+          set -euo pipefail
+          echo '11a3276974396d5be31009cf68256e3d7b4aa43ece89a0efacb2c5620583486e  research/mtf-route-lab/mtf_core_v04_frozen.zip' | sha256sum -c -
+          echo 'a0d796faa9af17546541570f2796ceb2ced34a2f13eb4e889a6c6049ea7db9af  research/mtf-route-lab/mtf_core_v04_fixtures.zip' | sha256sum -c -
+          mkdir -p mtf_route
+          unzip -oq research/mtf-route-lab/mtf_core_v04_frozen.zip -d mtf_route
+          unzip -oq research/mtf-route-lab/mtf_core_v04_fixtures.zip -d mtf_route
+          cp research/mtf-route-lab/replay_portfolio_scoped_v04.py mtf_route/src/
+          cp research/mtf-route-lab/test_portfolio_id_scope.py mtf_route/tests/
+          cp research/mtf-oos-2025/run_frozen_oos_2025.py mtf_route/src/
+          cp research/mtf-oos-2025/test_oos_guard_2025.py mtf_route/tests/
+          cp research/mtf-oos-2025/COURSE_FEATURE_AUDIT.md mtf_route/
+
+      - name: All frozen-core and OOS-guard tests
+        working-directory: mtf_route
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -v > unittest_2025_oos.txt 2>&1 || { tail -100 unittest_2025_oos.txt; exit 1; }
+          tail -10 unittest_2025_oos.txt
+          python src/check_frozen_engine_v03.py
+
+      - name: Download and cryptographically checksum official Futures history
+        working-directory: mtf_route
+        run: |
+          set -euo pipefail
+          python src/get_history_vision.py \
+            --symbols BTCUSDT,ETHUSDT,SOLUSDT,XRPUSDT,BCHUSDT \
+            --start-15m 2025-01-01T00:00:00Z \
+            --start-1d 2024-01-01T00:00:00Z \
+            --end 2026-01-01T00:00:00Z \
+            --out data/oos_2025
+
+      - name: Run exact frozen 2025 holdout (no parameter search)
+        working-directory: mtf_route
+        run: |
+          set -euo pipefail
+          python src/run_frozen_oos_2025.py \
+            --data-dir data/oos_2025 \
+            --out results_05/oos_2025
+
+      - name: Show concise verified portfolio results
+        if: success()
+        working-directory: mtf_route
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('results_05/oos_2025/OOS_2025_SUMMARY.json')
+          x=json.loads(p.read_text(encoding='utf-8'))
+          lines=['# Frozen MTF 2025 retrospective holdout, PAPER', '',
+                 'Status: '+x['status'], 'History gate: '+x['strict_history_gate']['status'],
+                 'Teacher chart labels visually verified: 0', '',
+                 '| Policy / cost | Closed | Win Rate % | PF | Return % | Max bar-close DD % |',
+                 '|---|---:|---:|---:|---:|---:|']
+          for name,v in x['scenarios'].items():
+              m=v['portfolio']
+              lines.append(f"| {name} | {m['completed_model_trades']} | {100*m['win_rate_resolved'] if m['win_rate_resolved'] is not None else 'N/A'} | {m['PF_resolved']} | {m['closed_equity_return_pct']} | {m['max_bar_close_MTM_drawdown_pct']} |")
+          lines += ['', 'This is a historical out-of-period sample BEFORE 2026, not a prospective test.',
+                    'Model proxy; not course-verified structure, original 3–5m BOS, actual fills, funding or liquidation.']
+          report='\n'.join(lines)+'\n'
+          print(report)
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as f:f.write(report)
+          Path('results_05/OOS_2025_CONCISE.md').write_text(report,encoding='utf-8')
+          PY
+
+      - name: Preserve data, fills, feature audit, test log even on failure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-frozen-2025-oos-paper
+          retention-days: 90
+          if-no-files-found: warn
+          path: |
+            mtf_route/data/oos_2025/*.csv
+            mtf_route/data/oos_2025/manifest_vision.json
+            mtf_route/results_05/**
+            mtf_route/unittest_2025_oos.txt
+            mtf_route/COURSE_FEATURE_AUDIT.md
