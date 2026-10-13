@@ -37,6 +37,8 @@ jobs:
           echo '11a3276974396d5be31009cf68256e3d7b4aa43ece89a0efacb2c5620583486e  research/mtf-route-lab/mtf_core_v04_frozen.zip' | sha256sum -c -
           mkdir -p mtf_route
           unzip -oq research/mtf-route-lab/mtf_core_v04_frozen.zip -d mtf_route
+          echo 'a0d796faa9af17546541570f2796ceb2ced34a2f13eb4e889a6c6049ea7db9af  research/mtf-route-lab/mtf_core_v04_fixtures.zip' | sha256sum -c -
+          unzip -oq research/mtf-route-lab/mtf_core_v04_fixtures.zip -d mtf_route
 
       - name: Baseline regression suite (MTF core is frozen)
         working-directory: mtf_route
