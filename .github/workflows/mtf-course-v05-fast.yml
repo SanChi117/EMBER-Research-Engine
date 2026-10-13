@@ -1,0 +1,27 @@
+name: MTF course fidelity v0.5 - fast source contracts ONLY
+on:
+  push:
+    branches:
+      - research/mtf-course-fidelity-v05
+    paths:
+      - 'research/mtf-course-v05/**'
+      - '.github/workflows/mtf-course-v05-fast.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  course-geometry-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Contract regressions (no network, no downloaded history)
+        working-directory: research/mtf-course-v05
+        run: python -m unittest discover -s tests -v
+      - name: Preserve code test metadata
+        run: |
+          sha256sum research/mtf-course-v05/src/course_primitives_v05.py
+          echo 'PAPER ONLY: source contract tests passed; NO backtest/PF claims' >> "$GITHUB_STEP_SUMMARY"

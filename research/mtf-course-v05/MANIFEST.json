@@ -1,0 +1,13 @@
+{
+  "project": "MTF course fidelity v0.5 isolated proof-of-concept",
+  "created_utc_date": "2026-10-14",
+  "tests_local": "29/29 PASS",
+  "heavy_backtest": "NOT_RUN",
+  "visual_course_verified": 0,
+  "files": {
+    "src/course_primitives_v05.py": "fac02b117901150ec94b899ce594d7503002ab39be98f834dc12ec65435cc57e",
+    "tests/test_course_primitives_v05.py": "5bf7d50a6a9cdc15d73a1780efc1f8c172a0f28c63cfddaf9cb9a653083a1c19",
+    "README_RU.md": "6b019cb5fa046caecc6e4b42cdd02e391fdbe52fd49f4ff9631fa06446d3d454",
+    ".github_workflow.yml": "8315f1953a694e8b3af517dabeb983e686bf117c79717aafc76e45b84fc81596"
+  }
+}
