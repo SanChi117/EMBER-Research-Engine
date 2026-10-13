@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: mtf-route-v04-${{ github.ref }}
@@ -39,10 +40,23 @@ jobs:
           unzip -oq research/mtf-route-lab/mtf_core_v04_frozen.zip -d mtf_route
           echo 'a0d796faa9af17546541570f2796ceb2ced34a2f13eb4e889a6c6049ea7db9af  research/mtf-route-lab/mtf_core_v04_fixtures.zip' | sha256sum -c -
           unzip -oq research/mtf-route-lab/mtf_core_v04_fixtures.zip -d mtf_route
+          cp research/mtf-route-lab/replay_portfolio_scoped_v04.py mtf_route/src/replay_portfolio_scoped_v04.py
+          cp research/mtf-route-lab/test_portfolio_id_scope.py mtf_route/tests/test_portfolio_id_scope.py
 
       - name: Baseline regression suite (MTF core is frozen)
         working-directory: mtf_route
         run: python -m unittest discover -s tests -v
+
+      - name: Reuse verified historical CSV and independent ideas from previous run
+        working-directory: mtf_route
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh run download 38479113192 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir . ; then
+            echo "Restored verified Futures CSV + frozen independent scenario outputs"
+          else
+            echo "Artifact reuse failed; next step will redownload from Binance Vision"
+          fi
 
       - name: Download Binance USD-M Futures from official Vision archives
         working-directory: mtf_route
@@ -52,7 +66,11 @@ jobs:
       - name: Validate data provenance, gaps, 15m/1d OHLCV and replay fixed grids
         working-directory: mtf_route
         run: |
-          python src/run_portfolio_grid_v04.py --data-dir data/history --out results_04/full_validation --end 2026-10-13T00:00:00Z
+          python src/history_gate_v04.py --data-dir data/history --out results_04/full_validation/HISTORY_GATE.json --end 2026-10-13T00:00:00Z
+          if [ ! -f results_04/full_validation/fixed_03_grid/independent_grid/SUMMARY.json ]; then
+            python src/run_research_v03.py --data-dir data/history --out results_04/full_validation/fixed_03_grid/independent_grid --end 2026-10-13T00:00:00Z
+          fi
+          python src/replay_portfolio_scoped_v04.py --root . --out results_04/portfolio_scoped_replay
 
       - name: Write concise verified report
         if: success()
@@ -61,21 +79,20 @@ jobs:
           python - <<'PY'
           import json, os
           from pathlib import Path
-          p = Path('results_04/full_validation/SUMMARY.json')
+          p = Path('results_04/portfolio_scoped_replay/FINAL_SUMMARY.json')
           data = json.loads(p.read_text(encoding='utf-8'))
           rows = ['# MTF Route Lab v0.4 - Futures PAPER results', '',
                   'Run status: ' + str(data.get('status')),
                   'Core: frozen MTF 0.3; independent IMB/SNR, IDM, BOS 15m proxy.', '',
-                  '| Policy x costs | Model completed | Net quote PnL | PF model | MaxDD |',
+                  '| Policy x costs | Closed model trades | Closed return % | PF model | Max bar-close MTM DD % |',
                   '|---|---:|---:|---:|---:|']
-          replay = data.get('full_replay', {})
-          for name, payload in replay.get('scenario_results', {}).items():
+          for name, payload in data.get('scenarios', {}).items():
               m = payload.get('model', {})
               rows.append('| ' + name + ' | ' +
-                  str(m.get('completed_trades', m.get('trades', 'N/A'))) + ' | ' +
-                  str(m.get('net_pnl', m.get('net_quote_pnl', 'N/A'))) + ' | ' +
-                  str(m.get('profit_factor', m.get('PF_model', 'N/A'))) + ' | ' +
-                  str(m.get('max_drawdown_pct', 'N/A')) + ' |')
+                  str(m.get('completed_model_trades', 'N/A')) + ' | ' +
+                  str(m.get('closed_equity_return_pct', 'N/A')) + '%'  + ' | ' +
+                  str(m.get('PF_resolved', 'N/A')) + ' | ' +
+                  str(m.get('max_bar_close_MTM_drawdown_pct', 'N/A')) + ' |')
           rows += ['', 'CAVEAT: model OHLC fills, no order acknowledgments, funding, verified teacher labels or untouched OOS; do not claim edge.']
           target = Path(os.environ['GITHUB_STEP_SUMMARY'])
           with target.open('a', encoding='utf-8') as f:
@@ -95,4 +112,5 @@ jobs:
             mtf_route/data/history/manifest_vision.json
             mtf_route/data/history/manifest.json
             mtf_route/results_04/**
+            research/mtf-route-lab/RESULTS_20261014.md
             mtf_route/results_03/full_validation/**

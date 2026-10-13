@@ -1,0 +1,320 @@
+{
+  "status": "PORTFOLIO_OHLC_PROXY_DONE_NOT_VALIDATED",
+  "history_gate": "READY_FOR_RESEARCH",
+  "no_order_placement": true,
+  "engine": "unchanged frozen MTF 0.3",
+  "portfolio_idea_id_scope": "symbol|source_idea_id",
+  "model_fill_not_exchange_ack": true,
+  "no_funding_liquidation": true,
+  "course_visual_labels_verified": 0,
+  "untouched_oos": false,
+  "cash_initial_usd": 1000.0,
+  "scenarios": {
+    "COURSE_PARENT_FTA__BASE": {
+      "model": {
+        "status": "PAPER_MODEL_NOT_EXCHANGE_FILLS",
+        "initial_equity": 1000.0,
+        "final_closed_equity": 843.39833097,
+        "closed_equity_return_pct": -15.660167,
+        "max_closed_equity_drawdown_pct_NOT_MTM": 15.660167,
+        "max_bar_close_MTM_drawdown_pct": 15.787892,
+        "ending_bar_close_MTM_equity": 843.39833097,
+        "ending_unrealized_quote_estimate": 0.0,
+        "completed_model_trades": 118,
+        "win_rate_resolved": 0.22034,
+        "PF_resolved": 0.63006,
+        "net_pnl": -156.60166904,
+        "routes_completed": {
+          "A_VC_IMB_SNR": 75,
+          "B_IDM": 40,
+          "C_BOS_15M_PROXY": 3
+        },
+        "rejections": {
+          "EXPIRED_NO_FILL": 94,
+          "BUSY_SYMBOL": 78,
+          "CAPACITY": 1,
+          "TARGET_BEFORE_FILL": 4
+        },
+        "ending_open_positions": 0,
+        "ending_pending_orders": 0,
+        "limits": {
+          "risk_fraction": 0.005,
+          "max_concurrent": 2,
+          "max_gross_leverage": 3.0,
+          "order_life_15m_bars": 12,
+          "max_hold_15m_bars": 96,
+          "fee_per_side": 0.0005,
+          "slippage_per_side": 0.0002
+        },
+        "disclaimers": [
+          "OHLC touch is not exchange order-book fill or order acknowledgment",
+          "No mark-price liquidation, tick/lot rounding, funding or partial fills",
+          "Bar-close mark-to-market estimate misses intrabar equity lows and liquidation risk",
+          "No real spread samples; slippage is a frozen research assumption",
+          "No strategy parameter tuning; idea inputs from v0.3 are unchanged"
+        ]
+      },
+      "by_route": {
+        "A_VC_IMB_SNR": {
+          "closed_trades": 75,
+          "wins": 13,
+          "net_quote_pnl": -149.544997,
+          "pf": 0.471348,
+          "win_rate": 0.173333
+        },
+        "B_IDM": {
+          "closed_trades": 40,
+          "wins": 13,
+          "net_quote_pnl": 6.535678,
+          "pf": 1.051526,
+          "win_rate": 0.325
+        },
+        "C_BOS_15M_PROXY": {
+          "closed_trades": 3,
+          "wins": 0,
+          "net_quote_pnl": -13.59235,
+          "pf": 0.0,
+          "win_rate": 0.0
+        }
+      },
+      "source_ideas_sha256": {
+        "BTCUSDT": "3be7f102e856d504d0f3abafbe59afa3c11f6b5fcc5b83ebbb24884734048ef8",
+        "ETHUSDT": "50fb604185ac2c06d57c7993cf472fd4f8258313e796b9f3d6413aafb426ca3e",
+        "SOLUSDT": "25df462a78c6b5bf74b7885cc8ca8ca1c01bdd75377f80f6844e7ec025740706",
+        "XRPUSDT": "48774d21597d7651ff124daca81e24d60574557f58cdea554a189f4d5f4981ee",
+        "BCHUSDT": "c79abaea1b68c04ee8f0a5b6cfa3fc4cc01e2373d576db65199ba6a30946a4da"
+      },
+      "portfolio_idea_count": 295,
+      "portfolio_trades_sha256": "66613f2ab8600019b864d0dafce719d8e4d761e09a1ae132536eb359bc8112da"
+    },
+    "COURSE_PARENT_FTA__COST_X2": {
+      "model": {
+        "status": "PAPER_MODEL_NOT_EXCHANGE_FILLS",
+        "initial_equity": 1000.0,
+        "final_closed_equity": 817.50836361,
+        "closed_equity_return_pct": -18.249164,
+        "max_closed_equity_drawdown_pct_NOT_MTM": 18.249164,
+        "max_bar_close_MTM_drawdown_pct": 18.2943,
+        "ending_bar_close_MTM_equity": 817.50836361,
+        "ending_unrealized_quote_estimate": 0.0,
+        "completed_model_trades": 99,
+        "win_rate_resolved": 0.19192,
+        "PF_resolved": 0.48722,
+        "net_pnl": -182.49163638,
+        "routes_completed": {
+          "A_VC_IMB_SNR": 59,
+          "B_IDM": 38,
+          "C_BOS_15M_PROXY": 2
+        },
+        "rejections": {
+          "EXPIRED_NO_FILL": 87,
+          "BUSY_SYMBOL": 56,
+          "CAPACITY": 1,
+          "TARGET_BEFORE_FILL": 1
+        },
+        "ending_open_positions": 0,
+        "ending_pending_orders": 0,
+        "limits": {
+          "risk_fraction": 0.005,
+          "max_concurrent": 2,
+          "max_gross_leverage": 3.0,
+          "order_life_15m_bars": 12,
+          "max_hold_15m_bars": 96,
+          "fee_per_side": 0.001,
+          "slippage_per_side": 0.0004
+        },
+        "disclaimers": [
+          "OHLC touch is not exchange order-book fill or order acknowledgment",
+          "No mark-price liquidation, tick/lot rounding, funding or partial fills",
+          "Bar-close mark-to-market estimate misses intrabar equity lows and liquidation risk",
+          "No real spread samples; slippage is a frozen research assumption",
+          "No strategy parameter tuning; idea inputs from v0.3 are unchanged"
+        ]
+      },
+      "by_route": {
+        "A_VC_IMB_SNR": {
+          "closed_trades": 59,
+          "wins": 7,
+          "net_quote_pnl": -158.27251,
+          "pf": 0.315739,
+          "win_rate": 0.118644
+        },
+        "B_IDM": {
+          "closed_trades": 38,
+          "wins": 12,
+          "net_quote_pnl": -15.599383,
+          "pf": 0.86548,
+          "win_rate": 0.315789
+        },
+        "C_BOS_15M_PROXY": {
+          "closed_trades": 2,
+          "wins": 0,
+          "net_quote_pnl": -8.619743,
+          "pf": 0.0,
+          "win_rate": 0.0
+        }
+      },
+      "source_ideas_sha256": {
+        "BTCUSDT": "b32a62abdf3265767120e700feb659616352ea5637aeb812bf0d574f58ed8d37",
+        "ETHUSDT": "9b886bf0de4d5e18aa149d72cccfb1e19bb3c43370379579e589afcee4c3f3b4",
+        "SOLUSDT": "a4edb57edb021fcd6b7860a36c25ffdad9e34adf4a6389fbf62784511af4f2e8",
+        "XRPUSDT": "779b8e243b9955a3ca83ea9abb24bf0f6a044bd31bf55275ff589919048e847a",
+        "BCHUSDT": "ff0b672c1cb64e997cde97ddd1a25f75c64163b8b7366cafe05f370faba1319c"
+      },
+      "portfolio_idea_count": 244,
+      "portfolio_trades_sha256": "25ac986d5ab2672a0f71d9ef51c471c61c5e3bfe5f90a2b40e2349708fe8a04a"
+    },
+    "V22_FIRST_OBSTACLE__BASE": {
+      "model": {
+        "status": "PAPER_MODEL_NOT_EXCHANGE_FILLS",
+        "initial_equity": 1000.0,
+        "final_closed_equity": 825.43166754,
+        "closed_equity_return_pct": -17.456833,
+        "max_closed_equity_drawdown_pct_NOT_MTM": 17.456833,
+        "max_bar_close_MTM_drawdown_pct": 17.456833,
+        "ending_bar_close_MTM_equity": 825.43166754,
+        "ending_unrealized_quote_estimate": 0.0,
+        "completed_model_trades": 67,
+        "win_rate_resolved": 0.13433,
+        "PF_resolved": 0.32754,
+        "net_pnl": -174.56833246,
+        "routes_completed": {
+          "B_IDM": 21,
+          "A_VC_IMB_SNR": 44,
+          "C_BOS_15M_PROXY": 2
+        },
+        "rejections": {
+          "BUSY_SYMBOL": 34,
+          "TARGET_BEFORE_FILL": 26,
+          "EXPIRED_NO_FILL": 37
+        },
+        "ending_open_positions": 0,
+        "ending_pending_orders": 0,
+        "limits": {
+          "risk_fraction": 0.005,
+          "max_concurrent": 2,
+          "max_gross_leverage": 3.0,
+          "order_life_15m_bars": 12,
+          "max_hold_15m_bars": 96,
+          "fee_per_side": 0.0005,
+          "slippage_per_side": 0.0002
+        },
+        "disclaimers": [
+          "OHLC touch is not exchange order-book fill or order acknowledgment",
+          "No mark-price liquidation, tick/lot rounding, funding or partial fills",
+          "Bar-close mark-to-market estimate misses intrabar equity lows and liquidation risk",
+          "No real spread samples; slippage is a frozen research assumption",
+          "No strategy parameter tuning; idea inputs from v0.3 are unchanged"
+        ]
+      },
+      "by_route": {
+        "A_VC_IMB_SNR": {
+          "closed_trades": 44,
+          "wins": 7,
+          "net_quote_pnl": -98.153832,
+          "pf": 0.398913,
+          "win_rate": 0.159091
+        },
+        "B_IDM": {
+          "closed_trades": 21,
+          "wins": 2,
+          "net_quote_pnl": -67.160458,
+          "pf": 0.228486,
+          "win_rate": 0.095238
+        },
+        "C_BOS_15M_PROXY": {
+          "closed_trades": 2,
+          "wins": 0,
+          "net_quote_pnl": -9.254042,
+          "pf": 0.0,
+          "win_rate": 0.0
+        }
+      },
+      "source_ideas_sha256": {
+        "BTCUSDT": "1fa87ce12b2905bf13ecc96c455762e3424a2b7622a76c1fa2b9aac7c8fa0ce0",
+        "ETHUSDT": "be8d4c05a59b5b0626db9b00d1359ad4cb06f9a658aae86a6eed55cc92fb8476",
+        "SOLUSDT": "967b0911402f85b31564cf9a923a33f0e830cc2a19bedc5c71aed44cec47e8fa",
+        "XRPUSDT": "f0f836cd254e321e3fb481b7487b1bbc19cc3f046c5de4473919ef1c5f425723",
+        "BCHUSDT": "2fab32f18c750d3226161642b74ddc63e1e71cfa6d9551dc53740b8e70dc6a69"
+      },
+      "portfolio_idea_count": 164,
+      "portfolio_trades_sha256": "ba737b3be5a9ee34f179ae09589520630961fb8fc975edb03fd1e0688ae6ed78"
+    },
+    "V22_FIRST_OBSTACLE__COST_X2": {
+      "model": {
+        "status": "PAPER_MODEL_NOT_EXCHANGE_FILLS",
+        "initial_equity": 1000.0,
+        "final_closed_equity": 843.26402226,
+        "closed_equity_return_pct": -15.673598,
+        "max_closed_equity_drawdown_pct_NOT_MTM": 15.673598,
+        "max_bar_close_MTM_drawdown_pct": 15.673598,
+        "ending_bar_close_MTM_equity": 843.26402226,
+        "ending_unrealized_quote_estimate": 0.0,
+        "completed_model_trades": 41,
+        "win_rate_resolved": 0.04878,
+        "PF_resolved": 0.11974,
+        "net_pnl": -156.73597776,
+        "routes_completed": {
+          "B_IDM": 18,
+          "A_VC_IMB_SNR": 20,
+          "C_BOS_15M_PROXY": 3
+        },
+        "rejections": {
+          "BUSY_SYMBOL": 15,
+          "EXPIRED_NO_FILL": 30,
+          "TARGET_BEFORE_FILL": 17
+        },
+        "ending_open_positions": 0,
+        "ending_pending_orders": 0,
+        "limits": {
+          "risk_fraction": 0.005,
+          "max_concurrent": 2,
+          "max_gross_leverage": 3.0,
+          "order_life_15m_bars": 12,
+          "max_hold_15m_bars": 96,
+          "fee_per_side": 0.001,
+          "slippage_per_side": 0.0004
+        },
+        "disclaimers": [
+          "OHLC touch is not exchange order-book fill or order acknowledgment",
+          "No mark-price liquidation, tick/lot rounding, funding or partial fills",
+          "Bar-close mark-to-market estimate misses intrabar equity lows and liquidation risk",
+          "No real spread samples; slippage is a frozen research assumption",
+          "No strategy parameter tuning; idea inputs from v0.3 are unchanged"
+        ]
+      },
+      "by_route": {
+        "A_VC_IMB_SNR": {
+          "closed_trades": 20,
+          "wins": 2,
+          "net_quote_pnl": -59.612294,
+          "pf": 0.26343,
+          "win_rate": 0.1
+        },
+        "B_IDM": {
+          "closed_trades": 18,
+          "wins": 0,
+          "net_quote_pnl": -83.505833,
+          "pf": 0.0,
+          "win_rate": 0.0
+        },
+        "C_BOS_15M_PROXY": {
+          "closed_trades": 3,
+          "wins": 0,
+          "net_quote_pnl": -13.617851,
+          "pf": 0.0,
+          "win_rate": 0.0
+        }
+      },
+      "source_ideas_sha256": {
+        "BTCUSDT": "1c754a78df2c2b181ba30606e2eb5c3ffe0ec75af4e85369dca1ec4996ce5d64",
+        "ETHUSDT": "bf73ad800cae82d4d85fdf8fa7e8653ecde9a1ee181a1a4460d6b250160eccdb",
+        "SOLUSDT": "daacb07638bcf6aa8ad69fb47b002c6fd9c387cf2ed84b2e99e10c8c09c48f78",
+        "XRPUSDT": "69a3c15d96675cc4d604d7aa89b860c35ebb13e19130694797529a999c0a5d15",
+        "BCHUSDT": "9909186e702c2c3d2cd68b0d6f4944e3ccccd1bddb96fed80087ac7ee700fa22"
+      },
+      "portfolio_idea_count": 103,
+      "portfolio_trades_sha256": "a1fc2f62ef894f94c1127ad6a376c68d1528aac8c6dca46f8c34fa74b0a664c5"
+    }
+  }
+}
