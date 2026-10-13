@@ -1,0 +1,77 @@
+{
+  "BTCUSDT": {
+    "15m_rows": 35040,
+    "days": 365,
+    "price_mismatch_count": 0,
+    "price_mismatch_examples": [],
+    "vol_mismatch_count": 1,
+    "vol_mismatches": [
+      {
+        "day": "2025-01-29",
+        "15m_vol": 169393.057,
+        "1d_vol": 169989.952,
+        "difference_pct": -0.351135
+      }
+    ]
+  },
+  "ETHUSDT": {
+    "15m_rows": 35040,
+    "days": 365,
+    "price_mismatch_count": 0,
+    "price_mismatch_examples": [],
+    "vol_mismatch_count": 1,
+    "vol_mismatches": [
+      {
+        "day": "2025-01-29",
+        "15m_vol": 2853320.761,
+        "1d_vol": 2863466.609,
+        "difference_pct": -0.35432
+      }
+    ]
+  },
+  "SOLUSDT": {
+    "15m_rows": 35040,
+    "days": 365,
+    "price_mismatch_count": 0,
+    "price_mismatch_examples": [],
+    "vol_mismatch_count": 1,
+    "vol_mismatches": [
+      {
+        "day": "2025-01-29",
+        "15m_vol": 19713898.0,
+        "1d_vol": 19766679.0,
+        "difference_pct": -0.26702
+      }
+    ]
+  },
+  "XRPUSDT": {
+    "15m_rows": 35040,
+    "days": 365,
+    "price_mismatch_count": 0,
+    "price_mismatch_examples": [],
+    "vol_mismatch_count": 1,
+    "vol_mismatches": [
+      {
+        "day": "2025-01-29",
+        "15m_vol": 859425702.1,
+        "1d_vol": 861947599.0,
+        "difference_pct": -0.292581
+      }
+    ]
+  },
+  "BCHUSDT": {
+    "15m_rows": 35040,
+    "days": 365,
+    "price_mismatch_count": 0,
+    "price_mismatch_examples": [],
+    "vol_mismatch_count": 1,
+    "vol_mismatches": [
+      {
+        "day": "2025-01-29",
+        "15m_vol": 222014.98,
+        "1d_vol": 223110.26,
+        "difference_pct": -0.490914
+      }
+    ]
+  }
+}

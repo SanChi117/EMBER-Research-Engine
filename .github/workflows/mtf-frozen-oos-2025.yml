@@ -44,6 +44,8 @@ jobs:
           cp research/mtf-route-lab/test_portfolio_id_scope.py mtf_route/tests/
           cp research/mtf-oos-2025/run_frozen_oos_2025.py mtf_route/src/
           cp research/mtf-oos-2025/test_oos_guard_2025.py mtf_route/tests/
+          cp research/mtf-oos-2025/repair_vision_jan29_2025.py mtf_route/src/
+          cp research/mtf-oos-2025/test_vision_repair_guard.py mtf_route/tests/
           cp research/mtf-oos-2025/COURSE_FEATURE_AUDIT.md mtf_route/
 
       - name: All frozen-core and OOS-guard tests
@@ -64,6 +66,14 @@ jobs:
             --start-1d 2024-01-01T00:00:00Z \
             --end 2026-01-01T00:00:00Z \
             --out data/oos_2025
+
+      - name: Quarantine Jan-29 monthly archive volume defect via official daily Vision checksum
+        working-directory: mtf_route
+        run: |
+          set -euo pipefail
+          python src/repair_vision_jan29_2025.py \
+            --data-dir data/oos_2025 \
+            --out results_05/JAN29_DATA_QA.json
 
       - name: Run exact frozen 2025 holdout (no parameter search)
         working-directory: mtf_route
