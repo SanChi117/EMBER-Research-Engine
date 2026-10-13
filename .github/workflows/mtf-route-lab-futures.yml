@@ -1,0 +1,96 @@
+name: MTF Route Lab 0.4 - Binance USD-M PAPER replay
+
+on:
+  push:
+    branches:
+      - research/mtf-route-v04-futures-20261014
+    paths:
+      - '.github/workflows/mtf-route-lab-futures.yml'
+      - 'research/mtf-route-lab/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mtf-route-v04-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verified-futures-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout isolated research branch
+        uses: actions/checkout@v4
+
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify frozen MTF v0.4 package
+        run: |
+          set -euo pipefail
+          echo '11a3276974396d5be31009cf68256e3d7b4aa43ece89a0efacb2c5620583486e  research/mtf-route-lab/mtf_core_v04_frozen.zip' | sha256sum -c -
+          mkdir -p mtf_route
+          unzip -oq research/mtf-route-lab/mtf_core_v04_frozen.zip -d mtf_route
+
+      - name: Baseline regression suite (MTF core is frozen)
+        working-directory: mtf_route
+        run: python -m unittest discover -s tests -v
+
+      - name: Download Binance USD-M Futures from official Vision archives
+        working-directory: mtf_route
+        run: |
+          python src/obtain_history_v04.py --download --data-dir data/history --end 2026-10-13T00:00:00Z --out results_04/DOWNLOAD_ATTEMPT.json
+
+      - name: Validate data provenance, gaps, 15m/1d OHLCV and replay fixed grids
+        working-directory: mtf_route
+        run: |
+          python src/run_portfolio_grid_v04.py --data-dir data/history --out results_04/full_validation --end 2026-10-13T00:00:00Z
+
+      - name: Write concise verified report
+        if: success()
+        working-directory: mtf_route
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path('results_04/full_validation/SUMMARY.json')
+          data = json.loads(p.read_text(encoding='utf-8'))
+          rows = ['# MTF Route Lab v0.4 - Futures PAPER results', '',
+                  'Run status: ' + str(data.get('status')),
+                  'Core: frozen MTF 0.3; independent IMB/SNR, IDM, BOS 15m proxy.', '',
+                  '| Policy x costs | Model completed | Net quote PnL | PF model | MaxDD |',
+                  '|---|---:|---:|---:|---:|']
+          replay = data.get('full_replay', {})
+          for name, payload in replay.get('scenario_results', {}).items():
+              m = payload.get('model', {})
+              rows.append('| ' + name + ' | ' +
+                  str(m.get('completed_trades', m.get('trades', 'N/A'))) + ' | ' +
+                  str(m.get('net_pnl', m.get('net_quote_pnl', 'N/A'))) + ' | ' +
+                  str(m.get('profit_factor', m.get('PF_model', 'N/A'))) + ' | ' +
+                  str(m.get('max_drawdown_pct', 'N/A')) + ' |')
+          rows += ['', 'CAVEAT: model OHLC fills, no order acknowledgments, funding, verified teacher labels or untouched OOS; do not claim edge.']
+          target = Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with target.open('a', encoding='utf-8') as f:
+              f.write('\n'.join(rows) + '\n')
+          print('\n'.join(rows))
+          PY
+
+      - name: Upload full historical dataset and research reports (even on error)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtf-v04-usdm-20260401-20261012
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            mtf_route/data/history/*.csv
+            mtf_route/data/history/manifest_vision.json
+            mtf_route/data/history/manifest.json
+            mtf_route/results_04/**
+            mtf_route/results_03/full_validation/**
