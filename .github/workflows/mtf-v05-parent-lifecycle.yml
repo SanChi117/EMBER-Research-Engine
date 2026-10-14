@@ -1,0 +1,118 @@
+name: MTF v0.5 parent lifecycle — locked two-period Futures replay
+
+on:
+  push:
+    branches:
+      - research/mtf-v05-parent-lifecycle-20261014
+    paths:
+      - 'research/mtf-v05/**'
+      - '.github/workflows/mtf-v05-parent-lifecycle.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mtf-v05-fixed-lifecycle-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  paper-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      PYTHONUNBUFFERED: '1'
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore immutable v0.3 baseline and make separate v0.5 overlay
+        run: |
+          set -euo pipefail
+          echo '11a3276974396d5be31009cf68256e3d7b4aa43ece89a0efacb2c5620583486e  research/mtf-route-lab/mtf_core_v04_frozen.zip' | sha256sum -c -
+          echo 'a0d796faa9af17546541570f2796ceb2ced34a2f13eb4e889a6c6049ea7db9af  research/mtf-route-lab/mtf_core_v04_fixtures.zip' | sha256sum -c -
+          mkdir -p mtf
+          unzip -oq research/mtf-route-lab/mtf_core_v04_frozen.zip -d mtf
+          unzip -oq research/mtf-route-lab/mtf_core_v04_fixtures.zip -d mtf
+          cp research/mtf-v05/mtf_engine_v05.py mtf/src/
+          cp research/mtf-v05/run_v05_lifecycle_grid.py mtf/src/
+          cp research/mtf-v05/test_parent_lifecycle_v05.py mtf/tests/
+          cd mtf
+          python src/check_frozen_engine_v03.py
+      - name: Full frozen-core and new lifecycle unit test suite
+        working-directory: mtf
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -v > tests_v05.log 2>&1 || { tail -100 tests_v05.log; exit 1; }
+          tail -10 tests_v05.log
+      - name: Restore immutable 2026 Futures data and independent baseline from earlier successful GitHub run
+        run: |
+          set -euo pipefail
+          mkdir -p source/2026
+          gh run download 38480389900 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir source/2026
+          test -f source/2026/mtf_route/data/history/BTCUSDT_15m.csv
+          test -f source/2026/mtf_route/results_04/portfolio_scoped_replay/COURSE_PARENT_FTA__BASE/SUMMARY.json
+      - name: Restore immutable 2025 Futures data and independent OOS baseline
+        run: |
+          set -euo pipefail
+          mkdir -p source/2025
+          gh run download 38484074191 --repo "$GITHUB_REPOSITORY" --name mtf-frozen-2025-oos-paper --dir source/2025
+          test -f source/2025/data/oos_2025/BTCUSDT_15m.csv
+          test -f source/2025/results_05/oos_2025/portfolio/COURSE_PARENT_FTA__BASE/SUMMARY.json
+      - name: Run fixed 2026 paired v0.3/v0.5 comparison on same byte-identical Futures data
+        working-directory: mtf
+        run: |
+          python src/run_v05_lifecycle_grid.py \
+            --year 2026 \
+            --data-dir ../source/2026/mtf_route/data/history \
+            --baseline-independent ../source/2026/mtf_route/results_04/full_validation/fixed_03_grid/independent_grid \
+            --baseline-portfolio ../source/2026/mtf_route/results_04/portfolio_scoped_replay \
+            --out results_v05/2026
+      - name: Run fixed 2025 retrospective holdout paired v0.3/v0.5 comparison
+        working-directory: mtf
+        run: |
+          python src/run_v05_lifecycle_grid.py \
+            --year 2025 \
+            --data-dir ../source/2025/data/oos_2025 \
+            --baseline-independent ../source/2025/results_05/oos_2025/independent \
+            --baseline-portfolio ../source/2025/results_05/oos_2025/portfolio \
+            --out results_v05/2025
+      - name: Summarize without selecting winning variants
+        if: success()
+        working-directory: mtf
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=['# MTF lifecycle bugfix v0.5 — fixed research comparison', '',
+               'Same data, costs, FTA, signals and OHLC portfolio assumptions as frozen v0.3.',
+               'v0.5 adds only as-of POI invalidation/freshness enforcement. No visual course labels.', '',
+               '| Year | Scenario | Baseline return % | v0.5 return % | v0.5 model trades | v0.5 PF |',
+               '|---|---|---:|---:|---:|---:|']
+          for year in (2025,2026):
+              q=json.loads(Path(f'results_v05/{year}/V05_COMPARISON.json').read_text())
+              for name,x in q['scenarios'].items():
+                  a,b=x['old'],x['new']
+                  out.append(f'| {year} | {name} | {a["closed_equity_return_pct"]} | {b["closed_equity_return_pct"]} | {b["completed_model_trades"]} | {b.get("PF_resolved")} |')
+          out.append('')
+          out.append('DO NOT infer trading edge; no future price anchors, teacher chart labels, funding, or execution ack. Periods retrospective.')
+          text='\n'.join(out)+'\n'
+          Path('results_v05/README_RESULTS.md').write_text(text)
+          Path(os.environ['GITHUB_STEP_SUMMARY']).write_text(text)
+          print(text)
+          PY
+      - name: Preserve all diagnostics and portfolio audit traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtf-v05-parent-lifecycle-two-period-futures
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            mtf/results_v05/**
+            mtf/tests_v05.log
+            research/mtf-v05/README_RU.md
