@@ -1,0 +1,14 @@
+{
+  "run_id": 38573032325,
+  "job_id": 115882881806,
+  "status": "FAILED",
+  "first_failing_step": "Verify exact frozen trading engine",
+  "expected_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "github_error": "1 computed checksum did NOT match",
+  "local_frozen_bytes": 33106,
+  "github_file_content_bytes": 33105,
+  "likely_cause": "legacy GitHub text transfer omitted final LF; test correctly refused to continue",
+  "remedy": "reconcile every Git blob against original local byte-exact SHA-1, preserve immutable source, rerun cloud QA",
+  "engine_logic_edited": false,
+  "note": "C04 cloud verification NOT DONE until byte-exact archive and independent replay pass"
+}
