@@ -1,0 +1,13 @@
+{
+  "d04_local_csv_series": 10,
+  "files_sha256": {
+    "baselines/d04_history_2026/manifest_vision.json": "07c2edf7a626be3d30978fbba11d3d031f2c81bad74d7ad9fdcac3808b178440",
+    "tests/test_d04_vision_provenance.py": "8722fbae26a7129ac488c8dde94545085a521f6da07902273af9e3a2c307d10f",
+    "tools/strict_vision_d04.py": "b31fd85a484d6f3b01a6e2c5804e123dcbb2e063a9f03e9f89813e8d5d42f631"
+  },
+  "frozen_core_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "last_record": "A038",
+  "ledger_tip": "73f5a474ba220da1507e0f24d9e4cdbc87d63dda6068bc80c819ef23f7325244",
+  "origin_claim": "OFFLINE INTEGRITY does not establish live Binance authenticity",
+  "previous_records": 38
+}

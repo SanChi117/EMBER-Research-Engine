@@ -1,0 +1,18 @@
+{
+  "branch": "research/mtf-element-audit-C07-20261014",
+  "isolated": true,
+  "parent_branch": "research/mtf-element-audit-C06-20261014",
+  "previous_trading_engine_SHA256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "status": "PLAN_NOT_YET_EXECUTED",
+  "uploaded_files": {
+    "cycles/C07_D04_ПРОИСХОЖДЕНИЕ_ДАННЫХ.md": "f9c0b2b4adc55da225c1f83332508d23e5515999764ecfc73e1dc354f92fc302",
+    "tests/challenge_d04_mutations.py": "9f32a37157156fa5ec0a38855098f31d3b0972dcdbcfe2a3eb2209f14e7ceedf",
+    "tests/test_d04_vision_provenance.py": "ae03d42704b01ca1dcac11b25e7315f25f65409fd063de459d0df564d4d961a2",
+    "tests/verify_d04_cloud_receipts.py": "078db5b920a05ad2328c8f03cd660706f376f8369b685afec2a2f5d62154248c",
+    "tests/verify_d04_offline_history.py": "b410dcdd9c68e5b3e52b99e0c7f222ba5b4f55868bb261ff956dd197948dd629",
+    "tools/strict_vision_d04.py": "d0bc636a729bfa33fcbff7ad06fd905f54d3f88379f874485f9c83e482b10262",
+    "МАТРИЦА_C07_DELTA.json": "5dcdddbf3f6f58d2488a9bffee9ef2da20c80f70ac7ffeef70b1eb67773faa89",
+    "СЛЕДУЮЩАЯ_ОЧЕРЕДЬ_C08.md": "8f3789c74dc4443573ad90d52d7835919971258fe20cd8db31dd79a1fae31117"
+  },
+  "workflow_sha256": "0c9b86c56d149bb664ce8799170274380ec6aa564df049cfd142dbfe99ccf6df"
+}

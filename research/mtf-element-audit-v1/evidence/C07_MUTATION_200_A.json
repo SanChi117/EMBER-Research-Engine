@@ -1,0 +1,18 @@
+{
+  "counterexample": {
+    "both_zip_and_checksum_forged": "LOCAL_CHECKSUM_CAN_STILL_VERIFY",
+    "conclusion": "offline checksum is integrity, not independent Binance authentication"
+  },
+  "counts": {
+    "FORGED_CHECKSUM_NAME": 30,
+    "INJECTED_ZIP_MEMBER": 29,
+    "SPOT_OR_COINM_MASQUERADE": 40,
+    "WRONG_KLINE_DATE_EVEN_WITH_NEW_CHECKSUM": 40,
+    "ZIP_BYTES_CHANGED_SAME_CHECKSUM": 60
+  },
+  "negative_cases": 199,
+  "status": "FAIL",
+  "unexpected_acceptance": [
+    "INJECTED_ZIP_MEMBER"
+  ]
+}

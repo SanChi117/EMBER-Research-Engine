@@ -1,0 +1,14 @@
+{
+  "cycle": "C07",
+  "D04": {
+    "scope": "official Binance Vision futures UM raw zip + checksum + local normalized manifest",
+    "status": "PARTIAL_SOURCE_ATTESTATION_AWAITING_CLOUD_PROOFS",
+    "local_normalized_csv_series": 10,
+    "local_csv_rows": 98680,
+    "declared_raw_sources": 315,
+    "locally_authenticated_sources": 0,
+    "not_yet_attested": "all remote archives until cloud downloads",
+    "full_trading_semantics_certified": false,
+    "trading_code_touched": false
+  }
+}
