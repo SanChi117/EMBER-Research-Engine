@@ -1,0 +1,15 @@
+{
+  "branch": "research/mtf-element-audit-C07-20261014",
+  "cloud_artifact": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38595068903/artifacts/11909357087",
+  "cloud_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38595068903",
+  "full_archive_attestation": false,
+  "github_directory": "https://github.com/SanChi117/EMBER-Research-Engine/tree/research/mtf-element-audit-C07-20261014/research/mtf-element-audit-v1",
+  "journal_current_entries": 53,
+  "no_trading_code_changes": true,
+  "record_to_be_appended": "A054",
+  "remote_recheck": "Git tree readback matched all 10 changed files including binary proof blob",
+  "sha256_verified_source_receipts": "b952cdf0da69f8021ef6862a5b2cc4ef095599107fc3c19b84d32fea09f0db9d",
+  "status": "PASS",
+  "step": "C07_PRE_FINAL_GITHUB_READBACK",
+  "verified_remote_commit": "6ae30b0c413ed06b0f5a44acabb375cf66e317c5"
+}
