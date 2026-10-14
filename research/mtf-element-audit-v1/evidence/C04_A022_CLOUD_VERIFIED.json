@@ -1,0 +1,20 @@
+{
+  "cycle": "C04",
+  "stage": "INDEPENDENT_GITHUB_QA_VERIFIED",
+  "run_id": 38574586864,
+  "artifact_id": 11899082260,
+  "repository": "SanChi117/EMBER-Research-Engine",
+  "workflow_commit": "0f09273fc44818ef36972a42e42cd7f7de47a3be",
+  "github_run_url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38574586864",
+  "artifact_sha256": "5a2926f71f2a7be4b57f6bf62711330e95b1041438de2a6f3e2c2411a71f96f1",
+  "cloud_matches_local_independent_data": true,
+  "cloud_mutations_equal_local": true,
+  "cloud_journal_events_verified": 21,
+  "cloud_evidence_checked": 50,
+  "cloud_30_unittests": "PASS",
+  "cloud_180_mutations": "PASS",
+  "cloud_93600_15m_and_5080_daily": "PASS",
+  "cloud_975_daily_cross_checks": "PASS",
+  "frozen_engine_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "scope": "Only isolated D01; D02 and D04 not approved, no trading changes"
+}
