@@ -1,0 +1,15 @@
+{
+  "blocked_step": "Journal proof verifier",
+  "cause": "C05_LEDGER_QA_A026.json is a legitimate zero-byte stdout file from FAILED journal self-check A027. Git transfer package excluded zero-byte files, so cloud lacked one referenced evidence file.",
+  "counterexample": "Journal proof must contain every referenced file, even empty stdout from a FAILED action; zero-byte evidence cannot be sole evidence of DONE",
+  "cycle": "C05",
+  "event": "First GitHub D02 CI failure",
+  "fix": "Add exact empty blob to Git snapshot, preserve failure record and rerun full cloud workflow, do not change historical events.",
+  "result": "FAILED",
+  "run_id": 38581911994,
+  "successful_steps": [
+    "frozen core SHA",
+    "portable 69 tests",
+    "120 mutations and future check"
+  ]
+}
