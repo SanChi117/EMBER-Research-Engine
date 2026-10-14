@@ -1,0 +1,366 @@
+{
+  "spec_version": "SPEC-0.1",
+  "date": "2026-10-14",
+  "entries": [
+    {
+      "id": "D01",
+      "name": "Закрытая свеча OHLCV",
+      "layer": "01 Данные",
+      "status": "INFRA_ENGINEERING_CHECKED",
+      "issue": "Инфраструктура проверена; это не учебная формация.",
+      "component_approved": true
+    },
+    {
+      "id": "D02",
+      "name": "Агрегация и синхронизация TF",
+      "layer": "01 Данные",
+      "status": "INFRA_ENGINEERING_CHECKED",
+      "issue": "Инфраструктура проверена; это не учебная формация.",
+      "component_approved": true
+    },
+    {
+      "id": "D03",
+      "name": "Время появления/подтверждения/исполнения",
+      "layer": "01 Данные",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Частичный chronological no-lookahead есть; единый event contract отсутствует.",
+      "component_approved": false
+    },
+    {
+      "id": "D04",
+      "name": "Подлинность и тип рыночного источника",
+      "layer": "01 Данные",
+      "status": "INFRA_ENGINEERING_CHECKED",
+      "issue": "Инфраструктура проверена; это не учебная формация.",
+      "component_approved": true
+    },
+    {
+      "id": "C01",
+      "name": "Структура HH/HL и LH/LL",
+      "layer": "02 Структура",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В 0.5 1D/1W состояние преимущественно метаданные, не полноценное правило допуска.",
+      "component_approved": false
+    },
+    {
+      "id": "C02",
+      "name": "Order Flow (OF)",
+      "layer": "02 Структура",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "Полноценный граф OF как объект отсутствует.",
+      "component_approved": false
+    },
+    {
+      "id": "C03",
+      "name": "Глобальное направление / конфликт TF",
+      "layer": "02 Структура",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 статус 1W/1D вычисляется, но не является полноценным gate.",
+      "component_approved": false
+    },
+    {
+      "id": "C04",
+      "name": "Торговая сессия / PDH/PDL / AH/AL",
+      "layer": "02 Структура",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Метаданные сессий есть, целевая карта уровней неполна.",
+      "component_approved": false
+    },
+    {
+      "id": "C05",
+      "name": "Окружение BTC/ETH, funding/OI и новости",
+      "layer": "02 Структура",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "В существующем replay значения часто UNKNOWN; торговые связи не утверждены.",
+      "component_approved": false
+    },
+    {
+      "id": "L01",
+      "name": "Обычный фрактал / swing pivot",
+      "layer": "03 Ликвидность",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 pivot=2+2 — гипотеза; ошибки при автоматическом приравнивании IDM.",
+      "component_approved": false
+    },
+    {
+      "id": "L02",
+      "name": "BSL — Buy Side Liquidity",
+      "layer": "03 Ликвидность",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 есть raid поверх pivot, но полноценная геометрия пулов не доказана.",
+      "component_approved": false
+    },
+    {
+      "id": "L03",
+      "name": "SSL — Sell Side Liquidity",
+      "layer": "03 Ликвидность",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Есть pivot-based approximation; цена пула и свежесть требуют меток.",
+      "component_approved": false
+    },
+    {
+      "id": "L04",
+      "name": "EQH/EQL — равные экстремумы",
+      "layer": "03 Ликвидность",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "В коде нет независимой полной разметки EQH/EQL; ближайший pivot ≠ EQL.",
+      "component_approved": false
+    },
+    {
+      "id": "L05",
+      "name": "Liquidity Raid / sweep",
+      "layer": "03 Ликвидность",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Часть wick reclaim реализована; 4H raid не полноценная самостоятельная ветка.",
+      "component_approved": false
+    },
+    {
+      "id": "P01",
+      "name": "POI — Point of Interest, родительская зона",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "v0.5 повторно проверяет 4H invalid, но полного жизненного цикла и first-test нет.",
+      "component_approved": false
+    },
+    {
+      "id": "P02",
+      "name": "IMB / FVG",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Базовая FVG-геометрия есть, но не весь контекст/заполнение и статус зоны.",
+      "component_approved": false
+    },
+    {
+      "id": "P03",
+      "name": "Order Block (OB)",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 body engulf проверяется, но выбор границ зоны эвристический.",
+      "component_approved": false
+    },
+    {
+      "id": "P04",
+      "name": "Rejection Block (RB)",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Есть прокси wick-interaction; визуальные границы не подтверждены.",
+      "component_approved": false
+    },
+    {
+      "id": "P05",
+      "name": "SNR — Support becomes Resistance / наоборот",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "v0.5 использует ширину 0.2 ATR и окно 20 баров — гипотезы.",
+      "component_approved": false
+    },
+    {
+      "id": "P06",
+      "name": "Volume Confirmation (VC) — структурное",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 детекторы существуют, но event-link неполный.",
+      "component_approved": false
+    },
+    {
+      "id": "P07",
+      "name": "First test / Freshness / mitigation",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "v0.5 нет общего CONSUMED/RETIRED; возможны повторные идеи.",
+      "component_approved": false
+    },
+    {
+      "id": "P08",
+      "name": "Инвалидация / время жизни POI",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 исправлен as-of 4H guard; порог ±0.1% 1H является инженерной эвристикой.",
+      "component_approved": false
+    },
+    {
+      "id": "P09",
+      "name": "Strong High / Strong Low",
+      "layer": "04 Зоны и подтверждения",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "В v0.5 подменён min/max окна до VC — не эквивалентно уроку.",
+      "component_approved": false
+    },
+    {
+      "id": "P10",
+      "name": "Сила зоны S1/S2/S3",
+      "layer": "04 Зоны и подтверждения",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Эта логика отсутствует в курсовом v0.5 replay, где вместо неё есть ежедневный якорь.",
+      "component_approved": false
+    },
+    {
+      "id": "T01",
+      "name": "Тест POI",
+      "layer": "05 События",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Контакт 1H ↔ 4H есть; полноценная регистрация повторных тестов нет.",
+      "component_approved": false
+    },
+    {
+      "id": "T02",
+      "name": "1H Trigger для маршрута A",
+      "layer": "05 События",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Есть частично; 4H raid→1H VC требует отдельной ветки, не искусственного trigger.",
+      "component_approved": false
+    },
+    {
+      "id": "T03",
+      "name": "Inducement (IDM)",
+      "layer": "05 События",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "В v0.5 IDM=2+2 pivot proxy, не доказанный inducement.",
+      "component_approved": false
+    },
+    {
+      "id": "T04",
+      "name": "BOS — Break of Structure",
+      "layer": "05 События",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "В коде C_BOS_15M_PROXY это SNR 15m — НЕ учебный BOS.",
+      "component_approved": false
+    },
+    {
+      "id": "T05",
+      "name": "15m/5m реакция и дочерняя VC",
+      "layer": "05 События",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 ребёнок связан главным образом по времени и стороне; пространственная связь неполна.",
+      "component_approved": false
+    },
+    {
+      "id": "T06",
+      "name": "Причинная ссылка между событиями",
+      "layer": "05 События",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "Недостающее место текущего механизма, выявлено аудитом.",
+      "component_approved": false
+    },
+    {
+      "id": "T07",
+      "name": "FTA — First Trouble Area",
+      "layer": "05 События",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В v0.5 ближайший pivot — прокси, не подтверждённый FTA.",
+      "component_approved": false
+    },
+    {
+      "id": "T08",
+      "name": "Entry — условие входа",
+      "layer": "06 План",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Существуют модельные entry, не все из них соответствуют учебному исполнению.",
+      "component_approved": false
+    },
+    {
+      "id": "T09",
+      "name": "Структурный стоп (SL)",
+      "layer": "06 План",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "Используется interval min/max, часто слишком близкий — прокси.",
+      "component_approved": false
+    },
+    {
+      "id": "T10",
+      "name": "Одна структурная TP / Target",
+      "layer": "06 План",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Сейчас это pivot-proxy, поэтому реальная достижимость не подтверждена.",
+      "component_approved": false
+    },
+    {
+      "id": "T11",
+      "name": "Расчёт Net RR и размера риска",
+      "layer": "06 План",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Арифметика проверена, но правильность структурных границ нет.",
+      "component_approved": false
+    },
+    {
+      "id": "R01",
+      "name": "Маршрут A: IMB/SNR entry",
+      "layer": "07 Маршруты",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Частично есть; T06 причинная геометрия неполна.",
+      "component_approved": false
+    },
+    {
+      "id": "R02",
+      "name": "Маршрут B: IDM early limit",
+      "layer": "07 Маршруты",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Есть pivot-прокси и неполная 4H raid branch; нельзя навязывать BOS.",
+      "component_approved": false
+    },
+    {
+      "id": "R03",
+      "name": "Маршрут C: raid→3–5m BOS",
+      "layer": "07 Маршруты",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "Отсутствует: текущая 15m SNR-proxy другая модель.",
+      "component_approved": false
+    },
+    {
+      "id": "R04",
+      "name": "Маршрут A2: 1H POI→15m trigger→5m VC",
+      "layer": "07 Маршруты",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "В current engine отсутствует; V2.2 отдельно задаёт TF15.",
+      "component_approved": false
+    },
+    {
+      "id": "X01",
+      "name": "TradeIdea и разрешение заявки",
+      "layer": "08 Исполнение/контроль",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Есть idea JSONL, нет реальной live-цепочки исполнения.",
+      "component_approved": false
+    },
+    {
+      "id": "X02",
+      "name": "Лимитная заявка / заполнение / отмена",
+      "layer": "08 Исполнение/контроль",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "PAPER candle-touch fill используется; безопасное реальное исполнение не реализовано.",
+      "component_approved": false
+    },
+    {
+      "id": "X03",
+      "name": "Позиция / защитные заявки / выход",
+      "layer": "08 Исполнение/контроль",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "Только PAPER replay; mark, funding, latency и partial fills не подтверждены.",
+      "component_approved": false
+    },
+    {
+      "id": "X04",
+      "name": "Портфельная арбитрация",
+      "layer": "08 Исполнение/контроль",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "В replay была лексикографическая очередность A/B/C; не рейтинг качества.",
+      "component_approved": false
+    },
+    {
+      "id": "X05",
+      "name": "Журнал и доказательства",
+      "layer": "08 Исполнение/контроль",
+      "status": "PARTIAL_OR_PROXY",
+      "issue": "Есть отдельные идеи/diagnostics, нет полного audit graph.",
+      "component_approved": false
+    },
+    {
+      "id": "X06",
+      "name": "Проверка качества отдельного элемента",
+      "layer": "08 Исполнение/контроль",
+      "status": "MISSING_OR_NOT_SEMANTICALLY_APPROVED",
+      "issue": "Сейчас 0 независимо визуально подтверждённых учебных разметок.",
+      "component_approved": false
+    }
+  ]
+}

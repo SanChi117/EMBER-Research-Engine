@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-14",
+  "spec_version": "SPEC-0.1",
+  "rule": "Ни один результат текущих тестов не присваивает статус учебной семантической аттестации",
+  "overrides": [
+    {"id": "D01", "previous": "INFRA_ENGINEERING_CHECKED", "current": "REJECTED_AS_STANDALONE_LOADER", "reason": "4 воспроизводимых контрпримера, если обойти отдельно проверенный History Gate", "evidence": ["evidence/04_D01_D02_ADVERSARIAL_VALID_RUN_1.json", "evidence/05_D01_D02_ADVERSARIAL_VALID_RUN_2.json"]},
+    {"id": "D02", "previous": "INFRA_ENGINEERING_CHECKED", "current": "PARTIAL_NEEDS_AS_OF_CONTRACT", "reason": "агрегация закрытых buckets проходит synthetic, но функция не имеет as_of", "evidence": ["evidence/04_D01_D02_ADVERSARIAL_VALID_RUN_1.json"]},
+    {"id": "D03", "previous": "PARTIAL_OR_PROXY", "current": "PARTIAL_OR_PROXY", "reason": "нет единого as-of control у loader/aggregate", "evidence": ["evidence/04_D01_D02_ADVERSARIAL_VALID_RUN_1.json"]},
+    {"id": "D04", "previous": "INFRA_ENGINEERING_CHECKED", "current": "VERIFIED_FORMAL_ON_2026_ARTIFACT_ONLY", "reason": "93 600 15m свечей, 975 сверок USD-M 1d с embedded manifest; не remote повторная аутентификация", "evidence": ["evidence/06_REAL_FUTURES_QA_RUN1.json", "evidence/07_REAL_FUTURES_QA_RUN2.json"]}
+  ],
+  "all_remaining_41": "UNTIL_TESTED_KEEP_PREVIOUS_UNAPPROVED_STATUS",
+  "semantically_approved_routes": 0,
+  "pnl_backtests_run_in_this_cycle": 0,
+  "trading_engine_modifications": 0,
+  "live_orders": 0
+}

@@ -1,0 +1,131 @@
+{
+  "aggregate_probe": {
+    "aggregate_api_has_as_of_parameter": false,
+    "future_bar_in_raw_aggregate_called_with_all_data": 1,
+    "interpretation": "aggregation is correct on complete buckets, but caller MUST pass only as-of data; no own as_of gate",
+    "one_closed_1h_bucket_from_5_quarters": 1,
+    "zero_1h_from_3_quarters": 0
+  },
+  "cases": {
+    "all_timestamps_shifted_5_minutes": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": true,
+        "count": 5,
+        "last_bar_end": 1767230400000
+      },
+      "legacy_matches_contract": false,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "OFF_GRID"
+      }
+    },
+    "duplicate_timestamp": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": false,
+        "error_msg": "Missing/duplicate candle 2026-01-01T01:00:00Z",
+        "error_type": "ValueError"
+      },
+      "legacy_matches_contract": true,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "NON_CONTIGUOUS_OR_UNSORTED"
+      }
+    },
+    "empty_volume": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": true,
+        "count": 5,
+        "last_bar_end": 1767230100000
+      },
+      "legacy_matches_contract": false,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "MISSING_volume"
+      }
+    },
+    "gap_15m": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": false,
+        "error_msg": "Missing/duplicate candle 2026-01-01T00:15:00Z",
+        "error_type": "ValueError"
+      },
+      "legacy_matches_contract": true,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "NON_CONTIGUOUS_OR_UNSORTED"
+      }
+    },
+    "invalid_high": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": false,
+        "error_msg": "Bad OHLCV at 1767226500000",
+        "error_type": "ValueError"
+      },
+      "legacy_matches_contract": true,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "BAD_OHLCV"
+      }
+    },
+    "last_candle_unfinished_as_of": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": true,
+        "count": 5,
+        "last_bar_end": 1767230100000
+      },
+      "legacy_matches_contract": false,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "CANDLE_STILL_OPEN"
+      }
+    },
+    "missing_volume_column": {
+      "contract_expectation": false,
+      "legacy": {
+        "accepts": true,
+        "count": 5,
+        "last_bar_end": 1767230100000
+      },
+      "legacy_matches_contract": false,
+      "proposed_strict": {
+        "accepted": false,
+        "reason": "MISSING_volume"
+      }
+    },
+    "valid_5_closed": {
+      "contract_expectation": true,
+      "legacy": {
+        "accepts": true,
+        "count": 5,
+        "last_bar_end": 1767230100000
+      },
+      "legacy_matches_contract": true,
+      "proposed_strict": {
+        "accepted": true,
+        "reason": "COMPLETE_CLOSED_ALIGNED"
+      }
+    }
+  },
+  "component_ids": [
+    "D01",
+    "D02",
+    "D03",
+    "D04"
+  ],
+  "counterexamples_where_legacy_accepts_invalid": [
+    "empty_volume",
+    "missing_volume_column",
+    "all_timestamps_shifted_5_minutes",
+    "last_candle_unfinished_as_of"
+  ],
+  "legacy_source_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "rejected_as_fully_accepted": true,
+  "result": "D01_EXISTING_LOADER_FAILS_STRICT_CLOSED_CANDLE_CONTRACT",
+  "scope": "Synthetic examples, independent gate; needs real bar-source check and semantic signoff"
+}

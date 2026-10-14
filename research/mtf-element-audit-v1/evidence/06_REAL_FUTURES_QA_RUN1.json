@@ -1,0 +1,62 @@
+{
+  "biggest_15m_sum_vs_1d_volume_difference": "0",
+  "counterclaim": "These real files pass, but the generic low-level CSV loader can still accept malformed supplied files; upstream gate had independently screened these archived files.",
+  "input_artifact_sha256": "b24e489b9c3e9df56ce4c1e2d66c703db615de78a489335a870fa253ab88c008",
+  "native_days_total": 975,
+  "raw_15m_total": 93600,
+  "scope": "Packaged 2026 USD-M CSVs; not fresh remote network attestation; excludes unclosed bars",
+  "symbols": {
+    "BCHUSDT": {
+      "15m": 18720,
+      "15m_sha256": "20ac4996c6b988a810f18c9e9bc742e043f20481944746b83c2aca5fb350ecfc",
+      "1d": 1016,
+      "1d_sha256": "cdbafa8dfba041e7c441d27599dd6e3e6ac48f3c6f6f5fa337cd9a67c563ba46",
+      "bad_days": 0,
+      "checked_days": 195,
+      "csv_issues": [],
+      "native_daily_vs_96x15m_mismatches": []
+    },
+    "BTCUSDT": {
+      "15m": 18720,
+      "15m_sha256": "402bda7f1156585d3a7ce38b0d3bbe762f67ce3cbb062dbfe3e6184ffd147117",
+      "1d": 1016,
+      "1d_sha256": "d89c17aeb8ac86e07b7bfd65ef825c45a298c0abcff40d0b18d9babb50a59c67",
+      "bad_days": 0,
+      "checked_days": 195,
+      "csv_issues": [],
+      "native_daily_vs_96x15m_mismatches": []
+    },
+    "ETHUSDT": {
+      "15m": 18720,
+      "15m_sha256": "3fdb854f3be9078050d7573202f309a0789a5eb571f40043f7cb777be019110b",
+      "1d": 1016,
+      "1d_sha256": "d4ac3ce143a9983c5e963d5e685531a6beb39adc85931fe480ec05ce8b2cdae0",
+      "bad_days": 0,
+      "checked_days": 195,
+      "csv_issues": [],
+      "native_daily_vs_96x15m_mismatches": []
+    },
+    "SOLUSDT": {
+      "15m": 18720,
+      "15m_sha256": "a5090ed5c554d57c352fd05485b7c8353a65f13d8a0ede7eb1308921d61bb0ee",
+      "1d": 1016,
+      "1d_sha256": "8ea054732988b9199463e6646156b4e4157f82267a7a58302bcd254140566de9",
+      "bad_days": 0,
+      "checked_days": 195,
+      "csv_issues": [],
+      "native_daily_vs_96x15m_mismatches": []
+    },
+    "XRPUSDT": {
+      "15m": 18720,
+      "15m_sha256": "5d73536c71f34b1314777c588c219eae63570a847d800d8b8f85e10da303cc65",
+      "1d": 1016,
+      "1d_sha256": "1a26ccce17a64744a64e73aa2e2e742de7fa403bc4931f2b79a9391d895065ef",
+      "bad_days": 0,
+      "checked_days": 195,
+      "csv_issues": [],
+      "native_daily_vs_96x15m_mismatches": []
+    }
+  },
+  "total_errors": 0,
+  "verdict": "PACKAGED_REAL_HISTORY_QA_PASS"
+}

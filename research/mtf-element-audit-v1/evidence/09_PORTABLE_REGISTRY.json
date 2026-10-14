@@ -1,0 +1,35 @@
+{
+  "test": "C00_registry_structure",
+  "actual_45": 45,
+  "status_count": 45,
+  "normal_errors": [],
+  "mutation_tests": {
+    "remove": [
+      "COUNT_NOT_45",
+      "ID_SET_MISMATCH"
+    ],
+    "duplicate": [
+      "DUPLICATE_ID",
+      "ID_SET_MISMATCH"
+    ],
+    "empty_gate": [
+      "BLANK_gate_D01"
+    ],
+    "status_wrong_id": [
+      "ID_SET_MISMATCH"
+    ],
+    "wrong_approval": [
+      "INVALID_APPROVAL_C01"
+    ]
+  },
+  "fields_per_item": 12,
+  "exact_source_field_present": 0,
+  "status_counts": {
+    "INFRA_ENGINEERING_CHECKED": 3,
+    "PARTIAL_OR_PROXY": 30,
+    "MISSING_OR_NOT_SEMANTICALLY_APPROVED": 12
+  },
+  "conclusion": "STRUCTURE_PASSES_BUT_SOURCE_TRACEABILITY_FAILS",
+  "integrity_passed": true,
+  "semantic_approval": false
+}

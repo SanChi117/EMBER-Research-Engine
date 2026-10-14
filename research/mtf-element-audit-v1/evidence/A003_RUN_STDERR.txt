@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/mnt/data/MTF_VERIFIABLE_WORKLOG_20261014/tests/test_foundation_adversarial.py", line 15, in <module>
+    engine=importlib.util.module_from_spec(sp);sp.loader.exec_module(engine)
+                                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/mnt/data/MTF_ROUTE_LAB_V05_LIFECYCLE_REPAIR_20261014/src/mtf_engine.py", line 21, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/dataclasses.py", line 1295, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?

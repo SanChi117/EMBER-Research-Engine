@@ -1,0 +1,50 @@
+{
+  "audit_date": "2026-10-14",
+  "spec_version": "SPEC-0.1",
+  "files": [
+    {
+      "name": "ELEMENTS_REGISTRY.json",
+      "sha256": "276df8e8c7046a2c5af42369f1f251d1d214641ec0afe7c3fcc887a5236b3c80",
+      "bytes": 51734
+    },
+    {
+      "name": "ELEMENTS_STATUS.json",
+      "sha256": "b68ed91c0bae39f0c1463395393321dd4951764d21576931e5906fc8d8df1a1f",
+      "bytes": 15265
+    },
+    {
+      "name": "00_ГЛАВНАЯ_АРХИТЕКТУРА.md",
+      "sha256": "8332ce6e099c42a636d74a80cd3d554dc25dcc743103f31cf235a4f04fbf4450",
+      "bytes": 9065
+    },
+    {
+      "name": "01_КАТАЛОГ_ЭЛЕМЕНТОВ.md",
+      "sha256": "bb7c9eaad3b885ae9f85f4a59feb0b6be22995fc9e1ba13d730888c6d880ccfe",
+      "bytes": 62071
+    },
+    {
+      "name": "05_МАТРИЦА_ГОТОВНОСТИ_45_ЭЛЕМЕНТОВ.md",
+      "sha256": "d0078935c7f16aacab5b6cbf123d420adce2c4ccf01c85c4bd95d9de9aa008e5",
+      "bytes": 9710
+    }
+  ],
+  "count_registry": 45,
+  "count_status": 45,
+  "field_set": [
+    "id",
+    "title",
+    "layer",
+    "tf",
+    "meaning",
+    "appears",
+    "confirms",
+    "ends",
+    "output",
+    "provenance",
+    "current",
+    "gate"
+  ],
+  "per_element_exact_source_links": 0,
+  "independent_visual_labels": 0,
+  "note": "No explicit per-passport source reference field exists, so textual provenance is not sufficient to accept methodology."
+}
