@@ -1,0 +1,7 @@
+{
+  "byte_identical": true,
+  "first_sha": "9b27f347ad57ec0c181e04913b5f144018461f1797e340c3c2d932cde879f4c6",
+  "future_suffix_tests": 20,
+  "mutants_rejected": 180,
+  "second_sha": "9b27f347ad57ec0c181e04913b5f144018461f1797e340c3c2d932cde879f4c6"
+}

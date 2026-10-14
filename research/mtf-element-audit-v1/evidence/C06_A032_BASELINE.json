@@ -1,0 +1,15 @@
+{
+  "component": "D03",
+  "cycle": "C06",
+  "frozen_engine_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "not_done": [
+    "semantic IDM",
+    "StrongHL",
+    "FTA",
+    "live order execution"
+  ],
+  "prior_actions": 31,
+  "prior_c05_acceptance_sha256": "1c7318777626e2b793543fbc819849994141e2dff8f5e7ca5c0f1f9c6f597386",
+  "prior_cycle": "C05",
+  "scenario": "isolated time/causal event graph only"
+}

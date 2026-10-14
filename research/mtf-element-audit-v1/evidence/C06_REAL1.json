@@ -1,0 +1,78 @@
+{
+  "component": "D03",
+  "limits": [
+    "D03 source time relies on D01/D02 timestamp contracts",
+    "Associated confirmation kinds are synthetic; no course semantic labels validated",
+    "No actual order acknowledgments, live exchange timing, or signal edge attested"
+  ],
+  "mutation_future_visibility_tested": 5,
+  "per_symbol": [
+    {
+      "first_daily_close": "1775001600000",
+      "graph_nodes": 389,
+      "graph_sha256": "2f79a296760363f130c5c342df063e8d078dc2bec79cb81324b4dcf59ca421b8",
+      "last_daily_close": "1791763200000",
+      "native_daily_input": 195,
+      "parent_child_timestamp_pairs": 194,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "first_daily_close": "1775001600000",
+      "graph_nodes": 389,
+      "graph_sha256": "93f66925ed9453515cfd40d92a410444bf6d603cfd1d986aab6b39e77314a8cc",
+      "last_daily_close": "1791763200000",
+      "native_daily_input": 195,
+      "parent_child_timestamp_pairs": 194,
+      "symbol": "ETHUSDT"
+    },
+    {
+      "first_daily_close": "1775001600000",
+      "graph_nodes": 389,
+      "graph_sha256": "e82b350b57947e06265353e8bbb589811d7412e8ea478b81c0cb39ea5bce8e01",
+      "last_daily_close": "1791763200000",
+      "native_daily_input": 195,
+      "parent_child_timestamp_pairs": 194,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "first_daily_close": "1775001600000",
+      "graph_nodes": 389,
+      "graph_sha256": "5268341a1dd17a25f056c5cf25bb80d517c8078e8872b393a29d2b0d444a4efe",
+      "last_daily_close": "1791763200000",
+      "native_daily_input": 195,
+      "parent_child_timestamp_pairs": 194,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "first_daily_close": "1775001600000",
+      "graph_nodes": 389,
+      "graph_sha256": "c514b9b275f9b574b1dd4e01623ee0de57c35aaaf4c148de88835fd9e838ea9d",
+      "last_daily_close": "1791763200000",
+      "native_daily_input": 195,
+      "parent_child_timestamp_pairs": 194,
+      "symbol": "BCHUSDT"
+    }
+  ],
+  "real_inputs_sha": {
+    "BCHUSDT_15m": "20ac4996c6b988a810f18c9e9bc742e043f20481944746b83c2aca5fb350ecfc",
+    "BCHUSDT_1d": "cdbafa8dfba041e7c441d27599dd6e3e6ac48f3c6f6f5fa337cd9a67c563ba46",
+    "BTCUSDT_15m": "402bda7f1156585d3a7ce38b0d3bbe762f67ce3cbb062dbfe3e6184ffd147117",
+    "BTCUSDT_1d": "d89c17aeb8ac86e07b7bfd65ef825c45a298c0abcff40d0b18d9babb50a59c67",
+    "ETHUSDT_15m": "3fdb854f3be9078050d7573202f309a0789a5eb571f40043f7cb777be019110b",
+    "ETHUSDT_1d": "d4ac3ce143a9983c5e963d5e685531a6beb39adc85931fe480ec05ce8b2cdae0",
+    "SOLUSDT_15m": "a5090ed5c554d57c352fd05485b7c8353a65f13d8a0ede7eb1308921d61bb0ee",
+    "SOLUSDT_1d": "8ea054732988b9199463e6646156b4e4157f82267a7a58302bcd254140566de9",
+    "XRPUSDT_15m": "5d73536c71f34b1314777c588c219eae63570a847d800d8b8f85e10da303cc65",
+    "XRPUSDT_1d": "1a26ccce17a64744a64e73aa2e2e742de7fa403bc4931f2b79a9391d895065ef"
+  },
+  "snapshots_tested": 1940,
+  "status": "VERIFIED_FORMAL_D03_REAL_BAR_TIMESTAMPS",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "BCHUSDT"
+  ],
+  "total_valid_parent_child_pairs": 970
+}

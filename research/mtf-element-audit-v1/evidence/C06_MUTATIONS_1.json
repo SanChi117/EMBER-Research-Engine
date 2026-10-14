@@ -1,0 +1,17 @@
+{
+  "by_code": {
+    "CROSS_INSTRUMENT_PARENT": 60,
+    "DECISION_BEFORE_KNOWN": 20,
+    "ORPHAN_DERIVED_EVENT": 20,
+    "PARENT_ANCESTRY_INVALIDATED": 20,
+    "UNKNOWN_PARENT": 20,
+    "UNKNOWN_UNCLOSED_EVENT": 40
+  },
+  "component": "D03",
+  "future_suffix_tests": 20,
+  "future_suffix_unchanged": true,
+  "no_strategy_claim": true,
+  "rejected": 180,
+  "result": "PASS_FORMAL_ISOLATED",
+  "total": 180
+}

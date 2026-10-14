@@ -1,0 +1,103 @@
+name: MTF D03 - Falsifiable causal as-of event audit
+
+on:
+  push:
+    branches: [research/mtf-element-audit-C06-20261014]
+    paths:
+      - '.github/workflows/mtf-d03-causal-audit.yml'
+      - 'research/mtf-element-audit-v1/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  d03-formal-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ROOT: research/mtf-element-audit-v1
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen trading engine exact SHA
+        run: |
+          echo '3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46  research/mtf-element-audit-v1/baselines/mtf_engine_v05_original.py' | sha256sum -c -
+      - name: Run complete D01-D03 regression suite
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tools/run_unit_suite_c05.py 2>&1 | tee /tmp/c06-unit.log
+          grep -q 'Ran 96 tests' /tmp/c06-unit.log
+          grep -q '^OK$' /tmp/c06-unit.log
+      - name: Reproduce 180 falsification cases and 20 future-visibility cases
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tests/challenge_d03_mutations.py --out /tmp/c06-cloud-mutations.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/c06-cloud-mutations.json'))
+          b=json.load(open('evidence/C06_MUTATIONS_1.json'))
+          assert a==b
+          assert a['total']==180 and a['rejected']==180 and a['future_suffix_tests']==20
+          PY
+      - name: Show semantic counterexample, reject false course-level claim
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tests/semantic_boundary_d03.py --out /tmp/c06-cloud-semantic-limit.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/c06-cloud-semantic-limit.json'))
+          b=json.load(open('evidence/C06_A037_SEMANTIC_COUNTEREXAMPLE.json'))
+          assert a==b and a['accepted_semantically_ambiguous_edge'] and a['accepted_nonexistent_evidence_id']
+          PY
+      - name: Verify append-only journal and historical proof hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tests/test_journal_integrity.py > /tmp/c06-cloud-ledger.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/c06-cloud-ledger.json'))
+          assert a['events']==37 and a['evidence_verification']['verified_evidence_blobs']==93
+          PY
+      - name: Restore official Binance historical archive from previously successful GitHub Action
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 38480389900 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir prior
+          test "$(find prior/mtf_route/data/history -name '*.csv' | wc -l)" -eq 10
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_DEFLATED
+          with ZipFile('/tmp/c06-prior-futures.zip','w',ZIP_DEFLATED) as z:
+              for path in sorted(Path('prior/mtf_route/data/history').glob('*')):
+                  if path.is_file():z.write(path,path.relative_to('prior').as_posix())
+          PY
+      - name: Independent historical bar-time linkage and future exclusion
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tests/verify_d03_real_futures.py --archive /tmp/c06-prior-futures.zip --out /tmp/c06-cloud-real.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/c06-cloud-real.json'))
+          b=json.load(open('evidence/C06_REAL1.json'))
+          assert a==b, 'Cloud and local D03 timestamp lineage differ'
+          assert a['total_valid_parent_child_pairs']==970
+          PY
+      - name: Upload D03 verification and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtf-c06-d03-causal-timestamps-audit
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c06-unit.log
+            /tmp/c06-cloud-mutations.json
+            /tmp/c06-cloud-semantic-limit.json
+            /tmp/c06-cloud-ledger.json
+            /tmp/c06-cloud-real.json

@@ -1,0 +1,8 @@
+{
+  "byte_identical": true,
+  "explicit_limitation": "Synthetic timing associations only, not actual detected trading setups",
+  "first_sha": "5002136ae552618237efeff13c1f7b64347a081f0faadd5280f695674575358a",
+  "real_ohlcv_archive_sha": "b24e489b9c3e9df56ce4c1e2d66c703db615de78a489335a870fa253ab88c008",
+  "real_pairs": 970,
+  "second_sha": "5002136ae552618237efeff13c1f7b64347a081f0faadd5280f695674575358a"
+}

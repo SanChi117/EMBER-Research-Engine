@@ -1,0 +1,19 @@
+{
+  "checks": {
+    "portable_journal": true,
+    "portable_mutation": true,
+    "portable_real": true,
+    "portable_unit": true
+  },
+  "no_original_files_touched": true,
+  "observations": {
+    "journal_events": 31,
+    "unit_last_lines": [
+      "----------------------------------------------------------------------",
+      "Ran 96 tests in 0.019s",
+      "",
+      "OK"
+    ]
+  },
+  "rerun_isolated_dir": true
+}

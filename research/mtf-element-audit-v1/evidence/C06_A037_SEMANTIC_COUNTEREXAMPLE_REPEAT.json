@@ -1,0 +1,11 @@
+{
+  "accepted_nonexistent_evidence_id": true,
+  "accepted_semantically_ambiguous_edge": true,
+  "conclusion": "D03 enforces graph/time/symbol invariants only. It cannot validate evidence bytes or whether an assigned VC actually belongs to that trigger.",
+  "followups": [
+    "D04 authenticated evidence dereferencing and source SHA",
+    "structural POI/RAID/VC/IDM positive and negative annotated fixtures"
+  ],
+  "graph_sha256": "9431cd4c83f560950ff9df9bc495e5f617b4167b00d109a03d306faa630a5d46",
+  "synthetic_scope": true
+}

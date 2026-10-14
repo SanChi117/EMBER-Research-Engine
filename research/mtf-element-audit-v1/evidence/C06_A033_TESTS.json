@@ -1,0 +1,12 @@
+{
+  "interpretation": "Formal local test only; not proof of course-level semantic labels",
+  "pass_all": true,
+  "source_sha": "346421577ce68752eb11297cfb6872aa92139b5e9aa932042b38d4845fd6acb5",
+  "suite": [
+    "legacy D01+D02",
+    "D03 event contract",
+    "D03 negative forms"
+  ],
+  "tests": 96,
+  "unit_log_sha": "a73cb4871e309d13a692239621066c152b3bb14bcbdfdb1e3ffd7fd80235a6cf"
+}
