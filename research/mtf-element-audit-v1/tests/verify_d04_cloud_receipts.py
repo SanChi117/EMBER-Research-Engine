@@ -16,7 +16,7 @@ KEYS=[(sym,tf,'2026-10-11') for sym in SYMBOLS for tf in ('15m','1d')]+[('BTCUSD
 def comparable(a,b):return all(Decimal(a[k])==Decimal(b[k]) for k in ('open','high','low','close','volume'))
 
 def main():
- if len(sys.argv)!=2:raise SystemExit('usage: verify_d04_cloud_receipts.py OUT.json')
+ if len(sys.argv) not in (2,3):raise SystemExit('usage: verify_d04_cloud_receipts.py OUT.json [HISTORY_DIR]')
  receipts={}
  for sym,tf,date in KEYS:
   key=f'{sym}_{tf}_{date}'

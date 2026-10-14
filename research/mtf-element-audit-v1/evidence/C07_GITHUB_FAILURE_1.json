@@ -1,0 +1,19 @@
+{
+  "cause": "Cloud workflow supplied output path plus history_dir, CLI only allowed len(sys.argv)==2",
+  "completed": {
+    "frozen_engine": true,
+    "ledger": true,
+    "negative_200": true,
+    "offline_10_series": true,
+    "unit_suite": true
+  },
+  "cycle": "C07",
+  "failed_step": "HTTPS validate 12 official Vision ZIP + CHECKSUM receipts on all 5 pairs",
+  "intended_fix": "allow len(sys.argv) in (2,3) and document usage without relaxing any validation",
+  "job_id": 115957166966,
+  "log_error": "usage: verify_d04_cloud_receipts.py OUT.json",
+  "network_fetch_reached": false,
+  "run_id": 38594372348,
+  "status": "FAIL",
+  "url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38594372348"
+}
