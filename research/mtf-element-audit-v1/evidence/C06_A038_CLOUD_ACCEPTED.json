@@ -1,0 +1,16 @@
+{
+  "all_checks_pass": true,
+  "artifact_id": 11907896964,
+  "artifact_sha256": "b2ef2ba2e3759e37184cde4d2532eb50fa20f86539aaefa987480579d726251b",
+  "checks": {
+    "c06-cloud-mutations.json": true,
+    "c06-cloud-real.json": true,
+    "c06-cloud-semantic-limit.json": true,
+    "journal_37": true,
+    "unit_96": true
+  },
+  "compared_by": "independent stdlib JSON structural comparison, UTC context and checksum",
+  "known_limit": "Causal semantics not attested; falsification script exposes unvalidated VC-to-trigger evidence",
+  "run_id": 38590954173,
+  "run_status": "success"
+}
