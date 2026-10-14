@@ -1,0 +1,24 @@
+{
+  "baseline_d01_cloud_run": 38574586864,
+  "baseline_futures_archive_sha256": "b24e489b9c3e9df56ce4c1e2d66c703db615de78a489335a870fa253ab88c008",
+  "baseline_journal_actions": 22,
+  "cycle": "C05",
+  "d01_code_sha256": "b7c7da41a3e1b2ce6923dc87f702e769bade895bce4a4a5967586fc769dde42c",
+  "frozen_engine_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "id": "D02",
+  "scope": "isolated D02 research contract; no live signals; no changes to trading engine",
+  "specification": {
+    "appears": "Когда доступны полный набор младших закрытых свечей либо нативная HTF-свеча.",
+    "confirms": "Только на закрытии соответствующего TF; 1W синхронизируется с понедельником UTC.",
+    "current": "15m/1h/4h/1d/1w есть; 3m и 5m оригинальных маршрутов нет.",
+    "ends": "Запретить собирать неполные HTF-бары или заменять 3m/5m на 15m.",
+    "gate": "На 15:45 нельзя читать данные закрытия 16:00.",
+    "id": "D02",
+    "layer": "01 Данные",
+    "meaning": "Собирает разные масштабы времени без просмотра будущего.",
+    "output": "BarClosed(tf, at), HistorySnapshot(as_of).",
+    "provenance": "ENG",
+    "tf": "15m/1H/4H/1D/1W/3m/5m",
+    "title": "Агрегация и синхронизация TF"
+  }
+}

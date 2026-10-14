@@ -1,0 +1,12 @@
+{
+  "claim": "initial implementation rejects any missing child",
+  "counterexample": "delete first bar of expected 16 x 15m interval, resulting 15 valid contiguous bars; parser treated it as leading partial",
+  "cycle": "C05",
+  "falsification": "subsequent expected_source_start_utc binding must reject; no claim of passing 120/120 before fix",
+  "first_mutation_result": "C05_MUTATIONS_PASS1.json",
+  "import_failure_log": "C05_FULL_UNIT_PASS1.log",
+  "observed": "118/120 corruptions rejected; deletion of FIRST bar in source not distinguishable from legitimate partial leading parent without declared source start; first attempt to fix stale trailing coverage alone was insufficient",
+  "result": "FAILED",
+  "second_mutation_result": "C05_MUTATIONS_PASS2.json",
+  "separate_failure": "full inherited test suite initially failed 2 import tests referring to absolute path of previous workspace; no trading engine defect established"
+}

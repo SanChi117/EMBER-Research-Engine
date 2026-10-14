@@ -1,0 +1,10 @@
+{
+  "cycle": "C05",
+  "result": "FAILED_THEN_REPAIRED",
+  "detected": "Original status matrix was changed after historical journal SHA references",
+  "failure_log": "evidence/C05_LEDGER_QA_A028.json",
+  "restoration": "Byte-identical copy from C04 restored original historical matrix",
+  "replacement": "МАТРИЦА_C05_DELTA.json contains new status without mutating historical file",
+  "final_qa": "evidence/C05_LEDGER_QA_A028_RESTORED.json",
+  "note": "This is a process failure recorded explicitly; no claim of uninterrupted success."
+}

@@ -1,0 +1,12 @@
+{
+  "cycle": "C05",
+  "detected": "Existing historical test scripts were edited in a copy, breaking SHA256 of evidence-bound originals",
+  "failing_evidence": "evidence/C05_LEDGER_QA_A026.json",
+  "failing_output": "AssertionError: Evidence size changed: tests/test_foundation_adversarial_v2.py",
+  "noteworthy": "Changes were only portability shims, but immutable original files MUST NOT be modified after journal hash references",
+  "original_test_1_sha256": "faf004e36a0bbcba95143d85c0f760e0bc1449b25a11cf4c128a492655acf117",
+  "original_test_2_sha256": "23c3ebc5aa85eb6d5bff1c74e9e966795acf7341ab8cd11d8723b24d237234ee",
+  "repair": "Restored byte-identical files from C04 snapshot. New compatibility runner mutates only temporary copies of tests, not journal-anchored originals.",
+  "restored_ledger_qa": "evidence/C05_LEDGER_QA_RESTORED.json",
+  "result": "FAILED"
+}

@@ -1,0 +1,86 @@
+name: MTF D02 - Falsifiable multi-TF as-of audit
+
+on:
+  push:
+    branches: [research/mtf-element-audit-C05-20261014]
+    paths:
+      - '.github/workflows/mtf-d02-audit.yml'
+      - 'research/mtf-element-audit-v1/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  d02-strict-independent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      ROOT: research/mtf-element-audit-v1
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Freeze check of pre-existing trading core
+        run: |
+          echo '3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46  research/mtf-element-audit-v1/baselines/mtf_engine_v05_original.py' | sha256sum -c -
+      - name: D01 and D02 portable positive and negative tests
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tools/run_unit_suite_c05.py 2>&1 | tee /tmp/c05-unit.log
+          grep 'Ran 69 tests' /tmp/c05-unit.log
+          grep -q '^OK$' /tmp/c05-unit.log
+      - name: Challenge D02 with 120 corruptions and future leakage attacks
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tests/challenge_d02_mutations.py --out /tmp/c05-cloud-mutants.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/c05-cloud-mutants.json'))
+          b=json.load(open('evidence/C05_MUTATIONS_PASS3.json'))
+          assert a == b, 'cloud and local falsification outcomes differ'
+          PY
+      - name: Check journal chain and all existing evidence hashes
+        working-directory: research/mtf-element-audit-v1
+        run: python tests/test_journal_integrity.py > /tmp/c05-cloud-journal.json
+      - name: Restore immutable earlier Binance Futures artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 38480389900 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir prior
+          test -f prior/mtf_route/data/history/manifest_vision.json
+          test "$(find prior/mtf_route/data/history -name '*.csv' | wc -l)" -eq 10
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          with ZipFile('/tmp/futures-2026-d02.zip','w',ZIP_DEFLATED) as z:
+              for path in sorted(Path('prior/mtf_route/data/history').glob('*')):
+                  if path.is_file():z.write(path,path.relative_to('prior').as_posix())
+          PY
+      - name: Independent real futures MTF aggregation and native-daily comparison
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          python tests/verify_d02_real_futures.py --archive /tmp/futures-2026-d02.zip --out /tmp/c05-cloud-real.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/c05-cloud-real.json'))
+          b=json.load(open('evidence/C05_REAL_PASS3.json'))
+          assert a == b, 'cloud output differs from frozen local 2026 validation'
+          assert a['invariants']['daily_15m_vs_native']==975
+          assert a['invariants']['weekly_15m_vs_native_1d']==135
+          PY
+      - name: Upload D02 verification results (including failure reports)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtf-c05-d02-formal-audit
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c05-unit.log
+            /tmp/c05-cloud-mutants.json
+            /tmp/c05-cloud-journal.json
+            /tmp/c05-cloud-real.json

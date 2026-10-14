@@ -1,0 +1,19 @@
+{
+  "cycle": "C05",
+  "component": "D02",
+  "baseline_matrix_policy": "MАТРИЦА_ПОСЛЕ_ОПРОВЕРЖЕНИЙ.json is evidence-bound and immutable; this file supersedes only D02 status, without rewriting the original",
+  "old_D02_status": "PARTIAL_NEEDS_AS_OF_CONTRACT",
+  "new_isolated_D02_status": "LOCAL_VERIFIED_CLOUD_PENDING",
+  "legacy_engine_D02_status": "PARTIAL_NEEDS_AS_OF_CONTRACT (unchanged)",
+  "tests": 69,
+  "negative_mutations_rejected": 120,
+  "point_in_time_future_mutations_invariant": 20,
+  "historical_daily_match": 975,
+  "historical_weekly_1d_match": 135,
+  "historical_hourly_independent": 23400,
+  "historical_4h_independent": 5850,
+  "independent_exchange_native_1h_4h_1w": false,
+  "real_3m_5m_data": false,
+  "live_integrated": false,
+  "strategy_signal_changes": 0
+}

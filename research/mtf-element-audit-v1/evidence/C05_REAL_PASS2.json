@@ -1,0 +1,99 @@
+{
+  "as_of_utc": "2026-10-13T00:00:00Z",
+  "component": "D02",
+  "cycle": "C05",
+  "invariants": {
+    "daily_15m_vs_native": 975,
+    "future_looks": 5,
+    "hours_1h_independent": 23400,
+    "hours_4h_independent": 5850,
+    "weekly_15m_vs_native_1d": 135
+  },
+  "limitations": [
+    "1h/4h are checked against separate arithmetic from raw 15m, not native exchange 1h/4h.",
+    "1w is checked against independently aggregated native 1d, not exchange-native 1w.",
+    "No real 3m/5m source candles were available in fixed history; synthetic tests only.",
+    "Actual point-in-time exchange publish latency/finalization not proven by the as-of bar-end convention.",
+    "Provenance D04, semantic pivot StrongHL/IDM and strategy accuracy not verified."
+  ],
+  "per_symbol": [
+    {
+      "derived_1d": 195,
+      "derived_1h": 4680,
+      "derived_1w": 27,
+      "derived_4h": 1170,
+      "first_week_open_at_ms": 1775433600000,
+      "future_data_cannot_change_past": true,
+      "last_week_closed_at_ms": 1791763200000,
+      "native_1d": 1016,
+      "partial_week_first": 1,
+      "partial_week_last": 1,
+      "raw_15m": 18720,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "derived_1d": 195,
+      "derived_1h": 4680,
+      "derived_1w": 27,
+      "derived_4h": 1170,
+      "first_week_open_at_ms": 1775433600000,
+      "future_data_cannot_change_past": true,
+      "last_week_closed_at_ms": 1791763200000,
+      "native_1d": 1016,
+      "partial_week_first": 1,
+      "partial_week_last": 1,
+      "raw_15m": 18720,
+      "symbol": "ETHUSDT"
+    },
+    {
+      "derived_1d": 195,
+      "derived_1h": 4680,
+      "derived_1w": 27,
+      "derived_4h": 1170,
+      "first_week_open_at_ms": 1775433600000,
+      "future_data_cannot_change_past": true,
+      "last_week_closed_at_ms": 1791763200000,
+      "native_1d": 1016,
+      "partial_week_first": 1,
+      "partial_week_last": 1,
+      "raw_15m": 18720,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "derived_1d": 195,
+      "derived_1h": 4680,
+      "derived_1w": 27,
+      "derived_4h": 1170,
+      "first_week_open_at_ms": 1775433600000,
+      "future_data_cannot_change_past": true,
+      "last_week_closed_at_ms": 1791763200000,
+      "native_1d": 1016,
+      "partial_week_first": 1,
+      "partial_week_last": 1,
+      "raw_15m": 18720,
+      "symbol": "XRPUSDT"
+    },
+    {
+      "derived_1d": 195,
+      "derived_1h": 4680,
+      "derived_1w": 27,
+      "derived_4h": 1170,
+      "first_week_open_at_ms": 1775433600000,
+      "future_data_cannot_change_past": true,
+      "last_week_closed_at_ms": 1791763200000,
+      "native_1d": 1016,
+      "partial_week_first": 1,
+      "partial_week_last": 1,
+      "raw_15m": 18720,
+      "symbol": "BCHUSDT"
+    }
+  ],
+  "status": "VERIFIED_FORMAL_D02_ON_EXISTING_2026_FUTURES_RECORDS",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "BCHUSDT"
+  ]
+}

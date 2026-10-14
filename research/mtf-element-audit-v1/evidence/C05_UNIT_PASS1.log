@@ -1,0 +1,41 @@
+test_15m_cannot_substitute_3m (test_d02_tf_sync.D02Tests.test_15m_cannot_substitute_3m) ... ok
+test_15m_to_1d (test_d02_tf_sync.D02Tests.test_15m_to_1d) ... ok
+test_15m_to_1h (test_d02_tf_sync.D02Tests.test_15m_to_1h) ... ok
+test_15m_to_1w (test_d02_tf_sync.D02Tests.test_15m_to_1w) ... ok
+test_15m_to_4h (test_d02_tf_sync.D02Tests.test_15m_to_4h) ... ok
+test_1d_to_1w (test_d02_tf_sync.D02Tests.test_1d_to_1w) ... ok
+test_3m_to_15m (test_d02_tf_sync.D02Tests.test_3m_to_15m) ... ok
+test_5m_to_15m (test_d02_tf_sync.D02Tests.test_5m_to_15m) ... ok
+test_asof_border_1ms (test_d02_tf_sync.D02Tests.test_asof_border_1ms) ... ok
+test_asof_zone_rejected (test_d02_tf_sync.D02Tests.test_asof_zone_rejected) ... ok
+test_bad_child_close_time_rejected (test_d02_tf_sync.D02Tests.test_bad_child_close_time_rejected) ... ok
+test_cut_at_last_closed_child (test_d02_tf_sync.D02Tests.test_cut_at_last_closed_child) ... ok
+test_float_bad_decimal_rejected (test_d02_tf_sync.D02Tests.test_float_bad_decimal_rejected) ... ok
+test_future_ohlc_mutation_cannot_change_asof (test_d02_tf_sync.D02Tests.test_future_ohlc_mutation_cannot_change_asof) ... ok
+test_integer_time_bool_rejected (test_d02_tf_sync.D02Tests.test_integer_time_bool_rejected) ... ok
+test_manual_native_future_suffix_invisible (test_d02_tf_sync.D02Tests.test_manual_native_future_suffix_invisible) ... ok
+test_missing_child_rejected (test_d02_tf_sync.D02Tests.test_missing_child_rejected) ... ok
+test_mixed_symbol_rejected (test_d02_tf_sync.D02Tests.test_mixed_symbol_rejected) ... ok
+test_mixed_tf_rejected (test_d02_tf_sync.D02Tests.test_mixed_tf_rejected) ... ok
+test_native_htf_future_ignored (test_d02_tf_sync.D02Tests.test_native_htf_future_ignored) ... ok
+test_no_bars_fails (test_d02_tf_sync.D02Tests.test_no_bars_fails) ... ok
+test_no_future_closed_bucket (test_d02_tf_sync.D02Tests.test_no_future_closed_bucket) ... ok
+test_no_leading_partial_bucket (test_d02_tf_sync.D02Tests.test_no_leading_partial_bucket) ... ok
+test_off_grid_rejected (test_d02_tf_sync.D02Tests.test_off_grid_rejected) ... ok
+test_out_of_order_rejected (test_d02_tf_sync.D02Tests.test_out_of_order_rejected) ... ok
+test_parent_bucket_partial_only (test_d02_tf_sync.D02Tests.test_parent_bucket_partial_only) ... ok
+test_pivot_bad_lookaround (test_d02_tf_sync.D02Tests.test_pivot_bad_lookaround) ... ok
+test_pivot_confirmation_delay (test_d02_tf_sync.D02Tests.test_pivot_confirmation_delay) ... ok
+test_pivot_earlier_asof_than_snapshot (test_d02_tf_sync.D02Tests.test_pivot_earlier_asof_than_snapshot) ... ok
+test_pivot_tie_not_arbitrarily_selected (test_d02_tf_sync.D02Tests.test_pivot_tie_not_arbitrarily_selected) ... ok
+test_repeated_child_rejected (test_d02_tf_sync.D02Tests.test_repeated_child_rejected) ... ok
+test_same_tf_cannot_aggregate (test_d02_tf_sync.D02Tests.test_same_tf_cannot_aggregate) ... ok
+test_week_anchor_constant (test_d02_tf_sync.D02Tests.test_week_anchor_constant) ... ok
+test_week_rollover_sunday_close_exact (test_d02_tf_sync.D02Tests.test_week_rollover_sunday_close_exact) ... ok
+test_week_starts_monday_not_sunday (test_d02_tf_sync.D02Tests.test_week_starts_monday_not_sunday) ... ok
+test_wrong_ohlc_rejected (test_d02_tf_sync.D02Tests.test_wrong_ohlc_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.006s
+
+OK

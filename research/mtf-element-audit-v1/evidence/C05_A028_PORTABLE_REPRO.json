@@ -1,0 +1,17 @@
+{
+  "cycle": "C05",
+  "journal_restored_sha256": "a92ac2136913aa78da83cafda7010bc46c35d972f6d29a4e879eb863772b959d",
+  "limitations": [
+    "Portable full-suite harness patches only ephemeral mirrors of legacy absolute paths",
+    "No native 1h/4h/1w Binance data in frozen archive",
+    "No real 3m or 5m tests"
+  ],
+  "mutations_identical": true,
+  "real_report_identical": true,
+  "reports_same_test_count": true,
+  "result": "PASS",
+  "temporary_test_harness": "tools/run_unit_suite_c05.py",
+  "test_pass1": "1a71811eb9b7548583c1ec22e157e426bfd345fb947f2ad1c334609c936c582b",
+  "test_pass2": "d316a50ef647205b85d7fd68fe4cab31aa957d79ac24c532df170257dff8b42d",
+  "tests_reported": 69
+}

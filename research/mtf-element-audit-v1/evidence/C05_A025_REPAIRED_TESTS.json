@@ -1,0 +1,14 @@
+{
+  "cycle": "C05",
+  "future_invariance_checks": 20,
+  "module": "tools/strict_tf_d02.py",
+  "module_sha256": "dad467b2f968aa8cd05b9c57f53474f15c0afa5fa1dfaebc53fdca4b68b497be",
+  "mutation_log_sha256": "4721ff646487fb93b9cfce00bbb1a2f5cdd6c6defeef5ed4227935f8be15b715",
+  "mutation_rejections": 120,
+  "no_trading_logic_changed": true,
+  "portable_test_harness_fix": "two legacy test scripts moved from hardcoded outside path to embedded byte-identical baseline; logic of assertions unchanged",
+  "result": "PASS",
+  "source_window_fix": "explicit start-bound optional expected_source_start_utc, stale end-of-prefix rejection; partial leading/trailing only if explicitly attributable to time windows",
+  "test_count": 69,
+  "tests_69": "d316a50ef647205b85d7fd68fe4cab31aa957d79ac24c532df170257dff8b42d"
+}

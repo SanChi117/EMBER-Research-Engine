@@ -1,0 +1,9 @@
+{
+  "cycle": "C05",
+  "future_invariance_passes": 20,
+  "future_mutation_attempts": 20,
+  "rejection_attempts": 120,
+  "rejections": 120,
+  "result": "PASS",
+  "unexpected_acceptances": []
+}
