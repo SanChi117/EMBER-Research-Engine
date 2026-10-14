@@ -1,0 +1,35 @@
+test_01_valid_closed (test_d01_bar_closed_contract.D01Contract.test_01_valid_closed) ... ok
+test_02_missing_volume_cell (test_d01_bar_closed_contract.D01Contract.test_02_missing_volume_cell) ... ok
+test_03_missing_volume_column (test_d01_bar_closed_contract.D01Contract.test_03_missing_volume_column) ... ok
+test_04_nonfinite (test_d01_bar_closed_contract.D01Contract.test_04_nonfinite) ... ok
+test_05_negative_volume (test_d01_bar_closed_contract.D01Contract.test_05_negative_volume) ... ok
+test_06_invalid_ohlc (test_d01_bar_closed_contract.D01Contract.test_06_invalid_ohlc) ... ok
+test_07_shifted_grid (test_d01_bar_closed_contract.D01Contract.test_07_shifted_grid) ... ok
+test_08_unfinished_asof (test_d01_bar_closed_contract.D01Contract.test_08_unfinished_asof) ... ok
+test_09_duplicate_timestamp (test_d01_bar_closed_contract.D01Contract.test_09_duplicate_timestamp) ... ok
+test_10_unsorted_rows (test_d01_bar_closed_contract.D01Contract.test_10_unsorted_rows) ... ok
+test_11_gap (test_d01_bar_closed_contract.D01Contract.test_11_gap) ... ok
+test_12_wrong_market (test_d01_bar_closed_contract.D01Contract.test_12_wrong_market) ... ok
+test_13_wrong_symbol (test_d01_bar_closed_contract.D01Contract.test_13_wrong_symbol) ... ok
+test_14_unknown_tf (test_d01_bar_closed_contract.D01Contract.test_14_unknown_tf) ... ok
+test_15_digest_mismatch (test_d01_bar_closed_contract.D01Contract.test_15_digest_mismatch) ... ok
+test_16_missing_source (test_d01_bar_closed_contract.D01Contract.test_16_missing_source) ... ok
+test_17_bad_close_time (test_d01_bar_closed_contract.D01Contract.test_17_bad_close_time) ... ok
+test_18_missing_close_time (test_d01_bar_closed_contract.D01Contract.test_18_missing_close_time) ... ok
+test_19_ambiguous_timezone (test_d01_bar_closed_contract.D01Contract.test_19_ambiguous_timezone) ... ok
+test_20_naive_timezone (test_d01_bar_closed_contract.D01Contract.test_20_naive_timezone) ... ok
+test_21_boolean_timestamp (test_d01_bar_closed_contract.D01Contract.test_21_boolean_timestamp) ... ok
+test_22_fractional_timestamp (test_d01_bar_closed_contract.D01Contract.test_22_fractional_timestamp) ... ok
+test_23_d01_accepts_utc_Z (test_d01_bar_closed_contract.D01Contract.test_23_d01_accepts_utc_Z) ... ok
+test_24_week_monday_accept (test_d01_bar_closed_contract.D01Contract.test_24_week_monday_accept) ... ok
+test_25_week_sunday_reject (test_d01_bar_closed_contract.D01Contract.test_25_week_sunday_reject) ... ok
+test_26_different_file_after_digest (test_d01_bar_closed_contract.D01Contract.test_26_different_file_after_digest) ... ok
+test_27_zero_bars (test_d01_bar_closed_contract.D01Contract.test_27_zero_bars) ... ok
+test_28_exact_last_close_allowed (test_d01_bar_closed_contract.D01Contract.test_28_exact_last_close_allowed) ... ok
+test_29_no_earlier_bars_after_future_injection (test_d01_bar_closed_contract.D01Contract.test_29_no_earlier_bars_after_future_injection) ... ok
+test_30_utf8_bom (test_d01_bar_closed_contract.D01Contract.test_30_utf8_bom) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.009s
+
+OK

@@ -1,0 +1,26 @@
+{
+  "repo": "SanChi117/EMBER-Research-Engine",
+  "branch": "research/mtf-element-audit-ledger-20261014",
+  "commit": "ef18515b10ed352409c8fd4c72a3ac79ce71387d",
+  "remote_path": "research/mtf-element-audit-v1/",
+  "remote_files": 34,
+  "baseline_2026_raw_archives_in_git": false,
+  "included_files": "documents + ledger through A010 + tests + real data reports + frozen core text + registry text",
+  "source_archive_external": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38480389900/artifacts/11856708573",
+  "note": "Remote commit anchors a snapshot of ledger A001-A010; A011 remote commit bookkeeping is recorded locally after the commit.",
+  "readback": [
+    {
+      "path": "ЖУРНАЛ_ДЕЙСТВИЙ.jsonl",
+      "git_blob_sha": "757170301a48071bc18fcaadceb1d17b61715b95",
+      "includes_A010": true
+    },
+    {
+      "path": "ПРОТОКОЛ_РАБОТЫ.md",
+      "git_blob_sha": "ea94982e9596e4e7a2ff9861f084419dce859adc"
+    },
+    {
+      "path": "evidence/04_D01_D02_ADVERSARIAL_VALID_RUN_1.json",
+      "git_blob_sha": "2cfc772116f16b32035c124da33017ab2fa727c9"
+    }
+  ]
+}

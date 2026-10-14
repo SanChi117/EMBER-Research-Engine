@@ -1,0 +1,11 @@
+{
+  "cycle": "C04",
+  "date": "2026-10-14",
+  "prior_entries": 12,
+  "prior_tip_sha256": "98c85f9d95d39bf271262356d7073f3d5393d9f77dac36aa0d4ff7821c514227",
+  "frozen_trading_core_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "operation": "isolate D01 source schema, never change baseline",
+  "module_file": "tools/strict_bar_closed.py",
+  "status": "BEFORE_RUNNING_REPAIR",
+  "requires_evidence": "D01 formal tests + full real-data replay + falsification"
+}

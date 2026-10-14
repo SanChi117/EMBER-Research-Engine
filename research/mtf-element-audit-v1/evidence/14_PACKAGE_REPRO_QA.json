@@ -1,0 +1,34 @@
+{
+  "candidate_archive_sha256": "6da99eebcdb2519a3f5e7226db2a7bb4d656df8729e9e1140f823972397097ae",
+  "archive_size_bytes": 4978784,
+  "new_directory_extraction": "PASS",
+  "portable_checks": [
+    "45 passports and five mutation catches",
+    "4 reproducible strict-contract counterexamples",
+    "93,600 real USD-M 15m and 975 day comparisons no errors",
+    "ledger and active proofs hashes valid"
+  ],
+  "results": [
+    {
+      "name": "spec",
+      "status": "PASS"
+    },
+    {
+      "name": "loader_violations",
+      "status": "REPRODUCED"
+    },
+    {
+      "name": "futures_2026",
+      "status": "PASS"
+    },
+    {
+      "name": "journal",
+      "status": "PASS"
+    }
+  ],
+  "scope_limits": [
+    "No semantic POI/IDM/BOS/FTA acceptance",
+    "No new PnL replay",
+    "No live order"
+  ]
+}

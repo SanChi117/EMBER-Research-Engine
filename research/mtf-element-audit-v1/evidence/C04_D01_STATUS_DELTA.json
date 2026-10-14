@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-14",
+  "cycle": "C04",
+  "element": "D01",
+  "old_loader_status": "REJECTED_AS_STANDALONE_LOADER",
+  "new_isolated_contract_status": "VERIFIED_FORMAL_WITH_DECLARED_SOURCE",
+  "integration_into_frozen_engine": "NOT_DONE",
+  "historical_2026_15m_rows": 93600,
+  "historical_2026_1d_rows": 5080,
+  "cross_tf_daily_checks": 975,
+  "unit_test_passed": 30,
+  "mutated_data_cases_rejected": 180,
+  "remaining_dependencies": [
+    "D02 point-in-time aggregation",
+    "D03 feature timing",
+    "D04 external Vision authenticity",
+    "Real 3m/5m/1h/4h/1w test coverage"
+  ],
+  "source_files": [
+    "tools/strict_bar_closed.py",
+    "cycles/C04_D01_СТРОГАЯ_ЗАКРЫТАЯ_СВЕЧА.md"
+  ],
+  "scope": "Research, no trades and no changes to frozen code",
+  "rule": "No log action with verified evidence means not done"
+}

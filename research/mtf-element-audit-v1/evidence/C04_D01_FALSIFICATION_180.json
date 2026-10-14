@@ -1,0 +1,923 @@
+{
+  "accepted_corruption": 0,
+  "all_negative_cases": [
+    "bad_high",
+    "bad_symbol",
+    "blank_volume",
+    "duplicate",
+    "future",
+    "gap",
+    "nan",
+    "negative_price",
+    "negative_volume",
+    "offgrid",
+    "order_swap",
+    "wrong_close"
+  ],
+  "case_details": [
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "blank_volume",
+      "reason": "MISSING_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "nan",
+      "reason": "NONFINITE_VOLUME"
+    },
+    {
+      "accepted": false,
+      "case": "negative_volume",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "negative_price",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "future",
+      "reason": "NOT_CLOSED_AS_OF"
+    },
+    {
+      "accepted": false,
+      "case": "wrong_close",
+      "reason": "INCONSISTENT_CLOSE_TIME"
+    },
+    {
+      "accepted": false,
+      "case": "gap",
+      "reason": "MISSING_BARS"
+    },
+    {
+      "accepted": false,
+      "case": "duplicate",
+      "reason": "UNSORTED_OR_DUPLICATE_TIMESTAMP"
+    },
+    {
+      "accepted": false,
+      "case": "bad_symbol",
+      "reason": "SYMBOL_MISMATCH"
+    },
+    {
+      "accepted": false,
+      "case": "bad_high",
+      "reason": "INVALID_OHLCV"
+    },
+    {
+      "accepted": false,
+      "case": "offgrid",
+      "reason": "OFF_TIMEFRAME_GRID"
+    },
+    {
+      "accepted": false,
+      "case": "order_swap",
+      "reason": "MISSING_BARS"
+    }
+  ],
+  "rejected": 180,
+  "seed": 20261014,
+  "total": 180,
+  "verdict": "PASS"
+}

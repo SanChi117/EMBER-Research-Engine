@@ -1,0 +1,72 @@
+name: MTF D01 contract — falsify and verify closed bars
+
+on:
+  push:
+    branches: [research/mtf-element-audit-C04-20261014]
+    paths:
+      - 'research/mtf-element-audit-v1/**'
+      - '.github/workflows/mtf-d01-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independent-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PYTHONUNBUFFERED: '1'
+      ROOT: research/mtf-element-audit-v1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact frozen trading engine
+        run: |
+          echo '3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46  research/mtf-element-audit-v1/baselines/mtf_engine_v05_original.py' | sha256sum -c -
+      - name: Run D01 positive and negative tests
+        run: python -m unittest discover -s "$ROOT/tests" -p test_d01_bar_closed_contract.py -v
+      - name: Recompute SHA after 180 deliberate candle corruptions
+        run: python "$ROOT/tests/challenge_d01_mutations.py" /tmp/d01-cloud-mutations.json
+      - name: Verify full append-only audit chain with recorded evidence
+        run: python "$ROOT/tests/test_journal_integrity.py" > /tmp/d01-cloud-journal.json
+      - name: Restore independent historical Futures artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/mtf-historical-2026
+          gh run download 38480389900 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir /tmp/mtf-historical-2026
+      - name: Recheck all 10 USD-M CSV, time grids and daily cross-check
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          base = Path('/tmp/mtf-historical-2026')
+          with ZipFile('/tmp/d01-futures-cloud.zip', 'w', compression=ZIP_DEFLATED) as z:
+              for p in base.rglob('*'):
+                  if p.is_file():
+                      z.write(p, p.relative_to(base))
+          PY
+          python "$ROOT/tests/verify_d01_real_futures.py" --archive /tmp/d01-futures-cloud.zip --out /tmp/d01-cloud-real.json
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          a=json.loads(Path('/tmp/d01-cloud-real.json').read_text(encoding='utf-8'))
+          b=json.loads((Path(os.environ['ROOT'])/'evidence/C04_D01_REAL_PASS1.json').read_text(encoding='utf-8'))
+          assert a==b, 'Cloud D01 differs from both pre-registered local reference manifests'
+          print('CLOUD_QA_EQUALS_BOTH_INDEPENDENT_LOCAL_ARCHIVES')
+          PY
+      - name: Export QA artifacts even when failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtf-D01-c04-cloud-qa
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/d01-cloud-mutations.json
+            /tmp/d01-cloud-journal.json
+            /tmp/d01-cloud-real.json

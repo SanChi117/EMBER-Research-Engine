@@ -1,0 +1,14 @@
+{
+  "15m_bars": 93600,
+  "1d_bars": 5080,
+  "cross_tf_daily": 975,
+  "data_csv_files": 10,
+  "engine_original_sha256": "3d430361a7654b460281e76b1cb976c2a89676388a5adeb752049550992e6d46",
+  "journal_events": 17,
+  "journal_evidence_checked": 43,
+  "mutations_rejected": 180,
+  "notes": "Validates D01 only. Data origin authenticated by D04 external future work.",
+  "same_report_as_prior": true,
+  "status": "PASS",
+  "unit_tests": "30/30"
+}

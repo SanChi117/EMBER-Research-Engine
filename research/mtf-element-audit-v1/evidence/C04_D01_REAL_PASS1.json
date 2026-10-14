@@ -1,0 +1,117 @@
+{
+  "as_of_utc": "2026-10-13T00:00:00Z",
+  "audit": "D01_FUTURES_2026_20261014",
+  "daily_overlap_checked": 975,
+  "daily_volume_discrepancies": 0,
+  "files": [
+    {
+      "D01_contract": "PASS",
+      "bars": 18720,
+      "first_ms": 1775001600000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "402bda7f1156585d3a7ce38b0d3bbe762f67ce3cbb062dbfe3e6184ffd147117",
+      "symbol": "BTCUSDT",
+      "timeframe": "15m"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 1016,
+      "first_ms": 1704067200000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "d89c17aeb8ac86e07b7bfd65ef825c45a298c0abcff40d0b18d9babb50a59c67",
+      "symbol": "BTCUSDT",
+      "timeframe": "1d"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 18720,
+      "first_ms": 1775001600000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "3fdb854f3be9078050d7573202f309a0789a5eb571f40043f7cb777be019110b",
+      "symbol": "ETHUSDT",
+      "timeframe": "15m"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 1016,
+      "first_ms": 1704067200000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "d4ac3ce143a9983c5e963d5e685531a6beb39adc85931fe480ec05ce8b2cdae0",
+      "symbol": "ETHUSDT",
+      "timeframe": "1d"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 18720,
+      "first_ms": 1775001600000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "a5090ed5c554d57c352fd05485b7c8353a65f13d8a0ede7eb1308921d61bb0ee",
+      "symbol": "SOLUSDT",
+      "timeframe": "15m"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 1016,
+      "first_ms": 1704067200000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "8ea054732988b9199463e6646156b4e4157f82267a7a58302bcd254140566de9",
+      "symbol": "SOLUSDT",
+      "timeframe": "1d"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 18720,
+      "first_ms": 1775001600000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "5d73536c71f34b1314777c588c219eae63570a847d800d8b8f85e10da303cc65",
+      "symbol": "XRPUSDT",
+      "timeframe": "15m"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 1016,
+      "first_ms": 1704067200000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "1a26ccce17a64744a64e73aa2e2e742de7fa403bc4931f2b79a9391d895065ef",
+      "symbol": "XRPUSDT",
+      "timeframe": "1d"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 18720,
+      "first_ms": 1775001600000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "20ac4996c6b988a810f18c9e9bc742e043f20481944746b83c2aca5fb350ecfc",
+      "symbol": "BCHUSDT",
+      "timeframe": "15m"
+    },
+    {
+      "D01_contract": "PASS",
+      "bars": 1016,
+      "first_ms": 1704067200000,
+      "independent_cursor": "PASS",
+      "last_end_exclusive_ms": 1791849600000,
+      "sha256": "cdbafa8dfba041e7c441d27599dd6e3e6ac48f3c6f6f5fa337cd9a67c563ba46",
+      "symbol": "BCHUSDT",
+      "timeframe": "1d"
+    }
+  ],
+  "limitations": [
+    "Authenticity of Vision .CHECKSUM depends on external D04 gate; D01 only verifies local digest against frozen manifest.",
+    "No semantic trading setup inference; no PnL evaluation.",
+    "Not a guarantee against later source replacement outside immutable archived bytes."
+  ],
+  "result": "VERIFIED_FORMAL_D01_SCHEMA_AND_ASOF_ON_DECLARED_VISION_HISTORY",
+  "rules": "frozen from previously verified manifest",
+  "total_15m_bars": 93600,
+  "total_1d_bars": 5080
+}
