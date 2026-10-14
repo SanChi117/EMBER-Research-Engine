@@ -1,0 +1,29 @@
+{
+  "journal_52": {
+    "code": 0,
+    "expected_after_cloud": true,
+    "pass": true,
+    "stderr_tail": "",
+    "stdout_tail": "\"A003 was falsely marked DONE during a crash, was explicitly VOIDed by A004; original remains visible for audit. Hash chain is local, independently anchored only if git commit is made.\",\n  \"tip_sha256\": \"c92439a7fa04da665b433c5f0f4b78c80408e9bb3ec8fb30dbaa68111284e8f8\",\n  \"validations_pass\": true\n}\n"
+  },
+  "mutations_200": {
+    "code": 0,
+    "pass": true,
+    "same_report_as_original": true,
+    "stderr_tail": "",
+    "stdout_tail": "ation\"\n  },\n  \"counts\": {\n    \"FORGED_CHECKSUM_NAME\": 30,\n    \"INJECTED_ZIP_MEMBER\": 30,\n    \"SPOT_OR_COINM_MASQUERADE\": 40,\n    \"WRONG_KLINE_DATE_EVEN_WITH_NEW_CHECKSUM\": 40,\n    \"ZIP_BYTES_CHANGED_SAME_CHECKSUM\": 60\n  },\n  \"negative_cases\": 200,\n  \"status\": \"PASS\",\n  \"unexpected_acceptance\": []\n}\n"
+  },
+  "offline_98680": {
+    "code": 0,
+    "pass": true,
+    "same_report_as_original": true,
+    "stderr_tail": "",
+    "stdout_tail": "{\"status\": \"OFFLINE_INTEGRITY_ONLY\", \"series\": 10, \"bars\": 98680, \"source_archives_claimed\": 315, \"forgery_demo\": true}\n"
+  },
+  "unit_134": {
+    "code": 0,
+    "pass": true,
+    "stderr_tail": "ision_provenance.TestVisionURL.test_valid_futures) ... ok\ntest_wrong_timeframe (test_d04_vision_provenance.TestVisionURL.test_wrong_timeframe) ... ok\n\n----------------------------------------------------------------------\nRan 134 tests in 0.325s\n\nOK\n",
+    "stdout_tail": ""
+  }
+}

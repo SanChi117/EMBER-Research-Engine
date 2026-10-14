@@ -1,0 +1,19 @@
+{
+  "cycle": "C07",
+  "D04": {
+    "status": "VERIFIED_FORMAL_SAMPLED_SOURCE_ONLY",
+    "frozen_trade_core_untouched": true,
+    "D01_D04_unit_tests": 134,
+    "malicious_cases_rejected": 200,
+    "normalized_csv_series_integrity_pass": 10,
+    "normalized_bars_integrity_pass": 98680,
+    "2026_archives_declared_in_manifest": 315,
+    "2026_archive_receipts_revalidated_over_https": 10,
+    "2025_jan29_archive_receipts_revalidated_over_https": 2,
+    "2026_full_archive_attestation": "NOT_DONE",
+    "2025_jan29_BTC_volume_conflict": "CONFIRMED_AND_QUARANTINED",
+    "source_authenticity_model": "TLS_host_plus_checksum_no_digital_signature",
+    "market_pattern_semantics": "NOT_VALIDATED",
+    "future_trading_orders": "DISABLED"
+  }
+}

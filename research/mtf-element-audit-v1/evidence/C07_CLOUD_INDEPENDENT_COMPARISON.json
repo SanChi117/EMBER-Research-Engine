@@ -1,0 +1,22 @@
+{
+  "2025_jan29_volume_conflict_reproduced": true,
+  "actual_https_raw_zip_receipts": 12,
+  "cloud_ledger_entries": 51,
+  "cloud_ledger_evidence_blobs": 121,
+  "cloud_local_mutations_byte_equal": true,
+  "cloud_local_offline_manifest_byte_equal": true,
+  "cloud_report_source_zip_sha256": "35779f97484cf0e42c0b1a5631ddfc0560d54c244a33c399b64d7d1c21f2b23f",
+  "mutations_rejected": 200,
+  "note": "2026 manifest has 315 source ZIP URLs. 10 sampled 2026 ZIPs cover one 15m+1d day for each of 5 symbols; 2 additional raw ZIP are 2025-01-29 BTC conflict. Remainder are NOT externally retested.",
+  "origins_not_checked": 305,
+  "run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38595068903",
+  "status": "PASS",
+  "unit_tests": 134,
+  "verified_2026_futures_symbols": [
+    "BCHUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ]
+}

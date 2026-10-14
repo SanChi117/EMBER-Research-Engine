@@ -1,0 +1,511 @@
+{
+  "claims": {
+    "archive_count_live_checked": 12,
+    "jan29_source_conflict": "QUARANTINE_IF_DIVERGENT; NEVER_SILENTLY_PATCH",
+    "origin_level": "HTTPS_VALIDATED_BINANCE_VISION_HOST_BUT_NOT_BINANCE_DIGITALLY_SIGNED",
+    "remaining_2026_archives": "NOT_RECHECKED_LIVE_IN_THIS_RUN"
+  },
+  "daily_checks": {
+    "BCHUSDT_2026-10-11": {
+      "15m": {
+        "close": "286.21",
+        "high": "286.87",
+        "low": "275.08",
+        "open": "279.95",
+        "volume": "178713.800"
+      },
+      "1d": {
+        "close": "286.21",
+        "high": "286.87",
+        "low": "275.08",
+        "open": "279.95",
+        "volume": "178713.800"
+      },
+      "match": true,
+      "status": "VERIFIED_AGREEMENT"
+    },
+    "BTCUSDT_2025-01-29": {
+      "15m": {
+        "close": "103698.20",
+        "high": "104755.00",
+        "low": "101269.70",
+        "open": "101279.70",
+        "volume": "169393.057"
+      },
+      "1d": {
+        "close": "103698.20",
+        "high": "104755.00",
+        "low": "101269.70",
+        "open": "101279.70",
+        "volume": "169989.952"
+      },
+      "match": false,
+      "status": "SOURCE_CONFLICT_QUARANTINED"
+    },
+    "BTCUSDT_2026-10-11": {
+      "15m": {
+        "close": "83723.00",
+        "high": "84180.00",
+        "low": "82751.10",
+        "open": "82941.00",
+        "volume": "61419.685"
+      },
+      "1d": {
+        "close": "83723.00",
+        "high": "84180.00",
+        "low": "82751.10",
+        "open": "82941.00",
+        "volume": "61419.685"
+      },
+      "match": true,
+      "status": "VERIFIED_AGREEMENT"
+    },
+    "ETHUSDT_2026-10-11": {
+      "15m": {
+        "close": "2535.66",
+        "high": "2553.76",
+        "low": "2496.12",
+        "open": "2504.90",
+        "volume": "1786336.083"
+      },
+      "1d": {
+        "close": "2535.66",
+        "high": "2553.76",
+        "low": "2496.12",
+        "open": "2504.90",
+        "volume": "1786336.083"
+      },
+      "match": true,
+      "status": "VERIFIED_AGREEMENT"
+    },
+    "SOLUSDT_2026-10-11": {
+      "15m": {
+        "close": "111.3000",
+        "high": "112.7300",
+        "low": "108.8900",
+        "open": "110.0300",
+        "volume": "10257277.79"
+      },
+      "1d": {
+        "close": "111.3000",
+        "high": "112.7300",
+        "low": "108.8900",
+        "open": "110.0300",
+        "volume": "10257277.79"
+      },
+      "match": true,
+      "status": "VERIFIED_AGREEMENT"
+    },
+    "XRPUSDT_2026-10-11": {
+      "15m": {
+        "close": "1.4095",
+        "high": "1.4260",
+        "low": "1.3865",
+        "open": "1.4017",
+        "volume": "336642528.8"
+      },
+      "1d": {
+        "close": "1.4095",
+        "high": "1.4260",
+        "low": "1.3865",
+        "open": "1.4017",
+        "volume": "336642528.8"
+      },
+      "match": true,
+      "status": "VERIFIED_AGREEMENT"
+    }
+  },
+  "fetched_utc": "2026-10-14T16:05:47.691620+00:00",
+  "machine_python": "3.11.17",
+  "normalized_cross_proof": {
+    "BCHUSDT": {
+      "96_bars": 96,
+      "aggregated_day_matches_verified_archive": true,
+      "date": "2026-10-11"
+    },
+    "BTCUSDT": {
+      "96_bars": 96,
+      "aggregated_day_matches_verified_archive": true,
+      "date": "2026-10-11"
+    },
+    "ETHUSDT": {
+      "96_bars": 96,
+      "aggregated_day_matches_verified_archive": true,
+      "date": "2026-10-11"
+    },
+    "SOLUSDT": {
+      "96_bars": 96,
+      "aggregated_day_matches_verified_archive": true,
+      "date": "2026-10-11"
+    },
+    "XRPUSDT": {
+      "96_bars": 96,
+      "aggregated_day_matches_verified_archive": true,
+      "date": "2026-10-11"
+    }
+  },
+  "receipts": {
+    "BCHUSDT_15m_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "286.21",
+        "high": "286.87",
+        "low": "275.08",
+        "open": "279.95",
+        "volume": "178713.800"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 96,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/15m/BCHUSDT-15m-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "279.95",
+        "280.14",
+        "279.64",
+        "279.68",
+        "2000.033",
+        "1791677699999"
+      ],
+      "last_ms": 1791762300000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "6dfb4a43f33bdcdb3c5a6acc4e4dd049acddf7d16c7ec8f9c47d9bd88dc7030c",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/15m/BCHUSDT-15m-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "BCHUSDT",
+      "tf": "15m",
+      "zip_sha256": "93af896007fea00b17a84c02492673d28145c41ecd7e45e84cbf07ab672662de"
+    },
+    "BCHUSDT_1d_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "286.21",
+        "high": "286.87",
+        "low": "275.08",
+        "open": "279.95",
+        "volume": "178713.800"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 1,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/1d/BCHUSDT-1d-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "279.95",
+        "286.87",
+        "275.08",
+        "286.21",
+        "178713.800",
+        "1791763199999"
+      ],
+      "last_ms": 1791676800000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "e091db7ffaf91167ddd9e1130796c831ab8605d6ba159a5a16a7d0d68a7a634b",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/1d/BCHUSDT-1d-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "BCHUSDT",
+      "tf": "1d",
+      "zip_sha256": "91f559518a6def6221cfde314970cef36aba3c97d06a17d8fcc2e6eb9c5490ad"
+    },
+    "BTCUSDT_15m_2025-01-29": {
+      "aggregated_ohlcv": {
+        "close": "103698.20",
+        "high": "104755.00",
+        "low": "101269.70",
+        "open": "101279.70",
+        "volume": "169393.057"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 96,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/15m/BTCUSDT-15m-2025-01-29.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1738108800000",
+        "101279.70",
+        "101538.40",
+        "101269.70",
+        "101478.50",
+        "1196.893",
+        "1738109699999"
+      ],
+      "last_ms": 1738194300000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "f69c3371b249d42458da88dd969ab95e77d1b27c4b16aaad145d059391006489",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/15m/BTCUSDT-15m-2025-01-29.zip",
+      "start_ms": 1738108800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "BTCUSDT",
+      "tf": "15m",
+      "zip_sha256": "69815e083d0777d8d0a710c0e7a02e5559a7f2a4845581302feabe2708966fc0"
+    },
+    "BTCUSDT_15m_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "83723.00",
+        "high": "84180.00",
+        "low": "82751.10",
+        "open": "82941.00",
+        "volume": "61419.685"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 96,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/15m/BTCUSDT-15m-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "82941.00",
+        "82987.10",
+        "82941.00",
+        "82987.00",
+        "155.167",
+        "1791677699999"
+      ],
+      "last_ms": 1791762300000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "86fb844cdb23f640f0346f1dcd1207043f3eafc22b040372f280466d1449524c",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/15m/BTCUSDT-15m-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "BTCUSDT",
+      "tf": "15m",
+      "zip_sha256": "f546fc0aa0772fe7e4e833e3d2714a2f098fb4c594016bf105ab82fa276bea80"
+    },
+    "BTCUSDT_1d_2025-01-29": {
+      "aggregated_ohlcv": {
+        "close": "103698.20",
+        "high": "104755.00",
+        "low": "101269.70",
+        "open": "101279.70",
+        "volume": "169989.952"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 1,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2025-01-29.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1738108800000",
+        "101279.70",
+        "104755.00",
+        "101269.70",
+        "103698.20",
+        "169989.952",
+        "1738195199999"
+      ],
+      "last_ms": 1738108800000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "d504f01b8053a963349ad73b39b8c7ed5e7abc2e285895edf0ea3cf37e2868fb",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2025-01-29.zip",
+      "start_ms": 1738108800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "zip_sha256": "de161a65593779fb68500953e030d2d7200e906be4b5e57bf103e58aec067ad0"
+    },
+    "BTCUSDT_1d_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "83723.00",
+        "high": "84180.00",
+        "low": "82751.10",
+        "open": "82941.00",
+        "volume": "61419.685"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 1,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "82941.00",
+        "84180.00",
+        "82751.10",
+        "83723.00",
+        "61419.685",
+        "1791763199999"
+      ],
+      "last_ms": 1791676800000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "492fa8a3fcb8718526cd3f187ea0f65f18c31fc1e7d4efb08847b3c880adce46",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "zip_sha256": "4fd7ef09d5142706e68334f3575a941b72db49c734ae0f08056dbfcf77d227e8"
+    },
+    "ETHUSDT_15m_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "2535.66",
+        "high": "2553.76",
+        "low": "2496.12",
+        "open": "2504.90",
+        "volume": "1786336.083"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 96,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/15m/ETHUSDT-15m-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "2504.90",
+        "2507.28",
+        "2504.50",
+        "2506.87",
+        "12276.857",
+        "1791677699999"
+      ],
+      "last_ms": 1791762300000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "d50bdf5724c28a5be01825cb52391e2e1dfb06565492402ce725d8433e4ebef1",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/15m/ETHUSDT-15m-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "ETHUSDT",
+      "tf": "15m",
+      "zip_sha256": "a7bf52037878a80ca49979de58d0c75289083e931705316a0933222225447126"
+    },
+    "ETHUSDT_1d_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "2535.66",
+        "high": "2553.76",
+        "low": "2496.12",
+        "open": "2504.90",
+        "volume": "1786336.083"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 1,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/1d/ETHUSDT-1d-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "2504.90",
+        "2553.76",
+        "2496.12",
+        "2535.66",
+        "1786336.083",
+        "1791763199999"
+      ],
+      "last_ms": 1791676800000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "adb5a3bca9968a7fc7c3a673b34f8eb23d6770fc5aaa8c4171c840d866cfac2a",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/1d/ETHUSDT-1d-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "ETHUSDT",
+      "tf": "1d",
+      "zip_sha256": "630e8a127bbc11a81ea3d98bebc03e1efa4d30e19906bd7de0bf10550faa0377"
+    },
+    "SOLUSDT_15m_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "111.3000",
+        "high": "112.7300",
+        "low": "108.8900",
+        "open": "110.0300",
+        "volume": "10257277.79"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 96,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/15m/SOLUSDT-15m-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "110.0300",
+        "110.1400",
+        "110.0300",
+        "110.0800",
+        "56377.18",
+        "1791677699999"
+      ],
+      "last_ms": 1791762300000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "50b9f974d5774c7c3415b907b8e71c0e5690c282c03b7a3c88969026b6d948dc",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/15m/SOLUSDT-15m-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "SOLUSDT",
+      "tf": "15m",
+      "zip_sha256": "7bec94b3b94563978ab6537c0a027d6d7c810a010afcce04b20b0fbb7a6341d9"
+    },
+    "SOLUSDT_1d_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "111.3000",
+        "high": "112.7300",
+        "low": "108.8900",
+        "open": "110.0300",
+        "volume": "10257277.79"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 1,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/1d/SOLUSDT-1d-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "110.0300",
+        "112.7300",
+        "108.8900",
+        "111.3000",
+        "10257277.79",
+        "1791763199999"
+      ],
+      "last_ms": 1791676800000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "a5d1c19d5c9b00113bc4df51a60ebfc42a9c8d4ad11518f16e741f3561a4c4b0",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/1d/SOLUSDT-1d-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "SOLUSDT",
+      "tf": "1d",
+      "zip_sha256": "92fe67612253939f280c8b03b6622bf63573d4016690eb99e861cdaf62c8ed33"
+    },
+    "XRPUSDT_15m_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "1.4095",
+        "high": "1.4260",
+        "low": "1.3865",
+        "open": "1.4017",
+        "volume": "336642528.8"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 96,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/15m/XRPUSDT-15m-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "1.4017",
+        "1.4032",
+        "1.4014",
+        "1.4021",
+        "1498192.0",
+        "1791677699999"
+      ],
+      "last_ms": 1791762300000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "59dd4258821ea99d463a49acfbbe9c3df22a9c13c22e7113102380aa88b9df25",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/15m/XRPUSDT-15m-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "XRPUSDT",
+      "tf": "15m",
+      "zip_sha256": "78d7507c89cdb718ee1efdf38fc710750a61017551703867289bc7c30e438ca5"
+    },
+    "XRPUSDT_1d_2026-10-11": {
+      "aggregated_ohlcv": {
+        "close": "1.4095",
+        "high": "1.4260",
+        "low": "1.3865",
+        "open": "1.4017",
+        "volume": "336642528.8"
+      },
+      "attestation": "HTTPS_BINANCE_VISION_HOST_AND_CHECKSUM",
+      "bars": 1,
+      "checksum_url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/1d/XRPUSDT-1d-2026-10-11.zip.CHECKSUM",
+      "first_bar_ohlcv": [
+        "1791676800000",
+        "1.4017",
+        "1.4260",
+        "1.3865",
+        "1.4095",
+        "336642528.8",
+        "1791763199999"
+      ],
+      "last_ms": 1791676800000,
+      "limitations": "NOT_A_DIGITAL_SIGNATURE; network-origin and TLS CA trust required",
+      "raw_csv_sha256": "c89588c8d06baad584f80c681080fc4164876302b54d8ed423deb596107a8ca7",
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/1d/XRPUSDT-1d-2026-10-11.zip",
+      "start_ms": 1791676800000,
+      "status": "SOURCE_CHECKSUM_AND_BARS_VERIFIED",
+      "symbol": "XRPUSDT",
+      "tf": "1d",
+      "zip_sha256": "0c8dc2dbcd358709b4d112ad66c85ceee857cdc005cff017ad7968662bdf8982"
+    }
+  },
+  "status": "PASS_WITH_DOCUMENTED_2025_SOURCE_CONFLICT",
+  "tls_impl": "OpenSSL 3.0.13 30 Jan 2024"
+}
