@@ -1,0 +1,43 @@
+test_manifest_integrity_not_authenticity (test_d04_vision_provenance.TestOfflineManifest.test_manifest_integrity_not_authenticity) ... ok
+test_manifest_spot_label_rejected (test_d04_vision_provenance.TestOfflineManifest.test_manifest_spot_label_rejected) ... ok
+test_normalized_csv_mutation_detected (test_d04_vision_provenance.TestOfflineManifest.test_normalized_csv_mutation_detected) ... ok
+test_accept (test_d04_vision_provenance.TestVisionArchive.test_accept) ... ok
+test_changed_content_without_checksum (test_d04_vision_provenance.TestVisionArchive.test_changed_content_without_checksum) ... ok
+test_changed_csv_with_recomputed_checksum_but_wrong_time (test_d04_vision_provenance.TestVisionArchive.test_changed_csv_with_recomputed_checksum_but_wrong_time) ... ok
+test_checksum_recomputed_can_be_forged (test_d04_vision_provenance.TestVisionArchive.test_checksum_recomputed_can_be_forged) ... ok
+test_checksum_wrong_filename (test_d04_vision_provenance.TestVisionArchive.test_checksum_wrong_filename) ... ok
+test_empty_zip (test_d04_vision_provenance.TestVisionArchive.test_empty_zip) ... ok
+test_header_from_official_futures_archive (test_d04_vision_provenance.TestVisionArchive.test_header_from_official_futures_archive) ... ok
+test_hidden_member (test_d04_vision_provenance.TestVisionArchive.test_hidden_member) ... ok
+test_malformed_checksum (test_d04_vision_provenance.TestVisionArchive.test_malformed_checksum) ... ok
+test_missing_hour (test_d04_vision_provenance.TestVisionArchive.test_missing_hour) ... ok
+test_negative_volume (test_d04_vision_provenance.TestVisionArchive.test_negative_volume) ... ok
+test_redirect_to_evil_host (test_d04_vision_provenance.TestVisionArchive.test_redirect_to_evil_host) ... ok
+test_spoofed_header_rejected_even_with_fresh_sha (test_d04_vision_provenance.TestVisionArchive.test_spoofed_header_rejected_even_with_fresh_sha) ... ok
+test_spot_with_good_local_sha (test_d04_vision_provenance.TestVisionArchive.test_spot_with_good_local_sha) ... ok
+test_traversal_member (test_d04_vision_provenance.TestVisionArchive.test_traversal_member) ... ok
+test_backslash (test_d04_vision_provenance.TestVisionURL.test_backslash) ... ok
+test_bad_archive_suffix (test_d04_vision_provenance.TestVisionURL.test_bad_archive_suffix) ... ok
+test_bad_date (test_d04_vision_provenance.TestVisionURL.test_bad_date) ... ok
+test_coin_m (test_d04_vision_provenance.TestVisionURL.test_coin_m) ... ok
+test_credentials (test_d04_vision_provenance.TestVisionURL.test_credentials) ... ok
+test_date_granularity (test_d04_vision_provenance.TestVisionURL.test_date_granularity) ... ok
+test_evil_host (test_d04_vision_provenance.TestVisionURL.test_evil_host) ... ok
+test_extra_slash (test_d04_vision_provenance.TestVisionURL.test_extra_slash) ... ok
+test_fragment (test_d04_vision_provenance.TestVisionURL.test_fragment) ... ok
+test_http (test_d04_vision_provenance.TestVisionURL.test_http) ... ok
+test_mismatched_timeframe (test_d04_vision_provenance.TestVisionURL.test_mismatched_timeframe) ... ok
+test_path_traversal (test_d04_vision_provenance.TestVisionURL.test_path_traversal) ... ok
+test_percent_path (test_d04_vision_provenance.TestVisionURL.test_percent_path) ... ok
+test_port (test_d04_vision_provenance.TestVisionURL.test_port) ... ok
+test_query (test_d04_vision_provenance.TestVisionURL.test_query) ... ok
+test_spot (test_d04_vision_provenance.TestVisionURL.test_spot) ... ok
+test_symbol_filename_mismatch (test_d04_vision_provenance.TestVisionURL.test_symbol_filename_mismatch) ... ok
+test_unicode_hostname (test_d04_vision_provenance.TestVisionURL.test_unicode_hostname) ... ok
+test_valid_futures (test_d04_vision_provenance.TestVisionURL.test_valid_futures) ... ok
+test_wrong_timeframe (test_d04_vision_provenance.TestVisionURL.test_wrong_timeframe) ... ok
+
+----------------------------------------------------------------------
+Ran 38 tests in 0.311s
+
+OK

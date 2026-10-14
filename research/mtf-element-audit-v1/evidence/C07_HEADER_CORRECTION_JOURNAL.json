@@ -1,0 +1,19 @@
+{
+  "events": 50,
+  "evidence_verification": {
+    "active_entries": 49,
+    "invalidated": [
+      "A003"
+    ],
+    "verified_evidence_blobs": 117
+  },
+  "ledger_hash_chain": "PASS",
+  "mutations": {
+    "edited_evidence_rejected": true,
+    "missing_first_entry_rejected": true,
+    "tampered_entry_rejected": true
+  },
+  "note": "A003 was falsely marked DONE during a crash, was explicitly VOIDed by A004; original remains visible for audit. Hash chain is local, independently anchored only if git commit is made.",
+  "tip_sha256": "e3d7142fd501dd1f3fde6548a4443f1711c58dc7cfa7652adf0b930fa613c1d4",
+  "validations_pass": true
+}

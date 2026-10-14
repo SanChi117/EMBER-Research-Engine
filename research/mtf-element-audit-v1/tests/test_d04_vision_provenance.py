@@ -57,6 +57,24 @@ class TestVisionArchive(unittest.TestCase):
  def assert_code(self,code,raw=None,ck=None,url=BTC15):
   with self.assertRaises(D04Rejected) as ctx:verify_raw_zip(url,raw if raw is not None else self.a,ck if ck is not None else self.chk)
   self.assertEqual(ctx.exception.code,code)
+ def test_header_from_official_futures_archive(self):
+  info=parse_url(BTC15)
+  raw,chk=sample_source()
+  with zipfile.ZipFile(io.BytesIO(raw)) as z: csvbytes=z.read(info['filename'][:-4]+'.csv')
+  header=b'open_time,open,high,low,close,volume,close_time,quote_volume,count,taker_buy_volume,taker_buy_quote_volume,ignore\n'
+  output=io.BytesIO()
+  with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:z.writestr(info['filename'][:-4]+'.csv',header+csvbytes)
+  zipb=output.getvalue()
+  ck=(digest(zipb)+'  '+info['filename']).encode()
+  self.assertEqual(verify_raw_zip(BTC15,zipb,ck)['bars'],96)
+ def test_spoofed_header_rejected_even_with_fresh_sha(self):
+  info=parse_url(BTC15)
+  with zipfile.ZipFile(io.BytesIO(self.a)) as z: csvbytes=z.read(info['filename'][:-4]+'.csv')
+  header=b'open_time,open,high,low,close,volume,close_time,quote_volume,count,spot_only,taker_buy_quote_volume,ignore\n'
+  output=io.BytesIO()
+  with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:z.writestr(info['filename'][:-4]+'.csv',header+csvbytes)
+  zipb=output.getvalue();ck=(digest(zipb)+'  '+info['filename']).encode()
+  self.assert_code('UNKNOWN_FUTURES_KLINE_HEADER',zipb,ck)
  def test_accept(self):
   r=verify_raw_zip(BTC15,self.a,self.chk)
   self.assertEqual(r['bars'],96)

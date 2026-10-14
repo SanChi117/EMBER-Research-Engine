@@ -89,6 +89,14 @@ def verify_raw_zip(url,zip_blob,checksum_blob, *,max_uncompressed=80_000_000, ma
     count=0;first=None;last=None;first_data=None;first_open=None;last_close=None;max_high=None;min_low=None;volume_total=Decimal(0)
     for row in reader:
         if len(row)!=12:raise D04Rejected('WRONG_FUTURES_KLINE_SCHEMA')
+        if row[0].strip().lower()=='open_time' and count==0:
+            expected=(('open_time',),('open',),('high',),('low',),('close',),('volume',),('close_time',),
+                      ('quote_volume','quote_asset_volume'),('count','trades','number_of_trades'),
+                      ('taker_buy_volume','taker_buy_base_volume','taker_buy_base_asset_volume'),
+                      ('taker_buy_quote_volume','taker_buy_quote_asset_volume'),('ignore',))
+            if not all(actual.strip().lower() in names for actual,names in zip(row,expected)):
+                raise D04Rejected('UNKNOWN_FUTURES_KLINE_HEADER')
+            continue
         if first_data is None:first_data=row
         try:tm=int(row[0]);close=int(row[6])
         except (ValueError,TypeError) as e:raise D04Rejected('INVALID_TIMESTAMP') from e

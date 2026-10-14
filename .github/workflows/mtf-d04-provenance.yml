@@ -43,7 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           python tools/run_unit_suite_c05.py 2>&1 | tee /tmp/c07-unit.log
-          grep -q 'Ran 132 tests' /tmp/c07-unit.log
+          grep -q 'Ran 134 tests' /tmp/c07-unit.log
           grep -q '^OK$' /tmp/c07-unit.log
       - name: 200 source forgery attempts, requiring deterministic rejection
         working-directory: research/mtf-element-audit-v1

@@ -1,0 +1,18 @@
+{
+  "cause": "valid Binance Vision 12-column header not supported; prior synthetic fixture was headerless",
+  "cycle": "C07",
+  "error_code": "INVALID_TIMESTAMP",
+  "failed": "remote CSV has header open_time,...; parser tried int(open_time)",
+  "fix": "allow ONLY known canonical Binance Futures headers at first row; reject incorrect headers, do not waive checksum or bar completeness",
+  "job_id": 115958218355,
+  "passed": {
+    "engine": true,
+    "journal_integrity": true,
+    "mutations_200": true,
+    "offline_csv_manifest": true,
+    "regressions_132": true
+  },
+  "run_id": 38594679545,
+  "status": "FAIL",
+  "url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38594679545"
+}
