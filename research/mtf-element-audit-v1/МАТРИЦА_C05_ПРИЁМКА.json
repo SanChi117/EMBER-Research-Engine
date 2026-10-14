@@ -1,0 +1,13 @@
+{
+  "cycle": "C05",
+  "id": "D02",
+  "status": "VERIFIED_FORMAL_ISOLATED",
+  "supersedes_file": "МАТРИЦА_C05_DELTA.json",
+  "historical_matrix_immutable": true,
+  "cloud_run_id": 38582330932,
+  "meaning": "Only timestamp availability, complete parent buckets, calendar UTC alignment and delayed mechanical pivots verified",
+  "NOT_proven": ["semantic IDM/Strong High Low", "exchange native 1h/4h/1w provenance", "real Binance 3m/5m streams", "publication latency", "trading profitability"],
+  "integrated_with_terminal": false,
+  "trading_engine_modified": false,
+  "failed_experiments_retained": ["A024", "A027", "A030"]
+}

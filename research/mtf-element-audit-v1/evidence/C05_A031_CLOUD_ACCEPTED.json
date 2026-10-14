@@ -1,0 +1,38 @@
+{
+  "cloud_artifact_id": 11903148351,
+  "cloud_journal_entries": 30,
+  "cloud_journal_validations_pass": true,
+  "cloud_matches_local_mutation_json": true,
+  "cloud_matches_local_real_json": true,
+  "cloud_verified_evidence_blobs": 74,
+  "cycle": "C05",
+  "final_result": "CLOUD_VERIFIED_FORMAL",
+  "frozen_trading_engine_unchanged": true,
+  "future_mutations_invariant": 20,
+  "github_commit_checked": "28cf99324c009672cb10b99a6af9b7df230e8c64",
+  "github_run_id": 38582330932,
+  "historical_checks": {
+    "daily_15m_vs_native": 975,
+    "future_looks": 5,
+    "hours_1h_independent": 23400,
+    "hours_4h_independent": 5850,
+    "weekly_15m_vs_native_1d": 135
+  },
+  "incidents_preserved": [
+    "A024",
+    "A027",
+    "A030"
+  ],
+  "limitations": [
+    "1h/4h are checked against separate arithmetic from raw 15m, not native exchange 1h/4h.",
+    "1w is checked against independently aggregated native 1d, not exchange-native 1w.",
+    "No real 3m/5m source candles were available in fixed history; synthetic tests only.",
+    "Actual point-in-time exchange publish latency/finalization not proven by the as-of bar-end convention.",
+    "Provenance D04, semantic pivot StrongHL/IDM and strategy accuracy not verified."
+  ],
+  "negative_cases_rejected": 120,
+  "paper_or_live_orders_created": 0,
+  "qa_artifact_sha256": "2dc9e9fab0886035d345b26720e79b05214da2bb932a63ae5cdcb1d4f1a5a080",
+  "source_authentication": "DECLARED_VISION_WITH_FROZEN_CHECKSUM; remote authenticity D04 not proven",
+  "unit_tests": 69
+}
