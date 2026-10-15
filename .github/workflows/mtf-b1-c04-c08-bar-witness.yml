@@ -1,0 +1,60 @@
+name: MTF B1 C04 - Binance Futures C08 Raw Archive POI Source Binding (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c04-c08-bar-witness.yml'
+      - 'research/mtf-element-audit-v1/d05/c08_source_bound_poi_b1.py'
+      - 'research/mtf-element-audit-v1/d05/test_c08_source_bound_poi_b1.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c08_b1_real_archive.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archived-binance-source-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard original C08 evidence bundle and original D03/v05 byte identity
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-element-audit-v1/tools/strict_event_lineage_d03.py)" = 16163fb8a08439d8d3b8e5f42c4cc16b82c1c28e
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Fail-closed B1/C04 unit and forged receipt negative cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c08_source_bound_poi_b1 2>&1 | tee /tmp/b1-c04-contract.txt
+          grep -q 'Ran 20 tests' /tmp/b1-c04-contract.txt
+          grep -Eq '^OK$' /tmp/b1-c04-contract.txt
+      - name: Download original 2026-10-01 15m Binance USD-M ZIP and checksum, compare raw source bar with D03 test/VC
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c08_b1_real_archive.py /tmp/b1-c04-real-source.json 2>&1 | tee /tmp/b1-c04-real-source.log
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/b1-c04-real-source.json'))
+          assert v['technical_replay']=='PASS'
+          assert v['academic_formation_approved'] is False
+          assert v['order_or_trade_plan_created'] is False
+          assert v['readiness']=='NOT_TRADE_READY'
+          assert v['parent_zone_source'].startswith('ARTIFICIAL_ZONE_')
+          print('C08_REAL_BINANCE_BAR_LINK_PASS_NO_ACADEMIC_TRADES')
+          PY
+      - name: Preserve error logs and actual HTTPS real source evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c04-real-20261001-binance-source-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/b1-c04-contract.txt
+            /tmp/b1-c04-real-source.log
+            /tmp/b1-c04-real-source.json
