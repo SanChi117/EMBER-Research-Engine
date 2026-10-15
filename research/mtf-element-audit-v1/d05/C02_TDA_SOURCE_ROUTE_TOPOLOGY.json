@@ -1,0 +1,88 @@
+{
+  "cycle": "D05_C02_TDA_SOURCE_TOPOLOGY",
+  "source_image_drive_id": "12XL6Lk1xZ_qZ_CHiqTucV8_fUYXo7yFv",
+  "source_file": "Untitled (38).png",
+  "source_sha256": "87d1e38b4350625487b63e46376ae4fa919fc248c6875dddd8b22454c2fb4781",
+  "source_resolution": [
+    2880,
+    1620
+  ],
+  "kind": "ACADEMIC_SCHEMATIC_PATHS_NO_PRICE_TIME_AXES",
+  "status": "SOURCE_DIAGRAM_TRANSCRIBED_NOT_SEMANTICALLY_APPROVED",
+  "paths": [
+    {
+      "color": "ORANGE",
+      "name": "DAILY_4H_FRACTAL_1H_NEW_POI_15M_VC",
+      "steps": [
+        "DAILY_CONTEXT",
+        "4H_FRACTAL_LIQUIDITY",
+        "1H_VC_NEW_POI",
+        "15M_VC_ENTRY"
+      ],
+      "entry_tf": "15m",
+      "source_note": "if no trigger point: route to 15M VC Entry"
+    },
+    {
+      "color": "GREEN",
+      "name": "DAILY_4H_FRACTAL_1H_POI_15M_TRIGGER_5M_VC",
+      "steps": [
+        "DAILY_CONTEXT",
+        "4H_FRACTAL_LIQUIDITY",
+        "1H_VC_POI",
+        "15M_LIQUIDITY_IMB_TRIGGER",
+        "5M_VC_ENTRY"
+      ],
+      "entry_tf": "5m",
+      "source_note": "4H FROM SSL/BSL, 1H FROM IMB/RB/SNR, 15M trigger SSL/BSL/IMB, 5M VC IMB/SNR"
+    },
+    {
+      "color": "RED",
+      "name": "DAILY_4H_POI_1H_TRIGGER_15M_VC",
+      "steps": [
+        "DAILY_CONTEXT",
+        "4H_VC_POI",
+        "1H_LIQUIDITY_IMB_TRIGGER",
+        "15M_VC_ENTRY"
+      ],
+      "entry_tf": "15m",
+      "source_note": "4H FROM IMB/RB/SNR, 1H trigger SSL/BSL/IMB, 15M VC IMB/SNR"
+    },
+    {
+      "color": "BLUE",
+      "name": "DAILY_4H_POI_1H_NEW_POI_15M_TRIGGER_5M_VC",
+      "steps": [
+        "DAILY_CONTEXT",
+        "4H_VC_POI",
+        "1H_VC_NEW_POI",
+        "15M_LIQUIDITY_IMB_TRIGGER",
+        "5M_VC_ENTRY"
+      ],
+      "entry_tf": "5m",
+      "source_note": "If no trigger on higher TF, 1H FROM IMB/RB/SNR then 15M trigger, 5M VC"
+    },
+    {
+      "color": "YELLOW",
+      "name": "DAILY_4H_POI_1H_NEW_POI_15M_VC",
+      "steps": [
+        "DAILY_CONTEXT",
+        "4H_VC_POI",
+        "1H_VC_NEW_POI",
+        "15M_VC_ENTRY"
+      ],
+      "entry_tf": "15m",
+      "source_note": "If no 15M trigger point, 15M VC from 1H VC new POI"
+    }
+  ],
+  "restrictions": [
+    "Diagram is a source for branching and TF hierarchy only, NOT a full model or numerical academic pattern proof.",
+    "No assumptions about sessions, entry fill type, RR, exact freshness or BOS confirmation from this figure.",
+    "5M VC means 5m resolution, and must not silently become 15m proxy.",
+    "Route C Liquidity Raid -> 3m/5m BOS is covered by separate 'Entry By BOS' lesson, not proven by this diagram.",
+    "No market source, OHLCV, validated event timestamps or numeric POI coordinates in source diagram."
+  ],
+  "approvals": {
+    "route_topology_source_extracted": true,
+    "code_semantics_verified": false,
+    "numeric_automated_signals_approved": 0
+  }
+}
