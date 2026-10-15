@@ -31,7 +31,7 @@ def path():
     ]
 def inspect(bars=None,asof=None,poi=None):
     xs=path() if bars is None else bars
-    t=xs[-1].end if asof is None else asof
+    t=(xs[-1].end if xs else T0+STEP) if asof is None else asof
     return inspect_complete_poi_prefix(zone() if poi is None else poi,xs,t)
 
 class AcademicLevelReactionPrefixContract(unittest.TestCase):
@@ -99,7 +99,7 @@ class AcademicLevelReactionPrefixContract(unittest.TestCase):
     def test_tf_mixing_rejected(self):
         xs=[candle(0),candle(1,tf="5m",step=300_000,base=T0+STEP)]
         with self.assertRaisesRegex(PrefixRejected,"INCOMPLETE_OR_MIXED_TIMEFRAME_PREFIX"):
-            inspect(xs,asof=T0+STEP+300_000)
+            inspect(xs,asof=T0+2*STEP)
 
     def test_late_asof_with_missing_final_bar_rejected(self):
         with self.assertRaisesRegex(PrefixRejected,"NOT_ALL_POST_KNOWN_CANDLES_PRESENT"):
