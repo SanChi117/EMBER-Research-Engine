@@ -1,0 +1,50 @@
+name: MTF B1 - Imported Course v05 versus C07 Causal Contracts (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-source-compatibility.yml'
+      - 'research/mtf-course-v05/**'
+      - 'research/mtf-element-audit-v1/d05/test_b1_course_d03_compatibility.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-upstream-reuse-and-seam-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify source snapshots byte-identical to isolated course-fidelity-v05 Git blobs
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/README_RU.md)" = 7ffc74581d8b67af20620761e7f8d0659890d89b
+          test "$(git hash-object research/mtf-course-v05/MANIFEST.json)" = 439727f370a295a6bccbf1bf305850dfd2c0c000
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-course-v05/tests/test_course_primitives_v05.py)" = f4f8b21b40733511d756f3847d50297982f26069
+          echo COURSE_V05_FOUR_FILES_BYTE_IDENTICAL
+      - name: Run unchanged existing 29 academic primitive synthetic tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/b1-original.txt
+          grep -q 'Ran 29 tests' /tmp/b1-original.txt
+          grep -Eq '^OK$' /tmp/b1-original.txt
+      - name: Run 8 explicit C07 D03 versus course-v05 seam and falsification cases
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-element-audit-v1/d05/test_b1_course_d03_compatibility.py 2>&1 | tee /tmp/b1-seams.txt
+          grep -q 'Ran 8 tests' /tmp/b1-seams.txt
+          grep -Eq '^OK$' /tmp/b1-seams.txt
+          echo 'B1_SOURCE_STAGED_AND_SEAMS_CHARACTERIZED__NOT_INTEGRATED__NO_TRADES'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-source-reuse-37-tests
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/b1-original.txt
+            /tmp/b1-seams.txt
