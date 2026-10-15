@@ -1,0 +1,79 @@
+name: MTF C08 - Publish read-only source receipts into research Git (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c08-publish-receipts.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish-prevalidated-original-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Retrieve exact successful original C08 evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/c08-source /tmp/c08-aggregate
+          gh run download 38750996053 --repo "$GITHUB_REPOSITORY" --pattern 'c08-*-source-receipts' --dir /tmp/c08-source
+          gh run download 38750996053 --repo "$GITHUB_REPOSITORY" --name c08-full-history-aggregated-proof --dir /tmp/c08-aggregate
+      - name: Verify all 315 original source receipts and store immutable files
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,shutil
+          root=Path('research/mtf-element-audit-v1/evidence/c08')
+          root.mkdir(parents=True,exist_ok=True)
+          paths=sorted(Path('/tmp/c08-source').rglob('c08-*.json'))
+          checks={
+            'BCHUSDT':'93e084c42bba50b3a112486444dc5de878ba12fa4168dbb0970b22e63f54b1af',
+            'BTCUSDT':'9d2079325a24c863e4e3c4157003de742d9279dd007e1cc6c4c3c16e66daec48',
+            'ETHUSDT':'08debff6e3c69a3ccb6925e07f4297818a41d988d4b6cf5d357089562aa7e4d1',
+            'SOLUSDT':'84d83e7165cb734dfe040ad0366c99cca1c2f2ce474bff65b4f5f8bbd83d095a',
+            'XRPUSDT':'0d3f6d4ec7d6ba74ceb04cd987357437a18e7bc3a74518a33dd29850da378107'
+          }
+          assert len(paths)==5,len(paths)
+          sources=set()
+          for f in paths:
+            symbol=f.stem.removeprefix('c08-')
+            assert symbol in checks,(f,symbol)
+            raw=f.read_bytes()
+            assert hashlib.sha256(raw).hexdigest()==checks[symbol]
+            data=json.loads(raw)
+            assert data['full_manifest_declared']==315
+            assert data['verified_source_archives']==63
+            assert len(data['receipts'])==63
+            for item in data['receipts']:
+              assert item['symbol']==symbol
+              assert item['status']=='HTTPS_CHECKSUM_AND_ALL_COLUMNS_REPLAYED'
+              assert item['normalized_all_11_columns_matched'] is True
+              url=item['url']
+              assert url not in sources
+              sources.add(url)
+            shutil.copyfile(f,root/f'C08_{symbol}_63_RECEIPTS.json')
+          assert len(sources)==315
+          agg=Path('/tmp/c08-aggregate/c08-aggregate.json')
+          summary=json.loads(agg.read_text())
+          assert summary['result']=='FULL_315_ATTESTED'
+          assert summary['verified_archives']==315
+          assert summary['quarantined_or_unverified_urls']==[]
+          shutil.copyfile(agg,root/'C08_315_AGGREGATE.json')
+          print('PASS: preserved 5 exact SHA-checked JSON originals and 315/315 aggregate')
+          PY
+      - name: Commit only new C08 evidence (never trading files)
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c08
+          test "$(git diff --cached --name-only | wc -l)" -eq 6
+          git commit -m "audit(C08): anchor 315 authenticated source receipt records permanently [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
