@@ -1,0 +1,85 @@
+name: MTF A061 - Academic Level Reaction Source Audit
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a061-reaction-journal.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-semantic-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate all 60 historical SHA journal records and frozen evidence
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a061-before.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a061-before.json'))
+          assert a['events']==60 and a['validations_pass']
+          print('HISTORICAL_CHAIN_60_PASS',a['tip_sha256'])
+          PY
+      - name: Independently rerun C01 to C04 all source-level test cases
+        working-directory: research/mtf-element-audit-v1/d05
+        run: |
+          set -euo pipefail
+          python -m unittest -v test_semantic_label_gate test_source_image_inventory_c02 test_c03_58_image_source_review test_reaction_illustration_gate 2>&1 | tee /tmp/a061-tests.txt
+          grep -q 'Ran 51 tests' /tmp/a061-tests.txt
+          grep -Eq '^OK$' /tmp/a061-tests.txt
+      - name: Append A061 (illustrative course source mechanics only)
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A061 \
+            --cycle D05_C04_ACADEMIC_LEVEL_REACTION \
+            --planned "Apply user clarification that academy charts illustrate level reaction, not independently executable historical deals; distinguish qualitative text diagrams from Futures signal validation" \
+            --executed "Recorded 8 source-linked SNR IMB POI positive and derived-negative qualitative reaction traces; corrected misleading two +MB chart labels; preserved contradictory SNR candle-order source; checked all source image SHA and 51 tests GitHub Actions 38781598658 PASS" \
+            --result "8 course illustrations traceable without invented timestamps or OHLCV; 0 automatic academy trade patterns accepted; SNR resistance candle-order conflict remains blocking" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Tried reversed SNR confirmation, fake obligatory IMB 50 percent retrace, altered source image SHA, promoting Forex illustration to Futures trade plan and silently resolving contradictory lesson captions; all rejected. This does not prove detector correctness on live Futures" \
+            --evidence cycles/D05_C04_ACADEMIC_LEVEL_REACTION_INTERPRETATION.md \
+            --evidence d05/C04_LEVEL_REACTION_SOURCE_CASES.json \
+            --evidence d05/reaction_illustration_gate.py \
+            --evidence d05/test_reaction_illustration_gate.py
+      - name: Re-verify 61-entry immutable historical chain and evidence
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a061-after.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a061-after.json'))
+          assert a['events']==61 and a['validations_pass']
+          print('AUDIT_CHAIN_61_VERIFIED',a['tip_sha256'])
+          PY
+      - name: Append only journal to research branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: append A061 academic level reaction figure clarification with 51 QA tests [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a061-source-evidence-journal
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a061-before.json
+            /tmp/a061-after.json
+            /tmp/a061-tests.txt
