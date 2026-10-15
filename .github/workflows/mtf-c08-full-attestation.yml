@@ -30,7 +30,7 @@ jobs:
           python tools/run_unit_suite_c05.py >/tmp/c08-tests.txt 2>&1 || { tail -n 100 /tmp/c08-tests.txt; exit 1; }
           tail -n 6 /tmp/c08-tests.txt
           grep -q 'Ran 139 tests' /tmp/c08-tests.txt
-          grep -q '^OK (skipped=1)
+          grep -Fq 'OK (skipped=1)' /tmp/c08-tests.txt
           python tests/test_journal_integrity.py >/tmp/c08-ledger.json
           python - <<'PY'
           import json
