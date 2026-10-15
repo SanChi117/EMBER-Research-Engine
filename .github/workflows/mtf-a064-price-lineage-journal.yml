@@ -1,0 +1,90 @@
+name: MTF A064 - B1 C03 Geometry Lineage Immutable Journal
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a064-price-lineage-journal.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ledger-and-source-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all A001-A063 historical evidence before appending
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a064-before.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a064-before.json'))
+          assert j['events']==63 and j['validations_pass']
+          print('63_OLD_ENTRIES_AND_EVIDENCE_PASS',j['tip_sha256'])
+          PY
+      - name: Independently rerun frozen v05 and all B1 C03 adversarial controls
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/tools/strict_event_lineage_d03.py)" = 16163fb8a08439d8d3b8e5f42c4cc16b82c1c28e
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a064-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a064-v05.txt
+          grep -Eq '^OK$' /tmp/a064-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_b1_course_d03_compatibility test_poi_touch_observer_b1 test_poi_price_lineage_b1 2>&1 | tee /tmp/a064-price.txt
+          grep -q 'Ran 50 tests' /tmp/a064-price.txt
+          grep -Eq '^OK$' /tmp/a064-price.txt
+      - name: Record verified B1 C03 technical conclusion (NOT source-complete)
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A064 \
+            --cycle B1_C03_POI_TEST_VC_PRICE_GEOMETRY \
+            --planned "Add source-linked closed-bar price/parent/child geometric validation on top of unchanged D03 and course v05 without creating any new academic trade condition" \
+            --executed "Added read-only ZoneReference BarWitness GeometricLink, checked POI-to-TEST price intersection, TF/symbol/market, child bar SHA and parent as-of, then VC after independently rechecked TEST; 79/79 PASS Actions 38785343737" \
+            --result "POI TEST and VC causal geometric provenance contract passed technically with source-self-declared bar digest; no confirmed first-test semantics, no external C08 bar origin binding, zero academic patterns approved or Trade Plans" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "First Actions 38785140691 failed three expected diagnostic reason assertions; subsequent 38785319471 passed Python tests but failed outdated test count 48 vs 50. Reordered diagnostic checks and added source/witness negatives, corrected CI count; historical failed jobs remain visible. Bar SHA alone does not prove Binance archive origin." \
+            --evidence cycles/B1_C03_PRICE_LINEAGE_ACCEPTANCE.md \
+            --evidence d05/poi_price_lineage_b1.py \
+            --evidence d05/test_poi_price_lineage_b1.py
+      - name: Verify 64 entries and all external evidence hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a064-after.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a064-after.json'))
+          assert j['events']==64 and j['validations_pass']
+          print('A001_A064_SHA_EVIDENCE_VERIFIED',j['tip_sha256'])
+          PY
+      - name: Commit only the append-only existing audit journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: append A064 geometric POI parent TEST VC proof and technical limitations [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a064-geometry-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a064-before.json
+            /tmp/a064-after.json
+            /tmp/a064-v05.txt
+            /tmp/a064-price.txt
