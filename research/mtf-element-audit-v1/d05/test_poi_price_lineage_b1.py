@@ -131,8 +131,21 @@ class ParentChildGeometryContract(unittest.TestCase):
 
     def test_missing_external_bar_binding(self):
         g,z,w,_=fixture()
-        with self.assertRaisesRegex(PriceLineageRejected,"RAW_SOURCE_BAR_NOT_SAME_CANDLE"):
+        with self.assertRaisesRegex(PriceLineageRejected,"SOURCE_INSTRUMENT_OR_TF_MISMATCH"):
             link_test_contact(g,z,replace(w,source_uid="parent_source"),HR+TF)
+
+    def test_same_tf_wrong_candle_source_reference_is_rejected(self):
+        g,z,w,_=fixture()
+        late=vcbar()
+        g.add(event("late_source","SOURCE",late.start,late.end,late.end,
+                    evidence=(bar_digest(late),)))
+        with self.assertRaisesRegex(PriceLineageRejected,"RAW_SOURCE_BAR_NOT_SAME_CANDLE"):
+            link_test_contact(g,z,replace(w,source_uid="late_source"),HR+2*TF)
+
+    def test_non_witness_reference_is_rejected_cleanly(self):
+        g,z,w,_=fixture()
+        with self.assertRaisesRegex(PriceLineageRejected,"INVALID_BAR_WITNESS"):
+            link_test_contact(g,z,{"not":"a bar witness"},HR+TF)
 
     def test_forged_original_bar_checksum_detected(self):
         g,z,w,_=fixture(test_source_sha="0"*64)
