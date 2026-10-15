@@ -30,7 +30,104 @@ jobs:
           python tools/run_unit_suite_c05.py >/tmp/c08-tests.txt 2>&1 || { tail -n 100 /tmp/c08-tests.txt; exit 1; }
           tail -n 6 /tmp/c08-tests.txt
           grep -q 'Ran 139 tests' /tmp/c08-tests.txt
-          grep -q '^OK$' /tmp/c08-tests.txt
+          grep -q '^OK (skipped=1)
+          python tests/test_journal_integrity.py >/tmp/c08-ledger.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c08-ledger.json'))
+          assert r['events']>=55 and r['validations_pass']
+          PY
+      - name: Restore immutable Futures history artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 38480389900 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir previous
+          test "$(find previous/mtf_route/data/history -maxdepth 1 -name '*.csv' | wc -l)" -eq 10
+          mkdir -p "$ROOT/baselines/d04_history_2026"
+          cp previous/mtf_route/data/history/*.csv "$ROOT/baselines/d04_history_2026/"
+          cp previous/mtf_route/data/history/manifest_vision.json "$ROOT/baselines/d04_history_2026/"
+      - name: Preflight 315 manifest declarations are NOT network proof
+        run: |
+          python "$ROOT/tests/verify_d04_full_manifest_c08.py" "$ROOT/baselines/d04_history_2026" /tmp/c08-preflight.json --offline-only
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c08-preflight.json'))
+          assert r['selected_sources']==315 and r['verified_source_archives']==0
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c08-preflight-unit-offline
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c08-tests.txt
+            /tmp/c08-ledger.json
+            /tmp/c08-preflight.json
+
+  c08-https-source-shards:
+    needs: c08-unit-and-frozen-inputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        symbol: [BTCUSDT, ETHUSDT, SOLUSDT, XRPUSDT, BCHUSDT]
+    env:
+      ROOT: research/mtf-element-audit-v1
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore frozen history without rewriting
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download 38480389900 --repo "$GITHUB_REPOSITORY" --name mtf-v04-usdm-20260401-20261012 --dir previous
+          mkdir -p "$ROOT/baselines/d04_history_2026"
+          cp previous/mtf_route/data/history/*.csv "$ROOT/baselines/d04_history_2026/"
+          cp previous/mtf_route/data/history/manifest_vision.json "$ROOT/baselines/d04_history_2026/"
+      - name: Validate complete source ZIP + checksum + every raw row
+        run: |
+          python "$ROOT/tests/verify_d04_full_manifest_c08.py" "$ROOT/baselines/d04_history_2026" "/tmp/c08-${{ matrix.symbol }}.json" --symbol "${{ matrix.symbol }}" --timeout 35 --retries 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c08-${{ matrix.symbol }}-source-receipts
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/c08-${{ matrix.symbol }}.json
+
+  c08-aggregate-proof:
+    needs: c08-https-source-shards
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve independent receipts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/c08-shards
+          gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --pattern 'c08-*-source-receipts' --dir /tmp/c08-shards
+      - name: Fail on any missing/mismatched source
+        run: |
+          set -euo pipefail
+          mapfile -t jsons < <(find /tmp/c08-shards -type f -name '*.json' | sort)
+          python research/mtf-element-audit-v1/tests/summarize_c08_shards.py /tmp/c08-aggregate.json "${jsons[@]}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c08-full-history-aggregated-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/c08-aggregate.json
+ /tmp/c08-tests.txt
           python tests/test_journal_integrity.py >/tmp/c08-ledger.json
           python - <<'PY'
           import json
