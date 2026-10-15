@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c08_source_bound_poi_b1 2>&1 | tee /tmp/b1-c04-contract.txt
-          grep -q 'Ran 20 tests' /tmp/b1-c04-contract.txt
+          grep -q 'Ran 21 tests' /tmp/b1-c04-contract.txt
           grep -Eq '^OK$' /tmp/b1-c04-contract.txt
       - name: Download original 2026-10-01 15m Binance USD-M ZIP and checksum, compare raw source bar with D03 test/VC
         run: |
