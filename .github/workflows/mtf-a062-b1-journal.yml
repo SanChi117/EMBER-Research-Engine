@@ -1,0 +1,93 @@
+name: MTF A062 - B1 Source Reuse And Causal Gap Journal
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a062-b1-journal.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  immutable-b1-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate existing A001-A061 and pinned evidence
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a062-before.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a062-before.json'))
+          assert a['events']==61 and a['validations_pass']
+          print('61_PREVIOUS_RECORDS_HASHES_PASS',a['tip_sha256'])
+          PY
+      - name: Prove source-v05 files exactly unchanged from original tree
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/README_RU.md)" = 7ffc74581d8b67af20620761e7f8d0659890d89b
+          test "$(git hash-object research/mtf-course-v05/MANIFEST.json)" = 439727f370a295a6bccbf1bf305850dfd2c0c000
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-course-v05/tests/test_course_primitives_v05.py)" = f4f8b21b40733511d756f3847d50297982f26069
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a062-source.txt
+          grep -q 'Ran 29 tests' /tmp/a062-source.txt
+          grep -Eq '^OK$' /tmp/a062-source.txt
+          python -m unittest -v research/mtf-element-audit-v1/d05/test_b1_course_d03_compatibility.py 2>&1 | tee /tmp/a062-seam.txt
+          grep -q 'Ran 8 tests' /tmp/a062-seam.txt
+          grep -Eq '^OK$' /tmp/a062-seam.txt
+      - name: Append A062 B1 partial result with exact evidence SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A062 \
+            --cycle B1_C01_V05_SOURCE_REUSE_CAUSAL_COMPATIBILITY \
+            --planned "Reuse the untouched course-fidelity-v05 primitives with C07 lineage, rather than rewriting the strategy or merging branches blindly" \
+            --executed "Copied original v05 README MANIFEST source and tests SHA-identically; executed 29 unchanged primitive tests and 8 C07 D03 seam tests in GitHub Actions 38782665902 success" \
+            --result "Verified source equivalence and formal as-of compatibility; documented v05 PoiLifecycle does not record second touch or invalidate after tested; C07 D03 formal lineage alone lacks price geometry; B1 remains partial" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Constructed invalidated-parent child, future-known confirmation, second touch after price exit, close beyond tested POI and temporal-but-price-unproven child; no claims of accepted academic trades or numeric detector precision" \
+            --evidence cycles/B1_C01_SOURCE_REUSE_COMPATIBILITY.md \
+            --evidence d05/test_b1_course_d03_compatibility.py \
+            --evidence ../mtf-course-v05/src/course_primitives_v05.py \
+            --evidence ../mtf-course-v05/tests/test_course_primitives_v05.py \
+            --evidence ../mtf-course-v05/MANIFEST.json
+      - name: Independently re-verify all 62 records and original evidence checksums
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a062-after.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a062-after.json'))
+          assert a['events']==62 and a['validations_pass']
+          print('AUDIT_CHAIN_62_PASS',a['tip_sha256'])
+          PY
+      - name: Commit ONLY append-only journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: record A062 B1 exact v05 source reuse and D03 compatibility gaps [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a062-b1-source-reuse-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a062-before.json
+            /tmp/a062-after.json
+            /tmp/a062-source.txt
+            /tmp/a062-seam.txt
