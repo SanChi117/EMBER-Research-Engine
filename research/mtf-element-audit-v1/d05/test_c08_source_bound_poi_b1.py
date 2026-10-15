@@ -121,8 +121,16 @@ class C08ArchiveWitnessContract(unittest.TestCase):
         with self.assertRaisesRegex(C08WitnessRejected,"OBSERVED_OHLC_DIFFERS_FROM_RAW_C08"):
             self.attest(witness=altered)
 
-    def test_wrong_time_in_same_daily_archive_is_rejected(self):
+    def test_other_day_source_zip_is_rejected_by_pinned_archive(self):
         other=replace(self.test,bar=Bar(START+96*TF,START+97*TF,101,104,100,102,"15m"))
+        # C08 has 2026-10-02 too; the receipt advances to the NEXT real
+        # archive, so Oct-01 bytes are rejected rather than "not covered".
+        with self.assertRaisesRegex(C08WitnessRejected,"RAW_ZIP_OR_CHECKSUM_REJECTED"):
+            self.attest(witness=other)
+
+    def test_date_outside_c08_manifest_has_no_receipt(self):
+        outside=START+31*86_400_000
+        other=replace(self.test,bar=Bar(outside,outside+TF,101,104,100,102,"15m"))
         with self.assertRaisesRegex(C08WitnessRejected,"C08_ARCHIVE_COVERAGE_NOT_UNIQUE"):
             self.attest(witness=other)
 
