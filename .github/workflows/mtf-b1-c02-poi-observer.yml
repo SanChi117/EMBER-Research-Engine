@@ -1,0 +1,44 @@
+name: MTF B1 C02 - Read-only POI First Test and Later Contact Audit (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c02-poi-observer.yml'
+      - 'research/mtf-element-audit-v1/d05/poi_touch_observer_b1.py'
+      - 'research/mtf-element-audit-v1/d05/test_poi_touch_observer_b1.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  poi-legacy-contract-and-diagnostic-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Existing course logic remains exact and untouched
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/b1-c02-original.txt
+          grep -q 'Ran 29 tests' /tmp/b1-c02-original.txt
+          grep -Eq '^OK$' /tmp/b1-c02-original.txt
+      - name: D03 compat and new read-only POI observer tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_b1_course_d03_compatibility test_poi_touch_observer_b1 2>&1 | tee /tmp/b1-c02-tests.txt
+          grep -q 'Ran 21 tests' /tmp/b1-c02-tests.txt
+          grep -Eq '^OK$' /tmp/b1-c02-tests.txt
+          echo 'POI_FIRST_TEST_CANDIDATE__LATER_CONTACT_UNCLASSIFIED__NO_TRADE'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b1-c02-50-technical-source-tests
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/b1-c02-original.txt
+            /tmp/b1-c02-tests.txt
