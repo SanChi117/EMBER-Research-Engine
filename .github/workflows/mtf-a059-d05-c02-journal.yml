@@ -1,0 +1,66 @@
+name: MTF A059 - D05 C02 SHA journal proof (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a059-d05-c02-journal.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  immutable-c02-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all historical chain entries and proof files before adding A059
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a059-before.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/a059-before.json'))
+          assert p['events']==58 and p['validations_pass']
+          print('A001_A058_CHAIN_AND_EVIDENCE_PASS',p['tip_sha256'])
+          PY
+      - name: Record D05 C02 completion only with stored source metadata and CI
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record             --action-id A059             --cycle D05_C02_SOURCE_ASSET_EXPANSION             --planned "Find source assets beyond six Notion page screenshots and establish source-grounded MTF route topology without altering trading code"             --executed "Catalogued 8 original Drive lesson folders (84 entries, 72 PNG), studied 14 PNG with original SHA, located three numeric EURUSD Forex source charts, extracted five distinct MTF pathways; GitHub Actions 38754933267 returned 22/22 source and schema tests PASS"             --result "D05 C02 source catalog and original course schematic topology accepted as documentation only; zero Binance Futures academic golden cases approved; 58 source images still unreviewed"             --verdict DONE             --cycle-result PASSED             --countercheck "Original course images with EURUSD 4H price axes come from OANDA/SAXO, NOT Binance Futures; publication date is not event-known-at; only the source/path inventory is verified. A058 historical work-map SHA restored unchanged; mutable map separated to avoid breaking evidence"             --evidence cycles/D05_C02_SOURCE_ASSET_EXPANSION.md             --evidence d05/C02_SOURCE_IMAGE_INVENTORY.json             --evidence d05/C02_TDA_SOURCE_ROUTE_TOPOLOGY.json             --evidence d05/test_source_image_inventory_c02.py
+      - name: Verify full 59-entry chain and all archived proof hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a059-after.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/a059-after.json'))
+          assert p['events']==59 and p['validations_pass']
+          print('AUDIT_LOG_59_PROOFS_PASS',p['tip_sha256'])
+          PY
+      - name: Commit ONLY append-only journal, never trade core
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: append A059 D05 C02 verified source inventory; preserve A058 snapshot [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a059-immutable-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a059-before.json
+            /tmp/a059-after.json
