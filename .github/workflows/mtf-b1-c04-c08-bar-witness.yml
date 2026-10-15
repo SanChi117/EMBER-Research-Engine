@@ -24,6 +24,10 @@ jobs:
           set -euo pipefail
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BCHUSDT_63_RECEIPTS.json)" = 35c51c28ee83c05050d75940563ed352277871fa
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_ETHUSDT_63_RECEIPTS.json)" = 8da28253c04f230a9e737b1075d30fc981628dfc
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_SOLUSDT_63_RECEIPTS.json)" = 04d7b6aca9c61216d9c311591c20aef6eb5e6afe
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_XRPUSDT_63_RECEIPTS.json)" = b36184a5b7153e96f338b87694d8eb8bab4b5191
           test "$(git hash-object research/mtf-element-audit-v1/tools/strict_event_lineage_d03.py)" = 16163fb8a08439d8d3b8e5f42c4cc16b82c1c28e
           test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
       - name: Fail-closed B1/C04 unit and forged receipt negative cases
