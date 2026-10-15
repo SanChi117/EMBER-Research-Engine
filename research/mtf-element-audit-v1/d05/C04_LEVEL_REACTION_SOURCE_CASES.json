@@ -1,0 +1,210 @@
+{
+  "cycle": "D05_C04_REACTION_LEVEL_SEMANTICS",
+  "date": "2026-10-15",
+  "source_role": "ACADEMIC_REACTION_ILLUSTRATION",
+  "replay_requirement": "NOT_REQUIRED_FOR_SOURCE_MECHANISM_DESCRIPTION",
+  "separate_automatic_trading_requirement": "REQUIRES_FUTURES_REPLAY_AND_SOURCE_ALIGNED_ALGORITHM",
+  "primary_text_sources": {
+    "SNR": "https://drive.google.com/file/d/1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m/view",
+    "POI": "https://drive.google.com/file/d/1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R/view",
+    "IMB": "https://drive.google.com/file/d/1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN/view"
+  },
+  "figures": [
+    {
+      "id": "POI-IMAGE-1-SNR-SCHEMA",
+      "drive_id": "1L7sXn8-RHn7p1J8-8qDs8XbRDyCJYoDN",
+      "sha256": "a0d68610890fa7b2a5bc3519db0a962ae3bf9e0ea91a39667cacf2eaee763a21",
+      "subject": "Two opposite SNR candle-pair schematic examples",
+      "interpretation": "illustration of a level and price turning around it, not backtest"
+    },
+    {
+      "id": "POI-IMAGE-2-SNR-SHORT",
+      "drive_id": "15vA7Iz6nu1MoeLcLSQSiD2O5shJa9RbU",
+      "sha256": "7a23ccdeb83bfdfcbe13cb5868816d7884079bc4a0855102fe1d7e9efc96cb1e",
+      "subject": "BSL raid / Short SNR / subsequent test and reaction",
+      "interpretation": "symbolic structural sequence; conflict candle-order text vs chart is unresolved"
+    },
+    {
+      "id": "POI-IMAGE-4-MB",
+      "drive_id": "1F0LLCklPaPNCBWHwVpsKUPqp1hdsh35p",
+      "sha256": "0652541c0bb64317beb86a2b20c4cb883eb69fe8bb25f70a1060e341249d551f",
+      "subject": "EURUSD 4H labelled +MB, no Raid / test FVG",
+      "interpretation": "MB weaker POI/illustration; previous C02 label 'IMB positive' was too broad"
+    },
+    {
+      "id": "POI-IMAGE-5-MB",
+      "drive_id": "1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b",
+      "sha256": "40a9129fc3653375a41e6095f2872308cfdf1bcdae3ac35b88e7ccbba49f9069",
+      "subject": "EURUSD 4H labelled +MB, no Raid / test FVG",
+      "interpretation": "MB weaker support demonstration, not strong SNR confirmation"
+    },
+    {
+      "id": "POI-FVG-ILLUSTRATION",
+      "drive_id": "1m_Dbbs1XrkPGh4y3TY7czaLGRCBc_z71",
+      "sha256": "6acde13098706e5c257c20a6c56ddd5587253efdc51e7962a37214944bed0194",
+      "subject": "Unscaled three-candle wick-gap geometric scheme",
+      "interpretation": "qualitative FVG formation, no time/price required for learning definition"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "SNR-LONG-TEXT-POS",
+      "family": "SNR",
+      "kind": "AUTHOR_TEXT_SEQUENCE",
+      "positive": true,
+      "image_id": "POI-IMAGE-1-SNR-SCHEMA",
+      "events": [
+        "CANDLE_PAIR_BUY_SELL",
+        "SSL_RAID_OR_NEGATIVE_FVG_TEST",
+        "BULLISH_FULL_CLOSE_ABOVE_PAIR_LEVEL",
+        "FIRST_SNR_TEST",
+        "LONG_REACTION_MAY_OCCUR"
+      ],
+      "claim": "TEXT_CONSISTENT_SEQUENCE_NOT_SIGNAL",
+      "limits": [
+        "SNR strength still requires actual geometry, liquidity/FVG source and first-test state"
+      ]
+    },
+    {
+      "case_id": "SNR-WEAK-MB",
+      "family": "SNR",
+      "kind": "SOURCE_ILLUSTRATION",
+      "positive": false,
+      "image_id": "POI-IMAGE-4-MB",
+      "events": [
+        "SNR_PAIR_PRESENT",
+        "NO_LIQUIDITY_RAID_AND_NO_FVG_TEST",
+        "RETURN_TO_POI",
+        "POSSIBLE_REACTION"
+      ],
+      "claim": "MITIGATION_BLOCK_NOT_STRONG_VC",
+      "limits": [
+        "This is not a ban on MB as a support in an already established direction"
+      ]
+    },
+    {
+      "case_id": "POI-FIRST-TEST",
+      "family": "POI",
+      "kind": "AUTHOR_TEXT_SEQUENCE",
+      "positive": true,
+      "image_id": "POI-IMAGE-5-MB",
+      "events": [
+        "POI_FORMED",
+        "FIRST_RETURN_TO_POI",
+        "RESPONSE_POSSIBLE"
+      ],
+      "claim": "FIRST_TEST_HAS_COURSE_PRIORITY_NOT_GUARANTEE",
+      "limits": [
+        "Even the first test may fail; no mandatory fill or profit inferred"
+      ]
+    },
+    {
+      "case_id": "POI-REPEATED-TEST",
+      "family": "POI",
+      "kind": "TEXT_DERIVED_NEGATIVE_CONTRAST",
+      "positive": false,
+      "image_id": "POI-IMAGE-5-MB",
+      "events": [
+        "POI_FORMED",
+        "FIRST_RETURN_TO_POI",
+        "SECOND_RETURN_TO_SAME_POI"
+      ],
+      "claim": "NOT_FIRST_TEST_DO_NOT_MISLABEL",
+      "limits": [
+        "Second test may react but must never be marked first; this alone does not prove an entry prohibited"
+      ]
+    },
+    {
+      "case_id": "IMB-THREE-CANDLE",
+      "family": "IMB",
+      "kind": "AUTHOR_TEXT_SEQUENCE",
+      "positive": true,
+      "image_id": "POI-FVG-ILLUSTRATION",
+      "events": [
+        "THREE_CANDLES",
+        "WICK_GAP_BETWEEN_FIRST_AND_THIRD",
+        "ZONE_RETURNS_AND_REACTION_POSSIBLE"
+      ],
+      "claim": "IMB_CANDIDATE_GEOMETRY_ONLY",
+      "limits": [
+        "Outer-candle color irrelevant and no universal percentage depth; HTF POI connection not inferred"
+      ]
+    },
+    {
+      "case_id": "IMB-NO-GAP",
+      "family": "IMB",
+      "kind": "TEXT_DERIVED_NEGATIVE_CONTRAST",
+      "positive": false,
+      "image_id": "POI-FVG-ILLUSTRATION",
+      "events": [
+        "THREE_CANDLES",
+        "WICKS_OVERLAP_FIRST_AND_THIRD",
+        "ZONE_RETURNS_AND_REACTION_POSSIBLE"
+      ],
+      "claim": "NOT_IMB_THREE_CANDLE_GAP",
+      "limits": [
+        "Only refutes classic three-wick-gap IMB, not all possible POI"
+      ]
+    },
+    {
+      "case_id": "POI-STRONG-CONTEXT",
+      "family": "POI",
+      "kind": "AUTHOR_TEXT_SEQUENCE",
+      "positive": true,
+      "image_id": "POI-IMAGE-2-SNR-SHORT",
+      "events": [
+        "POI_WITH_SSL_BSL_OR_FVG_CONTEXT",
+        "PRICE_RETURNS_TO_POI",
+        "REACTION_MAY_OCCUR"
+      ],
+      "claim": "CONTEXTUAL_POI_ILLUSTRATION_ONLY",
+      "limits": [
+        "Qualitative connection still needs specific event geometry before strategy signoff"
+      ]
+    },
+    {
+      "case_id": "POI-UNKNOWN-STRONG",
+      "family": "POI",
+      "kind": "TEXT_DERIVED_NEGATIVE_CONTRAST",
+      "positive": false,
+      "image_id": "POI-IMAGE-2-SNR-SHORT",
+      "events": [
+        "POI_WITHOUT_VERIFIED_SSL_BSL_OR_FVG",
+        "PRICE_RETURNS_TO_POI",
+        "REACTION_MAY_OCCUR"
+      ],
+      "claim": "STRONG_POI_EVIDENCE_MISSING",
+      "limits": [
+        "Weak or ordinary POI may still generate a reaction; not an automatic trade ban"
+      ]
+    }
+  ],
+  "source_conflicts": [
+    {
+      "code": "SNR_RESISTANCE_CANDLE_ORDER_CONFLICT",
+      "text_source_observation": "Lesson states resistance = Buy Candle + Sell Candle; support = Sell Candle + Buy Candle",
+      "image_observation": "Image (2).png labels short example Sell + Buy → SELL",
+      "resolution": "UNRESOLVED_DO_NOT_HARDCODE_CANDLE_ORDER_AS_STRONG_SNR",
+      "impact": "SNR independent entry conditions remain blocked pending author-context resolution"
+    }
+  ],
+  "errata": [
+    {
+      "earlier_doc": "C02_SOURCE_IMAGE_INVENTORY.json",
+      "image_ids": [
+        "1F0LLCklPaPNCBWHwVpsKUPqp1hdsh35p",
+        "1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b"
+      ],
+      "earlier_subject": "IMB positive reaction",
+      "corrected_subject": "Mitigation Block (+MB) illustration explicitly annotated 'no Raid / test FVG'",
+      "action": "overlay only; preserve immutable older audit record"
+    }
+  ],
+  "acceptance": {
+    "mechanism_examples_illustrated": 8,
+    "academic_market_patterns_independently_approved": 0,
+    "automatic_trade_plans_allowed": 0,
+    "uses_absolute_market_timestamps": false,
+    "needs_historical_forex_ohlcv_for_illustration_purpose": false
+  }
+}
