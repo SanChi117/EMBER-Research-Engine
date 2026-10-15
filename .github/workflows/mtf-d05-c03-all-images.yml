@@ -1,0 +1,42 @@
+name: MTF D05 C03 - Complete 72 Source Images (no trading)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-c03-all-images.yml'
+      - 'research/mtf-element-audit-v1/d05/C03_58_IMAGE_REVIEW.json'
+      - 'research/mtf-element-audit-v1/d05/test_c03_58_image_source_review.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-all-72-source-references:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check C01 C02 C03 source gate and spoofed source mutations
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_semantic_label_gate test_source_image_inventory_c02 test_c03_58_image_source_review 2>&1 | tee /tmp/d05-c03.txt
+          grep -q 'Ran 35 tests' /tmp/d05-c03.txt
+          grep -Eq '^OK$' /tmp/d05-c03.txt
+          python - <<'PY'
+          import json
+          x=json.load(open('C03_58_IMAGE_REVIEW.json'))
+          assert x['all_reviewed_images']==72
+          assert x['unreviewed_images']==0
+          assert x['approved_academic_futures_cases']==0
+          print('D05_ALL_IMAGES_REVIEWED__ACADEMIC_FUTURES_CASES_NOT_ATTESTED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d05-c03-35-schema-tests
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/d05-c03.txt
