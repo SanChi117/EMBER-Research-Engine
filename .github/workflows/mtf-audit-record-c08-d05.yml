@@ -1,0 +1,91 @@
+name: MTF audit journal A056 A057 - C08 D05 evidence anchoring
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-audit-record-c08-d05.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  strict-append-only-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify existing journal before append
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/ledger-before.json
+      - name: Record C08 independent source attestation with immutable evidence SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A056 \
+            --cycle C08_D04_ALL_315 \
+            --planned "Independent source verification of all 315 declared Binance USD-M original archive ZIPs and normalized bars without modifying frozen trade core" \
+            --executed "C08 Actions run 38750996053 from 42ff29aa5e: five 63-source shards; published exact receipts to Git commit ddc01235797a57953504543774abc421d007295d" \
+            --result "315 of 315 HTTPS-host plus checksum raw archives validated; all eleven normalized bar fields match; report FULL_315_ATTESTED; historical 2025 Jan29 conflict remains separate" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Previous false assumption offline CSV SHA certifies source; each original source now independently fetched; 139 unit tests, 1 skipped; no academic structural-pattern signoff" \
+            --evidence cycles/C08_315_ARCHIVES_ACCEPTANCE.md \
+            --evidence evidence/c08/C08_315_AGGREGATE.json \
+            --evidence evidence/c08/C08_BCHUSDT_63_RECEIPTS.json \
+            --evidence evidence/c08/C08_BTCUSDT_63_RECEIPTS.json \
+            --evidence evidence/c08/C08_ETHUSDT_63_RECEIPTS.json \
+            --evidence evidence/c08/C08_SOLUSDT_63_RECEIPTS.json \
+            --evidence evidence/c08/C08_XRPUSDT_63_RECEIPTS.json
+      - name: Record D05 six course image candidates without semantic approval
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A057 \
+            --cycle D05_VISUAL_C01 \
+            --planned "Inspect original Google Drive BOS IDM StrongHL image assets, build independent evidence-only acceptance gate, refuse invented chart prices" \
+            --executed "Reviewed 6 Drive course page screenshots and saved their SHA identifiers; D05 schema gate 10 tests PASS in GitHub Actions run 38751579043" \
+            --result "6/6 original screenshots sourced; 0/6 independently numeric market charts; 0 academic pattern cases approved; schema rejects future-known, missing geometry, Spot and self-certification" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Schematic/thumbnail appearance cannot identify exact symbol date/time/price boundaries; source text and image alone cannot prove arbitrary manual label is accurate" \
+            --evidence cycles/D05_C01_VISUAL_SOURCE_AUDIT.md \
+            --evidence d05/C01_VISUAL_CANDIDATES.json \
+            --evidence d05/semantic_label_gate.py \
+            --evidence d05/test_semantic_label_gate.py
+      - name: Check full historical and new journal, record immutable tip
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/ledger-after.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/ledger-after.json'))
+          assert x['events']==57 and x['validations_pass']
+          print('AUDIT_CHAIN_57_VERIFIED:',x['tip_sha256'])
+          PY
+      - name: Commit only journal append (no trading changes)
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: anchor A056 C08 proof and A057 D05 visual limits without altering core [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a056-a057-journal-verification
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/ledger-before.json
+            /tmp/ledger-after.json
