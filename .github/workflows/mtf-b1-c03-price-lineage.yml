@@ -34,13 +34,13 @@ jobs:
           set -euo pipefail
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_b1_course_d03_compatibility test_poi_touch_observer_b1 test_poi_price_lineage_b1 2>&1 | tee /tmp/b1-c03-contract.txt
-          grep -q 'Ran 48 tests' /tmp/b1-c03-contract.txt
+          grep -q 'Ran 50 tests' /tmp/b1-c03-contract.txt
           grep -Eq '^OK$' /tmp/b1-c03-contract.txt
           echo 'EVIDENCE_INTERSECTION_VERIFIED__ACADEMIC_SIGNAL_NOT_APPROVED'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mtf-b1-c03-77-technical-source-tests
+          name: mtf-b1-c03-79-technical-source-tests
           retention-days: 30
           if-no-files-found: warn
           path: |
