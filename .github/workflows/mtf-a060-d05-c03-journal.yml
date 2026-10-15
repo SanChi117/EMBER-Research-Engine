@@ -1,0 +1,85 @@
+name: MTF A060 - Immutable D05 C03 source review journal
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a060-d05-c03-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  record-d05-c03-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Recheck first 59 archived proofs before new claim
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a060-before.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a060-before.json'))
+          assert a['events']==59 and a['validations_pass']
+          print('CHAIN_59_VERIFIED',a['tip_sha256'])
+          PY
+      - name: Re-run C01 C02 C03 tests independently
+        working-directory: research/mtf-element-audit-v1/d05
+        run: |
+          set -euo pipefail
+          python -m unittest -v test_semantic_label_gate test_source_image_inventory_c02 test_c03_58_image_source_review 2>&1 | tee /tmp/a060-d05.txt
+          grep -q 'Ran 35 tests' /tmp/a060-d05.txt
+          grep -Eq '^OK$' /tmp/a060-d05.txt
+      - name: Record A060 with exact source/catalog and test hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A060 \
+            --cycle D05_C03_ALL_72_IMAGES \
+            --planned "Inspect and classify all remaining 58 original user Drive teaching PNGs and document SHA provenance without inventing price/time or Futures labels" \
+            --executed "Inspected and hashed 58 images, total 72/72 under C02 folder scope; isolated 3 additional EURUSD OANDA numeric charts and one unmatched price-axis figure; 35 source/negative tests independently PASS in Actions 38779488935" \
+            --result "All 72 teaching PNGs classified at source-asset level; 6 Forex price-scaled source charts now identified, 1 chart lacks symbol/TF, 0 academic Futures trade forms independently approved" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "First draft had 54/58 digest records and four truncated hashes; corrected before CI, errors remain in Git history; semantic replay unavailable and CI checks metadata rather than re-fetching Google Drive bytes" \
+            --evidence cycles/D05_C03_72_IMAGES_ACCEPTANCE.md \
+            --evidence d05/C03_58_IMAGE_REVIEW.json \
+            --evidence d05/test_c03_58_image_source_review.py
+      - name: Verify 60-event chain and all evidence hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a060-after.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a060-after.json'))
+          assert a['events']==60 and a['validations_pass']
+          print('CHAIN_60_EVIDENCE_PASS',a['tip_sha256'])
+          PY
+      - name: Append ONLY journal, no trading file touched
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: append A060 D05 C03 complete image inventory with 35 test proof [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a060-d05-image-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a060-before.json
+            /tmp/a060-d05.txt
+            /tmp/a060-after.json
