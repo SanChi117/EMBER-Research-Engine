@@ -1,0 +1,61 @@
+name: MTF A066 - Verify Complete POI Prefix Evidence Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a066-proof-verification.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-chain-and-reaction-prefix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently confirm all original 66 SHA journal records/evidence
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a066-proof.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/a066-proof.json'))
+          assert p['events']==66 and p['validations_pass']
+          records=[json.loads(line) for line in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if line.strip()]
+          assert records[-1]['action_id']=='A066'
+          assert records[-1]['record_sha256']=='798301ad7e4f2ce7ebf0e86b28ff7e80a4f36394a0c043c0fcb8e5e3f3770bc2'
+          assert 'NEXT candle with hindsight' in records[-1]['observed_result']
+          print('A001_A066_FULL_EVIDENCE_AND_SOURCE_LIMITATIONS_CONFIRMED')
+          PY
+      - name: Byte guard of frozen existing primitives and Binance receipt
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/tools/strict_event_lineage_d03.py)" = 16163fb8a08439d8d3b8e5f42c4cc16b82c1c28e
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+      - name: Rerun source-v05 29 and prefix falsifications 23
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a066-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a066-v05.txt
+          grep -Eq '^OK$' /tmp/a066-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_poi_complete_prefix_reaction_b1 2>&1 | tee /tmp/a066-prefix.txt
+          grep -q 'Ran 23 tests' /tmp/a066-prefix.txt
+          grep -Eq '^OK$' /tmp/a066-prefix.txt
+          echo '52_CONTRACT_CHECKS_PASSED_NO_ACADEMIC_READY'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a066-immutable-chain-and-prefix-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a066-proof.json
+            /tmp/a066-v05.txt
+            /tmp/a066-prefix.txt
