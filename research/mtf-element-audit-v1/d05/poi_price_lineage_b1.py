@@ -89,11 +89,13 @@ def _zone_parent(ledger: EventLedger, zone: ZoneReference, at: int):
     if p.kind!="POI" or zone.original_source_uid not in p.parent_uids:
         raise PriceLineageRejected("POI_NOT_SOURCE_LINKED")
     src=all_events.get(zone.original_source_uid)
-    if not src or src.kind!="SOURCE" or src.uid not in active or src.timeframe!=zone.tf:
+    if not src or src.kind!="SOURCE" or src.uid not in active:
         raise PriceLineageRejected("POI_SOURCE_NOT_ACTIVE")
     if (p.symbol,p.venue,p.market,p.timeframe,p.known_at_ms)!=(
         zone.symbol,zone.venue,zone.market,zone.tf,zone.known_at_ms):
         raise PriceLineageRejected("POI_ZONE_METADATA_MISMATCH")
+    if src.timeframe!=zone.tf:
+        raise PriceLineageRejected("POI_SOURCE_TF_MISMATCH")
     if zone.market!="USDM_FUTURES":
         raise PriceLineageRejected("NOT_FUTURES_EVIDENCE")
     return p,all_events,active
@@ -110,12 +112,12 @@ def _checked_observation(parent:CausalEvent, child:CausalEvent,
         witness.symbol,witness.venue,witness.market) or (
         child.symbol,child.venue,child.market)!=(witness.symbol,witness.venue,witness.market):
         raise PriceLineageRejected("WRONG_CHILD_INSTRUMENT")
+    if child.timeframe!=b.tf or (child.origin_open_ms,child.origin_close_ms)!=(b.start,b.end):
+        raise PriceLineageRejected("CHILD_TIMEFRAME_OR_ORIGIN_MISMATCH")
     if source.kind!="SOURCE" or (
         source.symbol,source.venue,source.market,source.timeframe)!=(
         witness.symbol,witness.venue,witness.market,b.tf):
         raise PriceLineageRejected("SOURCE_INSTRUMENT_OR_TF_MISMATCH")
-    if child.timeframe!=b.tf or (child.origin_open_ms,child.origin_close_ms)!=(b.start,b.end):
-        raise PriceLineageRejected("CHILD_TIMEFRAME_OR_ORIGIN_MISMATCH")
     if (source.origin_open_ms,source.origin_close_ms)!=(b.start,b.end):
         raise PriceLineageRejected("RAW_SOURCE_BAR_NOT_SAME_CANDLE")
     digest=bar_digest(b)
@@ -129,6 +131,8 @@ def link_test_contact(ledger: EventLedger, zone:ZoneReference, witness:BarWitnes
                     as_of_ms:int) -> GeometricLink:
     """Observational geometry only: zone overlaps bar's [low,high]."""
     parent,events,active=_zone_parent(ledger,zone,as_of_ms)
+    if not isinstance(witness,BarWitness):
+        raise PriceLineageRejected("INVALID_BAR_WITNESS")
     if witness.side!=zone.side:
         raise PriceLineageRejected("SIDE_MISMATCH")
     child=events.get(witness.child_uid)
@@ -157,6 +161,8 @@ def link_vc_after_test(ledger: EventLedger, zone:ZoneReference,
     """
     test_link=link_test_contact(ledger,zone,test_witness,as_of_ms)
     parent,events,active=_zone_parent(ledger,zone,as_of_ms)
+    if not isinstance(vc_witness,BarWitness):
+        raise PriceLineageRejected("INVALID_BAR_WITNESS")
     if vc_witness.side!=zone.side:
         raise PriceLineageRejected("SIDE_MISMATCH")
     child=events.get(vc_witness.child_uid)
