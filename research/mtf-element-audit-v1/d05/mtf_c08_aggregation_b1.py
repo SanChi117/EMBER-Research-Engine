@@ -30,6 +30,9 @@ class Source15m:
     bar: Bar
     volume: Decimal
     member_id: str
+    symbol: str
+    venue: str="BINANCE"
+    market: str="USDM_FUTURES"
 
 @dataclass(frozen=True)
 class DerivedClosedBar:
@@ -75,10 +78,18 @@ def derive_closed_mtf_from_15m(sources: list[Source15m],
         raise MTFSourceRejected("AS_OF_NOT_15M_CLOSE_BOUNDARY")
     if not isinstance(sources,list) or not sources or any(not isinstance(s,Source15m) for s in sources):
         raise MTFSourceRejected("INVALID_15M_SOURCES")
+    if any(not isinstance(s.bar,Bar) for s in sources):
+        raise MTFSourceRejected("INVALID_CANDLE_TYPE")
     closed=[s for s in sources if s.bar.end<=as_of_ms]
     if not closed:
         raise MTFSourceRejected("NO_CLOSED_15M_PREFIX")
+    identity=(closed[0].symbol,closed[0].venue,closed[0].market)
+    if (not isinstance(identity[0],str) or not identity[0].endswith("USDT")
+        or identity[1:]!=("BINANCE","USDM_FUTURES")):
+        raise MTFSourceRejected("NOT_BINANCE_USDM_FUTURES")
     for source in closed:
+        if (source.symbol,source.venue,source.market)!=identity:
+            raise MTFSourceRejected("CROSS_INSTRUMENT_OR_MARKET_SOURCE")
         b=source.bar
         if not isinstance(b,Bar) or b.tf!="15m" or b.start%CHILD or b.end!=b.start+CHILD:
             raise MTFSourceRejected("NOT_ALIGNED_15M_SOURCE")
