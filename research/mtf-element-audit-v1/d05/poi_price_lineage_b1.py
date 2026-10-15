@@ -51,6 +51,7 @@ class BarWitness:
     symbol: str
     venue: str
     market: str
+    side: str
 
 @dataclass(frozen=True)
 class GeometricLink:
@@ -88,7 +89,7 @@ def _zone_parent(ledger: EventLedger, zone: ZoneReference, at: int):
     if p.kind!="POI" or zone.original_source_uid not in p.parent_uids:
         raise PriceLineageRejected("POI_NOT_SOURCE_LINKED")
     src=all_events.get(zone.original_source_uid)
-    if not src or src.kind!="SOURCE" or src.uid not in active:
+    if not src or src.kind!="SOURCE" or src.uid not in active or src.timeframe!=zone.tf:
         raise PriceLineageRejected("POI_SOURCE_NOT_ACTIVE")
     if (p.symbol,p.venue,p.market,p.timeframe,p.known_at_ms)!=(
         zone.symbol,zone.venue,zone.market,zone.tf,zone.known_at_ms):
@@ -124,10 +125,12 @@ def _checked_observation(parent:CausalEvent, child:CausalEvent,
         raise PriceLineageRejected("FUTURE_OR_BACKDATED_OBSERVATION")
     return digest
 
-def link_first_test(ledger: EventLedger, zone:ZoneReference, witness:BarWitness,
+def link_test_contact(ledger: EventLedger, zone:ZoneReference, witness:BarWitness,
                     as_of_ms:int) -> GeometricLink:
     """Observational geometry only: zone overlaps bar's [low,high]."""
     parent,events,active=_zone_parent(ledger,zone,as_of_ms)
+    if witness.side!=zone.side:
+        raise PriceLineageRejected("SIDE_MISMATCH")
     child=events.get(witness.child_uid)
     src=events.get(witness.source_uid)
     if child is None or src is None:
@@ -145,36 +148,29 @@ def link_first_test(ledger: EventLedger, zone:ZoneReference, witness:BarWitness,
                          "TEST_PRICE_INTERSECTION_ONLY_FIRSTNESS_UNPROVEN")
 
 def link_vc_after_test(ledger: EventLedger, zone:ZoneReference,
-                       test_link:GeometricLink, witness:BarWitness,
+                       test_witness:BarWitness, vc_witness:BarWitness,
                        as_of_ms:int) -> GeometricLink:
-    """Trace a lower-TF VC's causal parent to price-evidenced TEST.
+    """Prove VC is causally after an independently re-checked POI TEST witness.
 
-    A VC may form AWAY from the parent zone. Never require its own candle to
-    intersect the zone; that would invent a course rule.
+    A VC may occur AWAY from the POI. Its precise academic confirmation
+    remains UNKNOWN. Never trust a fabricated/stale earlier GeometricLink.
     """
+    test_link=link_test_contact(ledger,zone,test_witness,as_of_ms)
     parent,events,active=_zone_parent(ledger,zone,as_of_ms)
-    child=events.get(witness.child_uid)
-    src=events.get(witness.source_uid)
+    if vc_witness.side!=zone.side:
+        raise PriceLineageRejected("SIDE_MISMATCH")
+    child=events.get(vc_witness.child_uid)
+    src=events.get(vc_witness.source_uid)
     if child is None or src is None or child.uid not in active or src.uid not in active:
         raise PriceLineageRejected("VC_OR_SOURCE_NOT_ACTIVE_AS_OF")
     if child.kind!="VC":
         raise PriceLineageRejected("NOT_VC_KIND")
-    if not isinstance(test_link,GeometricLink) or test_link.poi_uid!=zone.poi_uid or (
-        test_link.readiness!="NOT_TRADE_READY" or
-        test_link.relation!="TEST_PRICE_INTERSECTION_ONLY_FIRSTNESS_UNPROVEN"):
-        raise PriceLineageRejected("UNVERIFIED_TEST_LINK")
     test=events.get(test_link.child_uid)
     if test is None or test.uid not in active or test.kind!="TEST" or (
         test.uid not in child.parent_uids or parent.uid not in test.parent_uids):
         raise PriceLineageRejected("VC_NOT_CAUSALLY_LINKED_TO_TEST")
-    if child.known_at_ms < test.known_at_ms or witness.bar.start<test.known_at_ms:
+    if child.known_at_ms < test.known_at_ms or vc_witness.bar.start<test.known_at_ms:
         raise PriceLineageRejected("VC_BEFORE_TEST")
-    hash_now=_checked_observation(parent,child,src,witness,as_of_ms)
-    # Do not accept a copied/fabricated test-link digest without checking
-    # its original TEST's known time, source identity and current binding.
-    if test.known_at_ms!=test_link.known_at_ms or test_link.source_uid not in events or (
-        events[test_link.source_uid].uid not in test.evidence_uids or
-        test_link.bar_sha256 not in events[test_link.source_uid].evidence_uids):
-        raise PriceLineageRejected("STALE_OR_UNBOUND_TEST_LINK")
+    hash_now=_checked_observation(parent,child,src,vc_witness,as_of_ms)
     return GeometricLink(zone.poi_uid,child.uid,src.uid,child.known_at_ms,
                          hash_now,"VC_CAUSALLY_AFTER_PRICE_TOUCH_SEMANTICS_UNKNOWN")
