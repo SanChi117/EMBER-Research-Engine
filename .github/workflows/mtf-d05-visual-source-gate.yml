@@ -1,0 +1,41 @@
+name: MTF D05 Visual Evidence Gate (no trading)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-visual-source-gate.yml'
+      - 'research/mtf-element-audit-v1/d05/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  d05-synthetic-schema-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reject unlabeled lesson screenshots and invalid event geometry
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_semantic_label_gate 2>&1 | tee /tmp/d05-unit.txt
+          grep -Fq 'Ran 10 tests' /tmp/d05-unit.txt
+          grep -Fq 'OK' /tmp/d05-unit.txt
+          python - <<'PY'
+          import json
+          from semantic_label_gate import summarize_candidates
+          x=json.load(open('C01_VISUAL_CANDIDATES.json'))
+          result=summarize_candidates(x)
+          assert result['screen_captures']==6
+          assert result['numeric_golden_cases_accepted']==0
+          print('D05_SEMANTIC_SIGNOFF_BLOCKED_UNTIL_NUMERIC_SOURCE_CHARTS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-d05-visual-source-schema-only
+          retention-days: 30
+          path: /tmp/d05-unit.txt
