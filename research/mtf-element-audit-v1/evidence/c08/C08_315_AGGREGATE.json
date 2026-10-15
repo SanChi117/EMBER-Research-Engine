@@ -1,0 +1,20 @@
+{
+  "audit": "C08_INDEPENDENT_BINANCE_VISION_2026_FUTURES",
+  "created_utc": "2026-10-15T14:25:13.611592+00:00",
+  "limits": "HTTPS TLS + same-host checksum is not a third-party signed origin. No Spot, no mutation, PAPER only.",
+  "manifest_expected": 315,
+  "quarantined_or_unverified_urls": [],
+  "result": "FULL_315_ATTESTED",
+  "sources_by_symbol": {
+    "BCHUSDT": 63,
+    "BTCUSDT": 63,
+    "ETHUSDT": 63,
+    "SOLUSDT": 63,
+    "XRPUSDT": 63
+  },
+  "statuses": {
+    "HTTPS_CHECKSUM_AND_ALL_COLUMNS_REPLAYED": 315
+  },
+  "unique_sources": 315,
+  "verified_archives": 315
+}
