@@ -24,7 +24,7 @@ The new three came from **TDA**, filenames:
 - `Untitled (26).png`: EURUSD **1D** OANDA teaching chart with Daily RB and contextual liquidity, image ID `1bW_s5gSwq9-LLZehoeUjxAFZotDygix-`.
 - `Untitled (34).png`: EURUSD **1H** OANDA source teaching chart with `4H IMB [from]`, `1H Trigger [fractal]` and `4H Target [to]`, image ID `1XeyRLeQOwMNlcPw3wWLzNfPF0zqamC0U`.
 
-Additional relevant graphic: `POI/Untitled (10).png` (`1F...?` see manifest ID) visibly illustrates a `Raid 1H SSL` → `IMB` reaction and an apparent price scale. Instrument and **chart timeframe** are not independently identified, so status `PRICE_AXIS_MARKET_TF_UNKNOWN`, not course-attested.
+Additional relevant graphic: `POI/Untitled (10).png` (Drive ID `10eGpOY9DkYpV1vbbOymoWZ0PaSCvI_GX`) visibly illustrates a `Raid 1H SSL` → `IMB` reaction and an apparent price scale. Instrument and **chart timeframe** are not independently identified, so status `PRICE_AXIS_MARKET_TF_UNKNOWN`, not course-attested.
 
 A TDA source chart `Untitled (37).png` depicts **4H fractal raid → 1H RB new POI → 15m trigger → 5m VC**, but is a cropped chart with no verified symbol/time/price scale. It supports teaching hierarchy, **not numeric replay**.
 
