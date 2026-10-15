@@ -36,7 +36,7 @@ def main(output=None):
     assert verified["raw_csv_sha256"]==receipt["raw_csv_sha256"]
     with zipfile.ZipFile(io.BytesIO(blob)) as z:
         with z.open(FILE) as handle:
-            data=list(csv.reader(io.TextIOWrapper(handle,encoding="utf8-sig",newline="")))
+            data=list(csv.reader(io.TextIOWrapper(handle,encoding="utf-8-sig",newline="")))
     if data and data[0][0].lower()=="open_time":
         data=data[1:]
     assert len(data)==96 and verified["bars"]==96
