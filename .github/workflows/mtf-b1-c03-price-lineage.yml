@@ -1,0 +1,48 @@
+name: MTF B1 C03 - POI Price Geometry Lineage (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c03-price-lineage.yml'
+      - 'research/mtf-element-audit-v1/d05/poi_price_lineage_b1.py'
+      - 'research/mtf-element-audit-v1/d05/test_poi_price_lineage_b1.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry-and-lineage-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard existing D03 and course-v05 bytes unchanged
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/tools/strict_event_lineage_d03.py)" = 16163fb8a08439d8d3b8e5f42c4cc16b82c1c28e
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Test source-v05 as-is
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/b1-c03-v05.txt
+          grep -q 'Ran 29 tests' /tmp/b1-c03-v05.txt
+          grep -Eq '^OK$' /tmp/b1-c03-v05.txt
+      - name: Test B1 price, time, source, invalidation, replay and VC semantic boundaries
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_b1_course_d03_compatibility test_poi_touch_observer_b1 test_poi_price_lineage_b1 2>&1 | tee /tmp/b1-c03-contract.txt
+          grep -q 'Ran 48 tests' /tmp/b1-c03-contract.txt
+          grep -Eq '^OK$' /tmp/b1-c03-contract.txt
+          echo 'EVIDENCE_INTERSECTION_VERIFIED__ACADEMIC_SIGNAL_NOT_APPROVED'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c03-77-technical-source-tests
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/b1-c03-v05.txt
+            /tmp/b1-c03-contract.txt
