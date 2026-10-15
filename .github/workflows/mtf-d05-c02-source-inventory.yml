@@ -1,0 +1,48 @@
+name: MTF D05 C02 - Source Image and Route Topology QA (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-c02-source-inventory.yml'
+      - 'research/mtf-element-audit-v1/d05/C02_SOURCE_IMAGE_INVENTORY.json'
+      - 'research/mtf-element-audit-v1/d05/C02_TDA_SOURCE_ROUTE_TOPOLOGY.json'
+      - 'research/mtf-element-audit-v1/d05/test_source_image_inventory_c02.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-classification-no-trading:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify 8 folders, 14 image digests and 5 distinct academic schematic paths
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_semantic_label_gate test_source_image_inventory_c02 2>&1 | tee /tmp/d05-c02-tests.txt
+          grep -q 'Ran 22 tests' /tmp/d05-c02-tests.txt
+          grep -Eq '^OK$' /tmp/d05-c02-tests.txt
+          python - <<'PY'
+          import json
+          a=json.load(open('C02_SOURCE_IMAGE_INVENTORY.json'))
+          t=json.load(open('C02_TDA_SOURCE_ROUTE_TOPOLOGY.json'))
+          assert a['metrics']['image_assets']==72
+          assert a['metrics']['reviewed_images_with_sha256']==14
+          assert a['metrics']['numeric_price_axis_forex_only']==3
+          assert a['metrics']['independent_futures_semantic_cases_approved']==0
+          assert len(t['paths'])==5
+          assert not t['approvals']['code_semantics_verified']
+          print('SOURCE_TOPOLOGY_DOCUMENTED__SEMANTIC_APPROVAL_BLOCKED')
+          PY
+      - name: Evidence for independent repeat
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtf-d05-c02-source-topology-qa
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/d05-c02-tests.txt
