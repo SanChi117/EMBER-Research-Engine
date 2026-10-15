@@ -1,0 +1,73 @@
+{
+  "cycle": "D05_VISUAL_SOURCE_INVENTORY_PRELIMINARY",
+  "date": "2026-10-15",
+  "source": "Authenticated user's Google Drive, NOT author-provided raw chart image files",
+  "visual_course_cases_accepted": 0,
+  "notes": "Six 4480x1440 desktop screenshots of Notion teaching pages. These contain legible teaching excerpts, schematics and very small embedded chart thumbnails but no independently reproducible symbol/time/price-axis/zone boundary. Every case remains NEEDS_NUMERIC_CHART_SOURCE. No figure promoted to positive/negative golden case.",
+  "candidates": [
+    {
+      "id": "VIS-BOS-2102",
+      "drive_file_id": "1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ",
+      "course": "Entry by BOS",
+      "sha256": "df8be4c314c04b5ed6f3bfa6e13af8e3a5ccf57f947c4ef90f148ffc20c4fa39",
+      "type": "Notion desktop screenshot with two conceptual line diagrams",
+      "status": "NEEDS_NUMERIC_CHART_SOURCE"
+    },
+    {
+      "id": "VIS-SHL-2143",
+      "drive_file_id": "1gBx_bPk5jmD3LqrIORU5ZnECF5Q6sLnv",
+      "course": "Strong High & Low",
+      "sha256": "499799a640564977eb1b9488dd4d579c8d8d69b8ecead91c3d541e66a44ae4c7",
+      "type": "Annotated Strong High/Low concept diagram, unscaled",
+      "status": "SCHEMATIC_ONLY_NOT_GOLDEN"
+    },
+    {
+      "id": "VIS-SHL-2144",
+      "drive_file_id": "1sOAN3n6ZeplmYcJOYcmr_tSeuXnR4PDE",
+      "course": "Strong High & Low",
+      "sha256": "24a1b1a4186dfbed56a1898d624931cb024d080c2a7d2779b1c74049d565e61a",
+      "type": "Two schematic black-white candlestick figures with RAID BOS labels, no readable market/time-axis",
+      "status": "NEEDS_NUMERIC_CHART_SOURCE"
+    },
+    {
+      "id": "VIS-IDM-2098",
+      "drive_file_id": "1BAvuLqkNRgAqNnAkanKPH0DERDUWMziv",
+      "course": "IDM",
+      "sha256": "c5c565982bef7c75a50ecc6d6bb69c8a803f9956bf3d9e5ef622504342621877",
+      "type": "Notion explanation and thumbnail multi-TF charts; no reproducible candle timestamps",
+      "status": "NEEDS_NUMERIC_CHART_SOURCE"
+    },
+    {
+      "id": "VIS-IDM-2099",
+      "drive_file_id": "1Jhd2LCveoFZc4QFOf34NGAm7aqL-JgV1",
+      "course": "IDM",
+      "sha256": "8a801fcec9f6fb239b9a51a1e0ad26f7d2d9729cdc2d79fe1446f61c02da3201",
+      "type": "Embedded 4h/1h/15m graphic thumbnails with rectangle, no trustworthy price/time labels",
+      "status": "NEEDS_NUMERIC_CHART_SOURCE"
+    },
+    {
+      "id": "VIS-IDM-2100",
+      "drive_file_id": "1SEn0TcoqatPW03kVst6lcSI-6NbAVCq8",
+      "course": "IDM",
+      "sha256": "fd34d6c13cbba186598eface693becff1c07b0c1baf2c2dc4bd7efed33f1af7e",
+      "type": "Notion 4h/1h/15m graphic thumbnails, too reduced for time/price reconstruction",
+      "status": "NEEDS_NUMERIC_CHART_SOURCE"
+    }
+  ],
+  "required_fields_to_pass": [
+    "primary_image_sha256",
+    "symbol",
+    "exchange_market_type",
+    "tf",
+    "date_time_utc",
+    "open_at",
+    "known_at",
+    "entry_or_zone_price_bounds",
+    "correct_model_class",
+    "negative_case_reason",
+    "independent_replay_series_digest"
+  ],
+  "all_width": 4480,
+  "all_height": 1440,
+  "semantic_approval": "BLOCKED_UNTIL_AUTHOR_CHART_GEOMETRY"
+}
