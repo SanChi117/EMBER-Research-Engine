@@ -1,0 +1,89 @@
+name: MTF A063 - B1 C02 POI Diagnostics Ledger
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a063-poi-diagnostics-journal.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  append-verified-a063:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all A001-A062 past actions with immutable evidence
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a063-before.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a063-before.json'))
+          assert j['events']==62 and j['validations_pass']
+          print('A001_A062_EVIDENCE_PASS')
+          PY
+      - name: Run 29 original and 21 B1 tests without changing source
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a063-original.txt
+          grep -q 'Ran 29 tests' /tmp/a063-original.txt
+          grep -Eq '^OK$' /tmp/a063-original.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_b1_course_d03_compatibility test_poi_touch_observer_b1 2>&1 | tee /tmp/a063-b1.txt
+          grep -q 'Ran 21 tests' /tmp/a063-b1.txt
+          grep -Eq '^OK$' /tmp/a063-b1.txt
+      - name: Append A063 only with available SHA-linked evidence
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A063 \
+            --cycle B1_C02_POI_READ_ONLY_DIAGNOSTICS \
+            --planned "Extend existing unmodified PoiLifecycle with separate evidence-only reporting of first test, later contact and post-first broken-zone warning, with zero trading readiness" \
+            --executed "Built read-only POI observer, 13 source-limited checks, 29 original unchanged course unit tests and 8 D03 seam tests, GitHub Actions 38783385574 50/50 PASS" \
+            --result "FIRST_TEST_CANDIDATE, LATER_CONTACT_UNCLASSIFIED and POST_FIRST_CLOSE_BREACH_NEEDS_RULE are now separately traceable with closed-bar and as-of restrictions; no trade plan or source-unsupported second-test rule" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Rejected NaN zones, noncontiguous candles, invalid as_of, future suffix leakage, mistaking continuous zone contact for second entry and hiding post-first zone close breaches. SOURCE NEEDS_RULE remains open." \
+            --evidence cycles/B1_C02_POI_READ_ONLY_DIAGNOSTICS.md \
+            --evidence d05/poi_touch_observer_b1.py \
+            --evidence d05/test_poi_touch_observer_b1.py
+      - name: Verify all 63 events and every retained SHA proof
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a063-after.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a063-after.json'))
+          assert j['events']==63 and j['validations_pass']
+          print('A001_A063_EVIDENCE_PASS',j['tip_sha256'])
+          PY
+      - name: Commit journal append only
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m "audit: A063 first/repeated POI diagnostic proof; no trades [skip ci]"
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a063-poi-observer-immutable-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a063-before.json
+            /tmp/a063-after.json
+            /tmp/a063-original.txt
+            /tmp/a063-b1.txt
