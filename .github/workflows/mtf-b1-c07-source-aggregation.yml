@@ -1,0 +1,64 @@
+name: MTF B1 C07 - Closed 15m to 1H 4H 1D Source-Parity (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c07-source-aggregation.yml'
+      - 'research/mtf-element-audit-v1/d05/mtf_c08_aggregation_b1.py'
+      - 'research/mtf-element-audit-v1/d05/test_mtf_c08_aggregation_b1.py'
+      - 'research/mtf-element-audit-v1/tests/probe_b1_c07_mtf_original_daily.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-vs-derived-timeframes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard original C08 USD-M source manifests and unchanged academic primitives
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Run 50 inherited and source-resampling falsification tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/b1-c07-v05.txt
+          grep -q 'Ran 29 tests' /tmp/b1-c07-v05.txt
+          grep -Eq '^OK$' /tmp/b1-c07-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_mtf_c08_aggregation_b1 2>&1 | tee /tmp/b1-c07-unit.txt
+          grep -q 'Ran 21 tests' /tmp/b1-c07-unit.txt
+          grep -Eq '^OK$' /tmp/b1-c07-unit.txt
+      - name: Download original 15m and 1d Futures C08 ZIPs and require UTC OHLCV parity
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_b1_c07_mtf_original_daily.py /tmp/b1-c07-real.json 2>&1 | tee /tmp/b1-c07-real.log
+          python - <<'PY'
+          import json
+          o=json.load(open('/tmp/b1-c07-real.json'))
+          assert (o['source_15m_rows'],o['source_1d_rows'])==(96,1)
+          assert (o['complete_1h'],o['complete_4h'],o['complete_1d'])==(24,6,1)
+          assert o['partial_day_95_does_not_emit_daily']
+          assert o['ohlcv_exact_match'] is True
+          assert o['academy_mtf_bias_approved'] is False
+          assert o['trade_plan_created'] is False
+          assert o['readiness']=='NOT_TRADE_READY'
+          print('C08_15M_DERIVED_1H_4H_1D_EQUALS_ORIGINAL_1D_NO_ACADEMIC_TRADING')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c07-original-source-parity-verdict
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/b1-c07-v05.txt
+            /tmp/b1-c07-unit.txt
+            /tmp/b1-c07-real.json
+            /tmp/b1-c07-real.log
