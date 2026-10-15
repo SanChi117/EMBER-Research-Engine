@@ -1,0 +1,61 @@
+name: MTF A065 - Verify C08-anchored B1/C04 Evidence Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a065-c08-proof-verification.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-all-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check all 65 SHA-chain records and immutable evidence bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a065-proof.json
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/a065-proof.json'))
+          assert q['events']==65 and q['validations_pass']
+          with open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') as fh:
+              j=[json.loads(x) for x in fh if x.strip()]
+          assert j[-1]['action_id']=='A065'
+          assert j[-1]['record_sha256']=='72b4471e8ef56a01b8720d5c87b2dc3c4f377645aeb3453055391887cfc11371'
+          assert 'zero academic trade cases' in j[-1]['observed_result']
+          print('SHA_CHAIN_65_AND_SOURCE_EVIDENCE_ACCEPTED')
+          PY
+      - name: Verify all 315 C08 receipt set anchored at 5 fixed bundle Git blobs
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BCHUSDT_63_RECEIPTS.json)" = 35c51c28ee83c05050d75940563ed352277871fa
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_ETHUSDT_63_RECEIPTS.json)" = 8da28253c04f230a9e737b1075d30fc981628dfc
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_SOLUSDT_63_RECEIPTS.json)" = 04d7b6aca9c61216d9c311591c20aef6eb5e6afe
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_XRPUSDT_63_RECEIPTS.json)" = b36184a5b7153e96f338b87694d8eb8bab4b5191
+      - name: Rerun 21 fail-closed source-to-price technical tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c08_source_bound_poi_b1 2>&1 | tee /tmp/a065-contract.txt
+          grep -q 'Ran 21 tests' /tmp/a065-contract.txt
+          grep -Eq '^OK$' /tmp/a065-contract.txt
+          echo 'SOURCE_OHLCV_TECHNICAL_TESTS_PASS__NO_ACADEMIC_READY'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a065-source-journal-65-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a065-proof.json
+            /tmp/a065-contract.txt
