@@ -1,0 +1,47 @@
+name: MTF D05 C04 - Academic Reaction Illustration Source Gate
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-c04-reaction-illustrations.yml'
+      - 'research/mtf-element-audit-v1/d05/C04_LEVEL_REACTION_SOURCE_CASES.json'
+      - 'research/mtf-element-audit-v1/d05/reaction_illustration_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_reaction_illustration_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  course-reaction-source-fidelity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-only positive, negative and mutation checks
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_semantic_label_gate test_source_image_inventory_c02 test_c03_58_image_source_review test_reaction_illustration_gate 2>&1 | tee /tmp/d05-c04-tests.txt
+          grep -q 'Ran 51 tests' /tmp/d05-c04-tests.txt
+          grep -Eq '^OK$' /tmp/d05-c04-tests.txt
+          python - <<'PY'
+          import json
+          from reaction_illustration_gate import validate_source_cases
+          doc=json.load(open('C04_LEVEL_REACTION_SOURCE_CASES.json'))
+          inv=json.load(open('C02_SOURCE_IMAGE_INVENTORY.json'))
+          report=validate_source_cases(doc,inv)
+          assert report['source_level_cases']==8
+          assert report['academic_market_approvals']==0
+          assert report['ready_trade_plans']==0
+          assert report['unresolved_source_conflicts']>=1
+          print(json.dumps(report,ensure_ascii=False,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-d05-c04-qualitative-source-test-report
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/d05-c04-tests.txt
