@@ -1,0 +1,173 @@
+{
+  "schema": "EMBER_B1_C15_ORIGINAL_5M_NATIVE_C08_15M_DERIVED_MTF_PRICE_GRID_V1",
+  "origin_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38934933859",
+  "market": "BINANCE_USDM_FUTURES",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "BCHUSDT"
+  ],
+  "days": [
+    "2026-10-01",
+    "2026-10-02"
+  ],
+  "preserved_f06_source_receipt_blob": "a5bf2105d1c611517a8d127d5e1f8cb622720162",
+  "preserved_c08_archive_aggregate_blob": "4205ad3118a30bbd69c412e165c7c5ce3560195d",
+  "original_5m_zip_count": 10,
+  "original_native_15m_c08_zip_count": 10,
+  "original_5m_bars": 2880,
+  "independently_crosschecked_closed_tf_candles": {
+    "15m": 960,
+    "1h": 240,
+    "4h": 60,
+    "1d": 10
+  },
+  "total_exact_ohlcv_equalities": 1270,
+  "source_days": [
+    {
+      "symbol": "BTCUSDT",
+      "date": "2026-10-01",
+      "original_5m_zip_sha256": "10cd0734819af381d7cd032c84ba4a9a080a57bba1f97e8e71d45a16f27b067e",
+      "original_5m_csv_sha256": "77f4af057831db20ac57bfc50fee3c73a63d0b474d21c89e08d51ec1f2588243",
+      "original_15m_zip_sha256": "07fad98f8134a909c5d4a4862e00b7583a90104ad5a0f17414ccab8968cb251b",
+      "original_15m_csv_sha256": "5cee124dfdc3f9be47f17220cdaeb387784f17aea0b87a575c37e01d0e86ea24"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "date": "2026-10-02",
+      "original_5m_zip_sha256": "2a492563746eba6c3689b90c00a081bfce3ceab86a06493e80f22c4d55e8c7ea",
+      "original_5m_csv_sha256": "14dc88dd66d78f44b73daa9243d62e35d539ace64d26adb0ba4b32aefb599c73",
+      "original_15m_zip_sha256": "62742a246cee4ec9363e96f2270e00e9f23fd54f137c08ba732113a7a2e284be",
+      "original_15m_csv_sha256": "0268156b2e9cb0d8a61ccb6cc42fc74237b44205abc77ea889f62ea8a17cc705"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "date": "2026-10-01",
+      "original_5m_zip_sha256": "3dcf98cdbcf8e8a1d5bad7c454509b2e73dba82b34aad841b8c277cbe2be620b",
+      "original_5m_csv_sha256": "a8062ebf5849dd5773dc4490b0bd892084407a93d9a4354a6a257556150bef71",
+      "original_15m_zip_sha256": "3c2621fada8ae069986c661152738c775a1f9c17515a4abaf221b773ea97ce6a",
+      "original_15m_csv_sha256": "9e2d3e0abf5c2d3bacc2943e776ee9b884d59526c1fbe61448034ba4ccca7e52"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "date": "2026-10-02",
+      "original_5m_zip_sha256": "531c33307bf9a355cc9f1f364c77d394940f0bca68b4e69f3e3dfac771dcc39b",
+      "original_5m_csv_sha256": "fd31423b1efc2aa3dd5831168a2e34836b1154a2c1d25dbe01ba3a1e13c1827c",
+      "original_15m_zip_sha256": "1920007a2ad141d54a00ec5a8ead8c9ac88fc7e82f5bc508bf991475fc9a5745",
+      "original_15m_csv_sha256": "ebcaa3ba23c705ac96ce659730a199ae134c0f5ace1ebb8ab635e21b940459eb"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "date": "2026-10-01",
+      "original_5m_zip_sha256": "58ec1fc806b22c2c7ceee394ca5737ab04d10f508c0197610bdba408868ee3b0",
+      "original_5m_csv_sha256": "875f77cb4930c7cfc9c1dee575101d32c1a4aef58fe0f15ea7308dd08b2ad33d",
+      "original_15m_zip_sha256": "a003a9184850ff39227e56712a37b41b34c09d28ec64b20262a3c40adf4ba22e",
+      "original_15m_csv_sha256": "ae6363cd5b7234373c1120a11f2814ddcefee7ed7850ef8609416995951236fe"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "date": "2026-10-02",
+      "original_5m_zip_sha256": "878c1d9ca3d244e63255fe70ce085c0907be6ec80c7caf98264052aca170fe81",
+      "original_5m_csv_sha256": "c915afde158d27eb2d5292e2d0c351d399c029011544b384f590ea478c9acdd3",
+      "original_15m_zip_sha256": "7a545bce3c9c5f1db99202fd4d4a51f3d6c01f8a357b791b17d6daa808275776",
+      "original_15m_csv_sha256": "8226d72d17b99843e3b24eb71676028680f31c7a1fa18978a16287c9cad5f847"
+    },
+    {
+      "symbol": "XRPUSDT",
+      "date": "2026-10-01",
+      "original_5m_zip_sha256": "43ee37d87b1ae4881ccbd09a003505121259b7209c8be036e8bd3872d687aba3",
+      "original_5m_csv_sha256": "e9bcdd098d1b6da222972a24587a7c2b51fc528b62e7ebccbb6b1fc1b34250c7",
+      "original_15m_zip_sha256": "a4a27966006a93d49c5dd320b9f0bdbf290d960a0d6853eface63a72c1c6621f",
+      "original_15m_csv_sha256": "7f052cf38f45a8c257d17d67ad779c9406c4776ba14d14bb7e075d7593c4cf6c"
+    },
+    {
+      "symbol": "XRPUSDT",
+      "date": "2026-10-02",
+      "original_5m_zip_sha256": "dbad8bb5de24bb132dbc2b2c6883528b9e59c156100e8aeac785c6f4061d64ca",
+      "original_5m_csv_sha256": "39713a221c33e1c4ab9be8c62f26a03a602480085e8971c8b3f67b8ba4bea9d1",
+      "original_15m_zip_sha256": "04928f59a57b577c46553a358ff92da969737179d6afc5b4f14f6871e91acefa",
+      "original_15m_csv_sha256": "701cf94b6e592f60d6dbd3ccd813893ae67cf909c8a1426295fc2e71fca8ee30"
+    },
+    {
+      "symbol": "BCHUSDT",
+      "date": "2026-10-01",
+      "original_5m_zip_sha256": "3792c72f18f5292a6e036380f4856213c3441884ad9ae7b0dd1aba8d20f02168",
+      "original_5m_csv_sha256": "b8d98a4f08dab46cb199c9a2f8955eca627014107c687072899f16ae2033fae6",
+      "original_15m_zip_sha256": "f8067b373b982b1e9cfd000c2d87285edc72422f5ca18d12c2692eb361b96207",
+      "original_15m_csv_sha256": "2495ee3ba7905f1176f1dfbd7490176e371432c9fa221465f736f01d87f3e9ce"
+    },
+    {
+      "symbol": "BCHUSDT",
+      "date": "2026-10-02",
+      "original_5m_zip_sha256": "3dac40988e662c5f7e008236150cd6288e5026f0ec30e2c851915e2fc68b0030",
+      "original_5m_csv_sha256": "e09a883ca3f08c9e166cc76eecf07a1450a9446cbf237026007f967582e1c269",
+      "original_15m_zip_sha256": "cbcb5799460762588a9a0401bb416750ca1c5a46c2b4a65d3acba9a67ab56aa8",
+      "original_15m_csv_sha256": "6c5e307df659613afa8a773e03236915c0c92133beea55f871cecc8677f0714f"
+    }
+  ],
+  "observations": [
+    {
+      "symbol": "BTCUSDT",
+      "full_prefix_closed_candles": {
+        "15m": 192,
+        "1d": 2,
+        "1h": 48,
+        "4h": 12
+      },
+      "closed_daily_count_at_second_day_plus_1h": 1,
+      "author_1d_4h_poi_context_certified": false
+    },
+    {
+      "symbol": "ETHUSDT",
+      "full_prefix_closed_candles": {
+        "15m": 192,
+        "1d": 2,
+        "1h": 48,
+        "4h": 12
+      },
+      "closed_daily_count_at_second_day_plus_1h": 1,
+      "author_1d_4h_poi_context_certified": false
+    },
+    {
+      "symbol": "SOLUSDT",
+      "full_prefix_closed_candles": {
+        "15m": 192,
+        "1d": 2,
+        "1h": 48,
+        "4h": 12
+      },
+      "closed_daily_count_at_second_day_plus_1h": 1,
+      "author_1d_4h_poi_context_certified": false
+    },
+    {
+      "symbol": "XRPUSDT",
+      "full_prefix_closed_candles": {
+        "15m": 192,
+        "1d": 2,
+        "1h": 48,
+        "4h": 12
+      },
+      "closed_daily_count_at_second_day_plus_1h": 1,
+      "author_1d_4h_poi_context_certified": false
+    },
+    {
+      "symbol": "BCHUSDT",
+      "full_prefix_closed_candles": {
+        "15m": 192,
+        "1d": 2,
+        "1h": 48,
+        "4h": 12
+      },
+      "closed_daily_count_at_second_day_plus_1h": 1,
+      "author_1d_4h_poi_context_certified": false
+    }
+  ],
+  "provenance": "Independent actual F06 original 5m & native C08 original 15m ZIP+CSV SHA + same-host .CHECKSUM; 1h,4h,1d only exact Decimal-derived, NOT native 1h/4h/1d archives",
+  "native_higher_tf_1d_4h_1h_zip_claims": 0,
+  "academic_author_labelled_daily_parent_poi": 0,
+  "academic_entry_ready": 0,
+  "readiness": "NOT_TRADE_READY",
+  "unresolved": "2 days insufficient for independently source-labelled author HTF 1d/4h POI/StrongHL. No author-labelled trades, and same-host CHECKSUM not signed publisher attestation"
+}
