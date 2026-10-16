@@ -1,0 +1,118 @@
+{
+  "schema": "EMBER_B1_C17_NATIVE_C08_1D_4H_RESEARCH_GEOMETRY_V1",
+  "baseline_reused_original_c08_c16_git_blob": "bdaa008ce719254507ea95231cdc630bfa85cd67",
+  "source_replay_independent_ci": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38942172431",
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "market": "BINANCE_USDM_FUTURES",
+  "original_native_zip_sources": 30,
+  "native_15m_closed": 15360,
+  "derived_4h_closed": 960,
+  "independent_native_1d_equalities": 160,
+  "geometry_concept": "frozen_v05_confirmed_imb_three_closed_bar_wick_gap",
+  "observations": [
+    {
+      "symbol": "BTCUSDT",
+      "checked_native_1d": 32,
+      "derived_closed_4h": 192,
+      "1d": {
+        "gap_candidates": 4,
+        "with_later_contact": 4,
+        "without_later_contact": 0,
+        "with_repeat_contact": 3
+      },
+      "4h": {
+        "gap_candidates": 30,
+        "with_later_contact": 25,
+        "without_later_contact": 5,
+        "with_repeat_contact": 23
+      }
+    },
+    {
+      "symbol": "ETHUSDT",
+      "checked_native_1d": 32,
+      "derived_closed_4h": 192,
+      "1d": {
+        "gap_candidates": 7,
+        "with_later_contact": 6,
+        "without_later_contact": 1,
+        "with_repeat_contact": 5
+      },
+      "4h": {
+        "gap_candidates": 31,
+        "with_later_contact": 26,
+        "without_later_contact": 5,
+        "with_repeat_contact": 24
+      }
+    },
+    {
+      "symbol": "SOLUSDT",
+      "checked_native_1d": 32,
+      "derived_closed_4h": 192,
+      "1d": {
+        "gap_candidates": 5,
+        "with_later_contact": 4,
+        "without_later_contact": 1,
+        "with_repeat_contact": 2
+      },
+      "4h": {
+        "gap_candidates": 31,
+        "with_later_contact": 26,
+        "without_later_contact": 5,
+        "with_repeat_contact": 24
+      }
+    },
+    {
+      "symbol": "XRPUSDT",
+      "checked_native_1d": 32,
+      "derived_closed_4h": 192,
+      "1d": {
+        "gap_candidates": 4,
+        "with_later_contact": 4,
+        "without_later_contact": 0,
+        "with_repeat_contact": 3
+      },
+      "4h": {
+        "gap_candidates": 29,
+        "with_later_contact": 26,
+        "without_later_contact": 3,
+        "with_repeat_contact": 26
+      }
+    },
+    {
+      "symbol": "BCHUSDT",
+      "checked_native_1d": 32,
+      "derived_closed_4h": 192,
+      "1d": {
+        "gap_candidates": 6,
+        "with_later_contact": 4,
+        "without_later_contact": 2,
+        "with_repeat_contact": 3
+      },
+      "4h": {
+        "gap_candidates": 32,
+        "with_later_contact": 29,
+        "without_later_contact": 3,
+        "with_repeat_contact": 27
+      }
+    }
+  ],
+  "totals": {
+    "gap_candidates_1d": 26,
+    "gap_candidates_4h": 153,
+    "with_contact_1d": 22,
+    "with_contact_4h": 132,
+    "without_contact_1d": 4,
+    "without_contact_4h": 21
+  },
+  "asof_validation": "C17_PREFIX_CUTOFF_EQUALS_INDEPENDENT_C16_SOURCE_PREFIX",
+  "no_author_golden_labels": true,
+  "author_golden_source_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+  "author_approved_poi": 0,
+  "author_approved_stronghl": 0,
+  "author_approved_vc": 0,
+  "trade_ready": 0,
+  "limitation": "32-day 1D/4H geometric levels are candidates, neither author-labelled Binance Futures structures nor trading signals; 4H derived from original 15m; no independent original 32d 5m and no PnL"
+}
