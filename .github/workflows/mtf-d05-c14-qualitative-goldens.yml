@@ -22,6 +22,7 @@ jobs:
       - name: Pin original source images and original v05 and C13 engineering evidence
         run: |
           set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json)" = 82a80b053712ee819ceb7d83178f672db4030462
           test "$(git hash-object research/mtf-element-audit-v1/d05/C04_LEVEL_REACTION_SOURCE_CASES.json)" = bf764d34b9a1c4bfe06dca6dbe50557b244df0f4
           test "$(git hash-object research/mtf-element-audit-v1/d05/C03_58_IMAGE_REVIEW.json)" = c9b25c8912700f05cc1518c6d97555e11f6b9dc3
           test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
