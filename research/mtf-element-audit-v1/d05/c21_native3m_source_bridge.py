@@ -142,3 +142,25 @@ def reconcile_native_3m(archives,c08,*,as_of_ms):
         raise C21Rejected("MISSING_THREE_3M_ARCHIVES")
     full=[]
     shas=[]
+
+    for a,period,start in zip(archives,PERIODS,STARTS):
+        if (not isinstance(a,Original3mArchive) or a.symbol!=c08.symbol
+            or a.period!=period or a.readiness!="NOT_TRADE_READY"):
+            raise C21Rejected("WRONG_ORIGINAL_3M_ARCHIVE")
+        verified_name(a.url,c08.symbol,period)
+        if not ZIPSHA.fullmatch(a.zip_sha) or not ZIPSHA.fullmatch(a.csv_sha):
+            raise C21Rejected("INVALID_3M_RECEIPT_DIGEST")
+        count=(30*DAY if period=="2026-09" else DAY)//THREE
+        if len(a.rows)!=count:raise C21Rejected("INCOMPLETE_3M_SOURCE_ROWS")
+        for i,r in enumerate(a.rows):
+            at=start+i*THREE
+            if (not isinstance(r,Original3mRow) or r.symbol!=c08.symbol
+                or r.start_ms!=at or r.known_ms!=at+THREE
+                or r.zip_sha!=a.zip_sha or r.raw_id!=a.zip_sha+":"+str(at)
+                or not all(isinstance(x,Decimal) and x.is_finite() for x in
+                    (r.open,r.high,r.low,r.close,r.volume))
+                or not (0<r.low<=min(r.open,r.close)<=max(r.open,r.close)<=r.high
+                    and r.volume>=0)):
+                raise C21Rejected("ALTERED_NATIVE_3M_SOURCE_ROWS")
+        full.extend(a.rows)
+        shas.append(a.zip_sha)
