@@ -17,7 +17,7 @@ C15 независимо сравнил 5m → оригинальные C08 15m 
 
 ## Независимая сеть и измеренный результат
 
-[Первый CI с 30 raw Binance ZIP и 214 тестами — 38937390001](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38937390001) **SUCCESS**. [Повторный CI с сохранённой 30-источниковой квитанцией 38937575008](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38937575008) **SUCCESS**. Финальная SHA-pinned проверка пяти оригинальных C08 receipts запускается отдельно.
+[Первый CI с 30 raw Binance ZIP и 214 тестами — 38937390001](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38937390001) **SUCCESS**. [Повторный CI с сохранённой 30-источниковой квитанцией 38937575008](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38937575008) **SUCCESS**. [Финальная повторная CI 38938229365](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938229365) — **SUCCESS**, повторно **214 PASS + 30 оригинальных ZIP SHA** с пятью дополнительно Git-закреплёнными C08 batches и C16 квитанцией.
 
 | Ценовая проверка | На один символ | Все 5 символов | Доказательство |
 |---|---:|---:|---|
@@ -28,6 +28,13 @@ C15 независимо сравнил 5m → оригинальные C08 15m 
 | **Исходники сети всего** | 6 ZIP | **30 ZIP** | frozen C08 SHA & same-host HTTPS CHECKSUM |
 
 Пример as-of: после первого часа 2 октября доступна 1D за 1 октября, но **ещё недоступна дневная свеча за 2 октября**. Никакое предварительное high/low внутри этой будущей дневной свечи не превращается в закрытый 1D-контекст.
+
+## История неудачных контрпроверок и исправлений
+
+- [CI 38937085766](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38937085766) **FAIL** одного негативного теста: чужой символ был правильно отклонён на *раннем* source gate, но тест ожидал название *поздней* ошибки. Исправлено ожидание, не защита.
+- [CI 38937728876](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38937728876) **FAIL** после 214 PASS: при сборке C16 JSON было пропущено поле as-of 1D count (`undefined` при JSON сериализации). Фактические архивы корректны; свидетельство дополнено значением **31** закрытая 1D на 2 октября, 01:00 UTC.
+- [CI 38938115241](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938115241) **FAIL** после 214 PASS и полного скачивания 30 ZIP: в самостоятельном проверяющем модуле применялось короткое имя поля вместо `earlier_asof_second_oct_plus_1h_native_1d_count`. Поле исправлено; обе границы as-of сверены.
+- [Финальная CI 38938229365](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938229365) **SUCCESS**, все 214 unit и 30 original C08 ZIP+CSV sha по пяти монетам, 160/160 native 1D и as-of **31/32**. C16 receipt до добавления в append-only SHA журнал закреплён Git blob `bdaa008ce719254507ea95231cdc630bfa85cd67`.
 
 ## Что НЕ подтверждено
 
