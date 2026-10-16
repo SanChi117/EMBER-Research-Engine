@@ -23,9 +23,16 @@ FIELDS=(1,2,3,4,5)
 
 def main(path=None):
     five=download_source_5m(URL5,40)
+    receipt=json.loads((ROOT/"evidence"/"f03"/"F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json").read_text(encoding="utf8"))
+    assert receipt["schema"]=="EMBER_D05_F03_5M_SOURCE_RECEIPT_V1"
+    assert receipt["original_zip_url"]==URL5
+    assert receipt["original_zip_sha256"]==five.zip_sha256
+    assert receipt["original_raw_csv_sha256"]==five.raw_csv_sha256
+    assert receipt["academic_vc_certified"] is False and receipt["5m_under_frozen_c08_315"] is False
     assert len(five.rows)==288 and five.day_start_ms==DAY
     c08,_=_locked_receipt("BTCUSDT","15m",DAY,ROOT/"evidence"/"c08")
     assert c08["url"]==URL15
+    assert c08["zip_sha256"]==receipt["cross_checked_original_c08_15m_zip_sha256"]
     raw15=checked_download(URL15,25_000_000,40)
     checksum15=checked_download(URL15+".CHECKSUM",1024,40)
     verified=verify_raw_zip(URL15,raw15,checksum15)
