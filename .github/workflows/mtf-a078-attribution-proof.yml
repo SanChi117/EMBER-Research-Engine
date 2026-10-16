@@ -1,0 +1,61 @@
+name: MTF A078 — Verify Source-Causal Ambiguity Proof Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a078-attribution-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-78-source-proof-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify A001-A078 chain, each source evidence SHA and evidence bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a078-evidence.json
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/a078-evidence.json'))
+          assert q['events']==78 and q['validations_pass']
+          rows=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert rows[-1]['action_id']=='A078'
+          assert rows[-1]['record_sha256']=='c13105a637238a22c9bdcdd19a7d0ffef46a41984add4082a35899043dbab100'
+          assert 'approvals remain 0' in rows[-1]['observed_result']
+          print('A001_A078_FULL_CHAIN_AND_SOURCE_SHA_EVIDENCE_VERIFIED')
+          PY
+      - name: Original course primitives, F06, C11, C12 immutable source receipts
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f06/F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json)" = a5bf2105d1c611517a8d127d5e1f8cb622720162
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c11/C11_F06_SOURCE_PRICE_CANDIDATE_DIAGNOSTICS.json)" = 513c950c311efc12fab95ce64f4ac47f0f6003f3
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c12/C12_CAUSAL_AMBIGUITY_F06_DIAGNOSTIC.json)" = a18e62776584ad428ad74c254d864c59dd540984
+      - name: Recheck 29 original and 64 source and attribution graph adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a078-course.txt
+          grep -q 'Ran 29 tests' /tmp/a078-course.txt
+          grep -Eq '^OK$' /tmp/a078-course.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate 2>&1 | tee /tmp/a078-graph.txt
+          grep -q 'Ran 64 tests' /tmp/a078-graph.txt
+          grep -Eq '^OK$' /tmp/a078-graph.txt
+          echo 'A078_COMPLETE_78_PROOFS_93_TESTS_PASS_ZERO_AUTHOR_ATTESTED_VC'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a078-ambiguity-original-evidence-graph
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a078-evidence.json
+            /tmp/a078-course.txt
+            /tmp/a078-graph.txt
