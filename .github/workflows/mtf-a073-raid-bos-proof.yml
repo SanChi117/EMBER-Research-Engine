@@ -1,0 +1,59 @@
+name: MTF A073 - Verify Real Raid and BOS Price Evidence Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a073-raid-bos-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-source-linked-73-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify all 73 previous SHA evidence journal entries
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a073-proof.json
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/a073-proof.json'))
+          assert q['events']==73 and q['validations_pass']
+          records=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert records[-1]['action_id']=='A073'
+          assert records[-1]['record_sha256']=='de691244b3ded6f1bf0d6d6508a4c96e2881f180b958f1557b4005d982eecb8b'
+          assert '0 ready trades' in records[-1]['observed_result']
+          print('A001_A073_ALL_PINNED_GEOMETRIC_SOURCE_EVIDENCE_VERIFIED')
+          PY
+      - name: Original F03 5m receipt and course v05 files untouched
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f03/F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json)" = 7e5bc374b4e4cceaf01325b16e42631dad0ec9db
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Rerun all 70 original source and OHLCV geometric tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a073-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a073-v05.txt
+          grep -Eq '^OK$' /tmp/a073-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_f03_5m_original_source test_c09_source_5m_raid_bos_geometry 2>&1 | tee /tmp/a073-geometry.txt
+          grep -q 'Ran 41 tests' /tmp/a073-geometry.txt
+          grep -Eq '^OK$' /tmp/a073-geometry.txt
+          echo '73_SOURCE_CHAIN_ENTRIES_AND_70_READ_ONLY_RAID_BOS_TESTS_PASS_NO_READY'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a073-price-backed-raid-bos-sha-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a073-proof.json
+            /tmp/a073-v05.txt
+            /tmp/a073-geometry.txt
