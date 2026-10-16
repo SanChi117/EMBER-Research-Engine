@@ -71,7 +71,8 @@
       "original_native_15m_bars": 3072,
       "derived_closed_1h_bars": 768,
       "derived_closed_4h_bars": 192,
-      "exact_matched_native_1d_bars": 32
+      "exact_matched_native_1d_bars": 32,
+      "asof_oct2_01_native1d_count": 31
     },
     {
       "symbol": "ETHUSDT",
@@ -128,7 +129,8 @@
       "original_native_15m_bars": 3072,
       "derived_closed_1h_bars": 768,
       "derived_closed_4h_bars": 192,
-      "exact_matched_native_1d_bars": 32
+      "exact_matched_native_1d_bars": 32,
+      "asof_oct2_01_native1d_count": 31
     },
     {
       "symbol": "SOLUSDT",
@@ -185,7 +187,8 @@
       "original_native_15m_bars": 3072,
       "derived_closed_1h_bars": 768,
       "derived_closed_4h_bars": 192,
-      "exact_matched_native_1d_bars": 32
+      "exact_matched_native_1d_bars": 32,
+      "asof_oct2_01_native1d_count": 31
     },
     {
       "symbol": "XRPUSDT",
@@ -242,7 +245,8 @@
       "original_native_15m_bars": 3072,
       "derived_closed_1h_bars": 768,
       "derived_closed_4h_bars": 192,
-      "exact_matched_native_1d_bars": 32
+      "exact_matched_native_1d_bars": 32,
+      "asof_oct2_01_native1d_count": 31
     },
     {
       "symbol": "BCHUSDT",
@@ -299,7 +303,8 @@
       "original_native_15m_bars": 3072,
       "derived_closed_1h_bars": 768,
       "derived_closed_4h_bars": 192,
-      "exact_matched_native_1d_bars": 32
+      "exact_matched_native_1d_bars": 32,
+      "asof_oct2_01_native1d_count": 31
     }
   ],
   "source_tier": "HTTPS_ZIP_SAME_HOST_CHECKSUM_AND_PREVIOUSLY_FROZEN_C08_SHA_NOT_THIRD_PARTY_SIGNATURE",
