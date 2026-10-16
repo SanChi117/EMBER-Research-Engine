@@ -7,21 +7,35 @@ Crosscheck all 3,072 native 15m OHLCV against 9,216 native 5m Decimal triples
 per symbol. No author-labelled 1H raid / BOS signals or live trades.
 """
 from __future__ import annotations
-import sys,json
+import sys,json,urllib.request,urllib.parse
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 for d in (ROOT/"d05",ROOT/"tools",ROOT/"tests"):sys.path.insert(0,str(d))
-from verify_d04_full_manifest_c08 import checked_download
+from strict_vision_d04 import _SingleHostRedirect
 from probe_c16_32day_native_htf_sources import load_original,SYMS,DATES,STARTS
 from c16_c08_monthly_daily_htf_lineage import extended_32day_prefix,END,OCT_START,DAY
 from c20_original_32day_native5m_lineage import (
-    parse_original_native5m,reconcile_32day_native5m)
+    parse_original_native5m,reconcile_32day_native5m,_trust_path)
 
 def original_5m(symbol,period):
     group="monthly" if period=="2026-09" else "daily"
     url=f"https://data.binance.vision/data/futures/um/{group}/klines/{symbol}/5m/{symbol}-5m-{period}.zip"
-    binary=checked_download(url,25_000_000,40)
-    checksum=checked_download(url+".CHECKSUM",1024,40)
+    # Frozen D04 restricts its sources to 15m/1d, correctly rejects new 5m.
+    # Use the same host-only HTTPS redirect discipline with a separately
+    # validated exact 5m Futures archive path; NEVER weaken D04's allowlist.
+    _trust_path(url,period,symbol)
+    opener=urllib.request.build_opener(_SingleHostRedirect())
+    def checked_5m_http(target,limit):
+        with opener.open(urllib.request.Request(target,headers={
+              "User-Agent":"EMBER-C20-original-5m-research/1.0"}),timeout=40) as res:
+            final=urllib.parse.urlsplit(res.geturl())
+            if final.scheme!="https" or final.netloc!="data.binance.vision":
+                raise RuntimeError("C20_REDIRECT_TO_UNTRUSTED_HOST")
+            data=res.read(limit+1)
+        if len(data)>limit:raise RuntimeError("C20_ORIGINAL_5M_OVERSIZE")
+        return data
+    checksum=checked_5m_http(url+".CHECKSUM",1024)
+    binary=checked_5m_http(url,25_000_000)
     a=parse_original_native5m(url,binary,checksum,symbol=symbol,period=period)
     assert a.symbol==symbol and a.readiness=="NOT_TRADE_READY"
     return a,{"date":period,"url":url,"original_zip_sha256":a.zip_sha256,
