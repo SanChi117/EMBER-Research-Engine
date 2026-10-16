@@ -60,12 +60,6 @@ def compare_geometric_confirmation_routes(
     if not isinstance(bos,TwoDayReview) or not isinstance(poi,AttributionAudit):
         raise BranchRejected("INVALID_PRICE_SOURCE_REVIEW_PAIR")
     if (bos.symbol!=poi.symbol or bos.as_of_ms!=poi.as_of_ms
-        or bos.closed_5m_count!=poi.as_of_ms*0+bos.closed_1h_count*12
-        or poi.closed_1h_count*12>poi.closed_5m_count) if hasattr(poi,"closed_1h_count") else False:
-        # AttributionAudit intentionally does not copy entire price prefix;
-        # the explicit simple cross-review guards below are authoritative.
-        raise BranchRejected("UNSUPPORTED_OR_INCOMPATIBLE_SOURCE_REVIEW")
-    if (bos.symbol!=poi.symbol or bos.as_of_ms!=poi.as_of_ms
         or bos.confirmed_1h_raids!=poi.total_known_raid_candidates):
         raise BranchRejected("SOURCE_OR_RAID_COUNTS_DISAGREE")
     if (bos.readiness!="NOT_TRADE_READY" or poi.readiness!="NOT_TRADE_READY"
