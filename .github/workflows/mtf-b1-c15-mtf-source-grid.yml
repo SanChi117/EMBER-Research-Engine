@@ -35,10 +35,44 @@ jobs:
           grep -q 'Ran 29 tests' /tmp/c15-v05.txt
           grep -Eq '^OK$' /tmp/c15-v05.txt
           cd research/mtf-element-audit-v1/d05
-          python -m unittest -v test_c15_closed_multi_tf_source_grid 2>&1 | tee /tmp/c15-tests.txt
-          grep -q 'Ran 32 tests' /tmp/c15-tests.txt
-          grep -Eq '^OK$' /tmp/c15-tests.txt
-          echo '61_SOURCE_CLOSED_MTF_TESTS_PASS_NO_AUTHOR_GOLDEN_READY'
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid 2>&1 | tee /tmp/c15-tests.txt
+          grep -q 'Ran 155 tests' /tmp/c15-tests.txt
+          grep -Eq '^OK
+      - name: Fetch ten original 5m plus ten native original C08 15m ZIPs and cross-check all 1D 4H 1H 15m closed OHLCV
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c15_original_full_tf_grid.py /tmp/c15-original.json 2>&1 | tee /tmp/c15-real.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/c15-original.json'))
+          assert q['source_5m_zip_archives']==10
+          assert q['source_native_15m_c08_zip_archives']==10
+          assert q['raw_original_5m_bars']==2880
+          assert [q[k] for k in (
+              'original_15m_parity_checks',
+              'derived_1h_vs_original_15m_checks',
+              'derived_4h_vs_original_15m_checks',
+              'derived_1d_vs_original_15m_checks')]==[960,240,60,10]
+          assert q['all_timeframe_ohlcv_checks']==1270
+          assert q['native_1d_4h_archive_claims']==0
+          assert q['author_goldens_for_1d_4h_source_context']==0
+          assert q['trade_ready'] is False
+          assert all(d['first_1d_count_as_of_second_day_plus_1h']==1 for d in q['observations'])
+          print('C15_20_ORIGINAL_5M_AND_15M_ZIPS_1270_PARITY_AND_NO_1D_HTF_ENTRY_APPROVAL')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c15-original-raw-source-futures-mtf-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c15-v05.txt
+            /tmp/c15-tests.txt
+            /tmp/c15-original.json
+            /tmp/c15-real.log
+ /tmp/c15-tests.txt
+          echo '184_ALL_PRIOR_AND_NEW_CLOSED_MTF_TESTS_PASS_NO_AUTHOR_GOLDEN_READY'
       - name: Fetch ten original 5m plus ten native original C08 15m ZIPs and cross-check all 1D 4H 1H 15m closed OHLCV
         run: |
           set -euo pipefail
