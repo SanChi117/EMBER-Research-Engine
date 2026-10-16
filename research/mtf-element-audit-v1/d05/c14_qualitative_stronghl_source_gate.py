@@ -108,14 +108,13 @@ def evaluate_qualitative_stronghl(case:dict,fixture:dict,c04:dict)->SourceConcep
             result="CONTEXT_NOT_STRONG_SOURCE_ILLUSTRATION"
         else:
             if figure!="POI-IMAGE-2-SNR-SHORT":
-            raise QualitativeRejected("SNR_NOT_SUPPORTED_BY_CONFLICT_IMAGE")
-        conflicts=c04.get("source_conflicts",[])
-        if not any(x.get("code")=="SNR_RESISTANCE_CANDLE_ORDER_CONFLICT"
-                   and x.get("resolution")=="UNRESOLVED_DO_NOT_HARDCODE_CANDLE_ORDER_AS_STRONG_SNR"
-                   for x in conflicts):
-            raise QualitativeRejected("SNR_CONFLICT_NOT_DOCUMENTED")
-        result=("UNRESOLVED_AUTHOR_TEXT_IMAGE_CONFLICT"
-                if klass=="TEXT_CONFLICT" else "CONTEXT_NOT_STRONG_SOURCE_ILLUSTRATION")
+                raise QualitativeRejected("SNR_NOT_SUPPORTED_BY_CONFLICT_IMAGE")
+            conflicts=c04.get("source_conflicts",[])
+            if not any(x.get("code")=="SNR_RESISTANCE_CANDLE_ORDER_CONFLICT"
+                       and x.get("resolution")=="UNRESOLVED_DO_NOT_HARDCODE_CANDLE_ORDER_AS_STRONG_SNR"
+                       for x in conflicts):
+                raise QualitativeRejected("SNR_CONFLICT_NOT_DOCUMENTED")
+            result="UNRESOLVED_AUTHOR_TEXT_IMAGE_CONFLICT"
     elif subject=="POI_FIRST_TEST":
         result="LATER_TEST_CANNOT_BE_LABELLED_FIRST"
     elif subject=="POI_REACTION":
