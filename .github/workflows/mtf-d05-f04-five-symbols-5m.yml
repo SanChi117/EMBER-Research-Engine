@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/mtf-d05-f04-five-symbols-5m.yml'
       - 'research/mtf-element-audit-v1/tests/probe_f04_all_five_5m_futures_c08.py'
+      - 'research/mtf-element-audit-v1/evidence/f04/F04_FIVE_5M_FUTURES_2026-10-02_RECEIPTS.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,6 +28,7 @@ jobs:
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_XRPUSDT_63_RECEIPTS.json)" = b36184a5b7153e96f338b87694d8eb8bab4b5191
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BCHUSDT_63_RECEIPTS.json)" = 35c51c28ee83c05050d75940563ed352277871fa
           test "$(git hash-object research/mtf-element-audit-v1/evidence/f03/F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json)" = 7e5bc374b4e4cceaf01325b16e42631dad0ec9db
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f04/F04_FIVE_5M_FUTURES_2026-10-02_RECEIPTS.json)" = e5b24eb50c15fcd19fe1069d44e95a0a02edaa1c
       - name: Rerun v05 29 and source+raid 41 technical regression tests
         run: |
           set -euo pipefail
