@@ -1,0 +1,43 @@
+name: MTF B1 C16 — 32-day native 15m↔1D September to October Source Integrity (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c16-32day-native-htf.yml'
+      - 'research/mtf-element-audit-v1/d05/c16_c08_monthly_daily_htf_lineage.py'
+      - 'research/mtf-element-audit-v1/d05/test_c16_c08_monthly_daily_htf_lineage.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c16_32day_native_htf_sources.py'
+      - 'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-c08-monthly-1d-15m-context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen original C08 receipts and C15 grid
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c15/C15_F06_5M_NATIVE_15M_DERIVED_1D_4H_SOURCE_RECEIPT.json)" = 696065b29bbe45f5f4fdd0bf8042c4f5781c170d
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Thirty C16 source and no-lookahead adversarial tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c16_c08_monthly_daily_htf_lineage 2>&1 | tee /tmp/c16-tests.txt
+          grep -q 'Ran 30 tests' /tmp/c16-tests.txt
+          grep -Eq '^OK$' /tmp/c16-tests.txt
+          echo 'C16_SOURCE_GUARDS_AND_AUTHOR_BLOCK_PASS'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c16-long-context-pure-test-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/c16-tests.txt
