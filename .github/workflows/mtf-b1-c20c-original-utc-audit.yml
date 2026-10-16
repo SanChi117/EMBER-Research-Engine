@@ -1,0 +1,29 @@
+name: MTF C20C — Original UTC Context Audit (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c20c-original-utc-audit.yml'
+      - 'research/mtf-element-audit-v1/d05/c20c_context_observations.py'
+      - 'research/mtf-element-audit-v1/d05/test_c20c_context_observations.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c20c_original_utc_context.py'
+      - 'research/mtf-element-audit-v1/evidence/c20/C20C_ORIGINAL_UTC_CONTEXT_OBSERVATIONS.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-c20c:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test C20C UTC / author unknown classifications
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c20c_context_observations
+      - name: Re-download 45 original Futures ZIP and audit C20C cases
+        run: |
+          python research/mtf-element-audit-v1/tests/probe_c20c_original_utc_context.py /tmp/c20c-result.json
