@@ -1,0 +1,54 @@
+name: MTF D05 F01 - Source TDA Five Branches Fail Closed (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-f01-tda-branches.yml'
+      - 'research/mtf-element-audit-v1/d05/tda_source_route_contract.py'
+      - 'research/mtf-element-audit-v1/d05/test_tda_source_route_contract.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  author-source-route-topology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard teaching schematic unchanged since academic visual audit
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C02_TDA_SOURCE_ROUTE_TOPOLOGY.json)" = 8d3ecf4bdf82be14e3a1da2f132425feaa45fed3
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Run all TDA branch source matching, false approval and 5m gap tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_tda_source_route_contract 2>&1 | tee /tmp/d05-f01-tda.txt
+          grep -q 'Ran 23 tests' /tmp/d05-f01-tda.txt
+          grep -Eq '^OK$' /tmp/d05-f01-tda.txt
+          echo 'FIVE_AUTHOR_SCHEMATIC_BRANCHES_VERIFIED__ZERO_TRADE_READY'
+      - name: Validate no unsupported 5m source and no course semantic signoff
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import sys
+          sys.path.insert(0,'research/mtf-element-audit-v1/d05')
+          from tda_source_route_contract import verify_source_route_schema,KNOWN_ROUTES,STEP_TF,C08_TIMEFRAMES
+          d=verify_source_route_schema()
+          assert len(d)==5 and len(KNOWN_ROUTES)==5
+          assert STEP_TF['5M_VC_ENTRY']=='5m' and '5m' not in C08_TIMEFRAMES
+          assert d['GREEN']['entry_tf']=='5m' and d['BLUE']['entry_tf']=='5m'
+          assert sum('5M_VC_ENTRY' in x for x in KNOWN_ROUTES.values())==2
+          print('2_OF_5_ROUTES_REQUIRE_UNAVAILABLE_5M_C08_SOURCE__NOT_READY')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-d05-f01-original-tda-five-branches
+          retention-days: 30
+          if-no-files-found: warn
+          path: /tmp/d05-f01-tda.txt
