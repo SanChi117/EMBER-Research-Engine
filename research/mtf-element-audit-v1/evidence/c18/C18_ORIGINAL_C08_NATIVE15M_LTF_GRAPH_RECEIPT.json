@@ -1,0 +1,153 @@
+{
+  "schema": "EMBER_B1_C18_ORIGINAL_15M_FIRST_CONTACT_TO_1H_15M_GEOMETRIC_IMB_V1",
+  "scope": "NATIVE_C08_SOURCE_CONFIRMED_TEMPORAL_COOCCURRENCE_NOT_AUTHOR_VC",
+  "source_ci": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38945991444",
+  "frozen_c16_receipt_git_blob": "bdaa008ce719254507ea95231cdc630bfa85cd67",
+  "frozen_c17_receipt_git_blob": "d7fffbe4712bc5a188b2e9065527b86c2987846f",
+  "source_market": "BINANCE_USDM_FUTURES",
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "original_archives": 30,
+  "original_native_15m_bars": 15360,
+  "native_1d_equalities": 160,
+  "derived_1h_bars": 3840,
+  "observations": [
+    {
+      "author_approved_poi": 0,
+      "author_approved_stronghl": 0,
+      "author_approved_vc": 0,
+      "counts": {
+        "author_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+        "child_nodes_with_multiple_possible_htf_parents": 680,
+        "closed_15m_geometric_children": 634,
+        "closed_1h_geometric_children": 123,
+        "htf_parents_with_multiple_possible_children": 29,
+        "parents_1d": 4,
+        "parents_4h": 30,
+        "parents_with_subsequent_native_15m_contact": 29,
+        "parents_without_native_15m_contact": 5,
+        "readiness": "NOT_TRADE_READY",
+        "temporal_cooccurrence_edges": 8444,
+        "unattributed_parent_choices": 34
+      },
+      "native_15m_bars": 3072,
+      "original_daily_parity": 32,
+      "prefix_invariance": true,
+      "symbol": "BTCUSDT",
+      "trades": 0
+    },
+    {
+      "author_approved_poi": 0,
+      "author_approved_stronghl": 0,
+      "author_approved_vc": 0,
+      "counts": {
+        "author_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+        "child_nodes_with_multiple_possible_htf_parents": 684,
+        "closed_15m_geometric_children": 640,
+        "closed_1h_geometric_children": 126,
+        "htf_parents_with_multiple_possible_children": 32,
+        "parents_1d": 7,
+        "parents_4h": 31,
+        "parents_with_subsequent_native_15m_contact": 32,
+        "parents_without_native_15m_contact": 6,
+        "readiness": "NOT_TRADE_READY",
+        "temporal_cooccurrence_edges": 10838,
+        "unattributed_parent_choices": 38
+      },
+      "native_15m_bars": 3072,
+      "original_daily_parity": 32,
+      "prefix_invariance": true,
+      "symbol": "ETHUSDT",
+      "trades": 0
+    },
+    {
+      "author_approved_poi": 0,
+      "author_approved_stronghl": 0,
+      "author_approved_vc": 0,
+      "counts": {
+        "author_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+        "child_nodes_with_multiple_possible_htf_parents": 652,
+        "closed_15m_geometric_children": 579,
+        "closed_1h_geometric_children": 126,
+        "htf_parents_with_multiple_possible_children": 30,
+        "parents_1d": 5,
+        "parents_4h": 31,
+        "parents_with_subsequent_native_15m_contact": 30,
+        "parents_without_native_15m_contact": 6,
+        "readiness": "NOT_TRADE_READY",
+        "temporal_cooccurrence_edges": 9830,
+        "unattributed_parent_choices": 36
+      },
+      "native_15m_bars": 3072,
+      "original_daily_parity": 32,
+      "prefix_invariance": true,
+      "symbol": "SOLUSDT",
+      "trades": 0
+    },
+    {
+      "author_approved_poi": 0,
+      "author_approved_stronghl": 0,
+      "author_approved_vc": 0,
+      "counts": {
+        "author_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+        "child_nodes_with_multiple_possible_htf_parents": 623,
+        "closed_15m_geometric_children": 576,
+        "closed_1h_geometric_children": 132,
+        "htf_parents_with_multiple_possible_children": 30,
+        "parents_1d": 4,
+        "parents_4h": 29,
+        "parents_with_subsequent_native_15m_contact": 30,
+        "parents_without_native_15m_contact": 3,
+        "readiness": "NOT_TRADE_READY",
+        "temporal_cooccurrence_edges": 9938,
+        "unattributed_parent_choices": 33
+      },
+      "native_15m_bars": 3072,
+      "original_daily_parity": 32,
+      "prefix_invariance": true,
+      "symbol": "XRPUSDT",
+      "trades": 0
+    },
+    {
+      "author_approved_poi": 0,
+      "author_approved_stronghl": 0,
+      "author_approved_vc": 0,
+      "counts": {
+        "author_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+        "child_nodes_with_multiple_possible_htf_parents": 689,
+        "closed_15m_geometric_children": 619,
+        "closed_1h_geometric_children": 139,
+        "htf_parents_with_multiple_possible_children": 33,
+        "parents_1d": 6,
+        "parents_4h": 32,
+        "parents_with_subsequent_native_15m_contact": 33,
+        "parents_without_native_15m_contact": 5,
+        "readiness": "NOT_TRADE_READY",
+        "temporal_cooccurrence_edges": 11577,
+        "unattributed_parent_choices": 38
+      },
+      "native_15m_bars": 3072,
+      "original_daily_parity": 32,
+      "prefix_invariance": true,
+      "symbol": "BCHUSDT",
+      "trades": 0
+    }
+  ],
+  "totals": {
+    "parents_1d": 26,
+    "parents_4h": 153,
+    "observed_htf_first_native_15m_contacts": 154,
+    "native_15m_geometric_children": 3048,
+    "derived_1h_geometric_children": 646,
+    "temporal_edges_not_author_pairs": 50627,
+    "children_with_multiple_possible_parents": 3328
+  },
+  "author_golden_source_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+  "author_approved_1d_4h_poi": 0,
+  "author_approved_vc": 0,
+  "author_approved_trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "limitations": "No author-annotated Futures goldens; 50k+ all-later temporal candidate matches are deliberately not causal attribution; no native original 5m for 32-day path; no self-approved VC or entries"
+}
