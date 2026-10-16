@@ -1,0 +1,96 @@
+{
+  "schema": "EMBER_B1_C12_F06_TWO_DAY_RAID_IMB_ATTRIBUTION_DIAGNOSTICS_V1",
+  "source_origin_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38894954796",
+  "source_market": "BINANCE_USDM_FUTURES",
+  "source_dates": [
+    "2026-10-01",
+    "2026-10-02"
+  ],
+  "five_symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "BCHUSDT"
+  ],
+  "f06_raw_zip_and_csv_receipt_git_blob": "a5bf2105d1c611517a8d127d5e1f8cb622720162",
+  "c11_immutably_pinned_candidate_receipt_git_blob": "513c950c311efc12fab95ce64f4ac47f0f6003f3",
+  "independently_rechecked_5m_archives": 10,
+  "independently_rechecked_5m_rows": 2880,
+  "geometric_raid_imb_edges_not_trade_signals": 177,
+  "unique_geometric_imb_nodes": 154,
+  "unique_raid_nodes_with_edges": 11,
+  "raid_nodes_with_multiple_imbs": 11,
+  "imbs_with_multiple_raid_parents": 23,
+  "later_poi_zone_price_touch_edges": 168,
+  "per_symbol": [
+    {
+      "symbol": "BTCUSDT",
+      "original_5m_candles": 576,
+      "v05_hourly_raid_candidates": 6,
+      "geometric_raid_to_imb_edges": 19,
+      "distinct_5m_imb_nodes": 19,
+      "hourly_raids_with_any_matching_imb": 2,
+      "hourly_raids_with_multiple_imb_candidates": 2,
+      "imbs_with_multiple_raid_parents": 0,
+      "pairs_with_later_price_touch": 15,
+      "pairs_without_later_price_touch": 4
+    },
+    {
+      "symbol": "ETHUSDT",
+      "original_5m_candles": 576,
+      "v05_hourly_raid_candidates": 4,
+      "geometric_raid_to_imb_edges": 0,
+      "distinct_5m_imb_nodes": 0,
+      "hourly_raids_with_any_matching_imb": 0,
+      "hourly_raids_with_multiple_imb_candidates": 0,
+      "imbs_with_multiple_raid_parents": 0,
+      "pairs_with_later_price_touch": 0,
+      "pairs_without_later_price_touch": 0
+    },
+    {
+      "symbol": "SOLUSDT",
+      "original_5m_candles": 576,
+      "v05_hourly_raid_candidates": 4,
+      "geometric_raid_to_imb_edges": 47,
+      "distinct_5m_imb_nodes": 40,
+      "hourly_raids_with_any_matching_imb": 2,
+      "hourly_raids_with_multiple_imb_candidates": 2,
+      "imbs_with_multiple_raid_parents": 7,
+      "pairs_with_later_price_touch": 43,
+      "pairs_without_later_price_touch": 4
+    },
+    {
+      "symbol": "XRPUSDT",
+      "original_5m_candles": 576,
+      "v05_hourly_raid_candidates": 4,
+      "geometric_raid_to_imb_edges": 47,
+      "distinct_5m_imb_nodes": 31,
+      "hourly_raids_with_any_matching_imb": 2,
+      "hourly_raids_with_multiple_imb_candidates": 2,
+      "imbs_with_multiple_raid_parents": 16,
+      "pairs_with_later_price_touch": 47,
+      "pairs_without_later_price_touch": 0
+    },
+    {
+      "symbol": "BCHUSDT",
+      "original_5m_candles": 576,
+      "v05_hourly_raid_candidates": 7,
+      "geometric_raid_to_imb_edges": 64,
+      "distinct_5m_imb_nodes": 64,
+      "hourly_raids_with_any_matching_imb": 5,
+      "hourly_raids_with_multiple_imb_candidates": 5,
+      "imbs_with_multiple_raid_parents": 0,
+      "pairs_with_later_price_touch": 63,
+      "pairs_without_later_price_touch": 1
+    }
+  ],
+  "author_matching_rule_found": "NONE_PERMITTING_UNIQUE_FIRST_OR_NEAREST_PARENT_ASSIGNMENT",
+  "price_geometry_evidence_not_author_labels": true,
+  "unique_approved_stronghl": 0,
+  "approved_vc": 0,
+  "ready_trades": 0,
+  "status": "UNRESOLVED_ATTRIBUTION_NOT_ACADEMIC_ENTRY",
+  "failed_hypothesis": "177 raid-to-IMB temporal pairs are not 177 independent VC; 23 IMB share multiple raids and all 11 raids with any IMB have multiple IMB candidate children",
+  "source_limits": "2 UTC days five futures instruments, still subject to v05 2+2 pivot and 24h TTL unapproved assumptions, no full 1D/4H context, no author numerical golden labels"
+}
