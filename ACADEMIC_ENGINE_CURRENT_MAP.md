@@ -15,7 +15,7 @@
 
 **Текущий рабочий пункт:** `B1` — связать D03 parent/child с технически наблюдаемой ценовой геометрией и валидированными архивами C08; `D05b` — последующая отдельная семантическая приёмка реакции, `A3` — точная привязка 45 элементов.
 
-**Последние независимые CI:** B1/C16 [38938229365](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938229365) **214 PASS** + 30 native Binance Futures 15m/1D ZIP SHA and **160/160** independent 1D OHLCV matches over 32 consecutive days; B1/C15 **184 PASS**; A081 [38936098595](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38936098595) 81 source SHA chain PASS. **0 академически подтверждённых входов.**
+**Последние независимые CI:** B1/C16 [38938229365](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938229365) **214 PASS** + 30 native Binance Futures 15m/1D ZIP SHA and **160/160** independent 1D OHLCV matches over 32 consecutive days; B1/C15 **184 PASS**; A082 [38938922793](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938922793) **82/82 SHA source-evidence entries PASS**; общая CI [38938922602](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938922602) SUCCESS. **0 академически подтверждённых входов.**
 
 **Правило каждого следующего ответа:** показать таблицу этапов, число подтверждённых задач, отдельно **новые галочки за этот цикл**, ссылку на доказательства, SHA, CI и то, что осталось. Отсутствие коммита/журнала/проверки = без новой галочки.
 
