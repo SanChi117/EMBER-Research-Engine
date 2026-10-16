@@ -80,6 +80,36 @@ def main(outfile=None):
     }
     assert result["source_5m_candles"]==2880 and result["geometric_edges"]==177
     assert result["pairs_touching_zone_later"]==168 and result["source_5m_archives"]==10
+    pinned=json.loads((ROOT/"evidence"/"c12"/"C12_CAUSAL_AMBIGUITY_F06_DIAGNOSTIC.json").read_text(encoding="utf8"))
+    assert pinned["schema"]=="EMBER_B1_C12_F06_TWO_DAY_RAID_IMB_ATTRIBUTION_DIAGNOSTICS_V1"
+    assert pinned["f06_raw_zip_and_csv_receipt_git_blob"]=="a5bf2105d1c611517a8d127d5e1f8cb622720162"
+    assert pinned["c11_immutably_pinned_candidate_receipt_git_blob"]=="513c950c311efc12fab95ce64f4ac47f0f6003f3"
+    for pkey,rkey in (
+        ("independently_rechecked_5m_archives","source_5m_archives"),
+        ("independently_rechecked_5m_rows","source_5m_candles"),
+        ("geometric_raid_imb_edges_not_trade_signals","geometric_edges"),
+        ("unique_geometric_imb_nodes","distinct_imb_nodes"),
+        ("unique_raid_nodes_with_edges","total_distinct_raids_with_edges"),
+        ("raid_nodes_with_multiple_imbs","raids_with_multiple_imbs"),
+        ("imbs_with_multiple_raid_parents","imbs_with_multiple_raid_parents"),
+        ("later_poi_zone_price_touch_edges","pairs_touching_zone_later")):
+        assert pinned[pkey]==result[rkey],(pkey,rkey)
+    assert pinned["status"]==result["audit_status"]
+    assert pinned["unique_approved_stronghl"]==pinned["approved_vc"]==pinned["ready_trades"]==0
+    assert len(pinned["per_symbol"])==len(result["per_symbol"])==5
+    for saved,actual in zip(pinned["per_symbol"],result["per_symbol"]):
+        assert saved["symbol"]==actual["symbol"]
+        for keya,keyb in (
+            ("original_5m_candles","closed_native_5m_candles"),
+            ("v05_hourly_raid_candidates","raid_candidates"),
+            ("geometric_raid_to_imb_edges","candidate_edges_not_events"),
+            ("distinct_5m_imb_nodes","distinct_imb_nodes"),
+            ("hourly_raids_with_any_matching_imb","raids_with_edges"),
+            ("hourly_raids_with_multiple_imb_candidates","raids_with_multiple_imbs"),
+            ("imbs_with_multiple_raid_parents","imb_nodes_with_multiple_raid_parents"),
+            ("pairs_with_later_price_touch","pairs_with_later_zone_touch"),
+            ("pairs_without_later_price_touch","pairs_without_touch")):
+            assert saved[keya]==actual[keyb],(saved["symbol"],keya)
     print(json.dumps(result,sort_keys=True,indent=2))
     if outfile:Path(outfile).write_text(json.dumps(result,sort_keys=True,indent=2)+"\n",encoding="utf8")
     return 0
