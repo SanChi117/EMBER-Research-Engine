@@ -144,6 +144,30 @@ def main(output_file=None):
     assert summary["raw_original_5m_bars"]==2880
     assert [totals[t] for t in WIDTHS]==[960,240,60,10]
     assert summary["all_timeframe_ohlcv_checks"]==1270
+    receipt=json.loads((ROOT/"evidence"/"c15"/"C15_F06_5M_NATIVE_15M_DERIVED_1D_4H_SOURCE_RECEIPT.json").read_text(encoding="utf8"))
+    assert receipt["schema"]=="EMBER_B1_C15_ORIGINAL_5M_NATIVE_C08_15M_DERIVED_MTF_PRICE_GRID_V1"
+    assert receipt["preserved_f06_source_receipt_blob"]=="a5bf2105d1c611517a8d127d5e1f8cb622720162"
+    assert receipt["preserved_c08_archive_aggregate_blob"]=="4205ad3118a30bbd69c412e165c7c5ce3560195d"
+    assert receipt["original_5m_zip_count"]==summary["source_5m_zip_archives"]==10
+    assert receipt["original_native_15m_c08_zip_count"]==summary["source_native_15m_c08_zip_archives"]==10
+    assert receipt["original_5m_bars"]==summary["raw_original_5m_bars"]==2880
+    assert receipt["total_exact_ohlcv_equalities"]==summary["all_timeframe_ohlcv_checks"]==1270
+    assert receipt["independently_crosschecked_closed_tf_candles"]==totals
+    assert receipt["native_higher_tf_1d_4h_1h_zip_claims"]==0
+    assert receipt["academic_author_labelled_daily_parent_poi"]==0
+    assert receipt["academic_entry_ready"]==0 and receipt["readiness"]=="NOT_TRADE_READY"
+    for case,review in zip(receipt["observations"],summary["observations"]):
+        assert case["symbol"]==review["symbol"]
+        assert case["full_prefix_closed_candles"]==review["matched_native_15m_and_derived_tf_ohlcv"]
+        assert case["closed_daily_count_at_second_day_plus_1h"]==review["first_1d_count_as_of_second_day_plus_1h"]==1
+        assert case["author_1d_4h_poi_context_certified"] is False
+    for frozen in receipt["source_days"]:
+        previous=next(x for x in r["source_days"] if x["symbol"]==frozen["symbol"] and x["date"]==frozen["date"])
+        for a,b in (("original_5m_zip_sha256","original_5m_zip_sha256"),
+                    ("original_5m_csv_sha256","original_5m_csv_sha256"),
+                    ("original_15m_zip_sha256","c08_original_15m_zip_sha256"),
+                    ("original_15m_csv_sha256","c08_original_15m_csv_sha256")):
+            assert frozen[a]==previous[b]
     print(json.dumps(summary,indent=2,sort_keys=True))
     if output_file:Path(output_file).write_text(json.dumps(summary,indent=2,sort_keys=True)+"\n",encoding="utf8")
     return 0
