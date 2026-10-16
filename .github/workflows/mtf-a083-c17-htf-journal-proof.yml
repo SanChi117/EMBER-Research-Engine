@@ -1,0 +1,95 @@
+name: MTF A083 — Verify Original Futures C17 SHA Journal + HTF Evidence (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a083-c17-htf-journal-proof.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+      - 'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json'
+      - 'research/mtf-element-audit-v1/cycles/B1_C17_ORIGINAL_HTF_GEOMETRY_SOURCE_DIAGNOSTICS.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  a083-source-price-and-sha-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify complete append-only A001 to A083 SHA and exact evidence bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a083-chain.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a083-chain.json'))
+          assert r['events']==83 and r['validations_pass']
+          assert r['tip_sha256']=='9499614c5e77d02c840ce1e94c448c2a7695ae08970be3ba79604b38f41b3300'
+          entries=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert entries[-2]['action_id']=='A082'
+          assert entries[-2]['record_sha256']=='0c690846f3315bd4d551fef4e60c753a733f2f1b34cf4afa81032624c396b2b0'
+          assert entries[-1]['action_id']=='A083' and entries[-1]['cycle_result']=='PASSED'
+          assert len(entries[-1]['evidence'])==5
+          print('ALL_83_APPEND_ONLY_SOURCE_EVIDENCE_ENTRIES_SHA_PASS')
+          PY
+      - name: Verify frozen prior academic/C08 receipts and new pinned C17 result Git blobs
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          refs={
+            'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+            'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+            'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json':'bdaa008ce719254507ea95231cdc630bfa85cd67',
+            'research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json':'82a80b053712ee819ceb7d83178f672db4030462',
+            'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json':'d7fffbe4712bc5a188b2e9065527b86c2987846f'}
+          for path, expected in refs.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert actual==expected,(path,actual,expected)
+          print('SOURCE_AND_NEW_C17_GIT_RECEIPTS_FROZEN_MATCH')
+          PY
+      - name: Regression original v05 and C10 to C17 full negative tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a083-course.txt
+          grep -q 'Ran 29 tests' /tmp/a083-course.txt
+          grep -Eq '^OK$' /tmp/a083-course.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics 2>&1 | tee /tmp/a083-regression.txt
+          grep -q 'Ran 216 tests' /tmp/a083-regression.txt
+          grep -Eq '^OK$' /tmp/a083-regression.txt
+          echo '245_SOURCE_AND_HTF_NEGATIVE_REGRESSIONS_PASS'
+      - name: Independently re-download thirty original C08 Binance USD-M native source archives
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c17_original_htf_geometry.py /tmp/a083-network.json 2>&1 | tee /tmp/a083-network.log
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a083-network.json'))
+          assert r['original_C08_sources_replayed']==30
+          assert len(r['observations'])==5
+          assert sum(q['checked_native_1d'] for q in r['observations'])==160
+          assert sum(q['derived_4h'] for q in r['observations'])==960
+          assert sum(q['counts']['1d']['gap_candidates'] for q in r['observations'])==26
+          assert sum(q['counts']['4h']['gap_candidates'] for q in r['observations'])==153
+          assert r['author_golden_source_status']=='AUTHOR_GOLDEN_SOURCE_UNAVAILABLE'
+          assert r['ready_trades']==0 and r['readiness']=='NOT_TRADE_READY'
+          print('A083_ORIGINAL_C08_SOURCE_AND_PINNED_C17_RESULT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a083-c17-sha-chain-c08-source-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a083-chain.json
+            /tmp/a083-course.txt
+            /tmp/a083-regression.txt
+            /tmp/a083-network.json
+            /tmp/a083-network.log
