@@ -1,0 +1,91 @@
+name: MTF A084 — Verify C18 Native15m Futures Source and SHA Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a084-c18-native15m-journal-proof.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  a084-original-c08-native15m-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify whole 84-entry SHA chain and source evidence bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a084-sha-chain.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a084-sha-chain.json'))
+          assert x["events"]==84 and x["validations_pass"]
+          assert x["tip_sha256"]=="05cd9d01be757fe93f623c28c6b2577966a1c486f561c9b72a26108727ffa2b9"
+          entries=[json.loads(v) for v in open("ЖУРНАЛ_ДЕЙСТВИЙ.jsonl",encoding="utf8") if v.strip()]
+          assert entries[-2]["action_id"]=="A083"
+          assert entries[-2]["record_sha256"]=="9499614c5e77d02c840ce1e94c448c2a7695ae08970be3ba79604b38f41b3300"
+          assert entries[-1]["action_id"]=="A084" and entries[-1]["cycle_result"]=="PASSED"
+          assert len(entries[-1]["evidence"])==5
+          print("ALL_84_APPEND_ONLY_SHA_AND_EVIDENCE_BYTES_VERIFIED",flush=True)
+          PY
+      - name: Verify unchanged primary/previous originals and new C18 pinned Git receipts
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          refs={
+           'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+           'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+           'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json':'bdaa008ce719254507ea95231cdc630bfa85cd67',
+           'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json':'d7fffbe4712bc5a188b2e9065527b86c2987846f',
+           'research/mtf-element-audit-v1/evidence/c18/C18_ORIGINAL_C08_NATIVE15M_LTF_GRAPH_RECEIPT.json':'9178e96ec348414621bf58866a3c8001c0bee90b'}
+          for p,expected in refs.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert actual==expected,(p,actual,expected)
+          print("FROZEN_SOURCE_AND_PINNED_RESULT_GIT_BLOBS_PASS",flush=True)
+          PY
+      - name: Regress original course and all native-source adversarial tests C10 through C18
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a084-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a084-v05.txt
+          grep -Eq '^OK$' /tmp/a084-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph 2>&1 | tee /tmp/a084-regression.txt
+          grep -q 'Ran 241 tests' /tmp/a084-regression.txt
+          grep -Eq '^OK$' /tmp/a084-regression.txt
+          echo '270_FULL_REGRESSION_TESTS_PASS'
+      - name: Re-download original 30 ZIP and compare C18 exact native 15m source witness result
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c18_original_ltf_witness_graph.py /tmp/a084-native15m.json 2>&1 | tee /tmp/a084-native15m.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a084-native15m.json'))
+          assert x["original_C08_archives_reloaded"]==30
+          assert x["original_native_15m_bars"]==15360 and x["native_daily_parities"]==160
+          assert sum(z["counts"]["temporal_cooccurrence_edges"] for z in x["observations"])==50627
+          assert sum(z["counts"]["child_nodes_with_multiple_possible_htf_parents"] for z in x["observations"])==3328
+          assert x["author_golden_source_status"]=="AUTHOR_GOLDEN_SOURCE_UNAVAILABLE"
+          assert x["readiness"]=="NOT_TRADE_READY" and x["trade_ready"]==0
+          print("A084_30_ORIGINAL_ARCHIVES_AND_C18_PINNED_CAUSAL_GRAPH_PASS",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a084-source-native15m-sha-chain
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a084-sha-chain.json
+            /tmp/a084-v05.txt
+            /tmp/a084-regression.txt
+            /tmp/a084-native15m.json
+            /tmp/a084-native15m.log
