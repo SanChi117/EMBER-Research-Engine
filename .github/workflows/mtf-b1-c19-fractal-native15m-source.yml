@@ -47,36 +47,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph test_c19_fractal_wick_raid_source_witness 2>&1 | tee /tmp/c19-tests.txt
           grep -q 'Ran 262 tests' /tmp/c19-tests.txt
-          grep -Eq '^OK
-          echo C19_SOURCE_TESTS_PASS
-      - name: Independent 30 raw original C08 ZIP replay with strict full/suffix invariance
-        run: |
-          set -euo pipefail
-          python research/mtf-element-audit-v1/tests/probe_c19_original_fractal_raid_contacts.py /tmp/c19-original.json 2>&1 | tee /tmp/c19-original.log
-          python - <<'PY'
-          import json
-          x=json.load(open('/tmp/c19-original.json'))
-          assert x['original_C08_archive_sources_replayed']==30
-          assert x['verified_native_15m_rows']==15360
-          assert x['original_native_1d_equalities']==160
-          assert len(x['observations'])==5
-          assert all(z['future_suffix_invariant'] and not z['source_32day_original_native_3m5m'] for z in x['observations'])
-          assert x['author_golden_source_status']=='AUTHOR_GOLDEN_SOURCE_UNAVAILABLE'
-          assert x['trades']==0 and x['readiness']=='NOT_TRADE_READY'
-          print('C19_ORIGINAL_NATIVE_15M_FIRST_WICK_FRACTAL_REPLAY_PASS')
-          PY
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: mtf-c19-original-source-fractal-raid
-          retention-days: 30
-          if-no-files-found: warn
-          path: |
-            /tmp/c19-v05.txt
-            /tmp/c19-tests.txt
-            /tmp/c19-original.json
-            /tmp/c19-original.log
- /tmp/c19-tests.txt
+          grep -Eq '^OK$' /tmp/c19-tests.txt
           echo C19_SOURCE_TESTS_PASS
       - name: Independent 30 raw original C08 ZIP replay with strict full/suffix invariance
         run: |
