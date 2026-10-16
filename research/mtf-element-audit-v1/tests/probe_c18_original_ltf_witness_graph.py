@@ -21,8 +21,9 @@ def summarize(g):
     contacts=sum(p.first_closed_15m_contact_known_at_ms is not None for p in g.parents)
     assert len(set(p.parent_id for p in g.parents))==len(g.parents)
     assert len(set(c.id for c in g.children_15m+g.children_1h))==len(g.children_15m)+len(g.children_1h)
-    assert all(e.contact_known_at_ms<e.child_known_at_ms and e.parent_id in
-               {p.parent_id for p in g.parents} for e in g.edges)
+    parent_ids={p.parent_id for p in g.parents}
+    assert all(e.contact_known_at_ms<e.child_known_at_ms and e.parent_id in parent_ids
+               for e in g.edges)
     return {
       "parents_1d":sum(p.parent_tf=="1d" for p in g.parents),
       "parents_4h":sum(p.parent_tf=="4h" for p in g.parents),
