@@ -1,0 +1,54 @@
+{
+  "schema": "EMBER_C20B_HISTORICAL_AGGREGATE_REPLAY_V1",
+  "ci": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38953779420",
+  "source_5m_bars": 46080,
+  "source_hourly_parities": 3840,
+  "source_zip_count": 45,
+  "per_symbol": [
+    [
+      "BTCUSDT",
+      378,
+      124,
+      101
+    ],
+    [
+      "ETHUSDT",
+      387,
+      156,
+      122
+    ],
+    [
+      "SOLUSDT",
+      374,
+      117,
+      98
+    ],
+    [
+      "XRPUSDT",
+      368,
+      125,
+      97
+    ],
+    [
+      "BCHUSDT",
+      366,
+      120,
+      94
+    ]
+  ],
+  "columns": [
+    "symbol",
+    "closed_1h_fractals",
+    "first_wick_raid_geometry",
+    "later_5m_closed_price_crosses"
+  ],
+  "totals": {
+    "fractals_1h": 1873,
+    "first_wick_geometry_1h": 642,
+    "closed_5m_crosses": 512
+  },
+  "golden_labels_available": false,
+  "academic_bos_certified": false,
+  "readiness": "NOT_TRADE_READY",
+  "scope": "Retrospective geometry totals only; source-based per-event trading qualification has not been established."
+}
