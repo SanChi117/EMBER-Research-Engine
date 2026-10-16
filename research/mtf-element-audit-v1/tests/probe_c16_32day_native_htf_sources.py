@@ -96,6 +96,27 @@ def main(out=None):
     assert result["derived_1h_bars"]==3840
     assert result["derived_4h_bars"]==960
     assert result["crosschecked_original_native_1d_bars"]==160
+    fixed=json.loads((ROOT/"evidence"/"c16"/"C16_32DAY_NATIVE_15M_1D_RECEIPT.json").read_text(encoding="utf8"))
+    assert fixed["schema"]=="EMBER_B1_C16_NATIVE_C08_SEP2026_MONTH_PLUS_OCT2_SOURCE_MTF_V1"
+    assert fixed["original_c08_receipts_git_blob"]=="4205ad3118a30bbd69c412e165c7c5ce3560195d"
+    assert fixed["required_sources"]==30
+    assert fixed["original_native_15m_sources"]==result["original_15m_sources"]==15
+    assert fixed["original_native_1d_sources"]==result["original_1d_sources"]==15
+    assert fixed["days_per_symbol"]==result["continuous_days_per_symbol"]==32
+    assert fixed["original_native_15m_candles"]==result["source_15m_native_bars"]==15360
+    assert fixed["derived_1h_candles"]==result["derived_1h_bars"]==3840
+    assert fixed["derived_4h_candles"]==result["derived_4h_bars"]==960
+    assert fixed["independent_native_1d_decimal_ohlcv_equalities"]==result["crosschecked_original_native_1d_bars"]==160
+    assert fixed["trade_approved"]==fixed["author_approved_vc"]==fixed["author_approved_stronghl"]==0
+    assert fixed["author_approved_1d_4h_poi"]==0 and fixed["readiness"]=="NOT_TRADE_READY"
+    for observed,pinned in zip(result["observations"],fixed["sources"]):
+        assert pinned["symbol"]==observed["symbol"]
+        assert pinned["sources"]==observed["original_futures_sources"]
+        assert pinned["original_native_15m_bars"]==observed["original_native_15m_bars"]
+        assert pinned["derived_closed_1h_bars"]==observed["derived_closed_1h_bars"]
+        assert pinned["derived_closed_4h_bars"]==observed["derived_closed_4h_bars"]
+        assert pinned["exact_matched_native_1d_bars"]==observed["verified_native_1d_bars"]
+        assert pinned["asof_oct2_01_native1d_count"]==observed["earlier_asof_second_oct_plus_1h"]==31
     print(json.dumps(result,indent=2,sort_keys=True),flush=True)
     if out:Path(out).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
     return 0
