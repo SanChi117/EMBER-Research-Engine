@@ -32,7 +32,8 @@ jobs:
            'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json':'bdaa008ce719254507ea95231cdc630bfa85cd67',
            'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json':'d7fffbe4712bc5a188b2e9065527b86c2987846f',
            'research/mtf-element-audit-v1/evidence/c18/C18_ORIGINAL_C08_NATIVE15M_LTF_GRAPH_RECEIPT.json':'9178e96ec348414621bf58866a3c8001c0bee90b',
-           'research/mtf-element-audit-v1/evidence/c19/C19_ORIGINAL_NATIVE15M_FRACTAL_WICK_RESULT.json':'dbbd11a15cc5442644fd6c4339615fa1fa37362f'}
+           'research/mtf-element-audit-v1/evidence/c19/C19_ORIGINAL_NATIVE15M_FRACTAL_WICK_RESULT.json':'dbbd11a15cc5442644fd6c4339615fa1fa37362f',
+           'research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json':'7fc957b210b14b8ab0380b8941a7b145def836dc'}
           for p,want in refs.items():
               got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
               assert got==want,(p,got,want)
@@ -46,7 +47,36 @@ jobs:
           grep -Eq '^OK$' /tmp/c20-v05.txt
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph test_c19_fractal_wick_raid_source_witness test_c20_original_32day_native5m_lineage 2>&1 | tee /tmp/c20-regression.txt
-          grep -Eq '^OK$' /tmp/c20-regression.txt
+          grep -q 'Ran 285 tests' /tmp/c20-regression.txt
+          grep -Eq '^OK          echo C20_ALL_UNIT_SOURCE_AND_ADVERSARIAL_TESTS_PASS
+      - name: Download 45 original USD-M Futures ZIP and independently cross-check 5m 15m 1d
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c20_original_5m_monthly_cross_15m.py /tmp/c20-source.json 2>&1 | tee /tmp/c20-source.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/c20-source.json'))
+          assert q['new_original_native_5m_archives']==15
+          assert q['previous_original_C08_15m_1d_archives']==30
+          assert q['total_native_zip_sources_checked']==45
+          assert q['native_5m_rows']==46080
+          assert q['exact_native_15m_decimal_ohlcv_equalities']==15360
+          assert q['original_native_1d_parities']==160
+          assert q['trades']==0 and q['readiness']=='NOT_TRADE_READY'
+          print('C20_EXACT_32DAY_5M_NATIVE_SOURCE_PARITY_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-c20-original-5m-15m-native-price-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c20-v05.txt
+            /tmp/c20-regression.txt
+            /tmp/c20-source.json
+            /tmp/c20-source.log
+ /tmp/c20-regression.txt
           echo C20_ALL_UNIT_SOURCE_AND_ADVERSARIAL_TESTS_PASS
       - name: Download 45 original USD-M Futures ZIP and independently cross-check 5m 15m 1d
         run: |
