@@ -1,0 +1,58 @@
+name: MTF A075 — Verify Original Entry VC Source Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a075-source-vc-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-vc-75-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent A001-A075 hash chain and immutable source/code/test proofs
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a075-evidence.json
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/a075-evidence.json'))
+          assert q['events']==75 and q['validations_pass']
+          rows=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert rows[-1]['action_id']=='A075'
+          assert rows[-1]['record_sha256']=='21891e3aae9165556c70da22680e88d04fccea6e1bf46e3cadd5349f3d198d82'
+          assert 'zero author-attested trades' in rows[-1]['observed_result']
+          print('A001_A075_COMPLETE_CHAIN_PROOF_PASS')
+          PY
+      - name: Preserve original untouched academic primitives
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Retest source-VC semantics and previous primitives
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a075-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a075-v05.txt
+          grep -Eq '^OK$' /tmp/a075-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_f05_source_entry_vc_branches 2>&1 | tee /tmp/a075-vc.txt
+          grep -q 'Ran 29 tests' /tmp/a075-vc.txt
+          grep -Eq '^OK$' /tmp/a075-vc.txt
+          echo '75_IMMUTABLE_RECORDS_AND_58_COURSE_SOURCE_TESTS_PASS'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a075-original-entry-vc-evidence-chain
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a075-evidence.json
+            /tmp/a075-v05.txt
+            /tmp/a075-vc.txt
