@@ -57,6 +57,22 @@ def main(path=None):
             "author_golden_source_status":AUTHOR_UNKNOWN,
             "ready_trades":0,"readiness":"NOT_TRADE_READY",
             "limitations":"Only 32 days and three-closed-bar IMB geometry; not author POI/StrongHL/VC, not independently author-labelled Futures signals, not 32-day original 5m, no numerical performance"}
+    pinned=json.loads((ROOT/"evidence"/"c17"/"C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json").read_text(encoding="utf8"))
+    assert pinned["schema"]=="EMBER_B1_C17_NATIVE_C08_1D_4H_RESEARCH_GEOMETRY_V1"
+    assert pinned["baseline_reused_original_c08_c16_git_blob"]=="bdaa008ce719254507ea95231cdc630bfa85cd67"
+    assert pinned["original_native_zip_sources"]==30
+    assert pinned["native_15m_closed"]==15360
+    assert pinned["derived_4h_closed"]==960
+    assert pinned["independent_native_1d_equalities"]==160
+    assert pinned["author_golden_source_status"]==AUTHOR_UNKNOWN
+    assert pinned["trade_ready"]==pinned["author_approved_poi"]==pinned["author_approved_stronghl"]==pinned["author_approved_vc"]==0
+    assert len(pinned["observations"])==len(out)
+    for actual,fixed in zip(out,pinned["observations"]):
+        assert actual["symbol"]==fixed["symbol"]
+        assert actual["checked_native_1d"]==fixed["checked_native_1d"]
+        assert actual["derived_4h"]==fixed["derived_closed_4h"]
+        for tf in ("1d","4h"):
+            assert actual["counts"][tf]==fixed[tf], (actual["symbol"],tf,"PINNED_RESULT_DRIFT")
     assert len(out)==5 and sum(x["checked_native_1d"] for x in out)==160
     assert sum(x["derived_4h"] for x in out)==960
     assert result["ready_trades"]==0
