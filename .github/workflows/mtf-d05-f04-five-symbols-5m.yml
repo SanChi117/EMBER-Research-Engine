@@ -1,0 +1,67 @@
+name: MTF D05 F04 - Five Original 5m Futures Sources vs C08 (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-f04-five-symbols-5m.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_f04_all_five_5m_futures_c08.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-original-futures-five-symbol-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard unmodified C08 five receipt shards and F03 source receipt
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_ETHUSDT_63_RECEIPTS.json)" = 8da28253c04f230a9e737b1075d30fc981628dfc
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_SOLUSDT_63_RECEIPTS.json)" = 04d7b6aca9c61216d9c311591c20aef6eb5e6afe
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_XRPUSDT_63_RECEIPTS.json)" = b36184a5b7153e96f338b87694d8eb8bab4b5191
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BCHUSDT_63_RECEIPTS.json)" = 35c51c28ee83c05050d75940563ed352277871fa
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f03/F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json)" = 7e5bc374b4e4cceaf01325b16e42631dad0ec9db
+      - name: Rerun v05 29 and source+raid 41 technical regression tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/f04-v05.txt
+          grep -q 'Ran 29 tests' /tmp/f04-v05.txt
+          grep -Eq '^OK$' /tmp/f04-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_f03_5m_original_source test_c09_source_5m_raid_bos_geometry 2>&1 | tee /tmp/f04-tests.txt
+          grep -q 'Ran 41 tests' /tmp/f04-tests.txt
+          grep -Eq '^OK$' /tmp/f04-tests.txt
+      - name: Fetch five original Binance 5m and 15m Futures archives and prove all 480 source OHLCV groups
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_f04_all_five_5m_futures_c08.py /tmp/f04-five-originals.json 2>&1 | tee /tmp/f04-network.txt
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/f04-five-originals.json'))
+          assert q['verified_5m_archives']==5 and q['native_original_5m_rows']==1440
+          assert q['independent_original_c08_15m_rows']==480
+          assert q['exact_15m_ohlcv_groups_checked']==480
+          assert q['original_frozen_c08_315_unchanged'] is True
+          assert q['academic_5m_vc_signals']==0 and q['trade_ready'] is False
+          for x in q['source_results']:
+              assert x['exact_ohlcv_5m_to_15m_match_count']==96
+              assert x['readiness']=='NOT_TRADE_READY'
+          print('FIVE_NATIVE_5M_FUTURES_ARCHIVES_1440_BARS_VS_C08_NATIVE_15M_480_GROUPS_ALL_MATCH')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-f04-five-symbol-original-5m-archive-sha-proofs
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/f04-v05.txt
+            /tmp/f04-tests.txt
+            /tmp/f04-five-originals.json
+            /tmp/f04-network.txt
