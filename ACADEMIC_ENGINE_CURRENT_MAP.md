@@ -1,6 +1,6 @@
 # EMBER Academic Engine — карта работ и контроль приёмки
 
-**Версия текущей карты:** 2026-10-16 / после B1 C15 (native Futures 5m и C08 15m, source-bound 1D/4H/1H grid). Не использовать эту обновляемую копию как неизменяемое доказательство предыдущих журналов. **Режим:** PAPER ONLY, самостоятельная исследовательская разработка. **Текущий эталон:** ветка `research/academic-engine-recovery-20261015` на базе C07. Существующий `ROADMAP.md` относится к историческому EMBER Core и намеренно не меняется.
+**Версия текущей карты:** 2026-10-16 / после B1 C16 (32 дня original C08 native 15m и native 1D, derived 4H/1H). Не использовать эту обновляемую копию как неизменяемое доказательство предыдущих журналов. **Режим:** PAPER ONLY, самостоятельная исследовательская разработка. **Текущий эталон:** ветка `research/academic-engine-recovery-20261015` на базе C07. Существующий `ROADMAP.md` относится к историческому EMBER Core и намеренно не меняется.
 
 ## Обозначения
 
@@ -11,11 +11,11 @@
 
 ## Счётчик выполнения
 
-**Всего 39 укрупнённых контрольных пунктов:** ✅ **28** полностью закрыты в обозначенной области; 🔄 **3** частично готовы; ⏳/⛔ **8** не завершены. Это количество пунктов, **не процент объёма разработки**.
+**Всего 40 укрупнённых контрольных пунктов:** ✅ **29** полностью закрыты в обозначенной области; 🔄 **3** частично готовы; ⏳/⛔ **8** не завершены. Это количество пунктов, **не процент объёма разработки**.
 
 **Текущий рабочий пункт:** `B1` — связать D03 parent/child с технически наблюдаемой ценовой геометрией и валидированными архивами C08; `D05b` — последующая отдельная семантическая приёмка реакции, `A3` — точная привязка 45 элементов.
 
-**Последние независимые CI:** B1/C15 [38935498239](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38935498239) — **184 PASS**, 20 original USD-M ZIP source sha checks, **1270/1270 exact OHLCV native C08 15m vs independently derived 15m/1H/4H/1D**, 0 author-READY; D05/C14 152 PASS; A080 [38932558513](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38932558513) 80 SHA proof entries PASS.
+**Последние независимые CI:** B1/C16 [38938229365](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938229365) **214 PASS** + 30 native Binance Futures 15m/1D ZIP SHA and **160/160** independent 1D OHLCV matches over 32 consecutive days; B1/C15 **184 PASS**; A081 [38936098595](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38936098595) 81 source SHA chain PASS. **0 академически подтверждённых входов.**
 
 **Правило каждого следующего ответа:** показать таблицу этапов, число подтверждённых задач, отдельно **новые галочки за этот цикл**, ссылку на доказательства, SHA, CI и то, что осталось. Отсутствие коммита/журнала/проверки = без новой галочки.
 
@@ -54,6 +54,7 @@
 | B1l | C12: двусторонняя атрибуция Raid↔IMB и запрет ложного StrongHL/VC | [x] | 10 original F06 ZIP, 2880 5m, **177 геометрических связей, 154 уникальных IMB, 11 Raid со множеством IMB, 23 IMB с несколькими Raid**; ни nearest, ни first IMB не назначается родителем автоматически | **29 v05+19 C10+20 C11+25 C12 =93 PASS**, повторный SHA-anchored ZIP/C11/C12 CI. Оба FAILED CI зафиксированы. **0 академических StrongHL/VC/entry**; без авторских golden-меток D05b всё ещё [~] | [CI 38895159244](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38895159244), `cycles/B1_C12_AMBIGUOUS_RAID_TO_VC_ATTRIBUTION.md` |
 | B1m | C13: авторское «VC POI **или** BOS» как две независимые source-геометрические ветви | [x] | На исходных 10 USD-M 5m ZIP/двух днях: **25 Raid: 10 обе ветви, 2 только BOS, 1 только IMB/POI, 12 без геометрического подтверждения**. 12 BOS-событий и 177 IMB-рёбер сохраняются раздельно, каждое source-linked | **115/115 unit PASS** и повторный live SHA-check pinned F06+C12+C13; 0 авторских StrongHL/VC. Один BOS parent в v05 задан явно, но его академическая валидность ещё не подтверждена | [CI 38928978078](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38928978078), `cycles/B1_C13_STRONGHL_BOS_OR_POI_SOURCE_ALTERNATIVES.md` |
 | B1n | C15: закрытая MTF-связность 1D/4H/1H/15m/5m от original USD-M Futures | [x] | На исходных **10 оригинальных 5m ZIP и 10 original C08 15m ZIP** за Oct1–2 по пяти монетам: **2 880 raw 5m, 960/960 original 15m, 240/240 1H, 60/60 4H, 10/10 1D** exact Decimal OHLCV и source-ID; **1H/4H/1D DERIVED, не native ZIP** | **32 новых + 152 прежних = 184 tests PASS**, самостоятельный повторный сетевой CI с Git SHA-pinned C15 receipt; испорченный CI YAML был выявлен и исправлен; **2 дня 1D недостаточны** для авторского POI/StrongHL, READY 0 | [CI 38935498239](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38935498239), `cycles/B1_C15_NATIVE_FUTURES_FULL_MTF_CLOSED_SOURCE_GRID.md` |
+| B1o | C16: 32 непрерывных дня original Futures native 15m/1D и closed 4H context | [x] | C08 исходные **30 ZIP** (15 monthly/daily 15m и 15 monthly/daily 1D), 2026-09-01→10-02, 5 инструментов: **15 360 оригинальных 15m; 3 840 производных 1H; 960 производных 4H; 160/160 independent native 1D OHLCV=96×15m**. Полная as-of causal closure и SHA каждого источника | **214/214 тестов PASS**, final SHA-pinned CI; исправлены и сохранены три неудачных проверочных запуска. Даже 32 дня не равны авторским HTF POI/StrongHL/VC labels, **NO_READY** | [CI 38938229365](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38938229365), `cycles/B1_C16_32DAY_C08_NATIVE_1D_15M_SOURCE_COVERAGE.md` |
 | C1 | Route A: IMB/SNR (+ A2 1H→15m→5m) | [ ] | Изолированная геометрия IMB есть; route proxy не аттестован | Parent→child, SNR, first test, VC, FTA, SL/TP, visual parity | UNKNOWN не создаёт READY |
 | C2 | Route B: IDM early entry | [ ] | Изолированная кандидатная `select_idm` есть | Настоящее inducement, StrongHL, лимитный контракт без навязанного BOS | Нельзя называть pivot IDM |
 | C3 | Route C: raid→3m/5m BOS | [ ] | Исследовательский `bos_after_raid`, 29 локальных синтетических v05 тестов | Полный контекст, структурный raid, BOS и авторские схемы, исполнения после confirmed | 15m SNR proxy исключить |
@@ -65,7 +66,7 @@
 
 ## Ближайшая рабочая очередь
 
-**Текущий цикл после B1/C15:** непрерывный оригинальный Binance USD-M источник теперь проверенно строит строго закрытые 5m/15m/1H/4H/1D без заглядывания в будущую старшую свечу. 20 оригинальных ZIP и 1270/1270 Decimal OHLCV совпадений; C15 SHA receipt закреплён. **2 дня дневной истории не дают независимой авторской 1D/4H POI или StrongHL/VC разметки.** Следующий приоритет — расширить источник 1D/4H на достаточный непрерывный период и согласовать авторские positive/negative HTF POI случаи; до этого NO_READY.
+**Текущий цикл после B1/C16:** original C08 native 1D и 15m September month + Oct1/2 образуют SHA-проверенный **32-дневный** 1D и derived 4H/1H контекст по пяти инструментам. Все 160 дневных O/H/L/C/V подтверждены отдельными native 1D ZIP, as-of строгий и без будущего. Следующий цикл — price-reaction/HTF POI author qualification на этом длинном источнике: отсутствие author-annotated goldens обязано оставаться `AUTHOR_GOLDEN_SOURCE_UNAVAILABLE`; затем расширять путь 1D→4H→1H→15m→5m, PAPER ONLY.
 
 **После:** выбрать один проверяемый рыночный элемент (например, L01/L05/P09), построить positive/negative примеры только с первоисточником и независимой ценовой историей. Затем отдельный технический адаптер, не самостоятельная новая стратегия.
 
