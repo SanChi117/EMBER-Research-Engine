@@ -1,0 +1,50 @@
+name: MTF B1 C15 — Closed 1D 4H 1H 15m 5m Futures Source Grid (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c15-mtf-source-grid.yml'
+      - 'research/mtf-element-audit-v1/d05/c15_closed_multi_tf_source_grid.py'
+      - 'research/mtf-element-audit-v1/d05/test_c15_closed_multi_tf_source_grid.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c15_original_full_tf_grid.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  multi-timeframe-original-source-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve 5m raw F06 and unchanged academic primitives
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f06/F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json)" = a5bf2105d1c611517a8d127d5e1f8cb622720162
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c13/C13_DUAL_SOURCE_BOS_POI_DIAGNOSTICS.json)" = c699926be9f2550b6ecdc6a371de3b63c38d325d
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json)" = 82a80b053712ee819ceb7d83178f672db4030462
+      - name: Rerun 29 native academic v05 and 32 new negative MTF time source cases
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c15-v05.txt
+          grep -q 'Ran 29 tests' /tmp/c15-v05.txt
+          grep -Eq '^OK$' /tmp/c15-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c15_closed_multi_tf_source_grid 2>&1 | tee /tmp/c15-tests.txt
+          grep -q 'Ran 32 tests' /tmp/c15-tests.txt
+          grep -Eq '^OK$' /tmp/c15-tests.txt
+          echo '61_SOURCE_CLOSED_MTF_TESTS_PASS_NO_AUTHOR_GOLDEN_READY'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c15-original-raw-source-futures-mtf-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c15-v05.txt
+            /tmp/c15-tests.txt
+            /tmp/c15-original.json
+            /tmp/c15-real.log
