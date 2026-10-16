@@ -43,10 +43,12 @@ class C13SourceBOSorPOITests(unittest.TestCase):
         self.assertGreater(len(x.imb_event_ids),0)
     def test_bos_only_parent_is_not_promoted_to_stronghl(self):
         br,po,ev=injected()
-        id="1h:RAID:SHORT:"+str(T+DAY)+":1h:LOW:"+str(T)
-        other=fake_bos(id,proof()[1])
-        q=compare_geometric_confirmation_routes(replace(br,source_raid_bos=(other,)),po)
-        self.assertTrue(any(x.classification=="BOS_ONLY_GEOMETRY_NOT_AUTHOR_CERTIFIED" for x in q.parent_bos_links))
+        empty=replace(po,nodes=(),total_raid_imb_edges=0,
+                      unique_imb_nodes_with_edges=0,raid_nodes_with_edges=0)
+        q=compare_geometric_confirmation_routes(br,empty)
+        self.assertEqual(q.raids_with_bos_branch,1)
+        self.assertEqual(q.parent_bos_links[0].classification,
+                         "BOS_ONLY_GEOMETRY_NOT_AUTHOR_CERTIFIED")
         self.assertEqual(q.author_stronghl_approvals,0)
     def test_imb_only_path_is_not_promoted(self):
         _,_,br,po=data()
@@ -125,10 +127,11 @@ class C13SourceBOSorPOITests(unittest.TestCase):
         with self.assertRaisesRegex(BranchRejected,"RAID_IMB_EDGE_COUNT_MISMATCH"):
             compare_geometric_confirmation_routes(br,replace(po,total_raid_imb_edges=po.total_raid_imb_edges+1))
     def test_new_raid_not_in_supported_count_rejected(self):
-        _,_,br,po=data()
+        br,po,ev=injected()
+        extra=fake_bos("1h:RAID:SHORT:"+str(T+DAY)+":1h:LOW:"+str(T),proof()[1])
         with self.assertRaisesRegex(BranchRejected,"MORE_BRANCH_RAIDS_THAN_CONFIRMED_RAID_EVENTS"):
-            compare_geometric_confirmation_routes(replace(br,confirmed_1h_raids=po.total_known_raid_candidates),
-                                                   replace(po,total_known_raid_candidates=0)) # count mismatch first
+            compare_geometric_confirmation_routes(replace(br,source_raid_bos=(ev,extra),
+                    confirmed_1h_raids=1),replace(po,total_known_raid_candidates=1))
     def test_future_history_rejected_by_unmodified_C10(self):
         a,b=proof()
         with self.assertRaises(Exception):
