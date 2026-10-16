@@ -1,0 +1,61 @@
+name: MTF A080 — Verify StrongHL Conceptual Source Proof Chain (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a080-qualitative-stronghl-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-eighty-source-proof-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify A001–A080 full chained record SHA and evidence bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a080-source-evidence.json
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/a080-source-evidence.json'))
+          assert q['events']==80 and q['validations_pass']
+          all_events=[json.loads(z) for z in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if z.strip()]
+          assert all_events[-1]['action_id']=='A080'
+          assert all_events[-1]['record_sha256']=='ad1178bb4380e7d38f778a55b85964a47d4f12078b7f7737a1a7caddb8ec9cf4'
+          assert 'ready trades=0' in all_events[-1]['observed_result']
+          print('A001_A080_80_ORIGINAL_EVIDENCE_SHA_RECORDS_PASS')
+          PY
+      - name: Ensure original C03 C04 v05 and frozen C14 conceptual corpus
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C03_58_IMAGE_REVIEW.json)" = c9b25c8912700f05cc1518c6d97555e11f6b9dc3
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C04_LEVEL_REACTION_SOURCE_CASES.json)" = bf764d34b9a1c4bfe06dca6dbe50557b244df0f4
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json)" = 82a80b053712ee819ceb7d83178f672db4030462
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Rerun 37 qualitative source-negative controls and 115 original price-engineering regressions
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a080-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a080-v05.txt
+          grep -Eq '^OK$' /tmp/a080-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate 2>&1 | tee /tmp/a080-semantic-tests.txt
+          grep -q 'Ran 123 tests' /tmp/a080-semantic-tests.txt
+          grep -Eq '^OK$' /tmp/a080-semantic-tests.txt
+          echo 'A080_80_EVIDENCE_RECORDS_152_TESTS_ZERO_AUTHOR_BINANCE_FUTURES_GOLDEN_SIGNALS'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a080-frozen-academic-stronghl-concept-source-evidence
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a080-source-evidence.json
+            /tmp/a080-v05.txt
+            /tmp/a080-semantic-tests.txt
