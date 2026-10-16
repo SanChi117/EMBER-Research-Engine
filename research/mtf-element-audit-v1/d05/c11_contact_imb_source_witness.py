@@ -99,7 +99,7 @@ def inspect_contact_then_5m_imb(first:Verified5m,second:Verified5m,
             # First test MUST be after the three-bar gap is known. It is
             # merely price overlap, NOT a author-validated POI lifecycle.
             touch=next((r for r in closed if r.bar.start>=imb.known
-                        and r.bar.h>=imb.lo and r.bar.l<=imb.h),None)
+                        and r.bar.h>=imb.lo and r.bar.l<=imb.hi),None)
             paired.append(ContactImbPriceWitness(
                 old.symbol,raid.id,raid.side,raid.extreme,raid.known,contact.raw_id,
                 imb.id,imb.known,final.raw_id,imb.lo,imb.hi,
