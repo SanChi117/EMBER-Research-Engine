@@ -36,6 +36,7 @@ def lower_raid(*,kind="wick",next_bar=True):
 
 def target_fixture():
     p=[(100,102,98,100)]*16+[(103,105,99,103)]*16+[(106,108,104,106)]*16
+    p.extend([(104,105,104,104)]*8) # reserve closed future candles before indexing
     p[44]=(106,108,103,106) # strict SSL center: 43,44,45; known after 45 closes
     p[48]=(104,105,102,104) # HTF first gap contact, first strict SSL wick breach
     p[49]=(104,105,104,104) # confirms raid fractal; no premature signal
