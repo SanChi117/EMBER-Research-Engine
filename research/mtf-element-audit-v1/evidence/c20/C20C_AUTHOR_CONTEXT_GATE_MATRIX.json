@@ -1,0 +1,60 @@
+{
+  "schema": "EMBER_C20C_AUTHOR_CONTEXT_GATE_MATRIX_V1",
+  "mode": "PAPER_ONLY",
+  "source_lessons": [
+    "4. Entry By BOS.txt",
+    "PDPWPM High&Low. Session Liquidity.txt",
+    "типы сесий.txt"
+  ],
+  "gates": [
+    {
+      "code": "G1",
+      "rule": "1H fractal raid by wick only; BOS geometrically below BSL or above SSL",
+      "source": "EXPLICIT_AUTHOR",
+      "implementation": "C20B_RESEARCH_GEOMETRY_ONLY",
+      "certification": "NOT_AUTHOR_ATTESTED"
+    },
+    {
+      "code": "G2",
+      "rule": "Raided fractal fresh: previous session, at most previous day",
+      "source": "EXPLICIT_AUTHOR",
+      "implementation": "NOT_IMPLEMENTED_NO_SESSION_SOURCE_TIMEZONE",
+      "certification": "UNKNOWN"
+    },
+    {
+      "code": "G3",
+      "rule": "Do not open before 09:00 or after 17:00 in author's timing",
+      "source": "EXPLICIT_AUTHOR",
+      "implementation": "NOT_IMPLEMENTED_NO_VERIFIED_AUTHOR_TIMEZONE",
+      "certification": "UNKNOWN"
+    },
+    {
+      "code": "G4",
+      "rule": "FTA must allow valid target/RR, prefer first 1H liquidity or previous-session extrema",
+      "source": "EXPLICIT_AUTHOR",
+      "implementation": "NOT_IMPLEMENTED_NO_AUTHOR_FTA_ANNOTATIONS",
+      "certification": "UNKNOWN"
+    },
+    {
+      "code": "G5",
+      "rule": "SL only beyond swept raid liquidity; 15 pip example in forex cannot be copied to crypto",
+      "source": "EXPLICIT_AUTHOR_WITH_FOREX_CONTEXT",
+      "implementation": "NO_CRYPTO_PIP_CONVERSION",
+      "certification": "UNKNOWN"
+    },
+    {
+      "code": "G6",
+      "rule": "Original illustrated 1H3m BOS is not equivalent to unqualified 5m first close-break",
+      "source": "EXPLICIT_AUTHOR_ILLUSTRATED_ROUTE",
+      "implementation": "C20B_5M_IS_OPERATIONAL_PROXY",
+      "certification": "UNKNOWN"
+    }
+  ],
+  "historic_replay": {
+    "geometric_candidates": 512,
+    "author_bos_approved": 0,
+    "trades_approved": 0,
+    "author_golden_labels": 0
+  },
+  "readiness": "NOT_TRADE_READY"
+}
