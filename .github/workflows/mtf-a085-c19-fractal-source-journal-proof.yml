@@ -1,0 +1,94 @@
+name: MTF A085 — C19 Fractal Source SHA and Original Futures Repro (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a085-c19-fractal-source-journal-proof.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  a085-chain-and-original-native-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit 85 SHA-linked entries and exact C19 evidence file bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a085-chain.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a085-chain.json'))
+          assert x["events"]>=85 and x["validations_pass"]
+          entries=[json.loads(v) for v in open("ЖУРНАЛ_ДЕЙСТВИЙ.jsonl",encoding="utf8") if v.strip()]
+          assert entries[83]["action_id"]=="A084"
+          assert entries[83]["record_sha256"]=="05cd9d01be757fe93f623c28c6b2577966a1c486f561c9b72a26108727ffa2b9"
+          assert entries[84]["seq"]==85 and entries[84]["action_id"]=="A085"
+          assert entries[84]["record_sha256"]=="c8ab16762e2114ca086143bbb9e1387909e6d8ee2782c697fc458f41335a3351"
+          assert entries[84]["cycle_result"]=="PASSED" and len(entries[84]["evidence"])==5
+          print("A085_EXACT_5_FILES_AND_FULL_85_SHA_CHAIN_VERIFIED")
+          PY
+      - name: Check frozen v05, original data and pinned C16-C19 Git blobs
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          refs={
+           'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+           'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+           'research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json':'82a80b053712ee819ceb7d83178f672db4030462',
+           'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json':'bdaa008ce719254507ea95231cdc630bfa85cd67',
+           'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json':'d7fffbe4712bc5a188b2e9065527b86c2987846f',
+           'research/mtf-element-audit-v1/evidence/c18/C18_ORIGINAL_C08_NATIVE15M_LTF_GRAPH_RECEIPT.json':'9178e96ec348414621bf58866a3c8001c0bee90b',
+           'research/mtf-element-audit-v1/evidence/c19/C19_ORIGINAL_NATIVE15M_FRACTAL_WICK_RESULT.json':'dbbd11a15cc5442644fd6c4339615fa1fa37362f'}
+          for p,want in refs.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==want,(p,got,want)
+          print("FROZEN_C08_C14_C16_C17_C18_AND_PINNED_C19_GIT_BLOBS_PASS")
+          PY
+      - name: Original v05 and C10 to C19 291 closed-candle source tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a085-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a085-v05.txt
+          grep -Eq '^OK$' /tmp/a085-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph test_c19_fractal_wick_raid_source_witness 2>&1 | tee /tmp/a085-regress.txt
+          grep -q 'Ran 262 tests' /tmp/a085-regress.txt
+          grep -Eq '^OK$' /tmp/a085-regress.txt
+          echo "C19_A085_291_TOTAL_ORIGINAL_COURSE_AND_NEGATIVE_REGRESSION_PASS"
+      - name: Independently reload original 30 Binance Futures C08 ZIP and compare C19 pinned
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c19_original_fractal_raid_contacts.py /tmp/a085-original.json 2>&1 | tee /tmp/a085-original.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/a085-original.json'))
+          assert q["original_C08_archive_sources_replayed"]==30
+          assert q["verified_native_15m_rows"]==15360
+          assert q["original_native_1d_equalities"]==160
+          assert sum(x["counts"]["first_clean_fractal_wick_breaches"] for x in q["observations"])==2350
+          assert sum(x["counts"]["htf_first_contact_and_clean_fractal_wick_coobservations"] for x in q["observations"])==109
+          assert q["author_golden_source_status"]=="AUTHOR_GOLDEN_SOURCE_UNAVAILABLE"
+          assert q["trades"]==0 and q["readiness"]=="NOT_TRADE_READY"
+          print("A085_ORIGINAL_30_C08_ZIP_C19_PINNED_NATIVE_15M_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a085-c19-source-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a085-chain.json
+            /tmp/a085-v05.txt
+            /tmp/a085-regress.txt
+            /tmp/a085-original.json
+            /tmp/a085-original.log
