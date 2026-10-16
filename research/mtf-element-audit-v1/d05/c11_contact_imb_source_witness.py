@@ -91,6 +91,14 @@ def inspect_contact_then_5m_imb(first:Verified5m,second:Verified5m,
         for imb in imbs:
             if imb.side!=raid.side or imb.origin<raid.known or imb.known>as_of_ms:
                 continue
+            # Re-breaching the raided extreme before this proposed IMB
+            # destroys the *geometric witness* for this raid. This is an
+            # intentionally strict research check, not an author-certified
+            # universal StrongHL invalidation rule.
+            between=(r.bar for r in closed if raid.known<=r.bar.start<imb.known)
+            if any((b.h>raid.extreme if raid.side=="SHORT" else b.l<raid.extreme)
+                   for b in between):
+                continue
             nconfirm+=1
             idx=(imb.known-first.day_start_ms)//PERIOD-1
             if idx<0 or idx>=len(closed) or closed[idx].bar.end!=imb.known:
