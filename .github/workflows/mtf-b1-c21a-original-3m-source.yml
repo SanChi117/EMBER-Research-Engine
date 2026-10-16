@@ -41,34 +41,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c21_native3m_source_bridge 2>&1 | tee /tmp/c21-unit.log
           grep -q 'Ran 15 tests' /tmp/c21-unit.log
-          grep -Eq '^OK
-      - name: Independently download all original 3m and C08 archives
-        run: |
-          set -euo pipefail
-          python research/mtf-element-audit-v1/tests/probe_c21_native3m_futures_32day.py /tmp/c21-original.json 2>&1 | tee /tmp/c21-original.log
-          python - <<'PY'
-          import json
-          x=json.load(open('/tmp/c21-original.json'))
-          assert x['new_original_3m_zip_count']==15
-          assert x['previous_C08_original_zip_count']==30
-          assert x['native_3m_closed']==76800
-          assert x['original_15m_decimal_equalities']==15360
-          assert x['native_1d_equalities']==160
-          assert x['author_3m_bos_goldens']==x['author_approved_trades']==0
-          assert x['readiness']=='NOT_TRADE_READY'
-          print('C21_ORIGINAL_3M_5_TO_NATIVE15M_DECIMAL_PARITY_PASS')
-          PY
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: mtf-c21-original-3m-futures
-          retention-days: 30
-          if-no-files-found: warn
-          path: |
-            /tmp/c21-unit.log
-            /tmp/c21-original.json
-            /tmp/c21-original.log
- /tmp/c21-unit.log
+          grep -Eq '^OK$' /tmp/c21-unit.log
       - name: Independently download all original 3m and C08 archives
         run: |
           set -euo pipefail
