@@ -119,9 +119,12 @@ def inspect_tda_route(color:str,steps:list[RouteStepEvidence],as_of_ms:int)->Rou
         if s.known_at_ms%ORDER[s.timeframe]:
             raise TDARouteRejected("EVENT_KNOWN_AT_NOT_CLOSED_TF")
         last=s.known_at_ms
-    data_gaps=tuple(s.name for s in steps if s.timeframe=="5m" and s.c08_native_source_verified)
-    # A Boolean receipt declared by a caller is not proof of a native C08 5m
-    # archive; no 5m C08 data exists in the currently approved manifest.
+    if any(s.course_semantics_approved for s in steps):
+        raise TDARouteRejected("SELF_ASSERTED_COURSE_APPROVAL_NOT_ACCEPTED")
+    if any(s.timeframe=="5m" and s.c08_native_source_verified for s in steps):
+        raise TDARouteRejected("5M_NOT_PRESENT_IN_C08_ATTESTED_MANIFEST")
+    # Caller-declared receipts cannot authenticate 5m. HTF 1h/4h are
+    # derived, not Binance-native (see B1 C07/C08).
     source_gaps=tuple(s.name for s in steps if s.timeframe=="5m" or
                       (s.timeframe in C08_TIMEFRAMES and not s.c08_native_source_verified))
     semantic_gaps=tuple(s.name for s in steps if not s.course_semantics_approved)
