@@ -94,6 +94,42 @@ def main(outfile=None):
     assert report["raid_to_imb_geometric_edges"]==177
     assert report["bos_geometric_event_count"]==12
     assert report["raid_candidates"]==25
+    pinned=json.loads((ROOT/"evidence"/"c13"/"C13_DUAL_SOURCE_BOS_POI_DIAGNOSTICS.json").read_text(encoding="utf8"))
+    assert pinned["schema"]=="EMBER_B1_C13_ORIGINAL_F06_BOS_OR_POI_GEOMETRIC_BRANCH_DIAGNOSTICS_V1"
+    assert pinned["original_F06_zip_csv_receipt_blob"]=="a5bf2105d1c611517a8d127d5e1f8cb622720162"
+    assert pinned["original_C12_graph_receipt_blob"]=="a18e62776584ad428ad74c254d864c59dd540984"
+    pairs=(
+       ("original_5m_zip_archives","original_5m_zip_archives"),
+       ("native_5m_bars","source_5m_bars"),
+       ("raid_candidates","raid_candidates"),
+       ("raid_to_5m_imb_geometric_edges","raid_to_imb_geometric_edges"),
+       ("distinct_imb_nodes","distinct_imb_nodes"),
+       ("bos_5m_events","bos_geometric_event_count"),
+       ("raids_with_bos_branch","raids_with_bos_path"),
+       ("raids_with_imb_branch","raids_with_imb_path"),
+       ("raids_with_both_branches","raids_with_both_geometric_paths"),
+       ("raids_with_bos_only","bos_only_raids"),
+       ("raids_with_imb_only","imb_only_raids"),
+       ("raids_with_neither","raids_without_either"))
+    for pkey,rkey in pairs:assert pinned[pkey]==report[rkey],(pkey,rkey)
+    assert pinned["author_approved_vc"]==pinned["author_approved_stronghl"]==0
+    assert pinned["trade_ready"] is False and report["trade_ready"] is False
+    assert len(pinned["per_symbol"])==len(report["results"])==5
+    for a,b in zip(pinned["per_symbol"],report["results"]):
+        assert a["symbol"]==b["symbol"]
+        for pkey,rkey in (
+           ("raid_candidates","v05_1h_raid_candidates"),
+           ("bos_events","original_5m_bos_events"),
+           ("imb_pairs","original_raid_imb_pair_edges"),
+           ("distinct_imb_nodes","distinct_imb_nodes"),
+           ("bos_path_raids","raids_with_bos_path"),
+           ("imb_path_raids","raids_with_poi_imb_path"),
+           ("both_path_raids","raids_with_both_geometric_paths"),
+           ("bos_only_raids","raids_with_only_bos_geometry"),
+           ("imb_only_raids","raids_with_only_imb_geometry"),
+           ("neither_path_raids","raids_without_either_geometry")):
+            assert a[pkey]==b[rkey],(a["symbol"],pkey)
+        assert a["first_parent_combined_branch"]==(b["parent_bos_and_imb_evidence"][0] if b["parent_bos_and_imb_evidence"] else None)
     print(json.dumps(report,sort_keys=True,indent=2))
     if outfile:Path(outfile).write_text(json.dumps(report,sort_keys=True,indent=2)+"\n",encoding="utf8")
     return 0
