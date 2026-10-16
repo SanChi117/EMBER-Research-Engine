@@ -30,9 +30,9 @@ jobs:
           grep -Eq '^OK$' /tmp/f05-v05.txt
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_f05_source_entry_vc_branches 2>&1 | tee /tmp/f05-branches.txt
-          grep -q 'Ran 27 tests' /tmp/f05-branches.txt
+          grep -q 'Ran 29 tests' /tmp/f05-branches.txt
           grep -Eq '^OK$' /tmp/f05-branches.txt
-          echo '56_SOURCE_RELATION_TESTS_PASS__PRICE_AND_AUTHOR_EVENTS_UNATTESTED'
+          echo '58_SOURCE_RELATION_TESTS_PASS__PRICE_AND_AUTHOR_EVENTS_UNATTESTED'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
