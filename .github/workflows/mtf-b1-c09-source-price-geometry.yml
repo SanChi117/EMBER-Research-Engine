@@ -1,0 +1,63 @@
+name: MTF B1 C09 - Source-Bound 1H Raid to 5m BOS Geometry (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c09-source-price-geometry.yml'
+      - 'research/mtf-element-audit-v1/d05/c09_source_5m_raid_bos_geometry.py'
+      - 'research/mtf-element-audit-v1/d05/test_c09_source_5m_raid_bos_geometry.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c09_actual_price_raids_bos.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-binance-five-minute-bos-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Ensure original course primitives and locked 5m provenance are unchanged
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f03/F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json)" = 7e5bc374b4e4cceaf01325b16e42631dad0ec9db
+      - name: Run 29 original and 41 complete 5m provenance and 1h-raid-to-5m-BOS geometry tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/b1-c09-v05.txt
+          grep -q 'Ran 29 tests' /tmp/b1-c09-v05.txt
+          grep -Eq '^OK$' /tmp/b1-c09-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_f03_5m_original_source test_c09_source_5m_raid_bos_geometry 2>&1 | tee /tmp/b1-c09-geometry.txt
+          grep -q 'Ran 41 tests' /tmp/b1-c09-geometry.txt
+          grep -Eq '^OK$' /tmp/b1-c09-geometry.txt
+      - name: Independently replay pinned Binance 5m original bars through 1h raid and lower-timeframe BOS
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c09_actual_price_raids_bos.py /tmp/b1-c09-real.json 2>&1 | tee /tmp/b1-c09-real.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/b1-c09-real.json'))
+          assert q['native_raw_5m_bars']==288 and q['derived_closed_1h_bars']==24
+          assert q['5m_sha_locked'] is True
+          assert q['author_raid_freshness_24h_approved'] is False
+          assert q['author_strong_hl_vc_approved'] is False
+          assert q['author_poi_approved'] is False
+          assert q['trade_signals_approved']==0
+          assert q['readiness']=='NOT_TRADE_READY'
+          print('REAL_1H_5M_PRICE_GEOMETRY_REPLAY_ONLY__NO_AUTHOR_SIGNALS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c09-source-raid-bos-geometry
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/b1-c09-v05.txt
+            /tmp/b1-c09-geometry.txt
+            /tmp/b1-c09-real.log
+            /tmp/b1-c09-real.json
