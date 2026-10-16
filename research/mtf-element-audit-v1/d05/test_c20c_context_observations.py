@@ -18,3 +18,20 @@ class C20CContextTests(unittest.TestCase):
         x=review_calendar_context(line,as_of_ms=line.as_of_ms)
         self.assertEqual(x.observed_breaks,
                          x.same_utc_day+x.previous_utc_day+x.older_utc_day)
+
+    def test_no_break_before_raid_is_confirmed(self):
+        from c20_original_32day_native5m_lineage import SEPT_START
+        line=synthetic()
+        result=review_calendar_context(line,as_of_ms=SEPT_START+7*3600000)
+        self.assertEqual(result.observed_breaks,0)
+
+    def test_subbar_future_timestamp_rejected(self):
+        line=synthetic()
+        with self.assertRaisesRegex(ValueError,"FUTURE_OR_UNCLOSED"):
+            review_calendar_context(line,as_of_ms=line.as_of_ms-1)
+
+    def test_false_ready_source_rejected(self):
+        from dataclasses import replace
+        line=replace(synthetic(),readiness="READY")
+        with self.assertRaisesRegex(ValueError,"FORGED_C20A_SOURCE_APPROVAL"):
+            review_calendar_context(line,as_of_ms=line.as_of_ms)
