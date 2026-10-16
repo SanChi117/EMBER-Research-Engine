@@ -23,7 +23,7 @@ def main(outfile=None):
     c11=json.loads(C11.read_text(encoding="utf8"))
     assert f06["schema"]=="EMBER_B1_C10_TWO_CONSECUTIVE_DAYS_FIVE_SYMBOL_ORIGINAL_5M_RECEIPTS_V1"
     assert c11["schema"]=="EMBER_B1_C11_ORIGINAL_F06_RAID_5M_IMB_POI_RESEARCH_RECEIPT_V1"
-    assert f06["trade_ready"] is False and c11["academic_VC_approved"]==0
+    assert f06["readiness"]=="NOT_TRADE_READY" and f06["academy_entry_approved"]==0 and c11["academic_VC_approved"]==0
     assert len(f06["source_days"])==10
     observed=[]
     for symbol in f06["symbols"]:
