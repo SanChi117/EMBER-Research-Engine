@@ -1,0 +1,73 @@
+name: MTF B1 C20B — Original Hourly Raid to 5m Closed Break (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c20b-original-1h-5m-price-geometry.yml'
+      - 'research/mtf-element-audit-v1/d05/c20b_hourly_fractal_source_observer.py'
+      - 'research/mtf-element-audit-v1/d05/c20b_five_minute_break_observer.py'
+      - 'research/mtf-element-audit-v1/d05/test_c20b_closed_1h_5m_source_geometry.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c20b_original_hourly_5m_breaks.py'
+      - 'research/mtf-element-audit-v1/evidence/c20/C20B_ORIGINAL_1H_5M_BREAK_OBSERVATIONS.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay-original-1h-5m:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve original C08/C16/C19/C20A evidence SHA blobs
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          expected={
+            'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+            'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+            'research/mtf-element-audit-v1/evidence/c19/C19_ORIGINAL_NATIVE15M_FRACTAL_WICK_RESULT.json':'dbbd11a15cc5442644fd6c4339615fa1fa37362f',
+            'research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json':'7fc957b210b14b8ab0380b8941a7b145def836dc'}
+          for p,sha in expected.items():
+              x=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert x==sha,(p,x,sha)
+          print('C20B_FROZEN_SOURCE_BLOBS_UNCHANGED')
+          PY
+      - name: All v05 and C10-C20B adversarial unit tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c20b-v05.log
+          grep -q 'Ran 29 tests' /tmp/c20b-v05.log
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph test_c19_fractal_wick_raid_source_witness test_c20_original_32day_native5m_lineage test_c20b_closed_1h_5m_source_geometry 2>&1 | tee /tmp/c20b-tests.log
+          grep -q 'Ran 296 tests' /tmp/c20b-tests.log
+          echo C20B_ALL_325_TESTS_PASS
+      - name: Redownload 45 original native Futures ZIP and replay 1h to 5m source witnesses
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c20b_original_hourly_5m_breaks.py /tmp/c20b-real.json 2>&1 | tee /tmp/c20b-real.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c20b-real.json'))
+          assert x['original_5m_sources']==15
+          assert x['original_C08_15m_1d_sources']==30
+          assert x['rows_5m']==46080 and x['hourly_source_ohlc_parities']==3840
+          assert len(x['observations'])==5
+          assert x['readiness']=='NOT_TRADE_READY'
+          assert x['author_approved_bos']==x['author_approved_trades']==0
+          print('C20B_45_ORIGINAL_SOURCE_1H_5M_OBSERVATIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-c20b-source-geometric-replay
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c20b-v05.log
+            /tmp/c20b-tests.log
+            /tmp/c20b-real.json
+            /tmp/c20b-real.log
