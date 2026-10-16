@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import re
 
 from c11_contact_imb_source_witness import (
-    ContactImbPriceWitness,ContactImbReview,inspect_contact_then_5m_imb
+    ContactImbPriceWitness,ContactImbReview,StrongCandidateRejected,inspect_contact_then_5m_imb
 )
 from f03_5m_original_source import Verified5m,PERIOD
 
@@ -146,4 +146,8 @@ def inspect_ambiguity_from_original_source(
     first:Verified5m,second:Verified5m,as_of_ms:int
 )->AttributionAudit:
     """Call the existing C11 source+known-at gate, then classify all edges."""
-    return audit_ambiguous_edges(inspect_contact_then_5m_imb(first,second,as_of_ms))
+    try:
+        review=inspect_contact_then_5m_imb(first,second,as_of_ms)
+    except StrongCandidateRejected as e:
+        raise AttributionRejected("INVALID_TWO_DAY_SOURCE_PREFIX") from e
+    return audit_ambiguous_edges(review)
