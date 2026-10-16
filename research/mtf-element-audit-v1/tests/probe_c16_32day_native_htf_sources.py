@@ -116,7 +116,7 @@ def main(out=None):
         assert pinned["derived_closed_1h_bars"]==observed["derived_closed_1h_bars"]
         assert pinned["derived_closed_4h_bars"]==observed["derived_closed_4h_bars"]
         assert pinned["exact_matched_native_1d_bars"]==observed["verified_native_1d_bars"]
-        assert pinned["asof_oct2_01_native1d_count"]==observed["earlier_asof_second_oct_plus_1h"]==31
+        assert pinned["asof_oct2_01_native1d_count"]==observed["earlier_asof_second_oct_plus_1h_native_1d_count"]==31
     print(json.dumps(result,indent=2,sort_keys=True),flush=True)
     if out:Path(out).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
     return 0
