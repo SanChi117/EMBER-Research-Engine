@@ -1,0 +1,22 @@
+{
+  "schema": "EMBER_D05_F03_5M_SOURCE_RECEIPT_V1",
+  "date_utc": "2026-10-02",
+  "symbol": "BTCUSDT",
+  "market": "BINANCE_USDM_FUTURES",
+  "source_timeframe": "5m",
+  "original_zip_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2026-10-02.zip",
+  "original_zip_sha256": "2a492563746eba6c3689b90c00a081bfce3ceab86a06493e80f22c4d55e8c7ea",
+  "original_raw_csv_sha256": "14dc88dd66d78f44b73daa9243d62e35d539ace64d26adb0ba4b32aefb599c73",
+  "source_5m_rows": 288,
+  "cross_checked_original_c08_15m_zip_sha256": "62742a246cee4ec9363e96f2270e00e9f23fd54f137c08ba732113a7a2e284be",
+  "cross_checked_original_c08_15m_rows": 96,
+  "exact_ohlcv_15m_parity_count": 96,
+  "classic_5m_imb_candidates_observed": 60,
+  "original_fetch_CI": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38871920364",
+  "5m_under_frozen_c08_315": false,
+  "academic_vc_certified": false,
+  "author_trade_setups_certified": 0,
+  "readiness": "NOT_TRADE_READY",
+  "origin_limitation": "HTTPS plus CHECKSUM from same Binance-host is not Binance digital signature",
+  "interpretation": "Isolated one-day one-symbol provenance sample, not upgrade of frozen C08 315 archive scope and not academic VC"
+}
