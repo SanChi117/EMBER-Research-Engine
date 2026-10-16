@@ -77,32 +77,3 @@ jobs:
             /tmp/c20-regression.txt
             /tmp/c20-source.json
             /tmp/c20-source.log
- /tmp/c20-regression.txt
-          echo C20_ALL_UNIT_SOURCE_AND_ADVERSARIAL_TESTS_PASS
-      - name: Download 45 original USD-M Futures ZIP and independently cross-check 5m 15m 1d
-        run: |
-          set -euo pipefail
-          python research/mtf-element-audit-v1/tests/probe_c20_original_5m_monthly_cross_15m.py /tmp/c20-source.json 2>&1 | tee /tmp/c20-source.log
-          python - <<'PY'
-          import json
-          q=json.load(open('/tmp/c20-source.json'))
-          assert q['new_original_native_5m_archives']==15
-          assert q['previous_original_C08_15m_1d_archives']==30
-          assert q['total_native_zip_sources_checked']==45
-          assert q['native_5m_rows']==46080
-          assert q['exact_native_15m_decimal_ohlcv_equalities']==15360
-          assert q['original_native_1d_parities']==160
-          assert q['trades']==0 and q['readiness']=='NOT_TRADE_READY'
-          print('C20_EXACT_32DAY_5M_NATIVE_SOURCE_PARITY_PASS')
-          PY
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: mtf-c20-original-5m-15m-native-price-proof
-          retention-days: 30
-          if-no-files-found: warn
-          path: |
-            /tmp/c20-v05.txt
-            /tmp/c20-regression.txt
-            /tmp/c20-source.json
-            /tmp/c20-source.log
