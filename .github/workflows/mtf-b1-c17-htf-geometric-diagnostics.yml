@@ -7,6 +7,7 @@ on:
       - 'research/mtf-element-audit-v1/d05/c17_htf_imb_reaction_diagnostics.py'
       - 'research/mtf-element-audit-v1/d05/test_c17_htf_imb_reaction_diagnostics.py'
       - 'research/mtf-element-audit-v1/tests/probe_c17_original_htf_geometry.py'
+      - 'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,12 +29,13 @@ jobs:
             "research/mtf-course-v05/src/course_primitives_v05.py":"45cec7fd66d0ec156bc0a38225ee282c6d3ee71b",
             "research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json":"4205ad3118a30bbd69c412e165c7c5ce3560195d",
             "research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json":"bdaa008ce719254507ea95231cdc630bfa85cd67",
-            "research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json":"82a80b053712ee819ceb7d83178f672db4030462"}
+            "research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json":"82a80b053712ee819ceb7d83178f672db4030462",
+            "research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json":"d7fffbe4712bc5a188b2e9065527b86c2987846f"}
           for p,want in expected.items():
               actual=subprocess.check_output(["git","rev-parse","HEAD:"+p],text=True).strip()
               print(p,actual,flush=True)
               if actual!=want:raise AssertionError((p,repr(actual),repr(want)))
-          print("FOUR_FROZEN_SOURCE_BLOBS_MATCH",flush=True)
+          print("FIVE_PINNED_SOURCE_AND_RESULT_BLOBS_MATCH",flush=True)
           PY
       - name: Regress v05 and C10 through C17 including adversarial HTF tests
         run: |
