@@ -1,0 +1,48 @@
+name: MTF B1 C11 — Source-Witnessed StrongHL Candidate Boundaries (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c11-contact-imb.yml'
+      - 'research/mtf-element-audit-v1/d05/c11_contact_imb_source_witness.py'
+      - 'research/mtf-element-audit-v1/d05/test_c11_contact_imb_source_witness.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  only-price-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Freeze original course primitives and F06 receipts
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f06/F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json)" = a5bf2105d1c611517a8d127d5e1f8cb622720162
+      - name: Original course v05 primitives
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c11-v05.txt
+          grep -q 'Ran 29 tests' /tmp/c11-v05.txt
+          grep -Eq '^OK$' /tmp/c11-v05.txt
+      - name: Two day boundaries and geometric StrongHL candidate source witnesses
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness 2>&1 | tee /tmp/c11-tests.txt
+          grep -q 'Ran 38 tests' /tmp/c11-tests.txt
+          grep -Eq '^OK$' /tmp/c11-tests.txt
+          echo '67_SOURCE_BOUND_READ_ONLY_TESTS_PASS__ZERO_AUTHOR_CERTIFIED_SIGNALS'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c11-stronghl-geometry-test-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c11-v05.txt
+            /tmp/c11-tests.txt
