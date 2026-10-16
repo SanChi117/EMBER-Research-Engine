@@ -101,6 +101,16 @@ class SourceEntryVCBranches(unittest.TestCase):
         a[2]=replace(a[2],kind="SNR")
         a[3]=replace(a[3],kind="IMB")
         self.assertEqual(check(name,a).readiness,"NOT_TRADE_READY")
+    def test_created_new_1h_vc_poi_must_match_tested_type(self):
+        a=stage_list(R_FIVE)
+        a[2]=replace(a[2],kind="SNR")
+        with self.assertRaisesRegex(EntryCourseRejected,"TEST_NOT_OF_NEW_1H_POI"):
+            check(R_FIVE,a)
+    def test_new_1h_poi_cannot_be_tested_at_its_creation_time(self):
+        a=stage_list(R_FIVE)
+        a[2]=replace(a[2],known_at_ms=a[1].known_at_ms)
+        with self.assertRaisesRegex(EntryCourseRejected,"1H_POI_TEST_NOT_AFTER_POI_CREATION"):
+            check(R_FIVE,a)
     def test_wrong_parent_uid_rejected(self):
         a=stage_list(R_DIRECT)
         a[-1]=replace(a[-1],parent_source_id="a-fake")
