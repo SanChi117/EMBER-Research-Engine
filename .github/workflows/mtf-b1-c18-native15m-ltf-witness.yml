@@ -1,0 +1,75 @@
+name: MTF B1 C18 — Original Native15m Lower-TF Witness Graph (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c18-native15m-ltf-witness.yml'
+      - 'research/mtf-element-audit-v1/d05/c18_native_15m_child_witness_graph.py'
+      - 'research/mtf-element-audit-v1/d05/test_c18_native_15m_child_witness_graph.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c18_original_ltf_witness_graph.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-c08-native-ltf-closed-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original source Git blobs unchanged
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          refs={
+           'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+           'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+           'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json':'bdaa008ce719254507ea95231cdc630bfa85cd67',
+           'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json':'d7fffbe4712bc5a188b2e9065527b86c2987846f',
+           'research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json':'82a80b053712ee819ceb7d83178f672db4030462'}
+          for p,x in refs.items():
+              y=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert y==x,(p,y,x)
+          print('FROZEN_SOURCE_GIT_SHA_MATCH',flush=True)
+          PY
+      - name: Course source and C10 through C18 negative regression suite
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c18-course.txt
+          grep -q 'Ran 29 tests' /tmp/c18-course.txt
+          grep -Eq '^OK$' /tmp/c18-course.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph 2>&1 | tee /tmp/c18-tests.txt
+          grep -Eq '^OK$' /tmp/c18-tests.txt
+          echo 'C18_ALL_UNIT_NEGATIVE_AND_CAUSAL_TESTS_PASS'
+      - name: Re-download original C08 ZIP and verify C18 native 15m child graph
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c18_original_ltf_witness_graph.py /tmp/c18-raw-sources.json 2>&1 | tee /tmp/c18-raw-sources.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/c18-raw-sources.json'))
+          assert q['original_C08_archives_reloaded']==30
+          assert q['original_native_15m_bars']==15360
+          assert q['native_daily_parities']==160 and q['derived_closed_1h']==3840
+          assert sum(x['counts']['parents_1d'] for x in q['observations'])==26
+          assert sum(x['counts']['parents_4h'] for x in q['observations'])==153
+          assert all(x['prefix_invariance'] for x in q['observations'])
+          assert q['author_golden_source_status']=='AUTHOR_GOLDEN_SOURCE_UNAVAILABLE'
+          assert q['trade_ready']==0 and q['readiness']=='NOT_TRADE_READY'
+          print('ORIGINAL_C08_CAUSAL_LTF_GRAPH_WITH_NO_AUTHOR_TRADE_APPROVAL_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c18-original-c08-native15m-ltf-witness
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c18-course.txt
+            /tmp/c18-tests.txt
+            /tmp/c18-raw-sources.json
+            /tmp/c18-raw-sources.log
