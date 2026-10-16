@@ -159,7 +159,7 @@ class C16NativeMonthlyDailyHTF(unittest.TestCase):
             q.derived_4h_closed[0].author_status="AUTHOR_APPROVED"
     def test_unknown_symbol_rejected(self):
         a,b=setup()
-        with self.assertRaisesRegex(HTFSourceRejected,"MIXED_MARKET_OR_SYMBOL"):
+        with self.assertRaisesRegex(HTFSourceRejected,"INVALID_NATIVE_TIMEFRAME_ARCHIVE_SET"):
             run(a=fixture("15m","FAKEUSDT"),b=fixture("1d","FAKEUSDT"))
     def test_c08_archive_requires_checksum_and_exact_receipt_sha(self):
         url="https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1d/BTCUSDT-1d-2026-10-02.zip"
