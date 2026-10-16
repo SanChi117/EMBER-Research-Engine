@@ -32,7 +32,8 @@ def main(path=None):
         observed=cross_timeframe_raid_break(source,as_of_ms=END)
         cut=OCT_START+DAY+300000
         former=cross_timeframe_raid_break(source,as_of_ms=cut)
-        future_stable=cross_timeframe_raid_break(source,as_of_ms=cut)
+        independently_cut=reconcile_32day_native5m(five,c08,as_of_ms=cut)
+        future_stable=cross_timeframe_raid_break(independently_cut,as_of_ms=cut)
         assert former==future_stable
         assert observed.native5m_bars==9216
         assert observed.author_approved_bos==observed.author_approved_trades==0
@@ -79,12 +80,20 @@ def main(path=None):
     assert result["rows_5m"]==46080
     assert result["hourly_source_ohlc_parities"]==3840
     assert result["author_approved_trades"]==0
-    pin=ROOT/"evidence"/"c20"/"C20B_ORIGINAL_1H_5M_BREAK_OBSERVATIONS.json"
+    pin=ROOT/"evidence"/"c20"/"C20B_ORIGINAL_1H_5M_AGGREGATES.json"
     if pin.is_file():
-        f=json.loads(pin.read_text(encoding="utf8"))
-        assert f["schema"]=="EMBER_C20B_ORIGINAL_1H_FRACTAL_5M_PRICE_GEOMETRY_V1"
-        assert f["observations"]==result["observations"],"PINNED_ORIGINAL_GEOMETRY_REPLAY_CHANGED"
-        assert f["author_approved_bos"]==f["author_approved_trades"]==0
+        fixed=json.loads(pin.read_text(encoding="utf8"))
+        assert fixed["schema"]=="EMBER_C20B_HISTORICAL_AGGREGATE_REPLAY_V1"
+        assert fixed["source_5m_bars"]==result["rows_5m"]==46080
+        assert fixed["source_hourly_parities"]==result["hourly_source_ohlc_parities"]==3840
+        for x,pinned in zip(result["observations"],fixed["per_symbol"]):
+            assert [x["symbol"],x["observed_1h_fractal_levels"],
+                    x["observed_1h_first_confirmed_wick_geometry"],
+                    x["observed_5m_price_break_candidates"]]==pinned
+        assert fixed["totals"]["closed_5m_crosses"]==sum(x["observed_5m_price_break_candidates"] for x in obs)==512
+        assert fixed["totals"]["first_wick_geometry_1h"]==sum(x["observed_1h_first_confirmed_wick_geometry"] for x in obs)==642
+        assert fixed["academic_bos_certified"] is False
+        assert fixed["readiness"]=="NOT_TRADE_READY"
     if path:Path(path).write_text(json.dumps(result,sort_keys=True,indent=2)+"\n",encoding="utf8")
     print(json.dumps(result,sort_keys=True,indent=2),flush=True)
 if __name__=="__main__":main(sys.argv[1] if len(sys.argv)>1 else None)
