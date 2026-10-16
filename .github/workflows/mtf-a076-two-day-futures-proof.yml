@@ -1,0 +1,61 @@
+name: MTF A076 — Verify Ten Original Two-Day 5m Evidence Records
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a076-two-day-futures-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-two-day-76-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently validate 76 chained original source evidence records
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a076-proof.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a076-proof.json'))
+          assert x['events']==76 and x['validations_pass']
+          a=[json.loads(z) for z in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if z.strip()]
+          assert a[-1]['action_id']=='A076'
+          assert a[-1]['record_sha256']=='fbafa720faeec68ab51a9303ce3e718ec03bde8276044b671265ca8d0e14f34b'
+          assert '0 approved trades' in a[-1]['observed_result']
+          print('A001_A076_ALL_ORIGINAL_SOURCE_SHA_EVIDENCE_VERIFIED')
+          PY
+      - name: Frozen 10 raw ZIP source receipts, original C08 and v05 unchanged
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f06/F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json)" = a5bf2105d1c611517a8d127d5e1f8cb622720162
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f04/F04_FIVE_5M_FUTURES_2026-10-02_RECEIPTS.json)" = e5b24eb50c15fcd19fe1069d44e95a0a02edaa1c
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Rerun 48 no-lookahead source replay cases
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a076-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a076-v05.txt
+          grep -Eq '^OK$' /tmp/a076-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context 2>&1 | tee /tmp/a076-causal.txt
+          grep -q 'Ran 19 tests' /tmp/a076-causal.txt
+          grep -Eq '^OK$' /tmp/a076-causal.txt
+          echo '76_SHA_CHAIN_PROOFS_AND_48_PRICE_GEOMETRY_TESTS_PASS_NO_READY'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a076-original-10-source-futures-evidence
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a076-proof.json
+            /tmp/a076-v05.txt
+            /tmp/a076-causal.txt
