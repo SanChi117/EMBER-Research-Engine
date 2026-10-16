@@ -46,7 +46,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph 2>&1 | tee /tmp/c18-tests.txt
           grep -q 'Ran 241 tests' /tmp/c18-tests.txt
-          grep -Eq '^OK
+          grep -Eq '^OK$' /tmp/c18-tests.txt
           echo 'C18_ALL_UNIT_NEGATIVE_AND_CAUSAL_TESTS_PASS'
       - name: Re-download original C08 ZIP and verify C18 native 15m child graph
         run: |
