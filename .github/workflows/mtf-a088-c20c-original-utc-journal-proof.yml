@@ -1,0 +1,69 @@
+name: MTF A088 — Original C20C Source and SHA Chain (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a088-c20c-original-utc-journal-proof.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  a088-utc-source-and-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Full SHA journal and seven pinned C20C evidence files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a088-journal.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a088-journal.json'))
+          assert x['events']>=88 and x['validations_pass']
+          items=[json.loads(s) for s in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert items[86]['action_id']=='A087'
+          assert items[86]['record_sha256']=='1c2ecc95f5bbbb891867bd38ad4584cd220ddb39dc5239828ff6d43af81caa0d'
+          assert items[87]['action_id']=='A088' and items[87]['seq']==88
+          assert items[87]['record_sha256']=='067504ce5323421452d7001087a943478f8e8bea10be64fcf68ff73a5b0996d8'
+          assert items[87]['cycle_result']=='PASSED' and len(items[87]['evidence'])==7
+          print('A088_88_SHA_JOURNAL_AND_ALL_7_C20C_FILES_VERIFIED')
+          PY
+      - name: Fixed original 5m/1h source receipts
+        run: |
+          python - <<'PY'
+          import subprocess
+          refs={
+            'research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json':'7fc957b210b14b8ab0380b8941a7b145def836dc',
+            'research/mtf-element-audit-v1/evidence/c20/C20B_ORIGINAL_1H_5M_AGGREGATES.json':'555be0425c68749b27a72e90e3bc2943f7afab64',
+            'research/mtf-element-audit-v1/evidence/c20/C20C_ORIGINAL_UTC_CONTEXT_OBSERVATIONS.json':'346ccc1472f8e18103690bcd424c8d710eef4b01'}
+          for p,x in refs.items():
+              assert subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()==x
+          print('C20C_ORIGINAL_PINNED_GIT_SOURCE_BLOBS_PASS')
+          PY
+      - name: C20C closed-time negative tests
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c20c_context_observations
+      - name: Independently re-download 45 original Futures ZIP and assert refutations
+        run: |
+          python research/mtf-element-audit-v1/tests/probe_c20c_original_utc_context.py /tmp/a088-source.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a088-source.json'))
+          assert x['original_futures_zip_archives']==45
+          assert x['5m_native_rows']==46080
+          assert x['research_geom_5m_breaks']==512
+          assert sum(z['raid_pivot_older_utc_day'] for z in x['rows'])==70
+          assert sum(z['multiple_raid_parents_same_5m_bar_edges'] for z in x['rows'])==246
+          assert sum(z['utc_bos_close_09_17_proxy'] for z in x['rows'])==199
+          assert x['author_approved_bos']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C20C_45_ORIGINAL_ZIP_UTC_CONTEXT_AND_AMBIGUITY_PASS')
+          PY
