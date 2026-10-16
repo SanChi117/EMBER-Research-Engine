@@ -7,6 +7,7 @@ on:
       - 'research/mtf-element-audit-v1/d05/f03_5m_original_source.py'
       - 'research/mtf-element-audit-v1/d05/test_f03_5m_original_source.py'
       - 'research/mtf-element-audit-v1/tests/probe_f03_binance_original_5m_15m.py'
+      - 'research/mtf-element-audit-v1/evidence/f03/F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,6 +25,7 @@ jobs:
           set -euo pipefail
           test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f03/F03_BTCUSDT_5M_2026-10-02_ORIGINAL_RECEIPT.json)" = 7e5bc374b4e4cceaf01325b16e42631dad0ec9db
       - name: Synthetic original source ZIP negative mutations and 5m no-lookahead
         run: |
           set -euo pipefail
