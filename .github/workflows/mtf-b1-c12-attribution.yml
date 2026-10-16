@@ -1,0 +1,65 @@
+name: MTF B1 C12 — Original Raid-IMB Attribution Audit (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c12-attribution.yml'
+      - 'research/mtf-element-audit-v1/d05/c12_attribution_ambiguity_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c12_attribution_ambiguity_gate.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c12_real_attribution_graph.py'
+      - 'research/mtf-element-audit-v1/evidence/c12/C12_CAUSAL_AMBIGUITY_F06_DIAGNOSTIC.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  price-evidence-attribution-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve frozen source-v05, original F06 and original C11 diagnostic
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f06/F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json)" = a5bf2105d1c611517a8d127d5e1f8cb622720162
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c11/C11_F06_SOURCE_PRICE_CANDIDATE_DIAGNOSTICS.json)" = 513c950c311efc12fab95ce64f4ac47f0f6003f3
+      - name: Original 29+19+20 and new 25 causal ambiguity adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c12-course.txt
+          grep -q 'Ran 29 tests' /tmp/c12-course.txt
+          grep -Eq '^OK$' /tmp/c12-course.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate 2>&1 | tee /tmp/c12-negative.txt
+          grep -q 'Ran 64 tests' /tmp/c12-negative.txt
+          grep -Eq '^OK$' /tmp/c12-negative.txt
+          echo '93_CAUSAL_PRICE_ATTRIBUTION_TESTS_PASS_NO_AUTO_STRONGHL'
+      - name: Original F06 5m source replay and original C11 multi-parent diagnostic
+        if: ${{ hashFiles('research/mtf-element-audit-v1/tests/probe_c12_real_attribution_graph.py') != '' }}
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c12_real_attribution_graph.py /tmp/c12-real.json 2>&1 | tee /tmp/c12-real.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c12-real.json'))
+          assert x['source_5m_archives']==10 and x['source_5m_candles']==2880
+          assert x['geometric_edges']==177 and x['original_C11_reference_edges']==177
+          assert x['author_approved_vc']==0 and x['author_approved_stronghl']==0
+          assert x['trade_ready'] is False
+          assert x['audit_status']=='UNRESOLVED_ATTRIBUTION_NOT_ACADEMIC_ENTRY'
+          print('BIPARTITE_ATTRIBUTION_IDENTIFIED_NOT_PUBLISHED_AS_TRADE')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c12-ambiguous-causal-attribution-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c12-course.txt
+            /tmp/c12-negative.txt
+            /tmp/c12-real.json
+            /tmp/c12-real.log
