@@ -56,6 +56,18 @@ class PriceContactImbC11Tests(unittest.TestCase):
         res=inspect_contact_then_5m_imb(a,b,T+DAY+28*PERIOD)
         self.assertTrue(res.paired_source_price_witnesses)
         self.assertIsNone(res.paired_source_price_witnesses[0].first_later_poi_test_source_id)
+    def test_wick_extreme_rebreach_before_imb_rejects_geometric_pair(self):
+        a,b=proof()
+        # Break the 1H raid wick extreme (112) in a closed 5m bar before
+        # the 5m bearish gap is formed; no causal StrongHL candidate.
+        from test_c10_two_day_original_5m_context import make
+        broken=make(1,pattern=True,override={
+            25:(100,115,99,100),
+            26:(96,97,95,96),
+        })
+        result=inspect_contact_then_5m_imb(a,broken,T+DAY+28*PERIOD)
+        self.assertEqual(result.post_raid_5m_imb_candidates,0)
+        self.assertEqual(result.readiness,"NOT_TRADE_READY")
     def test_imb_gap_missing_means_no_confirmation(self):
         a,b=proof(gap=False)
         q=inspect_contact_then_5m_imb(a,b,T+DAY+28*PERIOD)
