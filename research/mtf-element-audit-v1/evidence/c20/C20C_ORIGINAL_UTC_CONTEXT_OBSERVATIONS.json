@@ -1,0 +1,86 @@
+{
+  "5m_native_rows": 46080,
+  "author_approved_bos": 0,
+  "meaning": "UTC calendar, 24h delay and UTC 09-17 are diagnostics NOT author session or FTA.",
+  "original_futures_zip_archives": 45,
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "research_geom_5m_breaks": 512,
+  "rows": [
+    {
+      "author_bos_status": "UNKNOWN_SOURCE_BOS_LABELS",
+      "author_fta_status": "UNKNOWN_SOURCE_FTA",
+      "author_session_status": "UNKNOWN_SOURCE_TIMEZONE",
+      "break_more_than_24h_after_confirmed_raid": 0,
+      "multiple_raid_parents_same_5m_bar_edges": 51,
+      "raid_pivot_older_utc_day": 9,
+      "raid_pivot_previous_utc_day": 16,
+      "raid_pivot_same_utc_day": 76,
+      "readiness": "NOT_TRADE_READY",
+      "research_price_breaks": 101,
+      "symbol": "BTCUSDT",
+      "utc_bos_close_09_17_proxy": 46
+    },
+    {
+      "author_bos_status": "UNKNOWN_SOURCE_BOS_LABELS",
+      "author_fta_status": "UNKNOWN_SOURCE_FTA",
+      "author_session_status": "UNKNOWN_SOURCE_TIMEZONE",
+      "break_more_than_24h_after_confirmed_raid": 0,
+      "multiple_raid_parents_same_5m_bar_edges": 75,
+      "raid_pivot_older_utc_day": 21,
+      "raid_pivot_previous_utc_day": 23,
+      "raid_pivot_same_utc_day": 78,
+      "readiness": "NOT_TRADE_READY",
+      "research_price_breaks": 122,
+      "symbol": "ETHUSDT",
+      "utc_bos_close_09_17_proxy": 46
+    },
+    {
+      "author_bos_status": "UNKNOWN_SOURCE_BOS_LABELS",
+      "author_fta_status": "UNKNOWN_SOURCE_FTA",
+      "author_session_status": "UNKNOWN_SOURCE_TIMEZONE",
+      "break_more_than_24h_after_confirmed_raid": 0,
+      "multiple_raid_parents_same_5m_bar_edges": 40,
+      "raid_pivot_older_utc_day": 11,
+      "raid_pivot_previous_utc_day": 20,
+      "raid_pivot_same_utc_day": 67,
+      "readiness": "NOT_TRADE_READY",
+      "research_price_breaks": 98,
+      "symbol": "SOLUSDT",
+      "utc_bos_close_09_17_proxy": 41
+    },
+    {
+      "author_bos_status": "UNKNOWN_SOURCE_BOS_LABELS",
+      "author_fta_status": "UNKNOWN_SOURCE_FTA",
+      "author_session_status": "UNKNOWN_SOURCE_TIMEZONE",
+      "break_more_than_24h_after_confirmed_raid": 0,
+      "multiple_raid_parents_same_5m_bar_edges": 49,
+      "raid_pivot_older_utc_day": 16,
+      "raid_pivot_previous_utc_day": 22,
+      "raid_pivot_same_utc_day": 59,
+      "readiness": "NOT_TRADE_READY",
+      "research_price_breaks": 97,
+      "symbol": "XRPUSDT",
+      "utc_bos_close_09_17_proxy": 32
+    },
+    {
+      "author_bos_status": "UNKNOWN_SOURCE_BOS_LABELS",
+      "author_fta_status": "UNKNOWN_SOURCE_FTA",
+      "author_session_status": "UNKNOWN_SOURCE_TIMEZONE",
+      "break_more_than_24h_after_confirmed_raid": 0,
+      "multiple_raid_parents_same_5m_bar_edges": 31,
+      "raid_pivot_older_utc_day": 13,
+      "raid_pivot_previous_utc_day": 19,
+      "raid_pivot_same_utc_day": 62,
+      "readiness": "NOT_TRADE_READY",
+      "research_price_breaks": 94,
+      "symbol": "BCHUSDT",
+      "utc_bos_close_09_17_proxy": 34
+    }
+  ],
+  "schema": "EMBER_C20C_ORIGINAL_45_SOURCE_CALENDAR_DIAGNOSTIC",
+  "trades": 0
+}
