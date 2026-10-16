@@ -20,6 +20,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Check frozen C20A/C20B original evidence and new C20C blob
+        run: |
+          python - <<'PY'
+          import subprocess
+          refs={
+           "research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json":"7fc957b210b14b8ab0380b8941a7b145def836dc",
+           "research/mtf-element-audit-v1/evidence/c20/C20B_ORIGINAL_1H_5M_AGGREGATES.json":"555be0425c68749b27a72e90e3bc2943f7afab64",
+           "research/mtf-element-audit-v1/evidence/c20/C20C_ORIGINAL_UTC_CONTEXT_OBSERVATIONS.json":"346ccc1472f8e18103690bcd424c8d710eef4b01"}
+          for p,want in refs.items():
+              actual=subprocess.check_output(["git","rev-parse","HEAD:"+p],text=True).strip()
+              assert actual==want,(p,actual,want)
+          print("C20C_FROZEN_SOURCE_GIT_BLOBS_PASS")
+          PY
       - name: Test C20C UTC / author unknown classifications
         run: |
           cd research/mtf-element-audit-v1/d05
