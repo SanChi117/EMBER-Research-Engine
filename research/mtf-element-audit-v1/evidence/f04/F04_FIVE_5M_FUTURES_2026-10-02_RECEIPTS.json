@@ -1,0 +1,91 @@
+{
+  "schema": "EMBER_D05_F04_FIVE_ORIGINAL_5M_BINANCE_FUTURES_RECEIPTS_V1",
+  "market": "BINANCE_USDM_FUTURES",
+  "date_utc": "2026-10-02",
+  "frozen_c08_315_modified": false,
+  "independent_remote_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38873374461",
+  "verified_5m_archive_count": 5,
+  "source_5m_bars_total": 1440,
+  "original_c08_15m_bars_compared": 480,
+  "exact_ohlcv_parity_groups": 480,
+  "academic_5m_vc_approved": 0,
+  "trade_ready": false,
+  "sources": [
+    {
+      "symbol": "BTCUSDT",
+      "original_5m_url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2026-10-02.zip",
+      "original_5m_zip_sha256": "2a492563746eba6c3689b90c00a081bfce3ceab86a06493e80f22c4d55e8c7ea",
+      "original_5m_csv_sha256": "14dc88dd66d78f44b73daa9243d62e35d539ace64d26adb0ba4b32aefb599c73",
+      "original_c08_15m_zip_sha256": "62742a246cee4ec9363e96f2270e00e9f23fd54f137c08ba732113a7a2e284be",
+      "original_5m_row_count": 288,
+      "exact_15m_ohlcv_parity_groups": 96,
+      "geometric_5m_classic_imb_candidates": 60,
+      "geometric_1h_raid_candidates": 1,
+      "geometric_5m_bos_after_raid_candidates": 1,
+      "academic_approval": false,
+      "readiness": "NOT_TRADE_READY"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "original_5m_url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/5m/ETHUSDT-5m-2026-10-02.zip",
+      "original_5m_zip_sha256": "531c33307bf9a355cc9f1f364c77d394940f0bca68b4e69f3e3dfac771dcc39b",
+      "original_5m_csv_sha256": "fd31423b1efc2aa3dd5831168a2e34836b1154a2c1d25dbe01ba3a1e13c1827c",
+      "original_c08_15m_zip_sha256": "1920007a2ad141d54a00ec5a8ead8c9ac88fc7e82f5bc508bf991475fc9a5745",
+      "original_5m_row_count": 288,
+      "exact_15m_ohlcv_parity_groups": 96,
+      "geometric_5m_classic_imb_candidates": 62,
+      "geometric_1h_raid_candidates": 0,
+      "geometric_5m_bos_after_raid_candidates": 0,
+      "academic_approval": false,
+      "readiness": "NOT_TRADE_READY"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "original_5m_url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/5m/SOLUSDT-5m-2026-10-02.zip",
+      "original_5m_zip_sha256": "878c1d9ca3d244e63255fe70ce085c0907be6ec80c7caf98264052aca170fe81",
+      "original_5m_csv_sha256": "c915afde158d27eb2d5292e2d0c351d399c029011544b384f590ea478c9acdd3",
+      "original_c08_15m_zip_sha256": "7a545bce3c9c5f1db99202fd4d4a51f3d6c01f8a357b791b17d6daa808275776",
+      "original_5m_row_count": 288,
+      "exact_15m_ohlcv_parity_groups": 96,
+      "geometric_5m_classic_imb_candidates": 56,
+      "geometric_1h_raid_candidates": 1,
+      "geometric_5m_bos_after_raid_candidates": 0,
+      "academic_approval": false,
+      "readiness": "NOT_TRADE_READY"
+    },
+    {
+      "symbol": "XRPUSDT",
+      "original_5m_url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/5m/XRPUSDT-5m-2026-10-02.zip",
+      "original_5m_zip_sha256": "dbad8bb5de24bb132dbc2b2c6883528b9e59c156100e8aeac785c6f4061d64ca",
+      "original_5m_csv_sha256": "39713a221c33e1c4ab9be8c62f26a03a602480085e8971c8b3f67b8ba4bea9d1",
+      "original_c08_15m_zip_sha256": "04928f59a57b577c46553a358ff92da969737179d6afc5b4f14f6871e91acefa",
+      "original_5m_row_count": 288,
+      "exact_15m_ohlcv_parity_groups": 96,
+      "geometric_5m_classic_imb_candidates": 59,
+      "geometric_1h_raid_candidates": 1,
+      "geometric_5m_bos_after_raid_candidates": 0,
+      "academic_approval": false,
+      "readiness": "NOT_TRADE_READY"
+    },
+    {
+      "symbol": "BCHUSDT",
+      "original_5m_url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/5m/BCHUSDT-5m-2026-10-02.zip",
+      "original_5m_zip_sha256": "3dac40988e662c5f7e008236150cd6288e5026f0ec30e2c851915e2fc68b0030",
+      "original_5m_csv_sha256": "e09a883ca3f08c9e166cc76eecf07a1450a9446cbf237026007f967582e1c269",
+      "original_c08_15m_zip_sha256": "cbcb5799460762588a9a0401bb416750ca1c5a46c2b4a65d3acba9a67ab56aa8",
+      "original_5m_row_count": 288,
+      "exact_15m_ohlcv_parity_groups": 96,
+      "geometric_5m_classic_imb_candidates": 53,
+      "geometric_1h_raid_candidates": 2,
+      "geometric_5m_bos_after_raid_candidates": 2,
+      "academic_approval": false,
+      "readiness": "NOT_TRADE_READY"
+    }
+  ],
+  "verification_limitations": [
+    "TLS HTTPS and same-host .CHECKSUM are not a Binance digital signature",
+    "Source data covers only 2026-10-02 across five symbols, not all historical days",
+    "v05 24h liquidity freshness and 2+2 pivot definitions not source-labelled academy approved",
+    "C08 original 315 archive manifest and all shards immutable; this is a separate receipt series"
+  ]
+}
