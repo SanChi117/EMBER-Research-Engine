@@ -1,0 +1,65 @@
+name: MTF B1 C13 — Original StrongHL POI OR BOS Branch Price Proof (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c13-bos-or-poi.yml'
+      - 'research/mtf-element-audit-v1/d05/c13_stronghl_bos_or_poi_source_branch.py'
+      - 'research/mtf-element-audit-v1/d05/test_c13_stronghl_bos_or_poi_source_branch.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c13_source_bos_or_poi.py'
+      - 'research/mtf-element-audit-v1/evidence/c13/C13_DUAL_SOURCE_BOS_POI_DIAGNOSTICS.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bos-or-poi-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Frozen unchanged original course v05, ten Futures F06 and C12 evidence
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/f06/F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json)" = a5bf2105d1c611517a8d127d5e1f8cb622720162
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c12/C12_CAUSAL_AMBIGUITY_F06_DIAGNOSTIC.json)" = a18e62776584ad428ad74c254d864c59dd540984
+      - name: Course v05 plus C10 C11 C12 and 22 independent POI-or-BOS structural tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c13-course.txt
+          grep -q 'Ran 29 tests' /tmp/c13-course.txt
+          grep -Eq '^OK$' /tmp/c13-course.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch 2>&1 | tee /tmp/c13-tests.txt
+          grep -q 'Ran 86 tests' /tmp/c13-tests.txt
+          grep -Eq '^OK$' /tmp/c13-tests.txt
+          echo '115_GEOMETRIC_SOURCE_CAUSAL_TESTS_PASS_NO_ACADEMIC_TRADE_SIGNOFF'
+      - name: Revalidate ten original 5m USD-M source ZIPs and 1h raid BOS or POI graph
+        if: ${{ hashFiles('research/mtf-element-audit-v1/tests/probe_c13_source_bos_or_poi.py') != '' }}
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c13_source_bos_or_poi.py /tmp/c13-real.json 2>&1 | tee /tmp/c13-real.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/c13-real.json'))
+          assert q['original_5m_zip_archives']==10 and q['source_5m_bars']==2880
+          assert q['raid_to_imb_geometric_edges']==177
+          assert q['bos_geometric_event_count']==12
+          assert q['author_approved_vc']==0 and q['author_approved_stronghl']==0
+          assert q['trade_ready'] is False
+          print('REAL_SOURCE_STRONGHL_TWO_ALTERNATIVE_GEOMETRY_BRANCHES_NO_CERTIFICATE')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-b1-c13-bos-or-poi-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c13-course.txt
+            /tmp/c13-tests.txt
+            /tmp/c13-real.json
+            /tmp/c13-real.log
