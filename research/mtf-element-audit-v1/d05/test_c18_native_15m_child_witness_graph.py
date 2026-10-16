@@ -162,5 +162,5 @@ class C18NativeChildWitness(unittest.TestCase):
     def test_full_history_cannot_be_claimed_as_original_five_minute(self):
         g=run()
         self.assertIn("15M_NATIVE",g.source_scope)
-        self.assertNotIn("5M",g.source_scope)
+        self.assertNotIn("ORIGINAL_5M",g.source_scope)
 if __name__=="__main__": unittest.main()
