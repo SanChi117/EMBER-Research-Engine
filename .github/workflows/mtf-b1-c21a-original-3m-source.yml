@@ -28,7 +28,8 @@ jobs:
             'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
             'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
             'research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json':'7fc957b210b14b8ab0380b8941a7b145def836dc',
-            'research/mtf-element-audit-v1/evidence/c20/C20C_ORIGINAL_UTC_CONTEXT_OBSERVATIONS.json':'346ccc1472f8e18103690bcd424c8d710eef4b01'}
+            'research/mtf-element-audit-v1/evidence/c20/C20C_ORIGINAL_UTC_CONTEXT_OBSERVATIONS.json':'346ccc1472f8e18103690bcd424c8d710eef4b01',
+            'research/mtf-element-audit-v1/evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json':'02949d457e63bb367bbb99ae087e3306d1e68557'}
           for p,want in refs.items():
               have=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
               assert have==want,(p,have,want)
@@ -39,7 +40,35 @@ jobs:
           set -euo pipefail
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c21_native3m_source_bridge 2>&1 | tee /tmp/c21-unit.log
-          grep -Eq '^OK$' /tmp/c21-unit.log
+          grep -q 'Ran 15 tests' /tmp/c21-unit.log
+          grep -Eq '^OK
+      - name: Independently download all original 3m and C08 archives
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c21_native3m_futures_32day.py /tmp/c21-original.json 2>&1 | tee /tmp/c21-original.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c21-original.json'))
+          assert x['new_original_3m_zip_count']==15
+          assert x['previous_C08_original_zip_count']==30
+          assert x['native_3m_closed']==76800
+          assert x['original_15m_decimal_equalities']==15360
+          assert x['native_1d_equalities']==160
+          assert x['author_3m_bos_goldens']==x['author_approved_trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C21_ORIGINAL_3M_5_TO_NATIVE15M_DECIMAL_PARITY_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-c21-original-3m-futures
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c21-unit.log
+            /tmp/c21-original.json
+            /tmp/c21-original.log
+ /tmp/c21-unit.log
       - name: Independently download all original 3m and C08 archives
         run: |
           set -euo pipefail
