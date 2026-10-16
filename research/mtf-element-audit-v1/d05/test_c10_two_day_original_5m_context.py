@@ -6,6 +6,7 @@ from io import BytesIO
 from pathlib import Path
 import sys,unittest,zipfile
 sys.path.insert(0,str(Path(__file__).resolve().parent))
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]/"mtf-course-v05"/"src"))
 from course_primitives_v05 import Bar
 from f03_5m_original_source import verify_original_5m,DAY,PERIOD
 from c10_two_day_original_5m_context import review_two_day_5m,TwoDayRejected
