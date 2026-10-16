@@ -101,6 +101,12 @@ def inspect_source_entry_branch(route:str,stages:list[ClaimedStage],as_of_ms:int
             raise EntryCourseRejected("UNLINKED_PARENT_STAGE")
         if index==0 and s.parent_source_id is not None:
             raise EntryCourseRejected("ROOT_CANNOT_HAVE_UNPROVED_PARENT")
+        if s.role=="1H_POI_TEST":
+            parent=stages[index-1]
+            if parent.role!="1H_VC_NEW_POI" or s.kind!=parent.kind:
+                raise EntryCourseRejected("TEST_NOT_OF_NEW_1H_POI")
+            if s.known_at_ms<=parent.known_at_ms:
+                raise EntryCourseRejected("1H_POI_TEST_NOT_AFTER_POI_CREATION")
         previous=s.known_at_ms
     if stages:
         parent=stages[0]
