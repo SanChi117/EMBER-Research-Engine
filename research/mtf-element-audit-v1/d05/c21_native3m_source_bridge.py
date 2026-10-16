@@ -79,3 +79,51 @@ def decimal(x):
     except (InvalidOperation,ValueError,TypeError) as e:raise C21Rejected("BAD_3M_DECIMAL") from e
     if not value.is_finite():raise C21Rejected("NONFINITE_3M_OHLCV")
     return value
+
+def read_original_3m(url,archive,checksum,*,symbol,period):
+    name=verified_name(url,symbol,period)
+    if (type(archive) is not bytes or type(checksum) is not bytes or
+        not 0<len(archive)<=30000000):
+        raise C21Rejected("MISSING_OR_OVERSIZE_ORIGINAL_3M")
+    sha=hashlib.sha256(archive).hexdigest()
+    try:check=parse_checksum(checksum,name)
+    except (ValueError,TypeError) as e:
+        raise C21Rejected("INVALID_SOURCE_CHECKSUM_3M") from e
+    if check!=sha:raise C21Rejected("ORIGINAL_3M_ZIP_SHA_MISMATCH")
+    try:
+        with zipfile.ZipFile(io.BytesIO(archive)) as z:
+            infos=z.infolist()
+            if (len(infos)!=1 or infos[0].filename!=name[:-4]+".csv"
+                or infos[0].is_dir() or infos[0].flag_bits&1
+                or infos[0].file_size>20000000):
+                raise C21Rejected("UNSAFE_ORIGINAL_3M_ZIP")
+            raw=z.read(infos[0])
+        text=raw.decode("utf-8-sig")
+        table=list(csv.reader(io.StringIO(text,newline="")))
+    except (zipfile.BadZipFile,KeyError,UnicodeError,RuntimeError) as e:
+        raise C21Rejected("CORRUPT_ORIGINAL_3M_ZIP") from e
+    if table and table[0][0].strip().lower()=="open_time":
+        if len(table[0])!=12:raise C21Rejected("WRONG_ORIGINAL_3M_HEADER")
+        table=table[1:]
+    expected=(30*DAY if period=="2026-09" else DAY)//THREE
+    if len(table)!=expected:raise C21Rejected("INCOMPLETE_3M_SOURCE_PERIOD")
+    base=STARTS[PERIODS.index(period)]
+    out=[]
+    for i,r in enumerate(table):
+        if len(r)!=12:raise C21Rejected("ORIGINAL_3M_NEEDS_12_COLUMNS")
+        at=base+i*THREE
+        try:
+            t=int(r[0]);close=int(r[6]);trades=int(r[8])
+        except (TypeError,ValueError) as e:
+            raise C21Rejected("INVALID_NATIVE_3M_TIME_OR_TRADECOUNT") from e
+        if t!=at or close!=at+THREE-1 or trades<0:
+            raise C21Rejected("GAPPED_UNCLOSED_OR_REORDERED_3M")
+        o,h,l,c,v=(decimal(r[j]) for j in (1,2,3,4,5))
+        quote,taker,takerquote=(decimal(r[j]) for j in (7,9,10))
+        if not (0<l<=min(o,c)<=max(o,c)<=h and
+                min(v,quote,taker,takerquote)>=0):
+            raise C21Rejected("IMPOSSIBLE_NATIVE_3M_OHLCV")
+        out.append(Original3mRow(symbol,at,at+THREE,o,h,l,c,v,
+                                 sha+":"+str(at),sha))
+    return Original3mArchive(symbol,period,url,sha,
+                             hashlib.sha256(raw).hexdigest(),tuple(out))
