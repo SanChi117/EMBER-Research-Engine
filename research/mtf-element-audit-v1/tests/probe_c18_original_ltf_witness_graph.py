@@ -78,6 +78,22 @@ def main(path=None):
     assert sum(x["original_daily_parity"] for x in observations)==160
     assert all(x["prefix_invariance"] and x["counts"]["author_status"]==AUTHOR_UNKNOWN
                and x["counts"]["readiness"]=="NOT_TRADE_READY" for x in observations)
+    pinned=json.loads((ROOT/"evidence"/"c18"/"C18_ORIGINAL_C08_NATIVE15M_LTF_GRAPH_RECEIPT.json").read_text(encoding="utf8"))
+    assert pinned["schema"]=="EMBER_B1_C18_ORIGINAL_15M_FIRST_CONTACT_TO_1H_15M_GEOMETRIC_IMB_V1"
+    assert pinned["frozen_c16_receipt_git_blob"]=="bdaa008ce719254507ea95231cdc630bfa85cd67"
+    assert pinned["frozen_c17_receipt_git_blob"]=="d7fffbe4712bc5a188b2e9065527b86c2987846f"
+    assert pinned["original_archives"]==result["original_C08_archives_reloaded"]==30
+    assert pinned["original_native_15m_bars"]==result["original_native_15m_bars"]==15360
+    assert pinned["native_1d_equalities"]==result["native_daily_parities"]==160
+    assert pinned["derived_1h_bars"]==result["derived_closed_1h"]==3840
+    assert pinned["observations"]==result["observations"],"SOURCE_GRAPH_DID_NOT_REPEAT_PINNED_OBSERVATION"
+    assert pinned["author_golden_source_status"]==AUTHOR_UNKNOWN
+    assert pinned["author_approved_1d_4h_poi"]==pinned["author_approved_vc"]==pinned["author_approved_trades"]==0
+    assert pinned["readiness"]=="NOT_TRADE_READY"
+    assert pinned["totals"]["parents_1d"]==26
+    assert pinned["totals"]["parents_4h"]==153
+    assert pinned["totals"]["observed_htf_first_native_15m_contacts"]==154
+    assert pinned["totals"]["temporal_edges_not_author_pairs"]==50627
     if path:Path(path).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
     print(json.dumps(result,indent=2,sort_keys=True),flush=True)
     return 0
