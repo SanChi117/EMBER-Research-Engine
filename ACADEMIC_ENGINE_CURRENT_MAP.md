@@ -1,6 +1,6 @@
 # EMBER Academic Engine — карта работ и контроль приёмки
 
-**Версия текущей карты:** 2026-10-16 / после B1 C11 (source-linked StrongHL/VC geometric candidate falsification). Не использовать эту обновляемую копию как неизменяемое доказательство предыдущих журналов. **Режим:** PAPER ONLY, самостоятельная исследовательская разработка. **Текущий эталон:** ветка `research/academic-engine-recovery-20261015` на базе C07. Существующий `ROADMAP.md` относится к историческому EMBER Core и намеренно не меняется.
+**Версия текущей карты:** 2026-10-16 / после B1 C12 (двусторонняя диагностика неоднозначности Raid→IMB без назначения VC). Не использовать эту обновляемую копию как неизменяемое доказательство предыдущих журналов. **Режим:** PAPER ONLY, самостоятельная исследовательская разработка. **Текущий эталон:** ветка `research/academic-engine-recovery-20261015` на базе C07. Существующий `ROADMAP.md` относится к историческому EMBER Core и намеренно не меняется.
 
 ## Обозначения
 
@@ -11,11 +11,11 @@
 
 ## Счётчик выполнения
 
-**Всего 35 укрупнённых контрольных пунктов:** ✅ **24** полностью закрыты в обозначенной области; 🔄 **3** частично готовы; ⏳/⛔ **8** не завершены. Это количество пунктов, **не процент объёма разработки**.
+**Всего 36 укрупнённых контрольных пунктов:** ✅ **25** полностью закрыты в обозначенной области; 🔄 **3** частично готовы; ⏳/⛔ **8** не завершены. Это количество пунктов, **не процент объёма разработки**.
 
 **Текущий рабочий пункт:** `B1` — связать D03 parent/child с технически наблюдаемой ценовой геометрией и валидированными архивами C08; `D05b` — последующая отдельная семантическая приёмка реакции, `A3` — точная привязка 45 элементов.
 
-**Последние независимые CI:** B1/C11 [38893550398](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38893550398) **68 PASS** + 10 original F06 Futures ZIP SHA pinned, 177 MANY-TO-MANY 1H Raid→5m IMB geometry combos and 168 later overlaps, **0 academic StrongHL/VC**; A076 [38890350803](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38890350803) 76 evidence records PASS. **0 академически подтверждённых торговых входов.**
+**Последние независимые CI:** B1/C12 [38895159244](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38895159244) **93 PASS** + 10 original F06 ZIP SHA, 177 graph edges, 154 unique IMB, 23 multi-parent cases, author approvals **0**; B1/C11 68 PASS; A077 [38893875422](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38893875422) 77 SHA proof entries PASS. **Нет разрешённых сделок.**
 
 **Правило каждого следующего ответа:** показать таблицу этапов, число подтверждённых задач, отдельно **новые галочки за этот цикл**, ссылку на доказательства, SHA, CI и то, что осталось. Отсутствие коммита/журнала/проверки = без новой галочки.
 
@@ -50,6 +50,7 @@
 | B1i | C09: закрытый 1H фрактальный Raid → BOS на исходных 5m Futures | [x] | BTC Oct2 original F03 288×5m → 24×1H, v05-кандидаты: 5 фракталов 1H, **1 wick raid**, 76×5m pivots, **1 5m BOS** после 1H raid с прямым raw source ID; без сделок | **29 v05 +23 F03+18 C09=70 PASS**; первое FAIL сравнивало SHA разных синтетических архивов, исправлена проверка geometry prefix; author 24h freshness и pivots не аттестованы | [CI 38872807582](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38872807582), `cycles/B1_C09_REAL_FUTURES_RAID_TO_5M_BOS_GEOMETRY.md` |
 | B1j | C10/F06: непрерывные 2 дня original 5m × 5 Futures монет | [x] | BTC/ETH/SOL/XRP/BCH, 2026-10-01–02: **10 source 5m ZIP, 2880 raw 5m, 960/960 exact C08 original 15m OHLCV**, 240 закрытых 1H; source-linked v05 25 raid и 12 BOS *кандидатов* | **19 новых + 29 v05 = 48 PASS**; два сетевых CI с SHA-pinned receipt всех 10 архивов; первый CI FAIL был из-за импорта v05 и исправлен; академическая семантика не аттестована | [CI 38889967628](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38889967628), `cycles/B1_C10_F06_TWO_DAY_FIVE_SYMBOL_FUTURES_SOURCE.md` |
 | B1k | C11: 1H Raid контакт → последующий 5m IMB → первый возможный TEST | [x] | На original F06 десяти 5m ZIP все 2880 баров: **25 Raid и 177 временных сочетаний с 5m IMB**, 168 последующих перекрытий IMB зон, **0 академически подтверждённых StrongHL/VC**; каждая связь с SHA исходной свечи | **29 v05 +19 C10 +20 C11 = 68 PASS**; CI повторно сверяет Git-pinned source+diagnostics; **177 many-to-many НЕ 177 независимых подтверждений/сделок**. Открыта причинная авторская неоднозначность | [CI 38893550398](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38893550398), `cycles/B1_C11_STRONGHL_CONTACT_VC_SOURCE_PRICE_DIAGNOSTICS.md` |
+| B1l | C12: двусторонняя атрибуция Raid↔IMB и запрет ложного StrongHL/VC | [x] | 10 original F06 ZIP, 2880 5m, **177 геометрических связей, 154 уникальных IMB, 11 Raid со множеством IMB, 23 IMB с несколькими Raid**; ни nearest, ни first IMB не назначается родителем автоматически | **29 v05+19 C10+20 C11+25 C12 =93 PASS**, повторный SHA-anchored ZIP/C11/C12 CI. Оба FAILED CI зафиксированы. **0 академических StrongHL/VC/entry**; без авторских golden-меток D05b всё ещё [~] | [CI 38895159244](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38895159244), `cycles/B1_C12_AMBIGUOUS_RAID_TO_VC_ATTRIBUTION.md` |
 | C1 | Route A: IMB/SNR (+ A2 1H→15m→5m) | [ ] | Изолированная геометрия IMB есть; route proxy не аттестован | Parent→child, SNR, first test, VC, FTA, SL/TP, visual parity | UNKNOWN не создаёт READY |
 | C2 | Route B: IDM early entry | [ ] | Изолированная кандидатная `select_idm` есть | Настоящее inducement, StrongHL, лимитный контракт без навязанного BOS | Нельзя называть pivot IDM |
 | C3 | Route C: raid→3m/5m BOS | [ ] | Исследовательский `bos_after_raid`, 29 локальных синтетических v05 тестов | Полный контекст, структурный raid, BOS и авторские схемы, исполнения после confirmed | 15m SNR proxy исключить |
@@ -61,7 +62,7 @@
 
 ## Ближайшая рабочая очередь
 
-**Текущий цикл после B1/C11:** реализована проверка ценовой последовательности liquidity contact→5m IMB candidate→post-known first overlap на 2880 настоящих 5m Futures барах 10 архивов; **один 1H Raid связывается со многими IMB**, так что этот алгоритм не может сам присваивать StrongHL/VC status. Далее: source-labeled признаки авторского причинного VC/POI, контрастные случаи, связь с HTF 4H/1D и FTA/SL, без произвольного TTL/volume фильтра.
+**Текущий цикл после B1/C12:** неоднозначная many-to-many связь Raid↔5m IMB измерена и закрыта для неавторизованного автоматического присвоения StrongHL/VC. 177 пар = 154 уникальных IMB, 11 Raid с множеством IMB, 23 IMB с ≥2 возможными Raid, 0 академических author labels/сигналов. Далее D05b/A3: найти точные авторские positive/negative размеченные пары контакт→POI/BOS и MTF-контекст, без выдумывания nearest/first/TTL-фильтра.
 
 **После:** выбрать один проверяемый рыночный элемент (например, L01/L05/P09), построить positive/negative примеры только с первоисточником и независимой ценовой историей. Затем отдельный технический адаптер, не самостоятельная новая стратегия.
 
