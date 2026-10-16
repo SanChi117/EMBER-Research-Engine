@@ -1,0 +1,44 @@
+name: MTF D05 F05 — Original Entry by IMB SNR VC Branch Rules (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-d05-f05-original-entry-vc.yml'
+      - 'research/mtf-element-audit-v1/d05/f05_source_entry_vc_branches.py'
+      - 'research/mtf-element-audit-v1/d05/test_f05_source_entry_vc_branches.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-entry-source-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require original v05 academic primitives unchanged
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Fail-closed source branch tests plus original v05
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/f05-v05.txt
+          grep -q 'Ran 29 tests' /tmp/f05-v05.txt
+          grep -Eq '^OK$' /tmp/f05-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_f05_source_entry_vc_branches 2>&1 | tee /tmp/f05-branches.txt
+          grep -q 'Ran 27 tests' /tmp/f05-branches.txt
+          grep -Eq '^OK$' /tmp/f05-branches.txt
+          echo '56_SOURCE_RELATION_TESTS_PASS__PRICE_AND_AUTHOR_EVENTS_UNATTESTED'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-f05-author-entry-imbsnr-vc-branch-counterexamples
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/f05-v05.txt
+            /tmp/f05-branches.txt
