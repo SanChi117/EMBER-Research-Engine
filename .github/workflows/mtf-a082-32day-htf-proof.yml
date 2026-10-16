@@ -1,0 +1,66 @@
+name: MTF A082 — Verify 32-day Native Futures Source Evidence Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a082-32day-htf-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  chained-82-original-research-source-proofs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify 82 source evidence SHA chained events and exact bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a082-source-chain.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a082-source-chain.json'))
+          assert r['events']==82 and r['validations_pass']
+          rows=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert rows[-1]['action_id']=='A082'
+          assert rows[-1]['record_sha256']=='0c690846f3315bd4d551fef4e60c753a733f2f1b34cf4afa81032624c396b2b0'
+          assert '0 approved trades' in rows[-1]['observed_result']
+          print('A001_A082_ALL_82_NATIVE_ORIGINAL_FUTURES_PROOF_BYTES_SHA_PASS')
+          PY
+      - name: Frozen original C08 receipt batch SHA and C16 selected source receipts
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c15/C15_F06_5M_NATIVE_15M_DERIVED_1D_4H_SOURCE_RECEIPT.json)" = 696065b29bbe45f5f4fdd0bf8042c4f5781c170d
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json)" = bdaa008ce719254507ea95231cdc630bfa85cd67
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_ETHUSDT_63_RECEIPTS.json)" = 8da28253c04f230a9e737b1075d30fc981628dfc
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_SOLUSDT_63_RECEIPTS.json)" = 04d7b6aca9c61216d9c311591c20aef6eb5e6afe
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_XRPUSDT_63_RECEIPTS.json)" = b36184a5b7153e96f338b87694d8eb8bab4b5191
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BCHUSDT_63_RECEIPTS.json)" = 35c51c28ee83c05050d75940563ed352277871fa
+      - name: Original 29 and full C10-C16 185 price source negative tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a082-course.txt
+          grep -q 'Ran 29 tests' /tmp/a082-course.txt
+          grep -Eq '^OK$' /tmp/a082-course.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage 2>&1 | tee /tmp/a082-all-negative.txt
+          grep -q 'Ran 185 tests' /tmp/a082-all-negative.txt
+          grep -Eq '^OK$' /tmp/a082-all-negative.txt
+          echo '82_SOURCE_CHAIN_PROOFS_AND_214_TESTS_PASS_ZERO_SOURCE_AUTHORIZED_TRADES'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a082-monthly-plus-daily-futures-evidence-chain
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a082-source-chain.json
+            /tmp/a082-course.txt
+            /tmp/a082-all-negative.txt
