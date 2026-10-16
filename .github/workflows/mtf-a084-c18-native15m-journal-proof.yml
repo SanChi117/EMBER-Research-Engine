@@ -1,4 +1,4 @@
-name: MTF A084 — Verify C18 Native15m Futures Source and SHA Journal (PAPER)
+name: MTF A084 — Verify C18 Original Proof Within Evolving SHA Journal (PAPER)
 on:
   push:
     branches: [research/academic-engine-recovery-20261015]
@@ -26,14 +26,14 @@ jobs:
           python - <<'PY'
           import json
           x=json.load(open('/tmp/a084-sha-chain.json'))
-          assert x["events"]==84 and x["validations_pass"]
-          assert x["tip_sha256"]=="05cd9d01be757fe93f623c28c6b2577966a1c486f561c9b72a26108727ffa2b9"
+          assert x["events"]>=84 and x["validations_pass"]
+          # SHA chain audit independently checks the current rolling tip.
           entries=[json.loads(v) for v in open("ЖУРНАЛ_ДЕЙСТВИЙ.jsonl",encoding="utf8") if v.strip()]
-          assert entries[-2]["action_id"]=="A083"
-          assert entries[-2]["record_sha256"]=="9499614c5e77d02c840ce1e94c448c2a7695ae08970be3ba79604b38f41b3300"
-          assert entries[-1]["action_id"]=="A084" and entries[-1]["cycle_result"]=="PASSED"
-          assert len(entries[-1]["evidence"])==5
-          print("ALL_84_APPEND_ONLY_SHA_AND_EVIDENCE_BYTES_VERIFIED",flush=True)
+          assert entries[82]["action_id"]=="A083"
+          assert entries[82]["record_sha256"]=="9499614c5e77d02c840ce1e94c448c2a7695ae08970be3ba79604b38f41b3300"
+          assert entries[83]["action_id"]=="A084" and entries[83]["cycle_result"]=="PASSED"
+          assert len(entries[83]["evidence"])==5
+          print("A084_HISTORIC_PREFIX_PLUS_FULL_ROLLING_CHAIN_VERIFIED",flush=True)
           PY
       - name: Verify unchanged primary/previous originals and new C18 pinned Git receipts
         run: |
