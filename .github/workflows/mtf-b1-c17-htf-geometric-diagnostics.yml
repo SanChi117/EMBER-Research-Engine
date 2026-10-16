@@ -28,7 +28,7 @@ jobs:
             "research/mtf-course-v05/src/course_primitives_v05.py":"45cec7fd66d0ec156bc0a38225ee282c6d3ee71b",
             "research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json":"4205ad3118a30bbd69c412e165c7c5ce3560195d",
             "research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json":"bdaa008ce719254507ea95231cdc630bfa85cd67",
-            "research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json":"82a80b053712ee819ceb8d83178f672db4030462"}
+            "research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json":"82a80b053712ee819ceb7d83178f672db4030462"}
           for p,want in expected.items():
               actual=subprocess.check_output(["git","rev-parse","HEAD:"+p],text=True).strip()
               print(p,actual,flush=True)
