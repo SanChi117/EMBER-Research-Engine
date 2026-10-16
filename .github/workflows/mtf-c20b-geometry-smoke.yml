@@ -1,0 +1,50 @@
+name: MTF C20B — Hourly/5m Geometry Smoke (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c20b-geometry-smoke.yml'
+      - 'research/mtf-element-audit-v1/d05/c20b_hourly_fractal_source_observer.py'
+      - 'research/mtf-element-audit-v1/d05/c20b_five_minute_break_observer.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  historical-closed-candle-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile both research-only source observation modules
+        run: |
+          set -euo pipefail
+          python -m py_compile research/mtf-element-audit-v1/d05/c20b_hourly_fractal_source_observer.py research/mtf-element-audit-v1/d05/c20b_five_minute_break_observer.py
+      - name: Check all previous original course and 5m source regressions
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph test_c19_fractal_wick_raid_source_witness test_c20_original_32day_native5m_lineage
+      - name: Verify modules produce source-only structure, never approval
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python - <<'PY'
+          from c20b_hourly_fractal_source_observer import observe_fractals_and_first_breach,HourSource
+          from c20b_five_minute_break_observer import CrossTimeframeObservation
+          from decimal import Decimal as D
+          hour=3600000
+          def b(i,hi=102,lo=98):
+              return HourSource(i*hour,(i+1)*hour,D(100),D(hi),D(lo),D(100),("source-"+str(i),))
+          hours=(b(0),b(1,110),b(2),b(3),b(4),b(5,111),b(6),b(7))
+          pivots,breaches=observe_fractals_and_first_breach(hours)
+          assert any(x.kind=="BSL" and x.level==110 for x in pivots)
+          matched=[x for x in breaches if x.fractal.kind=="BSL" and x.fractal.level==110]
+          assert len(matched)==1 and matched[0].verdict=="WICK_FRACTAL_GEOMETRY"
+          assert matched[0].confirmed_at_ms==7*hour
+          assert CrossTimeframeObservation.__dataclass_fields__["readiness"].default=="NOT_TRADE_READY"
+          print("NO_LOOKAHEAD_HOURLY_CONFIRMATION_AND_ZERO_TRADE_APPROVAL_SMOKE_PASS")
+          PY
