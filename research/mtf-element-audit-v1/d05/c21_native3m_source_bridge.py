@@ -127,3 +127,18 @@ def read_original_3m(url,archive,checksum,*,symbol,period):
                                  sha+":"+str(at),sha))
     return Original3mArchive(symbol,period,url,sha,
                              hashlib.sha256(raw).hexdigest(),tuple(out))
+
+def reconcile_native_3m(archives,c08,*,as_of_ms):
+    """Full original 32d source and C08 native 15m parity before as-of crop."""
+    from c16_c08_monthly_daily_htf_lineage import ExtendedHTFReview
+    from c18_native_15m_child_witness_graph import _verify_review
+    if not isinstance(c08,ExtendedHTFReview) or c08.as_of_ms!=END:
+        raise C21Rejected("MISSING_FULL_C08_PRICE_CONTEXT")
+    if type(as_of_ms) is not int or not SEPT_START<=as_of_ms<=END or as_of_ms%THREE:
+        raise C21Rejected("FUTURE_OR_NONCLOSED_3M_ASOF")
+    try:_verify_review(c08)
+    except ValueError as e:raise C21Rejected("INVALID_C08_NATIVE_PRICE_REVIEW") from e
+    if type(archives) is not tuple or len(archives)!=3:
+        raise C21Rejected("MISSING_THREE_3M_ARCHIVES")
+    full=[]
+    shas=[]
