@@ -35,3 +35,30 @@ class C20CContextTests(unittest.TestCase):
         line=replace(synthetic(),readiness="READY")
         with self.assertRaisesRegex(ValueError,"FORGED_C20A_SOURCE_APPROVAL"):
             review_calendar_context(line,as_of_ms=line.as_of_ms)
+
+    def test_wrong_native_row_provenance_rejected(self):
+        from dataclasses import replace
+        line=synthetic()
+        bars=line.original_5m_closed
+        tampered=replace(bars[15],origin_raw_row_id="unauthenticated")
+        line=replace(line,original_5m_closed=bars[:15]+(tampered,)+bars[16:])
+        with self.assertRaisesRegex(ValueError,"CORRUPTED_FIVE_MINUTE_SOURCE_ROW"):
+            review_calendar_context(line,as_of_ms=line.as_of_ms)
+
+    def test_no_session_inference_from_clock_proxy(self):
+        line=synthetic()
+        r=review_calendar_context(line,as_of_ms=line.as_of_ms)
+        self.assertEqual(r.readiness,"NOT_TRADE_READY")
+        self.assertTrue(0<=r.utc_9_17_proxy<=r.observed_breaks)
+        self.assertEqual(r.author_session_status,"UNKNOWN_SOURCE_TIMEZONE")
+
+    def test_future_suffix_invariance(self):
+        from dataclasses import replace
+        from c20_original_32day_native5m_lineage import SEPT_START,FIVE
+        line=synthetic()
+        cut=SEPT_START+85*FIVE
+        earlier=replace(line,as_of_ms=cut,
+                        original_5m_closed=line.original_5m_closed[:85])
+        a=review_calendar_context(earlier,as_of_ms=cut)
+        b=review_calendar_context(line,as_of_ms=cut)
+        self.assertEqual(a,b)
