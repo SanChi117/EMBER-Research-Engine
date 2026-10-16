@@ -1,0 +1,56 @@
+name: MTF A071 - Verify Order Flow Source Semantics Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a071-of-semantic-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  author-of-71-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent 71 record SHA chain and source evidence integrity
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a071-proof.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a071-proof.json'))
+          assert j['events']==71 and j['validations_pass']
+          with open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') as f:
+              events=[json.loads(l) for l in f if l.strip()]
+          assert events[-1]['action_id']=='A071'
+          assert events[-1]['record_sha256']=='7f8a31a2f09382ae635594fdba90d2dd046dce97a83065bce0dc2ec772672db2'
+          assert 'always NOT_TRADE_READY' in events[-1]['observed_result']
+          print('A001_A071_SHA_EVIDENCE_CHAIN_VERIFIED')
+          PY
+      - name: Rerun all 75 original v05 and Order Flow source tests
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a071-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a071-v05.txt
+          grep -Eq '^OK$' /tmp/a071-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_tda_source_route_contract test_of_source_semantic_claims 2>&1 | tee /tmp/a071-semantic.txt
+          grep -q 'Ran 46 tests' /tmp/a071-semantic.txt
+          grep -Eq '^OK$' /tmp/a071-semantic.txt
+          echo '71_RECORDS_AND_75_TECHNICAL_TESTS_PASS__ZERO_TRADE_SIGNALS_APPROVED'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a071-order-flow-semantic-boundaries
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a071-proof.json
+            /tmp/a071-v05.txt
+            /tmp/a071-semantic.txt
