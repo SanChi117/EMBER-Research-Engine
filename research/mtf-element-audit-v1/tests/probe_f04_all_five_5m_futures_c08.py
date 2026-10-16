@@ -77,7 +77,20 @@ def run_one(symbol):
        "readiness":"NOT_TRADE_READY"
     }
 def main(outpath=None):
+    pinned=json.loads((ROOT/"evidence"/"f04"/"F04_FIVE_5M_FUTURES_2026-10-02_RECEIPTS.json").read_text(encoding="utf8"))
+    assert pinned["schema"]=="EMBER_D05_F04_FIVE_ORIGINAL_5M_BINANCE_FUTURES_RECEIPTS_V1"
+    assert pinned["academic_5m_vc_approved"]==0 and pinned["trade_ready"] is False
+    entries={x["symbol"]:x for x in pinned["sources"]}
+    assert set(entries)==set(SYMBOLS)
     rows=[run_one(s) for s in SYMBOLS]
+    for r in rows:
+        expected=entries[r["symbol"]]
+        assert expected["original_5m_url"]==r["original_5m_url"]
+        assert expected["original_5m_zip_sha256"]==r["original_5m_zip_sha256"]
+        assert expected["original_5m_csv_sha256"]==r["original_5m_csv_sha256"]
+        assert expected["original_c08_15m_zip_sha256"]==r["original_15m_c08_zip_sha256"]
+        assert expected["exact_15m_ohlcv_parity_groups"]==r["exact_ohlcv_5m_to_15m_match_count"]
+        assert expected["academic_approval"] is False and expected["readiness"]=="NOT_TRADE_READY"
     q={
        "cycle":"D05_F04_FIVE_SYMBOLS_ONE_DAY_ORIGINAL_5M_SOURCE",
        "market":"BINANCE_USDM_FUTURES","utc_date":DATE,
