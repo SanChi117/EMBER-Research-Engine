@@ -14,7 +14,7 @@ permissions:
 jobs:
   original-c08-monthly-1d-15m-context:
     runs-on: ubuntu-latest
-    timeout-minutes: 28
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,18 +26,42 @@ jobs:
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c15/C15_F06_5M_NATIVE_15M_DERIVED_1D_4H_SOURCE_RECEIPT.json)" = 696065b29bbe45f5f4fdd0bf8042c4f5781c170d
           test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
-      - name: Thirty C16 source and no-lookahead adversarial tests
+      - name: Run original 29 plus 155 previous and 30 new C16 adversarial tests
         run: |
           set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/c16-v05.txt
+          grep -q 'Ran 29 tests' /tmp/c16-v05.txt
+          grep -Eq '^OK$' /tmp/c16-v05.txt
           cd research/mtf-element-audit-v1/d05
-          python -m unittest -v test_c16_c08_monthly_daily_htf_lineage 2>&1 | tee /tmp/c16-tests.txt
-          grep -q 'Ran 30 tests' /tmp/c16-tests.txt
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage 2>&1 | tee /tmp/c16-tests.txt
+          grep -q 'Ran 185 tests' /tmp/c16-tests.txt
           grep -Eq '^OK$' /tmp/c16-tests.txt
-          echo 'C16_SOURCE_GUARDS_AND_AUTHOR_BLOCK_PASS'
+          echo '214_COURSE_AND_SOURCE_MTF_REGRESSIONS_PASS_NO_TRADE'
+      - name: Independently re-download 30 native C08 ZIP and CSV + CHECKSUM and compare 1D with 15m
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c16_32day_native_htf_sources.py /tmp/c16-network.json 2>&1 | tee /tmp/c16-network.log
+          python - <<'PY'
+          import json
+          q=json.load(open('/tmp/c16-network.json'))
+          assert q['original_15m_sources']==15 and q['original_1d_sources']==15
+          assert q['source_15m_native_bars']==15360
+          assert q['derived_1h_bars']==3840
+          assert q['derived_4h_bars']==960
+          assert q['crosschecked_original_native_1d_bars']==160
+          assert q['continuous_days_per_symbol']==32
+          assert q['author_approved_stronghl']==q['author_approved_vc']==q['author_approved_trades']==0
+          assert q['readiness']=='NOT_TRADE_READY'
+          print('ALL_30_ORIGINAL_C08_15M_1D_SHA_SOURCE_CANDLES_AND_160_NATIVE_DAILY_PARITY_PASS')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mtf-b1-c16-long-context-pure-test-proof
+          name: mtf-b1-c16-32day-original-c08-native-htf-proof
           retention-days: 30
           if-no-files-found: warn
-          path: /tmp/c16-tests.txt
+          path: |
+            /tmp/c16-v05.txt
+            /tmp/c16-tests.txt
+            /tmp/c16-network.json
+            /tmp/c16-network.log
