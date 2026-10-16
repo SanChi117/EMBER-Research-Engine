@@ -164,3 +164,17 @@ def reconcile_native_3m(archives,c08,*,as_of_ms):
                 raise C21Rejected("ALTERED_NATIVE_3M_SOURCE_ROWS")
         full.extend(a.rows)
         shas.append(a.zip_sha)
+
+    if len(full)!=15360 or len(c08.native_15m_closed)!=3072:
+        raise C21Rejected("NOT_32_DAY_SOURCE_ALIGNED")
+    for i,p in enumerate(c08.native_15m_closed):
+        five=full[i*5:i*5+5]
+        native=(five[0].start_ms,five[-1].known_ms,five[0].open,
+                max(x.high for x in five),min(x.low for x in five),
+                five[-1].close,sum((x.volume for x in five),Decimal(0)))
+        frozen=(p.start_ms,p.known_at_ms,p.open,p.high,p.low,p.close,p.volume)
+        if native!=frozen:
+            raise C21Rejected("NATIVE_3M_VS_C08_15M_DECIMAL_OHLCV_DRIFT")
+    return C21Native3mResult(
+        c08.symbol,as_of_ms,tuple(x for x in full if x.known_ms<=as_of_ms),
+        tuple(shas),3072,c08.crosschecked_native_1d)
