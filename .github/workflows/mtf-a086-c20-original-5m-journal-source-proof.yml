@@ -1,0 +1,94 @@
+name: MTF A086 — Original 5m 32-Day SHA Journal and Native 15m Proof (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a086-c20-original-5m-journal-source-proof.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  a086-5m-source-and-sha-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A001-A086 complete SHA chain and five C20 evidence files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a086-chain.json
+          python - <<'PY'
+          import json
+          receipt=json.load(open('/tmp/a086-chain.json'))
+          assert receipt["events"]>=86 and receipt["validations_pass"]
+          entries=[json.loads(x) for x in open("ЖУРНАЛ_ДЕЙСТВИЙ.jsonl",encoding="utf8") if x.strip()]
+          assert entries[84]["action_id"]=="A085"
+          assert entries[84]["record_sha256"]=="c8ab16762e2114ca086143bbb9e1387909e6d8ee2782c697fc458f41335a3351"
+          assert entries[85]["action_id"]=="A086" and entries[85]["seq"]==86
+          assert entries[85]["record_sha256"]=="328526729c21ad677d89f4ee8ffc88eabaf156f5e86563568457c6c673145aae"
+          assert entries[85]["cycle_result"]=="PASSED" and len(entries[85]["evidence"])==5
+          print("A001_A086_COMPLETE_CHAIN_AND_PINNED_C20_FILES_SHA256_PASS")
+          PY
+      - name: Verify unchanged original C08, v05, C14, C16-20 Git evidence
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          refs={
+           'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+           'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+           'research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json':'82a80b053712ee819ceb7d83178f672db4030462',
+           'research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json':'bdaa008ce719254507ea95231cdc630bfa85cd67',
+           'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json':'d7fffbe4712bc5a188b2e9065527b86c2987846f',
+           'research/mtf-element-audit-v1/evidence/c18/C18_ORIGINAL_C08_NATIVE15M_LTF_GRAPH_RECEIPT.json':'9178e96ec348414621bf58866a3c8001c0bee90b',
+           'research/mtf-element-audit-v1/evidence/c19/C19_ORIGINAL_NATIVE15M_FRACTAL_WICK_RESULT.json':'dbbd11a15cc5442644fd6c4339615fa1fa37362f',
+           'research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json':'7fc957b210b14b8ab0380b8941a7b145def836dc'}
+          for path,want in refs.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert got==want,(path,got,want)
+          print("FROZEN_ORIGINAL_AND_PINNED_NEW_5M_PRICE_BLOBS_PASS")
+          PY
+      - name: All 314 original v05 and C10-C20 adversarial tests
+        run: |
+          set -euo pipefail
+          python -m unittest -v research/mtf-course-v05/tests/test_course_primitives_v05.py 2>&1 | tee /tmp/a086-v05.txt
+          grep -q 'Ran 29 tests' /tmp/a086-v05.txt
+          grep -Eq '^OK$' /tmp/a086-v05.txt
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c10_two_day_original_5m_context test_c11_contact_imb_source_witness test_c12_attribution_ambiguity_gate test_c13_stronghl_bos_or_poi_source_branch test_c14_qualitative_stronghl_source_gate test_c15_closed_multi_tf_source_grid test_c16_c08_monthly_daily_htf_lineage test_c17_htf_imb_reaction_diagnostics test_c18_native_15m_child_witness_graph test_c19_fractal_wick_raid_source_witness test_c20_original_32day_native5m_lineage 2>&1 | tee /tmp/a086-regress.txt
+          grep -q 'Ran 285 tests' /tmp/a086-regress.txt
+          grep -Eq '^OK$' /tmp/a086-regress.txt
+          echo "A086_314_ORIGINAL_COURSE_AND_C10_C20_MUTATION_TESTS_PASS"
+      - name: Redownload original 45 native USD-M ZIP and compare exact pinned original C20
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c20_original_5m_monthly_cross_15m.py /tmp/a086-original.json 2>&1 | tee /tmp/a086-original.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a086-original.json'))
+          assert x["new_original_native_5m_archives"]==15
+          assert x["previous_original_C08_15m_1d_archives"]==30
+          assert x["native_5m_rows"]==46080
+          assert x["exact_native_15m_decimal_ohlcv_equalities"]==15360
+          assert x["original_native_1d_parities"]==160
+          assert x["trades"]==0 and x["readiness"]=="NOT_TRADE_READY"
+          print("A086_ALL_45_ORIGINAL_SOURCE_ZIPS_AND_5M_15M_OHLCV_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a086-source-5m-15m-sha-replay
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a086-chain.json
+            /tmp/a086-v05.txt
+            /tmp/a086-regress.txt
+            /tmp/a086-original.json
+            /tmp/a086-original.log
