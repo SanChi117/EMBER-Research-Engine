@@ -8,7 +8,7 @@ on:
       - 'research/mtf-element-audit-v1/d05/c20b_five_minute_break_observer.py'
       - 'research/mtf-element-audit-v1/d05/test_c20b_closed_1h_5m_source_geometry.py'
       - 'research/mtf-element-audit-v1/tests/probe_c20b_original_hourly_5m_breaks.py'
-      - 'research/mtf-element-audit-v1/evidence/c20/C20B_ORIGINAL_1H_5M_BREAK_OBSERVATIONS.json'
+      - 'research/mtf-element-audit-v1/evidence/c20/C20B_ORIGINAL_1H_5M_AGGREGATES.json'
   workflow_dispatch:
 permissions:
   contents: read
