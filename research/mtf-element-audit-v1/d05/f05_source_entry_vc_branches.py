@@ -109,12 +109,20 @@ def inspect_source_entry_branch(route:str,stages:list[ClaimedStage],as_of_ms:int
                 if s.role=="1H_TRIGGER" and s.kind=="IMB" and parent.kind=="IMB":
                     raise EntryCourseRejected("1H_IMB_TRIGGER_INSIDE_4H_IMB_FORBIDDEN")
                 if s.role=="15M_TRIGGER" and s.kind=="IMB":
-                    # The author's nuance ties IMB-trigger usefulness to
-                    # RB/SNR supporting structure. A 1H IMB alone is not proof.
-                    raise EntryCourseRejected("15M_IMB_TRIGGER_REQUIRES_UNPROVED_RB_SNR")
+                    # The original lesson allows IMB triggers only with
+                    # a source-grounded RB/SNR support zone; here the only
+                    # available supporting 1h context is the newly formed
+                    # and subsequently tested 1h POI.
+                    support=next((e.kind for e in stages if e.role=="1H_VC_NEW_POI"),None)
+                    if support not in ("RB","SNR"):
+                        raise EntryCourseRejected("15M_IMB_TRIGGER_REQUIRES_UNPROVED_RB_SNR")
         for s in stages:
             if s.role=="1H_TRIGGER" and s.kind=="IMB" and parent.kind not in ("RB","SNR"):
                 raise EntryCourseRejected("IMB_TRIGGER_REQUIRES_RB_OR_SNR_SUPPORT")
+            if s.role=="15M_TRIGGER" and s.kind=="IMB":
+                support=next((e.kind for e in stages if e.role=="1H_VC_NEW_POI"),None)
+                if support not in ("RB","SNR"):
+                    raise EntryCourseRejected("15M_IMB_TRIGGER_REQUIRES_UNPROVED_RB_SNR")
     missing=expected[len(stages):]
     return EntryBranchReview(route,tuple(s.source_id for s in stages),missing,
                              "5m" if expected[-1]=="5M_VC_ENTRY" else "15m")
