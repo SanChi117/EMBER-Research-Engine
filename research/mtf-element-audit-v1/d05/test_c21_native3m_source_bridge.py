@@ -71,3 +71,50 @@ class C21SourceNegatives(unittest.TestCase):
         url,raw,check=sample(modify=modify)
         with self.assertRaisesRegex(C21Rejected,"12_COLUMNS"):
             read_original_3m(url,raw,check,symbol=SYM,period="2026-10-01")
+
+from c21_native3m_source_bridge import reconcile_native_3m,END
+from test_c20_original_32day_native5m_lineage import parsed,review
+
+class C21ExactPriceParity(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.a=tuple(read_original_3m(*sample(p),symbol=SYM,period=p)
+                    for p in PERIODS)
+        fives=tuple(x for p in PERIODS for x in parsed(p).rows)
+        cls.c08=review(fives)
+
+    def test_original_three_to_fifteen_ohlcv(self):
+        result=reconcile_native_3m(self.a,self.c08,as_of_ms=END)
+        self.assertEqual(len(result.original_3m_closed),15360)
+        self.assertEqual(result.native_15m_ohlcv_equalities,3072)
+        self.assertEqual(result.native_1d_equalities,32)
+        self.assertEqual(result.author_bos_approved,result.trade_approved)
+        self.assertEqual(result.readiness,"NOT_TRADE_READY")
+
+    def test_closed_3m_prefix(self):
+        cut=STARTS[2]+THREE
+        r=reconcile_native_3m(self.a,self.c08,as_of_ms=cut)
+        self.assertEqual(len(r.original_3m_closed),31*480+1)
+        self.assertEqual(r.original_3m_closed[-1].known_ms,cut)
+
+    def test_source_3m_price_mutation_rejected(self):
+        first=self.a[0]
+        r=replace(first.rows[10],high=first.rows[10].high+1)
+        change=replace(first,rows=first.rows[:10]+(r,)+first.rows[11:])
+        with self.assertRaisesRegex(C21Rejected,"OHLCV_DRIFT"):
+            reconcile_native_3m((change,)+self.a[1:],self.c08,as_of_ms=END)
+
+    def test_missing_source_row_rejected(self):
+        first=self.a[0]
+        with self.assertRaisesRegex(C21Rejected,"INCOMPLETE_3M_SOURCE_ROWS"):
+            reconcile_native_3m((replace(first,rows=first.rows[:-1]),)+self.a[1:],
+                                self.c08,as_of_ms=END)
+
+    def test_source_future_asof_rejected(self):
+        with self.assertRaisesRegex(C21Rejected,"FUTURE_OR_NONCLOSED"):
+            reconcile_native_3m(self.a,self.c08,as_of_ms=END+THREE)
+
+    def test_3m_source_cannot_upgrade_author_ready(self):
+        x=replace(self.a[1],readiness="READY")
+        with self.assertRaisesRegex(C21Rejected,"WRONG_ORIGINAL_3M_ARCHIVE"):
+            reconcile_native_3m((self.a[0],x,self.a[2]),self.c08,as_of_ms=END)
