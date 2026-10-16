@@ -61,3 +61,16 @@ def result():
         "readiness":"NOT_TRADE_READY",
         "meaning":"UTC calendar, 24h delay and UTC 09-17 are diagnostics NOT author session or FTA."
     }
+
+def main(output=None):
+    value=result()
+    p=ROOT/"evidence"/"c20"/"C20C_ORIGINAL_UTC_CONTEXT_OBSERVATIONS.json"
+    if p.exists():
+        expected=json.loads(p.read_text(encoding="utf8"))
+        assert expected==value,"C20C_PINNED_ORIGINAL_COUNTS_DRIFT"
+    if output:Path(output).write_text(json.dumps(value,indent=2,sort_keys=True)+"\n",encoding="utf8")
+    print(json.dumps(value,indent=2,sort_keys=True),flush=True)
+    return 0
+
+if __name__=="__main__":
+    raise SystemExit(main(sys.argv[1] if len(sys.argv)>1 else None))
