@@ -78,6 +78,23 @@ def main(dest=None):
         "limitations":"Temporal 1h raid plus later 5m IMB + possible zone touch; no independent author labels and no confirmed market regimes, FTA, risk, orders"
     }
     assert doc["verified_raw_closed_5m"]==2880 and len(rows)==5
+    pinned=json.loads((ROOT/"evidence"/"c11"/"C11_F06_SOURCE_PRICE_CANDIDATE_DIAGNOSTICS.json").read_text(encoding="utf8"))
+    assert pinned["schema"]=="EMBER_B1_C11_ORIGINAL_F06_RAID_5M_IMB_POI_RESEARCH_RECEIPT_V1"
+    assert pinned["source_receipt_git_blob"]=="a5bf2105d1c611517a8d127d5e1f8cb622720162"
+    assert pinned["market"]==doc["source_market"]
+    assert pinned["source_bars"]==doc["verified_raw_closed_5m"]
+    assert pinned["source_1h_raid_geometric_candidates"]==doc["source_1h_raid_candidates"]
+    assert pinned["raid_imb_temporal_candidate_PAIRS_NOT_INDEPENDENT_EVENTS"]==doc["price_raid_imb_candidate_pairs"]
+    assert pinned["raid_imb_pairs_with_later_zone_price_contact"]==doc["price_touch_candidate_pairs"]
+    assert pinned["unique_author_StrongHL_approved"]==0 and pinned["academic_VC_approved"]==0
+    assert pinned["trade_ready"] is False
+    for observed,p in zip(rows,pinned["rows"]):
+        assert observed["symbol"]==p["symbol"]
+        assert observed["source_1h_raid_candidates"]==p["source_1h_raid_candidates"]
+        assert observed["raid_then_5m_imb_time_and_geometry_pairs"]==p["raid_5m_imb_temporal_pairs"]
+        assert observed["with_later_5m_poi_price_touch"]==p["with_later_poi_price_touch"]
+        assert observed["without_later_touch"]==p["without_later_price_touch"]
+        assert observed["first_price_witness"]==p["first_price_witness"]
     print(json.dumps(doc,sort_keys=True,indent=2))
     if dest:Path(dest).write_text(json.dumps(doc,sort_keys=True,indent=2)+"\n",encoding="utf8")
     return 0
