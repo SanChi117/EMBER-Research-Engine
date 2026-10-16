@@ -1,0 +1,191 @@
+{
+  "schema": "EMBER_B1_C20_ORIGINAL_MONTHLY_DAILY_5M_NATIVE_15M_PARITY_V1",
+  "source_ci": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38951000322",
+  "native_original_market": "BINANCE_USDM_FUTURES",
+  "source_period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "previous_C08_original_receipts_blob": "4205ad3118a30bbd69c412e165c7c5ce3560195d",
+  "previous_C16_original_15m_1d_blob": "bdaa008ce719254507ea95231cdc630bfa85cd67",
+  "new_original_native_5m_archives": 15,
+  "old_original_C08_archives": 30,
+  "total_original_zip_sources": 45,
+  "native_5m_rows": 46080,
+  "exact_native_15m_decimal_ohlcv_equalities": 15360,
+  "original_native_1d_parities": 160,
+  "observations": [
+    {
+      "author_approved_bos": 0,
+      "author_approved_trade": 0,
+      "exact_native_15m_equalities": 3072,
+      "known_asof_2026_oct2_0005_utc": 8929,
+      "native_5m_rows": 9216,
+      "no_future_suffix_leak": true,
+      "original_native_1d_equalities": 32,
+      "source_5m": [
+        {
+          "date": "2026-09",
+          "original_raw_csv_sha256": "352ed47646f15de25b327958b7fc0ccc767b6fbf5586fe9041d947ca7844fb8c",
+          "original_zip_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26",
+          "rows": 8640,
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip"
+        },
+        {
+          "date": "2026-10-01",
+          "original_raw_csv_sha256": "77f4af057831db20ac57bfc50fee3c73a63d0b474d21c89e08d51ec1f2588243",
+          "original_zip_sha256": "10cd0734819af381d7cd032c84ba4a9a080a57bba1f97e8e71d45a16f27b067e",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2026-10-01.zip"
+        },
+        {
+          "date": "2026-10-02",
+          "original_raw_csv_sha256": "14dc88dd66d78f44b73daa9243d62e35d539ace64d26adb0ba4b32aefb599c73",
+          "original_zip_sha256": "2a492563746eba6c3689b90c00a081bfce3ceab86a06493e80f22c4d55e8c7ea",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2026-10-02.zip"
+        }
+      ],
+      "symbol": "BTCUSDT"
+    },
+    {
+      "author_approved_bos": 0,
+      "author_approved_trade": 0,
+      "exact_native_15m_equalities": 3072,
+      "known_asof_2026_oct2_0005_utc": 8929,
+      "native_5m_rows": 9216,
+      "no_future_suffix_leak": true,
+      "original_native_1d_equalities": 32,
+      "source_5m": [
+        {
+          "date": "2026-09",
+          "original_raw_csv_sha256": "b83b1a75024d51f8b34b1edc69e4d393e913224393fd29bd095879619af490d7",
+          "original_zip_sha256": "143312487ffcc01c174156343fbf05ea48cbfa4e4602937caafb3e0ad3dbca9a",
+          "rows": 8640,
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-09.zip"
+        },
+        {
+          "date": "2026-10-01",
+          "original_raw_csv_sha256": "a8062ebf5849dd5773dc4490b0bd892084407a93d9a4354a6a257556150bef71",
+          "original_zip_sha256": "3dcf98cdbcf8e8a1d5bad7c454509b2e73dba82b34aad841b8c277cbe2be620b",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/5m/ETHUSDT-5m-2026-10-01.zip"
+        },
+        {
+          "date": "2026-10-02",
+          "original_raw_csv_sha256": "fd31423b1efc2aa3dd5831168a2e34836b1154a2c1d25dbe01ba3a1e13c1827c",
+          "original_zip_sha256": "531c33307bf9a355cc9f1f364c77d394940f0bca68b4e69f3e3dfac771dcc39b",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/5m/ETHUSDT-5m-2026-10-02.zip"
+        }
+      ],
+      "symbol": "ETHUSDT"
+    },
+    {
+      "author_approved_bos": 0,
+      "author_approved_trade": 0,
+      "exact_native_15m_equalities": 3072,
+      "known_asof_2026_oct2_0005_utc": 8929,
+      "native_5m_rows": 9216,
+      "no_future_suffix_leak": true,
+      "original_native_1d_equalities": 32,
+      "source_5m": [
+        {
+          "date": "2026-09",
+          "original_raw_csv_sha256": "83adfa31de378a36fdd3cbe7d420d689fceb1d8ce3e1d3c99988ae00888413a7",
+          "original_zip_sha256": "9b71841a30ba4e98cab7c3591240dcfccba0efde6889785b586f9af1e84079fe",
+          "rows": 8640,
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-09.zip"
+        },
+        {
+          "date": "2026-10-01",
+          "original_raw_csv_sha256": "875f77cb4930c7cfc9c1dee575101d32c1a4aef58fe0f15ea7308dd08b2ad33d",
+          "original_zip_sha256": "58ec1fc806b22c2c7ceee394ca5737ab04d10f508c0197610bdba408868ee3b0",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/5m/SOLUSDT-5m-2026-10-01.zip"
+        },
+        {
+          "date": "2026-10-02",
+          "original_raw_csv_sha256": "c915afde158d27eb2d5292e2d0c351d399c029011544b384f590ea478c9acdd3",
+          "original_zip_sha256": "878c1d9ca3d244e63255fe70ce085c0907be6ec80c7caf98264052aca170fe81",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/5m/SOLUSDT-5m-2026-10-02.zip"
+        }
+      ],
+      "symbol": "SOLUSDT"
+    },
+    {
+      "author_approved_bos": 0,
+      "author_approved_trade": 0,
+      "exact_native_15m_equalities": 3072,
+      "known_asof_2026_oct2_0005_utc": 8929,
+      "native_5m_rows": 9216,
+      "no_future_suffix_leak": true,
+      "original_native_1d_equalities": 32,
+      "source_5m": [
+        {
+          "date": "2026-09",
+          "original_raw_csv_sha256": "9ccc4e6f789d63f3f56f7edbf17cffaed2e0f58580e4f34c5e939aa5123f632b",
+          "original_zip_sha256": "0feab324d90dc5a88c58e2e3c443101b517849d6fcfcc11e341da9ca84a71ec9",
+          "rows": 8640,
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-09.zip"
+        },
+        {
+          "date": "2026-10-01",
+          "original_raw_csv_sha256": "e9bcdd098d1b6da222972a24587a7c2b51fc528b62e7ebccbb6b1fc1b34250c7",
+          "original_zip_sha256": "43ee37d87b1ae4881ccbd09a003505121259b7209c8be036e8bd3872d687aba3",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/5m/XRPUSDT-5m-2026-10-01.zip"
+        },
+        {
+          "date": "2026-10-02",
+          "original_raw_csv_sha256": "39713a221c33e1c4ab9be8c62f26a03a602480085e8971c8b3f67b8ba4bea9d1",
+          "original_zip_sha256": "dbad8bb5de24bb132dbc2b2c6883528b9e59c156100e8aeac785c6f4061d64ca",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/5m/XRPUSDT-5m-2026-10-02.zip"
+        }
+      ],
+      "symbol": "XRPUSDT"
+    },
+    {
+      "author_approved_bos": 0,
+      "author_approved_trade": 0,
+      "exact_native_15m_equalities": 3072,
+      "known_asof_2026_oct2_0005_utc": 8929,
+      "native_5m_rows": 9216,
+      "no_future_suffix_leak": true,
+      "original_native_1d_equalities": 32,
+      "source_5m": [
+        {
+          "date": "2026-09",
+          "original_raw_csv_sha256": "66054a58784bcefdf21b8956c4a4c8b21892102dae94b6192816031b7c2aad0b",
+          "original_zip_sha256": "ef907f82e34e329d818ed16585835c283d72dcaea847a67d7eaeec7df59c6ec4",
+          "rows": 8640,
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-09.zip"
+        },
+        {
+          "date": "2026-10-01",
+          "original_raw_csv_sha256": "b8d98a4f08dab46cb199c9a2f8955eca627014107c687072899f16ae2033fae6",
+          "original_zip_sha256": "3792c72f18f5292a6e036380f4856213c3441884ad9ae7b0dd1aba8d20f02168",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/5m/BCHUSDT-5m-2026-10-01.zip"
+        },
+        {
+          "date": "2026-10-02",
+          "original_raw_csv_sha256": "e09a883ca3f08c9e166cc76eecf07a1450a9446cbf237026007f967582e1c269",
+          "original_zip_sha256": "3dac40988e662c5f7e008236150cd6288e5026f0ec30e2c851915e2fc68b0030",
+          "rows": 288,
+          "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/5m/BCHUSDT-5m-2026-10-02.zip"
+        }
+      ],
+      "symbol": "BCHUSDT"
+    }
+  ],
+  "strict_source_notice": "HTTPS and same-host .CHECKSUM matched for 15 separately downloaded original USD-M 5m ZIP; CHECKSUM is not an independent third-party digital signature. All 3072 15m Decimal OHLCV triples per symbol match 32-day already-frozen C08 source.",
+  "author_golden_source_status": "AUTHOR_GOLDEN_SOURCE_UNAVAILABLE",
+  "author_approved_bos": 0,
+  "author_approved_trade": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "limitations": "C20A establishes 5m provenance only; no 3m source, no author-annotated 1H raid / 5m BOS alignment, no certified SL/FTA/timezone/session/trade signal."
+}
