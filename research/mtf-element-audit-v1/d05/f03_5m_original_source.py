@@ -28,7 +28,7 @@ from course_primitives_v05 import Bar,confirmed_imb
 PERIOD=300_000
 ALLOWED=frozenset(("BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT","BCHUSDT"))
 DAY=86_400_000
-RE=re.compile(r"/data/futures/um/daily/klines/([A-Z0-9]+)/5m/([A-Z0-9]+)-5m-(20[0-9]{2}-[0-9]{2}-[0-9]{2})\\.zip\\Z")
+RE=re.compile(r"/data/futures/um/daily/klines/([A-Z0-9]+)/5m/([A-Z0-9]+)-5m-(20[0-9]{2}-[0-9]{2}-[0-9]{2})\.zip\Z")
 CSV_HEADER=("open_time","open","high","low","close","volume","close_time",
             "quote_volume","trades","taker_buy_base_volume","taker_buy_quote_volume","ignore")
 
@@ -62,7 +62,7 @@ def parse_5m_source(url:str):
     u=urllib.parse.urlsplit(url)
     if (u.scheme!="https" or u.netloc!="data.binance.vision"
         or u.query or u.fragment or u.username or u.password
-        or "%" in u.path or "\\\\" in u.path or "//" in u.path):
+        or "%" in u.path or "\\" in u.path or "//" in u.path):
         raise FiveMinuteRejected("NOT_TRUSTED_BINANCE_5M_FUTURES_PATH")
     m=RE.fullmatch(u.path)
     if m is None or m[1]!=m[2] or m[1] not in ALLOWED:
