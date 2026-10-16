@@ -1,0 +1,229 @@
+{
+  "schema": "EMBER_B1_C13_ORIGINAL_F06_BOS_OR_POI_GEOMETRIC_BRANCH_DIAGNOSTICS_V1",
+  "source_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38928525543",
+  "source_market": "BINANCE_USDM_FUTURES",
+  "days": [
+    "2026-10-01",
+    "2026-10-02"
+  ],
+  "source_symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "BCHUSDT"
+  ],
+  "original_5m_zip_archives": 10,
+  "native_5m_bars": 2880,
+  "original_F06_zip_csv_receipt_blob": "a5bf2105d1c611517a8d127d5e1f8cb622720162",
+  "original_C12_graph_receipt_blob": "a18e62776584ad428ad74c254d864c59dd540984",
+  "raid_candidates": 25,
+  "raid_to_5m_imb_geometric_edges": 177,
+  "distinct_imb_nodes": 154,
+  "bos_5m_events": 12,
+  "raids_with_bos_branch": 12,
+  "raids_with_imb_branch": 11,
+  "raids_with_both_branches": 10,
+  "raids_with_bos_only": 2,
+  "raids_with_imb_only": 1,
+  "raids_with_neither": 12,
+  "per_symbol": [
+    {
+      "symbol": "BTCUSDT",
+      "raid_candidates": 6,
+      "bos_events": 1,
+      "imb_pairs": 19,
+      "distinct_imb_nodes": 19,
+      "bos_path_raids": 1,
+      "imb_path_raids": 2,
+      "both_path_raids": 1,
+      "bos_only_raids": 0,
+      "imb_only_raids": 1,
+      "neither_path_raids": 4,
+      "first_parent_combined_branch": {
+        "bos_ids": [],
+        "imb_ids": [
+          "IMB:5m:SHORT:1790868600000",
+          "IMB:5m:SHORT:1790868900000"
+        ],
+        "path_class": "IMB_ONLY_GEOMETRY_NOT_AUTHOR_CERTIFIED",
+        "raid_id": "1h:RAID:SHORT:1790863200000:1h:HIGH:1790848800000"
+      }
+    },
+    {
+      "symbol": "ETHUSDT",
+      "raid_candidates": 4,
+      "bos_events": 1,
+      "imb_pairs": 0,
+      "distinct_imb_nodes": 0,
+      "bos_path_raids": 1,
+      "imb_path_raids": 0,
+      "both_path_raids": 0,
+      "bos_only_raids": 1,
+      "imb_only_raids": 0,
+      "neither_path_raids": 3,
+      "first_parent_combined_branch": {
+        "bos_ids": [
+          "5m:BOS:SHORT:1790877600000:1h:RAID:SHORT:1790874000000:1h:HIGH:1790856000000"
+        ],
+        "imb_ids": [],
+        "path_class": "BOS_ONLY_GEOMETRY_NOT_AUTHOR_CERTIFIED",
+        "raid_id": "1h:RAID:SHORT:1790874000000:1h:HIGH:1790856000000"
+      }
+    },
+    {
+      "symbol": "SOLUSDT",
+      "raid_candidates": 4,
+      "bos_events": 2,
+      "imb_pairs": 47,
+      "distinct_imb_nodes": 40,
+      "bos_path_raids": 2,
+      "imb_path_raids": 2,
+      "both_path_raids": 2,
+      "bos_only_raids": 0,
+      "imb_only_raids": 0,
+      "neither_path_raids": 2,
+      "first_parent_combined_branch": {
+        "bos_ids": [
+          "5m:BOS:LONG:1790872200000:1h:RAID:LONG:1790859600000:1h:LOW:1790848800000"
+        ],
+        "imb_ids": [
+          "IMB:5m:LONG:1790868000000",
+          "IMB:5m:LONG:1790874300000",
+          "IMB:5m:LONG:1790874900000",
+          "IMB:5m:LONG:1790875200000",
+          "IMB:5m:LONG:1790875500000",
+          "IMB:5m:LONG:1790879700000",
+          "IMB:5m:LONG:1790883900000",
+          "IMB:5m:LONG:1790885100000",
+          "IMB:5m:LONG:1790888100000",
+          "IMB:5m:LONG:1790892300000",
+          "IMB:5m:LONG:1790895300000",
+          "IMB:5m:LONG:1790900400000",
+          "IMB:5m:LONG:1790901900000",
+          "IMB:5m:LONG:1790905800000",
+          "IMB:5m:LONG:1790906100000",
+          "IMB:5m:LONG:1790907000000",
+          "IMB:5m:LONG:1790909100000",
+          "IMB:5m:LONG:1790909400000",
+          "IMB:5m:LONG:1790913300000",
+          "IMB:5m:LONG:1790913600000",
+          "IMB:5m:LONG:1790914800000",
+          "IMB:5m:LONG:1790915100000",
+          "IMB:5m:LONG:1790916600000",
+          "IMB:5m:LONG:1790927700000",
+          "IMB:5m:LONG:1790928000000",
+          "IMB:5m:LONG:1790929200000",
+          "IMB:5m:LONG:1790932500000",
+          "IMB:5m:LONG:1790939100000",
+          "IMB:5m:LONG:1790945700000",
+          "IMB:5m:LONG:1790948100000",
+          "IMB:5m:LONG:1790959800000",
+          "IMB:5m:LONG:1790963400000",
+          "IMB:5m:LONG:1790967600000",
+          "IMB:5m:LONG:1790975100000",
+          "IMB:5m:LONG:1790978100000",
+          "IMB:5m:LONG:1790979900000",
+          "IMB:5m:LONG:1790980200000",
+          "IMB:5m:LONG:1790980500000",
+          "IMB:5m:LONG:1790983200000",
+          "IMB:5m:LONG:1790984700000"
+        ],
+        "path_class": "BOTH_BOS_AND_IMB_GEOMETRY_NOT_AUTHOR_CERTIFIED",
+        "raid_id": "1h:RAID:LONG:1790859600000:1h:LOW:1790848800000"
+      }
+    },
+    {
+      "symbol": "XRPUSDT",
+      "raid_candidates": 4,
+      "bos_events": 2,
+      "imb_pairs": 47,
+      "distinct_imb_nodes": 31,
+      "bos_path_raids": 2,
+      "imb_path_raids": 2,
+      "both_path_raids": 2,
+      "bos_only_raids": 0,
+      "imb_only_raids": 0,
+      "neither_path_raids": 2,
+      "first_parent_combined_branch": {
+        "bos_ids": [
+          "5m:BOS:LONG:1790867700000:1h:RAID:LONG:1790863200000:1h:LOW:1790848800000"
+        ],
+        "imb_ids": [
+          "IMB:5m:LONG:1790868000000",
+          "IMB:5m:LONG:1790874300000",
+          "IMB:5m:LONG:1790875200000",
+          "IMB:5m:LONG:1790875500000",
+          "IMB:5m:LONG:1790883900000",
+          "IMB:5m:LONG:1790885100000",
+          "IMB:5m:LONG:1790891400000",
+          "IMB:5m:LONG:1790892300000",
+          "IMB:5m:LONG:1790895300000",
+          "IMB:5m:LONG:1790896800000",
+          "IMB:5m:LONG:1790897700000",
+          "IMB:5m:LONG:1790900400000",
+          "IMB:5m:LONG:1790901900000",
+          "IMB:5m:LONG:1790906100000",
+          "IMB:5m:LONG:1790906700000",
+          "IMB:5m:LONG:1790907000000",
+          "IMB:5m:LONG:1790909400000",
+          "IMB:5m:LONG:1790913600000",
+          "IMB:5m:LONG:1790914800000",
+          "IMB:5m:LONG:1790915100000",
+          "IMB:5m:LONG:1790916600000",
+          "IMB:5m:LONG:1790921100000",
+          "IMB:5m:LONG:1790927100000",
+          "IMB:5m:LONG:1790927400000",
+          "IMB:5m:LONG:1790927700000",
+          "IMB:5m:LONG:1790929200000",
+          "IMB:5m:LONG:1790932500000",
+          "IMB:5m:LONG:1790937000000",
+          "IMB:5m:LONG:1790944500000",
+          "IMB:5m:LONG:1790948100000",
+          "IMB:5m:LONG:1790950800000"
+        ],
+        "path_class": "BOTH_BOS_AND_IMB_GEOMETRY_NOT_AUTHOR_CERTIFIED",
+        "raid_id": "1h:RAID:LONG:1790863200000:1h:LOW:1790848800000"
+      }
+    },
+    {
+      "symbol": "BCHUSDT",
+      "raid_candidates": 7,
+      "bos_events": 6,
+      "imb_pairs": 64,
+      "distinct_imb_nodes": 64,
+      "bos_path_raids": 6,
+      "imb_path_raids": 5,
+      "both_path_raids": 5,
+      "bos_only_raids": 1,
+      "imb_only_raids": 0,
+      "neither_path_raids": 1,
+      "first_parent_combined_branch": {
+        "bos_ids": [
+          "5m:BOS:LONG:1790844600000:1h:RAID:LONG:1790838000000:1h:LOW:1790820000000"
+        ],
+        "imb_ids": [
+          "IMB:5m:LONG:1790843100000",
+          "IMB:5m:LONG:1790844900000",
+          "IMB:5m:LONG:1790850600000",
+          "IMB:5m:LONG:1790850900000",
+          "IMB:5m:LONG:1790851200000",
+          "IMB:5m:LONG:1790851500000",
+          "IMB:5m:LONG:1790851800000",
+          "IMB:5m:LONG:1790852100000",
+          "IMB:5m:LONG:1790854800000",
+          "IMB:5m:LONG:1790855100000",
+          "IMB:5m:LONG:1790861700000",
+          "IMB:5m:LONG:1790868000000"
+        ],
+        "path_class": "BOTH_BOS_AND_IMB_GEOMETRY_NOT_AUTHOR_CERTIFIED",
+        "raid_id": "1h:RAID:LONG:1790838000000:1h:LOW:1790820000000"
+      }
+    }
+  ],
+  "author_approved_vc": 0,
+  "author_approved_stronghl": 0,
+  "trade_ready": false,
+  "correctness_limit": "BOS source parent explicit under frozen v05 engineering pivots; IMB multiple parents still ambiguous; none author reviewed against golden StrongHL course labels",
+  "current_decision": "SOURCES_COHERENT_GEOMETRY_ONLY_NEVER_READY"
+}
