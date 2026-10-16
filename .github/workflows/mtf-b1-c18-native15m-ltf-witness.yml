@@ -76,33 +76,3 @@ jobs:
             /tmp/c18-tests.txt
             /tmp/c18-raw-sources.json
             /tmp/c18-raw-sources.log
- /tmp/c18-tests.txt
-          echo 'C18_ALL_UNIT_NEGATIVE_AND_CAUSAL_TESTS_PASS'
-      - name: Re-download original C08 ZIP and verify C18 native 15m child graph
-        run: |
-          set -euo pipefail
-          python research/mtf-element-audit-v1/tests/probe_c18_original_ltf_witness_graph.py /tmp/c18-raw-sources.json 2>&1 | tee /tmp/c18-raw-sources.log
-          python - <<'PY'
-          import json
-          q=json.load(open('/tmp/c18-raw-sources.json'))
-          assert q['original_C08_archives_reloaded']==30
-          assert q['original_native_15m_bars']==15360
-          assert q['native_daily_parities']==160 and q['derived_closed_1h']==3840
-          assert sum(x['counts']['parents_1d'] for x in q['observations'])==26
-          assert sum(x['counts']['parents_4h'] for x in q['observations'])==153
-          assert all(x['prefix_invariance'] for x in q['observations'])
-          assert q['author_golden_source_status']=='AUTHOR_GOLDEN_SOURCE_UNAVAILABLE'
-          assert q['trade_ready']==0 and q['readiness']=='NOT_TRADE_READY'
-          print('ORIGINAL_C08_CAUSAL_LTF_GRAPH_WITH_NO_AUTHOR_TRADE_APPROVAL_PASS')
-          PY
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: mtf-b1-c18-original-c08-native15m-ltf-witness
-          retention-days: 30
-          if-no-files-found: warn
-          path: |
-            /tmp/c18-course.txt
-            /tmp/c18-tests.txt
-            /tmp/c18-raw-sources.json
-            /tmp/c18-raw-sources.log
