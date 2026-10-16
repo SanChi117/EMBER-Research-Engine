@@ -22,10 +22,14 @@ jobs:
       - name: Confirm protected prior source evidence
         run: |
           set -euo pipefail
-          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
-          test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
-          test "$(git hash-object research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json)" = bdaa008ce719254507ea95231cdc630bfa85cd67
-          test "$(git hash-object research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json)" = 82a80b053712ee819ceb8d83178f672db4030462
+          echo "COURSE $(git rev-parse HEAD:research/mtf-course-v05/src/course_primitives_v05.py)"
+          echo "C08 $(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)"
+          echo "C16 $(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json)"
+          echo "C14 $(git rev-parse HEAD:research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json)"
+          test "$(git rev-parse HEAD:research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json)" = bdaa008ce719254507ea95231cdc630bfa85cd67
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/d05/C14_AUTHOR_STRONGHL_QUALITATIVE_CASES.json)" = 82a80b053712ee819ceb8d83178f672db4030462
           echo "FROZEN_SOURCE_BLOBS_MATCH"
       - name: Regress v05 and C10 through C17 including adversarial HTF tests
         run: |
