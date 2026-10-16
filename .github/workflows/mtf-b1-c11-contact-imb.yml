@@ -6,6 +6,7 @@ on:
       - '.github/workflows/mtf-b1-c11-contact-imb.yml'
       - 'research/mtf-element-audit-v1/d05/c11_contact_imb_source_witness.py'
       - 'research/mtf-element-audit-v1/d05/test_c11_contact_imb_source_witness.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c11_real_raid_imb_poi_witnesses.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,6 +38,21 @@ jobs:
           grep -q 'Ran 39 tests' /tmp/c11-tests.txt
           grep -Eq '^OK$' /tmp/c11-tests.txt
           echo '68_SOURCE_BOUND_READ_ONLY_TESTS_PASS__ZERO_AUTHOR_CERTIFIED_SIGNALS'
+      - name: Actual 10 pinned original Binance 5m ZIP replay for raid to IMB and possible POI touch
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c11_real_raid_imb_poi_witnesses.py /tmp/c11-real.json 2>&1 | tee /tmp/c11-real.log
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/c11-real.json'))
+          assert p['original_5m_zip_sources']==10
+          assert p['verified_raw_closed_5m']==2880
+          assert p['academic_approved_stronghl']==0
+          assert p['academic_approved_vc']==0 and p['trade_ready'] is False
+          assert p['original_f06_and_c08_unchanged'] is True
+          assert all(r['stronghl_vc_semantics']=='UNAPPROVED_NOT_AUTHOR_VERIFIED' for r in p['results'])
+          print('10_ACTUAL_BINANCE_5M_ZIP_GEOMETRIC_WITNESSES_ONLY_NO_TRADE_APPROVAL')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -46,3 +62,5 @@ jobs:
           path: |
             /tmp/c11-v05.txt
             /tmp/c11-tests.txt
+            /tmp/c11-real.json
+            /tmp/c11-real.log
