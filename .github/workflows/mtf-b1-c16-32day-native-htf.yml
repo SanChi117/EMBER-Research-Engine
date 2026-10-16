@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json)" = 4205ad3118a30bbd69c412e165c7c5ce3560195d
-          test "$(git hash-object research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json)" = dc6c3e7d4e4b01a9da50fa63a0eddede5b4f0bd3
+          test "$(git hash-object research/mtf-element-audit-v1/evidence/c16/C16_32DAY_NATIVE_15M_1D_RECEIPT.json)" = bdaa008ce719254507ea95231cdc630bfa85cd67
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_BTCUSDT_63_RECEIPTS.json)" = f8d6553ec598ecfa8ea2bd49a3e61699d0cfe650
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_ETHUSDT_63_RECEIPTS.json)" = 8da28253c04f230a9e737b1075d30fc981628dfc
           test "$(git hash-object research/mtf-element-audit-v1/evidence/c08/C08_SOLUSDT_63_RECEIPTS.json)" = 04d7b6aca9c61216d9c311591c20aef6eb5e6afe
