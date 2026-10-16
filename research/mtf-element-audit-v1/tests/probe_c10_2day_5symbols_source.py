@@ -74,12 +74,22 @@ def main(outpath=None):
         raise AssertionError("F04_RECEIPT_NOT_PINNED_SCHEMA")
     per={r["symbol"]:r for r in receipt["sources"]}
     assert set(per)==set(SYMS)
+    new=json.loads((ROOT/"evidence"/"f06"/"F06_FIVE_SYMBOL_TWO_DAY_5M_SOURCE_RECEIPTS.json").read_text(encoding="utf8"))
+    assert new["schema"]=="EMBER_B1_C10_TWO_CONSECUTIVE_DAYS_FIVE_SYMBOL_ORIGINAL_5M_RECEIPTS_V1"
+    assert new["readiness"]=="NOT_TRADE_READY" and new["academy_entry_approved"]==0
+    frozen={(x["symbol"],x["date"]):x for x in new["source_days"]}
+    assert len(frozen)==10
     results=[]
     for symbol in SYMS:
         days=[]
         proofs=[]
         for n,date in enumerate(DATES):
             five,proof=fetch_day(symbol,date,START+n*DAY,per[symbol] if n==1 else None)
+            fixed=frozen[(symbol,date)]
+            assert proof["native_5m_zip_sha256"]==fixed["original_5m_zip_sha256"]
+            assert proof["native_5m_csv_sha256"]==fixed["original_5m_csv_sha256"]
+            assert proof["native_original_c08_15m_zip_sha256"]==fixed["c08_original_15m_zip_sha256"]
+            assert proof["native_original_c08_15m_csv_sha256"]==fixed["c08_original_15m_csv_sha256"]
             days.append(five);proofs.append(proof)
         atmid=review_two_day_5m(days[0],days[1],START+DAY)
         whole=review_two_day_5m(days[0],days[1],START+2*DAY)
