@@ -82,6 +82,8 @@ def evaluate_qualitative_stronghl(case:dict,fixture:dict,c04:dict)->SourceConcep
     tf=case.get("confirm_tf")
     subject=case.get("subject")
     klass=case.get("classification")
+    if (subject=="StrongHL" and case["source_uri"]!=fixture["primary_sources"]["StrongHL"]) or (subject=="SNR" and case["source_uri"]!=fixture["primary_sources"]["SNR"]) or (subject in ("POI_FIRST_TEST","POI_REACTION") and case["source_uri"]!=fixture["primary_sources"]["IMB"]):
+        raise QualitativeRejected("MISMATCHED_CONCEPT_TEXT_SOURCE")
     if subject=="StrongHL":
         if contact=="NONE":
             result="MISSING_LIQUIDITY_OR_INEFFICIENCY_CONTACT"
@@ -100,7 +102,12 @@ def evaluate_qualitative_stronghl(case:dict,fixture:dict,c04:dict)->SourceConcep
         else:
             raise QualitativeRejected("UNKNOWN_TF_RELATION")
     elif subject=="SNR":
-        if figure!="POI-IMAGE-2-SNR-SHORT":
+        if case_id=="SHL-MB-WEAK-NOT-STRONG":
+            if klass!="SOURCE_ILLUSTRATION" or figure!="POI-IMAGE-4-MB":
+                raise QualitativeRejected("WEAK_MB_NOT_SOURCE_SUPPORTED")
+            result="CONTEXT_NOT_STRONG_SOURCE_ILLUSTRATION"
+        else:
+            if figure!="POI-IMAGE-2-SNR-SHORT":
             raise QualitativeRejected("SNR_NOT_SUPPORTED_BY_CONFLICT_IMAGE")
         conflicts=c04.get("source_conflicts",[])
         if not any(x.get("code")=="SNR_RESISTANCE_CANDLE_ORDER_CONFLICT"
