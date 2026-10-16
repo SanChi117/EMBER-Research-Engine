@@ -171,15 +171,13 @@ def extended_32day_prefix(native15:tuple[NativeSourceArchive,...],
     slots=(SEPT_START,OCT_START,OCT_START+DAY)
     allpieces=(native15,native1d)
     for tf,parts in zip(("15m","1d"),allpieces):
-        if any(not isinstance(part,NativeSourceArchive) or part.tf!=tf or
-               part.period_start_ms!=start or
-               part.period_end_ms!=(OCT_START if i==0 else start+DAY) or
-               part.readiness!="NOT_TRADE_READY" or
-               not re.fullmatch("[0-9a-f]{64}",part.zip_sha256) or
-               not re.fullmatch("[0-9a-f]{64}",part.raw_csv_sha256) or
-               len(part.rows)!=(30*96 if tf=="15m" else 30) if i==0 else False
-               for i,(part,start) in enumerate(zip(parts,slots))):
-            # Remaining checks below deliberately distinguish monthly vs daily
+        if any(
+            not isinstance(p,NativeSourceArchive) or p.symbol not in SYMBOLS
+            or p.tf!=tf or p.readiness!="NOT_TRADE_READY"
+            or not re.fullmatch(r"[0-9a-f]{64}",p.zip_sha256)
+            or not re.fullmatch(r"[0-9a-f]{64}",p.raw_csv_sha256)
+            for p in parts
+        ):
             raise HTFSourceRejected("INVALID_NATIVE_TIMEFRAME_ARCHIVE_SET")
     # Explicit full source proof object checks, not acceptance by archive name.
     for tf,parts in zip(("15m","1d"),allpieces):
