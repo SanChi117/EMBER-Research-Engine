@@ -1,0 +1,95 @@
+{
+  "schema": "EMBER_B1_C11_ORIGINAL_F06_RAID_5M_IMB_POI_RESEARCH_RECEIPT_V1",
+  "utc_days": [
+    "2026-10-01",
+    "2026-10-02"
+  ],
+  "market": "BINANCE_USDM_FUTURES",
+  "original_5m_archives_checked": 10,
+  "source_bars": 2880,
+  "source_1h_raid_geometric_candidates": 25,
+  "raid_imb_temporal_candidate_PAIRS_NOT_INDEPENDENT_EVENTS": 177,
+  "raid_imb_pairs_with_later_zone_price_contact": 168,
+  "rows": [
+    {
+      "symbol": "BTCUSDT",
+      "source_1h_raid_candidates": 6,
+      "raid_5m_imb_temporal_pairs": 19,
+      "with_later_poi_price_touch": 15,
+      "without_later_price_touch": 4,
+      "first_price_witness": {
+        "contact_5m_source_id": "10cd0734819af381d7cd032c84ba4a9a080a57bba1f97e8e71d45a16f27b067e:1790865300000",
+        "contact_known_ms": 1790866800000,
+        "contact_raid_uid": "1h:RAID:SHORT:1790863200000:1h:HIGH:1790848800000",
+        "imb_known_ms": 1790868900000,
+        "imb_raw_5m_source_id": "10cd0734819af381d7cd032c84ba4a9a080a57bba1f97e8e71d45a16f27b067e:1790868600000",
+        "imb_uid": "IMB:5m:SHORT:1790868600000",
+        "later_test_source_id": "10cd0734819af381d7cd032c84ba4a9a080a57bba1f97e8e71d45a16f27b067e:1790869500000"
+      }
+    },
+    {
+      "symbol": "ETHUSDT",
+      "source_1h_raid_candidates": 4,
+      "raid_5m_imb_temporal_pairs": 0,
+      "with_later_poi_price_touch": 0,
+      "without_later_price_touch": 0,
+      "first_price_witness": null
+    },
+    {
+      "symbol": "SOLUSDT",
+      "source_1h_raid_candidates": 4,
+      "raid_5m_imb_temporal_pairs": 47,
+      "with_later_poi_price_touch": 43,
+      "without_later_price_touch": 4,
+      "first_price_witness": {
+        "contact_5m_source_id": "58ec1fc806b22c2c7ceee394ca5737ab04d10f508c0197610bdba408868ee3b0:1790860500000",
+        "contact_known_ms": 1790863200000,
+        "contact_raid_uid": "1h:RAID:LONG:1790859600000:1h:LOW:1790848800000",
+        "imb_known_ms": 1790868300000,
+        "imb_raw_5m_source_id": "58ec1fc806b22c2c7ceee394ca5737ab04d10f508c0197610bdba408868ee3b0:1790868000000",
+        "imb_uid": "IMB:5m:LONG:1790868000000",
+        "later_test_source_id": "58ec1fc806b22c2c7ceee394ca5737ab04d10f508c0197610bdba408868ee3b0:1790868300000"
+      }
+    },
+    {
+      "symbol": "XRPUSDT",
+      "source_1h_raid_candidates": 4,
+      "raid_5m_imb_temporal_pairs": 47,
+      "with_later_poi_price_touch": 47,
+      "without_later_price_touch": 0,
+      "first_price_witness": {
+        "contact_5m_source_id": "43ee37d87b1ae4881ccbd09a003505121259b7209c8be036e8bd3872d687aba3:1790866200000",
+        "contact_known_ms": 1790866800000,
+        "contact_raid_uid": "1h:RAID:LONG:1790863200000:1h:LOW:1790848800000",
+        "imb_known_ms": 1790868300000,
+        "imb_raw_5m_source_id": "43ee37d87b1ae4881ccbd09a003505121259b7209c8be036e8bd3872d687aba3:1790868000000",
+        "imb_uid": "IMB:5m:LONG:1790868000000",
+        "later_test_source_id": "43ee37d87b1ae4881ccbd09a003505121259b7209c8be036e8bd3872d687aba3:1790868300000"
+      }
+    },
+    {
+      "symbol": "BCHUSDT",
+      "source_1h_raid_candidates": 7,
+      "raid_5m_imb_temporal_pairs": 64,
+      "with_later_poi_price_touch": 63,
+      "without_later_price_touch": 1,
+      "first_price_witness": {
+        "contact_5m_source_id": "3792c72f18f5292a6e036380f4856213c3441884ad9ae7b0dd1aba8d20f02168:1790839500000",
+        "contact_known_ms": 1790841600000,
+        "contact_raid_uid": "1h:RAID:LONG:1790838000000:1h:LOW:1790820000000",
+        "imb_known_ms": 1790843400000,
+        "imb_raw_5m_source_id": "3792c72f18f5292a6e036380f4856213c3441884ad9ae7b0dd1aba8d20f02168:1790843100000",
+        "imb_uid": "IMB:5m:LONG:1790843100000",
+        "later_test_source_id": "3792c72f18f5292a6e036380f4856213c3441884ad9ae7b0dd1aba8d20f02168:1790843400000"
+      }
+    }
+  ],
+  "source_receipt_git_blob": "a5bf2105d1c611517a8d127d5e1f8cb622720162",
+  "independent_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/38893273926",
+  "source_eligibility": "10 original Binance USD-M Futures ZIP+CSV SHA-pinned to F06",
+  "unique_author_StrongHL_approved": 0,
+  "academic_VC_approved": 0,
+  "trade_ready": false,
+  "critical_falsification": "177 raid-IMB pairs are many-to-many temporal associations, not 177 author VC/StrongHL or tradable events; no independent annotated geometry or full HTF route",
+  "footnote": "Many-to-many count is high because one raid may precede multiple later IMB gaps; candidate status not evidence of academic validity"
+}
