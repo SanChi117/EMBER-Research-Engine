@@ -1,0 +1,56 @@
+name: MTF A070 - Verify Source TDA Branch Audit Chain (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths: ['.github/workflows/mtf-a070-tda-proof.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  author-source-and-70-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent 70-record SHA chain and attached evidence audit
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a070-proof.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a070-proof.json'))
+          assert j['events']==70 and j['validations_pass']
+          with open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') as fh:
+              events=[json.loads(line) for line in fh if line.strip()]
+          assert events[-1]['action_id']=='A070'
+          assert events[-1]['record_sha256']=='add929dc413f89753e107940a9bce1de1e3582fc39d096cae62d85d583af6d1e'
+          assert 'No VC, Daily Bias' in events[-1]['observed_result']
+          print('A001_A070_ALL_SOURCE_BYTES_HASHED_AND_VERIFIED')
+          PY
+      - name: Guard original TDA schematic and academic course v05
+        run: |
+          set -euo pipefail
+          test "$(git hash-object research/mtf-element-audit-v1/d05/C02_TDA_SOURCE_ROUTE_TOPOLOGY.json)" = 8d3ecf4bdf82be14e3a1da2f132425feaa45fed3
+          test "$(git hash-object research/mtf-course-v05/src/course_primitives_v05.py)" = 45cec7fd66d0ec156bc0a38225ee282c6d3ee71b
+      - name: Rerun 23 original teaching-schematic branch counterexamples
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_tda_source_route_contract 2>&1 | tee /tmp/a070-contract.txt
+          grep -q 'Ran 23 tests' /tmp/a070-contract.txt
+          grep -Eq '^OK$' /tmp/a070-contract.txt
+          echo 'NO_AUTOMATIC_ACADEMIC_TRADE_APPROVAL_23_SOURCE_TESTS_PASS'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a070-author-tda-70-sha-proof
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a070-proof.json
+            /tmp/a070-contract.txt
