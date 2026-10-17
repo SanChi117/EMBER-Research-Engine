@@ -65,3 +65,6 @@ def main(output=None):
     assert total["observed_parent_edges"]==539
     assert total["eligible_pivot_options"]==539+total["alternate_pivot_options"]
     assert total["multiple_eligible_parent_edges"]>=total["same_bar_multiple_crossings"]
+
+    if output:
+        Path(output).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
