@@ -8,3 +8,14 @@ def summarize_pivots(source, *, as_of_ms):
     all_swings=_swings(bars)
     events=observe_native3m_raid_break(source, as_of_ms=as_of_ms)
     return bars, all_swings, events
+
+def audit_rival_pivots(source, *, as_of_ms):
+    bars,swings,events=summarize_pivots(source,as_of_ms=as_of_ms)
+    detail=[]
+    for e in events.potential_breaks:
+        at=(e.break_start_ms-bars[0].start_ms)//180000
+        if at<1 or at>=len(bars):
+            raise ValueError("INVALID_SOURCE_C22B_BAR_INDEX")
+        prior,bar=bars[at-1],bars[at]
+        if bar.raw_id!=e.source_original_3m_row_id:
+            raise ValueError("SOURCE_3M_BREAK_ID_CHANGED")
