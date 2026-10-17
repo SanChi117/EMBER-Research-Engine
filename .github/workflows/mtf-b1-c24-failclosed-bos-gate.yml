@@ -1,0 +1,25 @@
+name: MTF B1 C24 — Fail-closed BOS Research Gate (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c24-failclosed-bos-gate.yml'
+      - 'research/mtf-element-audit-v1/d05/c24_bos_research_admission_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c24_bos_research_admission_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c24-research-only-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Confirm C24 never approves unsupported BOS
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c24_bos_research_admission_gate 2>&1 | tee /tmp/c24-unit.log
+          grep -q 'Ran 6 tests' /tmp/c24-unit.log
