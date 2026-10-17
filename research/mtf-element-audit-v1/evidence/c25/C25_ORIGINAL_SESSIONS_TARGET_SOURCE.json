@@ -1,0 +1,712 @@
+{
+  "author_approved_trades": 0,
+  "author_fta_stop_proven": false,
+  "author_timezone_proven": false,
+  "limits": "Scenarios are hypotheses; 1h target is nearest historical opposing fractal geometry, not certified author FTA. Minimum stop distance excludes unknown buffer and fills.",
+  "local_prior_day_by_scenario": {
+    "Europe/Kyiv": 42,
+    "Europe/London": 40,
+    "UTC": 42
+  },
+  "markets": [
+    {
+      "first_three_price_and_calendar_witnesses": [
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788430500000,
+          "hypothetical_minimum_unbuffered_stop_distance": "3.52",
+          "nearest_preknown_opposing_1h_fractal_price": "246.70",
+          "raid_ms": 1788422400000,
+          "research_break_close": "248.66",
+          "research_raid_extreme": "252.18",
+          "source_original3m_break_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788430500000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788299100000,
+          "hypothetical_minimum_unbuffered_stop_distance": "2.74",
+          "nearest_preknown_opposing_1h_fractal_price": "247.77",
+          "raid_ms": 1788285600000,
+          "research_break_close": "245.42",
+          "research_raid_extreme": "242.68",
+          "source_original3m_break_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788299100000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788376320000,
+          "hypothetical_minimum_unbuffered_stop_distance": "3.55",
+          "nearest_preknown_opposing_1h_fractal_price": "246.12",
+          "raid_ms": 1788368400000,
+          "research_break_close": "244.64",
+          "research_raid_extreme": "241.09",
+          "source_original3m_break_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788376320000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        }
+      ],
+      "independent_prefix_equivalent": true,
+      "native15m_decimal_equalities": 3072,
+      "no_geometric_preknown_opposing_1h_target": 0,
+      "nonpositive_unbuffered_stop_distance": 0,
+      "original_native3m_bars": 15360,
+      "original_parent_edges": 99,
+      "previous_day_local": {
+        "Europe/Kyiv": 12,
+        "Europe/London": 8,
+        "UTC": 8
+      },
+      "previous_day_timezone_disagreements": 12,
+      "previous_session_09_17_local": {
+        "Europe/Kyiv": 4,
+        "Europe/London": 3,
+        "UTC": 2
+      },
+      "previous_session_timezone_disagreements": 4,
+      "raid_window_09_17_local": {
+        "Europe/Kyiv": 13,
+        "Europe/London": 14,
+        "UTC": 11
+      },
+      "raid_window_timezone_disagreements": 12,
+      "research_single_parent_cases": 45,
+      "scenario_zones": [
+        "UTC",
+        "Europe/Kyiv",
+        "Europe/London"
+      ],
+      "symbol": "BCHUSDT"
+    },
+    {
+      "first_three_price_and_calendar_witnesses": [
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788312420000,
+          "hypothetical_minimum_unbuffered_stop_distance": "484.30",
+          "nearest_preknown_opposing_1h_fractal_price": "76883.60",
+          "raid_ms": 1788303600000,
+          "research_break_close": "77120.00",
+          "research_raid_extreme": "77604.30",
+          "source_original3m_break_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788312420000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788318720000,
+          "hypothetical_minimum_unbuffered_stop_distance": "794.60",
+          "nearest_preknown_opposing_1h_fractal_price": "77497.20",
+          "raid_ms": 1788310800000,
+          "research_break_close": "77476.90",
+          "research_raid_extreme": "76682.30",
+          "source_original3m_break_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788318720000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788325200000,
+          "hypothetical_minimum_unbuffered_stop_distance": "328.00",
+          "nearest_preknown_opposing_1h_fractal_price": "77366.00",
+          "raid_ms": 1788318000000,
+          "research_break_close": "77439.80",
+          "research_raid_extreme": "77767.80",
+          "source_original3m_break_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788325200000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        }
+      ],
+      "independent_prefix_equivalent": true,
+      "native15m_decimal_equalities": 3072,
+      "no_geometric_preknown_opposing_1h_target": 0,
+      "nonpositive_unbuffered_stop_distance": 0,
+      "original_native3m_bars": 15360,
+      "original_parent_edges": 104,
+      "previous_day_local": {
+        "Europe/Kyiv": 7,
+        "Europe/London": 7,
+        "UTC": 8
+      },
+      "previous_day_timezone_disagreements": 8,
+      "previous_session_09_17_local": {
+        "Europe/Kyiv": 0,
+        "Europe/London": 1,
+        "UTC": 1
+      },
+      "previous_session_timezone_disagreements": 1,
+      "raid_window_09_17_local": {
+        "Europe/Kyiv": 11,
+        "Europe/London": 7,
+        "UTC": 6
+      },
+      "raid_window_timezone_disagreements": 11,
+      "research_single_parent_cases": 30,
+      "scenario_zones": [
+        "UTC",
+        "Europe/Kyiv",
+        "Europe/London"
+      ],
+      "symbol": "BTCUSDT"
+    },
+    {
+      "first_three_price_and_calendar_witnesses": [
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788509160000,
+          "hypothetical_minimum_unbuffered_stop_distance": "10.61",
+          "nearest_preknown_opposing_1h_fractal_price": "2514.95",
+          "raid_ms": 1788501600000,
+          "research_break_close": "2508.81",
+          "research_raid_extreme": "2498.20",
+          "source_original3m_break_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788509160000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788606180000,
+          "hypothetical_minimum_unbuffered_stop_distance": "6.56",
+          "nearest_preknown_opposing_1h_fractal_price": "2448.66",
+          "raid_ms": 1788598800000,
+          "research_break_close": "2452.71",
+          "research_raid_extreme": "2459.27",
+          "source_original3m_break_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788606180000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788621120000,
+          "hypothetical_minimum_unbuffered_stop_distance": "10.13",
+          "nearest_preknown_opposing_1h_fractal_price": "2458.31",
+          "raid_ms": 1788613200000,
+          "research_break_close": "2458.01",
+          "research_raid_extreme": "2447.88",
+          "source_original3m_break_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788621120000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 60
+            }
+          ]
+        }
+      ],
+      "independent_prefix_equivalent": true,
+      "native15m_decimal_equalities": 3072,
+      "no_geometric_preknown_opposing_1h_target": 0,
+      "nonpositive_unbuffered_stop_distance": 0,
+      "original_native3m_bars": 15360,
+      "original_parent_edges": 129,
+      "previous_day_local": {
+        "Europe/Kyiv": 9,
+        "Europe/London": 6,
+        "UTC": 5
+      },
+      "previous_day_timezone_disagreements": 6,
+      "previous_session_09_17_local": {
+        "Europe/Kyiv": 2,
+        "Europe/London": 2,
+        "UTC": 3
+      },
+      "previous_session_timezone_disagreements": 3,
+      "raid_window_09_17_local": {
+        "Europe/Kyiv": 10,
+        "Europe/London": 7,
+        "UTC": 6
+      },
+      "raid_window_timezone_disagreements": 6,
+      "research_single_parent_cases": 23,
+      "scenario_zones": [
+        "UTC",
+        "Europe/Kyiv",
+        "Europe/London"
+      ],
+      "symbol": "ETHUSDT"
+    },
+    {
+      "first_three_price_and_calendar_witnesses": [
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788318540000,
+          "hypothetical_minimum_unbuffered_stop_distance": "1.8300",
+          "nearest_preknown_opposing_1h_fractal_price": "102.5500",
+          "raid_ms": 1788310800000,
+          "research_break_close": "100.2800",
+          "research_raid_extreme": "98.4500",
+          "source_original3m_break_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788318540000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788340860000,
+          "hypothetical_minimum_unbuffered_stop_distance": "1.5200",
+          "nearest_preknown_opposing_1h_fractal_price": "98.8300",
+          "raid_ms": 1788332400000,
+          "research_break_close": "98.8600",
+          "research_raid_extreme": "100.3800",
+          "source_original3m_break_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788340860000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": true,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1789505280000,
+          "hypothetical_minimum_unbuffered_stop_distance": "1.7600",
+          "nearest_preknown_opposing_1h_fractal_price": "99.4900",
+          "raid_ms": 1789495200000,
+          "research_break_close": "97.4800",
+          "research_raid_extreme": "95.7200",
+          "source_original3m_break_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1789505280000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        }
+      ],
+      "independent_prefix_equivalent": true,
+      "native15m_decimal_equalities": 3072,
+      "no_geometric_preknown_opposing_1h_target": 0,
+      "nonpositive_unbuffered_stop_distance": 0,
+      "original_native3m_bars": 15360,
+      "original_parent_edges": 103,
+      "previous_day_local": {
+        "Europe/Kyiv": 5,
+        "Europe/London": 7,
+        "UTC": 8
+      },
+      "previous_day_timezone_disagreements": 9,
+      "previous_session_09_17_local": {
+        "Europe/Kyiv": 1,
+        "Europe/London": 1,
+        "UTC": 2
+      },
+      "previous_session_timezone_disagreements": 1,
+      "raid_window_09_17_local": {
+        "Europe/Kyiv": 8,
+        "Europe/London": 9,
+        "UTC": 9
+      },
+      "raid_window_timezone_disagreements": 7,
+      "research_single_parent_cases": 30,
+      "scenario_zones": [
+        "UTC",
+        "Europe/Kyiv",
+        "Europe/London"
+      ],
+      "symbol": "SOLUSDT"
+    },
+    {
+      "first_three_price_and_calendar_witnesses": [
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788303960000,
+          "hypothetical_minimum_unbuffered_stop_distance": "0.0109",
+          "nearest_preknown_opposing_1h_fractal_price": "1.3835",
+          "raid_ms": 1788296400000,
+          "research_break_close": "1.3474",
+          "research_raid_extreme": "1.3365",
+          "source_original3m_break_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788303960000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788325200000,
+          "hypothetical_minimum_unbuffered_stop_distance": "0.0130",
+          "nearest_preknown_opposing_1h_fractal_price": "1.3379",
+          "raid_ms": 1788318000000,
+          "research_break_close": "1.3446",
+          "research_raid_extreme": "1.3576",
+          "source_original3m_break_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788325200000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": true,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        },
+        {
+          "author_entry_approved": false,
+          "break_ms": 1788388020000,
+          "hypothetical_minimum_unbuffered_stop_distance": "0.0135",
+          "nearest_preknown_opposing_1h_fractal_price": "1.3418",
+          "raid_ms": 1788379200000,
+          "research_break_close": "1.3420",
+          "research_raid_extreme": "1.3555",
+          "source_original3m_break_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788388020000",
+          "zones": [
+            {
+              "name": "UTC",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 0
+            },
+            {
+              "name": "Europe/Kyiv",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 180
+            },
+            {
+              "name": "Europe/London",
+              "previous_day": false,
+              "prior_session_09_17": false,
+              "raid_window_09_17": false,
+              "utc_offset_minutes": 60
+            }
+          ]
+        }
+      ],
+      "independent_prefix_equivalent": true,
+      "native15m_decimal_equalities": 3072,
+      "no_geometric_preknown_opposing_1h_target": 0,
+      "nonpositive_unbuffered_stop_distance": 0,
+      "original_native3m_bars": 15360,
+      "original_parent_edges": 104,
+      "previous_day_local": {
+        "Europe/Kyiv": 9,
+        "Europe/London": 12,
+        "UTC": 13
+      },
+      "previous_day_timezone_disagreements": 15,
+      "previous_session_09_17_local": {
+        "Europe/Kyiv": 0,
+        "Europe/London": 0,
+        "UTC": 1
+      },
+      "previous_session_timezone_disagreements": 1,
+      "raid_window_09_17_local": {
+        "Europe/Kyiv": 8,
+        "Europe/London": 10,
+        "UTC": 10
+      },
+      "raid_window_timezone_disagreements": 8,
+      "research_single_parent_cases": 37,
+      "scenario_zones": [
+        "UTC",
+        "Europe/Kyiv",
+        "Europe/London"
+      ],
+      "symbol": "XRPUSDT"
+    }
+  ],
+  "prior_09_17_local_by_scenario": {
+    "Europe/Kyiv": 7,
+    "Europe/London": 7,
+    "UTC": 9
+  },
+  "raid_09_17_local_by_scenario": {
+    "Europe/Kyiv": 50,
+    "Europe/London": 47,
+    "UTC": 42
+  },
+  "readiness": "NOT_TRADE_READY",
+  "scenarios_not_author_settings": [
+    "UTC",
+    "Europe/Kyiv",
+    "Europe/London"
+  ],
+  "schema": "EMBER_C25_UNATTESTED_SESSION_DST_FTA_STOP_SOURCE_V1",
+  "source_native15m_exact": 15360,
+  "source_original_native3m": 76800,
+  "source_original_zip": 45,
+  "totals": {
+    "no_geometric_preknown_opposing_1h_target": 0,
+    "nonpositive_unbuffered_stop_distance": 0,
+    "original_parent_edges": 539,
+    "previous_day_timezone_disagreements": 50,
+    "previous_session_timezone_disagreements": 10,
+    "raid_window_timezone_disagreements": 44,
+    "research_single_parent_cases": 165
+  }
+}
