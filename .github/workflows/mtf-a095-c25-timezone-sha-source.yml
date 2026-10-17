@@ -34,3 +34,21 @@ jobs:
           assert len(j[94]['evidence'])==5 and j[94]['cycle_result']=='PASSED'
           print('A095_FULL_95_RECORD_SHA_FIVE_C25_PRICE_FILES_PASS')
           PY
+      - name: Pinned previous and current source receipts
+        run: |
+          python - <<'PY'
+          import subprocess
+          frozen={
+            'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9',
+            'research/mtf-element-audit-v1/evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json':'fe9b23672f97cdf1e50d603e7d214ecdef7a00ad'}
+          for p,w in frozen.items():
+              s=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert s==w,(p,s,w)
+          print('A095_C24_C25_GIT_SOURCE_RECEIPTS_IMMUTABLE')
+          PY
+      - name: Reproduce 10 adversarial C25 DST/FTA original-source tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c25_session_freshness_target_source 2>&1 | tee /tmp/a095-unit.log
+          grep -q 'Ran 10 tests' /tmp/a095-unit.log
