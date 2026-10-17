@@ -97,6 +97,14 @@ class C26ReadOnlyControls(unittest.TestCase):
                       (replace(rows[100],raw_id="tampered"),)+rows[101:])
         with self.assertRaisesRegex(ValueError,"ALTERED_ORIGINAL_NATIVE3M_BAR"):
             inspect_c26(wrong,as_of_ms=wrong.as_of_ms)
+    def test_original_zip_sha_tampering_rejected(self):
+        x=make3()
+        shas=("0"*64,)+x.original_zip_shas[1:]
+        with self.assertRaisesRegex(ValueError,"ALTERED_ORIGINAL_NATIVE3M_BAR"):
+            inspect_c26(replace(x,original_zip_shas=shas),as_of_ms=x.as_of_ms)
+    def test_unordered_source_rows_rejected(self):
+        with self.assertRaisesRegex(ValueError,"UNORDERED_OR_UNCLOSED_ROW"):
+            level_history(pivot(),(bar(13),bar(10)),break_start_ms=25)
     def test_author_session_and_fta_status_remain_unknown(self):
         x=make3()
         r=inspect_c26(x,as_of_ms=x.as_of_ms)
