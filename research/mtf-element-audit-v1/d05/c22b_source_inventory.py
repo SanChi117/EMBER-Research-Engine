@@ -31,3 +31,24 @@ def audit_rival_pivots(source, *, as_of_ms):
             eligible.append(swing)
         if not eligible or eligible[-1]!=e.swing:
             raise ValueError("LATEST_KNOWN_PROXY_PIVOT_DRIFT")
+
+        simultaneous=[]
+        for swing in eligible:
+            if e.side=="SHORT":
+                crossed=prior.close>=swing.level and bar.close<swing.level
+            else:
+                crossed=prior.close<=swing.level and bar.close>swing.level
+            if crossed:simultaneous.append(swing)
+        if e.swing not in simultaneous:
+            raise ValueError("SOURCE_SELECTED_SWING_NOT_CROSSED")
+        alternatives=[s for s in simultaneous if s!=e.swing]
+        detail.append({
+            "raid_start_ms":e.raid_start_ms,
+            "break_start_ms":e.break_start_ms,
+            "selected_center_ms":e.swing.center_ms,
+            "eligible_pivot_count":len(eligible),
+            "simultaneous_alternative_count":len(alternatives),
+            "eligible_centers":tuple(s.center_ms for s in eligible),
+            "crossed_alternative_centers":tuple(s.center_ms for s in alternatives),
+            "author_status":"AUTHOR_TIMESTAMPED_GOLDEN_MISSING"
+        })
