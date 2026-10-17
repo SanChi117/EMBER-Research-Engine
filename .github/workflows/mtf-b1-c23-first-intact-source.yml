@@ -20,6 +20,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Preserve original C21 C22 and C23 receipt blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+           'research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json':'a9a121cb41477b105dd13a1228b5d0577ac3abda',
+           'research/mtf-element-audit-v1/evidence/c22/C22B_ORIGINAL_PIVOT_ALTERNATIVES.json':'87bc70ed12cf77bf444a019cb48ef38d907ac5f3',
+           'research/mtf-element-audit-v1/evidence/c23/C23_ORIGINAL_FIRST_INTACT_PIVOT_RESULT.json':'b2fd86941fb1f2fcf11f656d230015577c58b021'}
+          for p,sha in pinned.items():
+              assert subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()==sha,p
+          print('C23_ORIGINAL_PRICE_RECEIPTS_SHA_PASS')
+          PY
       - name: C23 source guard unit tests
         run: |
           set -euo pipefail
