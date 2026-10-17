@@ -1,0 +1,12 @@
+{
+  "full_json_pinned_equal": true,
+  "independently_reloaded_original_zip": 45,
+  "negative_controls": 18,
+  "paper_only": true,
+  "prefix_physically_truncated_equal": true,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39069693828,
+  "schema": "EMBER_C26_INDEPENDENT_CI_WITNESS_V1",
+  "source_receipt_git_blob": "11edbf5ddf8e89e513fc3893e807903bbf8933eb",
+  "trigger_commit_sha": "0bd189c48a820be9840f19490d52050dc14499b3"
+}
