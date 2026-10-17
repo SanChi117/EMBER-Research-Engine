@@ -77,6 +77,24 @@ class C27SourceFamilyNegativeControls(unittest.TestCase):
     def test_dst_kyiv_shifts_previous_calendar(self):
         t=when("2026-10-17T22:00:00")
         self.assertNotEqual(_local_dt(t,"UTC").date(),_local_dt(t,"Europe/Kyiv").date())
+    def test_kyiv_fall_dst_day_has_25_hourly_candles(self):
+        h=hours_for(when("2026-10-24T00:00:00"),72)
+        x=previous_zone_extrema(h,(),zone="Europe/Kyiv",
+                raid_ms=when("2026-10-26T10:00:00"),
+                break_start_ms=when("2026-10-26T11:00:00"),
+                side="LONG",entry=D("100"))
+        self.assertEqual(x[0].required_closed_1h_hours,25)
+        self.assertEqual(x[0].observed_closed_1h_hours,25)
+        self.assertIsNotNone(x[0].value)
+    def test_kyiv_spring_dst_day_has_23_hourly_candles(self):
+        h=hours_for(when("2026-03-28T00:00:00"),72)
+        x=previous_zone_extrema(h,(),zone="Europe/Kyiv",
+                raid_ms=when("2026-03-30T10:00:00"),
+                break_start_ms=when("2026-03-30T11:00:00"),
+                side="SHORT",entry=D("100"))
+        self.assertEqual(x[0].required_closed_1h_hours,23)
+        self.assertEqual(x[0].observed_closed_1h_hours,23)
+        self.assertIsNotNone(x[0].value)
     def test_invalid_author_zone_rejected(self):
         with self.assertRaisesRegex(ValueError,"UNKNOWN_AUTHOR_TIMEZONE"):
             previous_zone_extrema((),(),zone="Europe/Fiction",raid_ms=10,
