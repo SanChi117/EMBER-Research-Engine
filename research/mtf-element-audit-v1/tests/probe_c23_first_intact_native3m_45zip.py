@@ -74,3 +74,12 @@ def main(target=None):
     assert totals["total_eligible_before_first_break_test"]==3393
     assert totals["previously_close_broken_levels"]+totals["still_close_intact_levels"]==3393
     assert totals["first_close_single_candidate_edges"]+totals["first_close_multiple_candidate_edges"]+totals["no_first_close_candidate_edges"]==539
+
+    pin=ROOT/"evidence"/"c23"/"C23_ORIGINAL_FIRST_INTACT_PIVOT_RESULT.json"
+    if pin.exists():
+        assert json.loads(pin.read_text(encoding="utf8"))==result,"C23_ORIGINAL_SOURCE_PINNED_DRIFT"
+    if target:
+        Path(target).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
+    print(json.dumps(result,indent=2,sort_keys=True),flush=True)
+if __name__=="__main__":
+    main(sys.argv[1] if len(sys.argv)>1 else None)
