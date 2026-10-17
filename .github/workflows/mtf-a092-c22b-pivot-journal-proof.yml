@@ -47,3 +47,9 @@ jobs:
               assert sha==want,(path,sha,want)
           print('A092_ORIGINAL_NATIVE3M_SOURCE_GIT_BLOBS_PASS')
           PY
+      - name: C22B eight source adversarial tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c22b_source_inventory 2>&1 | tee /tmp/a092-tests.log
+          grep -q 'Ran 8 tests' /tmp/a092-tests.log
