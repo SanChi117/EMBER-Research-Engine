@@ -67,3 +67,10 @@ def main(target=None):
        "original_source_results":rows,"totals":totals,
        "author_timestamp_bos_goldens":0,"author_approved_trades":0,
        "readiness":"NOT_TRADE_READY"}
+
+    assert result["original_3m_closed"]==76800
+    assert result["original_native15m_equalities"]==15360
+    assert totals["original_parent_edges"]==539
+    assert totals["total_eligible_before_first_break_test"]==3393
+    assert totals["previously_close_broken_levels"]+totals["still_close_intact_levels"]==3393
+    assert totals["first_close_single_candidate_edges"]+totals["first_close_multiple_candidate_edges"]+totals["no_first_close_candidate_edges"]==539
