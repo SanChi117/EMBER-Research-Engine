@@ -9,7 +9,7 @@ All 3 IANA calendars are experiments, not attributed to the instructor.
 C21-C26 historical evidence is read-only. PAPER ONLY.
 """
 from dataclasses import dataclass
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, time
 from decimal import Decimal
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
@@ -130,10 +130,17 @@ def previous_zone_extrema(hours,rows,*,zone,raid_ms,break_start_ms,side,entry):
     if not isinstance(entry,Decimal) or not entry.is_finite():
         raise ValueError("C27_BAD_ENTRY")
     prev_date=_local_dt(raid_ms,zone).date()-timedelta(days=1)
+    z=ZoneInfo(zone)
+    local_start=datetime.combine(prev_date,time.min,tzinfo=z)
+    local_end=datetime.combine(prev_date+timedelta(days=1),time.min,tzinfo=z)
+    required_calendar_hours=int((local_end.astimezone(timezone.utc)-
+                                 local_start.astimezone(timezone.utc)).total_seconds()//3600)
+    if required_calendar_hours not in (23,24,25):
+        raise ValueError("C27_INVALID_IANA_DST_CALENDAR_DAY")
     previous=[h for h in hours if h.close_ms<=break_start_ms and
               _local_dt(h.start_ms,zone).date()==prev_date]
     out=[]
-    for scope,window,required in (("PREVIOUS_LOCAL_DAY",previous,24),
+    for scope,window,required in (("PREVIOUS_LOCAL_DAY",previous,required_calendar_hours),
                                    ("PREVIOUS_LOCAL_09_17",
                                     [h for h in previous if 9<=_local_dt(h.start_ms,zone).hour<17],8)):
         # No 'completed session' from incomplete data, missing source or double counting.
