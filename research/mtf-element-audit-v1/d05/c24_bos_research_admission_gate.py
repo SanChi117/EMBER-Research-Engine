@@ -35,3 +35,34 @@ class AdmissionAudit:
     readiness:str="NOT_TRADE_READY"
     author_approved_bos:int=0
     approved_trades:int=0
+
+def audit_route_admission(source,*,as_of_ms):
+    rows=_source(source,as_of_ms)
+    swings=_swings(rows)
+    events=observe_native3m_raid_break(source,as_of_ms=as_of_ms).potential_breaks
+    parent_counts=Counter(e.break_start_ms for e in events)
+    outputs=[]
+    for e in events:
+        i=(e.break_start_ms-SEPT_START)//THREE
+        current,prior=rows[i],rows[i-1]
+        if current.raw_id!=e.source_original_3m_row_id:
+            raise ValueError("SOURCE_C24_ROW_ID_MISMATCH")
+        eligible=[]
+        for s in swings:
+            if s.kind!=e.swing.kind:continue
+            if not (e.raid_start_ms<=s.center_ms):continue
+            if not (e.raid_start_ms+3600000<=s.known_ms<=e.break_start_ms):continue
+            if e.side=="SHORT" and s.level>=e.raid_level:continue
+            if e.side=="LONG" and s.level<=e.raid_level:continue
+            eligible.append(s)
+        if not eligible or eligible[-1]!=e.swing:
+            raise ValueError("C24_C21B_RESEARCH_PIVOT_DRIFT")
+        first=[]
+        for s in eligible:
+            old=rows[(s.known_ms-SEPT_START)//THREE:i]
+            short=e.side=="SHORT"
+            if any(x.close<s.level if short else x.close>s.level for x in old):
+                continue
+            if (prior.close>=s.level and current.close<s.level if short
+                else prior.close<=s.level and current.close>s.level):
+                first.append(s)
