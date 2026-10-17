@@ -88,3 +88,32 @@ jobs:
           git add "$p"
           git commit -m "evidence(C27): first verified original 45-ZIP target family source JSON"
           git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Preserve failed C27 CI source and negative-test diagnosis without claiming acceptance
+        if: failure()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import pathlib,json,os
+          folder=pathlib.Path('research/mtf-element-audit-v1/evidence/c27/diagnostics')
+          folder.mkdir(parents=True,exist_ok=True)
+          output=folder/('C27_FAILED_RUN_'+os.environ['RUN_ID']+'.json')
+          logs={}
+          for p in ('/tmp/c27-negative.log','/tmp/c27-original.log'):
+              f=pathlib.Path(p)
+              logs[f.name]=(f.read_text(errors='replace')[-14000:] if f.exists() else 'NOT_REACHED')
+          output.write_text(json.dumps({
+              'run_id':int(os.environ['RUN_ID']),
+              'trigger_sha':os.environ['HEAD_SHA'],
+              'unapproved_failure_diagnostic':True,
+              'logs':logs,
+              'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c27/diagnostics/
+          git commit -m "diagnostic(C27): preserve failed source or negative replay evidence"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
