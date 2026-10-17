@@ -1,0 +1,91 @@
+name: MTF B1 C26 — Original Unswept 1H FTA Forensics (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c26-original-unswept-fta.yml'
+      - 'research/mtf-element-audit-v1/d05/c26_unswept_1h_fta_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c26_unswept_1h_fta_source.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c26_original3m_unswept_fta.py'
+      - 'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c26-original-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-unswept-forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen C24 and C25 Git blob before reading source
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+            'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9',
+            'research/mtf-element-audit-v1/evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json':'fe9b23672f97cdf1e50d603e7d214ecdef7a00ad'
+          }
+          for path,want in pinned.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert got==want,(path,got,want)
+          print('C26_FROZEN_PREDECESSOR_BLOBS_PASS')
+          PY
+      - name: Adversarial causal and source tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c26_unswept_1h_fta_source 2>&1 | tee /tmp/c26-negative.log
+          grep -q 'Ran 16 tests' /tmp/c26-negative.log
+      - name: Replay all 45 original Binance USD-M ZIP and physically truncated prefix
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c26_original3m_unswept_fta.py /tmp/c26-full-source.json 2>&1 | tee /tmp/c26-replay.log
+      - name: Reject false technical approvals and totals drift
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c26-full-source.json'))
+          t=x['totals']
+          assert x['original_zip_count']==45
+          assert x['original_native3m_bars']==76800
+          assert x['native15m_decimal_equalities']==15360
+          assert t['original_parent_edges']==539 and t['research_single_cases']==165
+          assert (t['nearest_target_already_crossed']+
+            t['nearest_target_equality_unresolved']+
+            t['nearest_target_intact']+
+            t['nearest_target_not_preknown'])==165
+          assert x['approved_trades']==x['author_bos_goldens']==0
+          assert not x['author_timezone_attested'] and not x['author_fta_threshold_attested']
+          assert not x['author_sl_buffer_attested'] and x['readiness']=='NOT_TRADE_READY'
+          print('C26_165_CAUSAL_SOURCE_CASES_PAPER_ONLY_PASS')
+          PY
+      - name: Upload independent complete source evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: c26-complete-original-source-json
+          path: /tmp/c26-full-source.json
+          retention-days: 30
+      - name: Freeze new C26 receipt only after passing first source replay
+        if: success()
+        run: |
+          set -euo pipefail
+          path=research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json
+          if test -e "$path"; then
+            echo "Existing C26 pinned receipt verified byte-content through previous replay."
+            exit 0
+          fi
+          mkdir -p "$(dirname "$path")"
+          cp /tmp/c26-full-source.json "$path"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$path"
+          git commit -m "evidence(C26): pin 45-source original 3m target liveness replay"
+          git push origin HEAD:research/academic-engine-recovery-20261015
