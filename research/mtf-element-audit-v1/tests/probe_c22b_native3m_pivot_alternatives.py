@@ -69,6 +69,9 @@ def main(output=None):
     if output:
         Path(output).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
 
+    pin=ROOT/"evidence"/"c22"/"C22B_ORIGINAL_PIVOT_ALTERNATIVES.json"
+    if pin.exists():
+        assert json.loads(pin.read_text(encoding="utf8"))==result,"C22B_ORIGINAL_PINNED_SOURCE_DRIFT"
     print(json.dumps(result,indent=2,sort_keys=True),flush=True)
 
 if __name__=="__main__":
