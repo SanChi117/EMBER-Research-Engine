@@ -20,6 +20,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Frozen C24 previous and C25 original source receipt hashes
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+           'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9',
+           'research/mtf-element-audit-v1/evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json':'fe9b23672f97cdf1e50d603e7d214ecdef7a00ad'}
+          for p,want in pinned.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==want,(p,got,want)
+          print('C25_ORIGINAL_SCENARIO_RECEIPT_PINNED_GIT_SHA_PASS')
+          PY
       - name: C25 falsify UTC versus Europe DST and noncausal 1H target
         run: |
           set -euo pipefail
