@@ -99,3 +99,54 @@ def _nearest_geometric_target(pivots,side,close,known_before_ms):
         and (p.level<close if side=="SHORT" else p.level>close)]
     if not options:return None
     return min(options,key=lambda p:(abs(p.level-close),p.center_ms))
+
+def inspect_c25(source,*,as_of_ms:int)->Review:
+    bars=_source(source,as_of_ms)
+    base=audit_route_admission(source,as_of_ms=as_of_ms)
+    original=observe_native3m_raid_break(source,as_of_ms=as_of_ms)
+    pivots,_=observe_fractals_and_first_breach(_hours(bars))
+    lookup={(e.pivot_center_ms,e.raid_start_ms,e.break_start_ms):e
+            for e in original.potential_breaks}
+    if len(lookup)!=len(original.potential_breaks):
+        raise ValueError("C25_DUPLICATED_RAID_PARENT_ID")
+    output=[]
+    for case in base.cases:
+        if case.reason!="RESEARCH_SINGLE_CANDIDATE_AUTHOR_SESSION_FTA_SL_UNVERIFIED":
+            continue
+        event=lookup.get((case.raid_fractal_ms,case.raid_start_ms,case.break_start_ms))
+        if event is None or event.source_original_3m_row_id!=case.original_break_row_id:
+            raise ValueError("C25_C24_SOURCE_PARENT_DRIFT")
+        if event.raid_confirmed_ms>event.break_start_ms:
+            raise ValueError("C25_PREMATURE_1H_RAID")
+        zones=tuple(scenario(event.pivot_center_ms,event.raid_start_ms,z) for z in ZONES)
+        known_target=_nearest_geometric_target(pivots,event.side,event.break_close,event.break_start_ms)
+        risk=(event.raid_extreme-event.break_close if event.side=="SHORT"
+              else event.break_close-event.raid_extreme)
+        if not (isinstance(risk,Decimal) and risk.is_finite()):
+            raise ValueError("C25_CORRUPTED_ORIGINAL_PRICE")
+        day_diff=len({z.pivot_was_previous_local_day for z in zones})>1
+        session_diff=len({z.pivot_in_previous_09_17_session for z in zones})>1
+        window_diff=len({z.raid_in_local_09_17_window for z in zones})>1
+        output.append(Case(source.symbol,event.raid_start_ms,
+            event.pivot_center_ms,event.break_start_ms,case.original_break_row_id,
+            event.side,zones,day_diff,session_diff,window_diff,
+            str(event.raid_extreme),str(event.break_close),str(risk),
+            str(known_target.level) if known_target else None,
+            known_target.center_ms if known_target else None,
+            known_target is not None))
+    cases=tuple(output)
+    if len(cases)!=base.single_research_without_author_labels:
+        raise ValueError("C25_165_PARENT_CAUSAL_JOIN_DRIFT")
+    return Review(
+        source.symbol,as_of_ms,base.total_original_research_edges,len(cases),
+        cases,sum(x.zones_disagree_on_previous_day for x in cases),
+        sum(x.zones_disagree_on_previous_09_17_session for x in cases),
+        sum(x.zones_disagree_on_raid_09_17 for x in cases),
+        sum(x.nearest_preknown_opposing_1h_fractal_price is None for x in cases),
+        sum(Decimal(x.minimum_unbuffered_stop_distance)<=0 for x in cases),
+        tuple((z,sum(x.zones[i].pivot_was_previous_local_day for x in cases))
+              for i,z in enumerate(ZONES)),
+        tuple((z,sum(x.zones[i].pivot_in_previous_09_17_session for x in cases))
+              for i,z in enumerate(ZONES)),
+        tuple((z,sum(x.zones[i].raid_in_local_09_17_window for x in cases))
+              for i,z in enumerate(ZONES)))
