@@ -108,3 +108,25 @@ class C21BOriginalThreeMinuteGeometry(unittest.TestCase):
         self.assertEqual(c.same_parent_with_both+c.only_5m_parent,c.native5m_cand_edges)
         self.assertEqual(c.earliest_3m_before_5m+c.earliest_5m_before_3m+
                          c.simultaneous_close,c.same_parent_with_both)
+
+    def test_original_hour_equal_but_3m_only_closed_break(self):
+        t=make3()
+        f=synthetic()
+        bars=f.original_5m_closed
+        # LTF candle made the same hourly LOW wick, but no closed 5m
+        # price crossing the prior 5m swing. 1h OHLC remains IDENTICAL.
+        changed=replace(bars[84],close=D(100))
+        f=replace(f,original_5m_closed=bars[:84]+(changed,)+bars[85:])
+        comparison=compare_original_3m_and_5m(t,f,as_of_ms=t.as_of_ms)
+        self.assertGreater(comparison.only_3m_parent,0)
+        self.assertEqual(comparison.only_5m_parent,0)
+        self.assertEqual(comparison.author_trades,0)
+    def test_original_hour_equal_but_5m_only_closed_break(self):
+        t=make3()
+        rows=t.original_3m_closed
+        changed=replace(rows[140],close=D(100))
+        t=replace(t,original_3m_closed=rows[:140]+(changed,)+rows[141:])
+        comparison=compare_original_3m_and_5m(t,synthetic(),
+                                                as_of_ms=t.as_of_ms)
+        self.assertGreater(comparison.only_5m_parent,0)
+        self.assertEqual(comparison.only_3m_parent,0)
