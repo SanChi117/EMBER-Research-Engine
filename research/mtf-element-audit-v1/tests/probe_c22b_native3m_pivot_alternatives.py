@@ -68,3 +68,8 @@ def main(output=None):
 
     if output:
         Path(output).write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
+
+    print(json.dumps(result,indent=2,sort_keys=True),flush=True)
+
+if __name__=="__main__":
+    main(sys.argv[1] if len(sys.argv)>1 else None)
