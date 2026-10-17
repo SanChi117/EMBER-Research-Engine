@@ -71,7 +71,15 @@ def main(output=None):
 
     pin=ROOT/"evidence"/"c22"/"C22B_ORIGINAL_PIVOT_ALTERNATIVES.json"
     if pin.exists():
-        assert json.loads(pin.read_text(encoding="utf8"))==result,"C22B_ORIGINAL_PINNED_SOURCE_DRIFT"
+        expected=json.loads(pin.read_text(encoding="utf8"))
+        if expected!=result:
+            for row,want in zip(result["observations"],expected["observations"]):
+                for key in row:
+                    if row[key]!=want.get(key):
+                        print("FIRST_C22B_SOURCE_DIFFERENCE",row["symbol"],key,
+                              "actual",str(row[key])[:800],"pinned",str(want.get(key))[:800],flush=True)
+                        break
+            raise AssertionError("C22B_ORIGINAL_PINNED_SOURCE_DRIFT")
     print(json.dumps(result,indent=2,sort_keys=True),flush=True)
 
 if __name__=="__main__":
