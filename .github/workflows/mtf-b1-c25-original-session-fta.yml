@@ -42,3 +42,22 @@ jobs:
         run: |
           set -euo pipefail
           python research/mtf-element-audit-v1/tests/probe_c25_original3m_session_dst_target.py /tmp/c25-original.json 2>&1 | tee /tmp/c25-source.log
+      - name: Assert 165 researcher-only cases and unverified session/target bounds
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c25-original.json'))
+          t=x['totals']
+          assert x['source_original_zip']==45
+          assert x['source_original_native3m']==76800
+          assert x['source_native15m_exact']==15360
+          assert t['research_single_parent_cases']==165
+          assert t['original_parent_edges']==539
+          assert t['previous_day_timezone_disagreements']==50
+          assert t['previous_session_timezone_disagreements']==10
+          assert t['raid_window_timezone_disagreements']==44
+          assert t['no_geometric_preknown_opposing_1h_target']==0
+          assert not x['author_timezone_proven'] and not x['author_fta_stop_proven']
+          assert x['author_approved_trades']==0 and x['readiness']=='NOT_TRADE_READY'
+          print('C25_PINNED_45ZIP_IANA_SESSION_UNCERTAINTY_PASS')
+          PY
