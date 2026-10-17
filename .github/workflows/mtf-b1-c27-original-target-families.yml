@@ -1,0 +1,90 @@
+name: MTF B1 C27 — 1H EQ and Previous Session Original Source (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c27-original-target-families.yml'
+      - 'research/mtf-element-audit-v1/d05/c27_target_families_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c27_target_families_source.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c27_original_1h_target_families.py'
+      - 'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c27-original-target-families-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-source-and-causal-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prior original C26 frozen Git JSON and A096 SHA
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,subprocess
+          p='research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json'
+          sha=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+          assert sha=='11edbf5ddf8e89e513fc3893e807903bbf8933eb'
+          j='research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+          records=[json.loads(v) for v in open(j,encoding='utf8') if v.strip()]
+          assert len(records)==96 and records[-1]['action_id']=='A096'
+          assert records[-1]['record_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          print('C27_IMMUTABLE_SOURCE_PREDECESSOR_PASS')
+          PY
+      - name: C27 no author-tolerance/session/source tamper adversarial tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c27_target_families_source 2>&1 | tee /tmp/c27-negative.log
+          grep -q 'Ran 18 tests' /tmp/c27-negative.log
+      - name: 45 independent original Binance USD-M ZIP and physically truncated prefix
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c27_original_1h_target_families.py /tmp/c27-original.json 2>&1 | tee /tmp/c27-original.log
+      - name: Verify original data totals and never autorize a trade
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c27-original.json'))
+          t=x['totals']
+          assert x['original_archive_count']==45
+          assert x['source_native_3m_bars']==76800
+          assert x['source_native_15m_decimal_equalities']==15360
+          assert t['original_parent_edges']==539 and t['research_single_cases']==165
+          assert t['prior_target_crossed_by_c26']==137
+          assert x['author_labeled_futures_bos_cases']==x['approved_trades']==0
+          assert not x['author_eq_tolerance_known'] and not x['author_session_timezone_dst_known']
+          assert not x['author_fta_rr_known'] and not x['author_sl_buffer_known']
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C27_FAIL_CLOSED_1H_FAMILY_SOURCE_ACCEPTED_FOR_FORENSICS_ONLY')
+          PY
+      - name: Preserve independent full C27 JSON replay
+        uses: actions/upload-artifact@v4
+        with:
+          name: c27-original-45zip-all-target-family-witnesses
+          path: /tmp/c27-original.json
+          retention-days: 30
+      - name: Pin result JSON only after first source and 18-negative success
+        if: success()
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json
+          if test -e "$p"; then
+            echo 'Existing JSON independently compared in replay'
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c27-original.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C27): first verified original 45-ZIP target family source JSON"
+          git push origin HEAD:research/academic-engine-recovery-20261015
