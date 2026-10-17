@@ -1,0 +1,71 @@
+name: MTF B1 C21B — Original 3m vs 5m 60ZIP Witnesses (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c21b-original-3m-5m-60zip.yml'
+      - 'research/mtf-element-audit-v1/d05/c21b_original_3m_raid_break_geometry.py'
+      - 'research/mtf-element-audit-v1/d05/c21b_3m_5m_geometry_compare.py'
+      - 'research/mtf-element-audit-v1/d05/test_c21b_native_3m_vs_5m.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c21b_original_3m_vs_5m_60zip.py'
+      - 'research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-3m-vs-5m:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Freeze original C08 C20 C21A source Git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          refs={
+            'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+            'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+            'research/mtf-element-audit-v1/evidence/c20/C20_ORIGINAL_5M_32DAY_LINEAGE_RESULT.json':'7fc957b210b14b8ab0380b8941a7b145def836dc',
+            'research/mtf-element-audit-v1/evidence/c20/C20B_ORIGINAL_1H_5M_AGGREGATES.json':'555be0425c68749b27a72e90e3bc2943f7afab64',
+            'research/mtf-element-audit-v1/evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json':'02949d457e63bb367bbb99ae087e3306d1e68557'}
+          for p,expected in refs.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==expected,(p,got,expected)
+          print('C21B_ALL_FROZEN_NATIVE_SOURCES_BLOBS_PASS')
+          PY
+      - name: Test adversarial 1h->3m and 3m-not-equal-5m semantics
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c21b_native_3m_vs_5m 2>&1 | tee /tmp/c21b-test.txt
+          grep -q 'Ran 15 tests' /tmp/c21b-test.txt
+      - name: Independently download all sixty original USD-M Futures ZIP
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c21b_original_3m_vs_5m_60zip.py /tmp/c21b-source.json 2>&1 | tee /tmp/c21b-source.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c21b-source.json'))
+          assert x['original_total_zip']==60
+          assert x['original_native3m_bars']==76800
+          assert x['original_native5m_bars']==46080
+          assert x['hourly_source_equivalent']==3840
+          assert x['source_native15m_parities_3m']==x['source_native15m_parities_5m']==15360
+          assert x['totals']['native5m_cand_edges']==512
+          assert x['author_labelled_3m_bos']==x['author_approved_trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C21B_60_ORIGINAL_USDM_3M_5M_PARENT_DISAGREEMENT_VERIFIED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-c21b-60-original-zip-replay
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c21b-test.txt
+            /tmp/c21b-source.json
+            /tmp/c21b-source.log
