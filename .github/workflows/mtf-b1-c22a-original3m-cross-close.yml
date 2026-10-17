@@ -28,7 +28,8 @@ jobs:
             "research/mtf-course-v05/src/course_primitives_v05.py":"45cec7fd66d0ec156bc0a38225ee282c6d3ee71b",
             "research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json":"4205ad3118a30bbd69c412e165c7c5ce3560195d",
             "research/mtf-element-audit-v1/evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json":"02949d457e63bb367bbb99ae087e3306d1e68557",
-            "research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json":"a9a121cb41477b105dd13a1228b5d0577ac3abda"}
+            "research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json":"a9a121cb41477b105dd13a1228b5d0577ac3abda",
+            "research/mtf-element-audit-v1/evidence/c22/C22A_ORIGINAL_3M_CROSS_CLOSE_BOUNDS.json":"05817435a27fc9273de8192fa8937969edf46c0b"}
           for path,want in frozen.items():
               got=subprocess.check_output(["git","rev-parse","HEAD:"+path],text=True).strip()
               assert got==want,(path,got,want)
