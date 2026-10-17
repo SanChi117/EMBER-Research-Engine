@@ -123,6 +123,14 @@ def _opposing_candidates(pivots, side, entry, break_start_ms):
                    and (p.level<entry if side=="SHORT" else p.level>entry)),
                   key=lambda p:(abs(p.level-entry),p.center_ms))
 
+def _intervening(pivots,entry,target,side,break_start_ms):
+    """Preknown hourly fractals strictly inside research price interval."""
+    if target is None:return ()
+    if side not in ("LONG","SHORT"):
+        raise ValueError("C26_INVALID_SIDE_OR_ENTRY")
+    return tuple(p for p in pivots if p.known_ms<=break_start_ms and
+        (entry>p.level>target if side=="SHORT" else entry<p.level<target))
+
 def _same_bar_unknown(side,bar,stop,target):
     """True only for inclusive price-range reach; never infer sequence or fill."""
     if target is None:return False
@@ -162,17 +170,14 @@ def inspect_c26(source,*,as_of_ms):
         def hist(p):
             key=(p.kind,p.center_ms,p.level)
             if key not in memo:
-                memo[key]=level_history(p,rows,break_start_ms=e.break_start_ms)
+                memo[key]=level_history(p,rows[(p.known_ms-rows[0].start_ms)//180000:i],break_start_ms=e.break_start_ms)
             return memo[key]
         first=hist(near) if near else None
         alt=next((p for p in potential[1:] if hist(p).state=="NO_CROSS_OBSERVED"),None)
         obstacles=[]
         if near:
-            for p in pivots:
-                if p.known_ms>e.break_start_ms or p==near:
-                    continue
-                if (entry>p.level>near.level if e.side=="SHORT"
-                    else entry<p.level<near.level):
+            for p in _intervening(pivots,entry,near.level,e.side,e.break_start_ms):
+                if p!=near:
                     obstacles.append(Obstacle(p.kind,str(p.level),p.center_ms,
                                               p.known_ms,hist(p)))
         obstacles.sort(key=lambda o:(abs(Decimal(o.level)-entry),o.center_ms))
