@@ -59,3 +59,9 @@ def main(output=None):
       "observations":per_symbol,"totals":total,
       "author_timestamped_binance_bos_goldens":0,
       "author_approved_trades":0,"readiness":"NOT_TRADE_READY"}
+
+    assert result["native3m_closed"]==76800
+    assert result["native15m_decimal_equalities"]==15360
+    assert total["observed_parent_edges"]==539
+    assert total["eligible_pivot_options"]==539+total["alternate_pivot_options"]
+    assert total["multiple_eligible_parent_edges"]>=total["same_bar_multiple_crossings"]
