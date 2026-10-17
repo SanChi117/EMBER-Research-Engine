@@ -55,3 +55,19 @@ jobs:
         run: |
           set -euo pipefail
           python research/mtf-element-audit-v1/tests/probe_c23_first_intact_native3m_45zip.py /tmp/a093-original.json 2>&1 | tee /tmp/a093-source.log
+      - name: Assert C23 first intact parent partitions
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a093-original.json'))
+          t=r['totals']
+          assert r['original_3m_closed']==76800 and r['original_native15m_equalities']==15360
+          assert t['original_parent_edges']==539
+          assert t['previously_close_broken_levels']==1408
+          assert t['first_close_single_candidate_edges']==285
+          assert t['first_close_multiple_candidate_edges']==242
+          assert t['no_first_close_candidate_edges']==12
+          assert t['chosen_latest_proxy_previously_close_broken']==13
+          assert r['author_approved_trades']==0 and r['readiness']=='NOT_TRADE_READY'
+          print('A093_FIRST_INTACT_ORIGINAL_PIVOT_SOURCE_PASS')
+          PY
