@@ -1,0 +1,75 @@
+name: MTF A096 — C26 SHA 96 Ledger and Independent 45 ZIP Source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a096-c26-sha-independent-source.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  a096-journal-and-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all 96 chained actions, file bytes, six C26 evidence SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a096-full-audit.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a096-full-audit.json'))
+          assert a['events']==96 and a['validations_pass']
+          j=[json.loads(v) for v in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
+          assert len(j)==96 and j[-1]['seq']==96
+          assert j[-2]['action_id']=='A095' and j[-1]['action_id']=='A096'
+          assert j[-1]['prev_sha256']=='aa18f538a88358dc539edf1c517cadd61346312d6f8d2b0c99428fe5c3f0e9af'
+          assert j[-1]['record_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          assert len(j[-1]['evidence'])==6 and j[-1]['cycle_result']=='PASSED'
+          print('A096_EXACT_96_EVENT_FULL_EVIDENCE_BYTES_PASS')
+          PY
+      - name: Verify independently Git-pinned original receipts C24 C25 C26
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+          'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9',
+          'research/mtf-element-audit-v1/evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json':'fe9b23672f97cdf1e50d603e7d214ecdef7a00ad',
+          'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+          'research/mtf-element-audit-v1/evidence/c26/C26_PINNED_RUN_WITNESS.json':'fa1b807f42a475792b341c1bd9ea40696042373e'}
+          for p,want in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==want,(p,got,want)
+          print('A096_ALL_ORIGINAL_RECEIPT_BLOBS_PINNED')
+          PY
+      - name: Independent 18 forensic source negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c26_unswept_1h_fta_source 2>&1 | tee /tmp/a096-negatives.log
+          grep -q 'Ran 18 tests' /tmp/a096-negatives.log
+      - name: Independently replay original 45 USD-M source and full JSON proof
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c26_original3m_unswept_fta.py /tmp/a096-source.json 2>&1 | tee /tmp/a096-source.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json'))
+          b=json.load(open('/tmp/a096-source.json'))
+          assert a==b,"A096_INDEPENDENT_PINNED_FULL_JSON_DRIFT"
+          assert a['original_zip_count']==45 and a['original_native3m_bars']==76800
+          assert a['native15m_decimal_equalities']==15360
+          assert a['totals']['research_single_cases']==165
+          assert a['totals']['nearest_target_already_crossed']==137
+          assert a['totals']['nearest_target_intact']==28
+          assert a['totals']['with_preknown_intervening_1h_obstacle']==74
+          assert a['approved_trades']==0 and a['readiness']=='NOT_TRADE_READY'
+          print('A096_SOURCE_INDEPENDENT_45ZIP_FULL_JSON_SHA_SUCCESS')
+          PY
