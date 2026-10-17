@@ -1,0 +1,12 @@
+{
+  "evidence_files_verified": 6,
+  "full_source_json_equal": true,
+  "journal_tip_sha256": "3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9",
+  "negative_tests": 18,
+  "pinned_original_zip_downloads": 45,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39069946991,
+  "schema": "EMBER_A096_INDEPENDENT_96_SHA_SOURCE_RUN_V1",
+  "sha_verified_events": 96,
+  "trigger_commit_sha": "8f6ea822ccc57015dc0e6a18cf18c1b3d53eaeb3"
+}
