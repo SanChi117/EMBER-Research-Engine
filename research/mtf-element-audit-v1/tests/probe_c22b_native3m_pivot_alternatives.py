@@ -48,3 +48,14 @@ def replay():
               "multiple_pivots",a["multiple_eligible_parent_edges"],
               "same-bar alternative crossings",a["same_bar_multiple_crossings"],flush=True)
     return out
+
+def main(output=None):
+    per_symbol=replay()
+    total={k:sum(r[k] for r in per_symbol) for k in FIELDS}
+    result={"schema":"EMBER_C22B_ORIGINAL_3M_PIVOT_ALTERNATIVES_V1",
+      "period_utc":["2026-09-01","2026-10-02"],"verified_total_source_zip":45,
+      "native3m_closed":sum(r["native3m_bars"] for r in per_symbol),
+      "native15m_decimal_equalities":sum(r["native15m_price_parity"] for r in per_symbol),
+      "observations":per_symbol,"totals":total,
+      "author_timestamped_binance_bos_goldens":0,
+      "author_approved_trades":0,"readiness":"NOT_TRADE_READY"}
