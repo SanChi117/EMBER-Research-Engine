@@ -22,7 +22,7 @@ def row(ms,high="99",low="90",close="95"):
 
 def hours_for(start,count=48):
     return tuple(HourSource(start+i*HOUR,start+(i+1)*HOUR,
-        D("100"),D(str(105+i%7)),D(str(80-i%9)),D("95"),
+        D("100"),D(str(105+i)),D(str(80-i)),D("95"),
         ("original-hour-"+str(i),)) for i in range(count))
 
 class C27SourceFamilyNegativeControls(unittest.TestCase):
