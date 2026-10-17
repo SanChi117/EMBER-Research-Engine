@@ -66,3 +66,24 @@ def audit_route_admission(source,*,as_of_ms):
             if (prior.close>=s.level and current.close<s.level if short
                 else prior.close<=s.level and current.close>s.level):
                 first.append(s)
+
+        parents=parent_counts[e.break_start_ms]
+        if not first:
+            reason="REJECT_NO_FIRST_INTACT_3M_PIVOT"
+        elif len(first)>1:
+            reason="REJECT_MULTIPLE_FIRST_INTACT_3M_PIVOTS"
+        elif parents>1:
+            reason="REJECT_MULTIPLE_1H_RAID_PARENTS"
+        else:
+            reason="RESEARCH_SINGLE_CANDIDATE_AUTHOR_SESSION_FTA_SL_UNVERIFIED"
+        outputs.append(GateCase(e.pivot_center_ms,e.raid_start_ms,current.raw_id,
+            e.break_start_ms,len(first),tuple(s.center_ms for s in first),
+            parents,reason))
+    cases=tuple(outputs)
+    return AdmissionAudit(source.symbol,as_of_ms,len(cases),
+        sum(x.first_intact_pivot_count==1 and x.same_break_bar_htf_parent_edges==1 for x in cases),
+        sum(x.reason=="REJECT_MULTIPLE_FIRST_INTACT_3M_PIVOTS" for x in cases),
+        sum(x.reason=="REJECT_NO_FIRST_INTACT_3M_PIVOT" for x in cases),
+        sum(x.reason=="REJECT_MULTIPLE_1H_RAID_PARENTS" for x in cases),
+        sum(x.reason=="RESEARCH_SINGLE_CANDIDATE_AUTHOR_SESSION_FTA_SL_UNVERIFIED" for x in cases),
+        cases)
