@@ -41,3 +41,21 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c24_bos_research_admission_gate 2>&1 | tee /tmp/a094-tests.log
           grep -q 'Ran 6 tests' /tmp/a094-tests.log
+      - name: Re-download all original 45 source ZIP and verify no-approved 3m routes
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c24_author_bos_failclosed_45zip.py /tmp/a094-original.json 2>&1 | tee /tmp/a094-original.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a094-original.json'))
+          assert x['original_zip']==45 and x['native3m_closed']==76800
+          assert x['native15m_equalities']==15360
+          t=x['totals']
+          assert t['total_original_research_edges']==539
+          assert t['multiple_pivot_refused']==242
+          assert t['multiple_parent_refused']==120
+          assert t['no_intact_pivot_refused']==12
+          assert t['single_research_without_author_labels']==165
+          assert x['author_approved_trades']==0 and x['readiness']=='NOT_TRADE_READY'
+          print('A094_C24_ORIGINAL_45ZIP_374_REJECTED_165_RESEARCH_ONLY_PASS')
+          PY
