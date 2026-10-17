@@ -1,0 +1,92 @@
+name: MTF A096 — Append C26 SHA Evidence Only After Pinned SUCCESS
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a096-c26-record-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a096-append-once
+  cancel-in-progress: false
+jobs:
+  verified-a096-append:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require independently pinned success and untampered immutable C26 results
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          prefix='research/mtf-element-audit-v1/'
+          checks={
+              'evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9',
+              'evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json':'fe9b23672f97cdf1e50d603e7d214ecdef7a00ad',
+              'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+              'evidence/c26/C26_PINNED_RUN_WITNESS.json':'fa1b807f42a475792b341c1bd9ea40696042373e'}
+          for path,want in checks.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+prefix+path],text=True).strip()
+              assert got==want,(path,got,want)
+          w=json.load(open(prefix+'evidence/c26/C26_PINNED_RUN_WITNESS.json'))
+          assert w['run_id']==39069693828 and w['full_json_pinned_equal']
+          assert w['negative_controls']==18 and w['independently_reloaded_original_zip']==45
+          j=[json.loads(v) for v in open(prefix+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8')]
+          assert len(j)==95 and j[-1]['action_id']=='A095'
+          assert j[-1]['record_sha256']=='aa18f538a88358dc539edf1c517cadd61346312d6f8d2b0c99428fe5c3f0e9af'
+          print('A096_PRECONDITIONS_FROZEN_SOURCE_INDEPENDENT_RUN_95_CHAIN_PASS')
+          PY
+      - name: Verify prior ledger plus all original hash evidence
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a096-prior-ledger.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a096-prior-ledger.json'))
+          assert j['events']==95 and j['validations_pass']
+          print('A096_PREVIOUS_EVIDENCE_SHA_95_PASS')
+          PY
+      - name: Append A096 exactly once using canonical auditlog record
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A096 \
+            --cycle B1/C26 \
+            --planned 'C26: test preknown 1H opposing target for earlier original 3m wick/body removal, identify preknown intermediate 1H FTA candidates and structural minimum unbuffered SL geometry, without inventing author BOS, RR, timezone or stop policy.' \
+            --executed 'Added standalone C26 source-only level liveness from frozen C21B/C24/C25, 18 negative tests, 45 original USD-M ZIP source replay, physically truncated prefix invariant, complete per-case pinned JSON, independent 45-ZIP full-JSON rerun CI 39069693828 SUCCESS, source forensic report; original earlier code and receipts unchanged.' \
+            --result '165 source-research singleton events, 137 historically nearest 1H targets already crossed before break start, 28 not previously crossed, 74 with preknown intervening 1H obstacles; 164 farther intact alternative hypotheses without automatic substitution; 76800 native3m, 15360 native15m Decimal price equalities, 45 original USD-M ZIP; author approved trades 0, NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent GitHub Actions 39069693828 PASS: exact C26 Git source receipt blob 11edbf5ddf8e89e513fc3893e807903bbf8933eb and C24/C25 blobs pinned, 18 adversarial controls, full JSON same-source original reread, C24/C25 counts and physical truncation equivalence. Author pivot goldens/timezone/DST/FTA/SL buffer missing; no trade-ready assertion.' \
+            --evidence d05/c26_unswept_1h_fta_source.py \
+            --evidence d05/test_c26_unswept_1h_fta_source.py \
+            --evidence tests/probe_c26_original3m_unswept_fta.py \
+            --evidence evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json \
+            --evidence evidence/c26/C26_PINNED_RUN_WITNESS.json \
+            --evidence cycles/B1_C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a096-completed-ledger.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a096-completed-ledger.json'))
+          assert j['events']==96 and j['validations_pass'] and j['evidence_verification']['verified_evidence_blobs']>0
+          print('A096_APPEND_ONLY_FULL_96_EVENT_SHA_EVIDENCE_PASS')
+          PY
+      - name: Commit only the append-only action journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git diff --cached --numstat
+          git commit -m "audit(A096): append independently source-verified C26 forensic result"
+          git push origin HEAD:research/academic-engine-recovery-20261015
