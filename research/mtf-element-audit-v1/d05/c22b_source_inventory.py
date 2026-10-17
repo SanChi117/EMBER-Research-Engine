@@ -19,3 +19,15 @@ def audit_rival_pivots(source, *, as_of_ms):
         prior,bar=bars[at-1],bars[at]
         if bar.raw_id!=e.source_original_3m_row_id:
             raise ValueError("SOURCE_3M_BREAK_ID_CHANGED")
+
+        eligible=[]
+        for swing in swings:
+            if swing.center_ms<e.raid_start_ms:continue
+            if swing.known_ms<e.raid_start_ms+3600000:continue
+            if swing.known_ms>e.break_start_ms:continue
+            if swing.kind!=e.swing.kind:continue
+            if e.side=="SHORT" and swing.level>=e.raid_level:continue
+            if e.side=="LONG" and swing.level<=e.raid_level:continue
+            eligible.append(swing)
+        if not eligible or eligible[-1]!=e.swing:
+            raise ValueError("LATEST_KNOWN_PROXY_PIVOT_DRIFT")
