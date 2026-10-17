@@ -1,0 +1,1015 @@
+{
+  "author_approved_trades": 0,
+  "author_timestamped_binance_bos_goldens": 0,
+  "native15m_decimal_equalities": 15360,
+  "native3m_closed": 76800,
+  "observations": [
+    {
+      "alternate_pivot_options": 523,
+      "eligible_pivot_options": 622,
+      "first_ten_rival_pivots": [
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788430500000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788426000000,
+            1788426360000,
+            1788426720000,
+            1788428340000,
+            1788429060000,
+            1788429600000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788422400000,
+          "selected_center_ms": 1788429600000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788325200000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788321420000,
+            1788321960000,
+            1788322500000,
+            1788324840000
+          ],
+          "eligible_pivot_count": 4,
+          "raid_start_ms": 1788318000000,
+          "selected_center_ms": 1788324840000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788325200000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788321420000,
+            1788321960000,
+            1788322500000,
+            1788324840000
+          ],
+          "eligible_pivot_count": 4,
+          "raid_start_ms": 1788318000000,
+          "selected_center_ms": 1788324840000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788299100000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788289380000,
+            1788290460000,
+            1788291000000,
+            1788291900000,
+            1788292800000,
+            1788293880000,
+            1788294600000,
+            1788294960000,
+            1788296400000,
+            1788297840000,
+            1788298740000
+          ],
+          "eligible_pivot_count": 11,
+          "raid_start_ms": 1788285600000,
+          "selected_center_ms": 1788298740000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788351300000,
+          "crossed_alternative_centers": [
+            1788349140000,
+            1788350400000
+          ],
+          "eligible_centers": [
+            1788346800000,
+            1788347880000,
+            1788349140000,
+            1788350400000,
+            1788350760000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1788343200000,
+          "selected_center_ms": 1788350760000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788376320000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788371820000,
+            1788372180000,
+            1788372540000,
+            1788373080000,
+            1788373620000,
+            1788374880000,
+            1788375600000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788368400000,
+          "selected_center_ms": 1788375600000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788538500000,
+          "crossed_alternative_centers": [
+            1788535440000,
+            1788535980000
+          ],
+          "eligible_centers": [
+            1788533820000,
+            1788534900000,
+            1788535440000,
+            1788535980000,
+            1788537240000,
+            1788537960000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788530400000,
+          "selected_center_ms": 1788537960000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788557220000,
+          "crossed_alternative_centers": [
+            1788553440000,
+            1788553980000
+          ],
+          "eligible_centers": [
+            1788553440000,
+            1788553980000,
+            1788555060000,
+            1788555600000,
+            1788556320000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1788548400000,
+          "selected_center_ms": 1788556320000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789002180000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788995160000,
+            1788995520000,
+            1788998580000,
+            1788998940000,
+            1788999840000,
+            1789000560000,
+            1789001100000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788991200000,
+          "selected_center_ms": 1789001100000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788654960000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788649560000,
+            1788650100000,
+            1788650640000,
+            1788651360000,
+            1788651720000,
+            1788652800000,
+            1788653700000,
+            1788654600000
+          ],
+          "eligible_pivot_count": 8,
+          "raid_start_ms": 1788645600000,
+          "selected_center_ms": 1788654600000,
+          "simultaneous_alternative_count": 0
+        }
+      ],
+      "multiple_eligible_parent_edges": 99,
+      "native15m_price_parity": 3072,
+      "native3m_bars": 15360,
+      "observed_parent_edges": 99,
+      "same_bar_multiple_crossings": 52,
+      "simultaneous_extra_crossings": 111,
+      "source_prefix_independent": true,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "alternate_pivot_options": 598,
+      "eligible_pivot_options": 702,
+      "first_ten_rival_pivots": [
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788351300000,
+          "crossed_alternative_centers": [
+            1788350220000
+          ],
+          "eligible_centers": [
+            1788346800000,
+            1788347700000,
+            1788349140000,
+            1788350220000,
+            1788350940000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1788343200000,
+          "selected_center_ms": 1788350940000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788312420000,
+          "crossed_alternative_centers": [
+            1788309000000
+          ],
+          "eligible_centers": [
+            1788307920000,
+            1788308460000,
+            1788309000000,
+            1788309540000,
+            1788311160000,
+            1788311700000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788303600000,
+          "selected_center_ms": 1788311700000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788318720000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788314400000,
+            1788314760000,
+            1788316020000,
+            1788316560000,
+            1788317460000,
+            1788318180000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788310800000,
+          "selected_center_ms": 1788318180000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788325200000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788322500000,
+            1788324840000
+          ],
+          "eligible_pivot_count": 2,
+          "raid_start_ms": 1788318000000,
+          "selected_center_ms": 1788324840000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789138260000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1789131960000,
+            1789132860000,
+            1789133400000,
+            1789135380000,
+            1789135920000,
+            1789136280000,
+            1789136820000,
+            1789137900000
+          ],
+          "eligible_pivot_count": 8,
+          "raid_start_ms": 1789128000000,
+          "selected_center_ms": 1789137900000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788374160000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788368400000,
+            1788368760000,
+            1788369660000,
+            1788370020000,
+            1788370740000,
+            1788371640000,
+            1788372000000,
+            1788372360000,
+            1788372720000,
+            1788373260000
+          ],
+          "eligible_pivot_count": 10,
+          "raid_start_ms": 1788364800000,
+          "selected_center_ms": 1788373260000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789048800000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1789045380000,
+            1789046460000,
+            1789046820000,
+            1789047360000,
+            1789048440000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1789041600000,
+          "selected_center_ms": 1789048440000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788427260000,
+          "crossed_alternative_centers": [
+            1788424920000
+          ],
+          "eligible_centers": [
+            1788422220000,
+            1788423660000,
+            1788424920000,
+            1788425460000,
+            1788426000000,
+            1788426360000,
+            1788426720000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788418800000,
+          "selected_center_ms": 1788426720000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788437340000,
+          "crossed_alternative_centers": [
+            1788434280000,
+            1788435180000,
+            1788435900000,
+            1788436620000
+          ],
+          "eligible_centers": [
+            1788433380000,
+            1788434280000,
+            1788435180000,
+            1788435900000,
+            1788436620000,
+            1788436980000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788429600000,
+          "selected_center_ms": 1788436980000,
+          "simultaneous_alternative_count": 4
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788480000000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788472800000,
+            1788473520000,
+            1788474780000,
+            1788475860000,
+            1788476940000,
+            1788477840000,
+            1788478200000,
+            1788479100000,
+            1788479640000
+          ],
+          "eligible_pivot_count": 9,
+          "raid_start_ms": 1788469200000,
+          "selected_center_ms": 1788479640000,
+          "simultaneous_alternative_count": 0
+        }
+      ],
+      "multiple_eligible_parent_edges": 104,
+      "native15m_price_parity": 3072,
+      "native3m_bars": 15360,
+      "observed_parent_edges": 104,
+      "same_bar_multiple_crossings": 66,
+      "simultaneous_extra_crossings": 123,
+      "source_prefix_independent": true,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "alternate_pivot_options": 693,
+      "eligible_pivot_options": 822,
+      "first_ten_rival_pivots": [
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788311160000,
+          "crossed_alternative_centers": [
+            1788308820000
+          ],
+          "eligible_centers": [
+            1788307380000,
+            1788307920000,
+            1788308460000,
+            1788308820000,
+            1788309540000,
+            1788310080000,
+            1788310440000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788303600000,
+          "selected_center_ms": 1788310440000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788311160000,
+          "crossed_alternative_centers": [
+            1788308820000
+          ],
+          "eligible_centers": [
+            1788307380000,
+            1788307920000,
+            1788308460000,
+            1788308820000,
+            1788309540000,
+            1788310080000,
+            1788310440000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788303600000,
+          "selected_center_ms": 1788310440000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788340860000,
+          "crossed_alternative_centers": [
+            1788338880000,
+            1788339240000
+          ],
+          "eligible_centers": [
+            1788336180000,
+            1788336720000,
+            1788337260000,
+            1788338880000,
+            1788339240000,
+            1788340500000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788332400000,
+          "selected_center_ms": 1788340500000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788340860000,
+          "crossed_alternative_centers": [
+            1788338880000,
+            1788339240000
+          ],
+          "eligible_centers": [
+            1788336180000,
+            1788336720000,
+            1788337260000,
+            1788338880000,
+            1788339240000,
+            1788340500000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788332400000,
+          "selected_center_ms": 1788340500000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788375960000,
+          "crossed_alternative_centers": [
+            1788372180000,
+            1788374880000,
+            1788375240000
+          ],
+          "eligible_centers": [
+            1788372180000,
+            1788372540000,
+            1788373080000,
+            1788373620000,
+            1788373980000,
+            1788374880000,
+            1788375240000,
+            1788375600000
+          ],
+          "eligible_pivot_count": 8,
+          "raid_start_ms": 1788368400000,
+          "selected_center_ms": 1788375600000,
+          "simultaneous_alternative_count": 3
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788405120000,
+          "crossed_alternative_centers": [
+            1788403320000,
+            1788404400000
+          ],
+          "eligible_centers": [
+            1788401160000,
+            1788401520000,
+            1788402780000,
+            1788403320000,
+            1788403860000,
+            1788404400000,
+            1788404760000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788397200000,
+          "selected_center_ms": 1788404760000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788386400000,
+          "crossed_alternative_centers": [
+            1788384780000
+          ],
+          "eligible_centers": [
+            1788382440000,
+            1788382800000,
+            1788383160000,
+            1788383880000,
+            1788384780000,
+            1788385860000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788379200000,
+          "selected_center_ms": 1788385860000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788405120000,
+          "crossed_alternative_centers": [
+            1788403320000,
+            1788404400000
+          ],
+          "eligible_centers": [
+            1788401160000,
+            1788401520000,
+            1788402780000,
+            1788403320000,
+            1788403860000,
+            1788404400000,
+            1788404760000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788397200000,
+          "selected_center_ms": 1788404760000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789504920000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1789498440000,
+            1789498980000,
+            1789499700000,
+            1789501140000,
+            1789502400000,
+            1789502940000,
+            1789503840000,
+            1789504200000
+          ],
+          "eligible_pivot_count": 8,
+          "raid_start_ms": 1789495200000,
+          "selected_center_ms": 1789504200000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788427080000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788422040000,
+            1788423660000,
+            1788424380000,
+            1788425460000,
+            1788426360000,
+            1788426720000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788418800000,
+          "selected_center_ms": 1788426720000,
+          "simultaneous_alternative_count": 0
+        }
+      ],
+      "multiple_eligible_parent_edges": 129,
+      "native15m_price_parity": 3072,
+      "native3m_bars": 15360,
+      "observed_parent_edges": 129,
+      "same_bar_multiple_crossings": 85,
+      "simultaneous_extra_crossings": 150,
+      "source_prefix_independent": true,
+      "symbol": "ETHUSDT"
+    },
+    {
+      "alternate_pivot_options": 527,
+      "eligible_pivot_options": 630,
+      "first_ten_rival_pivots": [
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788318540000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788314220000,
+            1788314760000,
+            1788315120000,
+            1788316020000,
+            1788317100000,
+            1788318180000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788310800000,
+          "selected_center_ms": 1788318180000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788340860000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788336720000,
+            1788338700000,
+            1788339060000,
+            1788340500000
+          ],
+          "eligible_pivot_count": 4,
+          "raid_start_ms": 1788332400000,
+          "selected_center_ms": 1788340500000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789505280000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1789498440000,
+            1789498980000,
+            1789499700000,
+            1789500600000,
+            1789501140000,
+            1789502400000,
+            1789503840000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1789495200000,
+          "selected_center_ms": 1789503840000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788386400000,
+          "crossed_alternative_centers": [
+            1788383880000
+          ],
+          "eligible_centers": [
+            1788383880000,
+            1788384780000,
+            1788385680000
+          ],
+          "eligible_pivot_count": 3,
+          "raid_start_ms": 1788379200000,
+          "selected_center_ms": 1788385680000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788376320000,
+          "crossed_alternative_centers": [
+            1788373980000,
+            1788374880000
+          ],
+          "eligible_centers": [
+            1788372540000,
+            1788373080000,
+            1788373620000,
+            1788373980000,
+            1788374880000,
+            1788375420000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788368400000,
+          "selected_center_ms": 1788375420000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788386400000,
+          "crossed_alternative_centers": [
+            1788383880000
+          ],
+          "eligible_centers": [
+            1788383880000,
+            1788384780000,
+            1788385680000
+          ],
+          "eligible_pivot_count": 3,
+          "raid_start_ms": 1788379200000,
+          "selected_center_ms": 1788385680000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789140060000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1789131240000,
+            1789131600000,
+            1789131960000,
+            1789132320000,
+            1789132860000,
+            1789133400000,
+            1789135380000,
+            1789136100000,
+            1789137000000,
+            1789137540000,
+            1789137900000,
+            1789138260000,
+            1789139160000
+          ],
+          "eligible_pivot_count": 13,
+          "raid_start_ms": 1789128000000,
+          "selected_center_ms": 1789139160000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788386400000,
+          "crossed_alternative_centers": [
+            1788383880000
+          ],
+          "eligible_centers": [
+            1788383880000,
+            1788384780000,
+            1788385680000
+          ],
+          "eligible_pivot_count": 3,
+          "raid_start_ms": 1788379200000,
+          "selected_center_ms": 1788385680000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788426180000,
+          "crossed_alternative_centers": [
+            1788423660000
+          ],
+          "eligible_centers": [
+            1788422040000,
+            1788423120000,
+            1788423660000,
+            1788424920000,
+            1788425460000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1788418800000,
+          "selected_center_ms": 1788425460000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788471720000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788465600000,
+            1788466500000,
+            1788467040000,
+            1788467760000,
+            1788468300000,
+            1788468660000,
+            1788469380000,
+            1788470640000
+          ],
+          "eligible_pivot_count": 8,
+          "raid_start_ms": 1788462000000,
+          "selected_center_ms": 1788470640000,
+          "simultaneous_alternative_count": 0
+        }
+      ],
+      "multiple_eligible_parent_edges": 103,
+      "native15m_price_parity": 3072,
+      "native3m_bars": 15360,
+      "observed_parent_edges": 103,
+      "same_bar_multiple_crossings": 60,
+      "simultaneous_extra_crossings": 108,
+      "source_prefix_independent": true,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "alternate_pivot_options": 513,
+      "eligible_pivot_options": 617,
+      "first_ten_rival_pivots": [
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788303960000,
+          "crossed_alternative_centers": [
+            1788302160000
+          ],
+          "eligible_centers": [
+            1788299640000,
+            1788300180000,
+            1788300540000,
+            1788302160000,
+            1788303060000,
+            1788303600000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788296400000,
+          "selected_center_ms": 1788303600000,
+          "simultaneous_alternative_count": 1
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788325200000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788321420000,
+            1788322500000,
+            1788323040000,
+            1788323940000
+          ],
+          "eligible_pivot_count": 4,
+          "raid_start_ms": 1788318000000,
+          "selected_center_ms": 1788323940000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788388020000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788382440000,
+            1788382980000,
+            1788383880000,
+            1788384240000,
+            1788384780000,
+            1788385860000,
+            1788386940000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788379200000,
+          "selected_center_ms": 1788386940000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788408360000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788402780000,
+            1788403680000,
+            1788404040000,
+            1788405120000,
+            1788406380000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1788397200000,
+          "selected_center_ms": 1788406380000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789048800000,
+          "crossed_alternative_centers": [
+            1789045380000,
+            1789047540000
+          ],
+          "eligible_centers": [
+            1789045380000,
+            1789046460000,
+            1789047540000,
+            1789048260000
+          ],
+          "eligible_pivot_count": 4,
+          "raid_start_ms": 1789041600000,
+          "selected_center_ms": 1789048260000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789048800000,
+          "crossed_alternative_centers": [
+            1789045380000,
+            1789047540000
+          ],
+          "eligible_centers": [
+            1789045380000,
+            1789046460000,
+            1789047540000,
+            1789048260000
+          ],
+          "eligible_pivot_count": 4,
+          "raid_start_ms": 1789041600000,
+          "selected_center_ms": 1789048260000,
+          "simultaneous_alternative_count": 2
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1789423200000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1789419600000,
+            1789420500000,
+            1789421400000,
+            1789421760000,
+            1789422660000
+          ],
+          "eligible_pivot_count": 5,
+          "raid_start_ms": 1789416000000,
+          "selected_center_ms": 1789422660000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788517800000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788512040000,
+            1788512580000,
+            1788513480000,
+            1788515640000,
+            1788516180000,
+            1788516720000,
+            1788517260000
+          ],
+          "eligible_pivot_count": 7,
+          "raid_start_ms": 1788508800000,
+          "selected_center_ms": 1788517260000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788806520000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788796440000,
+            1788797520000,
+            1788798060000,
+            1788801120000,
+            1788802020000,
+            1788803280000,
+            1788804000000,
+            1788804360000,
+            1788805260000,
+            1788806160000
+          ],
+          "eligible_pivot_count": 10,
+          "raid_start_ms": 1788793200000,
+          "selected_center_ms": 1788806160000,
+          "simultaneous_alternative_count": 0
+        },
+        {
+          "author_status": "AUTHOR_TIMESTAMPED_GOLDEN_MISSING",
+          "break_start_ms": 1788606180000,
+          "crossed_alternative_centers": [],
+          "eligible_centers": [
+            1788602580000,
+            1788603660000,
+            1788604020000,
+            1788604380000,
+            1788605460000,
+            1788605820000
+          ],
+          "eligible_pivot_count": 6,
+          "raid_start_ms": 1788598800000,
+          "selected_center_ms": 1788605820000,
+          "simultaneous_alternative_count": 0
+        }
+      ],
+      "multiple_eligible_parent_edges": 104,
+      "native15m_price_parity": 3072,
+      "native3m_bars": 15360,
+      "observed_parent_edges": 104,
+      "same_bar_multiple_crossings": 63,
+      "simultaneous_extra_crossings": 134,
+      "source_prefix_independent": true,
+      "symbol": "XRPUSDT"
+    }
+  ],
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "schema": "EMBER_C22B_ORIGINAL_3M_PIVOT_ALTERNATIVES_V1",
+  "totals": {
+    "alternate_pivot_options": 2854,
+    "eligible_pivot_options": 3393,
+    "multiple_eligible_parent_edges": 539,
+    "observed_parent_edges": 539,
+    "same_bar_multiple_crossings": 326,
+    "simultaneous_extra_crossings": 626
+  },
+  "verified_total_source_zip": 45
+}
