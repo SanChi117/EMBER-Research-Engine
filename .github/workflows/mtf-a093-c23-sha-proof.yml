@@ -51,3 +51,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c23_first_intact_pivot_guard 2>&1 | tee /tmp/a093-tests.log
           grep -q 'Ran 8 tests' /tmp/a093-tests.log
+      - name: Replay original native Binance USD-M 3m source
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c23_first_intact_native3m_45zip.py /tmp/a093-original.json 2>&1 | tee /tmp/a093-source.log
