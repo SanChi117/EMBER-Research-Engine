@@ -7,7 +7,7 @@ on:
       - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   a096-journal-and-source:
     runs-on: ubuntu-latest
@@ -73,3 +73,36 @@ jobs:
           assert a['approved_trades']==0 and a['readiness']=='NOT_TRADE_READY'
           print('A096_SOURCE_INDEPENDENT_45ZIP_FULL_JSON_SHA_SUCCESS')
           PY
+      - name: Anchor independent A096 SUCCESS GitHub run after complete recheck
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c26/A096_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then
+            echo "A096 previously independently witnessed"
+            exit 0
+          fi
+          python - <<'PY'
+          import json,os,pathlib
+          path=pathlib.Path('research/mtf-element-audit-v1/evidence/c26/A096_INDEPENDENT_RUN_WITNESS.json')
+          path.write_text(json.dumps({
+            'schema':'EMBER_A096_INDEPENDENT_96_SHA_SOURCE_RUN_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_commit_sha':os.environ['HEAD_SHA'],
+            'journal_tip_sha256':'3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9',
+            'sha_verified_events':96,
+            'evidence_files_verified':6,
+            'pinned_original_zip_downloads':45,
+            'full_source_json_equal':True,
+            'negative_tests':18,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A096): successful 96-SHA independent original 45-ZIP proof"
+          git push origin HEAD:research/academic-engine-recovery-20261015
