@@ -42,7 +42,6 @@ def main(destination=None):
         assert audit.author_approved_bos==audit.author_approved_trades==0
         assert audit.readiness=="NOT_TRADE_READY"
         for x in audit.observations:
-            assert x.raid_confirmed_ms<=x.structural_swing_known_ms or x.raid_confirmed_ms>x.structural_swing_known_ms
             assert max(x.raid_confirmed_ms,x.structural_swing_known_ms)<=x.first_reachable_cross_start_ms
             assert x.first_reachable_cross_known_ms<=x.close_break_known_ms<=END
             assert x.first_reachable_cross_start_ms<=x.close_break_start_ms
