@@ -1,0 +1,79 @@
+{
+  "author_approved_bos": 0,
+  "author_approved_trades": 0,
+  "native15m_equalities": 15360,
+  "native3m_closed": 76800,
+  "original_source_market_results": [
+    {
+      "multiple_parent_refused": 14,
+      "multiple_pivot_refused": 39,
+      "native15m_parity": 3072,
+      "no_intact_pivot_refused": 1,
+      "original_3m_bars": 15360,
+      "prefix_source_equal": true,
+      "single_research_without_author_labels": 45,
+      "source_single_pivot_single_parent": 45,
+      "symbol": "BCHUSDT",
+      "total_original_research_edges": 99
+    },
+    {
+      "multiple_parent_refused": 26,
+      "multiple_pivot_refused": 44,
+      "native15m_parity": 3072,
+      "no_intact_pivot_refused": 4,
+      "original_3m_bars": 15360,
+      "prefix_source_equal": true,
+      "single_research_without_author_labels": 30,
+      "source_single_pivot_single_parent": 30,
+      "symbol": "BTCUSDT",
+      "total_original_research_edges": 104
+    },
+    {
+      "multiple_parent_refused": 42,
+      "multiple_pivot_refused": 64,
+      "native15m_parity": 3072,
+      "no_intact_pivot_refused": 0,
+      "original_3m_bars": 15360,
+      "prefix_source_equal": true,
+      "single_research_without_author_labels": 23,
+      "source_single_pivot_single_parent": 23,
+      "symbol": "ETHUSDT",
+      "total_original_research_edges": 129
+    },
+    {
+      "multiple_parent_refused": 21,
+      "multiple_pivot_refused": 47,
+      "native15m_parity": 3072,
+      "no_intact_pivot_refused": 5,
+      "original_3m_bars": 15360,
+      "prefix_source_equal": true,
+      "single_research_without_author_labels": 30,
+      "source_single_pivot_single_parent": 30,
+      "symbol": "SOLUSDT",
+      "total_original_research_edges": 103
+    },
+    {
+      "multiple_parent_refused": 17,
+      "multiple_pivot_refused": 48,
+      "native15m_parity": 3072,
+      "no_intact_pivot_refused": 2,
+      "original_3m_bars": 15360,
+      "prefix_source_equal": true,
+      "single_research_without_author_labels": 37,
+      "source_single_pivot_single_parent": 37,
+      "symbol": "XRPUSDT",
+      "total_original_research_edges": 104
+    }
+  ],
+  "original_zip": 45,
+  "readiness": "NOT_TRADE_READY",
+  "schema": "EMBER_C24_FAIL_CLOSED_RESEARCH_BOS_V1",
+  "totals": {
+    "multiple_parent_refused": 120,
+    "multiple_pivot_refused": 242,
+    "no_intact_pivot_refused": 12,
+    "single_research_without_author_labels": 165,
+    "source_single_pivot_single_parent": 165,
+    "total_original_research_edges": 539
+  }
+}
