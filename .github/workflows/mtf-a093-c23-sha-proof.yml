@@ -16,3 +16,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Full SHA journal and five C23 evidence files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a093-integrity.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a093-integrity.json'))
+          assert x['events']>=93 and x['validations_pass']
+          j=[json.loads(v) for v in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
+          assert j[91]['action_id']=='A092'
+          assert j[92]['action_id']=='A093' and j[92]['seq']==93
+          assert j[92]['record_sha256']=='264477e53b7653fcde68ea0b0f99599c204d0b9e33042732c85ede7b8acd87bb'
+          assert len(j[92]['evidence'])==5 and j[92]['cycle_result']=='PASSED'
+          print('A093_93_SHA_RECORDS_AND_5_FILES_PASS')
+          PY
