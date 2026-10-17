@@ -44,7 +44,7 @@ jobs:
           set -euo pipefail
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c27_target_families_source 2>&1 | tee /tmp/c27-negative.log
-          grep -q 'Ran 18 tests' /tmp/c27-negative.log
+          grep -q 'Ran 20 tests' /tmp/c27-negative.log
       - name: 45 independent original Binance USD-M ZIP and physically truncated prefix
         run: |
           set -euo pipefail
@@ -72,7 +72,7 @@ jobs:
           name: c27-original-45zip-all-target-family-witnesses
           path: /tmp/c27-original.json
           retention-days: 30
-      - name: Pin result JSON only after first source and 18-negative success
+      - name: Pin result JSON only after first source and 20-negative success
         if: success()
         run: |
           set -euo pipefail
