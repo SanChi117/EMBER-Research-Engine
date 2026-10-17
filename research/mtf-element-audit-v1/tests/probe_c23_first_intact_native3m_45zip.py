@@ -55,3 +55,15 @@ def replay():
             "first-close singles",observed.first_close_single_candidate_edges,
             "first-close multiples",observed.first_close_multiple_candidate_edges,flush=True)
     return result
+
+def main(target=None):
+    rows=replay()
+    totals={name:sum(x[name] for x in rows) for name in COUNTS}
+    result={"schema":"EMBER_C23_FIRST_INTACT_NATIVE3M_SOURCE_V1",
+       "period_utc":["2026-09-01","2026-10-02"],
+       "original_3m_and_15m_1d_zip":45,
+       "original_3m_closed":sum(x["original_source_3m_bars"] for x in rows),
+       "original_native15m_equalities":sum(x["original_15m_parity"] for x in rows),
+       "original_source_results":rows,"totals":totals,
+       "author_timestamp_bos_goldens":0,"author_approved_trades":0,
+       "readiness":"NOT_TRADE_READY"}
