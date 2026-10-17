@@ -53,3 +53,21 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c22b_source_inventory 2>&1 | tee /tmp/a092-tests.log
           grep -q 'Ran 8 tests' /tmp/a092-tests.log
+      - name: Original Binance USD-M 45 ZIP C22B pinned source replay
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c22b_native3m_pivot_alternatives.py /tmp/a092-original.json 2>&1 | tee /tmp/a092-source.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a092-original.json'))
+          assert x['verified_total_source_zip']==45
+          assert x['native3m_closed']==76800
+          assert x['native15m_decimal_equalities']==15360
+          t=x['totals']
+          assert t['observed_parent_edges']==539
+          assert t['alternate_pivot_options']==2854
+          assert t['same_bar_multiple_crossings']==326
+          assert x['author_approved_trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('A092_C22B_45_SOURCE_ZIP_PINNED_PASS')
+          PY
