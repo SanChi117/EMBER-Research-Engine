@@ -1,0 +1,51 @@
+{
+  "schema": "EMBER_C22B_AUTHOR_BOS_LABEL_PROVENANCE_GATE_V1",
+  "mode": "PAPER_ONLY",
+  "review_date": "2026-10-17",
+  "author_materials": [
+    {
+      "type": "PRIMARY_AUTHOR_TEXT",
+      "name": "4. Entry By BOS.txt",
+      "url": "https://drive.google.com/file/d/1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO/view",
+      "verified_text": true,
+      "source_supports": [
+        "1H_HTF_LIQUIDITY_RAID",
+        "3M_OR_5M_BOS",
+        "BOS_BELOW_BSL_OR_ABOVE_SSL",
+        "MARKET_AT_CROSS_OR_WAIT_CONFIRMATION",
+        "FRESH_PREVIOUS_SESSION_AT_MOST_PREVIOUS_DAY",
+        "FTA_AND_STRUCTURAL_SL"
+      ],
+      "timestamped_2026_binance_usdm_golden": false
+    },
+    {
+      "type": "COURSE_SCREENSHOT",
+      "name": "Снимок экрана (2102).png",
+      "url": "https://drive.google.com/file/d/1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ/view",
+      "verified_time_anchored_2026_binance_bos": false
+    },
+    {
+      "type": "LINKED_EXTERNAL_HISTORICAL_BACKTEST",
+      "name": "BackTest 1H/3M 2023.01 - 2023.07",
+      "url": "https://www.notion.so/BackTest-1H-3M-2023-01-2023-07-70d3bb308f844a05a9ff1f069b5c6a3c",
+      "access_verified": false,
+      "era_2023_not_2026": true
+    }
+  ],
+  "source_requirements_for_bos_goldens": [
+    "PRIMARY_AUTHOR_JUDGEMENT_POSITIVE_OR_NEGATIVE",
+    "TIMEZONE_AND_DATE_ORIGINAL_AUTHOR",
+    "VENUE_SYMBOL_AND_TIMEFRAME",
+    "EXACT_HTF_RAID_AND_LTF_PIVOT_TIME_PRICE",
+    "INDEPENDENT_ORIGINAL_MARKET_PRICE_REPLAY",
+    "AUTHOR_EVIDENCE_SHA_AND_ORIGINAL_FILE"
+  ],
+  "adjudication": {
+    "author_verified_timestamped_usdm_cases": 0,
+    "technical3m_proxy_parent_edges": 539,
+    "author_approved_bos": 0,
+    "author_approved_trades": 0,
+    "readiness": "NOT_TRADE_READY"
+  },
+  "assertion": "Research multi-pivot histories, technical deterministic latest-swing choices and screenshot examples never imply primary-source author selection."
+}
