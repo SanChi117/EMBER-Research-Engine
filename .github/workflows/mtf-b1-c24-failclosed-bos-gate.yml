@@ -6,6 +6,8 @@ on:
       - '.github/workflows/mtf-b1-c24-failclosed-bos-gate.yml'
       - 'research/mtf-element-audit-v1/d05/c24_bos_research_admission_gate.py'
       - 'research/mtf-element-audit-v1/d05/test_c24_bos_research_admission_gate.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c24_author_bos_failclosed_45zip.py'
+      - 'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,3 +25,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c24_bos_research_admission_gate 2>&1 | tee /tmp/c24-unit.log
           grep -q 'Ran 6 tests' /tmp/c24-unit.log
+      - name: Original 45 Binance Futures ZIP zero author BOS admission
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c24_author_bos_failclosed_45zip.py /tmp/c24-original.json 2>&1 | tee /tmp/c24-source.log
