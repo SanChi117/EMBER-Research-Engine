@@ -52,3 +52,17 @@ def audit_rival_pivots(source, *, as_of_ms):
             "crossed_alternative_centers":tuple(s.center_ms for s in alternatives),
             "author_status":"AUTHOR_TIMESTAMPED_GOLDEN_MISSING"
         })
+
+    return {
+      "symbol":source.symbol,
+      "observed_parent_edges":len(detail),
+      "multiple_eligible_parent_edges":sum(d["eligible_pivot_count"]>1 for d in detail),
+      "same_bar_multiple_crossings":sum(d["simultaneous_alternative_count"]>0 for d in detail),
+      "eligible_pivot_options":sum(d["eligible_pivot_count"] for d in detail),
+      "alternate_pivot_options":sum(d["eligible_pivot_count"]-1 for d in detail),
+      "simultaneous_extra_crossings":sum(d["simultaneous_alternative_count"] for d in detail),
+      "first_ten_research_cases":detail[:10],
+      "source_author_goldens":0,
+      "author_approved_trades":0,
+      "readiness":"NOT_TRADE_READY"
+    }
