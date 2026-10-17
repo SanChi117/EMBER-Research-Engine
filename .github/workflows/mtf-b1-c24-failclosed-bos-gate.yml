@@ -19,6 +19,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Pin immutable original C23 and C24 result blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+           'research/mtf-element-audit-v1/evidence/c23/C23_ORIGINAL_FIRST_INTACT_PIVOT_RESULT.json':'b2fd86941fb1f2fcf11f656d230015577c58b021',
+           'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9'}
+          for p,w in pinned.items():
+              assert subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()==w,p
+          print('C24_SOURCE_RECEIPT_SHA_PASS')
+          PY
       - name: Confirm C24 never approves unsupported BOS
         run: |
           set -euo pipefail
