@@ -52,3 +52,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c25_session_freshness_target_source 2>&1 | tee /tmp/a095-unit.log
           grep -q 'Ran 10 tests' /tmp/a095-unit.log
+      - name: Recheck 45 independent original Binance USD-M ZIP C25
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c25_original3m_session_dst_target.py /tmp/a095-original.json 2>&1 | tee /tmp/a095-original.log
