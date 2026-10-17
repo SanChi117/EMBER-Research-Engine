@@ -8,6 +8,10 @@ on:
       - 'research/mtf-element-audit-v1/d05/test_c22a_intrabar_vs_closed_3m.py'
       - 'research/mtf-element-audit-v1/tests/probe_c22a_original_3m_intrabar_bounds.py'
       - 'research/mtf-element-audit-v1/evidence/c22/C22A_ORIGINAL_3M_CROSS_CLOSE_BOUNDS.json'
+      - 'research/mtf-element-audit-v1/d05/c22b_source_inventory.py'
+      - 'research/mtf-element-audit-v1/d05/test_c22b_source_inventory.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c22b_native3m_pivot_alternatives.py'
+      - 'research/mtf-element-audit-v1/evidence/c22/C22B_ORIGINAL_PIVOT_ALTERNATIVES.json'
   workflow_dispatch:
 permissions:
   contents: read
