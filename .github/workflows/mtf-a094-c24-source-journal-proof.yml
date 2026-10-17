@@ -34,3 +34,10 @@ jobs:
           assert len(j[93]['evidence'])==5
           print('A094_94_SHA_CHAIN_AND_C24_FIVE_EVIDENCE_FILES_PASS')
           PY
+      - name: Recheck original C24 frozen receipt Git blob and six guards
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json)" = "163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9"
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c24_bos_research_admission_gate 2>&1 | tee /tmp/a094-tests.log
+          grep -q 'Ran 6 tests' /tmp/a094-tests.log
