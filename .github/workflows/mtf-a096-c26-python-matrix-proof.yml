@@ -1,0 +1,73 @@
+name: MTF A096 — Python 3.10 3.11 3.12 Matrix Acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a096-c26-python-matrix-proof.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Enforce 96-event C26 journal and negative source tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a096-matrix-journal.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a096-matrix-journal.json'))
+          assert x['events']==96 and x['validations_pass']
+          assert x['tip_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          print('A096_96_SHA_MATRIX_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c26_unswept_1h_fta_source 2>&1 | tee /tmp/a096-matrix-unit.log
+          grep -q 'Ran 18 tests' /tmp/a096-matrix-unit.log
+  matrix-proof:
+    needs: [research-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Anchor matrix success as a source-only evidence witness
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c26/A096_PYTHON_MATRIX_WITNESS.json
+          if test -e "$p"; then
+            echo "Already frozen previous matrix success"
+            exit 0
+          fi
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c26/A096_PYTHON_MATRIX_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A096_C26_PYTHON_MATRIX_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_commit_sha':os.environ['HEAD_SHA'],
+            'versions_verified':['3.10','3.11','3.12'],
+            'a096_sha_records':96,
+            'per_version_negative_tests':18,
+            'journal_tip_sha256':'3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9',
+            'author_approved_trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A096): independently passed Python 3.10 3.11 3.12"
+          git push origin HEAD:research/academic-engine-recovery-20261015
