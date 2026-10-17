@@ -33,3 +33,21 @@ jobs:
           assert len(j[92]['evidence'])==5 and j[92]['cycle_result']=='PASSED'
           print('A093_93_SHA_RECORDS_AND_5_FILES_PASS')
           PY
+      - name: Verify exact frozen source receipts by Git blob
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+           'research/mtf-element-audit-v1/evidence/c22/C22B_ORIGINAL_PIVOT_ALTERNATIVES.json':'87bc70ed12cf77bf444a019cb48ef38d907ac5f3',
+           'research/mtf-element-audit-v1/evidence/c23/C23_ORIGINAL_FIRST_INTACT_PIVOT_RESULT.json':'b2fd86941fb1f2fcf11f656d230015577c58b021'}
+          for path,want in pinned.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert got==want,(path,got,want)
+          print('C23_NATIVE3M_ORIGINAL_GIT_RECEIPTS_PINNED')
+          PY
+      - name: Original 3m first-intact source negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c23_first_intact_pivot_guard 2>&1 | tee /tmp/a093-tests.log
+          grep -q 'Ran 8 tests' /tmp/a093-tests.log
