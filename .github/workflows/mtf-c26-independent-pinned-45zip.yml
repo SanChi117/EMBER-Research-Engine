@@ -1,0 +1,91 @@
+name: MTF C26 — Independent Pinned 45 ZIP Repeat (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c26-independent-pinned-45zip.yml'
+      - 'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c26-pinned-independent-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-source-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Immutable original proof and pinned C26 blob
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+            'research/mtf-element-audit-v1/evidence/c24/C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json':'163a0a41a9e5b51320e8f4baaad85cfd0be7c0a9',
+            'research/mtf-element-audit-v1/evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json':'fe9b23672f97cdf1e50d603e7d214ecdef7a00ad',
+            'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb'}
+          for p,want in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==want,(p,got,want)
+          print('C26_EXACT_FROZEN_GIT_RECEIPT_BLOB_PASS')
+          PY
+      - name: Independently rerun all 18 adversarial source controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c26_unswept_1h_fta_source 2>&1 | tee /tmp/c26-independent-controls.log
+          grep -q 'Ran 18 tests' /tmp/c26-independent-controls.log
+      - name: Independently reload original 45 USD-M ZIP and compare ALL JSON keys
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c26_original3m_unswept_fta.py /tmp/c26-independent.json 2>&1 | tee /tmp/c26-independent-source.log
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json'
+          a=json.load(open(p));b=json.load(open('/tmp/c26-independent.json'))
+          assert a==b,"C26_INDEPENDENT_FULL_JSON_DRIFT"
+          assert sum(len(x['cases']) for x in a['markets'])==165
+          assert a['totals']['nearest_target_already_crossed']==137
+          assert a['totals']['nearest_target_intact']==28
+          assert a['totals']['with_preknown_intervening_1h_obstacle']==74
+          assert a['approved_trades']==0 and a['readiness']=='NOT_TRADE_READY'
+          print('C26_PINNED_INDEPENDENT_45ZIP_FULL_JSON_PASS')
+          PY
+      - name: Publish externally verifiable successful CI run witness
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c26/C26_PINNED_RUN_WITNESS.json
+          if test -e "$p"; then
+            echo "Previous source witness exists; CI repeated with full comparisons"
+            exit 0
+          fi
+          python - <<'PY'
+          import json,os, pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c26/C26_PINNED_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_C26_INDEPENDENT_CI_WITNESS_V1',
+             'run_id':int(os.environ['RUN_ID']),
+             'trigger_commit_sha':os.environ['HEAD_SHA'],
+             'source_receipt_git_blob':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+             'independently_reloaded_original_zip':45,
+             'negative_controls':18,
+             'full_json_pinned_equal':True,
+             'prefix_physically_truncated_equal':True,
+             'paper_only':True,'readiness':'NOT_TRADE_READY'},
+             sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C26): independent pinned 45-ZIP repeat and run witness"
+          git push origin HEAD:research/academic-engine-recovery-20261015
