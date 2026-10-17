@@ -49,7 +49,7 @@ def audit_rival_pivots(source, *, as_of_ms):
             "eligible_pivot_count":len(eligible),
             "simultaneous_alternative_count":len(alternatives),
             "eligible_centers":[s.center_ms for s in eligible],
-            "crossed_alternative_centers":tuple(s.center_ms for s in alternatives),
+            "crossed_alternative_centers":[s.center_ms for s in alternatives],
             "author_status":"AUTHOR_TIMESTAMPED_GOLDEN_MISSING"
         })
 
