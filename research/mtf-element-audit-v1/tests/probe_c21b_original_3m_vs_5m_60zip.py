@@ -78,3 +78,40 @@ def replay():
               f"3m only={comparison.only_3m_parent}; "
               f"5m only={comparison.only_5m_parent}",flush=True)
     return rows
+
+def main(output=None):
+    rows=replay()
+    totals={k:sum(x[k] for x in rows) for k in FIELDS}
+    result={
+      "schema":"EMBER_C21B_NATIVE_3M_5M_ORIGINAL_60_SOURCE_PARENT_DIFFERENCES_V1",
+      "period_utc":["2026-09-01","2026-10-02"],
+      "original_C08_15m_1d_zip":30,"original_C20_5m_zip":15,
+      "original_C21_3m_zip":15,"original_total_zip":60,
+      "original_native3m_bars":sum(x["original3m_closed"] for x in rows),
+      "original_native5m_bars":sum(x["original5m_closed"] for x in rows),
+      "source_native15m_parities_3m":sum(x["exact_native15m_3m_equalities"] for x in rows),
+      "source_native15m_parities_5m":sum(x["exact_native15m_5m_equalities"] for x in rows),
+      "hourly_source_equivalent":sum(x["closed_1h_hours"] for x in rows),
+      "observations":rows,"totals":totals,
+      "author_labelled_3m_bos":0,"author_labelled_5m_bos":0,
+      "author_approved_trades":0,"readiness":"NOT_TRADE_READY",
+      "scope_notice":"Research strict-three-candle 3m and 5m first closed price crossings after next full 1h wick fractal confirmation; per-parent edges not independent trades, no author selection of swing or session or FTA/SL."
+    }
+    assert len(rows)==5 and result["original_native3m_bars"]==76800
+    assert result["original_native5m_bars"]==46080
+    assert result["source_native15m_parities_3m"]==15360
+    assert result["source_native15m_parities_5m"]==15360
+    assert result["hourly_source_equivalent"]==3840
+    assert result["totals"]["native5m_cand_edges"]==512
+    assert result["totals"]["same_parent_with_both"]+result["totals"]["only_3m_parent"]==result["totals"]["native3m_cand_edges"]
+    assert result["totals"]["same_parent_with_both"]+result["totals"]["only_5m_parent"]==512
+    pin=ROOT/"evidence"/"c21"/"C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json"
+    if pin.is_file():
+        recorded=json.loads(pin.read_text(encoding="utf8"))
+        assert recorded==result,"C21B_PINNED_SOURCE_PARITY_OR_PARENT_DRIFT"
+    if output:Path(output).write_text(json.dumps(result,sort_keys=True,indent=2)+"\n",encoding="utf8")
+    print(json.dumps(result,sort_keys=True,indent=2),flush=True)
+    return 0
+
+if __name__=="__main__":
+    raise SystemExit(main(sys.argv[1] if len(sys.argv)>1 else None))
