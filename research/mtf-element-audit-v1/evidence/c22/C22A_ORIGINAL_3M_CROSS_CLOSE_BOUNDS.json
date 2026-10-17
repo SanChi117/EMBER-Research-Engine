@@ -1,0 +1,324 @@
+{
+  "author_approved_trades": 0,
+  "author_selected_3m_structural_bos_goldens": 0,
+  "author_tick_level_labels": 0,
+  "meaning": "OHLC wick reach bounds vs closed confirmation of C21B research-selected 3m swing. The exact intrabar crossing timestamp, order, fill and author BOS remain unobservable.",
+  "observations": [
+    {
+      "break_bar_open_already_beyond_level": 0,
+      "candidate_parent_edges": 99,
+      "candle_time_unknown_order": 99,
+      "earlier_reach_already_closed_beyond_level": 0,
+      "earlier_reach_without_close": 22,
+      "early_prefix_cut_2026_10_02_0009": 97,
+      "first_reach_prior_to_closed_break": 22,
+      "five_example_witness_bounds": [
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788430500000",
+          "original3m_first_price_reach_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788430500000",
+          "raid_fractal_ms": 1788238800000,
+          "side": "SHORT",
+          "swing_known_ms": 1788429960000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788325200000",
+          "original3m_first_price_reach_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788325200000",
+          "raid_fractal_ms": 1788264000000,
+          "side": "SHORT",
+          "swing_known_ms": 1788325200000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788325200000",
+          "original3m_first_price_reach_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788325200000",
+          "raid_fractal_ms": 1788271200000,
+          "side": "SHORT",
+          "swing_known_ms": 1788325200000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788299100000",
+          "original3m_first_price_reach_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788299100000",
+          "raid_fractal_ms": 1788278400000,
+          "side": "LONG",
+          "swing_known_ms": 1788299100000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788351300000",
+          "original3m_first_price_reach_row_id": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92:1788351300000",
+          "raid_fractal_ms": 1788285600000,
+          "side": "LONG",
+          "swing_known_ms": 1788351120000
+        }
+      ],
+      "independent_early_prefix_stability": true,
+      "original_native15m_decimal_equalities": 3072,
+      "original_native3m_closed": 15360,
+      "symbol": "BCHUSDT"
+    },
+    {
+      "break_bar_open_already_beyond_level": 0,
+      "candidate_parent_edges": 104,
+      "candle_time_unknown_order": 104,
+      "earlier_reach_already_closed_beyond_level": 0,
+      "earlier_reach_without_close": 23,
+      "early_prefix_cut_2026_10_02_0009": 102,
+      "first_reach_prior_to_closed_break": 23,
+      "five_example_witness_bounds": [
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788351300000",
+          "original3m_first_price_reach_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788351300000",
+          "raid_fractal_ms": 1788285600000,
+          "side": "LONG",
+          "swing_known_ms": 1788351300000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788312420000",
+          "original3m_first_price_reach_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788312420000",
+          "raid_fractal_ms": 1788296400000,
+          "side": "SHORT",
+          "swing_known_ms": 1788312060000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 1,
+          "original3m_bos_close_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788318720000",
+          "original3m_first_price_reach_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788318540000",
+          "raid_fractal_ms": 1788296400000,
+          "side": "LONG",
+          "swing_known_ms": 1788318540000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788325200000",
+          "original3m_first_price_reach_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1788325200000",
+          "raid_fractal_ms": 1788303600000,
+          "side": "SHORT",
+          "swing_known_ms": 1788325200000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1789138260000",
+          "original3m_first_price_reach_row_id": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7:1789138260000",
+          "raid_fractal_ms": 1788343200000,
+          "side": "LONG",
+          "swing_known_ms": 1789138260000
+        }
+      ],
+      "independent_early_prefix_stability": true,
+      "original_native15m_decimal_equalities": 3072,
+      "original_native3m_closed": 15360,
+      "symbol": "BTCUSDT"
+    },
+    {
+      "break_bar_open_already_beyond_level": 0,
+      "candidate_parent_edges": 129,
+      "candle_time_unknown_order": 129,
+      "earlier_reach_already_closed_beyond_level": 0,
+      "earlier_reach_without_close": 30,
+      "early_prefix_cut_2026_10_02_0009": 125,
+      "first_reach_prior_to_closed_break": 30,
+      "five_example_witness_bounds": [
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 1,
+          "original3m_bos_close_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788311160000",
+          "original3m_first_price_reach_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788310980000",
+          "raid_fractal_ms": 1788289200000,
+          "side": "SHORT",
+          "swing_known_ms": 1788310800000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 1,
+          "original3m_bos_close_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788311160000",
+          "original3m_first_price_reach_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788310980000",
+          "raid_fractal_ms": 1788296400000,
+          "side": "SHORT",
+          "swing_known_ms": 1788310800000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788340860000",
+          "original3m_first_price_reach_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788340860000",
+          "raid_fractal_ms": 1788303600000,
+          "side": "SHORT",
+          "swing_known_ms": 1788340860000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788340860000",
+          "original3m_first_price_reach_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788340860000",
+          "raid_fractal_ms": 1788325200000,
+          "side": "SHORT",
+          "swing_known_ms": 1788340860000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788375960000",
+          "original3m_first_price_reach_row_id": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4:1788375960000",
+          "raid_fractal_ms": 1788361200000,
+          "side": "LONG",
+          "swing_known_ms": 1788375960000
+        }
+      ],
+      "independent_early_prefix_stability": true,
+      "original_native15m_decimal_equalities": 3072,
+      "original_native3m_closed": 15360,
+      "symbol": "ETHUSDT"
+    },
+    {
+      "break_bar_open_already_beyond_level": 0,
+      "candidate_parent_edges": 103,
+      "candle_time_unknown_order": 103,
+      "earlier_reach_already_closed_beyond_level": 0,
+      "earlier_reach_without_close": 31,
+      "early_prefix_cut_2026_10_02_0009": 102,
+      "first_reach_prior_to_closed_break": 31,
+      "five_example_witness_bounds": [
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788318540000",
+          "original3m_first_price_reach_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788318540000",
+          "raid_fractal_ms": 1788296400000,
+          "side": "LONG",
+          "swing_known_ms": 1788318540000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788340860000",
+          "original3m_first_price_reach_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788340860000",
+          "raid_fractal_ms": 1788325200000,
+          "side": "SHORT",
+          "swing_known_ms": 1788340860000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 1,
+          "original3m_bos_close_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1789505280000",
+          "original3m_first_price_reach_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1789505100000",
+          "raid_fractal_ms": 1788346800000,
+          "side": "LONG",
+          "swing_known_ms": 1789504200000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788386400000",
+          "original3m_first_price_reach_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788386400000",
+          "raid_fractal_ms": 1788357600000,
+          "side": "SHORT",
+          "swing_known_ms": 1788386040000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 2,
+          "original3m_bos_close_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788376320000",
+          "original3m_first_price_reach_row_id": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7:1788375960000",
+          "raid_fractal_ms": 1788361200000,
+          "side": "LONG",
+          "swing_known_ms": 1788375780000
+        }
+      ],
+      "independent_early_prefix_stability": true,
+      "original_native15m_decimal_equalities": 3072,
+      "original_native3m_closed": 15360,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "break_bar_open_already_beyond_level": 0,
+      "candidate_parent_edges": 104,
+      "candle_time_unknown_order": 104,
+      "earlier_reach_already_closed_beyond_level": 0,
+      "earlier_reach_without_close": 16,
+      "early_prefix_cut_2026_10_02_0009": 99,
+      "first_reach_prior_to_closed_break": 16,
+      "five_example_witness_bounds": [
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788303960000",
+          "original3m_first_price_reach_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788303960000",
+          "raid_fractal_ms": 1788285600000,
+          "side": "LONG",
+          "swing_known_ms": 1788303960000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788325200000",
+          "original3m_first_price_reach_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788325200000",
+          "raid_fractal_ms": 1788303600000,
+          "side": "SHORT",
+          "swing_known_ms": 1788324300000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 2,
+          "original3m_bos_close_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788388020000",
+          "original3m_first_price_reach_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788387660000",
+          "raid_fractal_ms": 1788325200000,
+          "side": "SHORT",
+          "swing_known_ms": 1788387300000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 1,
+          "original3m_bos_close_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788408360000",
+          "original3m_first_price_reach_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1788408180000",
+          "raid_fractal_ms": 1788386400000,
+          "side": "LONG",
+          "swing_known_ms": 1788406740000
+        },
+        {
+          "author_approval": false,
+          "earlier_reach_bars": 0,
+          "original3m_bos_close_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1789048800000",
+          "original3m_first_price_reach_row_id": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77:1789048800000",
+          "raid_fractal_ms": 1788397200000,
+          "side": "LONG",
+          "swing_known_ms": 1789048620000
+        }
+      ],
+      "independent_early_prefix_stability": true,
+      "original_native15m_decimal_equalities": 3072,
+      "original_native3m_closed": 15360,
+      "symbol": "XRPUSDT"
+    }
+  ],
+  "original_3m_zip": 15,
+  "original_C08_15m_1d_zip": 30,
+  "original_native15m_decimal_parity": 15360,
+  "original_native3m": 76800,
+  "original_total_zip": 45,
+  "readiness": "NOT_TRADE_READY",
+  "schema": "EMBER_C22A_ORIGINAL3M_OHLC_BOS_CROSS_VS_CLOSE_BOUNDS_V1",
+  "source_C21B_receipt_git_blob": "a9a121cb41477b105dd13a1228b5d0577ac3abda",
+  "totals": {
+    "break_bar_open_already_beyond_level": 0,
+    "candidate_parent_edges": 539,
+    "candle_time_unknown_order": 539,
+    "earlier_reach_already_closed_beyond_level": 0,
+    "earlier_reach_without_close": 122,
+    "first_reach_prior_to_closed_break": 122
+  }
+}
