@@ -1,0 +1,22 @@
+name: MTF B1 C23 — First Intact 3m Pivot (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c23-first-intact-source.yml'
+      - 'research/mtf-element-audit-v1/d05/c23_first_intact_pivot_guard.py'
+      - 'research/mtf-element-audit-v1/d05/test_c23_first_intact_pivot_guard.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c23_first_intact_native3m_45zip.py'
+      - 'research/mtf-element-audit-v1/evidence/c23/C23_ORIGINAL_FIRST_INTACT_PIVOT_RESULT.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c23-first-intact-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
