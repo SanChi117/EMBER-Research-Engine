@@ -1,0 +1,90 @@
+name: MTF A091 — Original 3m Cross/Close and 91 SHA Journal (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a091-c22a-3m-intrabar-sha-journal-proof.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  91-sha-original3m-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Entire rolling SHA journal and all five C22A source files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a091-sha.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a091-sha.json'))
+          assert x['events']>=91 and x['validations_pass']
+          a=[json.loads(s) for s in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert a[89]['action_id']=='A090'
+          assert a[89]['record_sha256']=='d904182fb4de03a18d84412031ae37197ba3ccde3715b1220a4de4b09bef2c64'
+          assert a[90]['seq']==91 and a[90]['action_id']=='A091'
+          assert a[90]['record_sha256']=='41c325ef04970b253c1357dcff3402505e55270bc56149f2ffd0609dde05b44d'
+          assert a[90]['cycle_result']=='PASSED' and len(a[90]['evidence'])==5
+          print('A091_SHA_CHAIN_91_AND_FIVE_NATIVE3M_SOURCE_FILES_PASS')
+          PY
+      - name: Original C08 C21 and C22A immutable SHA blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          refs={
+            'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+            'research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json':'4205ad3118a30bbd69c412e165c7c5ce3560195d',
+            'research/mtf-element-audit-v1/evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json':'02949d457e63bb367bbb99ae087e3306d1e68557',
+            'research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json':'a9a121cb41477b105dd13a1228b5d0577ac3abda',
+            'research/mtf-element-audit-v1/evidence/c22/C22A_ORIGINAL_3M_CROSS_CLOSE_BOUNDS.json':'05817435a27fc9273de8192fa8937969edf46c0b'}
+          for p,want in refs.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==want,(p,got,want)
+          print('C22A_FROZEN_USDM_3M_PRICE_GIT_PROOF_PASS')
+          PY
+      - name: All 24 C21B/C22A synthetic source falsification tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c22a_intrabar_vs_closed_3m test_c21b_native_3m_vs_5m 2>&1 | tee /tmp/a091-tests.txt
+          grep -q 'Ran 24 tests' /tmp/a091-tests.txt
+      - name: Redownload 45 original ZIP and verify 122 earlier price wick reaches
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c22a_original_3m_intrabar_bounds.py /tmp/a091-source.json 2>&1 | tee /tmp/a091-source.log
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a091-source.json'))
+          assert x['original_total_zip']==45
+          assert x['original_native3m']==76800
+          assert x['original_native15m_decimal_parity']==15360
+          t=x['totals']
+          assert t['candidate_parent_edges']==539
+          assert t['first_reach_prior_to_closed_break']==122
+          assert t['earlier_reach_without_close']==122
+          assert t['earlier_reach_already_closed_beyond_level']==0
+          assert t['break_bar_open_already_beyond_level']==0
+          assert t['candle_time_unknown_order']==539
+          assert x['author_selected_3m_structural_bos_goldens']==x['author_approved_trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('A091_C22A_122_EARLY_WICK_REACH_NOT_EXECUTABLE_MARKET_CROSS_PROVEN')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-a091-original3m-bound-and-sha
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/a091-sha.json
+            /tmp/a091-tests.txt
+            /tmp/a091-source.json
+            /tmp/a091-source.log
