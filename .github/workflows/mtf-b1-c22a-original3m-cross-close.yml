@@ -61,6 +61,25 @@ jobs:
           assert x["readiness"]=="NOT_TRADE_READY"
           print("C22A_NATIVE3M_INTRACANDLE_TIMESTAMP_UNOBSERVABLE_PROOF_PASS")
           PY
+      - name: C22B source-only competing swing tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c22b_source_inventory 2>&1 | tee /tmp/c22b-unit.log
+          grep -q 'Ran 8 tests' /tmp/c22b-unit.log
+      - name: Independent C22B original 45ZIP competing pivot replay
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c22b_native3m_pivot_alternatives.py /tmp/c22b-source.json 2>&1 | tee /tmp/c22b-source.log
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c22b-source.json'))
+          assert r['verified_total_source_zip']==45
+          assert r['native3m_closed']==76800
+          assert r['totals']['observed_parent_edges']==539
+          assert r['readiness']=='NOT_TRADE_READY'
+          print('C22B_NATIVE_3M_PIVOT_ALTERNATIVES_REPLAY_PASS')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
