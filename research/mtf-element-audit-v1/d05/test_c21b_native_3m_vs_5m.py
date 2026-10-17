@@ -75,3 +75,36 @@ class C21BOriginalThreeMinuteGeometry(unittest.TestCase):
         x=replace(x,original_3m_closed=a[:14]+(replace(a[14],raw_id="forged"),)+a[15:])
         with self.assertRaisesRegex(ValueError,"ALTERED_ORIGINAL_NATIVE3M_BAR"):
             observe_native3m_raid_break(x,as_of_ms=x.as_of_ms)
+
+    def test_hourly_original_3m_and_5m_price_parity(self):
+        t=make3()
+        f=synthetic()
+        c=compare_original_3m_and_5m(t,f,as_of_ms=t.as_of_ms)
+        self.assertGreater(c.native3m_cand_edges,0)
+        self.assertGreater(c.native5m_cand_edges,0)
+        self.assertGreater(c.same_parent_with_both,0)
+        self.assertEqual(c.readiness,"NOT_TRADE_READY")
+        self.assertEqual(c.author_trades,0)
+    def test_cross_tf_asof_must_be_common_closed_15m(self):
+        t=make3()
+        with self.assertRaisesRegex(ValueError,"COMMON_ASOF"):
+            compare_original_3m_and_5m(t,synthetic(),as_of_ms=t.as_of_ms-THREE)
+    def test_cross_tf_wrong_source_symbol_rejected(self):
+        t=make3()
+        f=replace(synthetic(),symbol="ETHUSDT")
+        with self.assertRaises(ValueError):
+            compare_original_3m_and_5m(t,f,as_of_ms=t.as_of_ms)
+    def test_3m_future_suffix_invariance(self):
+        full=make3()
+        cut=SEPT_START+141*THREE
+        smaller=replace(full,as_of_ms=cut,original_3m_closed=full.original_3m_closed[:141])
+        a=observe_native3m_raid_break(full,as_of_ms=cut)
+        b=observe_native3m_raid_break(smaller,as_of_ms=cut)
+        self.assertEqual(a,b)
+    def test_comparison_same_parent_is_not_independent_trade(self):
+        c=compare_original_3m_and_5m(make3(),synthetic(),
+                                       as_of_ms=SEPT_START+10*HOUR)
+        self.assertEqual(c.same_parent_with_both+c.only_3m_parent,c.native3m_cand_edges)
+        self.assertEqual(c.same_parent_with_both+c.only_5m_parent,c.native5m_cand_edges)
+        self.assertEqual(c.earliest_3m_before_5m+c.earliest_5m_before_3m+
+                         c.simultaneous_close,c.same_parent_with_both)
