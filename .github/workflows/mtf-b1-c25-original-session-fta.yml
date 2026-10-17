@@ -1,0 +1,32 @@
+name: MTF B1 C25 — Original Sessions and Target Bounds (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c25-original-session-fta.yml'
+      - 'research/mtf-element-audit-v1/d05/c25_session_freshness_target_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c25_session_freshness_target_source.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c25_original3m_session_dst_target.py'
+      - 'research/mtf-element-audit-v1/evidence/c25/C25_ORIGINAL_SESSIONS_TARGET_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-calendar-bounds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: C25 falsify UTC versus Europe DST and noncausal 1H target
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c25_session_freshness_target_source 2>&1 | tee /tmp/c25-tests.log
+          grep -q 'Ran 10 tests' /tmp/c25-tests.log
+      - name: Repeat 45 original USD-M ZIP with strict C24 parent sourcing
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c25_original3m_session_dst_target.py /tmp/c25-original.json 2>&1 | tee /tmp/c25-source.log
