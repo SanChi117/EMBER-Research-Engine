@@ -33,3 +33,17 @@ jobs:
           assert len(e[91]['evidence'])==7 and e[91]['cycle_result']=='PASSED'
           print('A092_92_CHAIN_7_SOURCE_HASHES_VERIFIED')
           PY
+      - name: Frozen author source and original C21/C22 receipt Git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+           'research/mtf-course-v05/src/course_primitives_v05.py':'45cec7fd66d0ec156bc0a38225ee282c6d3ee71b',
+           'research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json':'a9a121cb41477b105dd13a1228b5d0577ac3abda',
+           'research/mtf-element-audit-v1/evidence/c22/C22A_ORIGINAL_3M_CROSS_CLOSE_BOUNDS.json':'05817435a27fc9273de8192fa8937969edf46c0b',
+           'research/mtf-element-audit-v1/evidence/c22/C22B_ORIGINAL_PIVOT_ALTERNATIVES.json':'87bc70ed12cf77bf444a019cb48ef38d907ac5f3'}
+          for path,want in pinned.items():
+              sha=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert sha==want,(path,sha,want)
+          print('A092_ORIGINAL_NATIVE3M_SOURCE_GIT_BLOBS_PASS')
+          PY
