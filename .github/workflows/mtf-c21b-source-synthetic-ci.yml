@@ -1,0 +1,26 @@
+name: MTF C21B — Native 3m Research Geometry Synthetic (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c21b-source-synthetic-ci.yml'
+      - 'research/mtf-element-audit-v1/d05/c21b_original_3m_raid_break_geometry.py'
+      - 'research/mtf-element-audit-v1/d05/c21b_3m_5m_geometry_compare.py'
+      - 'research/mtf-element-audit-v1/d05/test_c21b_native_3m_vs_5m.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  no-lookahead-source-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: C21B test positive, negative, and 3m/5m divergences
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c21b_native_3m_vs_5m 2>&1 | tee /tmp/c21b-negative.log
