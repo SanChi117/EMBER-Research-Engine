@@ -91,11 +91,11 @@ def _known_same_price_pairs(pivots,side,entry,break_start_ms,rows):
     for p in pivots:
         if p.known_ms>break_start_ms or p.kind!=kind:
             continue
-        if not (p.level>entry if side=="LONG" else p.level<entry):
-            continue
         if not (isinstance(p.level,Decimal) and p.level.is_finite()
                 and p.source_rows and p.known_ms>p.center_ms):
             raise ValueError("C27_CORRUPTED_FRACTAL")
+        if not (p.level>entry if side=="LONG" else p.level<entry):
+            continue
         grouped.setdefault(p.level,[]).append(p)
     pairs=[]
     for level,group in grouped.items():
