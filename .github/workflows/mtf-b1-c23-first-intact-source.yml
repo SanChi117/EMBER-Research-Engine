@@ -26,3 +26,7 @@ jobs:
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c23_first_intact_pivot_guard 2>&1 | tee /tmp/c23-tests.log
           grep -q 'Ran 8 tests' /tmp/c23-tests.log
+      - name: Independently replay original Binance USD-M 45 ZIP
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c23_first_intact_native3m_45zip.py /tmp/c23-original.json 2>&1 | tee /tmp/c23-source.log
