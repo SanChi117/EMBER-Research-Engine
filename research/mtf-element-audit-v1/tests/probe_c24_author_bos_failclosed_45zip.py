@@ -40,3 +40,21 @@ def replay():
               "multi-pivot rejects",result.multiple_pivot_refused,
               "multi-parent rejects",result.multiple_parent_refused,flush=True)
     return out
+
+def main(target=None):
+    rows=replay()
+    totals={k:sum(x[k] for x in rows) for k in FIELDS}
+    r={"schema":"EMBER_C24_FAIL_CLOSED_RESEARCH_BOS_V1",
+       "original_zip":45,"native3m_closed":sum(x["original_3m_bars"] for x in rows),
+       "native15m_equalities":sum(x["native15m_parity"] for x in rows),
+       "original_source_market_results":rows,"totals":totals,
+       "author_approved_bos":0,"author_approved_trades":0,
+       "readiness":"NOT_TRADE_READY"}
+    assert r["native3m_closed"]==76800 and r["native15m_equalities"]==15360
+    assert totals["total_original_research_edges"]==539
+    assert totals["multiple_pivot_refused"]+totals["no_intact_pivot_refused"]+totals["multiple_parent_refused"]+totals["single_research_without_author_labels"]==539
+    pin=ROOT/"evidence"/"c24"/"C24_ORIGINAL_3M_FAIL_CLOSED_ADMISSION.json"
+    if pin.exists():assert json.loads(pin.read_text(encoding="utf8"))==r
+    if target:Path(target).write_text(json.dumps(r,indent=2,sort_keys=True)+"\n",encoding="utf8")
+    print(json.dumps(r,indent=2,sort_keys=True),flush=True)
+if __name__=="__main__":main(sys.argv[1] if len(sys.argv)>1 else None)
