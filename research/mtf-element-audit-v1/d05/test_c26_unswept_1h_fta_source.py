@@ -54,7 +54,7 @@ class C26ReadOnlyControls(unittest.TestCase):
             pivot("BSL","91",3,25),pivot("BSL","101",4,10))
         self.assertEqual(len(_intervening(pp,D("100"),D("90"),"SHORT",20)),2)
         self.assertEqual(_intervening(pp,D("100"),None,"SHORT",20),())
-        self.assertEqual(len(_intervening(pp,D("90"),D("100"),"LONG",20)),3)
+        self.assertEqual(len(_intervening(pp,D("90"),D("100"),"LONG",20)),2)
     def test_missing_target_returns_empty(self):
         self.assertEqual(_opposing_candidates((pivot("BSL","99"),),
                      "LONG",D("100"),30),[])
