@@ -86,3 +86,19 @@ def inspect_first_intact_pivots(source, *, as_of_ms):
             "RESEARCH_MULTIPLE_FIRST_CLOSE_ABSTAIN" if len(first_close)>1 else
             "NO_FIRST_CLOSE_LEVEL_ABSTAIN")
         })
+
+    from collections import Counter
+    bars_per=Counter(x["break_start_ms"] for x in out)
+    return FirstIntactResult(
+        symbol=source.symbol,as_of_ms=as_of_ms,original_parent_edges=len(out),
+        total_eligible_before_first_break_test=sum(x["eligible_count"] for x in out),
+        previously_close_broken_levels=sum(x["prior_close_broken_count"] for x in out),
+        previously_wick_breached_levels=sum(x["prior_wick_breached_count"] for x in out),
+        still_close_intact_levels=sum(x["intact_count"] for x in out),
+        first_close_crossing_levels=sum(x["first_close_count"] for x in out),
+        first_close_single_candidate_edges=sum(x["first_close_count"]==1 for x in out),
+        first_close_multiple_candidate_edges=sum(x["first_close_count"]>1 for x in out),
+        no_first_close_candidate_edges=sum(x["first_close_count"]==0 for x in out),
+        chosen_latest_proxy_previously_close_broken=sum(x["latest_proxy_already_broken"] for x in out),
+        first_close_multiple_parent_bar_edges=sum(bars_per[x["break_start_ms"]]>1 for x in out),
+        examples=tuple(out[:10]))
