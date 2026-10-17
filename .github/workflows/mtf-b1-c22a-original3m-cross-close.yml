@@ -1,0 +1,68 @@
+name: MTF B1 C22A — Original 3m BOS Cross vs Close Bounds (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c22a-original3m-cross-close.yml'
+      - 'research/mtf-element-audit-v1/d05/c22a_intrabar_vs_closed_3m_provenance.py'
+      - 'research/mtf-element-audit-v1/d05/test_c22a_intrabar_vs_closed_3m.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c22a_original_3m_intrabar_bounds.py'
+      - 'research/mtf-element-audit-v1/evidence/c22/C22A_ORIGINAL_3M_CROSS_CLOSE_BOUNDS.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-3m-source-bounds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original prior C21A/C21B immutable source Git receipts
+        run: |
+          python - <<'PY'
+          import subprocess
+          frozen={
+            "research/mtf-course-v05/src/course_primitives_v05.py":"45cec7fd66d0ec156bc0a38225ee282c6d3ee71b",
+            "research/mtf-element-audit-v1/evidence/c08/C08_315_AGGREGATE.json":"4205ad3118a30bbd69c412e165c7c5ce3560195d",
+            "research/mtf-element-audit-v1/evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json":"02949d457e63bb367bbb99ae087e3306d1e68557",
+            "research/mtf-element-audit-v1/evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json":"a9a121cb41477b105dd13a1228b5d0577ac3abda"}
+          for path,want in frozen.items():
+              got=subprocess.check_output(["git","rev-parse","HEAD:"+path],text=True).strip()
+              assert got==want,(path,got,want)
+          print("C22A_NO_FROZEN_SOURCE_CHANGE")
+          PY
+      - name: C22A synthetic adversity and prior C21B source cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c22a_intrabar_vs_closed_3m test_c21b_native_3m_vs_5m 2>&1 | tee /tmp/c22a-unit.log
+          grep -q 'Ran 24 tests' /tmp/c22a-unit.log
+      - name: 45 original ZIP reread 539 crossing-time ambiguity bounds
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c22a_original_3m_intrabar_bounds.py /tmp/c22a-original.json 2>&1 | tee /tmp/c22a-source.log
+          python - <<'PY'
+          import json
+          x=json.load(open("/tmp/c22a-original.json"))
+          assert x["original_total_zip"]==45
+          assert x["original_native3m"]==76800
+          assert x["original_native15m_decimal_parity"]==15360
+          assert x["totals"]["candidate_parent_edges"]==539
+          assert x["totals"]["candle_time_unknown_order"]==539
+          assert x["author_selected_3m_structural_bos_goldens"]==x["author_approved_trades"]==0
+          assert x["readiness"]=="NOT_TRADE_READY"
+          print("C22A_NATIVE3M_INTRACANDLE_TIMESTAMP_UNOBSERVABLE_PROOF_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mtf-c22a-original3m-close-vs-reach
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            /tmp/c22a-unit.log
+            /tmp/c22a-original.json
+            /tmp/c22a-source.log
