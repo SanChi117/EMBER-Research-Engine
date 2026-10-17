@@ -16,3 +16,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Verify full SHA-linked journal and seven C22B files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a092-ledger.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/a092-ledger.json'))
+          assert d['events']>=92 and d['validations_pass']
+          e=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert e[90]['action_id']=='A091'
+          assert e[91]['action_id']=='A092' and e[91]['seq']==92
+          assert e[91]['record_sha256']=='33380af8f8602ecc424d184b928f835b3af25fec6f74964e668021690af2e96e'
+          assert len(e[91]['evidence'])==7 and e[91]['cycle_result']=='PASSED'
+          print('A092_92_CHAIN_7_SOURCE_HASHES_VERIFIED')
+          PY
