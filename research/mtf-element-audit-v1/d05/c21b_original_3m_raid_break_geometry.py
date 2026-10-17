@@ -100,3 +100,42 @@ def _swings(bars):
             out.append(ThreeSwing("LOW",b.low,b.start_ms,c.known_ms,
                         (a.raw_id,b.raw_id,c.raw_id)))
     return tuple(out)
+
+def observe_native3m_raid_break(line,*,as_of_ms):
+    rows=_source(line,as_of_ms)
+    hours=_hours(rows)
+    pivots,raids=observe_fractals_and_first_breach(hours)
+    swings=_swings(rows)
+    found=[]
+    for raid in raids:
+        if raid.confirmed_at_ms is None:continue
+        is_short=raid.fractal.kind=="BSL"
+        eligible=[s for s in swings if s.kind==("LOW" if is_short else "HIGH")
+                  and s.center_ms>=raid.first_breach_ms
+                  and s.known_ms>=raid.first_breach_close_ms
+                  and (s.level<raid.fractal.level if is_short
+                       else s.level>raid.fractal.level)]
+        latest=None
+        k=0
+        for i in range((raid.confirmed_at_ms-SEPT_START)//THREE,len(rows)):
+            x=rows[i]
+            if (x.high>raid.extreme if is_short else x.low<raid.extreme):
+                break
+            while k<len(eligible) and eligible[k].known_ms<=x.start_ms:
+                latest=eligible[k]
+                k+=1
+            if latest is None:continue
+            prior=rows[i-1].close
+            crossed=(x.close<latest.level and prior>=latest.level if is_short
+                     else x.close>latest.level and prior<=latest.level)
+            if not crossed:continue
+            found.append(ThreeBreak(
+                raid.fractal.kind,raid.fractal.center_ms,
+                raid.first_breach_ms,raid.confirmed_at_ms,
+                raid.extreme,raid.fractal.level,
+                "SHORT" if is_short else "LONG",latest,
+                x.start_ms,x.known_ms,x.close,x.raw_id))
+            break
+    return ThreeObservation(line.symbol,as_of_ms,len(rows),len(hours),
+        len(pivots),sum(x.confirmed_at_ms is not None for x in raids),
+        len(swings),tuple(found))
