@@ -1,0 +1,61 @@
+name: MTF C31 — BOS Wick vs Closed Break Source Boundary Tests (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c31-bos-ambiguity-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c31_bos_entry_semantic_disagreement.py'
+      - 'research/mtf-element-audit-v1/d05/test_c31_bos_entry_semantic_disagreement.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  bos-ambiguity-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run 17 synthetic BOS timing and negative controls
+        id: tests
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c31_bos_entry_semantic_disagreement >/tmp/c31-tests.log 2>&1
+      - name: Preserve actual test failures as a permanent source diagnostic
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          RESULT: ${{ steps.tests.outcome }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c31/diagnostics/C31_BOS_TESTS.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          src=pathlib.Path('/tmp/c31-tests.log')
+          log=src.read_text(errors='replace') if src.exists() else 'NO_TEST_LOG'
+          p.write_text(json.dumps({
+              'schema':'C31_SOURCE_BOS_TIMING_NEGATIVE_DIAGNOSTIC',
+              'run_id':int(os.environ['RUN_ID']),
+              'trigger_sha':os.environ['HEAD_SHA'],
+              'test_result':os.environ['RESULT'],
+              'all_17_pass':os.environ['RESULT']=='success' and 'Ran 17 tests' in log and 'OK' in log[-300:],
+              'log_tail':log[-19000:],
+              'author_approved_bos':0,
+              'author_approved_trades':0,
+              'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c31/diagnostics/C31_BOS_TESTS.json
+          git commit -m "diagnostic(C31): 17 BOS bar-time vs wick source test actual result"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Reject failed negative source tests
+        if: steps.tests.outcome != 'success'
+        run: exit 1
