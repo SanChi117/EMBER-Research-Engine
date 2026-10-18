@@ -119,15 +119,25 @@ def _imb_cross(hour,gap):
     # A bearish FVG is approached from below and bullish FVG from above.
     # A body touching ANY gap interior disqualifies wick-only.
     if gap.kind=="BULL_CLASSIC_IMB":
-        wick=hour.low<gap.top and hour.high>=gap.bottom
-        body=min(hour.open,hour.close)<gap.top and max(hour.open,hour.close)>=gap.bottom
-        equality=hour.low==gap.top
+        # Wick approach from ABOVE: both open/close on or above top.
+        near=min(hour.open,hour.close)
+        if hour.low<gap.top and near>=gap.top:
+            return "WICK_ONLY"
+        if hour.low==gap.top and near>=gap.top:
+            return "BOUNDARY_ONLY"
+        # Body occupies at least some strict FVG interior.
+        if near<gap.top and max(hour.open,hour.close)>gap.bottom:
+            return "BODY_INTERACTION"
     else:
-        wick=hour.high>gap.bottom and hour.low<=gap.top
-        body=max(hour.open,hour.close)>gap.bottom and min(hour.open,hour.close)<=gap.top
-        equality=hour.high==gap.bottom
-    return ("BODY_INTERACTION" if body else "WICK_ONLY" if wick else
-            "BOUNDARY_ONLY" if equality else "NO_INTERACTION")
+        # Wick approach from BELOW: both open/close on or below bottom.
+        near=max(hour.open,hour.close)
+        if hour.high>gap.bottom and near<=gap.bottom:
+            return "WICK_ONLY"
+        if hour.high==gap.bottom and near<=gap.bottom:
+            return "BOUNDARY_ONLY"
+        if near>gap.bottom and min(hour.open,hour.close)<gap.top:
+            return "BODY_INTERACTION"
+    return "NO_INTERACTION"
 
 def _first_pivot_cross(pivot,hours):
     """Earliest true strict break after pivot is author-unselected but observable."""
