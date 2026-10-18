@@ -1,0 +1,15 @@
+{
+  "a101_record_sha256": "a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec",
+  "adversarial_source_tests_passed": 17,
+  "all_101_ledger_sha_verified": 101,
+  "approved_trades": 0,
+  "author_validated_bos": 0,
+  "c31_evidence_file_byte_hashes_verified": 7,
+  "full_original_45_usdm_zip_refetched": 45,
+  "full_original_539_case_json_equal": true,
+  "original_3m_prior_wick_only_events": 122,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39175901614,
+  "schema": "EMBER_A101_ALL_101_SHA_45_ORIGINAL_ZIP_BOS_SOURCE_V1",
+  "trigger_sha": "c3b578557cb228b04fc97128d33920d7690173dd"
+}
