@@ -1,0 +1,95 @@
+name: MTF A098 — C28 Immutable 1H IMB Evidence Append Only
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a098-c28-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a098-append-exclusively
+  cancel-in-progress: false
+jobs:
+  append-a098-only-after-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require pinned predecessor, original receipt and independent 45-ZIP CI
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess,json
+          b='research/mtf-element-audit-v1/'
+          checks={
+            'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+            'evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+            'evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+            'evidence/c28/C28_INDEPENDENT_RUN_WITNESS.json':'cebf9c9c9e6eae76a10ce73665d6de6be8640b65'}
+          for p,w in checks.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+              assert got==w,(p,got,w)
+          witness=json.load(open(b+'evidence/c28/C28_INDEPENDENT_RUN_WITNESS.json'))
+          assert witness['run_id']==39124089125 and witness['all_cases_exact_json_equal']
+          assert witness['python_versions']==['3.10','3.11','3.12']
+          assert witness['negative_controls_per_python']==22
+          assert witness['original_zip_count']==45 and witness['trade_approvals']==0
+          j=[json.loads(line) for line in open(b+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if line.strip()]
+          assert len(j)==97 and j[-1]['action_id']=='A097'
+          assert j[-1]['record_sha256']=='a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a'
+          print('A098_PRECONDITIONS_C26_C27_C28_GIT_BLOBS_CI_SHA_97_PASS')
+          PY
+      - name: Recheck original 97 entry SHA chain and all source bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a098-original97.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a098-original97.json'))
+          assert x['events']==97 and x['validations_pass']
+          print('A098_PREAPPEND_97_FULL_EVIDENCE_SHA_PASS')
+          PY
+      - name: Append A098 using canonical auditlog with six original-source evidence SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A098 \
+            --cycle B1/C28 \
+            --planned 'Identify academic FTA family semantics from original IMB RB SNR and Context course; independently study only strict source-native classic one-hour three-candle wick-gap formations and prior first-touch geometry without invented RB/SNR, author priority, session, RR, selected BOS or executable trade.' \
+            --executed 'Read original author primary course IMB RB SNR TDA sessions; created isolated classic 1H gap observer and 22 negative source controls. Verified 45 original Binance USD-M Futures ZIP and native 3m reconstruction to 1H, 76800 source 3m bars and 15360 15m Decimal equalities. Independent full pinned JSON C28 replay CI 39124089125 SUCCESS, Python 3.10 3.11 3.12 each with 22 passing negative controls, original C26 C27 receipts immutable and historical as-of prefix equivalence.' \
+            --result 'Among 3840 exact native1h bars across five instruments 646 classic 1H IMB technical zones; among 165 previous research-only C26 singleton cases 10720 repeated preknown-gap relationships, 383 retrospective interval zone overlaps in 133 cases, 366 prior touched overlap relationships and 17 previously untouched overlaps in 16 research cases, 220 prior full-wick traversals. These are overlapping retrospective geometry relations NOT trade or author FTA counts; C26 break close only known at its bar close. RB SNR author structural selection, ranking, valid RR and golden BOS still unproven. Zero approved trades, NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Original source receipt blob ed3aca9384c8e49d07220f04b7d363df92689317 independently fully equal to reloaded original 45 USD-M SHA ZIP JSON in run 39124089125. Three Python versions 22/22 source negative controls each, 539 original parent edges, 165 C26 research-only cases, prior C26/C27 git blobs pinned, 0 author BOS/TP/RB SNR approval, no entry, execution, profitability, target or implied price order.' \
+            --evidence d05/c28_source_fta_inventory.py \
+            --evidence d05/test_c28_source_fta_inventory.py \
+            --evidence tests/probe_c28_original_1h_classic_imb_fta.py \
+            --evidence evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json \
+            --evidence evidence/c28/C28_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C28_1H_CLASSIC_IMB_SOURCE_FTA_FORENSICS.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a098-complete.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a098-complete.json'))
+          assert x['events']==98 and x['validations_pass']
+          print('A098_APPENDED_98_FULL_SHA_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Commit only append-only original action journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A098): independent C28 classic IMB 45-ZIP source-only proof"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
