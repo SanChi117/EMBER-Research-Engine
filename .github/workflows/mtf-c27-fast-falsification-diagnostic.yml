@@ -1,4 +1,4 @@
-name: MTF C27 — Fast Falsification Diagnostic (PAPER)
+name: MTF C27 — Fast Falsification Diagnostic Recheck (PAPER)
 on:
   push:
     branches: [research/academic-engine-recovery-20261015]
