@@ -1,6 +1,6 @@
 # B1/C27 — separate academic 1H target families: original Futures source replay
 
-**Current review status:** source-only acceptance in progress; no author-certified trade, no author BOS golden, no RR rule. PAPER ONLY / NOT_TRADE_READY. Only mark C27 [x] after pinned 45-ZIP repeat and independent A097 SHA journal CI. This report never retroactively revises original C26.
+**Current review status:** independent source proof [39081484753](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081484753) **SUCCESS**: all 45 original ZIP, complete pinned JSON equality, 20 tests across Python 3.10/3.11/3.12. Author BOS/FTA/TP/SL not approved. A097 97/97 SHA journal verification is still required before C27 [x]. PAPER ONLY / NOT_TRADE_READY. This report never retroactively revises original C26.
 
 ## Academic primary-source separation
 
@@ -24,7 +24,7 @@ Original full 45 ZIP and C26 predecessor replay produced 165 source singleton ob
 
 Breakdown of **exact price pair research relationships** from first source replay: BCHUSDT 18/45 singletons (44 calendar-disagreeing), BTCUSDT 1/30 (30), ETHUSDT 11/23 (22), SOLUSDT 68/30 (30), XRPUSDT 80/37 (37). Many pairs may share a pivot or research case. They cannot be interpreted as opportunities, performance or independent positions.
 
-A fast diagnostic GitHub Actions [39081162038](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081162038) initially showed **three failed synthetic tests**: mismatched toy 3m known-at time units, missing explicit incomplete-calendar status, and a non-effective forged SHA choice. All three were corrected (no historical receipts changed), and rerun [39081236947](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081236947) passed all 20. A subsequent full source run [39081225289](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081225289) replayed all 45 ZIP and 20 controls successfully but failed on non-fast-forward `git push` because another GitHub job advanced the same branch concurrently; the runner logged that root cause and retained the negative diagnostic. The original source receipt was separately pinned in the branch (Git blob `d434ae830858fecf5e45cf7ef8ff7db1e627d489`). A separate **independent** full JSON and Python matrix CI is the next admission gate.
+A fast diagnostic GitHub Actions [39081162038](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081162038) initially showed **three failed synthetic tests**: mismatched toy 3m known-at time units, missing explicit incomplete-calendar status, and a non-effective forged SHA choice. All three were corrected (no historical receipts changed), and rerun [39081236947](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081236947) passed all 20. A subsequent full source run [39081225289](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081225289) replayed all 45 ZIP and 20 controls successfully but failed on non-fast-forward `git push` because another GitHub job advanced the same branch concurrently; the runner logged that root cause and retained the negative diagnostic. The original source receipt was separately pinned in the branch (Git blob `d434ae830858fecf5e45cf7ef8ff7db1e627d489`). The separate **independent** [39081484753](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39081484753) full JSON, 45 original ZIP and Python matrix CI passed; verified independent witness Git blob `1869d771bd18ad8534a76cfb03522928fd71dae8`. Remaining acceptance gate is append-only A097 with independent 97/97 SHA+source rerun; no author trade.
 
 ## Adversarial tests
 
@@ -34,7 +34,7 @@ There are **20 controls** in `d05/test_c27_target_families_source.py`: one-pivot
 
 - Original ZIP replay program: `tests/probe_c27_original_1h_target_families.py`; output `evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json`.
 - First source CI: `.github/workflows/mtf-b1-c27-original-target-families.yml`; re-download 45 original USD-M ZIP and compare C26 per-symbol counts, 76,800 original native3m bars, 15,360 exact native15m Decimal OHLCV equalities. Require 165 source-only C26 cases and an explicitly false author-approval state.
-- Second immutable pinned-source CI, then A097 append-only six-source SHA journal and independent 97/97 verification, followed by Python 3.10/3.11/3.12 tests, is REQUIRED before accepting C27. Any failure is documented; no retroactive mutation of original C21–C26 or A001–A096.
+- Second immutable pinned-source CI and Python 3.10/3.11/3.12 tests are **SUCCESS** in run 39081484753. A097 append-only six-source SHA journal and independent 97/97 verification remain REQUIRED before accepting C27. Any failure is documented; no retroactive mutation of original C21–C26 or A001–A096.
 
 ## Academic dependency
 
