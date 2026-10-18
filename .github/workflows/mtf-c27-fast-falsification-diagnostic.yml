@@ -1,0 +1,53 @@
+name: MTF C27 — Fast Falsification Diagnostic (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c27-fast-falsification-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fast-negative-20:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Capture exact original-source 20-test outcome
+        id: negatives
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c27_target_families_source > /tmp/c27-fast.log 2>&1
+      - name: Commit transparent diagnostic including any failure
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          NEG_OUTCOME: ${{ steps.negatives.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c27/diagnostics/C27_FAST_20_NEGATIVE_DIAGNOSTIC.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          txt=pathlib.Path('/tmp/c27-fast.log')
+          log=txt.read_text(errors='replace') if txt.exists() else 'TEST_STEP_NOT_EXECUTED'
+          p.write_text(json.dumps({
+            'schema':'C27_DIAGNOSTIC_UNATTESTED',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'test_status':os.environ['NEG_OUTCOME'],
+            'twenty_tests_pass':os.environ['NEG_OUTCOME']=='success' and 'Ran 20 tests' in log and 'OK' in log[-300:],
+            'log_tail':log[-15000:],
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c27/diagnostics/C27_FAST_20_NEGATIVE_DIAGNOSTIC.json
+          git commit -m "diagnostic(C27): expose exact 20-test output, pass or failure"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
