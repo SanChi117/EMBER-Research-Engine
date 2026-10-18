@@ -1,0 +1,27 @@
+# B1/C29 — 1H RB vs SNR vs MB: source-only causal candle-pair gates
+
+**Current status:** ORIGINAL-SOURCE RESEARCH IN PROGRESS. NOT author-certified RB, SNR, first FTA, TP or trade. No RB/SNR is marked READY. Only C29 24 source negative controls are confirmed by [CI 39125750890](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39125750890) PASS; original 45-ZIP full receipt, independent re-run and A099 journal must pass before C29 research-only [x]. Existing C26/C27/C28 receipts and append-only journal A001–A098 are not modified. PAPER ONLY / NOT_TRADE_READY.
+
+## Verified original academic source wording and separation
+
+| Primary source | Actual required constraints | Not independently specified |
+|---|---|---|
+| [3. Rejection Block.txt](https://drive.google.com/file/d/1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT/view) | Two opposite BUY/SELL candles showing dominant reverse side; RB must raid liquidity **or** test IMB; raid or IMB test **exclusively by wick**, zone marked by wicks. First/second candle raid and IMB variant where RB body must close beyond IMB are illustrated; first true POI test preferred | Specific valid raid pivot/source, exactly which selected wick boundaries, IMB age/mitigation, author positive/negative Futures examples |
+| [5. Support And Resistance .txt](https://drive.google.com/file/d/1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m/view) | Two opposite-color candles, SSL raid or FVG test, **new fully closed candle beyond Buy+Sell level**, then test and reaction (example LONG); unlike RB, raid or FVG interaction **may be through body**; later POI reaction is distinct; MB (no liquidity or FVG interaction) is **weaker and NOT SNR VC** | Exact level for new candle close and chosen source POI boundaries, timing/version of SELL counterpart, liquidity quality, author priority |
+| [Context & TDA](https://drive.google.com/file/d/14KFoZCWoJEue_WmlOyXg0sBZoXsozP2M/view) | IMB, RB, fractal BSL/SSL and SNR are distinct families of potential FTA zones, within same or lower timeframe | Ranking when several potential obstacles overlap, numeric minimum RR, expiration of FTA |
+| [Imbalance](https://drive.google.com/file/d/1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN/view) | Classic three-candle wick gap, preferred **first POI test** | Selected source-first POI test/volume, tick ordering and fill |
+| [4. Entry By BOS.txt](https://drive.google.com/file/d/1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO/view) | Higher TF raid, lower TF BOS, example opposite liquidity target, FTA barrier may invalidate RR | No certified precise 3m BOS pivot, actual historical Futures labels, timezone/DST, stop buffer |
+
+## What has been built—and what has NOT
+
+New isolated module `d05/c29_rb_snr_source_guards.py` observes only native-source **adjacent closed non-DOJI opposite-direction 1H candle pairs**; each 1H source is based on exactly 20 original closed 3m rows. `known_at` for pair is the **end of second hour**. The optional **third fully closed hour** is checked for an even stricter purely technical price condition: closing beyond the entire pair's outer wick envelope. This is **not** the author-defined SNR level; it is intentionally called `technical_extreme_envelope_follow_through`, cannot approve SNR and cannot serve as author TP or FTA. When working on a research 3m BOS bar, all pair/third timestamps must be known **at break BAR START**, and the later BOS CLOSE is never imported for these checks.
+
+A real RB would additionally need source-labeled wick-only sweep or IMB interaction; SNR would additionally need a separately certified liquidity/FVG and author candle close level; MB cannot be assigned SNR VC. The observed pair alone lacks these. `structural_gates` returns *explicit* `NEEDS_AUTHOR_...` and zero accepted cases even when provided freeform user-defined evidence hints. No general OB shortcut, no 1H FVG automatically relabeled RB, no automated first POI test from naive pair wick envelope, no event-level RB/SNR author trade.
+
+C29 independent negative controls: 24 adversarial tests for BUY/SELL vs SELL/BUY, DOJI/same direction exclusions, third-hour future leakage, equality and non-author outer-bound proxy, false author `READY`, faked evidence hints, MB as false SNR, source-row tamper/NaN, native source physical-prefix equivalence. First [CI 39125750890](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39125750890) PASS 24/24.
+
+## What original source replay will prove
+
+`tests/probe_c29_original_1h_rb_snr_source_gate.py` must reload the same 45 SHA-attested original Binance USD-M ZIP, 76,800 original native3m bars, 15,360 native 15m Decimal equalities, 3,840 closed native 1H hours across five instruments. It must preserve 539 C21B source parent edges and 165 C24/C28 *research-only* singleton cases, and independently verify physically truncated prefixes and all C26/C27/C28 exact Git blobs. Counts are **overlapping two-candle pattern observations**, not author RB/SNR frequency, FTA effectiveness, trading setups, opportunity quality, backtest win rates, portfolio PnL or cause for execution.
+
+No C29 source research [x] until first original JSON source, independent second full JSON source comparison, Python 3.10/3.11/3.12 matrix, immutable six-file A099 99/99 SHA and independent rerun. Missing source labels must remain `NEEDS_AUTHOR_RB_SNR_WICK_RAID_AND_ZONE_LABELS` and `AUTHOR_FIRST_FTA_PRIORITY_UNKNOWN` even if all tests pass. Do not silently infer class priority because an unverified geometric zone appears to offer larger reward. B1 macro [~], 29/40 count unchanged, PAPER ONLY.
