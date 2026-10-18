@@ -1,0 +1,19 @@
+{
+  "author_approved_trades": 0,
+  "full_per_case_json_exact_equal": true,
+  "negative_controls_per_version": 20,
+  "original_native15m_decimal_equalities": 15360,
+  "original_native3m_bars": 76800,
+  "original_usdm_zip": 45,
+  "python_versions_passed": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39081484753,
+  "schema": "EMBER_C27_INDEPENDENT_SOURCE_MATRIX_V1",
+  "source_receipt_git_blob": "d434ae830858fecf5e45cf7ef8ff7db1e627d489",
+  "source_singleton_cases": 165,
+  "trigger_commit": "13df9075412b46fecdd890ad57d2bf416773ffdf"
+}
