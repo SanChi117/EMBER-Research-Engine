@@ -1,0 +1,99 @@
+name: MTF A099 — Append C29 RB/SNR Source Audit Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a099-c29-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a099-append-exclusively
+  cancel-in-progress: false
+jobs:
+  after-independent-source-a099:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require original C26 C27 C28 C29 Git receipts and independent SUCCESS
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess,json
+          b='research/mtf-element-audit-v1/'
+          pins={
+            'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e51320e8f4baaad85cfd0be7c0a9',
+          }
+          pins={
+            'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+            'evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+            'evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+            'evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+            'evidence/c29/C29_INDEPENDENT_RUN_WITNESS.json':'0592e15c08e561503bae470c10a5c22de7550059'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+              assert got==w,(p,got,w)
+          witness=json.load(open(b+'evidence/c29/C29_INDEPENDENT_RUN_WITNESS.json'))
+          assert witness['run_id']==39125951806 and witness['all_json_case_evidence_equal']
+          assert witness['python_matrix']==['3.10','3.11','3.12']
+          assert witness['negative_controls_per_version']==24
+          assert witness['independently_refetched_zip']==45 and witness['author_rb_snr_approved']==0
+          j=[json.loads(line) for line in open(b+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if line.strip()]
+          assert len(j)==98 and j[-1]['action_id']=='A098'
+          assert j[-1]['record_sha256']=='292eece6faea4de832b825d0b76c280932d5ece14bcb37bfaa3e1abbf6bbcddc'
+          print('A099_PRECONDITIONS_PINNED_C29_45ZIP_SOURCE_AND_A098_98_SHA_PASS')
+          PY
+      - name: Verify 98 previous append-only hash journal records and all source bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a099-original.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a099-original.json'))
+          assert x['events']==98 and x['validations_pass']
+          print('A099_PREVIOUS_FULL_98_SHA_CHAIN_PASS')
+          PY
+      - name: Append immutable A099 with six new source evidence SHA256
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A099 \
+            --cycle B1/C29 \
+            --planned 'Read original academic RB SNR FTA lessons, reject candle-color-pair proxies as author certified RB SNR MB or first FTA, and test necessary causal 1H event prerequisites without inventing raid wick source, SNR settled zone, author BOS target, RR or SL.' \
+            --executed 'Read primary Google Drive Rejection Block Support and Resistance and Context source. Created isolated read-only native 1H adjacent opposite-candle-pair observer with optional later fully closed third 1H technical outer-envelope follow-through, 24 adversarial tests and source-gated unknown RB SNR MB POI statuses. Reproduced 45 SHA-checked original Binance USD-M Futures ZIP, 76800 native3m rows, 15360 native15m Decimal equalities and 3840 source hours. Independently repeated entire pinned JSON and Python 3.10 3.11 3.12 negative tests via CI 39125951806 SUCCESS, source-hash lineage and physically truncated prefix preserved.' \
+            --result '1989 technically opposite 1H candle pairs, 1988 with completed later hour, 403 strict whole wick-envelope third-hour close-through proxy observations, NOT author SNR. Across 165 existing source-only C26 singleton cases 34348 repeated color-pair history edges and 6728 repeated third-hour technical follow-through edges. All 165 have such raw observations, confirming pair counts are not an author-quality trade discriminant. Author positive RB SNR examples 0, selected first FTA 0, approved trades 0. NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'C29 complete immutable source JSON Git blob abd68cb7cb86087c83423d16e9bbdd2cb344224c independently reloaded through 45 original USD-M ZIP with full per-case JSON equality, CI 39125951806 all five jobs SUCCESS incl 24 adverse tests each on 3.10 3.11 3.12. Previous C26 C27 C28 Git blobs and A098 record SHA pinned. False RB wick raid, generic SNR settlement, MB volume confirmation, first POI test, author FTA priority, selected 3m BOS and trade approval always refused.' \
+            --evidence d05/c29_rb_snr_source_guards.py \
+            --evidence d05/test_c29_rb_snr_source_guards.py \
+            --evidence tests/probe_c29_original_1h_rb_snr_source_gate.py \
+            --evidence evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json \
+            --evidence evidence/c29/C29_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C29_RB_SNR_SOURCE_GATE_FORENSICS.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a099-updated.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a099-updated.json'))
+          assert r['events']==99 and r['validations_pass']
+          print('A099_APPENDED_99_SOURCE_EVIDENCE_SHA_PASS')
+          PY
+      - name: Commit ONLY canonical append-only journal change
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A099): append independently source-verified non-RB/SNR 45 ZIP negative study"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
