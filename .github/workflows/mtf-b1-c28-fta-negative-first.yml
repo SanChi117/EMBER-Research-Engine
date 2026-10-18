@@ -1,0 +1,64 @@
+name: MTF B1 C28 — Native 1H IMB Synthetic Falsification (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c28-fta-negative-first.yml'
+      - 'research/mtf-element-audit-v1/d05/c28_source_fta_inventory.py'
+      - 'research/mtf-element-audit-v1/d05/test_c28_source_fta_inventory.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c28-negative-test-falsification-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-falsification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute full 22 adversarial C28 native-source controls
+        id: tests
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c28_source_fta_inventory > /tmp/c28-negative-test.log 2>&1
+      - name: Store exact pass or failure without pretending acceptance
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c28/diagnostics/C28_NEGATIVE_TESTS.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          f=pathlib.Path('/tmp/c28-negative-test.log')
+          log=f.read_text(errors='replace') if f.exists() else 'NO_TEST_LOG'
+          passed=os.environ['OUTCOME']=='success' and 'Ran 22 tests' in log and 'OK' in log[-500:]
+          p.write_text(json.dumps({
+            'schema':'C28_NEGATIVE_DIAGNOSTIC_UNATTESTED',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_commit':os.environ['HEAD_SHA'],
+            'actual_test_outcome':os.environ['OUTCOME'],
+            'all_22_pass':passed,
+            'log_tail':log[-14000:],
+            'author_trades_approved':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c28/diagnostics/C28_NEGATIVE_TESTS.json
+          git commit -m "diagnostic(C28): 22-source negative controls actual outcome"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Fail CI if any adversarial source control failed
+        if: steps.tests.outcome != 'success'
+        run: exit 1
