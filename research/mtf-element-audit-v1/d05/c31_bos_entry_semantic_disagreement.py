@@ -33,6 +33,7 @@ class BOSWitness:
     first_earlier_wick_cross_source_row_id:str|None
     earlier_wick_cross_count:int
     earlier_wick_without_confirmed_bos_count:int
+    earlier_close_beyond_bos_level_count:int
     lag_raid_confirmed_to_break_minutes:int
     preceding_calendar_day_hypotheses:tuple[tuple[str,bool],...]
     academic_bos_pivot_status:str="AUTHOR_SELECTED_BOS_PIVOT_UNKNOWN"
@@ -51,6 +52,7 @@ class SourceAudit:
     edges_with_prior_strict_wick_cross:int
     prior_strict_wick_cross_observations:int
     edges_with_prior_wick_without_close_confirmation:int
+    edges_with_prior_closed_beyond_selected_swing:int
     break_at_raid_confirmation_hour_count:int
     break_later_than_3h_after_raid_confirmation:int
     previous_calendar_day_hypotheses:tuple[tuple[str,int],...]
@@ -71,6 +73,7 @@ def _prior_first_wicks(event,rows):
         raise ValueError("C31_RESEARCH_SWING_NOT_KNOWN_BEFORE_BREAK")
     previous=[]
     missed=[]
+    closed=[]
     last=-1
     for x in rows:
         if x.start_ms>=event.break_start_ms:break
@@ -82,10 +85,11 @@ def _prior_first_wicks(event,rows):
             raise ValueError("C31_FUTURE_PREBREAK_BAR")
         wick=_strict_side(event.side,x.low if event.side=="SHORT" else x.high,event.swing.level)
         close=_strict_side(event.side,x.close,event.swing.level)
+        if close:closed.append(x)
         if wick:
             previous.append(x)
             if not close:missed.append(x)
-    return tuple(previous),tuple(missed)
+    return tuple(previous),tuple(missed),tuple(closed)
 
 def _previous_calendar_day(event,zone):
     tz=ZoneInfo(zone)
@@ -126,7 +130,7 @@ def audit_single_bos(event,rows):
         or (event.side=="SHORT" and event.raid_extreme<=event.raid_level)
         or (event.side=="LONG" and event.raid_extreme>=event.raid_level)):
         raise ValueError("C31_NO_STRICT_BOS_OR_WICK_RAID_GEOMETRY")
-    prior,missed=_prior_first_wicks(event,rows)
+    prior,missed,closed=_prior_first_wicks(event,rows)
     first=prior[0] if prior else None
     lag=(event.break_start_ms-event.raid_confirmed_ms)//60000
     return BOSWitness(
@@ -136,7 +140,7 @@ def audit_single_bos(event,rows):
         event.source_original_3m_row_id,event.side,str(event.raid_level),
         str(event.raid_extreme),True,
         first.start_ms if first else None,first.raw_id if first else None,
-        len(prior),len(missed),lag,
+        len(prior),len(missed),len(closed),lag,
         tuple((zone,_previous_calendar_day(event,zone)) for zone in ZONES))
 
 def inspect_c31_bos(source,*,as_of_ms):
@@ -161,5 +165,6 @@ def inspect_c31_bos(source,*,as_of_ms):
         sum(x.earlier_wick_cross_count>0 for x in result),
         sum(x.earlier_wick_cross_count for x in result),
         sum(x.earlier_wick_without_confirmed_bos_count>0 for x in result),
+        sum(x.earlier_close_beyond_bos_level_count>0 for x in result),
         n0,sum(x.lag_raid_confirmed_to_break_minutes>180 for x in result),
         zones,result)
