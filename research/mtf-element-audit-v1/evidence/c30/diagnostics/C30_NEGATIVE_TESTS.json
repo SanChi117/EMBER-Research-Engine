@@ -1,0 +1,10 @@
+{
+  "all_25_pass": false,
+  "author_rb_snr_approved": 0,
+  "log_tail": "test_c30_causal_wick_liquidity_imb (unittest.loader._FailedTest.test_c30_causal_wick_liquidity_imb) ... ERROR\n\n======================================================================\nERROR: test_c30_causal_wick_liquidity_imb (unittest.loader._FailedTest.test_c30_causal_wick_liquidity_imb)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_c30_causal_wick_liquidity_imb\nTraceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/unittest/loader.py\", line 162, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/d05/test_c30_causal_wick_liquidity_imb.py\", line 8, in <module>\n    from c30_causal_wick_liquidity_imb import (\nImportError: cannot import name 'HOUR' from 'c30_causal_wick_liquidity_imb' (/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/d05/c30_causal_wick_liquidity_imb.py)\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39162669109,
+  "schema": "EMBER_C30_SOURCE_NEGATIVE_TEST_DIAGNOSTIC",
+  "test_outcome": "failure",
+  "trigger_sha": "1eb9ed3b415b74c1129e7c3a78a9ffa8dd83e5da"
+}
