@@ -1,0 +1,114 @@
+name: MTF A098 — Independent 98 SHA C28 Original 45 ZIP Proof
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a098-c28-independent-98-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a098-independent-98-source
+  cancel-in-progress: false
+jobs:
+  independent-full-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Re-verify 98 original append-only SHA entries and six C28 source files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a098-independent-audit.json
+          python - <<'PY'
+          import json
+          result=json.load(open('/tmp/a098-independent-audit.json'))
+          assert result['events']>=98 and result['validations_pass']
+          js=[json.loads(s) for s in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert len(js)>=98
+          assert js[96]['seq']==97 and js[96]['action_id']=='A097'
+          assert js[97]['seq']==98 and js[97]['action_id']=='A098'
+          assert js[97]['prev_sha256']=='a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a'
+          assert js[97]['record_sha256']=='292eece6faea4de832b825d0b76c280932d5ece14bcb37bfaa3e1abbf6bbcddc'
+          assert js[97]['cycle_result']=='PASSED' and len(js[97]['evidence'])==6
+          print('A098_98_SHA_AND_SIX_C28_EVIDENCE_SOURCE_BYTES_INDEPENDENT_PASS')
+          PY
+      - name: Check original frozen source C26 C27 C28 git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+           'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+           'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+           'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+           'research/mtf-element-audit-v1/evidence/c28/C28_INDEPENDENT_RUN_WITNESS.json':'cebf9c9c9e6eae76a10ce73665d6de6be8640b65'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==w,(p,got,w)
+          print('A098_ORIGINAL_SOURCE_GIT_BLOBS_NO_RETROACTIVE_MUTATION')
+          PY
+      - name: Recheck all 22 negative IMB FTA source guards
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c28_source_fta_inventory 2>&1 | tee /tmp/a098-negatives.log
+          grep -q 'Ran 22 tests' /tmp/a098-negatives.log
+      - name: Independently refetch all 45 native USD-M ZIP and compare FULL JSON again
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c28_original_1h_classic_imb_fta.py /tmp/a098-independent-source.json 2>&1 | tee /tmp/a098-source.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json'))
+          b=json.load(open('/tmp/a098-independent-source.json'))
+          assert a==b,'A098_ORIGINAL_ALL_45_ZIP_EXACT_FULL_JSON_DRIFT'
+          assert a['original_archive_count']==45 and a['original_source_3m_bars']==76800
+          assert a['original_native15m_decimal_equalities']==15360
+          t=a['totals']
+          assert t['original_parent_edges']==539 and t['research_single_cases']==165
+          assert t['full_source_1h_classic_imb']==646 and t['case_overlap_imb_edges']==383
+          assert t['cases_with_overlap']==133 and t['cases_with_previously_untouched_overlap']==16
+          assert t['case_overlap_previously_touched_edges']==366
+          assert a['approved_trades']==0 and a['author_selected_tp']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('A098_INDEPENDENT_45_ORIGINAL_ZIP_FULL_JSON_FTA_UNKNOWN_SUCCESS')
+          PY
+      - name: Freeze A098 final independent source proof and immutable 98 SHA tip
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c28/A098_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo "Existing verified source witness"; exit 0; fi
+          python - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c28/A098_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A098_98_SHA_45_ORIGINAL_ZIP_INDEPENDENT_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_commit':os.environ['HEAD_SHA'],
+            'a098_record_sha256':'292eece6faea4de832b825d0b76c280932d5ece14bcb37bfaa3e1abbf6bbcddc',
+            'canonical_entries_sha_verified':98,
+            'six_c28_evidence_file_bytes_verified':True,
+            'reloaded_binance_original_zip':45,
+            'full_json_pinned_exact_equal':True,
+            'negative_tests':22,
+            'approved_trades':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A098): independent 98 SHA and original 45 ZIP full C28 forensic replay"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
