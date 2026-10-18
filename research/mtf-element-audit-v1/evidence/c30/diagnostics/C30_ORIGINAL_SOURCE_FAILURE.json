@@ -1,0 +1,6 @@
+{
+  "accepted": false,
+  "log": "Traceback (most recent call last):\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py\", line 107, in <module>\n    if __name__==\"__main__\":main(sys.argv[1] if len(sys.argv)>1 else None)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py\", line 35, in main\n    assert inspect_c30(source,as_of_ms=cut)==inspect_c30(trunc,as_of_ms=cut),\"C30_SOURCE_PHYSICAL_PREFIX_CAUSAL_DRIFT\"\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/d05/c30_causal_wick_liquidity_imb.py\", line 238, in inspect_c30\n    brief=[{\n          ^^\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/d05/c30_causal_wick_liquidity_imb.py\", line 239, in <listcomp>\n    \"ms\":p.second_ms,\"liquidity_wick\":p.distinct_liquidity_wick_interactions,\n         ^^^^^^^^^^^\nAttributeError: 'SourcePairEvidence' object has no attribute 'second_ms'\n",
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39162843373
+}
