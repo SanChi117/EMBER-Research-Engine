@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/mtf-c30-independent-original-source-matrix.yml'
       - 'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json'
+      - 'research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py'
   workflow_dispatch:
 permissions:
   contents: write
