@@ -102,7 +102,10 @@ def main(output=None):
         p.write_text(json.dumps(out,sort_keys=True,ensure_ascii=False,indent=2)+"\n",encoding="utf8")
     if pin.exists():
         frozen=json.loads(pin.read_text(encoding="utf8"))
-        if frozen!=out:
+        # Python asdict() preserves nested tuple containers; JSON has ONLY arrays.
+        # Compare the actual JSON wire schema to avoid false tuple-vs-list drift.
+        canonical=json.loads(json.dumps(out,sort_keys=True,ensure_ascii=False))
+        if frozen!=canonical:
             def first_diff(a,b,path="root"):
                 if type(a)!=type(b):return (path,"TYPE",type(a).__name__,type(b).__name__)
                 if isinstance(a,dict):
@@ -115,7 +118,7 @@ def main(output=None):
                     for i,(x,y) in enumerate(zip(a,b)):
                         if x!=y:return first_diff(x,y,path+"["+str(i)+"]")
                 return (path,"VALUE",str(a)[:180],str(b)[:180])
-            diff=first_diff(frozen,out)
+            diff=first_diff(frozen,canonical)
             print("C30_PINNED_JSON_REPLAY_FIRST_DIFFERENCE",json.dumps(diff,ensure_ascii=False),flush=True)
             raise AssertionError("C30_PINNED_FULL_SOURCE_JSON_DRIFT")
     print(json.dumps({"totals":totals,"approved_trades":0,"readiness":"NOT_TRADE_READY"},sort_keys=True),flush=True)
