@@ -1,6 +1,6 @@
 # B1/C31 — 539 original source 3m BOS: first wick touch vs later closed break
 
-**Scope:** research-only PRICE TIMING COMPARISON, not a new entry strategy, not author-approved BOS/FTA/TP, **PAPER ONLY / NOT_TRADE_READY**. First 45 original source receipt obtained; independent full JSON/three Python-version matrix and A101 chain check pending.
+**Scope:** research-only PRICE TIMING COMPARISON, not a new entry strategy, not author-approved BOS/FTA/TP, **PAPER ONLY / NOT_TRADE_READY**. Original 45-archive source, full pinned 539-case JSON, and 17 negatives on Python 3.10, 3.11 and 3.12 independently verified by [CI 39175648272](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39175648272) **SUCCESS**. Independent source witness Git blob `6116275a51459baee80efb91e3ddcd9aa148344e`. A101 append-only SHA and final independent 101/101 gate remain pending.
 
 ## Primary academic course
 
@@ -39,4 +39,4 @@ Pinned `evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json`, immutable Git
 
 Alternate previous-calendar-day counts differ under UTC, Kyiv, London and do not establish course timezone. Do not import public ICT fixed 10:00 New York killzone as academy's 09:00–17:00 IANA time.
 
-**Admission gate:** first source receipt and negative tests complete. Before C31 source-only [x], require independent re-download 45 original ZIP and complete JSON equality, Python 3.10/3.11/3.12 17 test matrix, append-only seven-file A101 SHA, independently verified 101/101 journal, map update. **Main trade readiness STILL BLOCKED by author BOS/FTA goldens and source Notion.**
+**Admission gate:** frozen original source and [independent 45-ZIP, exact full JSON and Python 3.10/3.11/3.12 matrix 39175648272](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39175648272) SUCCESS. Before C31 source-only [x], require append-only seven-file A101 SHA, independently verified 101/101 journal, map update. **Main trade readiness STILL BLOCKED by author BOS/FTA goldens and source Notion.**
