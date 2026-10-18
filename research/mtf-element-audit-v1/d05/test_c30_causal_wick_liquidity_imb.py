@@ -79,7 +79,7 @@ class C30SourceCausalControls(unittest.TestCase):
                h(2,op="102",close="99",high="109"))
         pp=pivot("BSL",price="110",known=HOUR)
         result=source_pair_wick_evidence(hours,(pp,),())
-        pair=next(p for p in result if p.first_ms==HOUR)
+        pair=next(p for p in result if p.pair_first_ms==HOUR)
         self.assertGreater(pair.first_cross_liquidity_wick_interactions,0)
         self.assertIn("NEEDS_AUTHOR",pair.academic_rb_status)
         self.assertEqual(pair.readiness,"NOT_TRADE_READY")
@@ -89,7 +89,7 @@ class C30SourceCausalControls(unittest.TestCase):
                h(3,op="104",close="100",high="110",low="98"))
         g=gap(known=HOUR)
         result=source_pair_wick_evidence(hours,(),(g,))
-        p=next(p for p in result if p.first_ms==0)
+        p=next(p for p in result if p.pair_first_ms==0)
         self.assertEqual(p.imb_wick_first_tests,1)
         self.assertEqual(p.academic_snr_status,"NEEDS_AUTHOR_SNR_LEVEL_THIRD_CLOSE_AND_FIRST_TEST")
     def test_second_touch_not_relabelled_first(self):
