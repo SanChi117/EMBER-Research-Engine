@@ -1,0 +1,15 @@
+{
+  "action_sha256": "a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a",
+  "approved_trades": 0,
+  "complete_pinned_json_equal": true,
+  "negative_controls": 20,
+  "new_sha256_evidence_files": 6,
+  "original_native15m_equalities": 15360,
+  "original_usdm_zip": 45,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39081762788,
+  "schema": "EMBER_A097_FULL_97_SHA_C27_45ZIP_INDEPENDENT_V1",
+  "source_native3m_bars": 76800,
+  "trigger_commit": "623e8b6719fec0043eca70ca07a99bf118e6a831",
+  "verified_actions": 97
+}
