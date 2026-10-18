@@ -1,0 +1,7 @@
+{
+  "exact_log_tail": "BCHUSDT first-liquidity-pair witnesses 149 first-imb-pair witnesses 70\nBTCUSDT first-liquidity-pair witnesses 143 first-imb-pair witnesses 64\nETHUSDT first-liquidity-pair witnesses 138 first-imb-pair witnesses 64\nSOLUSDT first-liquidity-pair witnesses 133 first-imb-pair witnesses 67\nXRPUSDT first-liquidity-pair witnesses 127 first-imb-pair witnesses 65\nC30_PINNED_JSON_REPLAY_FIRST_DIFFERENCE [\"root.markets[0].cases[0].latest_two_unranked_source_pairs[0].selected_technical_examples\", \"TYPE\", \"list\", \"tuple\"]\nTraceback (most recent call last):\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py\", line 123, in <module>\n    if __name__==\"__main__\":main(sys.argv[1] if len(sys.argv)>1 else None)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/EMBER-Research-Engine/EMBER-Research-Engine/research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py\", line 120, in main\n    raise AssertionError(\"C30_PINNED_FULL_SOURCE_JSON_DRIFT\")\nAssertionError: C30_PINNED_FULL_SOURCE_JSON_DRIFT\n",
+  "independent_full_json_pass": false,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39163925676,
+  "trigger_sha": "a514204be04218cee208ba8ea925df7e30ab17b0"
+}
