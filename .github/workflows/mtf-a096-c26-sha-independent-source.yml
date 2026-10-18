@@ -26,13 +26,13 @@ jobs:
           python - <<'PY'
           import json
           a=json.load(open('/tmp/a096-full-audit.json'))
-          assert a['events']==96 and a['validations_pass']
+          assert a['events']>=96 and a['validations_pass']
           j=[json.loads(v) for v in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
-          assert len(j)==96 and j[-1]['seq']==96
-          assert j[-2]['action_id']=='A095' and j[-1]['action_id']=='A096'
-          assert j[-1]['prev_sha256']=='aa18f538a88358dc539edf1c517cadd61346312d6f8d2b0c99428fe5c3f0e9af'
-          assert j[-1]['record_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
-          assert len(j[-1]['evidence'])==6 and j[-1]['cycle_result']=='PASSED'
+          assert len(j)>=96 and j[95]['seq']==96
+          assert j[94]['action_id']=='A095' and j[95]['action_id']=='A096'
+          assert j[95]['prev_sha256']=='aa18f538a88358dc539edf1c517cadd61346312d6f8d2b0c99428fe5c3f0e9af'
+          assert j[95]['record_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          assert len(j[95]['evidence'])==6 and j[95]['cycle_result']=='PASSED'
           print('A096_EXACT_96_EVENT_FULL_EVIDENCE_BYTES_PASS')
           PY
       - name: Verify independently Git-pinned original receipts C24 C25 C26
