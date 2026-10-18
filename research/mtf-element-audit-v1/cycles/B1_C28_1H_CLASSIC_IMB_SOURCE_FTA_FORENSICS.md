@@ -1,6 +1,6 @@
 # B1/C28 — source-native classic 1H IMB potential FTA (source forensic)
 
-**PAPER ONLY · NOT_TRADE_READY · no author-selected FTA · no author-BOS or live order.** This is a read-only standalone original source experiment. Historical C26 and C27 and ledger A001–A097 remain unchanged. A098 acceptance requires independent full-pinned JSON replay and SHA journal proof.
+**PAPER ONLY · NOT_TRADE_READY · no author-selected FTA · no author-BOS or live order.** Technical original source C28 independently verified by [CI 39124089125](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39124089125): 45 original ZIP replay, exact full JSON parity, 22 source controls on Python 3.10/3.11/3.12. A098 final ledger gate not yet complete. This is a read-only standalone original source experiment. Historical C26 and C27 and ledger A001–A097 remain unchanged. Independent full-pinned JSON proof already passed; A098 append-only SHA journal and independent 98-event proof are still required.
 
 ## Primary author-source evidence recovered (Google Drive)
 
@@ -46,4 +46,4 @@ The original ZIP replay is `tests/probe_c28_original_1h_classic_imb_fta.py`; fro
 
 **NOT source-certified:** full FTA taxonomy / intrafamily selection (RB and SNR structural conditions), author priority IMB-vs-RB-vs-SNR-vs-fractal, chosen 1H EQL, author liquidity freshness/session timezone/DST, RR cutoff, 3m BOS pivot goldens, SL buffer or trade execution. Accordingly B1 macro stays [~] and Routes E/G/H blocked. No paper or live order.
 
-**C28 can be marked source [x] only after:** complete original 45-ZIP replay, immutable full JSON pin, independent second replay and Python 3.10/3.11/3.12 negative matrix, six new evidence SHA with A098, independent 98/98 ledger verification, main project map update. Until then, [~].
+**C28 source completion gate:** original 45-ZIP replay, immutable full JSON receipt and independent second replay with Python 3.10/3.11/3.12 negative matrix PASSED in run 39124089125. Six new evidence SHA in A098, independent 98/98 ledger verification and map update are still REQUIRED before [x].
