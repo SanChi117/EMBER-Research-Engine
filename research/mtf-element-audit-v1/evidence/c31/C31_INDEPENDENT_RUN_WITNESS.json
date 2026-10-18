@@ -1,0 +1,19 @@
+{
+  "author_instructor_goldens": 0,
+  "earlier_wick_only_proxy_events": 122,
+  "full_539_cases_json_equal": true,
+  "fully_reread_original_zip": 45,
+  "negative_tests_per_python": 17,
+  "original_receipt_git_blob": "38276d6d8a77942101a041d3605d72f69a7845d1",
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39175648272,
+  "schema": "EMBER_C31_BOS_ORIGINAL_45ZIP_CROSS_VS_CLOSE_MATRIX_V1",
+  "source_native3m_bars": 76800,
+  "trade_approvals": 0,
+  "trigger_sha": "aeaa8cba3cbf980f2f25a05b8fbfaf8737e55b45"
+}
