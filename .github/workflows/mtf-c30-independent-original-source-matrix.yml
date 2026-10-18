@@ -131,3 +131,40 @@ jobs:
           git commit -m "evidence(C30): independent 45 original ZIP causal wick-IMB and 3 Python 25-test matrix"
           git pull --rebase origin research/academic-engine-recovery-20261015
           git push origin HEAD:research/academic-engine-recovery-20261015
+
+  failed-gate-diagnostic:
+    needs: [python-matrix,original-independent-source,independently-pinned-source-witness]
+    if: ${{ always() && (needs.python-matrix.result != 'success' || needs.original-independent-source.result != 'success' || needs.independently-pinned-source-witness.result != 'success') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Preserve independent gate failure reasons and run id
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          MATRIX_RESULT: ${{ needs.python-matrix.result }}
+          SOURCE_RESULT: ${{ needs.original-independent-source.result }}
+          WITNESS_RESULT: ${{ needs.independently-pinned-source-witness.result }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c30/diagnostics/C30_INDEPENDENT_FAILED_STAGE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'python_matrix':os.environ['MATRIX_RESULT'],
+            'original_45zip_json_replay':os.environ['SOURCE_RESULT'],
+            'independent_witness':os.environ['WITNESS_RESULT'],
+            'accepted':False,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c30/diagnostics/C30_INDEPENDENT_FAILED_STAGE.json
+          git commit -m "diagnostic(C30): persist failed stage in independent 45 ZIP source matrix"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
