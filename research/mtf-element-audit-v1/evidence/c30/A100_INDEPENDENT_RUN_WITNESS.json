@@ -1,0 +1,14 @@
+{
+  "A100_record_sha256": "c45d5460376793f13ba17381b9d9da3fa6eb2226fc6824b9eecfbcdc750e7404",
+  "author_rb_snr_fta_bos_approved": 0,
+  "binance_original_zip_refetched": 45,
+  "c30_new_evidence_file_sha256_verified": 6,
+  "complete_pinned_json_equal": true,
+  "native3m_original_rows": 76800,
+  "negative_source_controls": 25,
+  "original_100_sha_records_verified": 100,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39164335165,
+  "schema": "EMBER_A100_100_SHA_45_ORIGINAL_ZIP_CAUSAL_WICK_V1",
+  "trigger_commit_sha": "31216241b158ee060b6fbbc03cf81ba1e7be15de"
+}
