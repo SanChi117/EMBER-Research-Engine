@@ -17,7 +17,7 @@ def pivot(kind,price,center,known):
     return HourFractal(kind,D(price),center,known,("original-"+str(center),))
 
 def row(ms,high="99",low="90",close="95"):
-    return NS(start_ms=ms,known_ms=ms+THREE,high=D(high),low=D(low),
+    return NS(start_ms=ms,known_ms=ms+3,high=D(high),low=D(low),
               close=D(close),raw_id="original-"+str(ms))
 
 def hours_for(start,count=48):
@@ -128,7 +128,7 @@ class C27SourceFamilyNegativeControls(unittest.TestCase):
             inspect_c27(forged,as_of_ms=forged.as_of_ms)
     def test_original_source_sha_tampering_rejected(self):
         source=make3()
-        forged=replace(source,original_zip_shas=("a"*64,)+source.original_zip_shas[1:])
+        forged=replace(source,original_zip_shas=("0"*64,)+source.original_zip_shas[1:])
         with self.assertRaisesRegex(ValueError,"ALTERED_ORIGINAL_NATIVE3M_BAR"):
             inspect_c27(forged,as_of_ms=forged.as_of_ms)
 
