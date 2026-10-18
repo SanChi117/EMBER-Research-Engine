@@ -27,6 +27,19 @@
 
 `d05/test_c28_source_fta_inventory.py` contains 22 adversarial controls: bullish/bearish geometry, equality, source row integrity, partial/noncontiguous hours, original price NaN, first-touch/full traverse, future touch/no-lookahead, price-side and strict interval overlap, tamper and false READY, independently truncated native source equivalence and zero approved trades.
 
+## Original 45-ZIP technical price findings (FIRST PINNED RECEIPT)
+
+First source-native replay produced a pinned JSON receipt at `evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json` (Git blob `ed3aca9384c8e49d07220f04b7d363df92689317`), backed by 45 original SHA-checked Binance Futures USD-M ZIP, 76,800 original closed 3m bars, 15,360 native 15m decimal OHLCV equalities and 3,840 reconstructed 1H bars. On five symbols, the 1H classic three-candle wick-gap observer recorded **646** gap formations. On 165 previous C26 technical singleton cases, there were **10,720 repeated event-to-preknown-gap relationships** (not independent IMB), and **383** positive-width intersections between gap zones and the *retrospective* research entry-close → historic nearest opposing 1H fractal interval; **133/165** cases had at least one intersecting gap. Of 383 intersections, **366** had some earlier original3m wick touch; **220** had a recorded prior full-wick-range traversal; **17** had no earlier wick touch, represented in **16** research cases. Same price gap may be referenced in multiple cases; do NOT count the 383 as distinct trade opportunities.
+
+Per-market independently reproducible gap counts (full 32d original source):
+- BCHUSDT 139 1H gaps, 120 interval overlap relations in 39/45 research cases
+- BTCUSDT 123 gaps, 61 overlaps in 24/30 cases
+- ETHUSDT 126 gaps, 74 overlaps in 20/23 cases
+- SOLUSDT 126 gaps, 50 overlaps in 19/30 cases
+- XRPUSDT 132 gaps, 78 overlaps in 31/37 cases
+
+**Adversarial interpretation:** A gap passing strict 1H price geometry does NOT mean it would be the instructor's first problem zone, OB, SNR, RB, trade target or entry filter. Even the retrospective overlap interval could not have been known before the BOS break bar closes, and C26 nearest historic 1H fractal itself was already crossed in 137/165 cases. Thus there is no portfolio, realized trade, expectancy, RR or author acceptance inference. The broad lesson requires SNR/RB/IMB/fractal contextual ranking, not a gap-only first target rule.
+
 ## Acceptance gate, external dependencies and limitations
 
 The original ZIP replay is `tests/probe_c28_original_1h_classic_imb_fta.py`; frozen target `evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json`. Replay must preserve C26 and C27 original Git blob SHAs, original 45 SHA-checked Binance USD-M 3m/15m/1d ZIP, 76,800 native3m bars, 15,360 exact Decimal native15m OHLCV checks, 539 C21B parent edges and 165 C24 singleton research cases. First synthetic test run [39123913002](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39123913002) **PASS 22/22**.
