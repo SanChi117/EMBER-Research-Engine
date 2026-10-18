@@ -1,0 +1,95 @@
+name: MTF A097 — C27 Evidence Append Only After Independent Success
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a097-c27-record-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a097-appender
+  cancel-in-progress: false
+jobs:
+  append-frozen-independent-a097:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact C27 receipt and independent source Python matrix witness
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess,json
+          base='research/mtf-element-audit-v1/'
+          refs={
+            'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+            'evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+            'evidence/c27/C27_INDEPENDENT_RUN_WITNESS.json':'1869d771bd18ad8534a76cfb03522928fd71dae8'}
+          for p,want in refs.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+base+p],text=True).strip()
+              assert got==want,(p,got,want)
+          w=json.load(open(base+'evidence/c27/C27_INDEPENDENT_RUN_WITNESS.json'))
+          assert w['run_id']==39081484753 and w['full_per_case_json_exact_equal']
+          assert w['python_versions_passed']==['3.10','3.11','3.12']
+          assert w['negative_controls_per_version']==20
+          assert w['original_usdm_zip']==45 and w['source_singleton_cases']==165
+          assert w['author_approved_trades']==0 and w['readiness']=='NOT_TRADE_READY'
+          j=[json.loads(v) for v in open(base+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8')]
+          assert len(j)==96 and j[-1]['action_id']=='A096'
+          assert j[-1]['record_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          print('A097_INDEPENDENT_C27_EVIDENCE_AND_A096_ANCHOR_PASS')
+          PY
+      - name: Recheck frozen 96-event journal and all old source evidence hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a097-old-journal.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a097-old-journal.json'))
+          assert x['events']==96 and x['validations_pass']
+          print('A097_SOURCE_PREDECESSOR_96_EVENT_CHAIN_PASS')
+          PY
+      - name: Canonical append-only A097 source result with six SHA256 evidence files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A097 \
+            --cycle B1/C27 \
+            --planned 'Separate 1H historical single BSL SSL price geometry from instructor-discussed 1H EQL and previous session extrema; no numeric author EQ tolerance or timezone/DST, no preferred RR, FTA or SL buffer invented. Falsify with original Futures rows and source provenance.' \
+            --executed 'New standalone C27 typed exact Decimal pair and prior-calendar hypothesis module without editing C21-C26. Verified 20 negative tests on Python 3.10 3.11 3.12, dynamic 23/24/25-hour IANA DST prior days, 8-hour hypothetical 09-17 sessions. Replayed original 45 USD-M ZIP, 76800 native3m and 15360 native15m exact Decimal OHLCV; pinned full C27 JSON, independent CI 39081484753 SUCCESS, recorded first 3 test failures and one non-fast-forward Git push failure transparently then corrected.' \
+            --result 'Of 165 source-only C24/C26 research singleton cases, 65 contained at least one exact-price pair of two previously confirmed 1H opposing fractals, giving 178 overlapping exact pair relationships; 163 of 165 differed in at least one UTC Kyiv London calendar hypothesis, with 62 incomplete 1H session-family windows; original C26 historical first target swept in 137 unchanged. Exact pair is a subset witness not instructor EQH EQL approval. No author-labelled BOS, timezone, numeric EQ tolerance, RR FTA SL or trades. NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'C27 pinned source Git blob d434ae830858fecf5e45cf7ef8ff7db1e627d489 independently reread as FULL JSON from 45 original SHA-checked USD-M ZIP. CI 39081484753 SUCCESS with 20 negative controls across Python 3.10 3.11 3.12, zero author approved trades. Earlier synthetic test failure run 39081162038 and source successful-but-branch-push-race run 39081225289 explicitly documented; no source receipt overwritten or old evidence mutated.' \
+            --evidence d05/c27_target_families_source.py \
+            --evidence d05/test_c27_target_families_source.py \
+            --evidence tests/probe_c27_original_1h_target_families.py \
+            --evidence evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json \
+            --evidence evidence/c27/C27_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C27_ORIGINAL_EQ_SESSION_TARGET_FAMILIES_SOURCE.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a097-new-journal.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a097-new-journal.json'))
+          assert a['events']==97 and a['validations_pass']
+          print('A097_APPEND_ONLY_97_FULL_BYTE_SHA_CHAIN_PASS')
+          PY
+      - name: Commit append-only SHA chain without rewriting any previous line
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A097): append 45 ZIP source typed 1H target-family proof"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
