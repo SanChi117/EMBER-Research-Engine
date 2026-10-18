@@ -1,0 +1,97 @@
+name: MTF A101 — Append C31 BOS Wick-vs-Close Source Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a101-c31-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a101-exclusive-append-source
+  cancel-in-progress: false
+jobs:
+  append-a101-after-original-independent-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require original receipts and confirmed full source CI with 17x3 controls
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          r='research/mtf-element-audit-v1/'
+          pins={
+           'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+           'evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+           'evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+           'evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+           'evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+           'evidence/c31/C31_INDEPENDENT_RUN_WITNESS.json':'6116275a51459baee80efb91e3ddcd9aa148344e'}
+          for p,want in pins.items():
+             have=subprocess.check_output(['git','rev-parse','HEAD:'+r+p],text=True).strip()
+             assert have==want,(p,have,want)
+          w=json.load(open(r+'evidence/c31/C31_INDEPENDENT_RUN_WITNESS.json'))
+          assert w['run_id']==39175648272 and w['full_539_cases_json_equal']
+          assert w['python_versions']==['3.10','3.11','3.12'] and w['negative_tests_per_python']==17
+          assert w['earlier_wick_only_proxy_events']==122 and w['author_instructor_goldens']==0
+          j=[json.loads(x) for x in open(r+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==100 and j[99]['action_id']=='A100'
+          assert j[99]['record_sha256']=='c45d5460376793f13ba17381b9d9da3fa6eb2226fc6824b9eecfbcdc750e7404'
+          print('A101_ORIGINAL_FULL_C31_AND_100_FROZEN_PREDECESSOR_SHA_PASS')
+          PY
+      - name: Verify all prior 100 event hashes and source bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a101-before.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a101-before.json'))
+          assert x['events']==100 and x['validations_pass']
+          print('A101_PRIOR_100_SHA_OLD_BYTES_PASS')
+          PY
+      - name: Append canonical A101 with SEVEN source evidence SHA files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A101 \
+            --cycle B1/C31 \
+            --planned 'Search accessible original instructor Notion 1H/3M 2023 backtest and compare authentic author raid→BOS lesson against independent public analogs without copying their rules. Falsify distinct BOS market crossing vs later 3m close time on previously selected C21 source original OHLC, preserving author selected swing/entry/FTA unknown.' \
+            --executed 'Searched exact Notion author ID/title and primary Google Drive lesson; instructor goldens unavailable. Documented five independent public examples and source non-equivalence. Added isolated C31 3m strict wick-versus-closed-break observation, 17 negative source tests and an original 45 SHA-checked Binance USD-M Futures ZIP replay preserving C21 539 technical edges, C25 165 source-only cases, 76800 native3m and 15360 exact native15m Decimal equalities. Original complete receipt pinned Git blob 38276d6d8a77942101a041d3605d72f69a7845d1. Independent CI 39175648272 all five jobs SUCCESS including 17 negative tests on Python 3.10/3.11/3.12 and full exact case JSON replay. No source modified retroactively, no trades.' \
+            --result '122 of 539 original technical 3m close-BOS edges (22.6 percent) had one or more earlier prior CLOSED 3m candles whose wick strictly crossed the retrospectively selected same 3m swing but did not CLOSE beyond it: 142 earlier wick observations. Zero earlier CLOSE beyond that same selected swing in the scoped window. 83 of 539 research break bars start at completed raid confirmation, 2 more than 180 minutes later. Crossing-tick fill is UNKNOWN; these 122 are not proven missed fillable trades or author BOS. Public sweep→MSS→FVG retest models conflict with or differ from author text and never authorize rule import. Author Notion 2023 positive/negative labels still missing: NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent GitHub Actions 39175648272 45 original source ZIP full immutable C31 539-case JSON equality and source parent parity 165 cases, Python 3.10 3.11 3.12 17 adverse tests each, original C26 C27 C28 C29 C30 blobs frozen, A100 SHA 100/100. BOS author pivot, entry tick/limit, session timezone, FTA target RR and SL buffer unknown. Seven file SHA cover module, negative tests, source probe, pinned JSON, independent run, primary/online distinction report and public-provenance comparison.' \
+            --evidence d05/c31_bos_entry_semantic_disagreement.py \
+            --evidence d05/test_c31_bos_entry_semantic_disagreement.py \
+            --evidence tests/probe_c31_original_bos_first_wick_vs_close.py \
+            --evidence evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json \
+            --evidence evidence/c31/C31_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C31_ORIGINAL_BOS_WICK_VS_CLOSE_SOURCE_REPORT.md \
+            --evidence cycles/B1_C31_PUBLIC_BOS_EXAMPLES_SOURCE_PROVENANCE.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a101-after.json
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/a101-after.json'))
+          assert v['events']==101 and v['validations_pass']
+          print('A101_SEVEN_SOURCE_EVIDENCE_SHA_AND_101_LEDGER_EVENTS_PASS')
+          PY
+      - name: Commit only canonical A101 journal line
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A101): 45 USD-M ZIP BOS prior wick-vs-close and public example non-substitution"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
