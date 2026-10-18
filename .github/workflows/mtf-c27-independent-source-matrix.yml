@@ -1,0 +1,128 @@
+name: MTF C27 — Independent Frozen 45 ZIP and Python Matrix (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c27-independent-source-matrix.yml'
+      - 'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c27-independent-frozen-proof-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  negative-python-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Immutable A096 journal plus source-only 20 test controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/c27-matrix-audit.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c27-matrix-audit.json'))
+          assert r['events']==96 and r['validations_pass']
+          assert r['tip_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          print('C27_FROZEN_A096_CHAIN_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c27_target_families_source 2>&1 | tee /tmp/c27-matrix-tests.log
+          grep -q 'Ran 20 tests' /tmp/c27-matrix-tests.log
+  pinned-original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check strict frozen C26 and C27 Git blob refs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+           'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+           'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489'}
+          for path,want in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert got==want,(path,got,want)
+          print('C27_IMMUTABLE_C26_C27_PINNED_ORIGINAL_JSON_BLOB_PASS')
+          PY
+      - name: Reload original 45 Binance USD-M ZIP and enforce exact full JSON equality
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c27_original_1h_target_families.py /tmp/c27-independent-original.json 2>&1 | tee /tmp/c27-independent.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json'))
+          b=json.load(open('/tmp/c27-independent-original.json'))
+          assert a==b,"C27_FULL_JSON_SOURCE_REPLAY_CONTRADICTION"
+          assert a['original_archive_count']==45
+          assert a['source_native_3m_bars']==76800
+          assert a['source_native_15m_decimal_equalities']==15360
+          t=a['totals']
+          assert t['original_parent_edges']==539
+          assert t['research_single_cases']==165
+          assert t['prior_target_crossed_by_c26']==137
+          assert t['with_exact_price_pair_on_side']==65
+          assert t['exact_price_pairs_total']==178
+          assert t['with_session_scenario_disagreement']==163
+          assert t['incomplete_session_windows']==62
+          assert a['author_labeled_futures_bos_cases']==0
+          assert a['approved_trades']==0 and a['readiness']=='NOT_TRADE_READY'
+          assert not a['author_eq_tolerance_known'] and not a['author_session_timezone_dst_known']
+          print('C27_45_USDM_ZIP_INDEPENDENT_FULL_JSON_EQUAL_FAIL_CLOSED_PASS')
+          PY
+  independent-witness:
+    needs: [negative-python-matrix,pinned-original-source]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Commit independent matrix and 45 ZIP source witness only after both success
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c27/C27_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then
+            echo 'C27 already source-witnessed'; exit 0
+          fi
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c27/C27_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_C27_INDEPENDENT_SOURCE_MATRIX_V1',
+             'run_id':int(os.environ['RUN_ID']),
+             'trigger_commit':os.environ['HEAD_SHA'],
+             'source_receipt_git_blob':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+             'original_usdm_zip':45,
+             'original_native3m_bars':76800,
+             'original_native15m_decimal_equalities':15360,
+             'full_per_case_json_exact_equal':True,
+             'python_versions_passed':['3.10','3.11','3.12'],
+             'negative_controls_per_version':20,
+             'source_singleton_cases':165,
+             'author_approved_trades':0,
+             'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C27): independent 45 ZIP full JSON and 3 Python matrix pass"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
