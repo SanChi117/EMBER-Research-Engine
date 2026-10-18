@@ -20,6 +20,14 @@ A real RB would additionally need source-labeled wick-only sweep or IMB interact
 
 C29 independent negative controls: 24 adversarial tests for BUY/SELL vs SELL/BUY, DOJI/same direction exclusions, third-hour future leakage, equality and non-author outer-bound proxy, false author `READY`, faked evidence hints, MB as false SNR, source-row tamper/NaN, native source physical-prefix equivalence. First [CI 39125750890](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39125750890) PASS 24/24.
 
+## Original verified technical first-source observations
+
+Pinned original C29 JSON: `evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json`, Git blob `abd68cb7cb86087c83423d16e9bbdd2cb344224c`. Reloaded five instruments/45 original SHA-checked Binance USD-M archives with **76,800 original closed 3m rows**, **15,360** native15m Decimal equalities and **3,840 native reconstructed 1H candles**. Found **1,989 source-only opposite candle-color pair instances**; **1,988** had a later already closed 1H candle by end of history, of which **403** satisfied our deliberately stringent closing beyond the entire pair wick envelope condition. This synthetic extreme-envelope rule is NOT the author's SNR closing level and NONE of these events is a confirmed RB/SNR, MB or first FTA.
+
+The 165 pre-existing research singleton cases linked to **34,348 repeated pair-history relationships**, including **6,728** repeated relations with source third-hour technical outer-envelope close. Both numbers double-count pairs across the 165 case observation times, and **all 165 cases** have at least one ordinary past opposite pair / follow-through: therefore raw pair frequency is indiscriminate, not a discriminator of author-quality entries. Without wick-only raid/IMB/first POI test context and authored zone boundaries, no pair can be upgraded. **Approved RB=0, SNR=0, FTA=0, trades=0**.
+
+This is an important attempted falsification of a shortcut: *color flip and third-bar price move alone cannot solve academic zone classification*. Freeze this as negative source evidence rather than treating 403 generic closes as 403 setups or targets.
+
 ## What original source replay will prove
 
 `tests/probe_c29_original_1h_rb_snr_source_gate.py` must reload the same 45 SHA-attested original Binance USD-M ZIP, 76,800 original native3m bars, 15,360 native 15m Decimal equalities, 3,840 closed native 1H hours across five instruments. It must preserve 539 C21B source parent edges and 165 C24/C28 *research-only* singleton cases, and independently verify physically truncated prefixes and all C26/C27/C28 exact Git blobs. Counts are **overlapping two-candle pattern observations**, not author RB/SNR frequency, FTA effectiveness, trading setups, opportunity quality, backtest win rates, portfolio PnL or cause for execution.
