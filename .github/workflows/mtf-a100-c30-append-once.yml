@@ -1,0 +1,97 @@
+name: MTF A100 — Append C30 Causal Native Wick IMB Research Source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a100-c30-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a100-source-chain-once
+  cancel-in-progress: false
+jobs:
+  append-a100-after-independent-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Enforce immutable source receipts and independent 45 ZIP 25-test matrix witness
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess,json
+          b='research/mtf-element-audit-v1/'
+          pin={
+            'evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+            'evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+            'evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+            'evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+            'evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+            'evidence/c30/C30_INDEPENDENT_RUN_WITNESS.json':'e835ae8de1d0ee0ed28a6323247d4c758c5f12df'}
+          for p,w in pin.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+              assert got==w,(p,got,w)
+          w=json.load(open(b+'evidence/c30/C30_INDEPENDENT_RUN_WITNESS.json'))
+          assert w['run_id']==39164064757 and w['complete_pinned_json_equal']
+          assert w['python_matrix']==['3.10','3.11','3.12']
+          assert w['adversarial_source_tests_per_python']==25
+          assert w['original_usdm_zip']==45 and w['author_rb_snr_bos_fta_approval']==0
+          j=[json.loads(v) for v in open(b+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
+          assert len(j)==99 and j[-1]['action_id']=='A099'
+          assert j[-1]['record_sha256']=='b02747002f9b6109820d6c5d1bdb131acfa1a3933ca91acc6ce707e1ca0372fe'
+          print('A100_SOURCE_45_ZIP_WITNESS_AND_PREVIOUS_99_SHA_PASS')
+          PY
+      - name: Validate 99 SHA evidence records byte by byte
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a100-prior.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a100-prior.json'))
+          assert x['events']==99 and x['validations_pass']
+          print('A100_PREVIOUS_FULL_99_SHA_PASS')
+          PY
+      - name: Append the six original source proof files with canonical SHA A100
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A100 \
+            --cycle B1/C30 \
+            --planned 'Recover source-causal necessary RB SNR prerequisites by matching C29 native opposing 1H pairs to PREVIOUSLY confirmed C20 one-left/one-right fractal strict first wick sweep and frozen C28 classic 1H IMB first correct-side wick test. Reject body, equality, future levels and invented author positive labels, first FTA ranking, BOS/SL/TP/RR.' \
+            --executed 'Created isolated C30 original SHA-checked 1H source-time gating, 25 adversarial tests and original 45 USD-M Futures ZIP replay. Obtained 76800 original native3m, 15360 exact native15m Decimal parity, 3840 reconstructed 1H hours, and matched 165 prior C26 singleton observations without changing C21-C29. Pinned full C30 JSON original source Git blob ff57e0d99b5a87d74a2bfab0eed99cee32206812, independently reloaded complete source with 25 tests on Python 3.10 3.11 3.12 in CI 39164064757 SUCCESS. Initial unit-test import/typed-property failures and false full JSON drift from Python tuple versus JSON list were diagnosed and corrected without changing source receipt.' \
+            --result 'On five symbols from original source: 1873 strict confirmed 1H fractals, 646 classic native1H IMB and 1989 C29 opposite-color 1H pair instances. 690 pairs have at least one first strict source-known 1H fractal wick breach, 330 pairs have first correct-side preknown IMB wick test, 1758 have any earlier source-known wick interaction. In 165 prior research cases, 164 have some historical first fractal-wick pair and 158 have some first IMB-wick pair, showing even causal but untargeted history is NOT sufficient to select author RB/SNR or BOS setup. No author RB SNR FTA targets, approved trades or execution. NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent CI 39164064757 five jobs SUCCESS, 45 original pinned SHA USD-M ZIP reread, 76800 native3m and 15360 native15m Decimal equalities, complete JSON exact replay after canonical JSON normalization, 25 negative source tests on Python 3.10/3.11/3.12. Forensic mismatch run 39163890068 found tuple-vs-list internal format only, not candle/source disagreement; original immutable C30 JSON blob unchanged. Frozen C26 C27 C28 C29 blobs and A099 SHA untouched, 0 author-labeled Futures BOS RB SNR or FTA.' \
+            --evidence d05/c30_causal_wick_liquidity_imb.py \
+            --evidence d05/test_c30_causal_wick_liquidity_imb.py \
+            --evidence tests/probe_c30_original_causal_wick_imb.py \
+            --evidence evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json \
+            --evidence evidence/c30/C30_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C30_CAUSAL_LIQUIDITY_IMB_SOURCE_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a100-after.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a100-after.json'))
+          assert x['events']==100 and x['validations_pass']
+          print('A100_APPEND_ONLY_100_SHA_SIX_EVIDENCE_FILE_BYTES_PASS')
+          PY
+      - name: Commit only one appended canonical action
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A100): append 45 original ZIP causal preknown 1H wick and IMB source"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
