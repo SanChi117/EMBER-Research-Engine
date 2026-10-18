@@ -1,0 +1,110 @@
+name: MTF C30 — Original Prior 1H Wick and IMB 45 ZIP Source (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c30-original-causal-45zip.yml'
+      - 'research/mtf-element-audit-v1/d05/c30_causal_wick_liquidity_imb.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py'
+      - 'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c30-45zip-first-source
+  cancel-in-progress: false
+jobs:
+  source-repeat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check previous SHA 99 and exact original source receipts
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          pins={
+           'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+           'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+           'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+           'research/mtf-element-audit-v1/evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==w,(p,got,w)
+          j=[json.loads(s) for s in open('research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert len(j)==99 and j[-1]['action_id']=='A099'
+          assert j[-1]['record_sha256']=='b02747002f9b6109820d6c5d1bdb131acfa1a3933ca91acc6ce707e1ca0372fe'
+          print('C30_PRIOR_FROZEN_C26_C27_C28_C29_A099_PASS')
+          PY
+      - name: Full 25 causal and negative source conditions
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c30_causal_wick_liquidity_imb 2>&1 | tee /tmp/c30-negative.log
+          grep -q 'Ran 25 tests' /tmp/c30-negative.log
+      - name: Replay original 45 Binance USD-M source ZIP and as-of pairs
+        id: originals
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c30_original_causal_wick_imb.py /tmp/c30-original.json > /tmp/c30-original.log 2>&1
+      - name: Preserve original diagnostic if failed instead of hiding
+        if: steps.originals.outcome != 'success'
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          f=pathlib.Path('/tmp/c30-original.log')
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c30/diagnostics/C30_ORIGINAL_SOURCE_FAILURE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+             'run_id':int(os.environ['RUN_ID']),
+             'accepted':False,
+             'log':f.read_text(errors='replace')[-16000:] if f.exists() else 'NOT_REACHED',
+             'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c30/diagnostics/C30_ORIGINAL_SOURCE_FAILURE.json
+          git commit -m "diagnostic(C30): retain failing original 45 ZIP source traceback"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+          exit 1
+      - name: Admit source-only JSON if full replay succeeded and no trade created
+        if: steps.originals.outcome == 'success'
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c30-original.json'))
+          t=x['totals']
+          assert x['original_binance_usdm_zip_count']==45
+          assert x['native3m_original_rows']==76800 and x['native15m_exact_decimal_equalities']==15360
+          assert t['original_closed_1h']==3840 and t['opposite_1h_pairs']==1989
+          assert t['research_single_cases']==165 and t['original_parent_edges']==539
+          assert x['author_positive_rb_goldens']==x['author_positive_snr_goldens']==0
+          assert x['author_selected_bos']==x['author_selected_first_fta']==0
+          assert x['author_approved_trades']==0 and x['readiness']=='NOT_TRADE_READY'
+          print('C30_FIRST_ORIGINAL_45ZIP_SOURCE_PASS')
+          PY
+      - name: First original 45 ZIP source JSON receipt
+        if: steps.originals.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json
+          if test -e "$p"; then echo "Already pinned and compared"; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c30-original.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C30): original 45 USD-M ZIP prior known liquidity and IMB first-wick"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
