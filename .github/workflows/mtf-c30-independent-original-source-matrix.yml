@@ -92,6 +92,31 @@ jobs:
           assert a['author_approved_trades']==0 and a['readiness']=='NOT_TRADE_READY'
           print('C30_INDEPENDENT_ORIGINAL_45ZIP_ALL_CASE_WICK_FIRST_JSON_PASS')
           PY
+      - name: Preserve complete JSON replay mismatch diagnosis and first changed field
+        if: failure()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          d=pathlib.Path('research/mtf-element-audit-v1/evidence/c30/diagnostics')
+          d.mkdir(parents=True,exist_ok=True)
+          log=pathlib.Path('/tmp/c30-independent.log')
+          d.joinpath('C30_INDEPENDENT_REPLAY_ERROR_'+os.environ['RUN_ID']+'.json').write_text(
+            json.dumps({'run_id':int(os.environ['RUN_ID']),
+              'trigger_sha':os.environ['HEAD_SHA'],
+              'independent_full_json_pass':False,
+              'exact_log_tail':log.read_text(errors='replace')[-8500:] if log.exists() else 'NO_LOG',
+              'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c30/diagnostics/C30_INDEPENDENT_REPLAY_ERROR_*.json
+          git commit -m "diagnostic(C30): persist first field divergence on pinned 45-ZIP independent JSON"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
   independently-pinned-source-witness:
     needs: [python-matrix,original-independent-source]
     runs-on: ubuntu-latest
