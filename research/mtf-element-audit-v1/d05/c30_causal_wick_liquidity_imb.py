@@ -236,7 +236,7 @@ def inspect_c30(source,*,as_of_ms):
         def any_imb(p):return p.source_imb_wick_interactions>0
         def first_imb(p):return p.imb_wick_first_tests>0
         brief=[{
-            "ms":p.second_ms,"liquidity_wick":p.distinct_liquidity_wick_interactions,
+            "ms":p.pair_second_ms,"liquidity_wick":p.distinct_liquidity_wick_interactions,
             "first_liquidity_wick":p.first_cross_liquidity_wick_interactions,
             "imb_wick":p.source_imb_wick_interactions,"first_imb_wick":p.imb_wick_first_tests,
             "sha":p.full_interactions_sha256} for p in eligible]
