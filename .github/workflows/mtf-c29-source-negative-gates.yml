@@ -1,0 +1,60 @@
+name: MTF C29 — 1H RB/SNR Negative Source Gates (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c29-source-negative-gates.yml'
+      - 'research/mtf-element-audit-v1/d05/c29_rb_snr_source_guards.py'
+      - 'research/mtf-element-audit-v1/d05/test_c29_rb_snr_source_guards.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  negative-24:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-only academic RB/SNR 24 negative controls
+        id: controls
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c29_rb_snr_source_guards > /tmp/c29-controls.log 2>&1
+      - name: Preserve exact falsification result without claiming trade approval
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          OUTCOME: ${{ steps.controls.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c29/diagnostics/C29_NEGATIVE_CONTROLS.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          f=pathlib.Path('/tmp/c29-controls.log')
+          log=f.read_text(errors='replace') if f.exists() else 'NO_TEST_LOG'
+          success=os.environ['OUTCOME']=='success' and 'Ran 24 tests' in log and 'OK' in log[-400:]
+          p.write_text(json.dumps({
+            'schema':'EMBER_C29_24_NEGATIVE_SOURCE_DIAGNOSTIC',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'status':os.environ['OUTCOME'],
+            'all_24_pass':success,'log_tail':log[-15000:],
+            'author_rb_snr_approved':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c29/diagnostics/C29_NEGATIVE_CONTROLS.json
+          git commit -m "diagnostic(C29): record 24 source RB-SNR falsification test results"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Fail on negative source falsification
+        if: steps.controls.outcome != 'success'
+        run: exit 1
