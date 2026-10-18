@@ -152,7 +152,7 @@ def previous_zone_extrema(hours,rows,*,zone,raid_ms,break_start_ms,side,entry):
             if not complete:
                 out.append(PreviousSessionWitness(zone,family,prev_date.isoformat(),
                     len(window),required,None,None,None,"UNKNOWN_SOURCE_INCOMPLETE",
-                    "UNKNOWN_SOURCE_INCOMPLETE"))
+                    "UNKNOWN_SOURCE_INCOMPLETE",status="UNKNOWN_SOURCE_INCOMPLETE"))
                 continue
             best=max(window,key=lambda h:h.high) if edge=="HIGH" else min(window,key=lambda h:h.low)
             price=best.high if edge=="HIGH" else best.low
