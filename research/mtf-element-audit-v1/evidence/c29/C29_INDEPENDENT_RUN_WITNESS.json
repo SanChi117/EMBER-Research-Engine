@@ -1,0 +1,18 @@
+{
+  "all_json_case_evidence_equal": true,
+  "author_rb_snr_approved": 0,
+  "exact_15m_decimal_equalities": 15360,
+  "independently_refetched_zip": 45,
+  "negative_controls_per_version": 24,
+  "original_native3m_rows": 76800,
+  "original_receipt_git_blob": "abd68cb7cb86087c83423d16e9bbdd2cb344224c",
+  "python_matrix": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39125951806,
+  "schema": "EMBER_C29_45_ORIGINAL_ZIP_SOURCE_PAIR_GATE_INDEPENDENT_V1",
+  "trigger_commit": "8546787219f0bff46a67bb64d9436489e40f5c53"
+}
