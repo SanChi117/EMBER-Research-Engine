@@ -1,0 +1,128 @@
+name: MTF B1 C28 — Independent 45 ZIP and Python Matrix (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c28-independent-source-matrix.yml'
+      - 'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c28-independent-source-matrix-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  negative-python-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify 97 SHA source journal and all original-file hashes
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/c28-matrix-ledger.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c28-matrix-ledger.json'))
+          assert r['events']==97 and r['validations_pass']
+          assert r['tip_sha256']=='a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a'
+          print('C28_MATRIX_FROZEN_PREVIOUS_97_SHA_PASS')
+          PY
+      - name: Independent 22 source-only FTA gap and no-lookahead adversarial controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c28_source_fta_inventory 2>&1 | tee /tmp/c28-matrix-tests.log
+          grep -q 'Ran 22 tests' /tmp/c28-matrix-tests.log
+  independent-original-zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check C26 C27 and new C28 frozen original Git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pinned={
+             'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+             'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+             'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317'}
+          for p,blob in pinned.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==blob,(p,got,blob)
+          print('C28_ALL_PINNED_SOURCE_GIT_BLOBS_PASS')
+          PY
+      - name: Independently re-download 45 original ZIP and compare COMPLETE JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c28_original_1h_classic_imb_fta.py /tmp/c28-independent.json 2>&1 | tee /tmp/c28-independent.log
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json'
+          a=json.load(open(p));b=json.load(open('/tmp/c28-independent.json'))
+          assert a==b,"C28_INDEPENDENT_45ZIP_COMPLETE_JSON_DRIFT"
+          t=a['totals']
+          assert a['original_archive_count']==45
+          assert a['original_source_3m_bars']==76800
+          assert a['original_native15m_decimal_equalities']==15360
+          assert t['original_parent_edges']==539 and t['research_single_cases']==165
+          assert t['source_hours']==3840 and t['full_source_1h_classic_imb']==646
+          assert t['case_preknown_imb_edges']==10720
+          assert t['case_overlap_imb_edges']==383
+          assert t['cases_with_overlap']==133 and t['cases_with_previously_untouched_overlap']==16
+          assert t['case_overlap_previously_touched_edges']==366
+          assert t['case_overlap_prior_full_traversals']==220
+          assert a['approved_trades']==a['author_bos_approved']==0
+          assert a['author_selected_tp']==a['author_rb_snr_selected_fta']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C28_INDEPENDENT_PINNED_ORIGINAL_45ZIP_FULL_JSON_COMPLETE_PASS')
+          PY
+  independent-proof-witness:
+    needs: [negative-python-matrix,independent-original-zip]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Freeze third party verifiable 45 original ZIP + 3 Python version proof
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c28/C28_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo "Already sourced"; exit 0; fi
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c28/C28_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+              'schema':'EMBER_C28_ORIGINAL_IMB_45ZIP_PYTHON_MATRIX_INDEPENDENT_V1',
+              'run_id':int(os.environ['RUN_ID']),
+              'trigger_commit_sha':os.environ['HEAD_SHA'],
+              'full_source_receipt_blob_sha':'ed3aca9384c8e49d07220f04b7d363df92689317',
+              'source_native3m_bars':76800,'original_zip_count':45,
+              'native15m_decimal_equalities':15360,
+              'all_cases_exact_json_equal':True,
+              'negative_controls_per_python':22,
+              'python_versions':['3.10','3.11','3.12'],
+              'C26_singleton_source_cases':165,
+              'trade_approvals':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C28): independently rechecked 45 original ZIP and Python matrix"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
