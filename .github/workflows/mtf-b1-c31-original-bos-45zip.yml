@@ -1,0 +1,113 @@
+name: MTF B1 C31 — 45 Original USD-M BOS Price Crossing vs Close (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c31-original-bos-45zip.yml'
+      - 'research/mtf-element-audit-v1/d05/c31_bos_entry_semantic_disagreement.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c31_original_bos_first_wick_vs_close.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c31-first-original-45zip
+  cancel-in-progress: false
+jobs:
+  original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require immutable preexisting original C26-C30 and 100 SHA entries
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess,json
+          p={
+           'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+           'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+           'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+           'research/mtf-element-audit-v1/evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812'}
+          for path,want in p.items():
+              have=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert have==want,(path,have,want)
+          j=[json.loads(x) for x in open('research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==100 and j[99]['action_id']=='A100'
+          assert j[99]['record_sha256']=='c45d5460376793f13ba17381b9d9da3fa6eb2226fc6824b9eecfbcdc750e7404'
+          print('C31_FROZEN_100_AND_PREDECESSOR_SOURCE_SHA_PASS')
+          PY
+      - name: Run all 17 academic BOS ambiguity negative controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c31_bos_entry_semantic_disagreement 2>&1 | tee /tmp/c31-tests.log
+          grep -q 'Ran 17 tests' /tmp/c31-tests.log
+      - name: Re-download 45 SHA original Futures ZIP and compare 539 old edges
+        id: original
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c31_original_bos_first_wick_vs_close.py /tmp/c31-original.json > /tmp/c31-original.log 2>&1
+      - name: Preserve any original-source failure and do not declare acceptance
+        if: steps.original.outcome != 'success'
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          f=pathlib.Path('/tmp/c31-original.log')
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c31/diagnostics/C31_ORIGINAL_45ZIP_FAILURE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'accepted':False,
+            'trace':f.read_text(errors='replace')[-13000:] if f.exists() else 'NO_LOG',
+            'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c31/diagnostics/C31_ORIGINAL_45ZIP_FAILURE.json
+          git commit -m "diagnostic(C31): retain original 45-ZIP BOS crossing replay failure"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+          exit 1
+      - name: Gate source receipt against trading inference
+        if: steps.original.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c31-original.json'))
+          t=x['totals']
+          assert x['source_original_zip_count']==45
+          assert x['source_original3m_bars']==76800
+          assert x['original_native15m_exact_decimal_equalities']==15360
+          assert t['strict_closed_3m_research_edges']==539
+          assert t['research_single_case_count']==165
+          assert t['proxy_raid_fractal_bos_order_pass']==539
+          assert x['author_confirmed_3m_BOS']==x['author_trade_approved']==0
+          assert x['author_live_execution_model_approved']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C31_SOURCE_539_CONSISTENT_PROXY_EDGES_ONLY_PASS')
+          PY
+      - name: Pin full exact source-only per-case JSON after success
+        if: steps.original.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json
+          if test -e "$p"; then echo 'Previous complete JSON already checked by probe'; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c31-original.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C31): original 45 ZIP 3m BOS wick-cross vs close full source"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
