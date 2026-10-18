@@ -1,0 +1,19 @@
+{
+  "adversarial_source_tests_per_python": 25,
+  "author_rb_snr_bos_fta_approval": 0,
+  "complete_pinned_json_equal": true,
+  "full_original_source_git_blob": "ff57e0d99b5a87d74a2bfab0eed99cee32206812",
+  "native15m_decimal_equalities": 15360,
+  "native3m_rows": 76800,
+  "original_usdm_zip": 45,
+  "python_matrix": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "research_cases": 165,
+  "run_id": 39164064757,
+  "schema": "EMBER_C30_NATIVE_PRIOR_WICK_IMB_45ZIP_INDEPENDENT_V1",
+  "trigger_commit": "551e4026ad722b1b2ed1b2cbd9e93d192acbe816"
+}
