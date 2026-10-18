@@ -1,0 +1,115 @@
+name: MTF A097 — 97 SHA C27 Independent 45 ZIP Original Source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a097-c27-independent-97-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a097-independent-proof
+  cancel-in-progress: false
+jobs:
+  original-97-sha-reverification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify all evidence file bytes and immutable A097 chained SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a097-independent-ledger.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/a097-independent-ledger.json'))
+          assert a['events']>=97 and a['validations_pass']
+          j=[json.loads(s) for s in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert len(j)>=97 and j[96]['seq']==97
+          assert j[95]['action_id']=='A096' and j[96]['action_id']=='A097'
+          assert j[96]['prev_sha256']=='3ea34ff3d66d888b9763847add1b1040dcbce127809bbc04aa67e6d96bac59f9'
+          assert j[96]['record_sha256']=='a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a'
+          assert len(j[96]['evidence'])==6 and j[96]['cycle_result']=='PASSED'
+          print('A097_ALL_97_SHA_AND_C27_SIX_EVIDENCE_BYTES_INDEPENDENT_PASS')
+          PY
+      - name: Check frozen source JSON Git blob from C26 and C27
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+            'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+            'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+            'research/mtf-element-audit-v1/evidence/c27/C27_INDEPENDENT_RUN_WITNESS.json':'1869d771bd18ad8534a76cfb03522928fd71dae8'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==w,(p,got,w)
+          print('A097_FROZEN_GIT_ORIGINAL_SOURCE_PROVENANCE_PASS')
+          PY
+      - name: Rerun all 20 negative tests on original code after A097 journal commit
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c27_target_families_source 2>&1 | tee /tmp/a097-negative.log
+          grep -q 'Ran 20 tests' /tmp/a097-negative.log
+      - name: Reload exact same original Binance 45 USD-M ZIP again and full per-case JSON compare
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c27_original_1h_target_families.py /tmp/a097-original.json 2>&1 | tee /tmp/a097-original.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json'))
+          b=json.load(open('/tmp/a097-original.json'))
+          assert a==b,"A097_FULL_JSON_ORIGINAL_SOURCE_DRIFT"
+          assert a['original_archive_count']==45
+          assert a['source_native_3m_bars']==76800
+          assert a['source_native_15m_decimal_equalities']==15360
+          t=a['totals']
+          assert t['original_parent_edges']==539 and t['research_single_cases']==165
+          assert t['with_exact_price_pair_on_side']==65 and t['exact_price_pairs_total']==178
+          assert t['with_session_scenario_disagreement']==163 and t['incomplete_session_windows']==62
+          assert t['prior_target_crossed_by_c26']==137
+          assert a['approved_trades']==0 and a['readiness']=='NOT_TRADE_READY'
+          print('A097_ORIGINAL_45ZIP_165_SOURCES_FULL_JSON_AND_AUTHOR_UNKNOWN_PASS')
+          PY
+      - name: Preserve A097 independent original 97 SHA replay run witness
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c27/A097_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then
+            echo 'Already anchored independently'; exit 0
+          fi
+          python - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c27/A097_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_A097_FULL_97_SHA_C27_45ZIP_INDEPENDENT_V1',
+             'run_id':int(os.environ['RUN_ID']),
+             'trigger_commit':os.environ['HEAD_SHA'],
+             'action_sha256':'a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a',
+             'verified_actions':97,'new_sha256_evidence_files':6,
+             'original_usdm_zip':45,
+             'source_native3m_bars':76800,
+             'original_native15m_equalities':15360,
+             'complete_pinned_json_equal':True,
+             'negative_controls':20,'approved_trades':0,
+             'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A097): 97 SHA independent 45 original ZIP full C27 replay"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
