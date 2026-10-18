@@ -1,0 +1,13 @@
+{
+  "a099_record_sha256": "b02747002f9b6109820d6c5d1bdb131acfa1a3933ca91acc6ce707e1ca0372fe",
+  "all_pinned_json_data_equal": true,
+  "approved_rb_snr_fta_trades": 0,
+  "c29_sha_evidence_files": 6,
+  "canonical_sha_events_verified": 99,
+  "negative_tests_passed": 24,
+  "original_usdm_zip_reread": 45,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39126166544,
+  "schema": "EMBER_A099_99_SHA_45_ORIGINAL_ZIP_SOURCE_GATES_V1",
+  "trigger_commit_sha": "21919cff0de050eccf7e93c822ca0ca1df6fa9f1"
+}
