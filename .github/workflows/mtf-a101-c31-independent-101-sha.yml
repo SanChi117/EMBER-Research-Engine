@@ -1,0 +1,124 @@
+name: MTF A101 — Independent 101 SHA C31 Original 45 ZIP BOS Proof
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a101-c31-independent-101-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a101-101-source-independent
+  cancel-in-progress: false
+jobs:
+  source-audit-101-sha:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently validate all 101 ledger SHA records and SEVEN source files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a101-source-audit.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a101-source-audit.json'))
+          assert r['events']>=101 and r['validations_pass']
+          j=[json.loads(v) for v in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
+          assert len(j)>=101
+          assert j[99]['seq']==100 and j[99]['action_id']=='A100'
+          assert j[100]['seq']==101 and j[100]['action_id']=='A101'
+          assert j[100]['prev_sha256']=='c45d5460376793f13ba17381b9d9da3fa6eb2226fc6824b9eecfbcdc750e7404'
+          assert j[100]['record_sha256']=='a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec'
+          assert j[100]['cycle_result']=='PASSED' and len(j[100]['evidence'])==7
+          print('A101_INDEPENDENT_101_ALL_SHA_SEVEN_FILES_PASS')
+          PY
+      - name: Ensure original C26 C27 C28 C29 C30 C31 source JSON receipts frozen
+        run: |
+          python - <<'PY'
+          import subprocess
+          checks={
+           'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+           'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489',
+           'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json':'ed3aca9384c8e49d07220f04b7d363df92689317',
+           'research/mtf-element-audit-v1/evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+           'research/mtf-element-audit-v1/evidence/c31/C31_INDEPENDENT_RUN_WITNESS.json':'6116275a51459baee80efb91e3ddcd9aa148344e'}
+          for p,want in checks.items():
+             actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+             assert actual==want,(p,actual,want)
+          print('A101_FROZEN_FULL_NATIVE_SOURCE_SHA_NO_RETROACTIVE_CHANGE')
+          PY
+      - name: Falsify BOS entry and market-cross confusion with 17 negative controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c31_bos_entry_semantic_disagreement 2>&1 | tee /tmp/a101-negatives.log
+          grep -q 'Ran 17 tests' /tmp/a101-negatives.log
+      - name: Re-download 45 original Binance USD-M ZIP and compare complete 539 BOS JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c31_original_bos_first_wick_vs_close.py /tmp/a101-independent-539.json 2>&1 | tee /tmp/a101-original.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json'))
+          b=json.load(open('/tmp/a101-independent-539.json'))
+          assert a==b,'A101_COMPLETE_ORIGINAL_539_BOS_JSON_DRIFT'
+          assert a['source_original_zip_count']==45 and a['source_original3m_bars']==76800
+          assert a['original_native15m_exact_decimal_equalities']==15360
+          t=a['totals']
+          assert t['strict_closed_3m_research_edges']==539
+          assert t['research_single_case_count']==165
+          assert t['proxy_raid_fractal_bos_order_pass']==539
+          assert t['edges_with_prior_strict_wick_cross']==122
+          assert t['edges_with_prior_wick_without_close_confirmation']==122
+          assert t['prior_strict_wick_cross_observations']==142
+          assert t['edges_with_prior_closed_beyond_selected_swing']==0
+          assert t['break_at_raid_confirmation_hour_count']==83
+          assert t['break_later_than_3h_after_raid_confirmation']==2
+          assert a['author_confirmed_3m_BOS']==a['author_trade_approved']==0
+          assert a['author_selected_pivot_goldens']==0 and a['readiness']=='NOT_TRADE_READY'
+          print('A101_45_ORIGINAL_ZIP_FULL_539_PARENT_BOS_WICK_VS_CLOSE_REPRODUCIBLE')
+          PY
+      - name: Freeze final independent A101 proof with immutable 101 chain tip
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c31/A101_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'prior independent receipt preserved'; exit 0; fi
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c31/A101_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A101_ALL_101_SHA_45_ORIGINAL_ZIP_BOS_SOURCE_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'a101_record_sha256':'a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec',
+            'all_101_ledger_sha_verified':101,
+            'c31_evidence_file_byte_hashes_verified':7,
+            'full_original_45_usdm_zip_refetched':45,
+            'full_original_539_case_json_equal':True,
+            'adversarial_source_tests_passed':17,
+            'original_3m_prior_wick_only_events':122,
+            'author_validated_bos':0,'approved_trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A101): independently verify 101 SHA records and 45 original ZIP BOS audit"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
