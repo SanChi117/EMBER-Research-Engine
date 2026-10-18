@@ -1,0 +1,92 @@
+name: MTF B1 C28 — Original 45 ZIP 1H Classic IMB FTA Source (PAPER)
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-b1-c28-fta-original-45zip.yml'
+      - 'research/mtf-element-audit-v1/d05/c28_source_fta_inventory.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c28_original_1h_classic_imb_fta.py'
+      - 'research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c28-45-original-zip-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reject predecessor price-evidence or journal modifications
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          paths={
+            'research/mtf-element-audit-v1/evidence/c26/C26_UNSWEPT_1H_FTA_ORIGINAL_SOURCE.json':'11edbf5ddf8e89e513fc3893e807903bbf8933eb',
+            'research/mtf-element-audit-v1/evidence/c27/C27_ORIGINAL_1H_EQ_SESSION_SOURCE.json':'d434ae830858fecf5e45cf7ef8ff7db1e627d489'}
+          for p,want in paths.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert actual==want,(p,actual,want)
+          lines=[json.loads(v) for v in open('research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8')]
+          assert len(lines)==97 and lines[-1]['action_id']=='A097'
+          assert lines[-1]['record_sha256']=='a918db6021fd96e1d60d4698cb36c44e80ccfccf00fe7301e6ecebd3896d7a1a'
+          print('C28_C26_C27_CROSSCHECK_AND_A097_SHA_FROZEN')
+          PY
+      - name: Execute exact 22 negative native 1H gap causal controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c28_source_fta_inventory 2>&1 | tee /tmp/c28-tests.log
+          grep -q 'Ran 22 tests' /tmp/c28-tests.log
+      - name: Independent original 45 Binance USD-M ZIP full source replay
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c28_original_1h_classic_imb_fta.py /tmp/c28-full.json 2>&1 | tee /tmp/c28-original.log
+      - name: Falsify any approved RB SNR FTA or executable target inference
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/c28-full.json'))
+          assert x['original_archive_count']==45
+          assert x['original_source_3m_bars']==76800
+          assert x['original_native15m_decimal_equalities']==15360
+          t=x['totals']
+          assert t['original_parent_edges']==539 and t['research_single_cases']==165
+          assert t['source_hours']==3840
+          assert t['case_overlap_imb_edges']==t['case_overlap_previously_touched_edges']+sum(
+              c['overlaps_untouched_before_break'] for m in x['markets'] for c in m['cases'])
+          assert x['author_rb_snr_selected_fta']==x['author_selected_tp']==0
+          assert x['approved_trades']==x['author_bos_approved']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C28_SOURCE_45ZIP_165_RESEARCH_ONLY_FTA_PASS')
+          PY
+      - name: Upload original complete causal source report
+        uses: actions/upload-artifact@v4
+        with:
+          name: c28-original-45zip-classic-imb-only
+          path: /tmp/c28-full.json
+          retention-days: 30
+      - name: Freeze first original-source receipt only after all controls pass
+        if: success()
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c28/C28_ORIGINAL_1H_CLASSIC_IMB_FTA_SOURCE.json
+          if test -e "$p"; then
+            echo 'Previously pinned JSON already checked by source replay'
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c28-full.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C28): pin full original 45-ZIP source 1H IMB FTA inventory"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
