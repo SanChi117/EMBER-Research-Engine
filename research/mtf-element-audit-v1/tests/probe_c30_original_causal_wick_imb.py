@@ -97,11 +97,27 @@ def main(output=None):
     assert totals["opposite_1h_pairs"]==1989
     assert out["author_approved_trades"]==0 and out["readiness"]=="NOT_TRADE_READY"
     pin=ROOT/"evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json"
-    if pin.exists():
-        assert json.loads(pin.read_text(encoding="utf8"))==out,"C30_PINNED_FULL_SOURCE_JSON_DRIFT"
     if output:
         p=Path(output);p.parent.mkdir(parents=True,exist_ok=True)
         p.write_text(json.dumps(out,sort_keys=True,ensure_ascii=False,indent=2)+"\n",encoding="utf8")
+    if pin.exists():
+        frozen=json.loads(pin.read_text(encoding="utf8"))
+        if frozen!=out:
+            def first_diff(a,b,path="root"):
+                if type(a)!=type(b):return (path,"TYPE",type(a).__name__,type(b).__name__)
+                if isinstance(a,dict):
+                    for k in sorted(set(a)|set(b)):
+                        if k not in a or k not in b:return (path+"."+k,"KEY_MISSING",k in a,k in b)
+                        if a[k]!=b[k]:
+                            return first_diff(a[k],b[k],path+"."+k)
+                if isinstance(a,list):
+                    if len(a)!=len(b):return (path,"LEN",len(a),len(b))
+                    for i,(x,y) in enumerate(zip(a,b)):
+                        if x!=y:return first_diff(x,y,path+"["+str(i)+"]")
+                return (path,"VALUE",str(a)[:180],str(b)[:180])
+            diff=first_diff(frozen,out)
+            print("C30_PINNED_JSON_REPLAY_FIRST_DIFFERENCE",json.dumps(diff,ensure_ascii=False),flush=True)
+            raise AssertionError("C30_PINNED_FULL_SOURCE_JSON_DRIFT")
     print(json.dumps({"totals":totals,"approved_trades":0,"readiness":"NOT_TRADE_READY"},sort_keys=True),flush=True)
     return out
 if __name__=="__main__":main(sys.argv[1] if len(sys.argv)>1 else None)
