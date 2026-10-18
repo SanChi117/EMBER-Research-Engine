@@ -1,0 +1,19 @@
+{
+  "C26_singleton_source_cases": 165,
+  "all_cases_exact_json_equal": true,
+  "full_source_receipt_blob_sha": "ed3aca9384c8e49d07220f04b7d363df92689317",
+  "native15m_decimal_equalities": 15360,
+  "negative_controls_per_python": 22,
+  "original_zip_count": 45,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39124089125,
+  "schema": "EMBER_C28_ORIGINAL_IMB_45ZIP_PYTHON_MATRIX_INDEPENDENT_V1",
+  "source_native3m_bars": 76800,
+  "trade_approvals": 0,
+  "trigger_commit_sha": "62860fa3e8d8a48491ce256da333461ba43d3097"
+}
