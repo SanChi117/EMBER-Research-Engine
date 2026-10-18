@@ -17,6 +17,8 @@ from c20b_hourly_fractal_source_observer import observe_fractals_and_first_breac
 from c28_source_fta_inventory import classic_1h_imb
 from c29_rb_snr_source_guards import observe_opposite_pairs,inspect_c29
 
+HOUR=3600000
+
 @dataclass(frozen=True)
 class Interaction:
     pair_first_ms:int
