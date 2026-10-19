@@ -1,0 +1,95 @@
+name: MTF A102 — Append Dual BOS Route No-Execution Source Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a102-c32-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a102-dual-route-exclusive
+  cancel-in-progress: false
+jobs:
+  append-original-dual-BOS-a102:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require old source blobs immutable, independent complete 45 ZIP proof and A101 SHA
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          b='research/mtf-element-audit-v1/'
+          pins={
+            'evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+            'evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+            'evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+            'evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74',
+            'evidence/c32/C32_INDEPENDENT_RUN_WITNESS.json':'98a824fc761786d71e1c097b237df31171aaaf9d'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+              assert got==w,(p,got,w)
+          r=json.load(open(b+'evidence/c32/C32_INDEPENDENT_RUN_WITNESS.json'))
+          assert r['run_id']==39300513430 and r['original_full_539_cases_json_equal']
+          assert r['python_versions']==['3.10','3.11','3.12'] and r['negative_tests_per_python']==23
+          assert r['original_archives_refetched']==45
+          assert r['orders_created']==r['trades_created']==r['market_price_tick_fills_attested']==r['limit_retest_fills_attested']==0
+          j=[json.loads(x) for x in open(b+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==101 and j[100]['action_id']=='A101'
+          assert j[100]['record_sha256']=='a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec'
+          print('A102_PRIOR_SOURCES_AND_45ZIP_MATRIX_0_ORDER_PROOF_PASS')
+          PY
+      - name: Verify 101 existing canonical source evidence SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a102-before.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a102-before.json'))
+          assert r['events']==101 and r['validations_pass']
+          print('A102_PREVIOUS_FULL_101_SHA_AND_FILE_BYTES_PASS')
+          PY
+      - name: Append A102 six source files after independent CI and falsification
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A102 \
+            --cycle B1/C32 \
+            --planned 'Split original instructor 1H wick raid→3m BOS 2 distinct source-level entrance routes: market on price crossing, and full 3m confirmed close followed by yet-undefined limit retracement, without assuming fills from OHLC or pretending retrospective C21 3m pivot is author goldens.' \
+            --executed 'Created isolated typed dual BOS source module, 23 fail-closed 3m-cross versus close/limit tests, original 45 Binance Futures ZIP replay with 76800 original3m and 15360 native15m Decimal equality, 539 C21 original research edges and 165 C31 singletons; full first source JSON Git blob c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74. Independently repeated entire full JSON and 23 negative tests on Python 3.10 3.11 3.12 CI 39300513430 SUCCESS (independent witness Git blob 98a824fc761786d71e1c097b237df31171aaaf9d). First synthetic tests had 2 wrongly preknown-raid wick candidates; source time gate rejected them, test cases corrected to time-valid delayed break without relaxing source gate. Original C20–C31 evidence unchanged.' \
+            --result 'Two separate PAPER route observations created for all 539 original selected C21 technical close-BOS edges. 122 pairs show earlier first 3m wick-price reach before closed BOS, not actionable fills. Every market price reach lacks tick ordering, author pivot and bid/ask; every close-then-limit lacks author limit price/retest/expiration. Full cases 539, 165 original source singletons, zero approved author market entries, zero author limit entries, zero orders, zero trades, zero inferred fills. Full original route JSON equality reproducible. NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent CI 39300513430 all five jobs SUCCESS including 45 original SHA ZIP source full 539 dual-route JSON equality, 23 adverse tests on Python 3.10/3.11/3.12, original C31 price-wick early relation 122, all orders and fills 0. Exact frozen Git source blob c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74 and witness 98a824fc761786d71e1c097b237df31171aaaf9d. PREVIOUS A101 SHA 101 source evidence chain unchanged; instructor goldens, chosen pivot, live tick fills, author limit price and FTA remain NOT ATTESTED.' \
+            --evidence d05/c32_dual_bos_route_source.py \
+            --evidence d05/test_c32_dual_bos_route_source.py \
+            --evidence tests/probe_c32_original_dual_bos_routes.py \
+            --evidence evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json \
+            --evidence evidence/c32/C32_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C32_DUAL_BOS_SOURCE_IMPLEMENTATION_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a102-after.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/a102-after.json'))
+          assert d['events']==102 and d['validations_pass']
+          print('A102_ALL_102_RECORD_HASHES_AND_6_FILE_SOURCE_SHA_PASS')
+          PY
+      - name: Commit only canonical A102 append-once journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A102): append independently reproduced dual BOS 45 ZIP source-only zero orders"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
