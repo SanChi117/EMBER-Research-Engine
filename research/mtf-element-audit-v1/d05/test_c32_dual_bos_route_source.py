@@ -51,15 +51,23 @@ class C32TwoBOSPaths(unittest.TestCase):
         src,e=example()
         rows=list(src.original_3m_closed)
         k=next(i for i,b in enumerate(rows) if b.start_ms==e.break_start_ms)
-        assert k>0
-        rows[k-1]=replace(rows[k-1],open=D("100"),high=D("101"),
+        assert k+1<len(rows)
+        # The ORIGINAL break bar becomes a wick-only source observation.
+        # A NEW synthetic next 3m bar contains the confirmed close.
+        # Both are after the completed 1H raid/source swing known-at gate.
+        rows[k]=replace(rows[k],open=D("100"),high=D("101"),
                  low=e.swing.level-D("1"),close=D("100"))
-        z=study_bos_routes(e,tuple(rows))
-        self.assertEqual(z.market_cross.first_source_wick_reach_bar_ms,rows[k-1].start_ms)
+        rows[k+1]=replace(rows[k+1],open=D("100"),high=D("101"),
+                 low=e.swing.level-D("3"),close=e.swing.level-D("2"))
+        delayed=replace(e,break_start_ms=rows[k+1].start_ms,
+            break_known_ms=rows[k+1].known_ms,break_close=rows[k+1].close,
+            source_original_3m_row_id=rows[k+1].raw_id)
+        z=study_bos_routes(delayed,tuple(rows))
+        self.assertEqual(z.market_cross.first_source_wick_reach_bar_ms,rows[k].start_ms)
         self.assertTrue(z.market_cross.first_wick_reach_was_before_research_close_bar)
         self.assertFalse(z.market_cross.first_source_bar_closed_beyond_selected_pivot)
         self.assertFalse(z.market_cross.market_order_allowed)
-        self.assertEqual(z.close_then_limit.selected_close_bar_ms,e.break_start_ms)
+        self.assertEqual(z.close_then_limit.selected_close_bar_ms,delayed.break_start_ms)
     def test_equal_wick_level_is_not_cross(self):
         src,e=example()
         rows=list(src.original_3m_closed)
@@ -72,9 +80,14 @@ class C32TwoBOSPaths(unittest.TestCase):
         src,e=example()
         rows=list(src.original_3m_closed)
         k=next(i for i,b in enumerate(rows) if b.start_ms==e.break_start_ms)
-        rows[k-1]=replace(rows[k-1],open=e.swing.level-D("1"),
+        rows[k]=replace(rows[k],open=e.swing.level-D("1"),
             high=D("101"),low=e.swing.level-D("2"),close=D("100"))
-        z=study_bos_routes(e,tuple(rows))
+        rows[k+1]=replace(rows[k+1],open=D("100"),high=D("101"),
+             low=e.swing.level-D("3"),close=e.swing.level-D("2"))
+        delayed=replace(e,break_start_ms=rows[k+1].start_ms,
+            break_known_ms=rows[k+1].known_ms,break_close=rows[k+1].close,
+            source_original_3m_row_id=rows[k+1].raw_id)
+        z=study_bos_routes(delayed,tuple(rows))
         self.assertTrue(z.market_cross.first_wick_reach_was_already_touched_at_bar_open)
         self.assertEqual(z.market_cross.first_source_bar_open_side,"OPEN_ALREADY_BEYOND_SELECTED_PIVOT")
         self.assertIsNone(z.market_cross.actual_tick_cross_ms)
