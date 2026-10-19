@@ -1,0 +1,36 @@
+# B1/C32 — market BOS cross vs close-then-limit are TWO separate PAPER source routes
+
+**Status:** 23/23 C32 adversarial source tests [CI 39299872969](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39299872969) SUCCESS. Native first full 45 USD-M ZIP source replay and independent witness pending, so C32 research-only [~]. No author BOS goldens; no market orders, no limit orders, no inferred fills. PAPER ONLY, `NOT_TRADE_READY`.
+
+## What original instructor actually says
+
+[Original academy 4. Entry By BOS.txt](https://drive.google.com/file/d/1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO/view):
+
+- After correct higher TF (often 1H) fractal **wick** liquidity raid and lower TF 3m/5m structural BOS, author mentions direct **market entry upon price crossing the BOS level**, or waiting for completed candle confirmation and entering using a **limit** order.
+- Opposite liquidity, FTA hurdle, structural stop **beyond swept liquidity**, freshness of the raided fractal and time/sessions are other necessary conditions. The exact author-selected 3m swing, limit price/retest expiration, IANA timezone and SL buffer remain unknown.
+- [Direct author linked Notion 1H/3m 2023 backtest](https://www.notion.so/BackTest-1H-3M-2023-01-2023-07-70d3bb308f844a05a9ff1f069b5c6a3c?pvs=21) is unavailable; unrelated public ICT examples cannot decide these missing definitions. See C31 public provenance audit for references.
+
+## Why C32 cannot be one 'first BOS' timestamp
+
+C31 verified original 45 ZIP and [A101 101/101 SHA CI](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39175901614): **539** C21 technical 3m **close** breaks; **122/539** had one or more earlier **3m wick** price penetrations of the SAME selected retrospective strict C21 swing without prior confirming close. These 122 are **NOT orders, missed fills, author positives or actual intrabar crossing times**. 3m OHLC has only candle high and low, not tick-level order, spread, exchange stop, bid/ask or fill.
+
+## New isolated technical implementation
+
+`d05/c32_dual_bos_route_source.py`: for every original SHA-checked C21/C31 technical parent event, without changing C20–C31 source or journal:
+
+1. `MarketCrossObservation`: record earliest original FULL-CLOSED 3m bar whose HIGH/LOW reached strictly past C21-selected research swing **after BOTH** (a) the completed 1H fractal raid confirmation and (b) chosen 3m swing right-bar confirmation. Persist source original3m row ID, bar close known timestamp, low/high, whether the bar began already across BOS, whether it closed beyond and whether same 3m bar also traversed swept extreme. Explicitly leave `actual_tick_cross_ms=None`, `simulated_fill_price=None`, `market_order_allowed=False`. Even if no earlier wick than C21 closed-break bar, the market crossing time remains UNKNOWN.
+2. `CloseThenLimitObservation`: record the C21 research first closed 3m break after known 1H raid, its actual completed 3m close known time and source ID. Admit only `source_close_beyond_pivot=True`, **NOT** any limit order or fill: `author_limit_price=None`, `author_limit_expiry=None`, `inferred_retest_fill=None`, `limit_order_allowed=False`. No arbitrary 50% FVG/POI limit, tick or ATR stop is invented.
+3. `DualRouteObservation`: two sibling objects for a **single** older C21 research parent; no route is chosen `NONE_UNTIL_AUTHOR_SOURCE_ATTESTED`, no orders/trades, no TP/SL/RR/funding/performance, no live terminal hooks.
+4. `inspect_c32`: validates C21 original SHA row data via `_source`, reconciles frozen C31 539 technical edges and 165 research-only singleton cases; must yield previous 122 earliest wick-before-close observations exactly. Refuses author approvals/orders. As-of physical source truncation tested; late original source future bars may not affect any pre-known time field.
+
+**Important limitation:** C21 retrospective pivot selection itself is not certified by author. This research tests two timing semantics for the **same** selected strict 1+1 proxy pivot, not two executable implementations of the author's BOS. Candidate first price crossing is a 3m-bar RANGE witness, not a tick event; if stop and BOS were both hit within the same 3m bar, sequence is UNKNOWN.
+
+## Negative-first falsification
+
+`d05/test_c32_dual_bos_route_source.py` — 23 checks including wrong-way raids, BOS swing time future, invalid price, original SHA and 3m row IDs, body raid invalidity, strict equality not counted as crossing, first earlier wick-only vs later fully closed bar, open already on crossed side, same bar also exceeding raid extreme and no manufactured tick ordering, absent limit placement policy, no forged source READY, physically truncated as-of invariance, no created orders or trades. First CI failure **2/23** was due to synthetic tests accidentally placing "earlier crossing" **BEFORE the 1H raid known-at time**, which correct source gate rejected. Synthetic test inputs were fixed by pushing closed BOS to a later 3m bar and moving first wick into permitted post-confirmation window. Source gate was NOT loosened. [CI 39299872969](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39299872969) then PASSED **23/23**.
+
+## Current source and acceptance gate
+
+`tests/probe_c32_original_dual_bos_routes.py` must reread original 45 USD-M Futures archives across BCH/BTC/ETH/SOL/XRP, verify 76,800 native 3m bars/15,360 native 15m Decimal parity, identical frozen 539/165 C31 research parent/singleton identities, and save full source JSON with both sibling route evidence per parent. Original pinned Git SHA C31 `38276d6d8a77942101a041d3605d72f69a7845d1`, append-only A101 `a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec`. No source rewrite.
+
+Not C32 [x] until: first full original 45 ZIP source receipt; independent second full complete JSON replay; 23 negative tests each on Python 3.10/3.11/3.12; pinned evidence receipt and witness; append-only A102 with 102/102 independent SHA verification; map update. Regardless of CI success the author BOS positive/negative goldens, FTA/limit mechanics and actual tick fills remain UNKNOWN and the wider B1 stays [~].
