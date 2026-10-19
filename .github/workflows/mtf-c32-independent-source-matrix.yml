@@ -1,0 +1,125 @@
+name: MTF C32 — Independent 45 ZIP Dual BOS and Python Matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c32-independent-source-matrix.yml'
+      - 'research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c32-independent-45-zip-dual
+  cancel-in-progress: false
+jobs:
+  negative-python-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Validate all prior 101 journal source hashes and evidence bytes
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/c32-old-ledger.json
+          python - <<'PY'
+          import json
+          t=json.load(open('/tmp/c32-old-ledger.json'))
+          assert t['events']==101 and t['validations_pass']
+          assert t['tip_sha256']=='a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec'
+          print('C32_PRIOR_101_BYTE_SOURCE_SHA_PASS')
+          PY
+      - name: Run all 23 cross vs close-then-unknown-limit falsification tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c32_dual_bos_route_source 2>&1 | tee /tmp/c32-23-negative.log
+          grep -q 'Ran 23 tests' /tmp/c32-23-negative.log
+  independent-original-45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin exact predecessor and new C32 source SHA blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          refs={
+            'research/mtf-element-audit-v1/evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+            'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+            'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+            'research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74'}
+          for p,expected in refs.items():
+             actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+             assert actual==expected,(p,actual,expected)
+          print('C32_ALL_ORIGINAL_PINNED_SHA_REPRODUCIBLE')
+          PY
+      - name: Reread all original 45 Binance USD-M ZIP and compare all 539 case route JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c32_original_dual_bos_routes.py /tmp/c32-independent.json 2>&1 | tee /tmp/c32-original.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json'))
+          b=json.load(open('/tmp/c32-independent.json'))
+          assert a==b,'C32_INDEPENDENT_COMPLETE_DUAL_ROUTE_JSON_DRIFT'
+          assert a['original_binance_usdm_zip_count']==45 and a['original_native3m_closed']==76800
+          assert a['native15m_exact_decimal_equalities']==15360
+          t=a['totals']
+          assert t['strict_c21_parent_edges']==t['closed_3m_bos_observed']==539
+          assert t['c31_research_single_cases']==165
+          assert t['prior_wick_reach_before_3m_bos_bar']==122
+          assert t['prior_wick_reach_before_3m_bos_close']==122
+          assert t['first_cross_bar_did_not_close_beyond_pivot']==122
+          assert t['cross_bar_also_exceeded_raid_extreme']==0
+          assert t['author_market_cross_approved']==t['author_limit_retest_approved']==0
+          assert t['orders_created']==t['trades_created']==0
+          assert a['approved_orders']==a['approved_trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C32_INDEPENDENT_ORIGINAL_45ZIP_COMPLETE_ROUTE_JSON_ZERO_ORDERS_PASS')
+          PY
+  freeze-independent-witness:
+    needs: [negative-python-matrix,independent-original-45zip]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Pin full original 539 case independent source + 3-version negative matrix
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c32/C32_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'Already pinned'; exit 0; fi
+          python3 - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c32/C32_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_C32_DUAL_BOS_ORIGINAL_45ZIP_INDEPENDENT_MATRIX_V1',
+             'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+             'original_source_receipt_git_blob':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74',
+             'original_archives_refetched':45,'native_original3m_rows':76800,
+             'original_full_539_cases_json_equal':True,
+             'negative_tests_per_python':23,'python_versions':['3.10','3.11','3.12'],
+             'market_price_tick_fills_attested':0,'limit_retest_fills_attested':0,
+             'orders_created':0,'trades_created':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C32): independent 45 ZIP 539 dual BOS route full JSON, 23 negatives per 3 Python"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
