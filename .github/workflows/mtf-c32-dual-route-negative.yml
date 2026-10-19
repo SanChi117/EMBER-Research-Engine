@@ -1,0 +1,57 @@
+name: MTF C32 — Dual BOS No-Execution Source Negative Tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c32-dual-route-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c32_dual_bos_route_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c32_dual_bos_route_source.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  no-execution-negatives:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute 23 BOS cross-vs-close fail-closed source controls
+        id: tests
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c32_dual_bos_route_source > /tmp/c32-source.log 2>&1
+      - name: Retain exact test result including failed assertions
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          RESULT: ${{ steps.tests.outcome }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c32/diagnostics/C32_DUAL_ROUTE_TESTS.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          f=pathlib.Path('/tmp/c32-source.log')
+          log=f.read_text(errors='replace') if f.exists() else 'NO_TEST_LOG'
+          ok=os.environ['RESULT']=='success' and 'Ran 23 tests' in log and 'OK' in log[-300:]
+          p.write_text(json.dumps({'schema':'C32_BOS_DUAL_ROUTE_NEGATIVE_CONTROLS',
+             'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+             'status':os.environ['RESULT'],'all_23_pass':ok,'log_tail':log[-18000:],
+             'market_orders_allowed':0,'limit_orders_allowed':0,'trades':0,
+             'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c32/diagnostics/C32_DUAL_ROUTE_TESTS.json
+          git commit -m "diagnostic(C32): preserve BOS cross/close negative tests actual outcomes"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Enforce fail closed on any source test failure
+        if: steps.tests.outcome != 'success'
+        run: exit 1
