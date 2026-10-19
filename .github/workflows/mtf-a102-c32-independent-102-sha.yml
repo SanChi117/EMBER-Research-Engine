@@ -1,0 +1,117 @@
+name: MTF A102 — Independent 102 SHA, 45 Original ZIP Dual BOS
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a102-c32-independent-102-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a102-independent-102-sha-and-45-zip
+  cancel-in-progress: false
+jobs:
+  verify-102-and-original-45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify 102 canonical SHA actions and six original source file hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a102-independent-ledger.json
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/a102-independent-ledger.json'))
+          assert v['events']>=102 and v['validations_pass']
+          j=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)>=102
+          assert j[100]['seq']==101 and j[100]['action_id']=='A101'
+          assert j[101]['seq']==102 and j[101]['action_id']=='A102'
+          assert j[101]['prev_sha256']=='a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec'
+          assert j[101]['record_sha256']=='a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f'
+          assert j[101]['cycle_result']=='PASSED' and len(j[101]['evidence'])==6
+          print('A102_ALL_102_SHA_AND_SIX_NEW_SOURCE_FILE_BYTES_PASS')
+          PY
+      - name: Refuse change to previous C29 C30 C31 or C32 source JSON and witness
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+           'research/mtf-element-audit-v1/evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+           'research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74',
+           'research/mtf-element-audit-v1/evidence/c32/C32_INDEPENDENT_RUN_WITNESS.json':'98a824fc761786d71e1c097b237df31171aaaf9d'}
+          for p,w in pins.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert actual==w,(p,actual,w)
+          print('A102_ALL_PINNED_ORIGINAL_SHA_SOURCE_BLOBS_STABLE')
+          PY
+      - name: Recheck 23 crossing vs close route negative controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c32_dual_bos_route_source 2>&1 | tee /tmp/a102-negative.log
+          grep -q 'Ran 23 tests' /tmp/a102-negative.log
+      - name: Independently re-download original 45 Futures ZIP and full C32 JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c32_original_dual_bos_routes.py /tmp/a102-original-reread.json 2>&1 | tee /tmp/a102-original.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json'))
+          b=json.load(open('/tmp/a102-original-reread.json'))
+          assert a==b,'A102_INDEPENDENT_45ZIP_COMPLETE_539_DUAL_ROUTE_JSON_DRIFT'
+          assert a['original_binance_usdm_zip_count']==45
+          assert a['original_native3m_closed']==76800
+          assert a['native15m_exact_decimal_equalities']==15360
+          t=a['totals']
+          assert t['strict_c21_parent_edges']==539
+          assert t['c31_research_single_cases']==165
+          assert t['prior_wick_reach_before_3m_bos_bar']==122
+          assert t['first_cross_bar_did_not_close_beyond_pivot']==122
+          assert t['closed_3m_bos_observed']==539
+          assert t['author_market_cross_approved']==t['author_limit_retest_approved']==0
+          assert t['orders_created']==t['trades_created']==0
+          assert a['approved_orders']==a['approved_trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('A102_INDEPENDENT_ORIGINAL_45ZIP_DUAL_ROUTE_COMPLETE_JSON_0_ORDER_PASS')
+          PY
+      - name: Freeze post-ledger independent 102 SHA and 45 ZIP receipt
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c32/A102_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'previous witness preserved'; exit 0; fi
+          python3 - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c32/A102_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_A102_102_SHA_ORIGINAL_45ZIP_DUAL_BOS_V1',
+             'run_id':int(os.environ['RUN_ID']),'trigger_commit':os.environ['HEAD_SHA'],
+             'a102_record_sha256':'a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f',
+             'all_102_sha_records_verified':102,'c32_source_evidence_files_sha_verified':6,
+             'original_binance_usdm_zip_reread':45,'full_539_case_json_equal':True,
+             'c32_negative_tests_passed':23,
+             'market_order_approvals':0,'limit_order_approvals':0,
+             'orders_created':0,'trades_created':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A102): independently verify 102 SHA and original 45 ZIP dual-route no-orders"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
