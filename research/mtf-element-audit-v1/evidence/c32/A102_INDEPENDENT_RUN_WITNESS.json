@@ -1,0 +1,16 @@
+{
+  "a102_record_sha256": "a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f",
+  "all_102_sha_records_verified": 102,
+  "c32_negative_tests_passed": 23,
+  "c32_source_evidence_files_sha_verified": 6,
+  "full_539_case_json_equal": true,
+  "limit_order_approvals": 0,
+  "market_order_approvals": 0,
+  "orders_created": 0,
+  "original_binance_usdm_zip_reread": 45,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39300966067,
+  "schema": "EMBER_A102_102_SHA_ORIGINAL_45ZIP_DUAL_BOS_V1",
+  "trades_created": 0,
+  "trigger_commit": "113d3ad33315ec4cae2b595d94b81d9751aea881"
+}
