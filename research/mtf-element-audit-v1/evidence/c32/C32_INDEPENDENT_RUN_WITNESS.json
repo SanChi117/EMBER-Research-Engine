@@ -1,0 +1,20 @@
+{
+  "limit_retest_fills_attested": 0,
+  "market_price_tick_fills_attested": 0,
+  "native_original3m_rows": 76800,
+  "negative_tests_per_python": 23,
+  "orders_created": 0,
+  "original_archives_refetched": 45,
+  "original_full_539_cases_json_equal": true,
+  "original_source_receipt_git_blob": "c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74",
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39300513430,
+  "schema": "EMBER_C32_DUAL_BOS_ORIGINAL_45ZIP_INDEPENDENT_MATRIX_V1",
+  "trades_created": 0,
+  "trigger_sha": "ab98bb0b06e7731484e092f276e0e520f0493e5f"
+}
