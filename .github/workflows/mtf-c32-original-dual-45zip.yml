@@ -1,0 +1,109 @@
+name: MTF C32 — 45 Original USD-M Dual BOS Source, No Orders
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c32-original-dual-45zip.yml'
+      - 'research/mtf-element-audit-v1/d05/c32_dual_bos_route_source.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c32_original_dual_bos_routes.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c32-dual-original-first
+  cancel-in-progress: false
+jobs:
+  original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Refuse changed predecessor source receipts or new journal actions
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          p={
+           'research/mtf-element-audit-v1/evidence/c29/C29_ORIGINAL_PAIR_GATES_NOT_RB_SNR.json':'abd68cb7cb86087c83423d16e9bbdd2cb344224c',
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1'}
+          for path,want in p.items():
+             have=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+             assert have==want,(path,have,want)
+          j=[json.loads(x) for x in open('research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==101 and j[-1]['action_id']=='A101'
+          assert j[-1]['record_sha256']=='a97be629b9810157aec0aa87cd16872f793280eb2b5e67685d1ecfda9a515bec'
+          print('C32_PRIOR_C29_C30_C31_FROZEN_A101_CHAIN_PASS')
+          PY
+      - name: Run 23 source-only cross versus close limit negative controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c32_dual_bos_route_source 2>&1 | tee /tmp/c32-tests.log
+          grep -q 'Ran 23 tests' /tmp/c32-tests.log
+      - name: Reload 45 SHA-checked Binance Futures ZIP and compare both paths
+        id: replay
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c32_original_dual_bos_routes.py /tmp/c32-original.json > /tmp/c32-original.log 2>&1
+      - name: Persist full failure diagnostic instead of false author READY
+        if: steps.replay.outcome != 'success'
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c32/diagnostics/C32_ORIGINAL_SOURCE_FAILURE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          f=pathlib.Path('/tmp/c32-original.log')
+          p.write_text(json.dumps({'run_id':int(os.environ['RUN_ID']),
+             'trigger_sha':os.environ['HEAD_SHA'],'accepted':False,
+             'log':f.read_text(errors='replace')[-16000:] if f.exists() else 'NO_LOG',
+             'readiness':'NOT_TRADE_READY'},sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c32/diagnostics/C32_ORIGINAL_SOURCE_FAILURE.json
+          git commit -m "diagnostic(C32): retain 45 original ZIP dual-route source failure"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+          exit 1
+      - name: Assert no original3m source could create either type of trading order
+        if: steps.replay.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c32-original.json'))
+          t=r['totals']
+          assert r['original_binance_usdm_zip_count']==45
+          assert r['original_native3m_closed']==76800 and r['native15m_exact_decimal_equalities']==15360
+          assert t['strict_c21_parent_edges']==t['closed_3m_bos_observed']==539
+          assert t['c31_research_single_cases']==165
+          assert t['prior_wick_reach_before_3m_bos_bar']==122
+          assert t['author_market_cross_approved']==t['author_limit_retest_approved']==0
+          assert t['orders_created']==t['trades_created']==0
+          assert r['approved_orders']==r['approved_trades']==0
+          assert r['readiness']=='NOT_TRADE_READY'
+          print('C32_ORIGINAL_45ZIP_TWO_ROUTE_ZERO_EXECUTION_PASS')
+          PY
+      - name: Freeze complete verified original 539 dual-route source JSON
+        if: steps.replay.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json
+          if test -e "$p"; then echo 'already source pinned'; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c32-original.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C32): original 45 ZIP BOS dual-route source complete JSON no order"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
