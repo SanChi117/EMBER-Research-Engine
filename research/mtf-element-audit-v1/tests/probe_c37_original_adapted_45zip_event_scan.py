@@ -153,7 +153,7 @@ def run(out=None):
         f=Path(out);f.parent.mkdir(parents=True,exist_ok=True)
         f.write_text(json.dumps(document,sort_keys=True,indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     if PINNED.exists():
-        assert json.loads(PINNED.read_text(encoding="utf8"))==document,"C37_FROZEN_FULL_45ZIP_EVENT_JSON_DRIFT"
+        assert json.loads(PINNED.read_text(encoding="utf8"))==json.loads(json.dumps(document,sort_keys=True,ensure_ascii=False)),"C37_FROZEN_FULL_45ZIP_EVENT_JSON_DRIFT"
     print(json.dumps({"totals":total,"status":"NOT_TRADE_READY"},sort_keys=True),flush=True)
     return document
 
