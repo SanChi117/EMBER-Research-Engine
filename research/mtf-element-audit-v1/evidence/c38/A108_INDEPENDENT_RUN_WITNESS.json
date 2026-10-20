@@ -1,0 +1,18 @@
+{
+  "adversarial_tests": 27,
+  "author_goldens": 0,
+  "canonical_A108_record_sha256": "4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35",
+  "canonical_sha_actions_verified": 108,
+  "closed_original_native3m_bars": 76800,
+  "complete_12_reaction_routes_json_equal": true,
+  "new_source_file_sha_bytes_verified": 6,
+  "orders": 0,
+  "original_full_45zip_reread": 45,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39512999553,
+  "schema": "EMBER_A108_108_SHA_ORIGINAL_POST_1H_REACTION_4X3_MATRIX_V1",
+  "source_bos_variant_count": 4,
+  "source_reaction_variant_count": 3,
+  "trades": 0,
+  "trigger_sha": "d34f2e9a9eb7446211f9d938808683b2c06b1f58"
+}
