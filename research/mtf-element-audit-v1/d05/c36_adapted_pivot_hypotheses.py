@@ -190,6 +190,7 @@ def summarize_frozen_c33(c33):
     by_market={}
     detail=[]
     seen=set()
+    unique_3m_source_bars=set()
     for market in markets:
         sym=market.get("symbol")
         if sym in seen or sym not in ("BCHUSDT","BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT"):
@@ -206,9 +207,16 @@ def summarize_frozen_c33(c33):
             asof=case.get("break_3m_bar_start_ms")
             split=chronological_partition(asof)
             partition[split]["events"]+=1
-            identity=(sym,case["original_break3m_source_row_id"])
+            original_bar_id=case["original_break3m_source_row_id"]
+            unique_3m_source_bars.add((sym,original_bar_id))
+            # A SINGLE original3m candle can be the closed BOS proxy for
+            # MULTIPLE distinct earlier 1H raids. The parent is the raid
+            # context, never the candle alone; 539 contexts are NOT 539
+            # independent fills or price observations.
+            identity=(sym,original_bar_id,case["raid_1h_pivot_center_ms"],
+                      case["raid_start_ms"],case["frozen_c21_proxy_swing_center_ms"])
             if identity in seen:
-                raise ValueError("C36_DUPLICATE_EVENT")
+                raise ValueError("C36_DUPLICATE_RAID_CONTEXT")
             seen.add(identity)
             result={}
             for variant in VARIANTS:
@@ -223,7 +231,9 @@ def summarize_frozen_c33(c33):
                 result[variant]={"center_ms":option.selected_swing_center_ms,
                     "level":option.selected_level,
                     "native_center_row":option.selected_native_center3m_sha_row_id}
-            detail.append({"symbol":sym,"break_bar_row_id":identity[1],
+            detail.append({"symbol":sym,"break_bar_row_id":original_bar_id,
+                 "raid_1h_pivot_center_ms":case["raid_1h_pivot_center_ms"],
+                 "raid_start_ms":case["raid_start_ms"],
                  "break_bar_start_ms":asof,"partition":split,
                  "c33_candidate_count":len(case["competing_swings"]),
                  "hypotheses":result,
@@ -239,6 +249,9 @@ def summarize_frozen_c33(c33):
         "source_c33_git_blob":FROZEN_C33_SHA,
         "sample_warning":"C21-conditioned closed-break retrospective source event set. Alternative pivot MAY NOT have BOS close at same event. NO trade/PnL/author inference.",
         "original_parent_events":539,"original_swing_candidate_links":5285,
+        "unique_original3m_BOS_break_bars":len(unique_3m_source_bars),
+        "additional_raid_contexts_sharing_original3m_bar":539-len(unique_3m_source_bars),
+        "samples_are_independent_trades":False,
         "variants":list(VARIANTS),"period_partitions":partition,
         "by_market":by_market,"variant_agreement_only":counts,
         "hypothesis_case_detail":detail,
