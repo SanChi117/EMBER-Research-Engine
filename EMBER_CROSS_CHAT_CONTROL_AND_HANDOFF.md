@@ -93,6 +93,14 @@
 - **C36-S02 [ ]** — Негативные проверки/исходные данные и только после независимой CI записать A106, проверить 106/106 SHA. Без одобрения торговых сделок.
 - **C36-S03 [ ]** — Если появится исходный 2023 Notion, провести отдельную верификацию instrument/provider/timezone/2023 actual data и выбранного автором swing; 2026 C33 — не тот же backtest.
 
+### C36 — старт адаптируемой архитектуры (2026-10-20)
+
+- **C36-S00 [x]** — Проверены реальные C21/C33 source-native 3m модели, 539 C21-conditioned events и 5 285 исходных кандидатов. Академические C20–C35, A001–A105 и locked data НЕ изменены. Уточнена принципиальная разница: выбор другого pivot внутри C21-conditioned выборки **не доказывает**, что у него был BOS/вход на этой свече. Код тестирует *выбор уровня*, не прибыльность.
+- **C36-S01 [~]** — Создан `d05/c36_adapted_pivot_hypotheses.py` (commits `64e98128`, `62440a7d`) с четырьмя версионированными ADAPTED-only гипотезами: `LATEST_CONFIRMED_V1` (C21 baseline), `EARLIEST_CONFIRMED_V1`, `DEEP_RAID_SIDE_V1`, `NEAREST_RAID_SIDE_V1`. Данные берутся только из уже известных к началу исходной BOS 3m-свечи swing с native3m SHA row IDs, C33 candidate list SHA, строгой 1H рейд-стороной. Запрещены авторская аттестация и любые ордера, PnL, TP/SL.
+- **C36-S02 [~]** — Созданы **32** adversarial/synthetic unittest `d05/test_c36_adapted_pivot_hypotheses.py` (commit `0eaa4340`) и полный read-only probe `tests/probe_c36_adapted_pivot_comparison.py` (commits `b7430ef4`, `3573f8bd`). Сравнение на всех 539 ранее frozen C33 cases, 5 285 eligible swing links, фиксированные хронологические DEVELOPMENT / VALIDATION / HOLDOUT, без оценки PnL. До PASS независимой CI — только [~], **не** A106.
+- **C36-S03 [ ]** — Запустить workflow 3x Python negative + full C33 pinned JSON and freeze C36 source comparison, записать реальные неудачи и новые коммиты.
+- **C36-S04 [ ]** — Проверить independent full JSON, отрицательные тесты, append-only A106 106/106 только если успешно и доказательно, обновить карту и этот документ. Глобальная B1 остаётся [~], NOT_TRADE_READY.
+
 ## 6. Правила перехода в следующий чат
 
 Новый чат должен **без вводных гаданий**:
