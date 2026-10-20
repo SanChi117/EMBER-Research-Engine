@@ -1,0 +1,95 @@
+name: MTF A104 — Independent 104 SHA and Instructor BOS Negative Source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a104-c34-independent-104-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a104-independent-104-bos-negative
+  cancel-in-progress: false
+jobs:
+  verify-104-academic-negative-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify 104 SHA records and 4 new source files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a104-independent.json
+          python - <<'PY'
+          import json
+          result=json.load(open('/tmp/a104-independent.json'))
+          assert result['events']>=104 and result['validations_pass']
+          j=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)>=104
+          assert j[102]['action_id']=='A103' and j[103]['action_id']=='A104'
+          assert j[103]['seq']==104
+          assert j[103]['prev_sha256']=='a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8'
+          assert j[103]['record_sha256']=='741e2ef71ec6f7095001d5161e6d59801af41cb86e42eccd109618a34045f5b4'
+          assert len(j[103]['evidence'])==4 and j[103]['cycle_result']=='PASSED'
+          print('A104_INDEPENDENT_104_RECORD_CHAIN_4_SOURCE_EVIDENCE_SHA_PASS')
+          PY
+      - name: Require original C33 45ZIP market source bytes untouched
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+           'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+           'research/mtf-element-audit-v1/d05/c34_author_bos_text_negative_gate.py':'12ce03773d12414fe231f019dc3f44474dbc1f71',
+           'research/mtf-element-audit-v1/d05/test_c34_author_bos_text_negative_gate.py':'18555893150e716d243e2e9f5779c71fe95aef25',
+           'research/mtf-element-audit-v1/evidence/c34/C34_INDEPENDENT_SOURCE_NEGATIVE_WITNESS.json':'f56fe16d514b0f9caeb03b483d8a905bf719fb90',
+           'research/mtf-element-audit-v1/cycles/B1_C34_AUTHOR_BOS_PRIMARY_SOURCE_NEGATIVE_RULE_AUDIT.md':'19cfddcbdbeef37e2b358e2a135d4e0c55cfcef2'}
+          for p,w in pins.items():
+              s=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert s==w,(p,s,w)
+          print('A104_PINNED_AUTHOR_C34_AND_45ZIP_PRIOR_C33_FILES_BYTES_UNCHANGED')
+          PY
+      - name: Independently rerun 38 actual BOS fail-closed tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c34_author_bos_text_negative_gate 2>&1 | tee /tmp/a104-again-negative.log
+          grep -q 'Ran 38 tests' /tmp/a104-again-negative.log
+          grep -q '^OK$' /tmp/a104-again-negative.log
+      - name: Freeze independent 104 SHA and 38 source negatives result
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c34/A104_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'previous receipt preserved'; exit 0; fi
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c34/A104_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_A104_104_SHA_ORIGINAL_BOS_TEXT_NEGATIVE_ONLY_V1',
+             'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+             'a104_record_sha256':'741e2ef71ec6f7095001d5161e6d59801af41cb86e42eccd109618a34045f5b4',
+             'all_source_sha_records_verified':104,
+             'c34_new_source_evidence_byte_hashes_verified':4,
+             'new_original_market_zip_reread':0,
+             'preserved_original_c33_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+             'source_text_negative_unit_tests_passed':38,
+             'author_3m_bos_pivot_goldens':0,
+             'orders_created':0,'trades_created':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A104): independent 104 original source SHA and 38 BOS text rejection checks"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
