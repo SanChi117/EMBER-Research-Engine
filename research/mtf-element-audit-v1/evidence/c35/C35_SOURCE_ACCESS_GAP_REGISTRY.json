@@ -1,0 +1,53 @@
+{
+  "schema": "EMBER_C35_SOURCE_GAP_AND_DATE_JOIN_V1",
+  "recorded_date_utc": "2026-10-20",
+  "author_source": {
+    "title": "BackTest 1H/3M 2023.01 - 2023.07",
+    "original_reference": "https://www.notion.so/BackTest-1H-3M-2023-01-2023-07-70d3bb308f844a05a9ff1f069b5c6a3c?pvs=21",
+    "url_found_in_drive_course": "https://drive.google.com/file/d/1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO/view",
+    "public_page_read_status": "NOT_ACCESSIBLE_ON_CHECK",
+    "drive_title_search_result": "COURSE_LESSON_LINK_ONLY_NO_RAW_LABELED_2023_CASE_DATASET_FOUND",
+    "exact_instructor_case_datetime": null,
+    "exact_instructor_case_symbol": null,
+    "exact_instructor_case_venue": null,
+    "exact_instructor_case_timezone": null,
+    "exact_instructor_selected_3m_BOS_price": null,
+    "course_heading_implied_period_start_utc": "2023-01-01T00:00:00Z",
+    "course_heading_implied_period_end_exclusive_utc": "2023-08-01T00:00:00Z",
+    "author_positive_goldens_proven": 0,
+    "author_negative_goldens_proven": 0
+  },
+  "frozen_research_source": {
+    "descriptor": "Original SHA-checked Binance USD-M native3m/15m/1d September 2026 monthly and first two days October 2026 daily",
+    "period_start_utc": "2026-09-01T00:00:00Z",
+    "period_end_exclusive_utc": "2026-10-03T00:00:00Z",
+    "underlying_C33_git_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+    "original_usdm_archives": 45,
+    "research_parent_events": 539,
+    "preknown_3m_swing_relations": 5285,
+    "labeled_author_BOS": 0
+  },
+  "periods_overlap": false,
+  "join_allowed": false,
+  "matched_historic_market_data": false,
+  "missing_source_fields": [
+    "author_original_bytes_sha256",
+    "case_author_label",
+    "case_symbol",
+    "case_market_venue",
+    "case_provider",
+    "case_timestamp_utc",
+    "case_iana_timezone",
+    "raid_1h_fractal_bar_and_level",
+    "author_selected_3m_swing_bar_and_level",
+    "3m_bar_source_sha",
+    "1h_bar_source_sha",
+    "first_FTA",
+    "original_author_SL"
+  ],
+  "author_BOS_status": "NEEDS_AUTHOR_BOS_GOLDENS",
+  "fake_inferred_2023_2026_joins": 0,
+  "orders_created": 0,
+  "trades_created": 0,
+  "readiness": "NOT_TRADE_READY"
+}
