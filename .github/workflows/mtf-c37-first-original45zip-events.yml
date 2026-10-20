@@ -1,0 +1,80 @@
+name: MTF C37 — First Original 45 ZIP Adapted BOS Event Replay
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c37-first-original45zip-events.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c37_original_adapted_45zip_event_scan.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c37-first-original-source-45zip
+  cancel-in-progress: false
+jobs:
+  first-native-event-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require original frozen parent and 27 native bar-to-close tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c37_native_adapted_bos_event_scanner 2>&1 | tee /tmp/c37-original-27.log
+          grep -q 'Ran 27 tests' /tmp/c37-original-27.log
+          grep -q '^OK$' /tmp/c37-original-27.log
+      - name: Reconstruct and scan all original 45 source ZIP, 4 independent BOS timelines
+        id: zip
+        continue-on-error: true
+        run: |
+          python research/mtf-element-audit-v1/tests/probe_c37_original_adapted_45zip_event_scan.py /tmp/c37-first-full.json >/tmp/c37-first-source.log 2>&1
+      - name: Preserve authentic first ZIP failure or source output
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+          OUTCOME: ${{ steps.zip.outcome }}
+        run: |
+          python - <<'PY'
+          import pathlib,json,os
+          f=pathlib.Path('/tmp/c37-first-source.log')
+          s=f.read_text(errors='replace') if f.exists() else 'MISSING_ZIP_TRACE'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c37/diagnostics/C37_FIRST_45ZIP_EVENT_REPLAY.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C37_ORIGINAL_45ZIP_FIRST_CAUSAL_EVENTS_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['TRIGGER_SHA'],
+            'source_replay_outcome':os.environ['OUTCOME'],
+            'source_log_tail':s[-20000:],
+            'author_bos_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c37/diagnostics/C37_FIRST_45ZIP_EVENT_REPLAY.json
+          git commit -m "diagnostic(C37): original full native45 ZIP adapted BOS event scan outcome"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Reject failed original-source scan
+        if: steps.zip.outcome != 'success'
+        run: exit 1
+      - name: Pin complete adapted event source once
+        if: steps.zip.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json
+          if test -e "$p"; then echo 'Source already pinned'; exit 0; fi
+          cp /tmp/c37-first-full.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C37): complete original 45 ZIP four independent BOS event timestamps and OHLC source"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
