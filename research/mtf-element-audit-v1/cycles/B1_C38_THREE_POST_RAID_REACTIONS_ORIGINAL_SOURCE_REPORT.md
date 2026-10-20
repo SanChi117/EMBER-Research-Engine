@@ -37,7 +37,7 @@ Source provenance: 45 original SHA-checksummed USD-M ZIP (BCH, BTC, ETH, SOL, XR
 - `d05/test_c38_adapted_post_raid_reaction.py`: **27 source/adversarial controls** including immediate BOS with no earlier reaction, delayed BOS with three distinct witnesses, false READY/trade tags, forged original3m source row hash or BOS price, future break bar, source prefix/suffix, invalid 1h/3m time placement and total 4×3 structure.
 - [First 27 negative controls CI 39493969372](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39493969372) PASS.
 - [First original ZIP 4×3 CI 39494276152](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39494276152) SUCCESS, full source recomputation and frozen receipt.
-- Independent full 45 ZIP replay, complete full JSON comparison and Python 3.10/3.11/3.12 ×27 control matrix are REQUIRED before any C38 [x]. A108 append and independent 108/108 SHA after all CI; this report is not a substitute for that proof.
+- [Independent C38 45 original USD-M ZIP, all 12 source combinations full per-case JSON equality and 27 source guards × Python 3.10/3.11/3.12 CI 39494609819](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39494609819) **SUCCESS across all five jobs**. Source witness `evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json` frozen Git blob `d50a567ace14bf187c14f931a2b0309ee4ba852f`: 45 original source ZIP, 76,800 native3m and 15,360 original15m Decimal source equality, old A107 107/107 source chain, 27 negative cases per Python version, 12 route combinations. C38 narrow source acceptance still requires A108 append and independent 108/108 SHA; no goldens or trading.
 
 ## What is NOT built
 
