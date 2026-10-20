@@ -1,0 +1,16 @@
+{
+  "2023_title_overlaps_2026_source": false,
+  "a105_record_sha256": "a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5",
+  "adversarial_source_tests_passed": 35,
+  "author_bos_goldens_attested": 0,
+  "c35_new_source_evidence_byte_hashes_verified": 5,
+  "canonical_source_sha_records_verified": 105,
+  "new_original_2023_or_2026_market_zip_replay": 0,
+  "orders": 0,
+  "original_c33_45zip_git_blob_unchanged": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39476159123,
+  "schema": "EMBER_A105_105_SHA_AUTHOR_2023_CASE_SOURCE_GAP_V1",
+  "trades": 0,
+  "trigger_sha": "d706e8a1aaafec4ed0c1b9d8656b8f0de301433c"
+}
