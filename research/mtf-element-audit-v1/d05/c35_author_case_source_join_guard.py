@@ -52,12 +52,12 @@ class InstructorCaseGuard:
 
 def _strict_epoch_ms(field,value):
     if value is not None and (type(value)!=int or value<=0):
-        raise ValueError("C35_INVALID_"+field)
+        raise ValueError("C35_INVALID_"+field.upper())
 
 def _strict_str(field,value):
     if value is not None and (type(value)!=str or len(value.strip())==0
                               or len(value)>2048):
-        raise ValueError("C35_INVALID_"+field)
+        raise ValueError("C35_INVALID_"+field.upper())
 
 def _overlap(a_start,a_end,b_start,b_end):
     return a_start<b_end and b_start<a_end
