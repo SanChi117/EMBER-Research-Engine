@@ -104,6 +104,14 @@ def _native_provenance(s,raw):
         raise ValueError("C33_SOURCE_SWING_SHA_ROW_MISMATCH")
     if s.known_ms!=ids[2].known_ms:
         raise ValueError("C33_SOURCE_SWING_RIGHT_CONFIRM_TIME_DRIFT")
+    if s.kind=="LOW":
+        valid=(s.level==ids[1].low and ids[1].low<ids[0].low and
+               ids[1].low<ids[2].low)
+    else:
+        valid=(s.level==ids[1].high and ids[1].high>ids[0].high and
+               ids[1].high>ids[2].high)
+    if not valid:
+        raise ValueError("C33_NOT_AN_ORIGINAL_STRICT_1PLUS1_PIVOT")
     return ids
 
 def _first_source_wick(s,event,rows):
