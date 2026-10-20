@@ -1,0 +1,12 @@
+{
+  "all_38_pass": false,
+  "author_labeled_goldens": 0,
+  "log_tail": "NO_LOG",
+  "orders": 0,
+  "outcome": "skipped",
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39458131235,
+  "schema": "EMBER_C34_AUTHOR_BOS_SOURCE_TEXT_NEGATIVE_GATE_V1",
+  "trades": 0,
+  "trigger_sha": "62b283e6c87b8b3e53d7424363452015a65adf0e"
+}
