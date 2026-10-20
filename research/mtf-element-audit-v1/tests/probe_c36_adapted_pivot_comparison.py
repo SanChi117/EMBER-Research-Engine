@@ -18,6 +18,9 @@ def main(output=None):
     x=summarize_frozen_c33(prior)
     assert x["source_c33_git_blob"]==FROZEN_C33_SHA
     assert x["original_parent_events"]==539 and x["original_swing_candidate_links"]==5285
+    assert x["unique_original3m_BOS_break_bars"]==390
+    assert x["additional_raid_contexts_sharing_original3m_bar"]==149
+    assert x["samples_are_independent_trades"] is False
     assert all(x["variant_agreement_only"][v]["n"]==539 for v in VARIANTS)
     assert x["variant_agreement_only"]["LATEST_CONFIRMED_V1"]["agrees_with_c21"]==539
     assert all(x["period_partitions"][s]["events"]>0 for s in ("DEVELOPMENT","VALIDATION","HOLDOUT"))
