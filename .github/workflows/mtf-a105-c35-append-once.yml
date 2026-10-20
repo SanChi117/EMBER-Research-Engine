@@ -1,0 +1,98 @@
+name: MTF A105 — Append Author 2023 vs C33 2026 Source Gap Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a105-c35-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a105-c35-frozen-source
+  cancel-in-progress: false
+jobs:
+  append-a105:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify pinned C35 independent original source no-join and immutable A104
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          base='research/mtf-element-audit-v1/'
+          pins={
+            'd05/c35_author_case_source_join_guard.py':'a1c45bea4a41ec907635639838a6516ecab7f357',
+            'd05/test_c35_author_case_source_join_guard.py':'7087e599a5c26419188818c0275d84a2542874b6',
+            'evidence/c35/C35_SOURCE_ACCESS_GAP_REGISTRY.json':'c0742c5f16ace9e922dc021bf5389bc4db1c80b0',
+            'evidence/c35/C35_INDEPENDENT_SOURCE_WITNESS.json':'4f793de037978f73bd2e4b61cae858a4757ea04a',
+            'cycles/B1_C35_2023_AUTHOR_VS_2026_C33_SOURCE_JOIN_REPORT.md':'ccf9ae39a770c402df1c621ee91d7d73a5914c16',
+            'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df'}
+          for p,want in pins.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+base+p],text=True).strip()
+              assert actual==want,(p,actual,want)
+          w=json.load(open(base+'evidence/c35/C35_INDEPENDENT_SOURCE_WITNESS.json'))
+          assert w['run_id']==39475591964
+          assert w['adversarial_source_tests_per_python']==35
+          assert w['python_versions']==['3.10','3.11','3.12']
+          assert w['old_104_sha_chain_verified']==104
+          assert w['periods_overlap']==False and w['joined_author_cases_to_C33']==0
+          assert w['new_usdm_archives_reread']==0 and w['author_selected_bos_golden_cases']==0
+          assert w['orders_created']==w['trades_created']==0
+          j=[json.loads(x) for x in open(base+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==104 and j[-1]['action_id']=='A104'
+          assert j[-1]['record_sha256']=='741e2ef71ec6f7095001d5161e6d59801af41cb86e42eccd109618a34045f5b4'
+          print('A105_C35_INDEPENDENT_SOURCE_WITNESS_AND_FROZEN_PREDECESSOR_PASS')
+          PY
+      - name: Re-verify canonical old 104 SHA actions
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a105-before.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/a105-before.json'))
+          assert d['events']==104 and d['validations_pass']
+          print('A105_PREVIOUS_104_SHA_BYTE_FILES_PASS')
+          PY
+      - name: Append 105th action only for original source metadata non-join
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A105 \
+            --cycle B1/C35 \
+            --planned 'Recover source-labelled actual instructor BackTest 1H/3M Jan-Jul 2023 examples from original academy/Notion or deny false source-matched 2026 crypto candles; preserve all original C33 45 SHA ZIP, 539 research parent cases and 5285 source preknown 3m swing relations.' \
+            --executed 'Repeated authorized Google Drive searches for BackTest 1H, 2023.01, 2023.07, 1H3M, BOS 2023 and opened original academy BOS Notion reference publicly; no accessible case dataset, only course hyperlink. Confirmed exact original C33 September1-October3 2026 UTC 32-day window, while instructor course title January-July 2023; windows do not overlap. Created source-gap registry with explicit missing label/symbol/provider/selected pivot/FTA/SL/timezone and typed author-case source join guard with 35 adversarial fake-label, fake-SHA, interval, wrong-market and no-execution tests. Corrected accidental initial creation of both C35 python files on default branch, moved to research and reverted default; initial CI 39474797141 failed before tests due missing module in research; second CI 39475425258 had 35 tests each Python version with 2 error-code case formatting mismatches; normalized exception field codes only. Independent Python 3.10,3.11,3.12 35 tests each all four jobs PASS CI 39475591964, witness blob 4f793de037978f73bd2e4b61cae858a4757ea04a. Original 45 ZIP unchanged; zero author positive/negative samples.' \
+            --result 'Five source documents pin original lesson and inaccessible 2023 backtest, source-level 2023 course title period vs C33 exact 2026 original 32-day sample period mismatch, and deny 2023-to-2026 BOS golden certification. 35 x3 metadata gate tests passed. No 2023 original instructor case labels, no author-verified chosen BOS swing, no original 2023 matching source, no market source replay, zero orders/trades or inferred fills. Technical negative provenance gate only; academic BOS remains NEEDS_AUTHOR_BOS_GOLDENS and NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent all four jobs CI 39475591964 SUCCESS: Python 3.10/3.11/3.12 each executes all 35 adverse source provenance tests and validates unchanged prior 104 SHA plus C33 original source Git blob fa17524a942d8227e8ec33e3d1e2c93c860669df. First two failed CI runs 39474797141 and 39475425258 openly documented and corrected without changing test geometry or treating a customer case label as author proof. Source gap metadata explicitly null; 2023 title does not validate individual price bars; no new trades or market data.' \
+            --evidence d05/c35_author_case_source_join_guard.py \
+            --evidence d05/test_c35_author_case_source_join_guard.py \
+            --evidence evidence/c35/C35_SOURCE_ACCESS_GAP_REGISTRY.json \
+            --evidence evidence/c35/C35_INDEPENDENT_SOURCE_WITNESS.json \
+            --evidence cycles/B1_C35_2023_AUTHOR_VS_2026_C33_SOURCE_JOIN_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a105-after.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/a105-after.json'))
+          assert d['events']==105 and d['validations_pass']
+          print('A105_105_SHA_FIVE_SOURCE_FILES_PASS')
+          PY
+      - name: Preserve only canonical SHA journal append
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A105): original 2023 author-case source gap cannot join 2026 USD-M 539 BOS source"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
