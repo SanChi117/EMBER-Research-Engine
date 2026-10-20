@@ -1,0 +1,155 @@
+name: MTF C36 — Independent 4 Adapted BOS + 6 Slots, Python 3.10–3.12
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c36-independent-adapted-pivot-and-slots.yml'
+      - 'research/mtf-element-audit-v1/evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json'
+      - 'research/mtf-element-audit-v1/d05/c36_adapted_slot_registry.py'
+      - 'research/mtf-element-audit-v1/d05/test_c36_adapted_slot_registry.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c36_adapted_slot_registry.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c36-independent-adapted-pivot
+  cancel-in-progress: false
+jobs:
+  python-source-negative-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Prior canonical 105 SHA and frozen original C33 native3m rows
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c36-old-ledger.json
+          python - <<'PY'
+          import json,subprocess
+          s=json.load(open('/tmp/c36-old-ledger.json'))
+          assert s['events']==105 and s['validations_pass']
+          assert s['tip_sha256']=='a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
+          path='research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'
+          sha=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+          assert sha=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          print('C36_PREDECESSOR_105_SHA_AND_C33_ORIGINAL_SOURCE_PASS')
+          PY
+      - name: Independent 35 pivot source controls no skipped tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c36_adapted_pivot_hypotheses 2>&1 | tee /tmp/c36-pivot-35.log
+          grep -q 'Ran 35 tests' /tmp/c36-pivot-35.log
+          grep -q '^OK$' /tmp/c36-pivot-35.log
+          if grep -q 'skipped=' /tmp/c36-pivot-35.log; then exit 1; fi
+      - name: Independent 23 locked academic core and adapted slots tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c36_adapted_slot_registry 2>&1 | tee /tmp/c36-slot-23.log
+          grep -q 'Ran 23 tests' /tmp/c36-slot-23.log
+          grep -q '^OK$' /tmp/c36-slot-23.log
+  reread-full-source-539:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate exact original C33 and first C36 source immutable Git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+           'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+           'research/mtf-element-audit-v1/evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json':'d086e00def1f84dafd32fc370ab249ec15956075'}
+          for p,w in pins.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert actual==w,(p,actual,w)
+          print('C36_INITIAL_AND_FROZEN_C33_PINNED_SOURCE_UNCHANGED')
+          PY
+      - name: Independently reread all 539 source contexts and compare full variant JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_pivot_comparison.py /tmp/c36-compare-again.json 2>&1 | tee /tmp/c36-full.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json'))
+          b=json.load(open('/tmp/c36-compare-again.json'))
+          assert a==b,'C36_COMPLETE_ORIGINAL_C33_539_COMPARISON_JSON_DRIFT'
+          assert a['original_parent_events']==539 and a['original_swing_candidate_links']==5285
+          assert a['unique_original3m_BOS_break_bars']==390
+          assert a['additional_raid_contexts_sharing_original3m_bar']==149
+          assert a['samples_are_independent_trades'] is False
+          c=a['variant_agreement_only']
+          assert c['LATEST_CONFIRMED_V1']=={'n':539,'agrees_with_c21':539}
+          assert c['EARLIEST_CONFIRMED_V1']=={'n':539,'agrees_with_c21':0}
+          assert c['DEEP_RAID_SIDE_V1']=={'n':539,'agrees_with_c21':54}
+          assert c['NEAREST_RAID_SIDE_V1']=={'n':539,'agrees_with_c21':52}
+          assert [a['period_partitions'][k]['events'] for k in ('DEVELOPMENT','VALIDATION','HOLDOUT')]==[270,131,138]
+          assert a['author_selected_BOS_goldens']==a['orders_created']==a['trades_created']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C36_INDEPENDENT_EXACT_539_ADAPTIVE_CHOICE_390_UNIQUE_NO_TRADE_PASS')
+          PY
+      - name: Produce read-only six-slot assembly manifest to be frozen if all jobs pass
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_slot_registry.py /tmp/c36-slot-manifest.json
+  freeze-source-proof:
+    needs: [python-source-negative-matrix,reread-full-source-539]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin source-only adapter and original academic locking proof
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c36/C36_INDEPENDENT_RUN_WITNESS.json
+          m=research/mtf-element-audit-v1/evidence/c36/C36_VERSIONED_ADAPTED_SLOT_REGISTRY.json
+          if test -e "$p" || test -e "$m"; then echo 'already source frozen'; exit 0; fi
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_slot_registry.py "$m"
+          python - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c36/C36_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_C36_ADAPTED_FOUR_BOS_SELECTORS_SIX_SLOTS_3PYTHON_MATRIX_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+            'old_source_SHA_actions_verified':105,
+            'original_C33_source_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'original_C36_comparison_blob':'d086e00def1f84dafd32fc370ab249ec15956075',
+            'source_contexts_replayed':539,
+            'unique_original3m_break_bars':390,
+            'different_1h_raid_contexts_same_break_bar':149,
+            'original_competing_swings':5285,
+            'all_case_comparison_JSON_equal':True,
+            'python_versions':['3.10','3.11','3.12'],
+            'pivot_negative_tests_per_python':35,
+            'registry_negative_tests_per_python':23,
+            'registered_adapted_pivot_hypotheses':4,
+            'full_engine_assembled':False,
+            'author_selected_bos_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p" "$m"
+          git commit -m "evidence(C36): independent 539 source pivot comparisons, 58 tests per Python and locked academic slots"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
