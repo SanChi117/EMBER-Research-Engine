@@ -1,0 +1,110 @@
+name: MTF C35 — Author Case Source 2023 vs 2026 35 Test Matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c35-author-case-nonintersection-matrix.yml'
+      - 'research/mtf-element-audit-v1/d05/c35_author_case_source_join_guard.py'
+      - 'research/mtf-element-audit-v1/d05/test_c35_author_case_source_join_guard.py'
+      - 'research/mtf-element-audit-v1/evidence/c35/C35_SOURCE_ACCESS_GAP_REGISTRY.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c35-source-nonintersection-independent
+  cancel-in-progress: false
+jobs:
+  negative-python-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify original A104 source SHA and immutable C33 2026 ZIP case receipt
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c35-prior-sha.json
+          python - <<'PY'
+          import json,subprocess
+          j=json.load(open('/tmp/c35-prior-sha.json'))
+          assert j['events']==104 and j['validations_pass']
+          assert j['tip_sha256']=='741e2ef71ec6f7095001d5161e6d59801af41cb86e42eccd109618a34045f5b4'
+          frozen='research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'
+          x=subprocess.check_output(['git','rev-parse','HEAD:'+frozen],text=True).strip()
+          assert x=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          print('C35_PRIOR_104_SHA_AND_C33_NATIVE_2026_SOURCE_PRESERVED')
+          PY
+      - name: Reject 2023 author case to 2026 source joins; 35 adverse examples
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c35_author_case_source_join_guard 2>&1 | tee /tmp/c35-35-negatives.log
+          grep -q 'Ran 35 tests' /tmp/c35-35-negatives.log
+          grep -q '^OK$' /tmp/c35-35-negatives.log
+      - name: Verify direct original source gap registry and date cutpoints
+        run: |
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c35/C35_SOURCE_ACCESS_GAP_REGISTRY.json'
+          a=json.load(open(p))
+          assert a['schema']=='EMBER_C35_SOURCE_GAP_AND_DATE_JOIN_V1'
+          assert a['author_source']['public_page_read_status']=='NOT_ACCESSIBLE_ON_CHECK'
+          assert a['author_source']['author_positive_goldens_proven']==0
+          assert a['author_source']['author_negative_goldens_proven']==0
+          assert a['frozen_research_source']['period_start_utc']=='2026-09-01T00:00:00Z'
+          assert a['frozen_research_source']['period_end_exclusive_utc']=='2026-10-03T00:00:00Z'
+          assert a['author_source']['course_heading_implied_period_start_utc']=='2023-01-01T00:00:00Z'
+          assert a['author_source']['course_heading_implied_period_end_exclusive_utc']=='2023-08-01T00:00:00Z'
+          assert not a['periods_overlap'] and not a['join_allowed']
+          assert a['frozen_research_source']['underlying_C33_git_blob']=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          assert a['fake_inferred_2023_2026_joins']==0
+          assert a['orders_created']==a['trades_created']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C35_COURSE_TITLE_2023_VS_SOURCE_2026_GAP_REGISTRY_PASS')
+          PY
+  pin-independent-witness:
+    needs: [negative-python-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Freeze 35 tests x3 version and original C33 source gap
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c35/C35_INDEPENDENT_SOURCE_WITNESS.json
+          if test -e "$p"; then echo 'Existing proof unchanged'; exit 0; fi
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c35/C35_INDEPENDENT_SOURCE_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_C35_AUTHOR_2023_VS_C33_2026_CASE_NONINTERSECTION_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'python_versions':['3.10','3.11','3.12'],
+            'adversarial_source_tests_per_python':35,
+            'old_104_sha_chain_verified':104,
+            'original_source_c33_git_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'periods_overlap':False,'joined_author_cases_to_C33':0,
+            'new_usdm_archives_reread':0,
+            'author_selected_bos_golden_cases':0,
+            'orders_created':0,'trades_created':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C35): source gap and 2023 instructor versus 2026 C33 source nonintersection 35x3"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
