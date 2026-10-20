@@ -1,0 +1,105 @@
+name: MTF C34 — Independent Instructor BOS Source Negative Python Matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c34-independent-source-negatives.yml'
+      - 'research/mtf-element-audit-v1/d05/c34_author_bos_text_negative_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c34_author_bos_text_negative_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c34-independent-negative-source
+  cancel-in-progress: false
+jobs:
+  independent-python-negative-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify original prior A103 ledger and SHA C33 source file
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c34-ledger.json
+          python - <<'PY'
+          import subprocess,json
+          r=json.load(open('/tmp/c34-ledger.json'))
+          assert r['events']==103 and r['validations_pass']
+          assert r['tip_sha256']=='a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8'
+          path='research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'
+          got=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+          assert got=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          print('C34_FROZEN_A103_AND_ORIGINAL_SOURCE_PASS')
+          PY
+      - name: Independently execute 38 BOS negative-only rule source cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c34_author_bos_text_negative_gate 2>&1 | tee /tmp/c34-negative.log
+          grep -q 'Ran 38 tests' /tmp/c34-negative.log
+          grep -q '^OK$' /tmp/c34-negative.log
+      - name: Additional independent invariants no author-positive or order
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python - <<'PY'
+          from decimal import Decimal
+          from c34_author_bos_text_negative_gate import C34RulePremises,judge_textual_bos_rules
+          p=C34RulePremises('SSL','WICK',Decimal('110'),Decimal('100'),
+                   True,True,False,True,True,True,True,
+                   'Europe/Kyiv',Decimal('14'),True,True)
+          j=judge_textual_bos_rules(p)
+          assert j.mandatory_invalidation_codes==()
+          assert j.instructor_route_classification=='ACADEMIC_BOS_AUTHOR_CHOICE_INDETERMINATE'
+          assert not j.available_for_paper_signals
+          assert not j.market_orders_allowed and not j.limit_orders_allowed
+          assert not j.trades_allowed and j.readiness=='NOT_TRADE_READY'
+          assert 'AUTHOR_SELECTED_3M_BOS_PIVOT_POSITIVE_NEGATIVE_GOLDENS_MISSING' in j.missing_academic_evidence
+          print('C34_NEGATIVE_ONLY_NO_AUTHOR_PIVOT_NO_EXECUTION_INVARIANT_PASS')
+          PY
+  freeze-independent-witness:
+    needs: [independent-python-negative-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Pin independent 38x3 source negative evidence only
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c34/C34_INDEPENDENT_SOURCE_NEGATIVE_WITNESS.json
+          if test -e "$p"; then echo 'Already frozen'; exit 0; fi
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c34/C34_INDEPENDENT_SOURCE_NEGATIVE_WITNESS.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C34_AUTHOR_BOS_NEGATIVE_SOURCE_ONLY_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['TRIGGER_SHA'],
+            'python_versions':['3.10','3.11','3.12'],
+            'negative_synthetic_rule_tests_per_python':38,
+            'frozen_a103_ledger_actions_verified':103,
+            'frozen_c33_original_git_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'new_original_market_zip_rereads':0,
+            'author_bos_goldens_attested':0,
+            'orders_created':0,'trades_created':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C34): independent Python 3.10-3.12 38 source-text BOS negative rules, no author goldens"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
