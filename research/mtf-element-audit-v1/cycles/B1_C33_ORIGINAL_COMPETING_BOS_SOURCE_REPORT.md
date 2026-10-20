@@ -1,6 +1,6 @@
 # B1/C33 — original 3m BOS swing competition, C21 proxy vs author ambiguity
 
-**Scope:** source-only C33 original 45 Binance USD-M Futures ZIP **first pinned receipt obtained**, 27/27 adversarial tests [CI 39454279240](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39454279240) PASS. Independent SECOND full JSON replay, Python 3.10–3.12 source matrix, A103/103 SHA still pending. **NOT author 3m BOS, FTA, trade, TP, SL; PAPER ONLY · NOT_TRADE_READY.**
+**Scope:** source-only C33 original 45 Binance USD-M Futures ZIP **first pinned receipt obtained**, 27/27 adversarial tests [CI 39454279240](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39454279240) PASS. Independent full JSON replay of 45 original ZIP and Python 3.10/3.11/3.12 27-negative matrix **PASSED** [CI 39455216429](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39455216429); independent witness frozen Git blob `7c432fd16a554dfadd0536590aafa7c17610231d`. Append-only A103 / final independent 103/103 SHA still pending. **NOT author 3m BOS, FTA, trade, TP, SL; PAPER ONLY · NOT_TRADE_READY.**
 
 ## Primary academy and exact unknown
 
@@ -39,4 +39,4 @@ All 539 research source events had **2 or more** strictly eligible local native3
 
 The blocker is not search speed, use of another generic MSS detector, or 'add more filters': it is missing the author's operational instruction for selecting ONE of multiple structurally eligible source swings, and what qualifies as local BOS after specific raid reaction. Thus the next meaningful research must focus on obtaining instructor's **annotated source case** (or authored precise text identifying selected 3m swing) and comparing author label vs ALL 5,285 source candidates.
 
-Success of CI will close only technical C33 ambiguity enumeration; it cannot make the larger B1 author entry engine READY. Before A103: independently replay full frozen JSON, adverse test 3 Python versions, pin witness, append-once A103 with six-source SHA and 103/103 independent source replay, then update map and cross-chat handoff.
+Success of CI will close only technical C33 ambiguity enumeration; it cannot make the larger B1 author entry engine READY. Original full frozen JSON was independently replayed exactly, negative tests PASSED on three Python versions, witness pinned. Before C33 source-only final [x]: append-once A103 with six-source SHA and 103/103 independent full original ZIP replay; then update map and cross-chat handoff.
