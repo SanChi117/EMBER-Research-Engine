@@ -1,0 +1,74 @@
+name: MTF C37 — 27 Native Adapted BOS Scanner First Source Gate
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c37-adapted-native3m-first.yml'
+      - 'research/mtf-element-audit-v1/d05/c37_native_adapted_bos_event_scanner.py'
+      - 'research/mtf-element-audit-v1/d05/test_c37_native_adapted_bos_event_scanner.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  c37-unit-source-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen 106 prior actions and original source
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c37-prior.json
+          python - <<'PY'
+          import json,subprocess
+          j=json.load(open('/tmp/c37-prior.json'))
+          assert j['events']==106 and j['validations_pass']
+          b=subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'],text=True).strip()
+          assert b=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          print('C37_PREVIOUS_106_SHA_AND_ORIGINAL_45_ZIP_RECEIPT_PINNED')
+          PY
+      - name: Run all source-native chronological 27 test cases
+        id: negatives
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c37_native_adapted_bos_event_scanner >/tmp/c37-tests.log 2>&1
+      - name: Persist exact tests and failures
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+          TEST_RESULT: ${{ steps.negatives.outcome }}
+        run: |
+          python - <<'PY'
+          import pathlib,json,os
+          s=pathlib.Path('/tmp/c37-tests.log')
+          log=s.read_text(errors='replace') if s.exists() else 'NO_LOG'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c37/diagnostics/C37_NATIVE_SOURCE_NEGATIVES.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C37_NATIVE_ADAPTED_SCANNER_FIRST_NEGATIVE_GATE_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['TRIGGER_SHA'],
+            'outcome':os.environ['TEST_RESULT'],
+            'all_27_pass':os.environ['TEST_RESULT']=='success' and 'Ran 27 tests' in log
+                    and 'OK' in log[-200:] and 'skipped=' not in log[-200:],
+            'original_test_log_tail':log[-18000:],
+            'author_selected_BOS_goldens':0,'orders_created':0,'trades_created':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c37/diagnostics/C37_NATIVE_SOURCE_NEGATIVES.json
+          git commit -m "diagnostic(C37): true chronological native3m 27 negative test outcome"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Refuse skipped or failing source guards
+        if: steps.negatives.outcome != 'success'
+        run: exit 1
