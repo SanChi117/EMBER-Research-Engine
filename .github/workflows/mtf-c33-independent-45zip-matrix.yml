@@ -1,0 +1,125 @@
+name: MTF C33 — Independent Original 45 ZIP 3m BOS Pivot Ambiguity
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c33-independent-45zip-matrix.yml'
+      - 'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c33-original-independent
+  cancel-in-progress: false
+jobs:
+  python-negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify all old 102 SHA evidence files and chain
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c33-prior-ledger.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c33-prior-ledger.json'))
+          assert r['events']==102 and r['validations_pass']
+          assert r['tip_sha256']=='a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f'
+          print('C33_PREVIOUS_ALL_102_SHA_PROVENANCE_PASS')
+          PY
+      - name: 27 adversarial no lookahead native price pivot source controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c33_preknown_competing_bos_swings 2>&1 | tee /tmp/c33-27-negatives.log
+          grep -q 'Ran 27 tests' /tmp/c33-27-negatives.log
+  full-independent-original-45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen 2026 original C30 C31 C32 and new C33 Git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          source={
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+           'research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74',
+           'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df'}
+          for p,w in source.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==w,(p,got,w)
+          print('C33_OLD_AND_CURRENT_ORIGINAL_IMMUTABLE_BLOB_IDS_MATCH')
+          PY
+      - name: Independently reread all 45 original USD-M ZIP and exact full pivot per-case JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c33_original_competing_bos.py /tmp/c33-independent.json 2>&1 | tee /tmp/c33-independent.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'))
+          b=json.load(open('/tmp/c33-independent.json'))
+          assert a==b,'C33_SECOND_ORIGINAL_ALL_539_CASE_JSON_NOT_EQUAL'
+          assert a['original_binance_usdm_zip_count']==45
+          assert a['original_native3m_rows']==76800
+          assert a['native15m_exact_decimal_equalities']==15360
+          t=a['totals']
+          assert t['original_c21_parent_edges']==539 and t['c31_research_singletons']==165
+          assert t['parents_with_multiple_preknown_swings']==539
+          assert t['parents_with_only_one_preknown_swing']==0
+          assert t['total_competing_preknown_swings']==5285
+          assert t['max_preknown_competing_swings']==18
+          assert t['proxy_not_latest_preknown']==0
+          assert t['orders_created']==t['trades_created']==0
+          assert a['author_selected_BOS_goldens']==0 and a['readiness']=='NOT_TRADE_READY'
+          print('C33_INDEPENDENT_FULL_45ZIP_539_CASE_5285_PREKNOWN_SWING_JSON_PASS')
+          PY
+  freeze-independent-source:
+    needs: [python-negatives,full-independent-original-45zip]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Freeze complete 45 original ZIP plus Python 3-version adversarial proof
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c33/C33_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo "C33 earlier proof retained"; exit 0; fi
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c33/C33_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_C33_45_ORIGINAL_ZIP_ALL_PREKNOWN_SWINGS_MATRIX_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+            'original_full_json_git_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'original_45_usdm_zip_reread':45,'complete_539_cases_json_equal':True,
+            'python_versions':['3.10','3.11','3.12'],'negative_tests_per_python':27,
+            'source_original_bos_parent_edges':539,'competing_swing_relations':5285,
+            'events_with_two_or_more_preknown_swings':539,
+            'author_selected_bos_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C33): independent 45 original ZIP full 539 BOS pivot options with 27x3 negative tests"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
