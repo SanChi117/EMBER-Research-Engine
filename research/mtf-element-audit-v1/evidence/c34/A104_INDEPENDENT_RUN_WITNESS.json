@@ -1,0 +1,15 @@
+{
+  "a104_record_sha256": "741e2ef71ec6f7095001d5161e6d59801af41cb86e42eccd109618a34045f5b4",
+  "all_source_sha_records_verified": 104,
+  "author_3m_bos_pivot_goldens": 0,
+  "c34_new_source_evidence_byte_hashes_verified": 4,
+  "new_original_market_zip_reread": 0,
+  "orders_created": 0,
+  "preserved_original_c33_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39459245566,
+  "schema": "EMBER_A104_104_SHA_ORIGINAL_BOS_TEXT_NEGATIVE_ONLY_V1",
+  "source_text_negative_unit_tests_passed": 38,
+  "trades_created": 0,
+  "trigger_sha": "39917660f836c8d2acdf68bde23957acfc2182e2"
+}
