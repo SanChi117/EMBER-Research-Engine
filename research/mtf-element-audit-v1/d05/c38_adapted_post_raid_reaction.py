@@ -109,7 +109,7 @@ def _eligible_window(e,rows):
         raise ValueError("C38_REACTION_CONTAINS_BOS_BREAK_CANDLE")
     return bars
 
-def _reacted(e,bars,hypothesis):
+def _reacted(e,bars,hypothesis,baseline_close):
     if hypothesis not in REACTION_VARIANTS:
         raise ValueError("C38_UNKNOWN_ADAPTED_REACTION")
     short=e.side=="SHORT"
@@ -137,8 +137,14 @@ def _reacted(e,bars,hypothesis):
         (short and extreme<=level) or
         (not short and extreme>=level)):
         raise ValueError("C38_INVALID_RAID_SOURCE_PRICE")
+    if (type(baseline_close) is not Decimal or
+        not baseline_close.is_finite() or baseline_close<=0):
+        raise ValueError("C38_MISSING_CLOSED_RAID_CONFIRMATION_PRICE")
     delta=abs(extreme-level)*Decimal("0.5")
-    boundary=level-delta if short else level+delta
+    # Adapted displacement must be meaningful *relative to the full 1H
+    # confirmation close*, NOT merely to a distant raid level that was
+    # already crossed in the previous hour.
+    boundary=baseline_close-delta if short else baseline_close+delta
     return next((b for b in bars if (
         b.close<=boundary if short else b.close>=boundary)),None)
 
@@ -146,7 +152,11 @@ def classify_adapted_reaction(e,rows,hypothesis):
     if hypothesis not in REACTION_VARIANTS:
         raise ValueError("C38_UNKNOWN_ADAPTED_REACTION")
     bars=_eligible_window(e,rows)
-    witness=_reacted(e,bars,hypothesis)
+    baseline_i=(e.raid_confirmed_ms-rows[0].start_ms)//180000-1
+    if (baseline_i<0 or baseline_i>=len(rows) or
+        rows[baseline_i].known_ms!=e.raid_confirmed_ms):
+        raise ValueError("C38_RAID_CONFIRMATION_BASELINE_NOT_SOURCE_CLOSED")
+    witness=_reacted(e,bars,hypothesis,rows[baseline_i].close)
     if witness is not None and (witness.known_ms>e.break_bar_start_ms or
             witness.start_ms<e.raid_confirmed_ms):
         raise ValueError("C38_UNCLOSED_FUTURE_REACTION_WITNESS")
