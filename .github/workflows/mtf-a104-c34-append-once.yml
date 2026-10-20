@@ -1,0 +1,93 @@
+name: MTF A104 — Append Instructor BOS Reject-Only Source Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a104-c34-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a104-academic-source-negative-append
+  cancel-in-progress: false
+jobs:
+  append-original-bos-negative-evidence-a104:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify old C33 original source immutable and independent source-text CI
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          base='research/mtf-element-audit-v1/'
+          pins={
+           'd05/c34_author_bos_text_negative_gate.py':'12ce03773d12414fe231f019dc3f44474dbc1f71',
+           'd05/test_c34_author_bos_text_negative_gate.py':'18555893150e716d243e2e9f5779c71fe95aef25',
+           'cycles/B1_C34_AUTHOR_BOS_PRIMARY_SOURCE_NEGATIVE_RULE_AUDIT.md':'19cfddcbdbeef37e2b358e2a135d4e0c55cfcef2',
+           'evidence/c34/C34_INDEPENDENT_SOURCE_NEGATIVE_WITNESS.json':'f56fe16d514b0f9caeb03b483d8a905bf719fb90',
+           'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+base+p],text=True).strip()
+              assert got==w,(p,got,w)
+          w=json.load(open(base+'evidence/c34/C34_INDEPENDENT_SOURCE_NEGATIVE_WITNESS.json'))
+          assert w['run_id']==39458705426 and w['python_versions']==['3.10','3.11','3.12']
+          assert w['negative_synthetic_rule_tests_per_python']==38
+          assert w['new_original_market_zip_rereads']==0 and w['author_bos_goldens_attested']==0
+          assert w['orders_created']==w['trades_created']==0
+          j=[json.loads(v) for v in open(base+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
+          assert len(j)==103 and j[-1]['action_id']=='A103'
+          assert j[-1]['record_sha256']=='a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8'
+          print('A104_PREVIOUS_SOURCE_A103_AND_C34_38x3_INDEPENDENT_PROOF_PASS')
+          PY
+      - name: Independently verify canonical 103 source SHA byte chain
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a104-old-chain.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a104-old-chain.json'))
+          assert j['events']==103 and j['validations_pass']
+          print('A104_OLD_103_CANONICAL_SHA_PASS')
+          PY
+      - name: Append immutable source academic negative C34 as exactly four evidence files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A104 \
+            --cycle B1/C34 \
+            --planned 'Re-examine original 4. Entry By BOS and related IDM/IMB/SNR/liquidity/context lessons and Drive images to find author-selected BOS swing goldens, or document absence. Build reject-only source-text rule checks without inventing author BOS pivot/FTA target, 3m tick fill, limit price, crypto pip risk or timeframe session.' \
+            --executed 'Reviewed original academy Drive 4. Entry By BOS, 2. Entry by IMB & SNR, 3. Entry by Inducement IDM, liquidity, Rejection Block and context/TDA; inspected BOS folder desktop screenshot 2102 and Entry Logic screenshots 2092 2093 and separated 15m/5m IMB/SNR models from 1H/3m BOS. No instructor-labeled positive/negative BOS pivots found, Notion 2023 original inaccessible. Created typed reject-only textual source C34 module and 38 synthetic rule guards. Initial CI 39458131235 failed before running tests due wrong git rev-parse repository root path, corrected workflow 68f3d56b, error documented. Independent all-four-job Python 3.10 3.11 3.12 by 38 source guards matrix CI 39458705426 SUCCESS and witness frozen blob f56fe16d514b0f9caeb03b483d8a905bf719fb90. C33 full original source blob fa17524a942d8227e8ec33e3d1e2c93c860669df untouched, no new market replay or signals.' \
+            --result 'Negative-only course rules formally distinguish wick BSL/SSL raid, appropriate below/above BOS levels, actual 3m model presence, suitable 1H target, first-trouble RR skip, SL beyond swept liquidity, and keep author selected pivot, limit fill, actual tick crossing, timezone DST and 15 pip crypto translation unknown. All hypothetical geometry pass STILL NOT_TRADE_READY; 0 author-positive cases, 0 orders/trades, no price/backtest data created. Precise BOS swing among prior 5285 research preknown candidate relations still unverified author selection.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent 38 source negative tests each Python 3.10 3.11 3.12 CI 39458705426 SUCCESS, SHA-103 full chain and frozen C33 original 45 ZIP source blob checked unchanged. Source images 2102/2092/2093 contain no timestamped author BOS selection goldens. First failed CI 39458131235 before unit test was faithfully kept. Four new evidence hashes for source gate, unit tests, frozen independent witness, source comparison audit; no 45 ZIP replay because no new market-data detector. Cannot claim author BOS ready, no actual trades.' \
+            --evidence d05/c34_author_bos_text_negative_gate.py \
+            --evidence d05/test_c34_author_bos_text_negative_gate.py \
+            --evidence evidence/c34/C34_INDEPENDENT_SOURCE_NEGATIVE_WITNESS.json \
+            --evidence cycles/B1_C34_AUTHOR_BOS_PRIMARY_SOURCE_NEGATIVE_RULE_AUDIT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a104-new-chain.json
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/a104-new-chain.json'))
+          assert j['events']==104 and j['validations_pass']
+          print('A104_104_SOURCE_SHA_AND_FOUR_BYTE_EVIDENCE_HASH_PASS')
+          PY
+      - name: Commit only immutable appended SHA journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A104): instructor BOS rejection-only rules independently verified, author pivot still missing"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
