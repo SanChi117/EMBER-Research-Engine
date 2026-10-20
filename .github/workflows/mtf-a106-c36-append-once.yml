@@ -1,0 +1,117 @@
+name: MTF A106 — Append Adapted BOS Lab 10 Evidence SHA Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a106-c36-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a106-c36-append-once
+  cancel-in-progress: false
+jobs:
+  original-adapted-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require ten immutable C36 adapted research evidence files and previous original source
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          root='research/mtf-element-audit-v1/'
+          pinned={
+            'd05/c36_adapted_pivot_hypotheses.py':'b6a80cea320571ff60ec6bd07cc8b55dd22059b6',
+            'd05/test_c36_adapted_pivot_hypotheses.py':'436f86f74805c556a956c2755552616a9f049aec',
+            'tests/probe_c36_adapted_pivot_comparison.py':'82ab6cc228edf8abc34a82ba719af3afbe489925',
+            'evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json':'d086e00def1f84dafd32fc370ab249ec15956075',
+            'd05/c36_adapted_slot_registry.py':'724836e84d804bda910279e1a20e1597e1a22065',
+            'd05/test_c36_adapted_slot_registry.py':'dfa7afce7b9186511ca466edb1d32009a4371d20',
+            'tests/probe_c36_adapted_slot_registry.py':'de89268192e4df4ee0d6893b335a22a0f67b9cfe',
+            'evidence/c36/C36_VERSIONED_ADAPTED_SLOT_REGISTRY.json':'a77454dd66d39855878519ba83b61df95cdc7c0f',
+            'evidence/c36/C36_INDEPENDENT_RUN_WITNESS.json':'36fbb68bb0f76f35065bd8ec5be69a2a4a87ec90',
+            'cycles/B1_C36_ADAPTED_PIVOT_LAB_AND_SLOTS_REPORT.md':'d73d0f2ea735b6bdf84243431c2a4b59cd7d8bad',
+            'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          }
+          for p,w in pinned.items():
+            got=subprocess.check_output(['git','rev-parse','HEAD:'+root+p],text=True).strip()
+            assert got==w,(p,got,w)
+          w=json.load(open(root+'evidence/c36/C36_INDEPENDENT_RUN_WITNESS.json'))
+          assert w['run_id']==39481487246 and w['all_case_comparison_JSON_equal']
+          assert w['python_versions']==['3.10','3.11','3.12']
+          assert w['pivot_negative_tests_per_python']==35
+          assert w['registry_negative_tests_per_python']==23
+          assert w['source_contexts_replayed']==539 and w['unique_original3m_break_bars']==390
+          assert w['different_1h_raid_contexts_same_break_bar']==149
+          assert w['original_competing_swings']==5285
+          assert w['author_selected_bos_goldens']==w['orders']==w['trades']==0
+          j=[json.loads(x) for x in open(root+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==105 and j[-1]['action_id']=='A105'
+          assert j[-1]['record_sha256']=='a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
+          print('A106_ORIGINAL_IMMUTABLE_SOURCE_10_FILES_AND_105_PREDECESSOR_PASS')
+          PY
+      - name: Independently verify all prior 105 SHA and source file bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a106-before.json
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/a106-before.json'))
+          assert v['events']==105 and v['validations_pass']
+          print('A106_PREVIOUS_105_SHA_BYTE_CHAIN_PASS')
+          PY
+      - name: Assert no new trade and full source reread matches pinned JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_pivot_comparison.py /tmp/a106-original539.json
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_slot_registry.py /tmp/a106-locked-slots.json
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c36_adapted_pivot_hypotheses test_c36_adapted_slot_registry
+      - name: Append canonical A106 ten SHA evidence files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A106 \
+            --cycle B1/C36 \
+            --planned 'Separate original read-only academic source CORE from explicitly adapted reusable hypotheses; implement four C33 original 3m source-preknown BOS pivot selection research variants, compare within 539 C21-conditioned study contexts without mixing author labels, offers of trades or profit objectives, and define versioned PAPER-only slots for later whole-engine validation.' \
+            --executed 'Reused original SHA-pinned C33 Binance USD-M 45 archive receipt and 539 strict C21 research contexts/5285 competing 3m swings (NO new ZIP downloaded); implemented 4 adapted deterministic pivot selectors with original bar SHA, candidate-list SHA, raid side, 3m right confirmation known at each BOS bar START. Found 539 distinct raid contexts but only 390 unique 3m BOS candles (149 contexts reuse those candles), fixed an incorrect one-row-one-raid uniqueness assumption. Compared latest, earliest, deep raid-side, nearest raid-side choices on complete pinned source and chrono-only 270/131/138 partitions. Created read-only academic CORE digest and six typed PAPER slots; only BOS_PIVOT has candidate source-only variants, Reaction/FTA/SL and executable entry remain blocked. First-gate CI 39480206950 PASS 35 tests and source; 39479714861 FAIL on duplicate candles corrected; independent CI 39480803299 FAIL on Python tuple vs JSON list manifest assertion despite 58x3 negative tests passing, 39481307923 FAIL final frozen manifest canonical serialization after other jobs passed, both fixed without modifying source semantics; final independent CI 39481487246 all five jobs SUCCESS 35 pivot + 23 slot tests on Python 3.10 3.11 3.12 and complete original case JSON equality. C36 source frozen Git blob d086e00def1f84dafd32fc370ab249ec15956075, registry manifest blob a77454dd66d39855878519ba83b61df95cdc7c0f, independent witness blob 36fbb68bb0f76f35065bd8ec5be69a2a4a87ec90.' \
+            --result '539 C21-conditioned technical RAID contexts are correlated across 390 unique original 3m BOS source bars. Under source-preknown pivot selection latest agrees with old C21 539/539; earliest 0/539; deepest raid-side 54/539; nearest beyond raid 52/539. These are NOT entries, missed trades, backtest performance, win rates or proof of author BOS. Development 270, Validation 131 and HOLDOUT 138 descriptive contexts have been inspected, therefore HOLDOUT is NOT pristine for future optimization. No price tick fill, target or risk system. Four versioned adapted choices, six locked academic/adapted research slots, 0 author goldens, 0 orders and 0 trades, NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent CI 39481487246 SUCCESS all 5 jobs, 35 pivot +23 source-slot adverse controls each Python 3.10/3.11/3.12, complete original C33 539 event full JSON source comparison reproducible, 5285 original source candidate SHA links preserved and old A105 105/105 canonical SHA old evidence unchanged. All three failed development CI cases documented and causally corrected. Original USD-M source ZIP not newly re-downloaded: reused fully verified frozen C33 original source 45 ZIP evidence only. Future C37 must scan each variant independently forward in 3m chronological price stream, then require untouched new periods and credible fees/slippage before profit questions; no automated orders or fills now.' \
+            --evidence d05/c36_adapted_pivot_hypotheses.py \
+            --evidence d05/test_c36_adapted_pivot_hypotheses.py \
+            --evidence tests/probe_c36_adapted_pivot_comparison.py \
+            --evidence evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json \
+            --evidence d05/c36_adapted_slot_registry.py \
+            --evidence d05/test_c36_adapted_slot_registry.py \
+            --evidence tests/probe_c36_adapted_slot_registry.py \
+            --evidence evidence/c36/C36_VERSIONED_ADAPTED_SLOT_REGISTRY.json \
+            --evidence evidence/c36/C36_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C36_ADAPTED_PIVOT_LAB_AND_SLOTS_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a106-after.json
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/a106-after.json'))
+          assert v['events']==106 and v['validations_pass']
+          print('A106_106_CANONICAL_RECORD_SHA_AND_TEN_EVIDENCE_BYTES_PASS')
+          PY
+      - name: Commit only appended journal A106, no previous source rewrite
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A106): four adapted source-only BOS hypothesis choices and six locked modules, 539 contexts not trades"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
