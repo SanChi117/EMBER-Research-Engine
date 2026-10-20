@@ -1,0 +1,18 @@
+{
+  "a106_record_sha256": "9e67ed26b4c9a0b7a6bc43be3cb3ac345998a6db310659e8273f6391c42ec03d",
+  "all_case_and_slot_manifest_JSON_equal": true,
+  "author_BOS_goldens": 0,
+  "distinct_original3m_break_bars": 390,
+  "full_106_source_sha_records_verified": 106,
+  "negative_source_tests_passed": 58,
+  "orders": 0,
+  "original_C33_source_git_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "readiness": "NOT_TRADE_READY",
+  "replayed_complete_source_research_contexts": 539,
+  "run_id": 39482224419,
+  "schema": "EMBER_A106_106_SHA_ADAPTED_FOUR_BOS_LOCKED_SLOTS_V1",
+  "source_competing_swings": 5285,
+  "ten_new_C36_evidence_file_byte_hashes_verified": 10,
+  "trades": 0,
+  "trigger_sha": "57123d35252b773b0cd0fba5f6b3a85d1ae90d0e"
+}
