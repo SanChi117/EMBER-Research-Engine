@@ -100,12 +100,12 @@ def _reacted(e,bars,hypothesis):
         return next((b for b in bars if (
             b.close<b.open if short else b.close>b.open)),None)
     if hypothesis=="POST_CONFIRM_TWO_PROGRESSIVE_CLOSES_V1":
-        for a,b in zip(bars,bars[1:]):
-            if (b.start_ms!=a.known_ms):continue
-            # Both subsequent 3m closes progress in the BOS direction,
-            # using the prior fully closed native 3m close.
-            prior=bars[bars.index(a)-1] if bars.index(a)>0 else None
-            if prior is None or a.start_ms!=prior.known_ms:continue
+        for j in range(2,len(bars)):
+            prior,a,b=bars[j-2:j+1]
+            if (a.start_ms!=prior.known_ms or
+                b.start_ms!=a.known_ms):continue
+            # Two strictly progressive 3m closes after full 1H raid
+            # confirmation, never the currently forming break candle.
             if ((prior.close>a.close>b.close) if short else
                 (prior.close<a.close<b.close)):
                 return b
