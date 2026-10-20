@@ -1,0 +1,26 @@
+{
+  "all_case_comparison_JSON_equal": true,
+  "author_selected_bos_goldens": 0,
+  "different_1h_raid_contexts_same_break_bar": 149,
+  "full_engine_assembled": false,
+  "old_source_SHA_actions_verified": 105,
+  "orders": 0,
+  "original_C33_source_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "original_C36_comparison_blob": "d086e00def1f84dafd32fc370ab249ec15956075",
+  "original_competing_swings": 5285,
+  "pivot_negative_tests_per_python": 35,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "registered_adapted_pivot_hypotheses": 4,
+  "registry_negative_tests_per_python": 23,
+  "run_id": 39481487246,
+  "schema": "EMBER_C36_ADAPTED_FOUR_BOS_SELECTORS_SIX_SLOTS_3PYTHON_MATRIX_V1",
+  "source_contexts_replayed": 539,
+  "trades": 0,
+  "trigger_sha": "9cc97292fec4d2df9f0ed6c077174c57a0ee251a",
+  "unique_original3m_break_bars": 390
+}
