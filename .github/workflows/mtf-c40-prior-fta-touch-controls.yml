@@ -1,0 +1,31 @@
+name: MTF C40 Prior FTA Touch First Controls
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c40-prior-fta-touch-controls.yml'
+      - 'research/mtf-element-audit-v1/d05/c40_pre_bos_fta_touch_state.py'
+      - 'research/mtf-element-audit-v1/d05/test_c40_pre_bos_fta_touch_state.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-negative:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify existing 108 SHA and previous source immutable
+        run: |
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+      - name: Reject source future touches and fake original FTA source
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c40_pre_bos_fta_touch_state 2>&1 | tee /tmp/c40-test.log
+          grep -q 'Ran 19 tests' /tmp/c40-test.log
+          grep -q '^OK$' /tmp/c40-test.log
+          if grep -q 'skipped=' /tmp/c40-test.log; then exit 1; fi
