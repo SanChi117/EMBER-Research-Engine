@@ -30,7 +30,7 @@ jobs:
           j=json.load(open('/tmp/c34-prior.json'))
           assert j['events']==103 and j['validations_pass']
           assert j['tip_sha256']=='a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8'
-          x=subprocess.check_output(['git','rev-parse','HEAD:evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'],text=True).strip()
+          x=subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'],text=True).strip()
           assert x=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
           print('C34_FROZEN_103_SHA_AND_45ZIP_C33_SOURCE_PASS')
           PY
