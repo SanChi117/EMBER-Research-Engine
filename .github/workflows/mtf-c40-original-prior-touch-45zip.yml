@@ -7,13 +7,15 @@ on:
       - 'research/mtf-element-audit-v1/tests/probe_c40_original_fta_prior_touch_45zip.py'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   original-45zip:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -41,3 +43,16 @@ jobs:
           assert x['readiness']=='NOT_TRADE_READY'
           print('C40_SOURCE_FIRST_TOUCH_STATE_ONLY_PASS')
           PY
+      - name: Freeze complete source-only C40 prior touch JSON after passing
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json
+          if test -e "$p"; then echo 'Already pinned'; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c40.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C40): 45 original ZIP 12 FTA route prior native3m touch states"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
