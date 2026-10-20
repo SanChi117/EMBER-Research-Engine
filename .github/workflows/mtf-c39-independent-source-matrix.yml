@@ -1,0 +1,126 @@
+name: MTF C39 Independent FTA 45ZIP and Python 3-Version Tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c39-independent-source-matrix.yml'
+      - 'research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c39-independent-original-45zip
+  cancel-in-progress: false
+jobs:
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify old 108 source SHA and 33 source-negative checks
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/prior.json
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/prior.json'))
+          assert v['events']==108 and v['validations_pass']
+          PY
+          cd d05
+          python -m unittest -v test_c39_adapted_preknown_fta_source 2>&1 | tee /tmp/c39-source-negative.log
+          grep -q 'Ran 33 tests' /tmp/c39-source-negative.log
+          grep -q '^OK$' /tmp/c39-source-negative.log
+          if grep -q 'skipped=' /tmp/c39-source-negative.log; then exit 1; fi
+  original-independent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Ensure frozen original parent and first C39 receipt untouched
+        run: |
+          python - <<'PY'
+          import subprocess
+          b='research/mtf-element-audit-v1/'
+          pins={
+           'evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+           'evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json':'15dacbe47ba2b6e133d8b97d970a96d6242cd80f'}
+          for path,sha in pins.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+b+path],text=True).strip()
+              assert actual==sha,(path,actual,sha)
+          PY
+      - name: Independently reread 45 original ZIP and compare entire frozen 12-route JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c39_original_source_preknown_fta_45zip.py /tmp/c39-second.json > /tmp/c39-second.log 2>&1
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json'
+          a=json.load(open(p))
+          b=json.load(open('/tmp/c39-second.json'))
+          assert a==b,'C39_COMPLETE_ORIGINAL_12_FTA_ROUTES_JSON_DRIFT'
+          assert a['replayed_original_usdm_zip_count']==45
+          assert a['closed_original_native3m_bars']==76800
+          assert a['native15m_original_decimal_equalities']==15360
+          assert a['route_count']==12 and len(a['summary_by_route'])==12
+          expected={'LATEST_CONFIRMED_V1':(539,537),
+                    'EARLIEST_CONFIRMED_V1':(462,462),
+                    'DEEP_RAID_SIDE_V1':(412,411),
+                    'NEAREST_RAID_SIDE_V1':(511,511)}
+          for name,(total,hits) in expected.items():
+              for k,v in a['summary_by_route'].items():
+                  if k.startswith(name+'::'):
+                      assert (v['source_bos_contexts'],v['with_potential_source_fta'])==(total,hits)
+          assert a['orders']==a['trades']==a['author_target_approvals']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C39_ALL_45_ZIP_EXACT_12_SOURCE_FTA_ROUTES_PASS')
+          PY
+  independent-witness:
+    needs: [negatives,original-independent]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Freeze C39 source-only 45ZIP witness
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c39/C39_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'witness previously frozen'; exit 0; fi
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c39/C39_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+           'schema':'EMBER_C39_INDEPENDENT_POTENTIAL_FTA_ORIGINAL_45ZIP_V1',
+           'run_id':int(os.environ['RUN_ID']),
+           'trigger_sha':os.environ['SOURCE_SHA'],
+           'python_versions':['3.10','3.11','3.12'],
+           'negative_source_tests_per_python':33,
+           'original_usdm_zip_reread':45,
+           'original_native3m_closed_bars':76800,
+           'native15m_decimal_parities':15360,
+           'frozen_full_FTA_comparison_blob':'15dacbe47ba2b6e133d8b97d970a96d6242cd80f',
+           'complete_12_source_FTA_JSON_equal':True,
+           'author_approved_FTA_targets':0,'orders':0,'trades':0,
+           'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C39): independent 45 original ZIP and 33x3 native potential FTA tests"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
