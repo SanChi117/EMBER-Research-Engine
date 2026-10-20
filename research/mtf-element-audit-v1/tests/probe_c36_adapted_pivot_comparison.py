@@ -9,7 +9,7 @@ RAW=ROOT/"evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json"
 PIN=ROOT/"evidence/c36/C36_PIVOT_HYPOTHESES_SOURCE_COMPARISON.json"
 
 def main(output=None):
-    source_sha=subprocess.check_output(["git","rev-parse","HEAD:"+str(RAW.relative_to(ROOT.parent))],
+    source_sha=subprocess.check_output(["git","rev-parse","HEAD:research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json"],
               text=True,cwd=ROOT.parent).strip()
     # Git HEAD:<path> resolves relative to repository root rather than
     # ROOT's parent research dir. Detect git rev-parse path drift.
