@@ -1,0 +1,36 @@
+name: C39 Original FTA Research Validation
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/c39-original-fta-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c39-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run all original research FTA tests
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c39_adapted_preknown_fta_source
+      - name: Replay source FTA on all 45 original archives
+        run: |
+          python research/mtf-element-audit-v1/tests/probe_c39_original_source_preknown_fta_45zip.py /tmp/c39.json
+      - name: Confirm research-only source
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/c39.json'))
+          assert r['replayed_original_usdm_zip_count']==45
+          assert r['route_count']==12
+          assert r['orders']==r['trades']==0
+          assert r['readiness']=='NOT_TRADE_READY'
+          print('C39 source only verified')
+          PY
