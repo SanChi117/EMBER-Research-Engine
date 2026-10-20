@@ -1,0 +1,109 @@
+name: MTF C33 — Original 45 USD-M ZIP Competing 3m BOS Pivot Source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c33-original-competing-45zip.yml'
+      - 'research/mtf-element-audit-v1/d05/c33_preknown_competing_bos_swings.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c33_original_competing_bos.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c33-first-original-45zip
+  cancel-in-progress: false
+jobs:
+  original-45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Enforce unchanged old source receipts and journal A102
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          checks={
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+           'research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74'}
+          for p,w in checks.items():
+              x=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert x==w,(p,x,w)
+          j=[json.loads(x) for x in open('research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==102 and j[-1]['action_id']=='A102'
+          assert j[-1]['record_sha256']=='a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f'
+          print('C33_PREDECESSOR_PINNED_SOURCES_AND_102_SHA_PASS')
+          PY
+      - name: First require all 27 known-before-swing negative controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c33_preknown_competing_bos_swings 2>&1 | tee /tmp/c33-negative.log
+          grep -q 'Ran 27 tests' /tmp/c33-negative.log
+      - name: Reread all 45 SHA-original USD-M ZIP and enumerate possible BOS pivots
+        id: original
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c33_original_competing_bos.py /tmp/c33-original.json > /tmp/c33-original.log 2>&1
+      - name: If failed preserve traceback and NEVER label research finished
+        if: steps.original.outcome != 'success'
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c33/diagnostics/C33_ORIGINAL_45ZIP_FAILURE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          f=pathlib.Path('/tmp/c33-original.log')
+          p.write_text(json.dumps({
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+            'accepted':False,'traceback':f.read_text(errors='replace')[-15000:] if f.exists() else 'NO_LOG',
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c33/diagnostics/C33_ORIGINAL_45ZIP_FAILURE.json
+          git commit -m "diagnostic(C33): original 45 ZIP competing source pivot trace fail-closed"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+          exit 1
+      - name: Refuse author READY and prove complete original source counts
+        if: steps.original.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json
+          j=json.load(open('/tmp/c33-original.json'))
+          t=j['totals']
+          assert j['original_binance_usdm_zip_count']==45
+          assert j['original_native3m_rows']==76800
+          assert j['native15m_exact_decimal_equalities']==15360
+          assert t['original_c21_parent_edges']==539
+          assert t['c31_research_singletons']==165
+          assert t['parents_with_only_one_preknown_swing']+t['parents_with_multiple_preknown_swings']==539
+          assert t['proxy_not_latest_preknown']==0
+          assert t['orders_created']==t['trades_created']==0
+          assert j['author_selected_BOS_goldens']==0 and j['readiness']=='NOT_TRADE_READY'
+          print('C33_ORIGINAL_45ZIP_COMPETING_3M_BOS_SOURCE_ONLY_PASS')
+          PY
+      - name: Pin complete 45 ZIP per-case source JSON once
+        if: steps.original.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json
+          if test -e "$p"; then echo 'Immutable source already verified by probe'; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c33-original.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C33): original 45 ZIP enumerated all preknown competing BOS pivots no fills"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
