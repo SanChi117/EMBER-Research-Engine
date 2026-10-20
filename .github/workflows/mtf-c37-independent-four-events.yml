@@ -1,0 +1,142 @@
+name: MTF C37 — Independent Original 45 ZIP Four Adapted BOS Events
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c37-independent-four-events.yml'
+      - 'research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c37-independent-full-original-bos
+  cancel-in-progress: false
+jobs:
+  original-27-source-guards:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Academic A106 all source SHAs and frozen original C33 unchanged
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c37-a106.json
+          python - <<'PY'
+          import json,subprocess
+          j=json.load(open('/tmp/c37-a106.json'))
+          assert j['events']==106 and j['validations_pass']
+          frozen={
+            'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'research/mtf-element-audit-v1/evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json':'d086e00def1f84dafd32fc370ab249ec15956075',
+            'research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'}
+          for p,want in frozen.items():
+             got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+             assert got==want,(p,got,want)
+          print('C37_A106_AND_ORIGINAL_ALL_SOURCE_BLOBS_UNCHANGED')
+          PY
+      - name: 27 fail-closed native price/source tests no skipped
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c37_native_adapted_bos_event_scanner 2>&1 | tee /tmp/c37-27-matrix.log
+          grep -q 'Ran 27 tests' /tmp/c37-27-matrix.log
+          grep -q '^OK$' /tmp/c37-27-matrix.log
+          if grep -q 'skipped=' /tmp/c37-27-matrix.log; then exit 1; fi
+  original-exact-full-json-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently redownload and reconcile 45 original USD-M ZIP, all four timelines
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c37_original_adapted_45zip_event_scan.py /tmp/c37-independent-complete.json 2>&1 | tee /tmp/c37-original-compare.log
+      - name: Full per-event JSON equality and no fabricated signals
+        run: |
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json'
+          a=json.load(open(p))
+          b=json.load(open('/tmp/c37-independent-complete.json'))
+          assert a==b,'C37_INDEPENDENT_ALL_FOUR_NATIVE3M_ROUTE_EVENTS_DRIFT'
+          assert a['source_native3m_usdm_ZIP_files']==45
+          assert a['source_closed_original3m_total']==76800
+          assert a['native15m_exact_decimal_equalities']==15360
+          assert a['source_original_frozen_C33_git_blob']=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          assert a['author_selected_bos_goldens']==a['paper_signals']==a['orders']==a['trades']==0
+          assert not a['market_wick_intrabar_execution_observable']
+          assert a['readiness']=='NOT_TRADE_READY'
+          t=a['comparison_totals']
+          expect={'LATEST_CONFIRMED_V1':(539,390,149),
+                  'EARLIEST_CONFIRMED_V1':(462,326,136),
+                  'DEEP_RAID_SIDE_V1':(412,298,114),
+                  'NEAREST_RAID_SIDE_V1':(511,371,140)}
+          for v,(n,u,repeated) in expect.items():
+             assert (t[v]['raid_context_event_count'],
+                     t[v]['unique_original3m_break_bars'],
+                     t[v]['additional_raid_contexts_reusing_original3m_bar'])==(n,u,repeated)
+             assert t[v]['raid_context_event_count']==sum(t[v]['chronological_splits'].values())
+             assert t[v]['vs_latest_C21']['same_raid_parent_count']+t[v]['vs_latest_C21']['only_adapted_variant_parent']==n
+             assert t[v]['vs_latest_C21']['same_raid_parent_count']+t[v]['vs_latest_C21']['only_frozen_C21_latest_parent']==539
+          assert sum(m['C21_latest_research_event_count'] for m in a['markets'])==539
+          assert all(m['physically_truncated_asof_source_equal'] for m in a['markets'])
+          assert all(all(not x['orders'] and not x['trades'] and x['readiness']=='NOT_TRADE_READY'
+                         for x in m['adapted_routes'].values()) for m in a['markets'])
+          print('C37_INDEPENDENT_ALL_45_ZIP_SOURCE_AND_FULL_EVENT_JSON_PASS_NO_TRADES')
+          PY
+  freeze-independent-evidence:
+    needs: [original-27-source-guards,original-exact-full-json-replay]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Freeze 27x3 and full independent 45 ZIP event replay source witness
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json
+          if test -e "$p"; then echo 'already pinned'; exit 0; fi
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json')
+          p.write_text(json.dumps({
+             'schema':'EMBER_C37_FOUR_ADAPTED_BOS_TIMELINES_45_ORIGINAL_ZIP_V1',
+             'run_id':int(os.environ['RUN_ID']),
+             'trigger_sha':os.environ['TRIGGER_SHA'],
+             'old_A106_sha_actions_verified':106,
+             'old_C33_git_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+             'C37_full_original_source_git_blob':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+             'original_binance_usdm_zip_replayed':45,
+             'closed_original_native3m_rows':76800,'original15m_decimal_parity':15360,
+             'all_four_timelines_full_event_json_equal':True,
+             'python_versions':['3.10','3.11','3.12'],
+             'negative_source_tests_per_python':27,
+             'original_C21_latest_parents':539,
+             'four_route_event_counts':{'LATEST_CONFIRMED_V1':539,
+                'EARLIEST_CONFIRMED_V1':462,
+                'DEEP_RAID_SIDE_V1':412,
+                'NEAREST_RAID_SIDE_V1':511},
+             'author_bos_goldens':0,'orders':0,'trades':0,
+             'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C37): independent original45zip 4 actual BOS timelines, 27x3 guards, exact per-event JSON"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
