@@ -10,7 +10,7 @@ Source code: `d05/c37_native_adapted_bos_event_scanner.py`; controls: `d05/test_
 
 Original academic core, C21/C33 original 45 SHA ZIP source receipts, C36 adaptation selectors and append-only historical journal are unmodified.
 
-## First full original 45 ZIP research result, pending independent CI at initial report publication
+## First full original 45 ZIP research result, independently verified
 
 Original Binance USD-M Futures symbols: BCH, BTC, ETH, SOL, XRP. Native 3m: **76,800 source-closed bars**, independently original 15m Decimal parity **15,360**, 45 SHA-checksummed USD-M ZIP (3m/15m/1d). 1 September – 2 October 2026 UTC. No original teacher 2023 market-basis relation; author 1H/3m annotated examples remain inaccessible.
 
@@ -53,7 +53,7 @@ Chronological partitions are descriptive structural audits, not a pristine holdo
 - Unit tests: **27** negative controls. Frozen original C21 latest regression; raid known only after full following 1h bar; same-bar break invalidated by new raid wick extreme; different as-of and physical prefix equality; closed 3m bar known_ms vs event start; strict confirmed 3m swing right-bar; no future or fake native3m SHA; body breach of raided liquidity not classified clean wick; no author `READY`/signal/order/trade; four alternative swing ranking outcomes.
 - [First 27/27 source test CI 39491091920](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39491091920) SUCCESS.
 - [First complete original 45 ZIP 4-route CI 39491400022](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39491400022) reported source reconstruction SUCCESS and committed first original `C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json` Git blob `e4b702e8c6cdc34f1c2475df73ef44ae1631fe56`.
-- The independent full original ZIP complete JSON proof and 27-test matrix × Python 3.10/3.11/3.12 must be successfully recorded before C37 source audit is marked [x] and before A107. Until then mark [~]; do not fabricate independent run results.
+- [Independent C37 CI 39492075525](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39492075525) **SUCCESS all five jobs**: full original 45 ZIP reread and complete per-event JSON equality across 539/462/412/511 research event routes, original 76,800 native3m bars and 15,360 native15m Decimal parity, plus **27 negative controls each** on Python 3.10/3.11/3.12. Immutable independent witness `evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json` Git blob `d11147727df89e598b69ae7c80a5e01b6dbc7bb3`. The first independent [CI 39491774466](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39491774466) **FAILED** after source reread and 3×27 tests PASS because immutable JSON contains empty arrays while intermediate Python dataclass `asdict` contains empty tuples; canonical JSON serialize-then-parse comparison repaired without changing original source scan or frozen data, commit `77cd44c8`. Original failed run remains in audit trail. Source C37 narrow research evidence acceptance awaits canonical append A107 and independently verified 107/107 SHA.
 
 ## Integration is NOT yet complete
 
