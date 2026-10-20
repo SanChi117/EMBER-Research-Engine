@@ -116,9 +116,9 @@
 ### C38 — активный следующий этап, ещё не завершён
 
 - **C38-S00 [~]** — Новый Source/ADAPTED **Reaction** слот. Проверять первые реакции строго по source 3m закрытиям после подтверждённого 1H рейда и **до начала каждого** C37 BOS бара. Реакцию не называть авторской, пока нет positive/negative оригиналов.
-- **C38-S01 [ ]** — Создать как минимум 2–3 простых варианта ADAPTED source Reaction с явными определениями и no-lookahead proof. Без торговых ордеров.
-- **C38-S02 [ ]** — Отдельные негативные контрольные примеры и сквозной original 45 ZIP × 4 BOS маршрута, проверять effect-on-observations, НЕ прибыль.
-- **C38-S03 [ ]** — Независимый CI + A108 108/108 только после замороженных доказательств, затем переход к First Trouble Area. 29/40 крупного счёта не менять без независимых критериев.
+- **C38-S01 [~]** — Создан `d05/c38_adapted_post_raid_reaction.py` (коммиты `54297731`, `0990cf08`, `bd1a4698`, `074963d1`) с 3 явно **ADAPTED** формализациями реакции после полного подтверждения 1H рейда и строго до начала каждой 3m BOS-свечи: `POST_CONFIRM_DIRECTIONAL_BODY_V1` (направленное тело), `POST_CONFIRM_TWO_PROGRESSIVE_CLOSES_V1` (два последовательных направленных изменения закрытия), `POST_CONFIRM_HALF_SWEEP_DISPLACEMENT_V1` (движение 3m закрытия от уже известного close подтверждения рейда минимум на 0.5 его wick sweep). Авторская семантика реакции неизвестна; **никакой сигнал, PnL, TP/SL, ордер** не создаётся.
+- **C38-S02 [~]** — Созданы **27** source/adversarial тестов `d05/test_c38_adapted_post_raid_reaction.py` commit `902ab135`, первая [CI 39493969372](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39493969372) **SUCCESS 27/27**, включая physically truncated as-of, future+fake SHA rejected, first reaction before BOS. Создан `tests/probe_c38_original_post_raid_reactions_45zip.py` commit `76c0dd4d`: восстанавливает 45 source USD-M ZIP и 12 комбинаций 4 BOS × 3 Reaction, сопоставляя полный C37 original JSON. Первый архивный workflow `mtf-c38-first-original-reaction-45zip.yml` commit `35b0f48a` **запущен, результат ожидается**; не записывать A108 без independent CI.
+- **C38-S03 [ ]** — Принимаем original JSON только после replay 45 ZIP, независимого повторного полного JSON, негативной матрицы Python 3.10/3.11/3.12, then append-only A108 108/108; FTA и SL всё ещё заблокированы.
 
 ## 6. Правила перехода в следующий чат
 
