@@ -1,0 +1,59 @@
+name: MTF C33 — Native Preknown BOS Pivot 27 Negative Tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c33-preknown-pivot-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c33_preknown_competing_bos_swings.py'
+      - 'research/mtf-element-audit-v1/d05/test_c33_preknown_competing_bos_swings.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  reject-future-swings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: 27 adversarial original native3m pivots, no future or fake source
+        id: tests
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c33_preknown_competing_bos_swings >/tmp/c33-adverse.log 2>&1
+      - name: Preserve original adverse test outcome and exact error
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+          OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          f=pathlib.Path('/tmp/c33-adverse.log')
+          log=f.read_text(errors='replace') if f.exists() else 'NO_TEST_LOG'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c33/diagnostics/C33_PREKNOWN_SWING_NEGATIVES.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C33_NEGATIVE_FIRST_PIVOT_SOURCE_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['TRIGGER_SHA'],
+            'outcome':os.environ['OUTCOME'],
+            'all_27_pass':os.environ['OUTCOME']=='success' and 'Ran 27 tests' in log and 'OK' in log[-240:],
+            'log_tail':log[-17000:],'author_bos_positive_goldens':0,
+            'author_trade_approved':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c33/diagnostics/C33_PREKNOWN_SWING_NEGATIVES.json
+          git commit -m "diagnostic(C33): retain all 27 native3m source pivot negative test results"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Reject failed tests
+        if: steps.tests.outcome != 'success'
+        run: exit 1
