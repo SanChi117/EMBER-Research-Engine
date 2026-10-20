@@ -1,0 +1,76 @@
+name: MTF C39 — First Adapted Potential FTA Negative Tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c39-first-fta-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c39_adapted_preknown_fta_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c39_adapted_preknown_fta_source.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  negative-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify 108 SHA original academic receipts and locked C37 source
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c39-old-sha.json
+          python - <<'PY'
+          import json,subprocess
+          x=json.load(open('/tmp/c39-old-sha.json'))
+          assert x['events']==108 and x['validations_pass']
+          assert x['tip_sha256']=='4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35'
+          p='research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json'
+          sha=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+          assert sha=='e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+          PY
+      - name: 33 source-native potential FTA negative rules
+        id: tests
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c39_adapted_preknown_fta_source >/tmp/c39-adverse.log 2>&1
+      - name: Preserve the actual result, no fake positive or trades
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SHA_HEAD: ${{ github.sha }}
+          OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,json,pathlib
+          f=pathlib.Path('/tmp/c39-adverse.log')
+          log=f.read_text(errors='replace') if f.exists() else 'TESTS_NEVER_RAN'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c39/diagnostics/C39_FTA_FIRST_NEGATIVE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C39_FIRST_OBSTACLE_SOURCE_TEST_V1',
+            'run_id':int(os.environ['RUN_ID']),'source_commit':os.environ['SHA_HEAD'],
+            'result':os.environ['OUTCOME'],
+            'pass_all_33':os.environ['OUTCOME']=='success' and 'Ran 33 tests' in log
+                     and 'OK' in log[-200:] and 'skipped=' not in log[-200:],
+            'test_log_tail':log[-21000:],
+            'author_fta_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c39/diagnostics/C39_FTA_FIRST_NEGATIVE.json
+          git commit -m "diagnostic(C39): first 33 potential FTA source timing negatives and exact outcome"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Fail on nonpassing source tests
+        if: steps.tests.outcome != 'success'
+        run: exit 1
