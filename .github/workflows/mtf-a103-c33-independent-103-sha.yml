@@ -1,0 +1,115 @@
+name: MTF A103 — Independent 103 SHA + 45 Original ZIP C33
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a103-c33-independent-103-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a103-independent-original
+  cancel-in-progress: false
+jobs:
+  verify-103-full-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all 103 canonical SHA action records and six source file bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a103-all-sha.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a103-all-sha.json'))
+          assert r['events']>=103 and r['validations_pass']
+          j=[json.loads(s) for s in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert len(j)>=103
+          assert j[101]['action_id']=='A102' and j[102]['action_id']=='A103'
+          assert j[102]['seq']==103 and j[102]['prev_sha256']=='a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f'
+          assert j[102]['record_sha256']=='a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8'
+          assert len(j[102]['evidence'])==6 and j[102]['cycle_result']=='PASSED'
+          print('A103_ALL_103_SHA_EVIDENCE_FILE_BYTES_PASS')
+          PY
+      - name: Retain all prior pinned C30-33 original Git blob receipts unchanged
+        run: |
+          python - <<'PY'
+          import subprocess
+          pins={
+           'research/mtf-element-audit-v1/evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+           'research/mtf-element-audit-v1/evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+           'research/mtf-element-audit-v1/evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74',
+           'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+           'research/mtf-element-audit-v1/evidence/c33/C33_INDEPENDENT_RUN_WITNESS.json':'7c432fd16a554dfadd0536590aafa7c17610231d'}
+          for p,want in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==want,(p,got,want)
+          print('A103_ALL_ORIGINAL_FROZEN_SOURCE_GIT_SHA_PRESERVED')
+          PY
+      - name: Repeat all 27 source-known 3m pivot checks with real original 3m IDs
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c33_preknown_competing_bos_swings 2>&1 | tee /tmp/a103-27-negatives.log
+          grep -q 'Ran 27 tests' /tmp/a103-27-negatives.log
+      - name: Independently re-download all 45 original Futures ZIP and replay full 539 case JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c33_original_competing_bos.py /tmp/a103-complete.json 2>&1 | tee /tmp/a103-original.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'))
+          b=json.load(open('/tmp/a103-complete.json'))
+          assert a==b,'A103_45ZIP_SOURCE_ALL_CASES_JSON_DRIFT'
+          assert a['original_binance_usdm_zip_count']==45
+          assert a['original_native3m_rows']==76800 and a['native15m_exact_decimal_equalities']==15360
+          t=a['totals']
+          assert t['original_c21_parent_edges']==539 and t['c31_research_singletons']==165
+          assert t['parents_with_multiple_preknown_swings']==539 and t['parents_with_only_one_preknown_swing']==0
+          assert t['total_competing_preknown_swings']==5285 and t['max_preknown_competing_swings']==18
+          assert t['proxy_not_latest_preknown']==0
+          assert t['orders_created']==t['trades_created']==0 and a['author_selected_BOS_goldens']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('A103_45_ORIGINAL_ZIP_EXACT_539_PARENT_5285_PIVOT_SOURCE_REPRODUCIBLE_NO_TRADE')
+          PY
+      - name: Freeze independent 103 all source SHA and original ZIP run
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c33/A103_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'already pinned'; exit 0; fi
+          python3 - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c33/A103_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A103_103_SHA_ALL_PREKNOWN_3M_PIVOTS_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['HEAD_SHA'],
+            'a103_record_sha256':'a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8',
+            'canonical_record_sha_verified':103,'new_c33_evidence_bytes_verified':6,
+            'original_usdm_binance_zip_reread':45,
+            'complete_original_539_case_json_equal':True,
+            'source_preknown_competing_pivots':5285,
+            'ambiguous_C21_research_events':539,
+            'negative_source_tests_passed':27,
+            'author_approved_bos':0,'orders':0,'trades':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A103): 103 SHA independent source 45 original ZIP competing BOS replay proof"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
