@@ -104,7 +104,8 @@ class C33OriginalPivotCompetitionNegativeTests(unittest.TestCase):
         src,e,sw=fixture()
         rows=list(src.original_3m_closed)
         i=next(i for i,x in enumerate(rows) if x.start_ms==e.swing.center_ms)
-        rows[i]=(replace(rows[i],low=rows[i].low-D("0.2")) if e.swing.kind=="LOW"\n                 else replace(rows[i],high=rows[i].high+D("0.2")))
+        rows[i]=(replace(rows[i],low=rows[i].low-D("0.2")) if e.swing.kind=="LOW"
+                 else replace(rows[i],high=rows[i].high+D("0.2")))
         raw={x.start_ms:x for x in rows}
         with self.assertRaisesRegex(ValueError,"NOT_AN_ORIGINAL_STRICT"):
             _native_provenance(e.swing,raw)
