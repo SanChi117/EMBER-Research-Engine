@@ -1,0 +1,96 @@
+name: MTF A103 — Append Native BOS Pivot Ambiguity Source Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a103-c33-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a103-append-source-once
+  cancel-in-progress: false
+jobs:
+  append-a103-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require independent 45 ZIP 27x3 tests source and 102 old SHA proofs
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          b='research/mtf-element-audit-v1/'
+          pins={
+            'evidence/c30/C30_ORIGINAL_PRIOR_WICK_IMB_CAUSAL_SOURCE.json':'ff57e0d99b5a87d74a2bfab0eed99cee32206812',
+            'evidence/c31/C31_ORIGINAL_BOS_CROSS_VS_CLOSE_SOURCE.json':'38276d6d8a77942101a041d3605d72f69a7845d1',
+            'evidence/c32/C32_ORIGINAL_DUAL_BOS_ROUTE_SOURCE.json':'c3f4186b50af1e1d5bd85505ef0e8ae5d1d67e74',
+            'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'evidence/c33/C33_INDEPENDENT_RUN_WITNESS.json':'7c432fd16a554dfadd0536590aafa7c17610231d'}
+          for p,w in pins.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+              assert got==w,(p,got,w)
+          w=json.load(open(b+'evidence/c33/C33_INDEPENDENT_RUN_WITNESS.json'))
+          assert w['run_id']==39455216429 and w['complete_539_cases_json_equal']
+          assert w['negative_tests_per_python']==27 and w['python_versions']==['3.10','3.11','3.12']
+          assert w['original_45_usdm_zip_reread']==45
+          assert w['competing_swing_relations']==5285 and w['events_with_two_or_more_preknown_swings']==539
+          assert w['author_selected_bos_goldens']==w['orders']==w['trades']==0
+          j=[json.loads(x) for x in open(b+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==102 and j[-1]['action_id']=='A102'
+          assert j[-1]['record_sha256']=='a7807e261824a4375bf73472d6a706d32ba18630b330413ec58259bef28fea4f'
+          print('A103_PINNED_C33_FULL_SOURCE_AND_102_SHA_PASS')
+          PY
+      - name: Verify all 102 previous append-only source SHA and file bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a103-before.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a103-before.json'))
+          assert x['events']==102 and x['validations_pass']
+          print('A103_FULL_PRIOR_102_SHA_AND_SOURCE_BYTES_PASS')
+          PY
+      - name: Append A103 six SHA source files after full original independent success
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A103 \
+            --cycle B1/C33 \
+            --planned 'Find whether original technical C21 latest-confirmed strict native3m 1+1 BOS proxy is unique or one of several source-known competing preclosed LTF swings. Enumerate all on the side of real previously confirmed BSL/SSL 1H raid without inventing instructor BOS pivot, freshness rank or trading fill, and preserve original SHA chains.' \
+            --executed 'Created isolated C33 enumerator of all causally preknown correct-side original 3m 1+1 swing candidates for each earlier C21 BOS, verified three raw original native3m source IDs and exact high/low strict swing price, computed source-known first wick reach; 27 adverse tests. Initial CI 39454193235 failed on escaped newline in test file; correction retained, CI 39454279240 27/27 SUCCESS. Replayed 45 original SHA-verified Binance USD-M archives (76800 original3m,15360 original15m Decimal equalities), kept all 539 C21 parent edges, 165 old singleton research cases and prior 102 SHA evidence unchanged. Pinned original full per-case JSON blob fa17524a942d8227e8ec33e3d1e2c93c860669df; independent full exact JSON ZIP reread with Python 3.10/3.11/3.12 27 controls each CI 39455216429 all five jobs SUCCESS, witness blob 7c432fd16a554dfadd0536590aafa7c17610231d. Added current cross-chat control handoff and recorded each step as WIP or PASS.' \
+            --result 'All 539 original technical C21 close-BOS events have MULTIPLE strict source-preknown 3m pivot alternatives: 0 with one alone. There are 5285 repeated source event-to-pivot relationships across five original Futures pairs; largest candidate set per event 18. Every C21 latest pivot matches the latest-confirmed source strict proxy exactly, but this has not been proved the instructors chosen author BOS. Unknown valid local reaction, target/FTA and stop, zero selected instructor goldens, zero orders or approved trades, NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'C33 independent original 45 ZIP full 539-case JSON equality CI 39455216429 SUCCESS; 27 negative controls each Python 3.10,3.11,3.12; original C30 C31 C32 Git blobs and previous A102 102 SHA frozen. All candidate source 3m swings confirmed by bar START, no future, each three raw original SHA 3m ids and exact pivot price verified. Explicit false-positive and selected-author-BOS-unknown status; code does not generate order, SL, FTA, TP, RR, or fill. Earlier first syntactic test error independently recorded and corrected; no old SHA evidence rewritten.' \
+            --evidence d05/c33_preknown_competing_bos_swings.py \
+            --evidence d05/test_c33_preknown_competing_bos_swings.py \
+            --evidence tests/probe_c33_original_competing_bos.py \
+            --evidence evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json \
+            --evidence evidence/c33/C33_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C33_ORIGINAL_COMPETING_BOS_SOURCE_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py > /tmp/a103-after.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a103-after.json'))
+          assert x['events']==103 and x['validations_pass']
+          print('A103_103_SHA_AND_SIX_FULL_ORIGINAL_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Commit only canonical appended A103 journal action
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A103): independently source-verified 539 ambiguous C21 BOS with 5285 preknown swing alternatives"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
