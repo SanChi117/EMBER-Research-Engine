@@ -1,0 +1,75 @@
+name: MTF C34 — Original Author BOS Negative Rules 38 Tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c34-author-bos-negative-gates.yml'
+      - 'research/mtf-element-audit-v1/d05/c34_author_bos_text_negative_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c34_author_bos_text_negative_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-rule-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify earlier 103 canonical source and pinned C33 original case SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c34-prior.json
+          python - <<'PY'
+          import json,subprocess
+          j=json.load(open('/tmp/c34-prior.json'))
+          assert j['events']==103 and j['validations_pass']
+          assert j['tip_sha256']=='a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8'
+          x=subprocess.check_output(['git','rev-parse','HEAD:evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'],text=True).strip()
+          assert x=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          print('C34_FROZEN_103_SHA_AND_45ZIP_C33_SOURCE_PASS')
+          PY
+      - name: Check all 38 original academic BOS negative predicates
+        id: negative
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c34_author_bos_text_negative_gate >/tmp/c34-bos-negatives.log 2>&1
+      - name: Preserve failed or passed real test diagnostics
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+          RESULT: ${{ steps.negative.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          f=pathlib.Path('/tmp/c34-bos-negatives.log')
+          s=f.read_text(errors='replace') if f.exists() else 'NO_LOG'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c34/diagnostics/C34_AUTHOR_BOS_NEGATIVES.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C34_AUTHOR_BOS_SOURCE_TEXT_NEGATIVE_GATE_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+            'outcome':os.environ['RESULT'],
+            'all_38_pass':os.environ['RESULT']=='success' and 'Ran 38 tests' in s and 'OK' in s[-300:],
+            'log_tail':s[-19000:],
+            'author_labeled_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c34/diagnostics/C34_AUTHOR_BOS_NEGATIVES.json
+          git commit -m "diagnostic(C34): all 38 original BOS source-text negatives and actual result"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Fail on invalid source-rule tests
+        if: steps.negative.outcome != 'success'
+        run: exit 1
