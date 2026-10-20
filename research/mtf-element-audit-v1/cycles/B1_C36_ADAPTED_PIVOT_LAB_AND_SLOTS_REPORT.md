@@ -45,7 +45,7 @@ Chronological description-only partitions by C21 break-bar timestamp:
 - 23 architecture negatives: frozen academic core hash and C33 source lock, disallowed modification of author raid/entry, forbidden FTA/SL/Reaction placeholders, disallowed unregistered variant and real trading, explicit `holdout not pristine` marker.
 - Complete original 539-case comparison through `tests/probe_c36_adapted_pivot_comparison.py`; every original case and its four source selections preserved. `tests/probe_c36_adapted_slot_registry.py` freezes four typed assembly states without orders.
 
-The first C36 source-only [CI 39480206950](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39480206950) **SUCCESS** after correcting distinct raid context keys, yielding first source-comparison Git blob `d086e00def1f84dafd32fc370ab249ec15956075`. The independent 3-version source matrix and A106 append remain subject to their own accepted CI; do not pre-label them passed.
+The first C36 source-only [CI 39480206950](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39480206950) **SUCCESS** after correcting distinct raid context keys, yielding first source-comparison Git blob `d086e00def1f84dafd32fc370ab249ec15956075`. Independent complete full-source JSON and **35 pivot + 23 registry tests on EACH Python 3.10, 3.11, 3.12** confirmed by [CI 39481487246](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39481487246) **SUCCESS, five jobs**. Full C36 first receipt frozen Git blob `d086e00def1f84dafd32fc370ab249ec15956075`; research slot manifest Git blob `a77454dd66d39855878519ba83b61df95cdc7c0f`; independent CI witness Git blob `36fbb68bb0f76f35065bd8ec5be69a2a4a87ec90`. A106 append-only journal and independent 106/106 SHA acceptance remain pending.
 
 ## Precise next practical implementation (C37), NOT solved by C36
 
@@ -54,3 +54,13 @@ A full adapted BOS *event* is not a static choice from cases that C21 already se
 Only after this route is stable integrate local `Reaction`, then `FTA`, and `SL/TP` slots, with independent price-source geometry and no assumption of fill from 3m OHLC. Evaluate whole strategies against **new** untouched holdout periods and forward PAPER observations; no profitable strategy, author fidelity, Sharpe/ROI or win rate can be claimed at C36.
 
 **Immutable baseline:** Original source C33 Git blob `fa17524a942d8227e8ec33e3d1e2c93c860669df`, A105 SHA tip `a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5`. Development remains **PAPER ONLY · NOT_TRADE_READY**.
+
+
+## CI falsification and repair history — preserve all failed checks
+
+- [CI 39479714861](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39479714861) FAIL — source scanner falsely asserted each C21 research parent must use a unique original 3m break candle. Actual source had 539 different 1H raid contexts but only 390 unique 3m bars. Fixed to keep both counts and an explicit correlation warning, not to drop contexts.
+- [CI 39480803299](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39480803299) FAIL after all three Python 58-test matrices passed — manifest probe compared Python `asdict` tuple with JSON list as though same type. Fixed first equality to empty-collection nontruthiness, with no changes to event logic.
+- [CI 39481307923](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39481307923) FAIL only in final freeze job after full source and 58×3 negatives PASS — wrote tuple-structured Python object and reread JSON-structured object without canonical reserialization. Fixed canonical JSON comparison in probe, with original source + slot registry unchanged.
+- [CI 39481487246](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39481487246) all five jobs SUCCESS. No 32/32 skipped tests disguised as passing: now 35/35 pivot and 23/23 architecture checks each Python.
+
+**Source scope:** frozen original C33 ZIP receipt reused — C36 did **not** re-download the 45 ZIP; it independently reevaluated frozen C33 complete JSON with pinned SHA. The old independent C33 45 ZIP replay remains earlier evidence, NOT a new C36 source reread. Author goldens 0, confirmed adapted trading triggers 0, orders 0, trades 0.
