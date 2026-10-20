@@ -34,13 +34,13 @@ jobs:
           import json,subprocess
           d=json.load(open('/tmp/c36-prior-ledger.json'))
           assert d['events']==105 and d['validations_pass']
-          assert d['tip_sha256']=='a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
+          assert d['tip_sha256']=='a2fe39896fea78c95d535e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
           p='research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'
           actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
           assert actual=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
           print('C36_PRIOR_ACADEMIC_C33_PINNED_SOURCE_AND_A105_SHA_PASS')
           PY
-      - name: Run 32 fail-closed adapted pivot selection tests
+      - name: Run 35 fail-closed adapted pivot selection tests
         id: negatives
         continue-on-error: true
         run: |
@@ -69,14 +69,14 @@ jobs:
           nl=n.read_text(errors='replace') if n.exists() else 'NOT_RUN'
           rl=r.read_text(errors='replace') if r.exists() else 'NOT_RUN'
           ok=(os.environ['NEGATIVE_STATUS']=='success' and
-              os.environ['REPLAY_STATUS']=='success' and 'Ran 32 tests' in nl and 'OK' in nl[-200:])
+              os.environ['REPLAY_STATUS']=='success' and 'Ran 35 tests' in nl and 'OK' in nl[-200:] and 'skipped=' not in nl[-200:])
           p.write_text(json.dumps({
             'schema':'EMBER_C36_ADAPTED_PIVOT_FIRST_GATE_V1',
             'run_id':int(os.environ['RUN_ID']),
             'trigger_sha':os.environ['COMMIT_SHA'],
             'negatives_outcome':os.environ['NEGATIVE_STATUS'],
             'replay_outcome':os.environ['REPLAY_STATUS'],
-            'all_32_and_539_source_pass':ok,
+            'all_35_and_539_source_pass':ok,
             'negative_log_tail':nl[-13000:],
             'replay_log_tail':rl[-13000:],
             'author_positive_BOS_goldens':0,'trades':0,
@@ -86,7 +86,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add research/mtf-element-audit-v1/evidence/c36/diagnostics/C36_ADAPTED_FIRST_GATE.json
-          git commit -m "diagnostic(C36): keep actual 32 negative and 539 source-only pivot compare outcomes"
+          git commit -m "diagnostic(C36): keep actual 35 negative and 539 source-only pivot compare outcomes"
           git pull --rebase origin research/academic-engine-recovery-20261015
           git push origin HEAD:research/academic-engine-recovery-20261015
       - name: Refuse false acceptance on failed test or source
