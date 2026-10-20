@@ -1,0 +1,76 @@
+name: MTF C38 — Three ADAPTED Post-Raid Reaction Negative Gates
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c38-reaction-first.yml'
+      - 'research/mtf-element-audit-v1/d05/c38_adapted_post_raid_reaction.py'
+      - 'research/mtf-element-audit-v1/d05/test_c38_adapted_post_raid_reaction.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  causal-reaction-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require accepted 107 SHA and unmodified original C37 45ZIP source
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c38-a107-old.json
+          python - <<'PY'
+          import subprocess,json
+          s=json.load(open('/tmp/c38-a107-old.json'))
+          assert s['events']==107 and s['validations_pass']
+          p='research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json'
+          b=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+          assert b=='e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+          print('C38_A107_107_SHA_AND_C37_ORIGINAL_EVENTS_PINNED')
+          PY
+      - name: Test 27 source-native reactions and strict before BOS causality
+        id: tests
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c38_adapted_post_raid_reaction >/tmp/c38-negative.log 2>&1
+      - name: Freeze genuine reaction test failures before fixing source
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+          OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          python - <<'PY'
+          import pathlib,json,os
+          file=pathlib.Path('/tmp/c38-negative.log')
+          raw=file.read_text(errors='replace') if file.exists() else 'MISSING_TEST_LOG'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c38/diagnostics/C38_REACTION_FIRST_SOURCE_TESTS.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C38_THREE_ADAPTED_REACTION_NEGATIVE_SOURCE_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['TRIGGER_SHA'],
+            'outcome':os.environ['OUTCOME'],
+            'all_27_tests_pass':os.environ['OUTCOME']=='success' and
+              'Ran 27 tests' in raw and 'OK' in raw[-250:] and 'skipped=' not in raw[-250:],
+            'test_log_tail':raw[-20000:],
+            'source_author_reaction_goldens':0,
+            'source_author_bos_goldens':0,
+            'orders':0,'trades':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c38/diagnostics/C38_REACTION_FIRST_SOURCE_TESTS.json
+          git commit -m "diagnostic(C38): real 27 adapted post-raid pre-BOS reaction negative tests"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Reject failed reaction source tests
+        if: steps.tests.outcome != 'success'
+        run: exit 1
