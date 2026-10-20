@@ -1,0 +1,104 @@
+name: MTF A105 — Independent 105 SHA Author Case 2023/2026 Provenance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a105-c35-independent-105-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a105-independent-105-original-case-gate
+  cancel-in-progress: false
+jobs:
+  check-105-and-original-source-gap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify 105 SHA and 5 new source-provenance files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a105-independent.json
+          python - <<'PY'
+          import json
+          result=json.load(open('/tmp/a105-independent.json'))
+          assert result['events']>=105 and result['validations_pass']
+          j=[json.loads(line) for line in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if line.strip()]
+          assert len(j)>=105
+          assert j[103]['action_id']=='A104' and j[104]['action_id']=='A105'
+          assert j[104]['seq']==105
+          assert j[104]['prev_sha256']=='741e2ef71ec6f7095001d5161e6d59801af41cb86e42eccd109618a34045f5b4'
+          assert j[104]['record_sha256']=='a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
+          assert len(j[104]['evidence'])==5 and j[104]['cycle_result']=='PASSED'
+          print('A105_INDEPENDENT_ALL_105_SHA_FIVE_EVIDENCE_FILES_PASS')
+          PY
+      - name: Frozen C33 2026 price source plus C35 2023 source no-join
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          base='research/mtf-element-audit-v1/'
+          check={
+           'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+           'd05/c35_author_case_source_join_guard.py':'a1c45bea4a41ec907635639838a6516ecab7f357',
+           'd05/test_c35_author_case_source_join_guard.py':'7087e599a5c26419188818c0275d84a2542874b6',
+           'evidence/c35/C35_SOURCE_ACCESS_GAP_REGISTRY.json':'c0742c5f16ace9e922dc021bf5389bc4db1c80b0',
+           'evidence/c35/C35_INDEPENDENT_SOURCE_WITNESS.json':'4f793de037978f73bd2e4b61cae858a4757ea04a',
+           'cycles/B1_C35_2023_AUTHOR_VS_2026_C33_SOURCE_JOIN_REPORT.md':'ccf9ae39a770c402df1c621ee91d7d73a5914c16'}
+          for p,want in check.items():
+            actual=subprocess.check_output(['git','rev-parse','HEAD:'+base+p],text=True).strip()
+            assert actual==want,(p,actual,want)
+          j=json.load(open(base+'evidence/c35/C35_SOURCE_ACCESS_GAP_REGISTRY.json'))
+          assert j['periods_overlap'] is False and j['join_allowed'] is False
+          assert j['author_source']['author_positive_goldens_proven']==0
+          assert j['author_source']['author_negative_goldens_proven']==0
+          assert j['fake_inferred_2023_2026_joins']==0
+          assert j['orders_created']==j['trades_created']==0 and j['readiness']=='NOT_TRADE_READY'
+          print('A105_EXACT_FROZEN_GIT_SOURCE_AND_AUTHOR_GOLDENS_ZERO_PASS')
+          PY
+      - name: Independently rerun 35 2023 vs 2026 original-case source controls
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c35_author_case_source_join_guard 2>&1 | tee /tmp/a105-35-tests.log
+          grep -q 'Ran 35 tests' /tmp/a105-35-tests.log
+          grep -q '^OK$' /tmp/a105-35-tests.log
+      - name: Freeze 105 SHA independent proof without executable orders
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c35/A105_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'source witness already frozen'; exit 0; fi
+          python - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c35/A105_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A105_105_SHA_AUTHOR_2023_CASE_SOURCE_GAP_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+            'a105_record_sha256':'a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5',
+            'canonical_source_sha_records_verified':105,
+            'c35_new_source_evidence_byte_hashes_verified':5,
+            'adversarial_source_tests_passed':35,
+            'original_c33_45zip_git_blob_unchanged':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'new_original_2023_or_2026_market_zip_replay':0,
+            '2023_title_overlaps_2026_source':False,
+            'author_bos_goldens_attested':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A105): 105 canonical SHA original 2023 author-case vs 2026 C33 provenance refusal"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
