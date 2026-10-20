@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/mtf-c37-independent-four-events.yml'
       - 'research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json'
+      - 'research/mtf-element-audit-v1/tests/probe_c37_original_adapted_45zip_event_scan.py'
   workflow_dispatch:
 permissions:
   contents: write
