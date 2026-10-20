@@ -1,0 +1,17 @@
+{
+  "a103_record_sha256": "a6df5a8510402c832454653b409abb2ce9d89d04b0d3b35dbf6026e3803bc1d8",
+  "ambiguous_C21_research_events": 539,
+  "author_approved_bos": 0,
+  "canonical_record_sha_verified": 103,
+  "complete_original_539_case_json_equal": true,
+  "negative_source_tests_passed": 27,
+  "new_c33_evidence_bytes_verified": 6,
+  "orders": 0,
+  "original_usdm_binance_zip_reread": 45,
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39455752782,
+  "schema": "EMBER_A103_103_SHA_ALL_PREKNOWN_3M_PIVOTS_V1",
+  "source_preknown_competing_pivots": 5285,
+  "trades": 0,
+  "trigger_sha": "620928a99dede4d97d66dafbf34279b6d513889a"
+}
