@@ -1,0 +1,70 @@
+name: MTF C40 Independent 45ZIP Prior FTA Touch Source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c40-independent-source-matrix.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently run 19 prior-obstacle history negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c40_pre_bos_fta_touch_state 2>&1 | tee /tmp/c40-negative.log
+          grep -q 'Ran 19 tests' /tmp/c40-negative.log
+          grep -q '^OK$' /tmp/c40-negative.log
+          if grep -q 'skipped=' /tmp/c40-negative.log; then exit 1; fi
+  original-full-JSON:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen C39 and C40 source Git blobs
+        run: |
+          python - <<'PY'
+          import subprocess
+          p={
+          'research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json':'15dacbe47ba2b6e133d8b97d970a96d6242cd80f',
+          'research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json':'718ce971dd781b2046c530992b4c9743225ef5b7'}
+          for path,w in p.items():
+            got=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+            assert got==w,(path,got,w)
+          PY
+      - name: Independently reread all 45 original ZIP and entire 12-source-history JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c40_original_fta_prior_touch_45zip.py /tmp/c40-independent.json > /tmp/c40-replay.log 2>&1
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json'
+          a=json.load(open(p));b=json.load(open('/tmp/c40-independent.json'))
+          assert a==b,'C40_FULL_FROZEN_12_SOURCE_HISTORY_JSON_DRIFT'
+          assert a['source_original_45_usdm_zip']==45
+          assert a['original_closed_native3m']==76800
+          assert a['native15m_exact_decimal']==15360
+          assert a['route_count']==len(a['summary_by_route'])==12
+          assert a['original_author_freshness_goldens']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          x=a['summary_by_route']['LATEST_CONFIRMED_V1::CLOSEST_PRIOR_1H_OBSTACLE_V1']
+          assert x=={'NO_PREKNOWN_FTA_CANDIDATE':2,'NO_PRIOR_SOURCE_TOUCH':78,
+                     'PRIOR_BOUNDARY_TOUCH':58,'PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL':401}
+          print('C40_INDEPENDENT_COMPLETE_45ZIP_12_SOURCE_HISTORY_JSON_PASS')
+          PY
