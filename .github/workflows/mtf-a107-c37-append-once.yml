@@ -1,0 +1,103 @@
+name: MTF A107 — Append C37 Independent Adapted BOS Events Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a107-c37-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a107-original-native3m-append-once
+  cancel-in-progress: false
+jobs:
+  append-a107:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require independent 45 ZIP C37 and old immutable source evidence
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          base='research/mtf-element-audit-v1/'
+          pins={
+             'd05/c37_native_adapted_bos_event_scanner.py':'88deff6629a7c032f2603603c211f43aa6ff6f89',
+             'd05/test_c37_native_adapted_bos_event_scanner.py':'be7c7839d1a3887a93a9d709fba1d4f1d677482d',
+             'tests/probe_c37_original_adapted_45zip_event_scan.py':'5deca92bdf21a8899940f376683f258e69cee97f',
+             'evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+             'evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json':'d11147727df89e598b69ae7c80a5e01b6dbc7bb3',
+             'cycles/B1_C37_NATIVE_FOUR_ADAPTED_BOS_EVENT_SOURCE_REPORT.md':'89ceccdf4fec61e497a9b6ce9ff034dfbbdcebb2',
+             'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df'}
+          for p,w in pins.items():
+             actual=subprocess.check_output(['git','rev-parse','HEAD:'+base+p],text=True).strip()
+             assert actual==w,(p,actual,w)
+          w=json.load(open(base+'evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json'))
+          assert w['run_id']==39492075525
+          assert w['all_four_timelines_full_event_json_equal']
+          assert w['original_binance_usdm_zip_replayed']==45 and w['closed_original_native3m_rows']==76800
+          assert w['original15m_decimal_parity']==15360
+          assert w['python_versions']==['3.10','3.11','3.12']
+          assert w['negative_source_tests_per_python']==27
+          assert w['four_route_event_counts']=={
+            'LATEST_CONFIRMED_V1':539,'EARLIEST_CONFIRMED_V1':462,
+            'DEEP_RAID_SIDE_V1':412,'NEAREST_RAID_SIDE_V1':511}
+          assert w['author_bos_goldens']==w['orders']==w['trades']==0
+          j=[json.loads(x) for x in open(base+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)==106 and j[-1]['action_id']=='A106'
+          assert j[-1]['record_sha256']=='9e67ed26b4c9a0b7a6bc43be3cb3ac345998a6db310659e8273f6391c42ec03d'
+          print('A107_SOURCE_45ZIP_WITNESS_AND_A106_GIT_BLOBS_PINNED_PASS')
+          PY
+      - name: Verify all canonical previous A106 SHA and source byte hashes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a107-before.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/a107-before.json'))
+          assert p['events']==106 and p['validations_pass']
+          print('A107_ALL_PRIOR_106_SHA_SOURCE_BYTE_HASHES_PASS')
+          PY
+      - name: Append exactly one 107th source-qualified C37 action
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py record \
+            --action-id A107 \
+            --cycle B1/C37 \
+            --planned 'Evolve frozen academic CORE plus four ADAPTED BOS pivot selection prototypes C36 to four independent complete chronological 1H wick raid then 3m closed-BOS research event scanners. Rebuild each event from original native3m source and prior confirmed 1h raid rather than selecting a different pivot at the frozen C21 break bar. Preserve no author goldens, no orders, no assumed tick fill.' \
+            --executed 'Built separate c37_native_adapted_bos_event_scanner.py using native original SHA bars, as-of bar START pivot confirmation, 1H first wick raid confirmed after full following hour, invalidation when raid extreme breached, source candle CLOSE crossing selected swing independently for each adapted variant. Added 27 adversarial source, no future, time prefix and invalidation unit tests CI 39491091920 PASS. Rebuilt all 45 original SHA-verified Binance USD-M 3m/15m/1d ZIP using existing original data loader with 76800 original 3m and 15360 15m original Decimal equalities, 5 symbols and 4 independent route event timelines; frozen C21 LATEST replicates exactly 539 existing research events. Original source receipt blob e4b702e8c6cdc34f1c2475df73ef44ae1631fe56. First independent CI 39491774466 passed 27 tests x 3 Python and source retrieval but failed only due intermediate Python tuples compared directly to JSON arrays; comparator-only canonical JSON fix commit 77cd44c8 with zero price/route changes, error recorded. Independently reread all 45 original ZIP and complete exact source per-event JSON equality, 27 negative tests on Python 3.10,3.11,3.12; CI 39492075525 ALL JOBS SUCCESS, independent source witness blob d11147727df89e598b69ae7c80a5e01b6dbc7bb3.' \
+            --result 'Four different original source price-closed event streams: C21 LATEST 539 raid contexts/390 unique 3m candles; EARLIEST 462/326; DEEP 412/298; NEAREST 511/371. Shared bar contexts correlated and not independent trades. Relative to LATEST nearest has 114 earlier common raid events, 204 later and 174 same, 19 variant-only raid parents and 47 latest-only; variants genuinely select event times not mere levels. No author 2023 BOS labels, no valid 1H reaction, FTA, SL/TP, execution order or profit stats, zero orders/trades and NOT_TRADE_READY. Original prior C33 and C36 evidence immutable.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Frozen source Python native 3m bar AS-OF prefix equality; independent Python 3.10,3.11,3.12 27 test suites no skips and full 45 source SHA ZIP reconstruction; CI 39492075525 complete original source JSON exact equality, old C21 exact 539 event regression, original 3m 76800 and original 15m 15360 Decimal parity. Earlier independent CI 39491774466 false failure only due Python tuple versus JSON list mismatch is preserved, corrected by canonical JSON comparison without modifying original source code or 45 ZIP. Six evidence byte hashes source implementation/test/probe/full original receipt/independent CI witness/report and 106 prior SHA checked. No author selected BOS, market tick fill, entries, PnL or actual orders.' \
+            --evidence d05/c37_native_adapted_bos_event_scanner.py \
+            --evidence d05/test_c37_native_adapted_bos_event_scanner.py \
+            --evidence tests/probe_c37_original_adapted_45zip_event_scan.py \
+            --evidence evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json \
+            --evidence evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json \
+            --evidence cycles/B1_C37_NATIVE_FOUR_ADAPTED_BOS_EVENT_SOURCE_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a107-after.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a107-after.json'))
+          assert x['events']==107 and x['validations_pass']
+          print('A107_107_SHA_SIX_SOURCE_BYTES_PASS')
+          PY
+      - name: Push only canonical append to journal, never rewrite old events
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git diff --cached --check
+          git commit -m "audit(A107): 45 original ZIP four independent native3m BOS timelines, 27x3 source negatives"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
