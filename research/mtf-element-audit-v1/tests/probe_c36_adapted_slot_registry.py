@@ -24,7 +24,7 @@ def run(output=None):
         p=Path(output);p.parent.mkdir(parents=True,exist_ok=True)
         p.write_text(json.dumps(r,sort_keys=True,ensure_ascii=False,indent=2)+"\n",encoding="utf8")
     if PATH.exists():
-        assert json.loads(PATH.read_text(encoding="utf8"))==r,"C36_SLOT_MANIFEST_PINNED_FULL_JSON_DRIFT"
+        assert json.loads(PATH.read_text(encoding="utf8"))==json.loads(json.dumps(r,sort_keys=True)),"C36_SLOT_MANIFEST_PINNED_FULL_JSON_DRIFT"
     print(json.dumps({"academic_core_id":r["core_id"],
         "registered_variants":list(r["research_assemblies"]),
         "orders":r["orders"],"trades":r["trades"],
