@@ -1,0 +1,20 @@
+{
+  "adversarial_source_tests_per_python": 35,
+  "author_selected_bos_golden_cases": 0,
+  "joined_author_cases_to_C33": 0,
+  "new_usdm_archives_reread": 0,
+  "old_104_sha_chain_verified": 104,
+  "orders_created": 0,
+  "original_source_c33_git_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "periods_overlap": false,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39475591964,
+  "schema": "EMBER_C35_AUTHOR_2023_VS_C33_2026_CASE_NONINTERSECTION_V1",
+  "trades_created": 0,
+  "trigger_sha": "109ef7c1d2c51bd080b0a774bf9a1a1c5284af13"
+}
