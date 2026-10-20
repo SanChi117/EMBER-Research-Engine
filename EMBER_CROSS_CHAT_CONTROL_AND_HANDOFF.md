@@ -108,12 +108,13 @@
 - **C36-S05 [x]** — Завершённый frozen отчёт `cycles/B1_C36_ADAPTED_PIVOT_LAB_AND_SLOTS_REPORT.md` blob `d73d0f2ea735b6bdf84243431c2a4b59cd7d8bad`. Добавлен journal **A106**, canonical SHA `9e67ed26b4c9a0b7a6bc43be3cb3ac345998a6db310659e8273f6391c42ec03d`, **10 source SHA evidence files**. [Независимая CI 39482224419](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39482224419) **SUCCESS 106/106 SHA**, 58 unit source tests, full JSON source and slots. Финальный A106 witness blob `4e5afda1431b2ab6d47bac208465ec814fcdc207`. Карта обновлена commit `e7b4ec42`.
 - **C36-S06 [x]** — Handoff и карта обновлены. **C36 закрыт только как версионированная source-choice архитектура**, не как рынок, сделки, оптимизированный RR или авторский BOS.
 
-### C37 — текущая незакрытая работа
+### C37 — фактические шаги разработки (20 октября 2026)
 
-- **C37-S00 [~]** — Зафиксировать контракт forward data scanner: каждый 1H wick raid после подтверждения, все исходные 3m бар-закрытия по времени, выбор swing до каждой новой свечи для каждой из 4 версий, остановка по инвалидации рейда. Уровень равен авторскому только когда есть первичный source golden, сейчас НЕТ.
-- **C37-S01 [ ]** — Реализовать новый `d05/c37_...py` с независимыми по каждой версии событийными счётчиками; baseline LATEST должен точно воспроизводить старые C21 539 research events по 45 USD-M ZIP, иначе механизм неверен. 20+ fail-closed no-lookahead тестов.
-- **C37-S02 [ ]** — Full original 45 ZIP replay + сравнение полного JSON, отличие timestamps и overlap по оригинальным price candles без псевдо независимых доходностей.
-- **C37-S03 [ ]** — Independent full source repeat, матрица 3 Python, A107 107/107 SHA только после доказанного PASS; FTA/SL/Order остаются OFF.
+- **C37-S00 [x]** — Продолжена **уже завершённая C36/A106** (106/106 SHA) без повторения старого цикла. Исходный C21 3m close-cross и C20B 1H wick-fractal source observer изучены, оригинальные SHA USD-M архивы не изменены.
+- **C37-S01 [~]** — Реализован `d05/c37_native_adapted_bos_event_scanner.py` (commit `54740589`) — строгий 1H raid→3m сканер по **каждой новой исходной свече**, все 4 ADAPTED гипотезы выбирают собственный подтверждённый до начала свечи 3m swing, а собственный closed-break регистрируется только по закрытии этой свечи. Инвалидация при выходе за экстремум 1H рейда; C21 LATEST **обязан дословно совпадать** с frozen C21 parent events. Нет реальных или PAPER ордеров/сделок, никакого PnL. **27/27** adversarial test на синтетическом original-sha source, [CI 39491091920](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39491091920) PASS.
+- **C37-S02 [~]** — Создан original-source `tests/probe_c37_original_adapted_45zip_event_scan.py` (commit `3ef8044f`), пересобирающий 45 оригинальных ZIP / 76 800 SHA-подтверждённых native3m и 15 360 native15m Decimal равенств. Все 4 адаптации обрабатывают **собственные timestamps**, не условные C21 timestamps. Сохраняются 539 baseline C21 research parent events, отдельные native original 3m bar IDs, собственные event counts, совпадения и сдвиги, а также физическое prefix-as-of усечение. Первый CI `.github/workflows/mtf-c37-first-original45zip-events.yml` (commit `b17c3d9f`) **запущен, итог ещё ожидается**; сохраняются подлинные diagnostics, `[x]` и A107 до PASS не ставить.
+- **C37-S03 [ ]** — Повторная независимая CI на Python 3.10/3.11/3.12 + точное полное совпадение нового оригинального JSON; не менять замороженные C20-C36.
+- **C37-S04 [ ]** — Append-only A107 после frozen исходного, испытания и независимой CI; отдельная SHA-проверка 107/107; обновить основную карту, текущий handoff и следующие реакционные этапы.
 
 ## 6. Правила перехода в следующий чат
 
