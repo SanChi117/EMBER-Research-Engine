@@ -1,0 +1,119 @@
+name: MTF A107 — Independent 107 SHA Source 45ZIP Four BOS
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a107-c37-independent-107-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a107-independent-source-sha
+  cancel-in-progress: false
+jobs:
+  independently-verify-original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently check all 107 canonical SHA events and 6 original files
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a107-sha.json
+          python - <<'PY'
+          import json
+          s=json.load(open('/tmp/a107-sha.json'))
+          assert s['events']>=107 and s['validations_pass']
+          events=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(events)>=107
+          assert events[105]['action_id']=='A106' and events[106]['action_id']=='A107'
+          assert events[106]['seq']==107
+          assert events[106]['record_sha256']=='b325185b98640c5af48b8bc084ae50034c8e35d44d4a761833702e350f139045'
+          assert events[106]['prev_sha256']=='9e67ed26b4c9a0b7a6bc43be3cb3ac345998a6db310659e8273f6391c42ec03d'
+          assert len(events[106]['evidence'])==6 and events[106]['cycle_result']=='PASSED'
+          print('A107_INDEPENDENT_ALL_SHA_CHAIN_AND_SIX_SOURCE_BYTES_PASS')
+          PY
+      - name: Verify original C33, C36 and C37 evidence blobs were never rewritten
+        run: |
+          python - <<'PY'
+          import subprocess
+          sha={
+           'research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+           'research/mtf-element-audit-v1/evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json':'d086e00def1f84dafd32fc370ab249ec15956075',
+           'research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+           'research/mtf-element-audit-v1/evidence/c37/C37_INDEPENDENT_SOURCE_WITNESS.json':'d11147727df89e598b69ae7c80a5e01b6dbc7bb3',
+           'research/mtf-element-audit-v1/cycles/B1_C37_NATIVE_FOUR_ADAPTED_BOS_EVENT_SOURCE_REPORT.md':'89ceccdf4fec61e497a9b6ce9ff034dfbbdcebb2'}
+          for p,expected in sha.items():
+              got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+              assert got==expected,(p,got,expected)
+          print('A107_C33_C36_C37_FULL_ORIGINAL_GIT_BLOBS_UNMODIFIED')
+          PY
+      - name: Recheck 27 native adverse controls and no skipped cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c37_native_adapted_bos_event_scanner 2>&1 | tee /tmp/a107-27-source.log
+          grep -q 'Ran 27 tests' /tmp/a107-27-source.log
+          grep -q '^OK$' /tmp/a107-27-source.log
+          if grep -q 'skipped=' /tmp/a107-27-source.log; then exit 1; fi
+      - name: Independently reread all 45 SHA original ZIP and validate full 4-source timelines
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c37_original_adapted_45zip_event_scan.py /tmp/a107-45zip-replay.json 2>&1 | tee /tmp/a107-native-full.log
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json'))
+          b=json.load(open('/tmp/a107-45zip-replay.json'))
+          assert a==b,'A107_FOUR_ORIGINAL_NATIVE_SOURCE_TIMELINES_FULL_JSON_DRIFT'
+          assert a['source_native3m_usdm_ZIP_files']==45
+          assert a['source_closed_original3m_total']==76800
+          assert a['native15m_exact_decimal_equalities']==15360
+          t=a['comparison_totals']
+          assert [(t[k]['raid_context_event_count'],t[k]['unique_original3m_break_bars'])
+           for k in ('LATEST_CONFIRMED_V1','EARLIEST_CONFIRMED_V1','DEEP_RAID_SIDE_V1','NEAREST_RAID_SIDE_V1')]==[
+              (539,390),(462,326),(412,298),(511,371)]
+          assert a['author_selected_bos_goldens']==a['paper_signals']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('A107_SECOND_INDEPENDENT_SOURCE_ZIP_ALL_4_EVENT_JSON_REPLAY_PASS')
+          PY
+      - name: Pin independent 107 SHA original ZIP witness
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c37/A107_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'Already immutable'; exit 0; fi
+          python - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c37/A107_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+           'schema':'EMBER_A107_107_SHA_FOUR_ADAPTED_45ZIP_NATIVE_BOS_V1',
+           'run_id':int(os.environ['RUN_ID']),
+           'trigger_sha':os.environ['TRIGGER_SHA'],
+           'canonical_A107_record_sha256':'b325185b98640c5af48b8bc084ae50034c8e35d44d4a761833702e350f139045',
+           'all_sha_action_records_verified':107,'six_new_source_evidence_files_verified':6,
+           'replayed_original_45_usdm_zip':45,'original_closed3m_bars':76800,
+           'full_four_event_timelines_json_equal':True,
+           'negative_tests':27,
+           'route_counts':{'LATEST_CONFIRMED_V1':539,'EARLIEST_CONFIRMED_V1':462,
+             'DEEP_RAID_SIDE_V1':412,'NEAREST_RAID_SIDE_V1':511},
+           'author_goldens':0,'paper_orders':0,'real_orders':0,'trades':0,
+           'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A107): independent SHA-107 original native45 ZIP four adapted BOS event source proof"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
