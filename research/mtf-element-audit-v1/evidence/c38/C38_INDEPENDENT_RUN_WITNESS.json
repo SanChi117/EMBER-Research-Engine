@@ -1,0 +1,24 @@
+{
+  "author_bos_goldens": 0,
+  "author_reaction_goldens": 0,
+  "closed_original_native3m_rows": 76800,
+  "frozen_original_C37_git_blob": "e4b702e8c6cdc34f1c2475df73ef44ae1631fe56",
+  "orders": 0,
+  "original_C38_full_source_git_blob": "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440",
+  "prior_canonical_sha_actions_verified": 107,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "replayed_original_USDM_ZIP": 45,
+  "run_id": 39494609819,
+  "schema": "EMBER_C38_4_BOS_X_3_REACTION_45ZIP_INDEPENDENT_V1",
+  "source_combination_count": 12,
+  "source_matrix_exact_complete_JSON_match": true,
+  "source_negative_controls_per_python": 27,
+  "source_original15m_exact_equalities": 15360,
+  "trades": 0,
+  "trigger_sha": "a21fb7dfd6dfd7268102d0571bd92ef9e03a6b57"
+}
