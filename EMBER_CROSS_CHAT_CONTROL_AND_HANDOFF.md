@@ -46,7 +46,8 @@
 | C31 / A101 | 122/539 ранних wick reach до close, семантика отличается | [CI 39175901614](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39175901614) 101/101 |
 | **C32 / A102** | **две типизированные ветви BOS**, ни одна не создаёт заявку | [CI 39300966067](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39300966067) 102/102 |
 | **C33 / A103 [x]** | source-наблюдение всех допустимых заранее swing: 539/539 случаев с неоднозначностью, 5 285 связей | [CI 39455752782](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39455752782) 103/103 SHA; НЕ авторский BOS |\n| **C34 / A104 [x]** | source-text BOS отрицательные правила и первичные Drive источники, но без авторского выбранного BOS pivot | [CI 39459245566](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39459245566) PASS 104/104; 38 synthetic negative tests×3 Python |
-| **C35 / A105 [x]** | source gap авторского 3m swing + связка reaction/FTA/SL без самовольной эвристики | `NEEDS_AUTHOR_BOS_GOLDENS`; другой независимый PAPER-компонент возможен |
+| **C35 / A105 [x]** | 2023 авторский источник vs 2026 USD-M: правила метаданных и запрет ложного сопоставления кейсов | [CI 39475591964](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39475591964) 35×3 PASS; [A105 CI 39476159123](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39476159123) 105/105 SHA; авторского BOS нет |
+| **C36 [~]** | следующий независимый академический PAPER-элемент; без подмены авторских BOS goldens | не начинался, отдельная приёмка |
 
 ## 5. Журнал работ C33 и всех следующих шагов — ЗАПОЛНЯТЬ ПО ХОДУ
 
