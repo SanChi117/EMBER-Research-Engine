@@ -1,0 +1,18 @@
+{
+  "author_bos_goldens_attested": 0,
+  "frozen_a103_ledger_actions_verified": 103,
+  "frozen_c33_original_git_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "negative_synthetic_rule_tests_per_python": 38,
+  "new_original_market_zip_rereads": 0,
+  "orders_created": 0,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39458705426,
+  "schema": "EMBER_C34_AUTHOR_BOS_NEGATIVE_SOURCE_ONLY_V1",
+  "trades_created": 0,
+  "trigger_sha": "50d8ec6c111dbdbf1b093c2da21eb5134b579746"
+}
