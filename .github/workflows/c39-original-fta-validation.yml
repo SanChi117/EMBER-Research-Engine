@@ -6,13 +6,15 @@ on:
       - '.github/workflows/c39-original-fta-validation.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   c39-source:
     runs-on: ubuntu-latest
     timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -34,3 +36,16 @@ jobs:
           assert r['readiness']=='NOT_TRADE_READY'
           print('C39 source only verified')
           PY
+      - name: Freeze original source result after successful independent check
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json
+          if test -e "$p"; then echo 'Original proof already frozen'; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c39.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C39): original 45 ZIP native 4 BOS x 3 potential FTA historical source"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
