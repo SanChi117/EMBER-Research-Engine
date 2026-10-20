@@ -1,0 +1,29 @@
+{
+  "C37_full_original_source_git_blob": "e4b702e8c6cdc34f1c2475df73ef44ae1631fe56",
+  "all_four_timelines_full_event_json_equal": true,
+  "author_bos_goldens": 0,
+  "closed_original_native3m_rows": 76800,
+  "four_route_event_counts": {
+    "DEEP_RAID_SIDE_V1": 412,
+    "EARLIEST_CONFIRMED_V1": 462,
+    "LATEST_CONFIRMED_V1": 539,
+    "NEAREST_RAID_SIDE_V1": 511
+  },
+  "negative_source_tests_per_python": 27,
+  "old_A106_sha_actions_verified": 106,
+  "old_C33_git_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "orders": 0,
+  "original15m_decimal_parity": 15360,
+  "original_C21_latest_parents": 539,
+  "original_binance_usdm_zip_replayed": 45,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39492075525,
+  "schema": "EMBER_C37_FOUR_ADAPTED_BOS_TIMELINES_45_ORIGINAL_ZIP_V1",
+  "trades": 0,
+  "trigger_sha": "0f82641b6a391d6e0fcb5db0f43541d3ec903ef2"
+}
