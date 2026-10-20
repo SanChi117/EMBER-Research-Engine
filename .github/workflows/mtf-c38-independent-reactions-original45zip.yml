@@ -1,0 +1,139 @@
+name: MTF C38 — Independent 4 BOS × 3 Reaction 45 ZIP Matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c38-independent-reactions-original45zip.yml'
+      - 'research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c38-independent-reaction-source
+  cancel-in-progress: false
+jobs:
+  original-27-reaction-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify frozen A107 ledger and C37 original full 45 ZIP source receipt
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c38-a107.json
+          python - <<'PY'
+          import json,subprocess
+          j=json.load(open('/tmp/c38-a107.json'))
+          assert j['events']==107 and j['validations_pass']
+          jn=[json.loads(v) for v in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if v.strip()]
+          assert jn[-1]['record_sha256']=='b325185b98640c5af48b8bc084ae50034c8e35d44d4a761833702e350f139045'
+          pins={
+           'research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+           'research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json':'a69d69de29d4b52a9ee68ccdf0dbcb20222a6440'}
+          for p,s in pins.items():
+            got=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+            assert got==s,(p,got,s)
+          print('C38_A107_SOURCE_AND_NEW_ORIGINAL_C38_SHA_PINNED')
+          PY
+      - name: Test 27 original pre-BOS reaction controls on each Python
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c38_adapted_post_raid_reaction 2>&1 | tee /tmp/c38-27.log
+          grep -q 'Ran 27 tests' /tmp/c38-27.log
+          grep -q '^OK$' /tmp/c38-27.log
+          if grep -q 'skipped=' /tmp/c38-27.log; then exit 1; fi
+  independent-full-original-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently re-read all 45 original USD-M ZIP to rebuild 4x3 reaction JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c38_original_post_raid_reactions_45zip.py /tmp/c38-independent-matrix.json 2>&1 | tee /tmp/c38-source-replay.log
+      - name: Verify exact 12 combinations all 5 symbols and no author trades
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open('research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json'))
+          b=json.load(open('/tmp/c38-independent-matrix.json'))
+          assert a==b,'C38_FULL_ORIGINAL_SOURCE_12_COMBINATION_MATRIX_NOT_EQUAL'
+          assert a['original_USDM_SHA_ZIP_count']==45
+          assert a['original_closed_native3m_count']==76800
+          assert a['original15m_decimal_parities']==15360
+          assert a['hypothesis_count']==12 and len(a['summary_by_combination'])==12
+          assert a['parent_C37_original_research_events']==539
+          assert a['original_C37_source_git_blob']=='e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+          assert a['author_approved_reactions']==a['author_approved_bos']==a['order_submissions']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          expected={
+           'LATEST_CONFIRMED_V1':[539,416,258,152],
+           'EARLIEST_CONFIRMED_V1':[462,402,323,246],
+           'DEEP_RAID_SIDE_V1':[412,351,270,236],
+           'NEAREST_RAID_SIDE_V1':[511,415,304,215]}
+          variants=[
+           'POST_CONFIRM_DIRECTIONAL_BODY_V1',
+           'POST_CONFIRM_TWO_PROGRESSIVE_CLOSES_V1',
+           'POST_CONFIRM_HALF_SWEEP_DISPLACEMENT_V1']
+          for bos,(n,*yes) in expected.items():
+            for v,w in zip(variants,yes):
+              t=a['summary_by_combination'][bos+'::'+v]
+              assert t['bos_research_parent_events']==n
+              assert t['with_prior_reaction']==w
+              assert t['without_prior_reaction']==n-w
+              assert sum(t['reaction_satisfied_partition'].values())==w
+          assert all(x['original_asof_prefix_physically_equal'] for x in a['markets'])
+          print('C38_INDEPENDENT_12_ROUTES_ALL_45_SOURCE_ZIP_FULL_JSON_EQUAL_NO_TRADES')
+          PY
+  freeze-independent-reaction-witness:
+    needs: [original-27-reaction-matrix,independent-full-original-matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Source-frozen independent C38 all 12 reaction route proof
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'already pinned'; exit 0; fi
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+           'schema':'EMBER_C38_4_BOS_X_3_REACTION_45ZIP_INDEPENDENT_V1',
+           'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+           'prior_canonical_sha_actions_verified':107,
+           'frozen_original_C37_git_blob':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+           'original_C38_full_source_git_blob':'a69d69de29d4b52a9ee68ccdf0dbcb20222a6440',
+           'replayed_original_USDM_ZIP':45,'closed_original_native3m_rows':76800,
+           'source_original15m_exact_equalities':15360,
+           'source_matrix_exact_complete_JSON_match':True,
+           'python_versions':['3.10','3.11','3.12'],
+           'source_negative_controls_per_python':27,
+           'source_combination_count':12,
+           'author_reaction_goldens':0,'author_bos_goldens':0,
+           'orders':0,'trades':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C38): independent full 45 source ZIP 12 pre-BOS reactions and 27 tests x 3 Python"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
