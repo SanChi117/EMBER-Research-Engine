@@ -1,0 +1,20 @@
+{
+  "author_approved_FTA_targets": 0,
+  "complete_12_source_FTA_JSON_equal": true,
+  "frozen_full_FTA_comparison_blob": "15dacbe47ba2b6e133d8b97d970a96d6242cd80f",
+  "native15m_decimal_parities": 15360,
+  "negative_source_tests_per_python": 33,
+  "orders": 0,
+  "original_native3m_closed_bars": 76800,
+  "original_usdm_zip_reread": 45,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39514608621,
+  "schema": "EMBER_C39_INDEPENDENT_POTENTIAL_FTA_ORIGINAL_45ZIP_V1",
+  "trades": 0,
+  "trigger_sha": "277d7effd34ef6378f9ac250073fd3666cf78fef"
+}
