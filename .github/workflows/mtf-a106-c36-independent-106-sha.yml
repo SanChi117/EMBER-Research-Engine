@@ -1,0 +1,132 @@
+name: MTF A106 — Independent 106 SHA, Four BOS Hypotheses, Locked Slots
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a106-c36-independent-106-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a106-full-independent
+  cancel-in-progress: false
+jobs:
+  independent-106-and-original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify 106 append-only SHA records and ten bytes
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a106-all.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/a106-all.json'))
+          assert r['events']>=106 and r['validations_pass']
+          j=[json.loads(x) for x in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(j)>=106
+          assert j[104]['action_id']=='A105' and j[105]['action_id']=='A106'
+          assert j[105]['seq']==106 and j[105]['cycle_result']=='PASSED'
+          assert j[105]['prev_sha256']=='a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
+          assert j[105]['record_sha256']=='9e67ed26b4c9a0b7a6bc43be3cb3ac345998a6db310659e8273f6391c42ec03d'
+          assert len(j[105]['evidence'])==10
+          print('A106_INDEPENDENT_106_SHA_SOURCE_BYTE_HASHES_AND_10_FILES_PASS')
+          PY
+      - name: Preserve all earlier academic source identities and adapted evidence SHA
+        run: |
+          python - <<'PY'
+          import subprocess
+          root='research/mtf-element-audit-v1/'
+          pins={
+            'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'd05/c36_adapted_pivot_hypotheses.py':'b6a80cea320571ff60ec6bd07cc8b55dd22059b6',
+            'd05/test_c36_adapted_pivot_hypotheses.py':'436f86f74805c556a956c2755552616a9f049aec',
+            'tests/probe_c36_adapted_pivot_comparison.py':'82ab6cc228edf8abc34a82ba719af3afbe489925',
+            'evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json':'d086e00def1f84dafd32fc370ab249ec15956075',
+            'd05/c36_adapted_slot_registry.py':'724836e84d804bda910279e1a20e1597e1a22065',
+            'd05/test_c36_adapted_slot_registry.py':'dfa7afce7b9186511ca466edb1d32009a4371d20',
+            'tests/probe_c36_adapted_slot_registry.py':'de89268192e4df4ee0d6893b335a22a0f67b9cfe',
+            'evidence/c36/C36_VERSIONED_ADAPTED_SLOT_REGISTRY.json':'a77454dd66d39855878519ba83b61df95cdc7c0f',
+            'evidence/c36/C36_INDEPENDENT_RUN_WITNESS.json':'36fbb68bb0f76f35065bd8ec5be69a2a4a87ec90',
+            'cycles/B1_C36_ADAPTED_PIVOT_LAB_AND_SLOTS_REPORT.md':'d73d0f2ea735b6bdf84243431c2a4b59cd7d8bad'}
+          for p,want in pins.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+root+p],text=True).strip()
+              assert actual==want,(p,actual,want)
+          print('A106_FROZEN_CORE_AND_C36_SHA_IMMUTABLE_SOURCE_PASS')
+          PY
+      - name: Independently rerun 58 source-only tests and full 539 C33 selections
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c36_adapted_pivot_hypotheses test_c36_adapted_slot_registry 2>&1 | tee /tmp/a106-58-tests.log
+          grep -q 'Ran 58 tests' /tmp/a106-58-tests.log
+          grep -q '^OK$' /tmp/a106-58-tests.log
+          if grep -q 'skipped=' /tmp/a106-58-tests.log; then exit 1; fi
+          cd ../../..
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_pivot_comparison.py /tmp/a106-539-comparison.json
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_slot_registry.py /tmp/a106-research-assembly.json
+          python - <<'PY'
+          import json
+          p='research/mtf-element-audit-v1/evidence/c36/'
+          x=json.load(open(p+'C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json'))
+          y=json.load(open('/tmp/a106-539-comparison.json'))
+          assert x==y
+          assert x['original_parent_events']==539 and x['unique_original3m_BOS_break_bars']==390
+          assert x['additional_raid_contexts_sharing_original3m_bar']==149
+          assert x['samples_are_independent_trades']==False
+          assert x['variant_agreement_only']['LATEST_CONFIRMED_V1']['agrees_with_c21']==539
+          assert x['variant_agreement_only']['EARLIEST_CONFIRMED_V1']['agrees_with_c21']==0
+          assert x['variant_agreement_only']['DEEP_RAID_SIDE_V1']['agrees_with_c21']==54
+          assert x['variant_agreement_only']['NEAREST_RAID_SIDE_V1']['agrees_with_c21']==52
+          m=json.load(open(p+'C36_VERSIONED_ADAPTED_SLOT_REGISTRY.json'))
+          n=json.load(open('/tmp/a106-research-assembly.json'))
+          assert m==n
+          assert not any(v['paper_order_placement_allowed'] or v['real_order_placement_allowed']
+                 for v in m['research_assemblies'].values())
+          assert x['orders_created']==x['trades_created']==m['orders']==m['trades']==0
+          assert x['readiness']==m['readiness']=='NOT_TRADE_READY'
+          print('A106_INDEPENDENT_COMPLETE_539_ADAPTED_PIVOT_AND_SIX_SLOT_JSON_PASS')
+          PY
+      - name: Pin independent A106 full source and canonical chain witness
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c36/A106_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'prior witness preserved'; exit 0; fi
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c36/A106_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A106_106_SHA_ADAPTED_FOUR_BOS_LOCKED_SLOTS_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['HEAD_SHA'],
+            'a106_record_sha256':'9e67ed26b4c9a0b7a6bc43be3cb3ac345998a6db310659e8273f6391c42ec03d',
+            'full_106_source_sha_records_verified':106,
+            'ten_new_C36_evidence_file_byte_hashes_verified':10,
+            'original_C33_source_git_blob':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+            'replayed_complete_source_research_contexts':539,
+            'distinct_original3m_break_bars':390,
+            'source_competing_swings':5285,
+            'all_case_and_slot_manifest_JSON_equal':True,
+            'negative_source_tests_passed':58,
+            'author_BOS_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A106): independently verify 106 SHA all 10 C36 files, 539 research contexts, 58 source tests"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
