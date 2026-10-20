@@ -1,0 +1,21 @@
+{
+  "author_selected_bos_goldens": 0,
+  "competing_swing_relations": 5285,
+  "complete_539_cases_json_equal": true,
+  "events_with_two_or_more_preknown_swings": 539,
+  "negative_tests_per_python": 27,
+  "orders": 0,
+  "original_45_usdm_zip_reread": 45,
+  "original_full_json_git_blob": "fa17524a942d8227e8ec33e3d1e2c93c860669df",
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "run_id": 39455216429,
+  "schema": "EMBER_C33_45_ORIGINAL_ZIP_ALL_PREKNOWN_SWINGS_MATRIX_V1",
+  "source_original_bos_parent_edges": 539,
+  "trades": 0,
+  "trigger_sha": "642afb606f769df1a83ff75a5f7e38192403df6b"
+}
