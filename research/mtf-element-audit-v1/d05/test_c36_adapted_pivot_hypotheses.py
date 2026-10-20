@@ -3,6 +3,7 @@ import copy
 import hashlib
 import json
 import unittest
+from pathlib import Path
 from dataclasses import asdict
 from decimal import Decimal as D
 from c36_adapted_pivot_hypotheses import (
@@ -135,12 +136,19 @@ class C36AdaptedSelectorSourceControls(unittest.TestCase):
     def test_reject_two_baselines_after_resigned(self):
         c=self.fresh()
         # A second baseline may be crafted but only if two valid source pivots.
-        if len(c["competing_swings"])<2:self.skipTest("fixture only 1 pivot")
+        if len(c["competing_swings"])<2:
+            # Use an ORIGINAL pinned multiple-choice event; no skipped
+            # negative test is allowed to count as a full test PASS.
+            p=Path(__file__).resolve().parents[1]/"evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json"
+            full=json.loads(p.read_text(encoding="utf8"))
+            c=next(k for market in full["markets"] for k in market["source_case_competing_swings"]
+                   if k["competing_preknown_swing_count"]>1)
+        asof=c["break_3m_bar_start_ms"]
         c["competing_swings"][0]["selected_by_frozen_c21_proxy"]=True
         c["competing_swings"][-1]["selected_by_frozen_c21_proxy"]=True
         reseal(c)
         with self.assertRaisesRegex(ValueError,"BASELINE_NOT_UNIQUE"):
-            choose_adapted_pivot(c,VARIANTS[0],as_of_ms=self.asof)
+            choose_adapted_pivot(c,VARIANTS[0],as_of_ms=asof)
     def test_reject_invalid_close_confirm(self):
         c=self.fresh();c["break_3m_close_known_ms"]+=180000
         with self.assertRaisesRegex(ValueError,"FUTURE_BREAK"):
@@ -178,5 +186,25 @@ class C36AdaptedSelectorSourceControls(unittest.TestCase):
         for v in VARIANTS:
             x=choose_adapted_pivot(c,v,as_of_ms=self.asof)
             self.assertEqual(x.selection_scope,"C33_PREKNOWN_SOURCE_OPTIONS_ONLY")
+    def test_multiple_raid_contexts_sharing_one_3m_bar_remain_separate(self):
+        from c36_adapted_pivot_hypotheses import summarize_frozen_c33
+        p=Path(__file__).resolve().parents[1]/"evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json"
+        result=summarize_frozen_c33(json.loads(p.read_text(encoding="utf8")))
+        self.assertEqual(result["original_parent_events"],539)
+        self.assertEqual(result["unique_original3m_BOS_break_bars"],390)
+        self.assertEqual(result["additional_raid_contexts_sharing_original3m_bar"],149)
+        self.assertFalse(result["samples_are_independent_trades"])
+    def test_no_adapted_variant_has_author_goldens_or_orders(self):
+        from c36_adapted_pivot_hypotheses import summarize_frozen_c33
+        p=Path(__file__).resolve().parents[1]/"evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json"
+        result=summarize_frozen_c33(json.loads(p.read_text(encoding="utf8")))
+        self.assertEqual(result["author_selected_BOS_goldens"],0)
+        self.assertEqual(result["orders_created"],0)
+        self.assertEqual(result["trades_created"],0)
+        self.assertEqual(result["readiness"],"NOT_TRADE_READY")
+    def test_incompatible_source_rejected_without_author_status(self):
+        from c36_adapted_pivot_hypotheses import summarize_frozen_c33
+        with self.assertRaisesRegex(ValueError,"UNTRUSTED_ORIGINAL_C33"):
+            summarize_frozen_c33({"schema":"fake","readiness":"READY"})
 
 if __name__=="__main__":unittest.main()
