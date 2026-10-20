@@ -127,7 +127,7 @@ def _validate_case(case,*,as_of_ms):
             raise ValueError("C36_AUTHOR_PIVOT_FORGERY")
         if type(item.get("selected_by_frozen_c21_proxy"))!=bool:
             raise ValueError("C36_INVALID_C21_PROXY_FLAG")
-        identity=(ms,item["original_center3m_sha_row_id"])
+        identity=ms # only one same-side strict pivot per center bar
         if identity in identities:
             raise ValueError("C36_DUPLICATE_SWING_CANDIDATE")
         identities.add(identity)
