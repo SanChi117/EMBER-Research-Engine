@@ -18,7 +18,7 @@ def run(output=None):
     assert all(x["paper_order_placement_allowed"] is False and
                x["technical_backtest_ready"] is False and
                x["real_order_placement_allowed"] is False and
-               x["orders"]==[] and x["trades"]==[] for x in r["research_assemblies"].values())
+               not x["orders"] and not x["trades"] for x in r["research_assemblies"].values())
     assert r["readiness"]=="NOT_TRADE_READY"
     if output:
         p=Path(output);p.parent.mkdir(parents=True,exist_ok=True)
