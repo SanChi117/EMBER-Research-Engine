@@ -1,0 +1,107 @@
+name: MTF C36 — Four Adapted BOS Pivot Hypotheses First Gate
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c36-adapted-pivot-first.yml'
+      - 'research/mtf-element-audit-v1/d05/c36_adapted_pivot_hypotheses.py'
+      - 'research/mtf-element-audit-v1/d05/test_c36_adapted_pivot_hypotheses.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c36_adapted_pivot_comparison.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c36-adapted-first-pivot-source
+  cancel-in-progress: false
+jobs:
+  test-and-compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require unchanged academic C33 and canonical old 105 source chain
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/c36-prior-ledger.json
+          python - <<'PY'
+          import json,subprocess
+          d=json.load(open('/tmp/c36-prior-ledger.json'))
+          assert d['events']==105 and d['validations_pass']
+          assert d['tip_sha256']=='a2fe39896fea78c95d532e6ff2c0c710f9ee8aabd876f2112c7f390c290247a5'
+          p='research/mtf-element-audit-v1/evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json'
+          actual=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip()
+          assert actual=='fa17524a942d8227e8ec33e3d1e2c93c860669df'
+          print('C36_PRIOR_ACADEMIC_C33_PINNED_SOURCE_AND_A105_SHA_PASS')
+          PY
+      - name: Run 32 fail-closed adapted pivot selection tests
+        id: negatives
+        continue-on-error: true
+        run: |
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c36_adapted_pivot_hypotheses >/tmp/c36-negative.log 2>&1
+      - name: Run all 539 C33 original research cases through four variants
+        id: replay
+        continue-on-error: true
+        run: |
+          python research/mtf-element-audit-v1/tests/probe_c36_adapted_pivot_comparison.py /tmp/c36-first-full.json > /tmp/c36-first-full.log 2>&1
+      - name: Preserve exact failure proof and diagnostics, no silent skipped cases
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          COMMIT_SHA: ${{ github.sha }}
+          NEGATIVE_STATUS: ${{ steps.negatives.outcome }}
+          REPLAY_STATUS: ${{ steps.replay.outcome }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import pathlib,json,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c36/diagnostics/C36_ADAPTED_FIRST_GATE.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          n=pathlib.Path('/tmp/c36-negative.log')
+          r=pathlib.Path('/tmp/c36-first-full.log')
+          nl=n.read_text(errors='replace') if n.exists() else 'NOT_RUN'
+          rl=r.read_text(errors='replace') if r.exists() else 'NOT_RUN'
+          ok=(os.environ['NEGATIVE_STATUS']=='success' and
+              os.environ['REPLAY_STATUS']=='success' and 'Ran 32 tests' in nl and 'OK' in nl[-200:])
+          p.write_text(json.dumps({
+            'schema':'EMBER_C36_ADAPTED_PIVOT_FIRST_GATE_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['COMMIT_SHA'],
+            'negatives_outcome':os.environ['NEGATIVE_STATUS'],
+            'replay_outcome':os.environ['REPLAY_STATUS'],
+            'all_32_and_539_source_pass':ok,
+            'negative_log_tail':nl[-13000:],
+            'replay_log_tail':rl[-13000:],
+            'author_positive_BOS_goldens':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c36/diagnostics/C36_ADAPTED_FIRST_GATE.json
+          git commit -m "diagnostic(C36): keep actual 32 negative and 539 source-only pivot compare outcomes"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Refuse false acceptance on failed test or source
+        if: steps.negatives.outcome != 'success' || steps.replay.outcome != 'success'
+        run: exit 1
+      - name: Freeze first complete variant-selected original 539-case JSON
+        if: steps.negatives.outcome == 'success' && steps.replay.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c36/C36_ORIGINAL_539_CASE_ADAPTED_PIVOT_COMPARISON.json
+          if test -e "$p"; then echo 'Immutable receipt already pinned'; exit 0; fi
+          cp /tmp/c36-first-full.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C36): four adapted pivot hypotheses compared on original frozen 539 BOS source cases"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
