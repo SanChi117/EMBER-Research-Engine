@@ -1,0 +1,126 @@
+name: MTF A108 — Independent 108 SHA Original Reaction 45 ZIP
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a108-c38-independent-108-sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a108-independent-original-reaction
+  cancel-in-progress: false
+jobs:
+  independent-108-and-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all 108 SHA event and 6 source bytes, old frozen source
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a108-journal.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a108-journal.json'))
+          assert x['events']>=108 and x['validations_pass']
+          j=[json.loads(s) for s in open('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if s.strip()]
+          assert len(j)>=108 and j[106]['action_id']=='A107' and j[107]['action_id']=='A108'
+          assert j[107]['record_sha256']=='4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35'
+          assert j[107]['prev_sha256']=='b325185b98640c5af48b8bc084ae50034c8e35d44d4a761833702e350f139045'
+          assert len(j[107]['evidence'])==6 and j[107]['cycle_result']=='PASSED'
+          print('A108_INDEPENDENT_108_SHA_AND_6_SOURCE_BYTES_PASS')
+          PY
+      - name: Frozen original academic and C37 C38 source blobs
+        run: |
+          python - <<'PY'
+          import subprocess,json
+          b='research/mtf-element-audit-v1/'
+          pins={
+           'evidence/c33/C33_ORIGINAL_COMPETING_BOS_PIVOTS_SOURCE.json':'fa17524a942d8227e8ec33e3d1e2c93c860669df',
+           'evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+           'evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json':'a69d69de29d4b52a9ee68ccdf0dbcb20222a6440',
+           'evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json':'d50a567ace14bf187c14f931a2b0309ee4ba852f'}
+          for p,w in pins.items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+              assert actual==w,(p,actual,w)
+          witness=json.load(open(b+'evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json'))
+          assert witness['run_id']==39494609819 and witness['source_matrix_exact_complete_JSON_match']
+          print('A108_ORIGINAL_PRIOR_AND_C38_FULL_GIT_BLOBS_PASS')
+          PY
+      - name: Repeat all 27 original post-confirmation reaction negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c38_adapted_post_raid_reaction 2>&1 | tee /tmp/a108-27-negative.log
+          grep -q 'Ran 27 tests' /tmp/a108-27-negative.log
+          grep -q '^OK$' /tmp/a108-27-negative.log
+          if grep -q 'skipped=' /tmp/a108-27-negative.log; then exit 1; fi
+      - name: Reread all 45 original Futures USD-M ZIP and exact 12 route JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c38_original_post_raid_reactions_45zip.py /tmp/a108-original-full.json 2>&1 | tee /tmp/a108-original.log
+          python - <<'PY'
+          import json
+          b='research/mtf-element-audit-v1/evidence/c38/'
+          frozen=json.load(open(b+'C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json'))
+          current=json.load(open('/tmp/a108-original-full.json'))
+          assert frozen==current,'A108_FULL_12_ORIGINAL_REACTION_ROUTES_JSON_DRIFT'
+          assert frozen['original_USDM_SHA_ZIP_count']==45
+          assert frozen['original_closed_native3m_count']==76800
+          assert frozen['original15m_decimal_parities']==15360
+          assert frozen['hypothesis_count']==12 and len(frozen['summary_by_combination'])==12
+          expected={'LATEST_CONFIRMED_V1':[539,416,258,152],
+                    'EARLIEST_CONFIRMED_V1':[462,402,323,246],
+                    'DEEP_RAID_SIDE_V1':[412,351,270,236],
+                    'NEAREST_RAID_SIDE_V1':[511,415,304,215]}
+          for bos,(total,*values) in expected.items():
+            result=[r for k,r in frozen['summary_by_combination'].items() if k.startswith(bos+'::')]
+            assert len(result)==3
+            r={k.split('::')[1]:v for k,v in frozen['summary_by_combination'].items() if k.startswith(bos+'::')}
+            assert r['POST_CONFIRM_DIRECTIONAL_BODY_V1']['with_prior_reaction']==values[0]
+            assert r['POST_CONFIRM_TWO_PROGRESSIVE_CLOSES_V1']['with_prior_reaction']==values[1]
+            assert r['POST_CONFIRM_HALF_SWEEP_DISPLACEMENT_V1']['with_prior_reaction']==values[2]
+            assert all(v['bos_research_parent_events']==total for v in r.values())
+          assert frozen['author_approved_reactions']==frozen['author_approved_bos']==0
+          assert frozen['order_submissions']==frozen['trades']==0
+          assert frozen['readiness']=='NOT_TRADE_READY'
+          print('A108_INDEPENDENT_45ZIP_12_REACTION_CROSS_BOS_FULL_JSON_PASS')
+          PY
+      - name: Pin verified 108 source SHA chain result once
+        if: success()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          TRIGGER_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c38/A108_INDEPENDENT_RUN_WITNESS.json
+          if test -e "$p"; then echo 'preserve previous receipt'; exit 0; fi
+          python - <<'PY'
+          import json,pathlib,os
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c38/A108_INDEPENDENT_RUN_WITNESS.json')
+          p.write_text(json.dumps({
+            'schema':'EMBER_A108_108_SHA_ORIGINAL_POST_1H_REACTION_4X3_MATRIX_V1',
+            'run_id':int(os.environ['RUN_ID']),'trigger_sha':os.environ['TRIGGER_SHA'],
+            'canonical_A108_record_sha256':'4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35',
+            'canonical_sha_actions_verified':108,'new_source_file_sha_bytes_verified':6,
+            'original_full_45zip_reread':45,'closed_original_native3m_bars':76800,
+            'complete_12_reaction_routes_json_equal':True,'adversarial_tests':27,
+            'source_bos_variant_count':4,'source_reaction_variant_count':3,
+            'author_goldens':0,'orders':0,'trades':0,'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(A108): independent 108 SHA and original 45 ZIP 4 BOS x 3 Reaction full-source proof"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
