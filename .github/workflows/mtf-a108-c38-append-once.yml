@@ -1,0 +1,82 @@
+name: MTF A108 — Append C38 Reaction Evidence Once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-a108-c38-append-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-a108-once
+  cancel-in-progress: false
+jobs:
+  append-a108:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin original source receipts and independent test result
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          b='research/mtf-element-audit-v1/'
+          pins={
+            'evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+            'evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json':'a69d69de29d4b52a9ee68ccdf0dbcb20222a6440',
+            'evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json':'d50a567ace14bf187c14f931a2b0309ee4ba852f',
+            'd05/c38_adapted_post_raid_reaction.py':'6cddd502ef2f0a567fed7d9fb60b51646829f98a',
+            'd05/test_c38_adapted_post_raid_reaction.py':'c136987c22c9c3bf99adcc17303d43698077d246',
+            'tests/probe_c38_original_post_raid_reactions_45zip.py':'c370404072d2ae7163ad11d8c4d7d5654894b342',
+            'cycles/B1_C38_THREE_POST_RAID_REACTIONS_ORIGINAL_SOURCE_REPORT.md':'b62e7525087d90f9b690d07852c73118a4ac5d4b'}
+          for p,w in pins.items():
+            got=subprocess.check_output(['git','rev-parse','HEAD:'+b+p],text=True).strip()
+            assert got==w,(p,got,w)
+          witness=json.load(open(b+'evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json'))
+          assert witness['run_id']==39494609819
+          assert witness['source_matrix_exact_complete_JSON_match']
+          assert witness['replayed_original_USDM_ZIP']==45
+          assert witness['source_negative_controls_per_python']==27
+          assert witness['python_versions']==['3.10','3.11','3.12']
+          journal=[json.loads(x) for x in open(b+'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl',encoding='utf8') if x.strip()]
+          assert len(journal)==107 and journal[-1]['action_id']=='A107'
+          assert journal[-1]['record_sha256']=='b325185b98640c5af48b8bc084ae50034c8e35d44d4a761833702e350f139045'
+          PY
+      - name: Append only independent C38 source scope and verify SHA
+        working-directory: research/mtf-element-audit-v1
+        run: |
+          set -euo pipefail
+          python tools/auditlog.py verify
+          python tools/auditlog.py record \
+            --action-id A108 --cycle B1/C38 \
+            --planned 'Create isolated ADAPTED reaction alternatives observable strictly after complete 1h raid confirmation and before each of four original3m BOS candle starts, without claiming author labels or any executable order.' \
+            --executed 'Built three source-native post-confirmation reaction predicates and 27 adverse source-timing tests. First unit CI 39493969372 PASS. Replayed all 45 original USD-M ZIP, 76800 original3m closed bars, 15360 original15m Decimal equalities and twelve combinations of four independently timed BOS routes plus three reaction hypotheses; full source pinned JSON blob a69d69de29d4b52a9ee68ccdf0dbcb20222a6440. Independent all-original full JSON replay and 27 tests on each Python 3.10 3.11 3.12 CI 39494609819 PASS. Frozen independent witness blob d50a567ace14bf187c14f931a2b0309ee4ba852f, previous C37 source unchanged.' \
+            --result 'Original 539 C21 latest research BOS contexts: 416 directional-body prior reactions, 258 two-progressive-close reactions and 152 half-wick-excursion reactions. EARLIEST 462: 402 323 246. DEEP 412: 351 270 236. NEAREST 511: 415 304 215. These twelve source counts are NOT trades, author-approved reactions or performance results. ZERO order/fills, source-only NOT_TRADE_READY.' \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck 'Independent CI 39494609819 complete original 45 ZIP full exact JSON equality, source prefix invariance, 27 fail-closed controls each Python 3.10 3.11 3.12; no author 2023 goldens, Reaction variants declared ADAPTED, prior C37 source Git blob e4b702e8c6cdc34f1c2475df73ef44ae1631fe56 unchanged.' \
+            --evidence d05/c38_adapted_post_raid_reaction.py \
+            --evidence d05/test_c38_adapted_post_raid_reaction.py \
+            --evidence tests/probe_c38_original_post_raid_reactions_45zip.py \
+            --evidence evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json \
+            --evidence evidence/c38/C38_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C38_THREE_POST_RAID_REACTIONS_ORIGINAL_SOURCE_REPORT.md
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py >/tmp/a108-sha.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/a108-sha.json'))
+          assert x['events']==108 and x['validations_pass']
+          PY
+      - name: Commit append-only journal
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "audit(A108): independent 45ZIP twelve ADAPTED BOS reaction source comparisons"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
