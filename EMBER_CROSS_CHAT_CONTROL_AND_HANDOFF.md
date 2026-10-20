@@ -126,6 +126,11 @@
 - **C39-S03 [x, независимая проверка; не полный цикл]** — [CI 39514608621](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39514608621) **SUCCESS**: 33 теста каждый Python 3.10/3.11/3.12, повтор всех 45 ZIP, exact FULL JSON equality 12 BOS×FTA. Witness Git blob `dc86ff91727525c51d4393d5f8b1acf1babdbc7e`. LATEST 537/539 контекстов с потенциальным obstacle, EARLIEST 462/462, DEEP 411/412, NEAREST 511/511, одинаковое наличие для трёх рейтингов. **Это не TP и не готовые входы**: свежесть и prior-touch не проверены.
 - **C39-S04 [~]** — Source report `cycles/B1_C39_POTENTIAL_1H_FTA_4X3_SOURCE_REPORT.md` commit `2954c7e5` зафиксирован. **A109 append ещё НЕ выполнен**, 109/109 не подтверждены; старый A108 108/108 остался целым. Следующий шаг — SHA append once + отдельная независимая A109 CI после допуска записи, затем закрыть source-only C39 и начать C40 prior touch / wick traversal. Без исполнительных ордеров.
 
+### C40 — начало нового цикла
+
+- **C40-S01 [~]** — Компонент `d05/c40_pre_bos_fta_touch_state.py` (commit `cbeeabee`): проверки прошлых касаний и прохождений 1H-уровней, только исходные закрытые свечи до BOS.
+- **C40-S02 [x] (только тесты)** — `d05/test_c40_pre_bos_fta_touch_state.py` (commit `d7870684`): [CI 39515342088](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39515342088) **PASS 19/19**, без исполнения ордеров. C40 остаётся [~], поскольку оригинальный архивный повтор не проведён. C39 A109 также ещё не добавлен: исходные 45 ZIP и независимая CI для C39 PASS, запись SHA ожидается.
+
 ## 6. Правила перехода в следующий чат
 
 Новый чат должен **без вводных гаданий**:
