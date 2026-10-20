@@ -122,7 +122,7 @@
 
 - **C39-S00 [x]** — Прочитаны frozen C20 1H fractal/BSL/SSL и C28 classic three-hour 1H IMB/Context/TDA; оригинальная модель не имеет сертифицированного авторского приоритета FTA или состояния свежести. Source-only new FTA не приравнивать TP.
 - **C39-S01 [~]** — Создан `d05/c39_adapted_preknown_fta_source.py`, commit `33375365`: потенциальные впереди 1H Fractal/Classic IMB известные до C37 3m BOS-бара. Три исследования: `CLOSEST_PRIOR_1H_OBSTACLE_V1`, `FRACTAL_FAMILY_PRIORITY_V1`, `CLASSIC_IMB_FAMILY_PRIORITY_V1`. Цена BOS-close ретроспективна (известна лишь на BOS закрытии). Нет свежести/авторской FTA/SL/TP/ордеров. Пока [~], тестов CI не было.
-- **C39-S02 [ ]** — Негативные as-of/source SHA/price/no-ready тесты, оригинальный 45 ZIP 4 BOS × 3 FTA matrix, запись ошибок, independent matrix 3 Python.
+- **C39-S02 [~]** — Созданы 33 adversarial/source теста `d05/test_c39_adapted_preknown_fta_source.py` commit `55106d2f`: [CI 39513820814](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39513820814) **PASS 33/33** без пропусков, включая lookahead, подмену bar SHA и запрет TP/READY. Создан original replay `tests/probe_c39_original_source_preknown_fta_45zip.py` commit `a0ad0b9a`: 45 SHA USD-M ZIP, 4 BOS × 3 потенциальных FTA, физическое усечение as-of, immutable C37 parent counts. Первый длинный CI [39514131523](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/39514131523) пока RUNNING; запуск сделан read-only без преждевременного frozen JSON и A109. Статус C39 всё ещё [~].
 - **C39-S03 [ ]** — После original proof+tests, append A109+ independent 109/109 SHA, карта и handoff; затем интеграция полных Reaction × BOS × FTA маршрутов как PAPER-source наблюдений.
 
 ## 6. Правила перехода в следующий чат
