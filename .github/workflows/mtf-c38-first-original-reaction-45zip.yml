@@ -1,0 +1,81 @@
+name: MTF C38 — Original 45 ZIP 4 BOS × 3 Reaction Source Matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c38-first-original-reaction-45zip.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c38_original_post_raid_reactions_45zip.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c38-first-original-45zip-reaction
+  cancel-in-progress: false
+jobs:
+  first-45zip-reaction-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require 27 adverse source guards and preserved original C37
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c38_adapted_post_raid_reaction 2>&1 | tee /tmp/c38-negative.log
+          grep -q 'Ran 27 tests' /tmp/c38-negative.log
+          grep -q '^OK$' /tmp/c38-negative.log
+      - name: Re-read 45 source USD-M ZIP and evaluate 12 source-only hypotheses
+        id: full
+        continue-on-error: true
+        run: |
+          python research/mtf-element-audit-v1/tests/probe_c38_original_post_raid_reactions_45zip.py /tmp/c38-original-source.json >/tmp/c38-first-source.log 2>&1
+      - name: Always retain real diagnostic log without calling a failed test pass
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SHA_TRIGGER: ${{ github.sha }}
+          STATUS: ${{ steps.full.outcome }}
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          log=pathlib.Path('/tmp/c38-first-source.log')
+          text=log.read_text(errors='replace') if log.exists() else 'NO_SOURCE_LOG'
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c38/diagnostics/C38_FIRST_ORIGINAL_45ZIP_REACTION_MATRIX.json')
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps({
+            'schema':'EMBER_C38_ORIGINAL_45ZIP_REACTION_MATRIX_INITIAL_V1',
+            'run_id':int(os.environ['RUN_ID']),
+            'trigger_sha':os.environ['SHA_TRIGGER'],
+            'outcome':os.environ['STATUS'],
+            'log_tail':text[-25000:],
+            'author_goldens':0,'orders':0,'trades':0,
+            'readiness':'NOT_TRADE_READY'
+          },sort_keys=True,indent=2)+'\n')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c38/diagnostics/C38_FIRST_ORIGINAL_45ZIP_REACTION_MATRIX.json
+          git commit -m "diagnostic(C38): first real 45 original ZIP reaction variants full source outcome"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
+      - name: Fail if source cannot be independently reproduced
+        if: steps.full.outcome != 'success'
+        run: exit 1
+      - name: Freeze original full 12-combination reaction source receipt once
+        if: steps.full.outcome == 'success'
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json
+          if test -e "$p"; then echo 'already pinned'; exit 0; fi
+          cp /tmp/c38-original-source.json "$p"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$p"
+          git commit -m "evidence(C38): source-native 45 ZIP all 4 BOS x 3 pre-BOS reaction variants no trades"
+          git pull --rebase origin research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
