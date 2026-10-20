@@ -81,6 +81,23 @@ def _eligible_window(e,rows):
         raise ValueError("C38_UNTRUSTED_READY_OR_BAD_BOS_EVENT")
     if len(rows)==0 or e.symbol!=rows[0].symbol:
         raise ValueError("C38_WRONG_NATIVE_PRICE_SOURCE_SYMBOL")
+    start=rows[0].start_ms
+    if ((e.break_bar_start_ms-start)%180000 or
+        (e.swing_center_ms-start)%180000):
+        raise ValueError("C38_3M_EVENT_NOT_ON_SOURCE_GRID")
+    idx=(e.break_bar_start_ms-start)//180000
+    swing_idx=(e.swing_center_ms-start)//180000
+    if (idx<0 or idx>=len(rows) or swing_idx<0 or swing_idx>=len(rows)):
+        raise ValueError("C38_BREAK_OR_SWING_NOT_IN_ORIGINAL_SOURCE")
+    breakrow=rows[idx]
+    swingrow=rows[swing_idx]
+    if (breakrow.start_ms!=e.break_bar_start_ms or
+        breakrow.known_ms!=e.break_bar_closed_known_ms or
+        breakrow.raw_id!=e.break_original_native3m_row_id or
+        str(breakrow.close)!=e.break_close or
+        swingrow.raw_id!=e.swing_center_native3m_row_id or
+        e.swing_confirmed_ms!=e.swing_center_ms+2*180000):
+        raise ValueError("C38_ORIGINAL_BREAK_OR_SWING_ROW_SHA_DRIFT")
     bars=tuple(b for b in rows if
          b.start_ms>=e.raid_confirmed_ms and
          b.known_ms<=e.break_bar_start_ms)
