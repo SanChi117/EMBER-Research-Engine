@@ -1,0 +1,23 @@
+{
+  "all_sha_action_records_verified": 107,
+  "author_goldens": 0,
+  "canonical_A107_record_sha256": "b325185b98640c5af48b8bc084ae50034c8e35d44d4a761833702e350f139045",
+  "full_four_event_timelines_json_equal": true,
+  "negative_tests": 27,
+  "original_closed3m_bars": 76800,
+  "paper_orders": 0,
+  "readiness": "NOT_TRADE_READY",
+  "real_orders": 0,
+  "replayed_original_45_usdm_zip": 45,
+  "route_counts": {
+    "DEEP_RAID_SIDE_V1": 412,
+    "EARLIEST_CONFIRMED_V1": 462,
+    "LATEST_CONFIRMED_V1": 539,
+    "NEAREST_RAID_SIDE_V1": 511
+  },
+  "run_id": 39492665698,
+  "schema": "EMBER_A107_107_SHA_FOUR_ADAPTED_45ZIP_NATIVE_BOS_V1",
+  "six_new_source_evidence_files_verified": 6,
+  "trades": 0,
+  "trigger_sha": "c658b1d8fd5baa67ad17bd952aedf748d3464f29"
+}
