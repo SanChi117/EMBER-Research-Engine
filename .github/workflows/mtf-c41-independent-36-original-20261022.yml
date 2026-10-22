@@ -1,0 +1,73 @@
+name: EMBER C41 independent complete 45ZIP 36-route source JSON
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c41-independent-36-original-20261022.yml'
+permissions:
+  contents: read
+jobs:
+  c41-negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify accepted 110/110 source ledger and all evidence
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger.log
+          grep -Fq 'entries 110 tip_sha256 26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f' /tmp/ledger.log
+          python tests/test_journal_integrity.py | tee /tmp/all-evidence.log
+          grep -Fq '"validations_pass": true' /tmp/all-evidence.log
+      - name: Independently rerun 19 C41 adverse source tests without skipping
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c41_source_only_bos_reaction_fta_join 2>&1 | tee /tmp/c41-tests.log
+          grep -Fq 'Ran 19 tests' /tmp/c41-tests.log
+          grep -qx 'OK' /tmp/c41-tests.log
+          ! grep -q 'skipped=' /tmp/c41-tests.log
+  c41-45zip-original-json:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen C38 C39 C40 and C41 original full-result Git blobs
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json)" = "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+      - name: Independently reread all 45 source ZIP and compare ENTIRE C41 JSON
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tests/probe_c41_original_36route_source_45zip.py /tmp/C41-INDEPENDENT-COMPLETE.json > /tmp/C41-ORIGINAL-REPLAY.log 2>&1
+          python - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('research/mtf-element-audit-v1')
+          expected=json.loads((root/'evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json').read_text())
+          got=json.loads(pathlib.Path('/tmp/C41-INDEPENDENT-COMPLETE.json').read_text())
+          assert expected==got,"C41_36_ROUTE_FULL_45ZIP_JSON_MISMATCH"
+          assert got["source_original_binance_usdm_zip"]==45
+          assert got["source_original_native3m_bars"]==76800
+          assert got["source_native15m_decimal_equalities"]==15360
+          assert got["source_route_count"]==36 and len(got["summary_by_36_source_route"])==36
+          assert got["total_correlated_contexts"]==17316
+          assert got["academic_author_goldens"]==got["orders"]==got["trades"]==0
+          assert got["readiness"]=="NOT_TRADE_READY"
+          for market in got["markets"]:
+              assert len(market["routes"])==36
+              assert market["orders"]==market["trades"]==0
+          print("C41_INDEPENDENT_45ZIP_ALL_36_SOURCE_FULL_JSON_EXACT_PASS")
+          PY
