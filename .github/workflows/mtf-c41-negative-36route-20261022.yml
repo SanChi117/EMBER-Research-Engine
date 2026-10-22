@@ -4,6 +4,8 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c41-negative-36route-20261022.yml'
+      - 'research/mtf-element-audit-v1/d05/c41_source_only_bos_reaction_fta_join.py'
+      - 'research/mtf-element-audit-v1/d05/test_c41_source_only_bos_reaction_fta_join.py'
 permissions:
   contents: read
 jobs:
