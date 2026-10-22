@@ -1,0 +1,53 @@
+name: EMBER independent C40 A110 source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A110-independent-ledger-20261022.yml'
+permissions:
+  contents: read
+jobs:
+  full-110-ledger:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify A001-A110 full SHA ledger and all original evidence bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/110.log
+          grep -Fq 'entries 110 tip_sha256 26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f' /tmp/110.log
+          python tests/test_journal_integrity.py | tee /tmp/110evidence.log
+          grep -Fq '"validations_pass": true' /tmp/110evidence.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[json.loads(line) for line in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==110
+          a,b=rows[-2:]
+          assert a['seq']==109 and a['action_id']=='A109'
+          assert a['record_sha256']=='32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e'
+          assert b['seq']==110 and b['action_id']=='A110'
+          assert b['prev_sha256']==a['record_sha256']
+          assert b['record_sha256']=='26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f'
+          assert b['cycle']=='B1/C40' and b['verdict']=='DONE' and b['cycle_result']=='PASSED'
+          assert len(b['evidence'])==6 and all(x['bytes']>0 and len(x['sha256'])==64 for x in b['evidence'])
+          print('C40_A110_INDEPENDENT_110_SHA_ALL_EVIDENCE_PASS')
+          PY
+      - name: Reexecute 19 source prior touch C40 controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c40_pre_bos_fta_touch_state 2>&1 | tee /tmp/c40.txt
+          grep -Fq 'Ran 19 tests' /tmp/c40.txt
+          grep -qx 'OK' /tmp/c40.txt
+          ! grep -q 'skipped=' /tmp/c40.txt
