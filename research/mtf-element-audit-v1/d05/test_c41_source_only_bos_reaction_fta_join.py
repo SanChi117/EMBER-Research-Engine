@@ -104,18 +104,17 @@ class C41SourceJoins(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"FORGED_CHILD_AUTHOR_OR_EXECUTION"):
             self.join(t=t)
     def test_reaction_future_bar_refused(self):
+        # Adversarially FORGE a reaction on the BOS candle, whether or not
+        # the synthetic fixture contains any naturally positive reactions.
         x=list(self.r.routes)
-        found=False
-        for idx,route in enumerate(x):
-            obs=list(route.observations)
-            for j,w in enumerate(obs):
-                if w.condition_satisfied:
-                    obs[j]=replace(w,first_confirmed_reaction_bar_closed_ms=w.bos_break_bar_start_ms+THREE)
-                    x[idx]=replace(route,observations=tuple(obs))
-                    found=True
-                    break
-            if found:break
-        self.assertTrue(found,"C41 synthetic fixture must include positive adapted reaction")
+        route=x[0]
+        obs=list(route.observations)
+        w=obs[0]
+        obs[0]=replace(w,condition_satisfied=True,
+            first_confirmed_reaction_bar_start_ms=w.bos_break_bar_start_ms,
+            first_confirmed_reaction_bar_closed_ms=w.bos_break_bar_start_ms+THREE,
+            first_confirmed_native3m_row_id=w.original_bos_break_row_id)
+        x[0]=replace(route,observations=tuple(obs))
         with self.assertRaisesRegex(ValueError,"REACTION_FUTURE_OR_SOURCE_ID"):
             self.join(r=replace(self.r,routes=tuple(x)))
     def test_bos_future_bar_closed_beyond_source_asof_refused(self):
