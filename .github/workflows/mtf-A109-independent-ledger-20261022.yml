@@ -1,0 +1,52 @@
+name: EMBER independent C39 A109 source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A109-independent-ledger-20261022.yml'
+permissions:
+  contents: read
+jobs:
+  full-109-ledger:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently check A109 sequence SHA and all active evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a109.txt
+          grep -Fq 'entries 109 tip_sha256 32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e' /tmp/a109.txt
+          python tests/test_journal_integrity.py | tee /tmp/a109e.txt
+          grep -Fq '"validations_pass": true' /tmp/a109e.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==109
+          prev=rows[-2];last=rows[-1]
+          assert prev['action_id']=='A108' and prev['record_sha256']=='4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35'
+          assert last['seq']==109 and last['action_id']=='A109' and last['prev_sha256']==prev['record_sha256']
+          assert last['cycle']=='B1/C39' and last['verdict']=='DONE' and last['cycle_result']=='PASSED'
+          assert len(last['evidence'])==6
+          assert last['record_sha256']=='32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e'
+          assert all(e['bytes']>0 and len(e['sha256'])==64 for e in last['evidence'])
+          print('INDEPENDENT_A109_109_109_SIX_SHA_EVIDENCE_PASS')
+          PY
+      - name: Reexecute all 33 C39 adversarial source tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c39_adapted_preknown_fta_source 2>&1 | tee /tmp/c39.txt
+          grep -Fq 'Ran 33 tests' /tmp/c39.txt
+          grep -qx 'OK' /tmp/c39.txt
+          ! grep -q 'skipped=' /tmp/c39.txt
