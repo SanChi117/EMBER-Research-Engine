@@ -1,0 +1,74 @@
+name: EMBER C40 append-once A110 verified prior-touch source only
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c40-A110-accept-once-20261022.yml'
+permissions:
+  contents: write
+jobs:
+  append-a110:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Refuse prior journal edits, enforce A109 source evidence and independent re-audits
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/before110.log
+          grep -Fq 'entries 109 tip_sha256 32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e' /tmp/before110.log
+          python tests/test_journal_integrity.py > /tmp/verified109evidence.log
+          grep -Fq '"validations_pass": true' /tmp/verified109evidence.log
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+          python - <<'PY'
+          import json,pathlib
+          rows=[json.loads(v) for v in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert rows[-1]['seq']==109 and rows[-1]['action_id']=='A109'
+          assert rows[-1]['record_sha256']=='32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e'
+          assert rows[-2]['action_id']=='A108'
+          assert len(rows[-1]['evidence'])==6
+          print('A109_INDEPENDENT_109_SHAs_FROZEN_FOR_A110')
+          PY
+      - name: Append-once A110 with six immutable C40 evidence SHA entries
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A110 \
+            --cycle B1/C40 \
+            --planned 'Accept prior-touch native3m pre-BOS classification for C39 three adapted source potential FTA variants only after independent re-audit' \
+            --executed 'Read C40 code and C39 coupling, independently reran 19 C40 and 33 C39 source-negative tests on Python 3.10 3.11 3.12 with ledger/evidence integrity; independently reread 45 Binance USD-M original ZIP and compared full C39/C40 12-route JSON in CI 39831134857; independently accepted predecessor A109 109/109 in CI 39832081581' \
+            --result 'C40 four source prior-touch classes split known prior obstacle first touch and strict sweep/full gap traversal before 3m BOS BAR START; original 45 ZIP, 76800 native3m, 15360 native15m Decimal, 12 correlated source routes; 0 author fresh FTA goldens, orders or trades; NOT_TRADE_READY' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Successor independent CI 39831134857 4/4 jobs PASS and full original C40 JSON equal Git blob 718ce971dd781b2046c530992b4c9743225ef5b7, C39 15dacbe47ba2b6e133d8b97d970a96d6242cd80f. CI 39830996018 failed due self-created checker field mismatch; corrected and rerun PASS. C39 prior A109 SHA 32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e independent 39832081581 PASS; no order/TP/author inference.' \
+            --evidence d05/c40_pre_bos_fta_touch_state.py \
+            --evidence d05/test_c40_pre_bos_fta_touch_state.py \
+            --evidence tests/probe_c40_original_fta_prior_touch_45zip.py \
+            --evidence evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json \
+            --evidence evidence/c40/C40_INDEPENDENT_SOURCE_WITNESS_20261022.json \
+            --evidence cycles/B1_C40_PRE_BOS_SOURCE_FTA_TOUCH_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/a110.log
+          grep -Fq 'entries 110' /tmp/a110.log
+          python tests/test_journal_integrity.py | tee /tmp/a110evidence.log
+          grep -Fq '"validations_pass": true' /tmp/a110evidence.log
+      - name: Only journal append permitted then commit via authenticated GitHub Actions
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/touched.log
+          test "$(wc -l < /tmp/touched.log)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/touched.log
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C40): append-once A110 prior-touch six-file SHA evidence chain'
+          git push origin HEAD:research/academic-engine-recovery-20261015
