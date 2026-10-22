@@ -1,0 +1,35 @@
+name: EMBER C41 independent 36-route source-only negative matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c41-negative-36route-20261022.yml'
+permissions:
+  contents: read
+jobs:
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify immutable accepted A110 110/110 before C41 test
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c41journal
+          grep -Fq 'entries 110 tip_sha256 26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f' /tmp/c41journal
+      - name: Run all 19 C41 source joins and mutation negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c41_source_only_bos_reaction_fta_join 2>&1 | tee /tmp/c41.out
+          grep -Fq 'Ran 19 tests' /tmp/c41.out
+          grep -qx 'OK' /tmp/c41.out
+          ! grep -q 'skipped=' /tmp/c41.out
