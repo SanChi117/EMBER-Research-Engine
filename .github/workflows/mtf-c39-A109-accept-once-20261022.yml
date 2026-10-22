@@ -1,0 +1,66 @@
+name: EMBER C39 append-once A109 verified source only
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c39-A109-accept-once-20261022.yml'
+permissions:
+  contents: write
+jobs:
+  append-a109:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Refuse prior journal edits and ensure frozen C39 witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/check.log
+          grep -Fq 'entries 108 tip_sha256 4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35' /tmp/check.log
+          python tests/test_journal_integrity.py > /tmp/evidence.log
+          grep -Fq '"validations_pass": true' /tmp/evidence.log
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_INDEPENDENT_RUN_WITNESS.json)" = "dc86ff91727525c51d4393d5f8b1acf1babdbc7e"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+      - name: Write ONE A109 evidence SHA record and immediately self-verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A109 \
+            --cycle B1/C39 \
+            --planned 'Accept source-only adapted 1H potential FTA three-way families after independent raw-futures replay' \
+            --executed 'Read C39 source and report; independently reran 33 negative tests per Python 3.10, 3.11 and 3.12; verified A001-A108 SHA and all active evidence; independently fetched all 45 original USD-M ZIP and matched full frozen C39 JSON in SUCCESS CI 39831134857' \
+            --result 'C39 four BOS x three ADAPTED FTA source candidates remain strictly preknown 1H obstacle levels, retrospectively selected after BOS close; 45 source ZIP, 76800 3m, 15360 native15m Decimal, 12 correlated research routes; 0 author FTA approved, 0 orders/trades; NOT_TRADE_READY' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Independent successor CI 39831134857 verified C39 and C40 full original JSON and C37/C38/C39/C40 pinned blobs. Initial CI 39830996018 failed due independent checker schema mismatch; corrected 212a05f rerun PASS. C39 original Git blob 15dacbe47ba2b6e133d8b97d970a96d6242cd80f; witness dc86ff91727525c51d4393d5f8b1acf1babdbc7e. No author golden FTA or execution inference.' \
+            --evidence d05/c39_adapted_preknown_fta_source.py \
+            --evidence d05/test_c39_adapted_preknown_fta_source.py \
+            --evidence tests/probe_c39_original_source_preknown_fta_45zip.py \
+            --evidence evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json \
+            --evidence evidence/c39/C39_INDEPENDENT_RUN_WITNESS.json \
+            --evidence cycles/B1_C39_POTENTIAL_1H_FTA_4X3_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/a109.log
+          grep -Fq 'entries 109' /tmp/a109.log
+          python tests/test_journal_integrity.py | tee /tmp/a109evidence.log
+          grep -Fq '"validations_pass": true' /tmp/a109evidence.log
+      - name: Append-only git commit to specified research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --name-only | tee /tmp/touched.log
+          test "$(wc -l < /tmp/touched.log)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/touched.log
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C39): append-once A109 source evidence SHA chain'
+          git push origin HEAD:research/academic-engine-recovery-20261015
