@@ -1,0 +1,50 @@
+name: EMBER independent C41 A111 original 36-source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A111-independent-ledger-20261022.yml'
+permissions:
+  contents: read
+jobs:
+  verify-111:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify 111 SHA chained journal and all active six C41 evidence blobs
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/111pass.log
+          grep -Fq 'entries 111 tip_sha256 eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4' /tmp/111pass.log
+          python tests/test_journal_integrity.py | tee /tmp/111evidence.log
+          grep -Fq '"validations_pass": true' /tmp/111evidence.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==111
+          prior,last=j[-2:]
+          assert prior['action_id']=='A110' and prior['record_sha256']=='26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f'
+          assert last['action_id']=='A111' and last['seq']==111 and last['prev_sha256']==prior['record_sha256']
+          assert last['record_sha256']=='eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4'
+          assert last['cycle']=='B1/C41' and last['verdict']=='DONE' and last['cycle_result']=='PASSED'
+          assert len(last['evidence'])==6 and all(x['bytes']>0 and len(x['sha256'])==64 for x in last['evidence'])
+          assert any(x['bytes']>20000000 for x in last['evidence'])
+          print('C41_INDEPENDENT_A111_111_SHAS_AND_FULL_EVIDENCE_PASS')
+          PY
+      - name: Independently rerun C41 19 source chronology adverse tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c41_source_only_bos_reaction_fta_join 2>&1 | tee /tmp/c41-adverse.txt
+          grep -Fq 'Ran 19 tests' /tmp/c41-adverse.txt
+          grep -qx 'OK' /tmp/c41-adverse.txt
+          ! grep -q 'skipped=' /tmp/c41-adverse.txt
