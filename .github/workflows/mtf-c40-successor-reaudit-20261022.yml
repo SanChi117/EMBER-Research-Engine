@@ -1,0 +1,98 @@
+name: EMBER C39-C40 successor independent audit 2026-10-22
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c40-successor-reaudit-20261022.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  negative-and-ledger:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Independently verify entire chained action journal and immutable evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/auditlog.out
+          grep -Fq 'entries 108 tip_sha256 4133cf415c2e37b0f8c894e006ec047a4a43abad50668d5410e96d29797f6b35' /tmp/auditlog.out
+          python tests/test_journal_integrity.py | tee /tmp/evidence.out
+          grep -Fq '"validations_pass": true' /tmp/evidence.out
+      - name: Independently rerun 33 C39 adverse tests and 19 C40 adverse tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c39_adapted_preknown_fta_source 2>&1 | tee /tmp/c39.out
+          grep -Fq 'Ran 33 tests' /tmp/c39.out
+          grep -qx 'OK' /tmp/c39.out
+          ! grep -q 'skipped=' /tmp/c39.out
+          python -m unittest -v test_c40_pre_bos_fta_touch_state 2>&1 | tee /tmp/c40.out
+          grep -Fq 'Ran 19 tests' /tmp/c40.out
+          grep -qx 'OK' /tmp/c40.out
+          ! grep -q 'skipped=' /tmp/c40.out
+  independent-original-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify pinned original sources and previously accepted C38
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          pinned={
+          'research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+          'research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json':'a69d69de29d4b52a9ee68ccdf0dbcb20222a6440',
+          'research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json':'15dacbe47ba2b6e133d8b97d970a96d6242cd80f',
+          'research/mtf-element-audit-v1/evidence/c39/C39_INDEPENDENT_RUN_WITNESS.json':'dc86ff91727525c51d4393d5f8b1acf1babdbc7e',
+          'research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json':'718ce971dd781b2046c530992b4c9743225ef5b7',
+          }
+          for path, expected in pinned.items():
+              sha=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert sha==expected,(path,sha,expected)
+              print('IMMUTABLE_GIT_BLOB',path,sha,flush=True)
+          PY
+      - name: Independently recompute C39 and C40 from all original 45 source ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c39_original_source_preknown_fta_45zip.py" /tmp/independent-C39.json > /tmp/C39-source.log 2>&1
+          python "$R/tests/probe_c40_original_fta_prior_touch_45zip.py" /tmp/independent-C40.json > /tmp/C40-source.log 2>&1
+          python - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('research/mtf-element-audit-v1')
+          for cycle,fp,out in (
+          ('C39','evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json','/tmp/independent-C39.json'),
+          ('C40','evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json','/tmp/independent-C40.json')):
+              frozen=json.loads((root/fp).read_text())
+              independent=json.loads(pathlib.Path(out).read_text())
+              assert frozen==independent,(cycle,'COMPLETE_JSON_MISMATCH')
+              assert independent['source_original_45_usdm_zip']==45,(cycle,'COUNT_45_ZIP')
+              assert independent['original_closed_native3m']==76800,(cycle,'COUNT_NATIVE3M')
+              assert independent['native15m_exact_decimal']==15360,(cycle,'COUNT_15M_PARITY')
+              assert independent['route_count']==12,(cycle,'COUNT_ROUTES')
+              assert independent['orders']==independent['trades']==0,(cycle,'FORGED_EXECUTION')
+              assert independent['readiness']=='NOT_TRADE_READY',(cycle,'READINESS')
+              print(cycle,'INDEPENDENT_45ZIP_FULL_JSON_EXACT_PASS',flush=True)
+          z=independent
+          assert z['original_author_freshness_goldens']==0
+          expected={'NO_PREKNOWN_FTA_CANDIDATE':2,'NO_PRIOR_SOURCE_TOUCH':78,'PRIOR_BOUNDARY_TOUCH':58,'PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL':401}
+          assert z['summary_by_route']['LATEST_CONFIRMED_V1::CLOSEST_PRIOR_1H_OBSTACLE_V1']==expected
+          print('C40_19_NEGATIVE_CONTROLS_AND_FULL_ARCHIVE_RESOURCES_ARE_SEPARATELY_VALIDATED')
+          PY
