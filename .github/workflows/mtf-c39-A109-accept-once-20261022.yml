@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git diff --name-only | tee /tmp/touched.log
+          git -c core.quotePath=false diff --name-only | tee /tmp/touched.log
           test "$(wc -l < /tmp/touched.log)" -eq 1
           grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/touched.log
           git config user.name 'github-actions[bot]'
