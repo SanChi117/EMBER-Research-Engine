@@ -1,0 +1,43 @@
+{
+  "schema": "EMBER_C40_INDEPENDENT_ORIGINAL_45ZIP_PRE_BOS_SOURCE_WITNESS_20261022",
+  "date_utc": "2026-10-22",
+  "original_c40_independent_run_id": 39516049254,
+  "independent_successor_run_id": 39831134857,
+  "independent_successor_head_sha": "212a05ffa3b433098aa7d2193459ad47658a020e",
+  "independent_successor_ci_conclusion": "success",
+  "independent_successor_successful_jobs": 4,
+  "initial_failed_successor_run_id": 39830996018,
+  "initial_failed_reason": "Successor test infrastructure mismatched C39 JSON field names with C40 field names. Corrected and fully re-run successfully; no source strategy edits.",
+  "negative_c40_tests_per_python": 19,
+  "negative_c39_tests_per_python": 33,
+  "tested_python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "original_binance_usdm_source_zip_reread": 45,
+  "original_native3m_closed": 76800,
+  "original_native15m_decimal_equalities": 15360,
+  "complete_c39_original_json_equal": true,
+  "complete_c40_original_json_equal": true,
+  "source_c37_original_git_blob": "e4b702e8c6cdc34f1c2475df73ef44ae1631fe56",
+  "source_c38_original_git_blob": "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440",
+  "source_c39_original_git_blob": "15dacbe47ba2b6e133d8b97d970a96d6242cd80f",
+  "source_c39_witness_git_blob": "dc86ff91727525c51d4393d5f8b1acf1babdbc7e",
+  "source_c40_original_git_blob": "718ce971dd781b2046c530992b4c9743225ef5b7",
+  "prior_A109_record_sha256": "32d1759424b2659cc7350a0c78e1b61b9b428f4542a499a20fa27ae816f6b84e",
+  "prior_A109_independent_run_id": 39832081581,
+  "prior_A109_independent_ci_conclusion": "success",
+  "assumptions": "C39 adapted potential obstacle selection is retrospectively compared to BOS 3m CLOSE. C40 source prior touch is observed only after fully-known 1H source level and before BOS 3m BAR START. Neither certifies author FTA or trading.",
+  "prior_touch_state_LATEST_CLOSEST": {
+    "NO_PREKNOWN_FTA_CANDIDATE": 2,
+    "NO_PRIOR_SOURCE_TOUCH": 78,
+    "PRIOR_BOUNDARY_TOUCH": 58,
+    "PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL": 401
+  },
+  "original_author_freshness_goldens": 0,
+  "trade_execution_approvals": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
