@@ -1,0 +1,72 @@
+name: EMBER C41 first original 45ZIP 36 source routes freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c41-original-36-source-freeze-20261022.yml'
+permissions:
+  contents: write
+jobs:
+  original-source-freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Confirm A110 accepted, no source mutation and 19 C41 negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger.log
+          grep -Fq 'entries 110 tip_sha256 26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f' /tmp/ledger.log
+          cd d05
+          python -m unittest -v test_c41_source_only_bos_reaction_fta_join 2>&1 | tee /tmp/c41-tests.log
+          grep -Fq 'Ran 19 tests' /tmp/c41-tests.log
+          grep -qx 'OK' /tmp/c41-tests.log
+          ! grep -q 'skipped=' /tmp/c41-tests.log
+      - name: Independently pin parent C38/C39/C40 complete original evidence Git blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json)" = "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+      - name: Download all 45 original SHA-checked source ZIP and independently join 36 source routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research/mtf-element-audit-v1/evidence/c41
+          python research/mtf-element-audit-v1/tests/probe_c41_original_36route_source_45zip.py research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json > /tmp/c41-original.log 2>&1
+          tail -c 600 /tmp/c41-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json")
+          obj=json.loads(p.read_text())
+          assert obj["source_original_binance_usdm_zip"]==45
+          assert obj["source_original_native3m_bars"]==76800
+          assert obj["source_native15m_decimal_equalities"]==15360
+          assert obj["source_route_count"]==36
+          assert obj["total_correlated_contexts"]==17316
+          assert obj["academic_author_goldens"]==obj["orders"]==obj["trades"]==0
+          assert obj["readiness"]=="NOT_TRADE_READY"
+          assert len(obj["summary_by_36_source_route"])==36
+          print("C41_ALL_45ZIP_36_SOURCE_ROUTE_RECONCILIATION_PASS",p.stat().st_size,"bytes")
+          PY
+      - name: Commit only C41 frozen new-source result, not original parent data
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json
+          git diff --cached --name-only | tee /tmp/staged.log
+          test "$(wc -l < /tmp/staged.log)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json' /tmp/staged.log
+          git commit -m 'evidence(C41): freeze 45 original USD-M ZIP 36 correlated source-only routes'
+          git push origin HEAD:research/academic-engine-recovery-20261015
