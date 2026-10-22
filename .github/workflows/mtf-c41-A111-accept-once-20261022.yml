@@ -1,0 +1,71 @@
+name: EMBER C41 append-once A111 original 36 source routes
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c41-A111-accept-once-20261022.yml'
+permissions:
+  contents: write
+jobs:
+  append-a111:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify accepted old 110 evidence and exact frozen original C41 full source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/check110.txt
+          grep -Fq 'entries 110 tip_sha256 26a833aa16042c29826c510ddf3fb28f511de32478b81aad216de5c452b8cc4f' /tmp/check110.txt
+          python tests/test_journal_integrity.py | tee /tmp/checke.txt
+          grep -Fq '"validations_pass": true' /tmp/checke.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json)" = "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+          cd d05
+          python -m unittest -v test_c41_source_only_bos_reaction_fta_join 2>&1 | tee /tmp/c41negative.txt
+          grep -Fq 'Ran 19 tests' /tmp/c41negative.txt
+          grep -qx 'OK' /tmp/c41negative.txt
+      - name: Append exactly one A111 immutable 6-source-SHA record
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A111 \
+            --cycle B1/C41 \
+            --planned 'Join independently timed four adapted original3m BOS streams with three adapted postraid reaction predicates and three adapted 1H potential FTA source selectors, preserving C40 prior-touch states and source chronology' \
+            --executed 'Implemented fail-closed 36-route source join with original BOS raw-ID, 1H known-as-of and native3m causal reaction/touch guards; independently passed 19 source-negative tests per Python 3.10 3.11 3.12, full original 45 USD-M ZIP separate 36-route source-replay + full frozen JSON equality CI 39834278704; A110 old SHA unchanged' \
+            --result 'C41 all 45 original Binance futures source ZIP checked; 76800 native3m candles, 15360 precise native15m equalities, 36 correlated source combinations, 17316 correlated source contexts. Exact full original C38/C39/C40 event IDs and C41 frozen complete JSON matching. No author-approved setup/FTA, PnL, orders or trades; NOT_TRADE_READY' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Initial C41 negative CI 39833392790 FAIL from unit fixture assumption (zero naturally positive reaction); revised deterministic adversarial future-BOS-bar reaction; CI 39833541683 PASS 19 x 3; first full original CI 39833872654 PASS, independent 45 ZIP full exact JSON CI 39834278704 PASS. C41 frozen full source Git blob ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c unchanged. Source-only, no trade outcome or source-golden inference.' \
+            --evidence d05/c41_source_only_bos_reaction_fta_join.py \
+            --evidence d05/test_c41_source_only_bos_reaction_fta_join.py \
+            --evidence tests/probe_c41_original_36route_source_45zip.py \
+            --evidence evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json \
+            --evidence evidence/c41/C41_INDEPENDENT_SOURCE_WITNESS_20261022.json \
+            --evidence cycles/B1_C41_36_SOURCE_ONLY_JOIN_ORIGINAL_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/111.log
+          grep -Fq 'entries 111' /tmp/111.log
+          python tests/test_journal_integrity.py | tee /tmp/111e.log
+          grep -Fq '"validations_pass": true' /tmp/111e.log
+      - name: Commit only append-only journal and push to research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/touched.txt
+          test "$(wc -l < /tmp/touched.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/touched.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C41): append-once A111 six-source-SHA original36 ledger'
+          git push origin HEAD:research/academic-engine-recovery-20261015
