@@ -1,0 +1,174 @@
+{
+  "schema": "EMBER_C45_RECOVERED_COURSE_TEXT_AUTHOR_CONTRACT_V1",
+  "collected_utc": "2026-10-23",
+  "provenance": "Authenticated user's Google Drive accessible text lesson exports, read for C45; summaries are paraphrases, not copied source lesson or independently labelled chart goldens.",
+  "evidence_scope": "TEXTUAL_AUTHOR_RULE_OBSERVED_IMAGES_AND_2023_TRADE_GOLDENS_NOT_ATTESTED",
+  "source_files": [
+    {
+      "id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+      "title": "POI.txt",
+      "anchor": "Point Of Interest; Support Zone; Resistance Zone",
+      "url": "https://drive.google.com/file/d/1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R/view"
+    },
+    {
+      "id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "title": "2. Entry by IMB & SNR.txt",
+      "anchor": "Daily POI or Liquidity -> 4H VC; 4H POI -> 1H; 1H POI -> 15M",
+      "url": "https://drive.google.com/file/d/1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ/view"
+    },
+    {
+      "id": "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs",
+      "title": "3. Entry by Inducement [IDM].txt",
+      "anchor": "4H VC -> 1H IDM; 1H VC -> 15M IDM; no final VC",
+      "url": "https://drive.google.com/file/d/19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs/view"
+    },
+    {
+      "id": "1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO",
+      "title": "4. Entry By BOS.txt",
+      "anchor": "1H Liquidity Raid -> 3-5M BOS; BOS opposite raid wick; SL over liquidity; target 1H",
+      "url": "https://drive.google.com/file/d/1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO/view"
+    },
+    {
+      "id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "title": "Strong High & Low.txt",
+      "anchor": "contact liquidity/inefficiency then VC POI or BOS to validate Strong HL",
+      "url": "https://drive.google.com/file/d/1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t/view"
+    },
+    {
+      "id": "1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN",
+      "title": "Fair Value Gap  Imbalance.txt",
+      "anchor": "Three-bar open-wick inefficiency; original first POI test",
+      "url": "https://drive.google.com/file/d/1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN/view"
+    },
+    {
+      "id": "1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m",
+      "title": "5. Support And Resistance .txt",
+      "anchor": "SNR source interaction with SSL raid or FVG then source level test",
+      "url": "https://drive.google.com/file/d/1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m/view"
+    },
+    {
+      "id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "title": "3. Rejection Block.txt",
+      "anchor": "RB must raid liquidity or overlap IMB; first tested POI",
+      "url": "https://drive.google.com/file/d/1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT/view"
+    },
+    {
+      "id": "1sTrV-fAPe35xJ6WpMYrGfxy_WRV9i4JD",
+      "title": "ликвидность.txt",
+      "anchor": "Fractal liquidity BSL SSL; wick-only clean raid, reaction; 3-bar fractal",
+      "url": "https://drive.google.com/file/d/1sTrV-fAPe35xJ6WpMYrGfxy_WRV9i4JD/view"
+    }
+  ],
+  "claims": [
+    {
+      "id": "POI-01",
+      "file": "POI.txt",
+      "meaning": "POI is a tested typed support/resistance interest zone; not automatically any 4H/1D candle wick range.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "POI-02",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "4H/1H POI roles include IMB, SNR, RB and liquidity; POI must be tested before VC route is considered.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "POI-03",
+      "file": "Fair Value Gap  Imbalance.txt",
+      "meaning": "In course methodology the first POI test matters; repeated tests can accumulate liquidity, so do not silently treat repeated touch as pristine.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "POI-04",
+      "file": "3. Rejection Block.txt",
+      "meaning": "RB candidate requires liquidity raid or overlap/cover of IMB, not just adjacent two opposite-color candles.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "POI-05",
+      "file": "5. Support And Resistance .txt",
+      "meaning": "A SNR level source reaction/VC differs from RB and needs its specific source interaction.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-A-01",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "4H POI test with 1H liquidity or IMB trigger: evaluate 15M IMB/SNR VC for entry.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-A-02",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "Without 1H trigger after 4H POI test or after 4H liquidity raid, wait for 1H VC and treat 1H VC POI as new support context.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-A-03",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "After a properly contextual 1H POI test and 15M trigger, look for 5M VC IMB/SNR entry.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-A-04",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "Without 15M trigger after contextual 1H POI test, 15M VC IMB/SNR may become the entry POI.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-A-05",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "4H base POI and 1H VC target on 4H FTA; 1H POI and 15M VC target on 1H FTA. Author FTA geometry still requires original examples.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-A-06",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "At entry VC is IMB or SNR, although contextual VC/POI can include RB; conflating RB entry with route A IMB/SNR is unsupported.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-B-01",
+      "file": "3. Entry by Inducement [IDM].txt",
+      "meaning": "4H contextual VC POI can set up 1H IDM entry; 1H VC POI can set up 15M IDM entry.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-B-02",
+      "file": "3. Entry by Inducement [IDM].txt",
+      "meaning": "IDM is BSL/SSL lower-TF liquidity inside or ahead of the contextual POI and may enter directly at trigger without final raid VC; must be supported by strong HL.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-C-01",
+      "file": "4. Entry By BOS.txt",
+      "meaning": "1H fractal wick raid and 3M/5M BOS; if BSL raid BOS below raid, if SSL raid BOS above raid.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "ROUTE-C-02",
+      "file": "4. Entry By BOS.txt",
+      "meaning": "1H BOS route stop behind raided liquidity, target on raid's TF; without BOS or meaningful nearest FTA/acceptable RR skip. Neither C39 retrospective close nor C44 prior candle range alone constitutes executable trade.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "STRONG-01",
+      "file": "Strong High & Low.txt",
+      "meaning": "A Strong High/Low requires liquidity/inefficiency contact and subsequent POI or BOS confirmation; bare pivot is insufficient for academic SL.",
+      "scope": "TEXT_RULE"
+    },
+    {
+      "id": "STATUS-01",
+      "file": "2. Entry by IMB & SNR.txt",
+      "meaning": "Lesson text yields conditional requirements, but chart screenshots and archived 2023 entry/stop/target examples have not been independently aligned to original candle raw IDs; no positive author golden asserted.",
+      "scope": "KNOWN_LIMITATION"
+    }
+  ],
+  "unverified": [
+    "2023 screenshot-to-original-candle positive/negative goldens",
+    "Exact author FTA source-type hierarchy/mitigation and tick execution",
+    "Automated identification of real 4H/1D POI and valid first test from market bars",
+    "Strong High/Low academic proof and structural SL",
+    "ROI, RR, fill sequencing, forward OOS, order authorization"
+  ],
+  "source_only_gate": "NEVER_TRADE_READY"
+}
