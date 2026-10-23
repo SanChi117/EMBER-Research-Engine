@@ -222,11 +222,24 @@ def _reorder(candidates,hypothesis):
 def _allow(touch_state,policy):
     if policy not in ELIGIBILITY_POLICIES:
         raise ValueError("C43_UNKNOWN_TOUCH_POLICY")
+    if touch_state not in STATES or touch_state=="NO_PREKNOWN_FTA_CANDIDATE":
+        raise ValueError("C43_INVALID_INDIVIDUAL_CANDIDATE_TOUCH")
     if policy==ELIGIBILITY_POLICIES[0]:
         return True
     if policy==ELIGIBILITY_POLICIES[1]:
         return touch_state!="PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL"
     return touch_state=="NO_PRIOR_SOURCE_TOUCH"
+
+def choose_ranked_candidate(ordered,policy):
+    """Pure causal post-BOS rank decision; NONE when no candidate passes."""
+    found=None
+    for i,c in enumerate(ordered):
+        if not isinstance(c,CandidateObservation):
+            raise ValueError("C43_FORGED_RANKED_CANDIDATE")
+        ok=_allow(c.touch.classification,policy)
+        if found is None and ok:
+            found=(i,c)
+    return found
 
 def rerank_event(event,rows,index,fractals,gaps,registry,original_by_fta):
     """Compute all candidate touches ONCE for BOS then 3×3 pure rankings."""
@@ -267,8 +280,7 @@ def rerank_event(event,rows,index,fractals,gaps,registry,original_by_fta):
             if old_gate.eligible!=(baseline is not None and
                                   _allow(baseline.touch.classification,policy)):
                 raise ValueError("C43_C42_ORIGINAL_GATE_DRIFT")
-            selected=next(((rank,c) for rank,c in enumerate(ordered)
-                          if _allow(c.touch.classification,policy)),None)
+            selected=choose_ranked_candidate(ordered,policy)
             chosen_rank,chosen=(selected if selected is not None else (None,None))
             if policy==ELIGIBILITY_POLICIES[0] and chosen!=baseline:
                 raise ValueError("C43_UNFILTERED_C39_BASELINE_DRIFT")
