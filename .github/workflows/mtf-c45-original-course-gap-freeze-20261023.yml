@@ -1,4 +1,4 @@
-name: EMBER C45 recovered lesson text source 97MB C44 gap proof freeze
+name: EMBER C45 recovered lesson text source 97MB C44 semantic gap freeze v2
 on:
   push:
     branches: [research/academic-engine-recovery-20261015]
