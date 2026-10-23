@@ -1,0 +1,69 @@
+name: EMBER C44 initial 45ZIP bounded per-candidate source original freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c44-original-45zip-source-freeze-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  original_source_freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original SHA journal 113/113 and all frozen C43 source bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/old113.txt
+          grep -Fq 'entries 113 tip_sha256 f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8' /tmp/old113.txt
+          python tests/test_journal_integrity.py | tee /tmp/sha-old.txt
+          grep -Fq '"validations_pass": true' /tmp/sha-old.txt
+          python tools/partition_c43_source_result.py evidence/c43 | tee /tmp/c43old.txt
+          grep -Fq 'C43_FIVE_PARTS_REASSEMBLE_EXACT_CANONICAL_168MB_JSON_PASS' /tmp/c43old.txt
+          cd d05
+          python -m unittest -v test_c44_adapted_bounded_source_fta 2>&1 | tee /tmp/c44tests.txt
+          grep -Fq 'Ran 31 tests' /tmp/c44tests.txt
+          grep -qx 'OK' /tmp/c44tests.txt
+      - name: Re-download original 45 USD-M ZIP and freeze entire C44 bounded source JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c44"
+          python "$R/tests/probe_c44_original_bounded_source_45zip.py" "$R/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json" > /tmp/c44original.log 2>&1 || { tail -c 10000 /tmp/c44original.log; exit 1; }
+          tail -c 1200 /tmp/c44original.log
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json')
+          j=json.loads(p.read_text())
+          assert j['original_binance_usdm_source_zip']==45
+          assert j['original_native3m_closed']==76800
+          assert j['native15m_exact_decimal']==15360
+          assert j['correlated_parent_contexts']==17316
+          assert j['route_count']==36 and len(j['policies'])==4
+          assert j['author_fta_goldens']==j['author_poi_goldens']==j['orders']==j['trades']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C44_FIRST_FULL_ORIGINAL_45ZIP_FOUR_BOUNDED_SOURCE_JSON_PASS',p.stat().st_size)
+          PY
+      - name: Commit only frozen C44 JSON and rebase before writing to remote
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json
+          git diff --cached --name-only | tee /tmp/stage.txt
+          test "$(wc -l < /tmp/stage.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json' /tmp/stage.txt
+          git commit -m 'evidence(C44): original 45 Binance ZIP four bounded FTA source policies'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
