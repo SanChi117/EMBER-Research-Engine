@@ -1,0 +1,40 @@
+name: EMBER C46 source-only original4H IMB first-contact negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c46-native4h-imb-first-touch-negatives-20261023.yml'
+      - 'research/mtf-element-audit-v1/d05/c46_original_4h_classic_imb_first_contact.py'
+      - 'research/mtf-element-audit-v1/d05/test_c46_original_4h_classic_imb_first_contact.py'
+permissions:
+  contents: read
+jobs:
+  negative_4h:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify A115 source SHA and inherited original C44 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A115.txt
+          grep -Fq 'entries 115 tip_sha256 928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37' /tmp/A115.txt
+          python tests/test_journal_integrity.py | tee /tmp/evidence115.txt
+          grep -Fq '"validations_pass": true' /tmp/evidence115.txt
+      - name: Verify all 25 source 4H native3m geometry first-contact no-lookahead negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c46_original_4h_classic_imb_first_contact 2>&1 | tee /tmp/C46tests.txt
+          grep -Fq 'Ran 25 tests' /tmp/C46tests.txt
+          grep -qx 'OK' /tmp/C46tests.txt
+          ! grep -q 'skipped=' /tmp/C46tests.txt
