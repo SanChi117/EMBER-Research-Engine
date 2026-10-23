@@ -1,0 +1,42 @@
+name: EMBER C45 recovered course POI FTA route A/B/C textual contract negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c45-course-text-semantic-negative-20261023.yml'
+      - 'research/mtf-element-audit-v1/d05/c45_recovered_course_text_contract.py'
+      - 'research/mtf-element-audit-v1/d05/test_c45_recovered_course_text_contract.py'
+      - 'research/mtf-element-audit-v1/d05/C45_RECOVERED_AUTHOR_TEXT_RULES_20261023.json'
+permissions:
+  contents: read
+jobs:
+  semantic_text_negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify accepted A114 and immutable 97MB C44 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/114.txt
+          grep -Fq 'entries 114 tip_sha256 6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558' /tmp/114.txt
+          python tests/test_journal_integrity.py | tee /tmp/evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = '0f8cd79824af85569ffef87bfbec808a8a2b89b3'
+      - name: Verify original 9 Google Drive lesson metadata provenance and C45 route contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c45_recovered_course_text_contract 2>&1 | tee /tmp/c45.txt
+          grep -Fq 'Ran 38 tests' /tmp/c45.txt
+          grep -qx 'OK' /tmp/c45.txt
+          ! grep -q 'skipped=' /tmp/c45.txt
