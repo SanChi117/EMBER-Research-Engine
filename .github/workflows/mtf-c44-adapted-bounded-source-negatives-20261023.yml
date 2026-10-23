@@ -1,0 +1,40 @@
+name: EMBER C44 bounded source FTA adverse test matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c44-adapted-bounded-source-negatives-20261023.yml'
+      - 'research/mtf-element-audit-v1/d05/c44_adapted_bounded_source_fta.py'
+      - 'research/mtf-element-audit-v1/d05/test_c44_adapted_bounded_source_fta.py'
+permissions:
+  contents: read
+jobs:
+  31-adverse:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify authoritative A113 113 SHA chain and all source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/113.txt
+          grep -Fq 'entries 113 tip_sha256 f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8' /tmp/113.txt
+          python tests/test_journal_integrity.py | tee /tmp/113-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/113-evidence.txt
+      - name: C44 full 31 no-lookahead bounded source tests, no skips
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c44_adapted_bounded_source_fta 2>&1 | tee /tmp/C44-negative.txt
+          grep -Fq 'Ran 31 tests' /tmp/C44-negative.txt
+          grep -qx 'OK' /tmp/C44-negative.txt
+          ! grep -q 'skipped=' /tmp/C44-negative.txt
