@@ -1,0 +1,132 @@
+{
+  "author_verified_trade_setups": 0,
+  "course_route_claim_to_original_C44_contexts_verified": 0,
+  "frozen_C44_bytes": 97764435,
+  "frozen_C44_complete_JSON_sha256": "62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892",
+  "important_interpretation": "This is absence of original author-labeled POI test, context/VC, timeframe target, StrongHL source fields in existing C44 research output. It does NOT mean 17316 market events lacked any true real-world valid setup. A synthetically TEXT-CONSISTENT example is also not an academic chart golden.",
+  "independently_author_labeled_2023_chart_goldens": 0,
+  "markets": [
+    {
+      "C44_adapted_candidate_counts": {
+        "NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1": 2673,
+        "NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1": 2097,
+        "NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1": 1476,
+        "NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1": 3006
+      },
+      "author_certified_contexts": 0,
+      "correlated_contexts": 3276,
+      "course_text_source_evidence_statuses": {
+        "COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT": 3276
+      },
+      "orders": 0,
+      "symbol": "BCHUSDT",
+      "trades": 0
+    },
+    {
+      "C44_adapted_candidate_counts": {
+        "NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1": 2394,
+        "NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1": 1953,
+        "NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1": 2430,
+        "NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1": 3132
+      },
+      "author_certified_contexts": 0,
+      "correlated_contexts": 3186,
+      "course_text_source_evidence_statuses": {
+        "COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT": 3186
+      },
+      "orders": 0,
+      "symbol": "BTCUSDT",
+      "trades": 0
+    },
+    {
+      "C44_adapted_candidate_counts": {
+        "NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1": 3564,
+        "NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1": 3096,
+        "NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1": 3114,
+        "NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1": 4086
+      },
+      "author_certified_contexts": 0,
+      "correlated_contexts": 4158,
+      "course_text_source_evidence_statuses": {
+        "COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT": 4158
+      },
+      "orders": 0,
+      "symbol": "ETHUSDT",
+      "trades": 0
+    },
+    {
+      "C44_adapted_candidate_counts": {
+        "NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1": 2763,
+        "NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1": 2142,
+        "NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1": 2070,
+        "NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1": 3105
+      },
+      "author_certified_contexts": 0,
+      "correlated_contexts": 3303,
+      "course_text_source_evidence_statuses": {
+        "COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT": 3303
+      },
+      "orders": 0,
+      "symbol": "SOLUSDT",
+      "trades": 0
+    },
+    {
+      "C44_adapted_candidate_counts": {
+        "NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1": 2817,
+        "NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1": 2178,
+        "NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1": 2016,
+        "NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1": 3249
+      },
+      "author_certified_contexts": 0,
+      "correlated_contexts": 3393,
+      "course_text_source_evidence_statuses": {
+        "COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT": 3393
+      },
+      "orders": 0,
+      "symbol": "XRPUSDT",
+      "trades": 0
+    }
+  ],
+  "orders": 0,
+  "original_C44_source_market_count": 5,
+  "original_native15m_exact": 15360,
+  "original_native3m_closed": 76800,
+  "readiness": "NOT_TRADE_READY",
+  "recovered_18_course_text_claim_ids": [
+    "LIQUIDITY-01",
+    "POI-01",
+    "POI-02",
+    "POI-03",
+    "POI-04",
+    "POI-05",
+    "ROUTE-A-01",
+    "ROUTE-A-02",
+    "ROUTE-A-03",
+    "ROUTE-A-04",
+    "ROUTE-A-05",
+    "ROUTE-A-06",
+    "ROUTE-B-01",
+    "ROUTE-B-02",
+    "ROUTE-C-01",
+    "ROUTE-C-02",
+    "STATUS-01",
+    "STRONG-01"
+  ],
+  "recovered_9_lesson_text_titles": [
+    "POI.txt",
+    "2. Entry by IMB & SNR.txt",
+    "3. Entry by Inducement [IDM].txt",
+    "4. Entry By BOS.txt",
+    "Strong High & Low.txt",
+    "Fair Value Gap  Imbalance.txt",
+    "5. Support And Resistance .txt",
+    "3. Rejection Block.txt",
+    "ликвидность.txt"
+  ],
+  "repeated_correlated_context_copies": 17316,
+  "schema": "EMBER_C45_RECOVERED_TEXT_ORIGINAL_C44_SOURCE_EVIDENCE_GAP_V1",
+  "source_only_author_poi_evidence_statuses": {
+    "COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT": 17316
+  },
+  "trades": 0
+}
