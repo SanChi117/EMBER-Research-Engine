@@ -1,0 +1,75 @@
+name: EMBER C42 first original 45ZIP source FTA eligibility freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c42-original-45zip-source-freeze-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  original-source-freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify accepted A111 and source-only C42 gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/old-ledger.log
+          grep -Fq 'entries 111 tip_sha256 eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4' /tmp/old-ledger.log
+          python tests/test_journal_integrity.py > /tmp/old-evidence.log
+          grep -Fq '"validations_pass": true' /tmp/old-evidence.log
+          cd d05
+          python -m unittest -v test_c42_adapted_source_fta_eligibility 2>&1 | tee /tmp/c42-local-negative.log
+          grep -Fq 'Ran 25 tests' /tmp/c42-local-negative.log
+          grep -qx 'OK' /tmp/c42-local-negative.log
+          ! grep -q 'skipped=' /tmp/c42-local-negative.log
+      - name: Assert previously frozen C38 C39 C40 C41 original JSON blobs unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json)" = "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+      - name: Re-download original 45 futures ZIP and save entire 36-route 3-policy annotated source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research/mtf-element-audit-v1/evidence/c42
+          python research/mtf-element-audit-v1/tests/probe_c42_original_fta_eligibility_45zip.py research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json > /tmp/c42-source.txt 2>&1 || { tail -c 5000 /tmp/c42-source.txt; exit 1; }
+          tail -c 400 /tmp/c42-source.txt
+          python - <<'PY'
+          import json,pathlib
+          path=pathlib.Path("research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json")
+          a=json.loads(path.read_text())
+          assert a['original_source_usdm_45zip']==45
+          assert a['original_closed_native3m']==76800
+          assert a['native15m_decimal_equalities']==15360
+          assert a['route_count']==36 and a['eligibility_policy_count']==3
+          assert a['parent_correlated_source_contexts']==17316
+          assert a['orders']==a['trades']==a['author_source_fta_freshness_goldens']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          v=list(a['policy_counts_across_correlated_routes'].values())
+          assert v[0]>=v[1]>=v[2]
+          print('C42_FIRST_COMPLETE_45ZIP_THREE_POLICY_JSON_PASS',path.stat().st_size,'bytes')
+          PY
+      - name: Commit only C42 frozen original 45ZIP source JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json
+          git diff --cached --name-only | tee /tmp/staged.log
+          test "$(wc -l < /tmp/staged.log)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json' /tmp/staged.log
+          git commit -m 'evidence(C42): freeze original 45USD-M ZIP three-policy 36-route source results'
+          git push origin HEAD:research/academic-engine-recovery-20261015
