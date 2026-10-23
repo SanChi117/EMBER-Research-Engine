@@ -1,0 +1,74 @@
+name: EMBER C45 independent full original C44 POI FTA textual evidence gap
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c45-independent-course-text-gap-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify accepted A114 114/114 SHA and 97MB original C44 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/old-114.txt
+          grep -Fq 'entries 114 tip_sha256 6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558' /tmp/old-114.txt
+          python tests/test_journal_integrity.py | tee /tmp/old-sha.txt
+          grep -Fq '"validations_pass": true' /tmp/old-sha.txt
+      - name: Re-run all 40 corrected C45 academic lesson text positive/negative cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c45_recovered_course_text_contract 2>&1 | tee /tmp/test40.txt
+          grep -Fq 'Ran 40 tests' /tmp/test40.txt
+          grep -qx 'OK' /tmp/test40.txt
+          ! grep -q 'skipped=' /tmp/test40.txt
+  frozen_source_semantic_gap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assert immutable C44 complete original source and pinned C45 first pass small JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = '0f8cd79824af85569ffef87bfbec808a8a2b89b3'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json)" = 'd310373c0bff1b48a6e677461d15077eeb9c3ca8'
+      - name: Independently re-read entire C44 97MB and byte-compare full derived C45 proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c45_course_text_compatibility_c44.py" /tmp/C45-INDEPENDENT-ALL-97MB-GAP.json | tee /tmp/semantics.txt
+          cmp -s "$R/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json" /tmp/C45-INDEPENDENT-ALL-97MB-GAP.json
+          python - <<'PY'
+          import json,pathlib,hashlib
+          root=pathlib.Path('research/mtf-element-audit-v1')
+          p=root/'evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json'
+          q=pathlib.Path('/tmp/C45-INDEPENDENT-ALL-97MB-GAP.json')
+          assert p.read_bytes()==q.read_bytes()
+          x=json.loads(p.read_text())
+          assert len(x['recovered_9_lesson_text_titles'])==9
+          assert len(x['recovered_18_course_text_claim_ids'])==18
+          assert x['repeated_correlated_context_copies']==17316
+          assert x['source_only_author_poi_evidence_statuses']=={'COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT':17316}
+          assert x['course_route_claim_to_original_C44_contexts_verified']==0
+          assert x['orders']==x['trades']==x['author_verified_trade_setups']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C45_INDEPENDENT_FULL_97MB_C44_SOURCE_17316_TEXTUAL_EVIDENCE_GAP_BYTE_EXACT_PASS',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
