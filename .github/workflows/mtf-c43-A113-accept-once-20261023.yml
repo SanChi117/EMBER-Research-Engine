@@ -1,0 +1,86 @@
+name: EMBER C43 append-once A113 original 45ZIP complete source acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c43-A113-accept-once-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  append-a113:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify immutable previous accepted A112 and all original market-part SHA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/112-check.txt
+          grep -Fq 'entries 112 tip_sha256 5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f' /tmp/112-check.txt
+          python tests/test_journal_integrity.py | tee /tmp/old-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/old-evidence.txt
+          python tools/partition_c43_source_result.py evidence/c43 | tee /tmp/c43-168mb-sha.txt
+          grep -Fq 'C43_FIVE_PARTS_REASSEMBLE_EXACT_CANONICAL_168MB_JSON_PASS' /tmp/c43-168mb-sha.txt
+          cd d05
+          python -m unittest -v test_c43_adapted_per_candidate_fta_rerank 2>&1 | tee /tmp/c43-28.txt
+          grep -Fq 'Ran 28 tests' /tmp/c43-28.txt
+          grep -qx 'OK' /tmp/c43-28.txt
+      - name: Enforce unchanged C41/C42 and C43 pinned five-part Git data
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json)" = "bddf315c58a906fe58546512bc416c24bd1ce95f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_45ZIP_MANIFEST.json)" = "c1db4afec81cb240f981e6e0ef2211044c75e372"
+      - name: Append exactly one A113 with twelve C43 immutable source/test/original evidence SHA256
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A113 \
+            --cycle B1/C43 \
+            --planned 'Independently assess all historically preknown original 1H FTA candidates per BOS source event, C39 family rankings, C42 prior-touch eligibility gates, after original 3m BOS close, without author or trade certification' \
+            --executed 'Built isolated C43 per-candidate original3m first-touch index and source-verified 1H fractal/IMB candidate ranking, 28 adversarial tests Python 3.10 3.11 3.12, original 45 Binance USD-M ZIP and physical prefix no-future replay with frozen C41/C42 event checks; compressed no result; preserved entire 168774218-byte canonical JSON in five full original market parts plus SHA manifest. Independent CI 40000294077 SUCCESS all four jobs including complete five-market byte equality and full 168MB SHA.' \
+            --result 'C43 source-only 36 correlated original BOS-Reaction-FTA route overlays, 17316 repeated source contexts. Policy any 17289 selected; reject prior strict sweep 17262 with 12840 alternate sources; require no prior touch 17262 with 14829 alternate sources. This high availability falsifies usefulness of unlimited source candidate pool; 0 author-approved FTA, orders, fills, trades or PnL. NOT_TRADE_READY' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'First C43 28-test CI 39999023895 failed test-only field name; corrected test CI 39999123685 PASS all 3 Python. First source CI 39999367449 successfully computed 168MB but git push failed non-fast-forward; corrected exact five-market SHA partition CI 39999848721 PASS, independent original 45ZIP all 5 entire byte exact and reconstructed aggregate SHA CI 40000294077 PASS. Full aggregate sha256 92956d189574d2a13a0f8aa3f5aa9f99ddd4cc33dcb128c3fbb2b9b8fc30e791, Git manifest c1db4afec81cb240f981e6e0ef2211044c75e372, predecessor A112 tip 5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f. No author golden or order target.' \
+            --evidence d05/c43_adapted_per_candidate_fta_rerank.py \
+            --evidence d05/test_c43_adapted_per_candidate_fta_rerank.py \
+            --evidence tests/probe_c43_original_per_candidate_fta_45zip.py \
+            --evidence tools/partition_c43_source_result.py \
+            --evidence evidence/c43/C43_ORIGINAL_BCHUSDT_ALL_CANDIDATE_RERANK.json \
+            --evidence evidence/c43/C43_ORIGINAL_BTCUSDT_ALL_CANDIDATE_RERANK.json \
+            --evidence evidence/c43/C43_ORIGINAL_ETHUSDT_ALL_CANDIDATE_RERANK.json \
+            --evidence evidence/c43/C43_ORIGINAL_SOLUSDT_ALL_CANDIDATE_RERANK.json \
+            --evidence evidence/c43/C43_ORIGINAL_XRPUSDT_ALL_CANDIDATE_RERANK.json \
+            --evidence evidence/c43/C43_ORIGINAL_45ZIP_MANIFEST.json \
+            --evidence evidence/c43/C43_INDEPENDENT_FULL_SOURCE_WITNESS_20261023.json \
+            --evidence cycles/B1_C43_ALL_CANDIDATES_RERANK_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/a113.txt
+          grep -Fq 'entries 113' /tmp/a113.txt
+          python tests/test_journal_integrity.py | tee /tmp/a113-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/a113-evidence.txt
+      - name: Commit ONLY immutable append-once A113 journal record, rebase without overwrite
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/touched.txt
+          test "$(wc -l < /tmp/touched.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/touched.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C43): append-once A113 twelve source evidence SHA chain'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
