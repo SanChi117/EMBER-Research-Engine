@@ -1,0 +1,72 @@
+name: EMBER C42 append-once A112 independent original-source eligibility
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c42-A112-accept-once-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  append-a112:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reject changed old A111 source SHA or changed original frozen 45ZIP evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/journal-before.txt
+          grep -Fq 'entries 111 tip_sha256 eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4' /tmp/journal-before.txt
+          python tests/test_journal_integrity.py > /tmp/sha-before.txt
+          grep -Fq '"validations_pass": true' /tmp/sha-before.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json)" = "bddf315c58a906fe58546512bc416c24bd1ce95f"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=[json.loads(x) for x in Path("ЖУРНАЛ_ДЕЙСТВИЙ.jsonl").read_text().splitlines()]
+          assert len(a)==111 and a[-1]["action_id"]=="A111"
+          assert a[-1]["record_sha256"]=="eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4"
+          PY
+      - name: Append one C42 six evidence SHA256 record after A111
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A112 \
+            --cycle B1/C42 \
+            --planned 'Evaluate same C39 selected 1H source obstacle by three isolated ADAPTED prior-touch eligibility hypotheses without promoting author FTA or creating orders' \
+            --executed 'Added C42 source-only 3-policy gate over accepted C41 36-route original3m contexts; passed 25 adverse cases on each Python 3.10 3.11 3.12; replayed original 45 Binance USD-M SHA ZIP 76800 native3m and 15360 exact native15m; compared whole frozen 40MB C42 36-route source JSON in independent CI 39990993912 SUCCESS; preserved original C41 evidence and A111' \
+            --result '17,316 correlated source context copies under three adapted same-selected-obstacle eligibility policies: any prior-known 17,289; reject strict prior sweeps/full traversals 4,422; require no observed touch 2,433. Zero author freshness goldens, orders, trades; no PnL, no academic FTA certification or auto reselection; PAPER ONLY NOT_TRADE_READY' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'First 45ZIP C42 CI 39990581621 PASS; independent 45ZIP COMPLETE 40MB frozen C42 original JSON equality CI 39990993912 PASS, 4/4 matrix jobs, 25 C42 negative cases each Python. Source-only C42 Git blob bddf315c58a906fe58546512bc416c24bd1ce95f; immutable C41 ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c; prior A111 chain eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4. Selection ranked using retrospective BOS close, not before BOS start, and no lifetime freshness certification.' \
+            --evidence d05/c42_adapted_source_fta_eligibility.py \
+            --evidence d05/test_c42_adapted_source_fta_eligibility.py \
+            --evidence tests/probe_c42_original_fta_eligibility_45zip.py \
+            --evidence evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json \
+            --evidence evidence/c42/C42_INDEPENDENT_SOURCE_WITNESS_20261023.json \
+            --evidence cycles/B1_C42_SOURCE_ONLY_FTA_TOUCH_ELIGIBILITY_45ZIP_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/a112.txt
+          grep -Fq 'entries 112' /tmp/a112.txt
+          python tests/test_journal_integrity.py | tee /tmp/a112-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/a112-evidence.txt
+      - name: Commit ONLY append-once A112 source journal to research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/touched.txt
+          test "$(wc -l < /tmp/touched.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/touched.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C42): append-once A112 six evidence SHA source-only eligibility'
+          git push origin HEAD:research/academic-engine-recovery-20261015
