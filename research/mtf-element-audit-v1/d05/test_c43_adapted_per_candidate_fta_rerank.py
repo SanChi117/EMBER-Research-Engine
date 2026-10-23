@@ -134,7 +134,7 @@ class C43SourcePerCandidateTests(unittest.TestCase):
     def test_original_scanner_stability_on_same_source(self):
         self.assertEqual(scan_original_per_candidate_fta_rerank(self.src,as_of_ms=self.src.as_of_ms),self.out)
     def test_no_unregistered_duplicate_route_promotion(self):
-        self.assertTrue(all(len(set(p.hypothesis_id for p in c.decisions))==3
+        self.assertTrue(all(len(set(p.eligibility_policy_id for p in c.decisions))==3
             for r in self.out.routes for c in r.contexts))
     def test_candidate_registry_includes_both_directional_gap_boundaries(self):
         # Direct proof that original 1H source gap may be evaluated from
