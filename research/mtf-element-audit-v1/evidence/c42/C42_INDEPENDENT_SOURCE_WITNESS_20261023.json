@@ -1,0 +1,44 @@
+{
+  "schema": "EMBER_C42_INDEPENDENT_FTA_SOURCE_ELIGIBILITY_45ZIP_V1",
+  "date_utc": "2026-10-23",
+  "source_module": "d05/c42_adapted_source_fta_eligibility.py",
+  "source_test": "d05/test_c42_adapted_source_fta_eligibility.py",
+  "first_negative_ci_run_id": 39990257408,
+  "first_original_45zip_ci_run_id": 39990581621,
+  "independent_full_original_45zip_ci_run_id": 39990993912,
+  "independent_ci_conclusion": "success",
+  "independent_ci_jobs_successful": 4,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "negative_tests_per_python": 25,
+  "source_original_zip_count": 45,
+  "native_original3m_closed": 76800,
+  "native15m_exact_decimal": 15360,
+  "source_routes": 36,
+  "adapted_eligibility_policies": 3,
+  "parent_correlated_contexts": 17316,
+  "full_independent_original_source_json_exact_equality": true,
+  "full_original_c42_result_git_blob": "bddf315c58a906fe58546512bc416c24bd1ce95f",
+  "previous_original_c41_git_blob": "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c",
+  "previous_A111_tip_sha256": "eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4",
+  "policy_counts_correlated_source_contexts": {
+    "ANY_PREKNOWN_RESEARCH_OBSTACLE_V1": 17289,
+    "EXCLUDE_PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL_V1": 4422,
+    "REQUIRE_NO_PRIOR_OBSERVED_TOUCH_V1": 2433
+  },
+  "note": "All three policy sums are duplicated/correlated source route contexts, NOT independent events or trades. C42 gates only the C39-selected candidate and does NOT reseat/reselect a different candidate. C39 ranking uses retrospective BOS bar CLOSE; source known prior before BOS START does not make selection available before BOS close.",
+  "limitations": [
+    "No historical observation before 2026-09-01 (not lifetime untouched proof)",
+    "source OHLC not intrabar fill proof",
+    "same-host SHA receipt not independent data authenticity",
+    "no instructor-labelled FTA/entry/TP/SL or verified profitability",
+    "no new held-out future sample"
+  ],
+  "author_freshness_goldens": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
