@@ -1,0 +1,75 @@
+name: EMBER C44 independent A114 114 SHA and 98MB source acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A114-independent-ledger-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  verify_a114:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify all 114 append-only SHA records and immutable C44 6 source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/114.txt
+          grep -Fq 'entries 114 tip_sha256 6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558' /tmp/114.txt
+          python tests/test_journal_integrity.py | tee /tmp/114-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/114-evidence.txt
+          python - <<'PY'
+          import json,hashlib,pathlib
+          a=[json.loads(s) for s in pathlib.Path("ЖУРНАЛ_ДЕЙСТВИЙ.jsonl").read_text().splitlines()]
+          assert len(a)==114
+          old,new=a[-2:]
+          assert old['seq']==113 and old['action_id']=='A113'
+          assert old['record_sha256']=='f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8'
+          assert new['seq']==114 and new['action_id']=='A114'
+          assert new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558'
+          assert new['cycle']=='B1/C44' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==6
+          expected=[('d05/c44_adapted_bounded_source_fta.py',14065),
+            ('d05/test_c44_adapted_bounded_source_fta.py',8713),
+            ('tests/probe_c44_original_bounded_source_45zip.py',8139),
+            ('evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json',97764435),
+            ('evidence/c44/C44_INDEPENDENT_ORIGINAL_SOURCE_WITNESS_20261023.json',2579),
+            ('cycles/B1_C44_SOURCE_BOUNDED_45ZIP_REPORT.md',8378)]
+          assert [(v['path'],v['bytes']) for v in new['evidence']]==expected
+          for evidence in new['evidence']:
+            data=pathlib.Path(evidence['path']).read_bytes()
+            assert len(data)==evidence['bytes']
+            assert hashlib.sha256(data).hexdigest()==evidence['sha256']
+          assert new['evidence'][3]['sha256']=='62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892'
+          doc=json.loads(pathlib.Path('evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json').read_text())
+          assert doc['original_binance_usdm_source_zip']==45
+          assert doc['original_native3m_closed']==76800 and doc['native15m_exact_decimal']==15360
+          assert doc['route_count']==36 and doc['correlated_parent_contexts']==17316
+          assert doc['author_fta_goldens']==doc['author_poi_goldens']==doc['trades']==doc['orders']==0
+          assert doc['readiness']=='NOT_TRADE_READY'
+          assert doc['correlated_bounded_candidate_counts']=={
+          'NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1':11106,
+          'NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1':16578,
+          'NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1':11466,
+          'NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1':14211}
+          print('C44_A114_INDEPENDENT_ALL_114_SHA_SIX_SOURCE_EVIDENCE_AND_97764435_BYTES_PASS')
+          PY
+      - name: Independently reexecute 31 no-lookahead bounded FTA source tests without skips
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c44_adapted_bounded_source_fta 2>&1 | tee /tmp/c44-31.txt
+          grep -Fq 'Ran 31 tests' /tmp/c44-31.txt
+          grep -qx 'OK' /tmp/c44-31.txt
+          ! grep -q 'skipped=' /tmp/c44-31.txt
