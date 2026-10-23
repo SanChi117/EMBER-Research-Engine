@@ -30,7 +30,7 @@ def run(path=None):
     assert old["route_count"]==36
     claims=recovered_text_claims()
     lesson=json.loads(RECOVERED.read_text(encoding="utf8"))
-    assert len(claims)==17 and len(lesson["source_files"])==9
+    assert len(claims)==18 and len(lesson["source_files"])==9
     markets=[]
     total=0
     aggregate=Counter()
@@ -68,7 +68,7 @@ def run(path=None):
       "frozen_C44_complete_JSON_sha256":C44_SHA,
       "frozen_C44_bytes":len(raw),
       "recovered_9_lesson_text_titles":[v["title"] for v in lesson["source_files"]],
-      "recovered_17_course_text_claim_ids":sorted(claims),
+      "recovered_18_course_text_claim_ids":sorted(claims),
       "original_C44_source_market_count":len(markets),
       "original_native3m_closed":old["original_native3m_closed"],
       "original_native15m_exact":old["native15m_exact_decimal"],
