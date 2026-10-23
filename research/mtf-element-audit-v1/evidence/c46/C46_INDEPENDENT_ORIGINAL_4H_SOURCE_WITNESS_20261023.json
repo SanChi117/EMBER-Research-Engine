@@ -1,0 +1,51 @@
+{
+  "schema": "EMBER_C46_INDEPENDENT_ORIGINAL_USDM_45ZIP_NATIVE4H_CLASSIC_IMB_FIRST_3M_CONTACT_WITNESS_V1",
+  "date_utc": "2026-10-23",
+  "source_description": "Original Binance USD-M 45 ZIP; native original3m 80 candles -> closed 4H; strict 3-candle 4H wick gap; first original3m contact after last 4H candle closes",
+  "predecessor_A115_tip_sha256": "928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37",
+  "predecessor_recovered_author_lesson_sources": 9,
+  "first_source_negative_ci": 40013838561,
+  "first_original_45zip_freeze_ci": 40014056526,
+  "independent_original_45zip_source_ci": 40014261187,
+  "independent_ci_job_conclusions": [
+    "success",
+    "success",
+    "success",
+    "success"
+  ],
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "negative_tests_per_python": 25,
+  "original_binance_usdm_zip": 45,
+  "original_native3m_closed": 76800,
+  "native15m_exact_decimal_equalities": 15360,
+  "frozen_original_C46_git_blob": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+  "frozen_original_C46_bytes": 293203,
+  "frozen_original_C46_sha256": "fad6a04944ea2d0758fb86bacfd8bb49fe5988674f88abb0d7143f002d50aa42",
+  "independent_original_45zip_full_json_byte_exact": true,
+  "source_candidate_4h_three_bar_classic_IMB": 153,
+  "first_native3m_original_source_contact": 132,
+  "no_observed_contact": 21,
+  "source_candidates_by_symbol": {
+    "BCHUSDT": 32,
+    "BTCUSDT": 30,
+    "ETHUSDT": 31,
+    "SOLUSDT": 31,
+    "XRPUSDT": 29
+  },
+  "limitations": [
+    "These are original source-derived 4H three-candle technical IMB zones, not author POI goldens",
+    "First observed 3m OHLC interval contact is not course-confirmed first POI test",
+    "Missing parent 1D/4H macro causality, 1H/15M VC, valid StrongHL and academic FTA",
+    "Historical 2026-09-01 to 2026-10-02 source only; no independent 2023 labelled charts, fills, stops, OOS, PnL",
+    "Source OHLC does not prove intrabar tick sequencing"
+  ],
+  "source_author_PoI_goldens": 0,
+  "source_author_first_test_goldens": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
