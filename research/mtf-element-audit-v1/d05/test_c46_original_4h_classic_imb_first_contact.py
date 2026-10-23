@@ -73,29 +73,31 @@ class C46OriginalNative4hTest(unittest.TestCase):
     def test_candidate_must_be_proven_before_contact(self):
         rows=self.rows
         c=FourHourImbCandidate("LONG",str(rows[400].low),str(rows[400].high),
-            2*FOUR,0,FOUR,2*FOUR,("1","2","3"),("4","5","6"))
+            self.rows[0].start_ms+2*FOUR,self.rows[0].start_ms,
+            self.rows[0].start_ms+FOUR,self.rows[0].start_ms+2*FOUR,
+            ("1","2","3"),("4","5","6"))
         x=original_first_contact(rows,c,rows[-1].known_ms)
         self.assertTrue(x.has_complete_original3m_prefix_after_known)
         if x.first_contact_bar_start_ms is not None:
             self.assertGreaterEqual(x.first_contact_bar_start_ms,c.fully_known_ms)
             self.assertIsNotNone(x.first_contact_original3m_id)
     def test_future_unclosed_4h_source_rejected(self):
-        c=FourHourImbCandidate("LONG","1","2",9*FOUR,0,FOUR,2*FOUR,
+        c=FourHourImbCandidate("LONG","1","2",self.rows[-1].known_ms+FOUR,0,FOUR,2*FOUR,
             ("1","2","3"),("4","5","6"))
         with self.assertRaisesRegex(ValueError,"FUTURE_OR_PARTIAL_4H"):
             original_first_contact(self.rows,c,self.rows[-1].known_ms)
     def test_author_poi_forgery_rejected(self):
-        c=FourHourImbCandidate("LONG","1","2",FOUR,0,FOUR,2*FOUR,
+        c=FourHourImbCandidate("LONG","1","2",self.rows[0].start_ms+FOUR,0,FOUR,2*FOUR,
             ("1","2","3"),("4","5","6"),author_poi_certified=True)
         with self.assertRaisesRegex(ValueError,"FORGED_AUTHOR_POI"):
             original_first_contact(self.rows,c,self.rows[-1].known_ms)
     def test_original_prefix_must_be_complete(self):
-        c=FourHourImbCandidate("LONG","1","2",FOUR,0,FOUR,2*FOUR,
+        c=FourHourImbCandidate("LONG","1","2",self.rows[0].start_ms+FOUR,0,FOUR,2*FOUR,
             ("1","2","3"),("4","5","6"))
         with self.assertRaisesRegex(ValueError,"INCOMPLETE_OR_FUTURE_SOURCE_PREFIX"):
             original_first_contact(self.rows,c,self.rows[-1].known_ms+THREE)
     def test_changed_zone_inverted_bounds_rejected(self):
-        c=FourHourImbCandidate("LONG","2","1",FOUR,0,FOUR,2*FOUR,
+        c=FourHourImbCandidate("LONG","2","1",self.rows[0].start_ms+FOUR,0,FOUR,2*FOUR,
             ("1","2","3"),("4","5","6"))
         with self.assertRaisesRegex(ValueError,"FORGED_ZONE_BOUNDARY"):
             original_first_contact(self.rows,c,self.rows[-1].known_ms)
