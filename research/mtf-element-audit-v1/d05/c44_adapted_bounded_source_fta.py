@@ -278,11 +278,11 @@ def scan_original_c44_bounded_source(source,*,as_of_ms):
                     if (x.original_bos_3m_row_id!=e.break_original_native3m_row_id or
                         x.original_raid_fractal_center_ms!=e.raid_fractal_center_ms or
                         x.original_bos_closed_ms!=e.break_bar_closed_known_ms or
-                        x.reaction_hypothesis_id!=reaction if hasattr(x,"reaction_hypothesis_id") else False):
+                        x.bos!=stream.hypothesis_id or x.reaction!=reaction or
+                        x.fta!=fta or x.orders or x.trades or
+                        x.readiness!="NOT_TRADE_READY"):
                         raise ValueError("C44_C43_PARENT_EVENT_MISMATCH")
                     decisions,source_key=rechecked[(stream.hypothesis_id,fta,i)]
-                    if x.original_c43_no_touch_selected_source_key if hasattr(x,"original_c43_no_touch_selected_source_key") else False:
-                        raise ValueError("C44_UNEXPECTED_CHILD_DATA")
                     if (x.decisions[2].selected_candidate is None)!=(source_key is None):
                         raise ValueError("C44_C43_NO_TOUCH_GATING_DRIFT")
                     contexts.append(C44BoundedContext(e.symbol,stream.hypothesis_id,
