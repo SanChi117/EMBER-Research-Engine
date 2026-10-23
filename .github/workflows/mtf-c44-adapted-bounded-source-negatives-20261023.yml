@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
 jobs:
-  31-adverse:
+  negatives:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
