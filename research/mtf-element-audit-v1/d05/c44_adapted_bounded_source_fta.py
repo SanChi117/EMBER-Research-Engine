@@ -191,7 +191,7 @@ def eligible(candidate_info,policy,closed4h,closed1d):
 
 def evaluate_bounded_candidates(event,source,observed_by_fta,closed4h,closed1d):
     if (event.author_bos_approved or event.paper_trade_allowed or event.orders or
-        event.trades or event.readiness!="NOT_TRADE_READY" or
+        event.trades or event.status!="ADAPTED_RESEARCH_CLOSED_BREAK_NOT_AUTHOR_BOS" or
         event.break_bar_closed_known_ms!=event.break_bar_start_ms+THREE):
         raise ValueError("C44_FORGED_BOS_OR_EARLY_DECISION")
     raw=source_preknown_potential_obstacles(event,source["rows"],source["fractals"],source["gaps"])
