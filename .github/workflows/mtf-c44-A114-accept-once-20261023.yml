@@ -1,0 +1,85 @@
+name: EMBER C44 append-once A114 bounded source FTA SHA record
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c44-A114-accept-once-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  append_c44_a114:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify A113 113/113 chain and original C44 source SHA plus 31 negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A113-previous.txt
+          grep -Fq 'entries 113 tip_sha256 f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8' /tmp/A113-previous.txt
+          python tests/test_journal_integrity.py | tee /tmp/evidence113.txt
+          grep -Fq '"validations_pass": true' /tmp/evidence113.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_45ZIP_MANIFEST.json)" = "c1db4afec81cb240f981e6e0ef2211044c75e372"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = "0f8cd79824af85569ffef87bfbec808a8a2b89b3"
+          python - <<'PY'
+          import hashlib,pathlib,json
+          p=pathlib.Path("evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json")
+          assert p.stat().st_size==97764435
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892"
+          a=json.loads(p.read_text())
+          assert a['original_binance_usdm_source_zip']==45
+          assert a['original_native3m_closed']==76800
+          assert a['native15m_exact_decimal']==15360
+          assert a['correlated_parent_contexts']==17316
+          assert a['author_fta_goldens']==a['author_poi_goldens']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c44_adapted_bounded_source_fta 2>&1 | tee /tmp/c44neg.txt
+          grep -Fq 'Ran 31 tests' /tmp/c44neg.txt
+          grep -qx 'OK' /tmp/c44neg.txt
+      - name: Append only A114 six immutable C44 evidence SHA256 records and verify 114
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A114 \
+            --cycle B1/C44 \
+            --planned 'Bound the all-candidate C43 source re-ranking with independent original1H pre-known source age, original3m untouched status, percent distance from retrospective BOS close, and fully closed original4H/1D source-range research proxy, without inventing academic POI or entry orders' \
+            --executed 'Isolated C44 all-source-reverified 4-policy 24h/72h age 1/3-percent distance and preceding closed 4H/1D range proxy; 31 causal negative tests across Python 3.10 3.11 3.12 and full original 45 Binance USD-M ZIP, original 76800 closed native3m and 15360 exact native15m, frozen C43 parent source join and physically cut as-of. First full original JSON CI 40008446069 SUCCESS and independent separate CI 40008979006 SUCCESS all 4 jobs including byte exact entire 97764435-byte original C44 JSON.' \
+            --result 'C44 four ADAPTED research-only source bounds over 17316 CORRELATED route contexts: untouched age24h distance1pct selected 11106; untouched 72h distance3pct 16578; latter plus previous closed original4H high-low 11466; latter plus previous closed original1D high-low 14211. No instructor POI/FTA certification, zero fills/orders/trades/PnL; B1 remains NOT_TRADE_READY' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Predecessor A113 SHA f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8 remains unchanged; source C43 full original manifest Git blob c1db4afec81cb240f981e6e0ef2211044c75e372 unchanged. Initial CI 40007987234 workflow job config failed; CI 40008062183 and 40008146520 failed on new C44 parent field errors; corrected 31x3 CI 40008214776 PASS. First original 45ZIP 40008446069 PASS. Independent second fresh 45ZIP exact full 97764435-byte C44 JSON CI 40008979006 PASS 4/4, sha256 62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892, original frozen Git blob 0f8cd79824af85569ffef87bfbec808a8a2b89b3. All thresholds and preceding closed 4H/1D ranges are ADAPTED unverified academic source proxies, NOT POI or profitable trades.' \
+            --evidence d05/c44_adapted_bounded_source_fta.py \
+            --evidence d05/test_c44_adapted_bounded_source_fta.py \
+            --evidence tests/probe_c44_original_bounded_source_45zip.py \
+            --evidence evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json \
+            --evidence evidence/c44/C44_INDEPENDENT_ORIGINAL_SOURCE_WITNESS_20261023.json \
+            --evidence cycles/B1_C44_SOURCE_BOUNDED_45ZIP_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/114-verify.txt
+          grep -Fq 'entries 114' /tmp/114-verify.txt
+          python tests/test_journal_integrity.py | tee /tmp/114-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/114-evidence.txt
+      - name: Commit ONLY A114 append-once journal and safely rebase remote
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C44): append-once A114 six original 45ZIP FTA source SHA evidence records'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
