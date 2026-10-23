@@ -1,0 +1,72 @@
+name: EMBER independent C43 A113 full 45ZIP source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A113-independent-ledger-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  full-113-source-ledger:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify complete 113/113 SHA ledger and ALL twelve immutable evidence file byte-hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A113-ledger.txt
+          grep -Fq 'entries 113 tip_sha256 f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8' /tmp/A113-ledger.txt
+          python tests/test_journal_integrity.py | tee /tmp/A113-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A113-evidence.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          lines=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(lines)==113
+          old,new=lines[-2:]
+          assert old['seq']==112 and old['action_id']=='A112'
+          assert old['record_sha256']=='5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f'
+          assert new['seq']==113 and new['action_id']=='A113'
+          assert new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8'
+          assert new['cycle']=='B1/C43' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==12
+          assert sum(x['bytes'] for x in new['evidence'])>155_000_000
+          assert all(x['bytes']>0 and len(x['sha256'])==64 for x in new['evidence'])
+          print('C43_A113_INDEPENDENT_113_SHA_ALL_12_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Independently reconstruct 168MB C43 source bytes from five Git market blobs + SHA manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/partition_c43_source_result.py evidence/c43 | tee /tmp/c43-full-hash.txt
+          grep -Fq 'C43_FIVE_PARTS_REASSEMBLE_EXACT_CANONICAL_168MB_JSON_PASS' /tmp/c43-full-hash.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('evidence/c43/C43_ORIGINAL_45ZIP_MANIFEST.json').read_text())
+          assert m['complete_aggregate_source_json_sha256']=='92956d189574d2a13a0f8aa3f5aa9f99ddd4cc33dcb128c3fbb2b9b8fc30e791'
+          assert m['complete_aggregate_source_json_bytes']==168774218
+          assert m['parent_metadata']['orders']==m['parent_metadata']['trades']==0
+          assert m['parent_metadata']['readiness']=='NOT_TRADE_READY'
+          print('C43_A113_168MB_SOURCE_NOT_ORDERS')
+          PY
+      - name: Reexecute all 28 C43 source adverse tests without skips
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c43_adapted_per_candidate_fta_rerank 2>&1 | tee /tmp/c43-tests.txt
+          grep -Fq 'Ran 28 tests' /tmp/c43-tests.txt
+          grep -qx 'OK' /tmp/c43-tests.txt
+          ! grep -q 'skipped=' /tmp/c43-tests.txt
