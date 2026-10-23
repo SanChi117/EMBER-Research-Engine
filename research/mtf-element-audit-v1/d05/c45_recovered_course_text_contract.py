@@ -162,12 +162,12 @@ def source_only_c44_compatibility(evidence):
               "decisions","original_bos_start_ms","original_bos_closed_ms")
     if not isinstance(evidence,dict) or any(k not in evidence for k in required):
         raise ValueError("C45_MISSING_C44_SOURCE_EVENT_FIELDS")
-    if evidence.get("orders") or evidence.get("trades") or
-       evidence.get("readiness")!="NOT_TRADE_READY":
+    if (evidence.get("orders") or evidence.get("trades") or
+        evidence.get("readiness")!="NOT_TRADE_READY"):
         raise ValueError("C45_C44_FORGED_EXECUTABLE_OUTPUT")
-    if "verified_typed_poi_source" not in evidence or
-       "context_is_tested" not in evidence or
-       "academic_author_chart_golden_verified" not in evidence:
+    if ("verified_typed_poi_source" not in evidence or
+        "context_is_tested" not in evidence or
+        "academic_author_chart_golden_verified" not in evidence):
         return {"status":"COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT",
                 "author_ready":False,"orders":0}
     if evidence["academic_author_chart_golden_verified"]:
