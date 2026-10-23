@@ -29,7 +29,7 @@ jobs:
           test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = "0f8cd79824af85569ffef87bfbec808a8a2b89b3"
           cd d05
           python -m unittest -v test_c45_recovered_course_text_contract 2>&1 | tee /tmp/c45-negative.txt
-          grep -Fq 'Ran 38 tests' /tmp/c45-negative.txt
+          grep -Fq 'Ran 40 tests' /tmp/c45-negative.txt
           grep -qx 'OK' /tmp/c45-negative.txt
           ! grep -q 'skipped=' /tmp/c45-negative.txt
       - name: Audit all 17316 frozen C44 original source contexts against recovered academic text, save ONLY small derived proof
