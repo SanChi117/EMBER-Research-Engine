@@ -53,8 +53,8 @@ class C45AuthorCourseContractTests(unittest.TestCase):
 
     def test_recovered_nine_actual_drive_files(self):
         self.assertEqual(len({v["file"] for v in recovered_text_claims().values()}),9)
-    def test_recovered_seventeen_text_claims(self):
-        self.assertEqual(len(recovered_text_claims()),17)
+    def test_recovered_eighteen_text_claims(self):
+        self.assertEqual(len(recovered_text_claims()),18)
     def test_route_modes_are_eight_named_variants(self):
         self.assertEqual(len(TEXT_ROUTE_MODES),8)
     def test_positive_route_a_4h_1h_15m_text_contract(self):
