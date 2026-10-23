@@ -33,7 +33,7 @@ def route_c():
         volume_confirmation_tf=None,volume_confirmation_kind=None,
         entry_tf="3M",target_tf="1H",target_kind="EQL",
         stop_kind="BEHIND_RAIDED_LIQUIDITY",confirmed_strong_hl=False,
-        raid_wick=True,bos_position="BELOW_BSL_RAID")
+        raid_wick=True,bos_position="BELOW_BSL_RAID",raid_kind="BSL")
 
 def c44_context():
     return {"original_bos_3m_row_id":"native",
@@ -69,6 +69,13 @@ class C45AuthorCourseContractTests(unittest.TestCase):
             entry_tf=None))
         self.assertTrue(x.text_only_rule_consistent)
         self.assertEqual(x.orders,())
+    def test_positive_4h_no_trigger_1h_rb_context_vc(self):
+        x=evaluate_text_contract(replace(route_a(),mode="A_4H_NO_TRIGGER_1H_VC",
+            trigger_tf=None,trigger_kind=None,volume_confirmation_tf="1H",
+            volume_confirmation_kind="RB",entry_tf=None))
+        self.assertTrue(x.text_only_rule_consistent)
+        self.assertFalse(x.source_trade_ready)
+
     def test_positive_route_a_1h_15m_5m_text_contract(self):
         x=evaluate_text_contract(replace(route_a(),mode="A_1H_TRIGGER_5M_VC",
             context_tf="1H",trigger_tf="15M",trigger_kind="SSL",
@@ -135,6 +142,12 @@ class C45AuthorCourseContractTests(unittest.TestCase):
     def test_bos_on_wrong_raid_side_rejected(self):
         self.assertBlocked(replace(route_c(),bos_position="INSIDE_SAME_WICK"),
             "C45_BOS_NOT_ON_CORRECT_SIDE_OF_RAID")
+    def test_bos_bsl_vs_ssl_side_cannot_be_swapped(self):
+        self.assertBlocked(replace(route_c(),raid_kind="SSL",bos_position="BELOW_BSL_RAID"),
+            "C45_BOS_NOT_ON_CORRECT_SIDE_OF_RAID")
+        self.assertTrue(evaluate_text_contract(replace(route_c(),raid_kind="SSL",
+            bos_position="ABOVE_SSL_RAID")).text_only_rule_consistent)
+
     def test_bos_wrong_stop_rejected(self):
         self.assertBlocked(replace(route_c(),stop_kind="FIVE_MIN_PIVOT"),
             "C45_BOS_STOP_NOT_AFTER_RAIDED_LIQUIDITY")
