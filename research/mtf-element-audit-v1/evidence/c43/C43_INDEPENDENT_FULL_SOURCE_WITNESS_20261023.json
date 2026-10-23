@@ -1,0 +1,62 @@
+{
+  "schema": "EMBER_C43_INDEPENDENT_ALL_ORIGINAL_45ZIP_PER_CANDIDATE_SOURCE_FTA_RERANK_WITNESS_V1",
+  "utc_date": "2026-10-23",
+  "first_negative_ci_failed_id": 39999023895,
+  "first_negative_ci_fail_reason": "test-only mismatch: nonexistent hypothesis_id on ReRankDecision; corrected property eligibility_policy_id and reran all tests",
+  "correction_commit": "b04827c079ff06427faaf88f9489939bbe549f5c",
+  "first_negative_ci_success_id": 39999123685,
+  "first_big_source_ci_failed_id": 39999367449,
+  "first_big_source_ci_fail_reason": "168,774,218-byte original full JSON independently computed, source checks PASS, Git push rejected non-fast-forward due intervening docs commit; >100MB single-file GitHub limit risk; NO source blob published from failed run.",
+  "sharded_first_full_45zip_ci_id": 39999848721,
+  "sharded_first_full_45zip_ci_conclusion": "success",
+  "independent_45zip_full_source_ci_id": 40000294077,
+  "independent_45zip_full_source_ci_conclusion": "success",
+  "independent_45zip_jobs_successful": 4,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "source_negative_tests_per_python": 28,
+  "native_original3m_closed": 76800,
+  "original_native15m_decimal_exact": 15360,
+  "original_Binance_USDM_zip_count": 45,
+  "frozen_original_C41_git_blob": "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c",
+  "frozen_original_C42_git_blob": "bddf315c58a906fe58546512bc416c24bd1ce95f",
+  "frozen_C43_manifest_git_blob": "c1db4afec81cb240f981e6e0ef2211044c75e372",
+  "complete_source_aggregate_json_sha256": "92956d189574d2a13a0f8aa3f5aa9f99ddd4cc33dcb128c3fbb2b9b8fc30e791",
+  "complete_source_aggregate_json_bytes": 168774218,
+  "all_five_market_full_byte_checks": "PASS",
+  "all_five_source_sha256_checks": "PASS",
+  "all_168774218_aggregate_canonical_bytes_sha256": "PASS",
+  "source_routes": 36,
+  "correlated_original_parent_context_copies": 17316,
+  "candidate_eligibility_after_rerank": {
+    "ANY_PREKNOWN_RESEARCH_OBSTACLE_V1": {
+      "selected": 17289,
+      "alternates": 0
+    },
+    "EXCLUDE_PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL_V1": {
+      "selected": 17262,
+      "alternates": 12840
+    },
+    "REQUIRE_NO_PRIOR_OBSERVED_TOUCH_V1": {
+      "selected": 17262,
+      "alternates": 14829
+    }
+  },
+  "falsification": "Both restrictive policies became almost universally satisfied by reselecting farther/older source candidates. This is evidence of overly permissive source universe, NOT strategy quality. Independent route copies are not trades.",
+  "decision_known_at": "ORIGINAL_3M_BOS_BAR_CLOSE",
+  "prior_touch_history_end": "ORIGINAL_3M_BOS_BAR_START",
+  "known_limitations": [
+    "No instructor-labeled FTA goldens or author ranking",
+    "Only September 1 through October 2 2026 source history for prior touch",
+    "No bounded maximum distance, recency, 4H/1D POI priority or mitigation academic certification",
+    "No unseen holdout, no execution costs, no orders/trades/PNL"
+  ],
+  "author_approved_fta_goldens": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "predecessor_A112_tip_sha256": "5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f"
+}
