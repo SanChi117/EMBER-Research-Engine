@@ -1,0 +1,75 @@
+name: EMBER C43 first complete 45ZIP per-candidate FTA rerank freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c43-original-45zip-first-freeze-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify prior A112 evidence and independent C43 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A112-source.txt
+          grep -Fq 'entries 112 tip_sha256 5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f' /tmp/A112-source.txt
+          python tests/test_journal_integrity.py > /tmp/A112-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A112-evidence.txt
+          cd d05
+          python -m unittest -v test_c43_adapted_per_candidate_fta_rerank 2>&1 | tee /tmp/C43-unit.txt
+          grep -Fq 'Ran 28 tests' /tmp/C43-unit.txt
+          grep -qx 'OK' /tmp/C43-unit.txt
+          ! grep -q 'skipped=' /tmp/C43-unit.txt
+      - name: Check prior source C38 C39 C40 C41 C42 full JSON Git blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json)" = "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json)" = "bddf315c58a906fe58546512bc416c24bd1ce95f"
+      - name: Read original 45 USD-M ZIP, audit all candidates and freeze complete new C43 source JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research/mtf-element-audit-v1/evidence/c43
+          python research/mtf-element-audit-v1/tests/probe_c43_original_per_candidate_fta_45zip.py research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_ALL_PREKNOWN_CANDIDATE_FTA_RERANK_45ZIP.json > /tmp/c43-native-source.log 2>&1 || { tail -c 8000 /tmp/c43-native-source.log; exit 1; }
+          tail -c 500 /tmp/c43-native-source.log
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_ALL_PREKNOWN_CANDIDATE_FTA_RERANK_45ZIP.json')
+          j=json.loads(p.read_text())
+          assert j['original_usdm_binance_zip']==45
+          assert j['original_native3m_closed']==76800
+          assert j['native15m_exact_decimal']==15360
+          assert j['source_route_count']==36
+          assert j['adapted_policy_count']==3
+          assert j['parent_correlated_contexts']==17316
+          assert j['source_author_goldens']==j['orders']==j['trades']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C43_FIRST_45ZIP_ALL_CANDIDATE_SOURCE_RERANK_PASS',p.stat().st_size,'bytes')
+          PY
+      - name: Commit ONLY original C43 full source evidence, preserve prior
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_ALL_PREKNOWN_CANDIDATE_FTA_RERANK_45ZIP.json
+          git diff --cached --name-only | tee /tmp/only-c43.txt
+          test "$(wc -l < /tmp/only-c43.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_ALL_PREKNOWN_CANDIDATE_FTA_RERANK_45ZIP.json' /tmp/only-c43.txt
+          git commit -m 'evidence(C43): freeze original 45ZIP all-candidate per-FTA source rerank'
+          git push origin HEAD:research/academic-engine-recovery-20261015
