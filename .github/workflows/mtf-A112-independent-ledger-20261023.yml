@@ -1,0 +1,54 @@
+name: EMBER independent C42 A112 45ZIP source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A112-independent-ledger-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  verify-a112:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify all 112 SHA records and evidence bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a112.txt
+          grep -Fq 'entries 112 tip_sha256 5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f' /tmp/a112.txt
+          python tests/test_journal_integrity.py | tee /tmp/a112evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/a112evidence.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(a)==112
+          old,new=a[-2:]
+          assert old['seq']==111 and old['action_id']=='A111'
+          assert old['record_sha256']=='eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4'
+          assert new['seq']==112 and new['action_id']=='A112'
+          assert new['record_sha256']=='5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f'
+          assert new['prev_sha256']==old['record_sha256']
+          assert new['cycle']=='B1/C42' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==6 and all(x['bytes']>0 and len(x['sha256'])==64 for x in new['evidence'])
+          assert any(x['bytes']>40000000 for x in new['evidence'])
+          print('C42_INDEPENDENT_112_SHA_CHAIN_6_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Rerun 25 C42 negative source timing and policy tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c42_adapted_source_fta_eligibility 2>&1 | tee /tmp/c42-25.txt
+          grep -Fq 'Ran 25 tests' /tmp/c42-25.txt
+          grep -qx 'OK' /tmp/c42-25.txt
+          ! grep -q 'skipped=' /tmp/c42-25.txt
