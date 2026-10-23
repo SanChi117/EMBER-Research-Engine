@@ -1,0 +1,59 @@
+{
+  "schema": "EMBER_C45_INDEPENDENT_ORIGINAL_COURSE_TEXT_AND_C44_SOURCE_EVIDENCE_V1",
+  "utc_date": "2026-10-23",
+  "recovered_google_drive_text_sources": 9,
+  "paraphrased_course_text_rule_claims": 18,
+  "text_source_ids": [
+    "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+    "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+    "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs",
+    "1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO",
+    "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+    "1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN",
+    "1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m",
+    "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+    "1sTrV-fAPe35xJ6WpMYrGfxy_WRV9i4JD"
+  ],
+  "prior_source_authoritative_A114_tip_sha256": "6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558",
+  "prior_frozen_C44_source_git_blob": "0f8cd79824af85569ffef87bfbec808a8a2b89b3",
+  "prior_frozen_C44_source_size_bytes": 97764435,
+  "prior_frozen_C44_source_sha256": "62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892",
+  "first_course_text_negative_test_fail_CI": 40011783197,
+  "first_failed_issue": "Nine original lesson file sources but only eight linked claim files. Then stale original 17-count assertion remained after adding the ninth source LIQUIDITY-01. Corrected to 18 unique source claims and 40 tests.",
+  "corrected_40_tests_three_python_CI": 40012592712,
+  "first_full_original_course_gap_freeze_CI": 40012653362,
+  "independent_original_97MB_semantic_repeat_CI": 40012781400,
+  "independent_all_jobs_conclusion": "success",
+  "independent_jobs_success_count": 4,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "text_route_tests_per_python": 40,
+  "original_Binance_USDM_45ZIP_lineage_preserved": true,
+  "original_C44_correlated_contexts_examined": 17316,
+  "fully_author_qualified_C44_contexts": 0,
+  "C44_contexts_missing_required_academic_POI_evidence_fields": 17316,
+  "meaning": "Missing academic POI and example truth label in C44 source output is a provenance limitation, not a proof historical signals were absent or invalid.",
+  "independent_comparison_of_entire_derived_evidence_JSON": "byte-exact PASS",
+  "course_text_rules_support_context_paths": [
+    "4H_POI_1H_TRIGGER_15M_ENTRY",
+    "4H_POI_NO_TRIGGER_1H_VC",
+    "1H_POI_15M_TRIGGER_5M_ENTRY",
+    "1H_POI_NO_TRIGGER_15M_VC",
+    "4H_VC_1H_IDM",
+    "1H_VC_15M_IDM",
+    "1H_LIQUIDITY_RAID_3M_BOS",
+    "1H_LIQUIDITY_RAID_5M_BOS"
+  ],
+  "not_verified": [
+    "Course annotated 2023 1H3M positive-negative chart goldens aligned to source raw candle IDs",
+    "4H/1D typed POI formation and first-test lifecycle within actual original market bars",
+    "Course FTA mitigation hierarchy, same-context timeframe target, real Strong HL stop",
+    "PAPER execution trade PnL or author permitted order"
+  ],
+  "paper_orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
