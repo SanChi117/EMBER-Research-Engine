@@ -49,6 +49,7 @@ class CourseContextCase:
     direct_idm_within_or_ahead_poi:bool=False
     academic_author_chart_golden_verified:bool=False
     raw_order_approval:bool=False
+    raid_kind:str|None=None
 
 @dataclass(frozen=True)
 class CourseGate:
@@ -105,7 +106,9 @@ def evaluate_text_contract(case,claims=None):
                 case.trigger_tf==expected[1] and
                 case.trigger_kind==expected[1]+"_BOS",
                 "C45_BOS_WRONG_OR_MISSING_3M_5M_CROSS")
-        require(case.bos_position in ("BELOW_BSL_RAID","ABOVE_SSL_RAID"),
+        require(case.raid_kind in ("BSL","SSL") and
+                case.bos_position==("BELOW_BSL_RAID" if case.raid_kind=="BSL"
+                                   else "ABOVE_SSL_RAID"),
                 "C45_BOS_NOT_ON_CORRECT_SIDE_OF_RAID")
         require(case.target_tf=="1H" and case.target_kind in
                 ("EQL","EQH","FIRST_TROUBLE_AREA"),"C45_BOS_NO_CONTEXTUAL_1H_TARGET")
@@ -134,8 +137,9 @@ def evaluate_text_contract(case,claims=None):
             require(case.trigger_kind in ("BSL","SSL","IMB") if expected[1] is not None
                     else case.trigger_kind is None,
                     "C45_ROUTE_A_TRIGGER_MISSING_OR_FORGED")
+            vc_types=("IMB","SNR","RB") if case.mode=="A_4H_NO_TRIGGER_1H_VC" else ENTRY_VC
             require(case.volume_confirmation_tf==expected[2] and
-                    case.volume_confirmation_kind in ENTRY_VC,
+                    case.volume_confirmation_kind in vc_types,
                     "C45_ENTRY_VC_MUST_USE_IMB_OR_SNR")
             require(case.entry_tf==expected[3],"C45_ROUTE_A_ENTRY_TF_INVALID")
             require(case.stop_kind in ("BEHIND_STRONG_HIGH_LOW","BEHIND_PARENT_POI"),
