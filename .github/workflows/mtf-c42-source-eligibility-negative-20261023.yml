@@ -1,0 +1,40 @@
+name: EMBER C42 adapted FTA source eligibility negative matrix
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c42-source-eligibility-negative-20261023.yml'
+      - 'research/mtf-element-audit-v1/d05/c42_adapted_source_fta_eligibility.py'
+      - 'research/mtf-element-audit-v1/d05/test_c42_adapted_source_fta_eligibility.py'
+permissions:
+  contents: read
+jobs:
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify A111 111/111 chain and evidence including prior original C41 JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger-c42.txt
+          grep -Fq 'entries 111 tip_sha256 eab55a801ed454f9266a80f87221e340211fcfc0d92913542f3deeca8df949c4' /tmp/ledger-c42.txt
+          python tests/test_journal_integrity.py | tee /tmp/ledger-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/ledger-evidence.txt
+      - name: Execute 25 fail-closed source eligibility tests, no skips
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c42_adapted_source_fta_eligibility 2>&1 | tee /tmp/c42-negative.txt
+          grep -Fq 'Ran 25 tests' /tmp/c42-negative.txt
+          grep -qx 'OK' /tmp/c42-negative.txt
+          ! grep -q 'skipped=' /tmp/c42-negative.txt
