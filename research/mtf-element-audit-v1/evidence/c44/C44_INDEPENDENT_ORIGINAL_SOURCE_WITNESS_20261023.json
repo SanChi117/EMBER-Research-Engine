@@ -1,0 +1,56 @@
+{
+  "schema": "EMBER_C44_INDEPENDENT_ORIGINAL_45ZIP_BOUNDED_SOURCE_WITNESS_V1",
+  "date": "2026-10-23",
+  "research_mode": "PAPER_ONLY_NOT_TRADE_READY",
+  "predecessor_A113_tip": "f8a397096e2199133ded9d08dc81f8112f5ea27b3b1675851c26c008568354f8",
+  "predecessor_C43_manifest_git_blob": "c1db4afec81cb240f981e6e0ef2211044c75e372",
+  "first_workflow_invalid_job_id_ci": 40007987234,
+  "first_field_name_failure_ci": 40008062183,
+  "second_parent_field_failure_ci": 40008146520,
+  "corrected_full_negative_ci": 40008214776,
+  "first_archived_original_45ZIP_ci": 40008446069,
+  "independent_complete_original_45ZIP_ci": 40008979006,
+  "independent_ci_all_job_conclusions": [
+    "success",
+    "success",
+    "success",
+    "success"
+  ],
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "negative_test_count_per_python": 31,
+  "original_binance_usdm_zip_count": 45,
+  "original_native3m_closed": 76800,
+  "exact_native15m_decimal_equalities": 15360,
+  "original_source_bos_reaction_fta_route_count": 36,
+  "parent_repeated_correlated_source_contexts": 17316,
+  "adapted_source_policy_count": 4,
+  "source_candidate_occurrence_count_by_policy": {
+    "NT_SOURCE_MAX_24H_MAX_1PCT_ADAPTED_V1": 11106,
+    "NT_SOURCE_MAX_72H_MAX_3PCT_ADAPTED_V1": 16578,
+    "NT_72H_3PCT_PREV_CLOSED_4H_RANGE_PROXY_V1": 11466,
+    "NT_72H_3PCT_PREV_CLOSED_1D_RANGE_PROXY_V1": 14211
+  },
+  "frozen_full_original_C44_JSON_git_blob": "0f8cd79824af85569ffef87bfbec808a8a2b89b3",
+  "frozen_complete_original_C44_JSON_byte_count": 97764435,
+  "frozen_complete_original_C44_JSON_sha256": "62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892",
+  "independent_second_original_45ZIP_full_97764435_bytes_byte_exact": true,
+  "native3m_original_source_asof_prefix_physically_cut_equal": true,
+  "source_decision_earliest_available": "ORIGINAL_3M_BOS_BAR_CLOSE",
+  "per_candidate_touch_window": "AFTER_ORIGINAL_SOURCE_KNOWN_AND_BEFORE_BOS_BAR_START",
+  "adversarial_limits": [
+    "24/72-hour source age and 1/3-percent price distance are declared ADAPTED parameter alternatives, not author thresholds",
+    "prior CLOSED 4H/1D wick high-low ranges are not academically defined POI",
+    "source original3m OHLC cannot prove intra-bar order sequencing or fills",
+    "2026 Sep-Oct original sample reused for SOURCE checks, no unseen out-of-sample validation",
+    "36 route overlays are correlated source context occurrences, not unique trades"
+  ],
+  "academic_author_poi_goldens": 0,
+  "academic_author_fta_goldens": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
