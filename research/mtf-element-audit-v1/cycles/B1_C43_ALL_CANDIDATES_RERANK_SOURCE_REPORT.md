@@ -31,7 +31,7 @@ Corrected [CI 39999848721](https://github.com/SanChi117/EMBER-Research-Engine/ac
 - SOLUSDT `580d75d78494e6eb3c3d9441f1729bbb7c47c18a2b52f0b0ec7efa8ad8c4ea2c` — 29,983,909 bytes
 - XRPUSDT `c8472e0cd7e96530caa4b239030364f73852c7d2e79f1de0c56813f736a354ef` — 30,824,179 bytes
 
-**Second independent replay** [CI 40000294077](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40000294077): three versions of Python independently 112/112 predecessor evidence and 28 C43 source negatives PASS; separately rebuild full 45ZIP from original downloads and compare **all 5 entire file bytes, manifest bytes, and the reconstructed 168MB aggregate hash**. **At the time this report was created, full independent 45ZIP source check was still running; do not mark accepted until result verified.**
+**Second independent replay** [CI 40000294077](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40000294077): three versions of Python independently 112/112 predecessor evidence and 28 C43 source negatives PASS; separately rebuild full 45ZIP from original downloads and compare **all 5 entire file bytes, manifest bytes, and the reconstructed 168MB aggregate hash**. **SUCCESS**: independent job re-downloaded all 45 original ZIP and produced explicit `C43_INDEPENDENT_MARKET_FULL_BYTE_EXACT` for all five markets and `C43_INDEPENDENT_45ZIP_FULL_168MB_AGGREGATE_FIVE_MARKET_JSON_EXACT_PASS`; 4/4 jobs, 28 source-negative tests × Python 3.10/3.11/3.12, no skips. C43 source-only acceptance still requires A113 + independent 113/113 ledger.
 
 ## What counts actually mean: a useful falsification
 
@@ -44,6 +44,6 @@ Across 36 research-route overlays, **17,316 correlated parent contexts** (not se
 
 ## Final gate / next cycle
 
-C43 **[~] until independently successful original rerun AND A113 append-once and separate 113/113 SHA/evidence CI**. Evidence intended: source/test/original 45ZIP probe/sharding tool, five complete source-market original JSON blobs, SHA manifest, independently observed witness, this report (12 files total).
+C43 **[~] until A113 append-once and separate 113/113 SHA/evidence CI**. Original rerun and exact full five-market data match are independently PASS. Evidence intended: source/test/original 45ZIP probe/sharding tool, five complete source-market original JSON blobs, SHA manifest, independently observed witness, this report (12 files total).
 
 If C43 source-only acceptance passes, next **C44** should test separately **age of source, distance from BOS reference, source-type/family hierarchy, mitigation/reaction context, upper bounds or 4H/1D POI** with parameter-free baseline and explicit independent source hypotheses. No threshold retrofitting on reused 2026-09/10 source; use genuine unused holdout for performance. Academic Route A/B/C, structural SL/TP, fees/slippage/funding and entry execution remain unimplemented; `PAPER ONLY / NOT_TRADE_READY`. Coarse milestone count 29/40 remains unchanged.
