@@ -1,0 +1,66 @@
+name: EMBER C46 independent 116/116 original 4H IMB source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A116-independent-ledger-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  verify_116:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify A001-A116 immutable SHA and all six original4H C46 file hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A116.txt
+          grep -Fq 'entries 116 tip_sha256 453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c' /tmp/A116.txt
+          python tests/test_journal_integrity.py | tee /tmp/A116-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A116-evidence.txt
+          python - <<'PY'
+          import json,hashlib,pathlib
+          arr=[json.loads(x) for x in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(arr)==116
+          before,now=arr[-2:]
+          assert before['action_id']=='A115'
+          assert before['record_sha256']=='928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37'
+          assert now['seq']==116 and now['action_id']=='A116'
+          assert now['prev_sha256']==before['record_sha256']
+          assert now['record_sha256']=='453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c'
+          assert now['cycle']=='B1/C46' and now['verdict']=='DONE' and now['cycle_result']=='PASSED'
+          assert len(now['evidence'])==6
+          for ev in now['evidence']:
+              blob=pathlib.Path(ev['path']).read_bytes()
+              assert len(blob)==ev['bytes']
+              assert hashlib.sha256(blob).hexdigest()==ev['sha256']
+          doc=pathlib.Path('evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json')
+          assert len(doc.read_bytes())==293203
+          assert hashlib.sha256(doc.read_bytes()).hexdigest()=='fad6a04944ea2d0758fb86bacfd8bb49fe5988674f88abb0d7143f002d50aa42'
+          x=json.loads(doc.read_text())
+          assert x['source_candidate_4h_IMB_count']==153
+          assert x['first_observed_source_3m_contact_count']==132 and x['source_no_contact_count']==21
+          assert x['original_binance_USDM_zip']==45 and x['original_native3m_closed']==76800
+          assert x['native15m_decimal_equalities']==15360
+          assert x['author_course_4h_poi_goldens']==x['author_first_test_goldens']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C46_INDEPENDENT_A116_SIX_SHA_ORIGINAL4H_SOURCE_PASS')
+          PY
+      - name: Independently execute all 25 C46 4H source geometry and 3m first-contact tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c46_original_4h_classic_imb_first_contact 2>&1 | tee /tmp/C46-25.txt
+          grep -Fq 'Ran 25 tests' /tmp/C46-25.txt
+          grep -qx 'OK' /tmp/C46-25.txt
+          ! grep -q 'skipped=' /tmp/C46-25.txt
