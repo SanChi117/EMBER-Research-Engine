@@ -1,0 +1,40 @@
+name: EMBER C43 per-candidate original3m source index adverse tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c43-negative-and-source-index-20261023.yml'
+      - 'research/mtf-element-audit-v1/d05/c43_adapted_per_candidate_fta_rerank.py'
+      - 'research/mtf-element-audit-v1/d05/test_c43_adapted_per_candidate_fta_rerank.py'
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify predecessor 112 SHA chain and all evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/check-112.txt
+          grep -Fq 'entries 112 tip_sha256 5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f' /tmp/check-112.txt
+          python tests/test_journal_integrity.py | tee /tmp/evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/evidence.txt
+      - name: Re-run 28 C43 per-candidate adverse/alternative tests, no skips
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c43_adapted_per_candidate_fta_rerank 2>&1 | tee /tmp/C43-unit.txt
+          grep -Fq 'Ran 28 tests' /tmp/C43-unit.txt
+          grep -qx 'OK' /tmp/C43-unit.txt
+          ! grep -q 'skipped=' /tmp/C43-unit.txt
