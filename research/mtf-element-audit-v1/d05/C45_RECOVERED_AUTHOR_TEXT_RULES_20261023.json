@@ -161,6 +161,12 @@
       "file": "2. Entry by IMB & SNR.txt",
       "meaning": "Lesson text yields conditional requirements, but chart screenshots and archived 2023 entry/stop/target examples have not been independently aligned to original candle raw IDs; no positive author golden asserted.",
       "scope": "KNOWN_LIMITATION"
+    },
+    {
+      "id": "LIQUIDITY-01",
+      "file": "ликвидность.txt",
+      "meaning": "The BSL/SSL liquidity raid must be a fractal interaction and a clean trading-model raid is primarily wick-based; body-only crossing is not equivalent to the clean raid trigger.",
+      "scope": "TEXT_RULE"
     }
   ],
   "unverified": [
