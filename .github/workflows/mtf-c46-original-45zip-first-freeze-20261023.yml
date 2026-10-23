@@ -1,0 +1,73 @@
+name: EMBER C46 first original 45ZIP native4H IMB source first contact freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c46-original-45zip-first-freeze-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  original_4h_imb_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit predecessor A115 115 SHA and source-only C46 25 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/115.txt
+          grep -Fq 'entries 115 tip_sha256 928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37' /tmp/115.txt
+          python tests/test_journal_integrity.py > /tmp/115-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/115-evidence.txt
+          cd d05
+          python -m unittest -v test_c46_original_4h_classic_imb_first_contact 2>&1 | tee /tmp/c46-tests.txt
+          grep -Fq 'Ran 25 tests' /tmp/c46-tests.txt
+          grep -qx 'OK' /tmp/c46-tests.txt
+      - name: Verify previous original 97MB source and unchanged original 3m ZIP lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = '0f8cd79824af85569ffef87bfbec808a8a2b89b3'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json)" = 'd310373c0bff1b48a6e677461d15077eeb9c3ca8'
+      - name: Re-download original 45 USD-M ZIP and freeze actual 4H three-bar IMB source/first native3m contacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c46"
+          python "$R/tests/probe_c46_original_4h_imb_first_touch_45zip.py" "$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json" > /tmp/c46-original.log 2>&1 || { tail -c 11000 /tmp/c46-original.log; exit 1; }
+          tail -c 900 /tmp/c46-original.log
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json')
+          v=json.loads(p.read_text())
+          assert v['original_binance_USDM_zip']==45
+          assert v['original_native3m_closed']==76800
+          assert v['native15m_decimal_equalities']==15360
+          assert v['original_market_count']==5
+          assert v['source_candidate_4h_IMB_count']==v['first_observed_source_3m_contact_count']+v['source_no_contact_count']
+          assert v['author_course_4h_poi_goldens']==v['author_first_test_goldens']==v['orders']==v['trades']==0
+          assert v['readiness']=='NOT_TRADE_READY'
+          print('C46_FIRST_ORIGINAL_FULL_45ZIP_NATIVE4H_CLASSIC_IMB_SOURCE_PASS',p.stat().st_size)
+          PY
+      - name: Commit ONLY original C46 45ZIP native4H source evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json' /tmp/staged.txt
+          git commit -m 'evidence(C46): freeze original 45USD-M ZIP 4H IMB source-only first 3m contact'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
