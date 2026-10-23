@@ -1,0 +1,69 @@
+name: EMBER C45 recovered lesson text source 97MB C44 gap proof freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c45-original-course-gap-freeze-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  freeze_course_text_gap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify prior immutable A114 chain, original C44 Git blob and recovered 9 original lesson sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A114.txt
+          grep -Fq 'entries 114 tip_sha256 6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558' /tmp/A114.txt
+          python tests/test_journal_integrity.py | tee /tmp/prev-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/prev-evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = "0f8cd79824af85569ffef87bfbec808a8a2b89b3"
+          cd d05
+          python -m unittest -v test_c45_recovered_course_text_contract 2>&1 | tee /tmp/c45-negative.txt
+          grep -Fq 'Ran 38 tests' /tmp/c45-negative.txt
+          grep -qx 'OK' /tmp/c45-negative.txt
+          ! grep -q 'skipped=' /tmp/c45-negative.txt
+      - name: Audit all 17316 frozen C44 original source contexts against recovered academic text, save ONLY small derived proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c45"
+          python "$R/tests/probe_c45_course_text_compatibility_c44.py" "$R/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json" | tee /tmp/audit-c45.txt
+          grep -Fq '"contexts": 17316' /tmp/audit-c45.txt
+          python - <<'PY'
+          import json,pathlib
+          r=pathlib.Path('research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json')
+          a=json.loads(r.read_text())
+          assert len(a['recovered_9_lesson_text_titles'])==9
+          assert len(a['recovered_18_course_text_claim_ids'])==18
+          assert a['source_only_author_poi_evidence_statuses']=={'COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT':17316}
+          assert a['course_route_claim_to_original_C44_contexts_verified']==0
+          assert a['independently_author_labeled_2023_chart_goldens']==0
+          assert a['orders']==a['trades']==a['author_verified_trade_setups']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C45_FULL_ORIGINAL_C44_97MB_AUTHOR_POI_TEXT_EVIDENCE_GAP_CONFIRMED',r.stat().st_size)
+          PY
+      - name: Commit only small C45 original context course gap result, preserve all raw market data
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json
+          git diff --cached --name-only | tee /tmp/c45staged.txt
+          test "$(wc -l < /tmp/c45staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json' /tmp/c45staged.txt
+          git commit -m 'evidence(C45): recovered 9 academic lesson text semantics vs all 17316 C44 source events'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
