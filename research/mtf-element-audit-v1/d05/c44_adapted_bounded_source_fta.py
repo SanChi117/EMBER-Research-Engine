@@ -278,8 +278,9 @@ def scan_original_c44_bounded_source(source,*,as_of_ms):
                     if (x.original_bos_3m_row_id!=e.break_original_native3m_row_id or
                         x.original_raid_fractal_center_ms!=e.raid_fractal_center_ms or
                         x.bos_bar_closed_known_ms!=e.break_bar_closed_known_ms or
-                        x.bos!=stream.hypothesis_id or x.reaction!=reaction or
-                        x.fta!=fta or x.orders or x.trades or
+                        x.bos_hypothesis_id!=stream.hypothesis_id or
+                        x.reaction_hypothesis_id!=reaction or
+                        x.fta_hypothesis_id!=fta or x.orders or x.trades or
                         x.readiness!="NOT_TRADE_READY"):
                         raise ValueError("C44_C43_PARENT_EVENT_MISMATCH")
                     decisions,source_key=rechecked[(stream.hypothesis_id,fta,i)]
