@@ -72,7 +72,7 @@ def recovered_text_claims(path=RULES_PATH):
     claims=data["claims"]
     claim_ids=[x["id"] for x in claims]
     if (len(files)!=9 or len(ids)!=9 or len(titles)!=9 or
-        len(claims)!=17 or len(set(claim_ids))!=17 or
+        len(claims)!=18 or len(set(claim_ids))!=17 or
         any(c["file"] not in titles or c["scope"] not in
             ("TEXT_RULE","KNOWN_LIMITATION") for c in claims) or
         any(not x["url"].startswith("https://drive.google.com/file/d/"+x["id"]+"/")
@@ -97,7 +97,7 @@ def evaluate_text_contract(case,claims=None):
     def require(test,code):
         if not test:failures.append(code)
     if case.mode.startswith("C_"):
-        used=["ROUTE-C-01","ROUTE-C-02","STRONG-01"]
+        used=["ROUTE-C-01","ROUTE-C-02","STRONG-01","LIQUIDITY-01"]
         require(case.context_tf=="1H" and case.context_kind=="LIQUIDITY",
                 "C45_BOS_NOT_FROM_1H_LIQUIDITY")
         require(case.raid_wick,"C45_BOS_NO_CLEAN_1H_RAID_WICK")
