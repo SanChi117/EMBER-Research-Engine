@@ -1,0 +1,77 @@
+name: EMBER C46 independent 45ZIP original 4H classic IMB exact source replay
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c46-independent-native4h-45zip-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  negative_source:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify prior A115 journal and source SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A115-source.txt
+          grep -Fq 'entries 115 tip_sha256 928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37' /tmp/A115-source.txt
+          python tests/test_journal_integrity.py | tee /tmp/A115-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A115-evidence.txt
+      - name: Rerun 25 source original4H native3m causal first contact tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c46_original_4h_classic_imb_first_contact 2>&1 | tee /tmp/25.txt
+          grep -Fq 'Ran 25 tests' /tmp/25.txt
+          grep -qx 'OK' /tmp/25.txt
+          ! grep -q 'skipped=' /tmp/25.txt
+  independent_original_45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify previous course semantic gap and pinned first 4H original evidence Git blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json)" = "d310373c0bff1b48a6e677461d15077eeb9c3ca8"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = "dc03c181912ffbb800bc191fbc16ec0d05c335e0"
+      - name: Re-download 45 original USD-M ZIP and independently rebuild entire original native4H IMB source JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c46_original_4h_imb_first_touch_45zip.py" /tmp/C46-INDEPENDENT-4H-ORIGINAL-SOURCE.json > /tmp/c46source.log 2>&1 || { tail -c 10000 /tmp/c46source.log; exit 1; }
+          cmp -s "$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json" /tmp/C46-INDEPENDENT-4H-ORIGINAL-SOURCE.json
+          python - <<'PY'
+          import hashlib,json,pathlib
+          a=pathlib.Path('research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json')
+          b=pathlib.Path('/tmp/C46-INDEPENDENT-4H-ORIGINAL-SOURCE.json')
+          assert a.read_bytes()==b.read_bytes()
+          x=json.loads(a.read_text())
+          assert x['original_binance_USDM_zip']==45
+          assert x['original_native3m_closed']==76800
+          assert x['native15m_decimal_equalities']==15360
+          assert x['original_market_count']==5
+          assert x['source_candidate_4h_IMB_count']==153
+          assert x['first_observed_source_3m_contact_count']==132
+          assert x['source_no_contact_count']==21
+          assert x['author_course_4h_poi_goldens']==x['author_first_test_goldens']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C46_INDEPENDENT_ALL_ORIGINAL_45ZIP_FIVE_MARKET_SOURCE_4H_IMB_FIRST_CONTACT_EXACT_PASS',
+            len(a.read_bytes()),hashlib.sha256(a.read_bytes()).hexdigest())
+          PY
