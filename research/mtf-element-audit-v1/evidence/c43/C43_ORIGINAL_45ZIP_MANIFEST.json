@@ -1,0 +1,72 @@
+{
+  "complete_aggregate_source_json_bytes": 168774218,
+  "complete_aggregate_source_json_sha256": "92956d189574d2a13a0f8aa3f5aa9f99ddd4cc33dcb128c3fbb2b9b8fc30e791",
+  "market_parts": [
+    {
+      "bytes": 29670463,
+      "name": "C43_ORIGINAL_BCHUSDT_ALL_CANDIDATE_RERANK.json",
+      "sha256": "333b0f85d43450322e30d6243dfa0c98437e6bf7b21c8f60283c036b61ec03fc",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "bytes": 28900657,
+      "name": "C43_ORIGINAL_BTCUSDT_ALL_CANDIDATE_RERANK.json",
+      "sha256": "0274a2599b619708e0710eb92ad670120a90120d60845fe83d62f081aa18307f",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "bytes": 37483297,
+      "name": "C43_ORIGINAL_ETHUSDT_ALL_CANDIDATE_RERANK.json",
+      "sha256": "a0c232a71455037a4d16b6929722a55fffb537ac049a78b2f4e4d109e3333808",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "bytes": 29983909,
+      "name": "C43_ORIGINAL_SOLUSDT_ALL_CANDIDATE_RERANK.json",
+      "sha256": "580d75d78494e6eb3c3d9441f1729bbb7c47c18a2b52f0b0ec7efa8ad8c4ea2c",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "bytes": 30824179,
+      "name": "C43_ORIGINAL_XRPUSDT_ALL_CANDIDATE_RERANK.json",
+      "sha256": "c8472e0cd7e96530caa4b239030364f73852c7d2e79f1de0c56813f736a354ef",
+      "symbol": "XRPUSDT"
+    }
+  ],
+  "parent_metadata": {
+    "adapted_policy_count": 3,
+    "limitations": "Reselected source obstacle is NOT an academic FTA, a target, a fill, or strategy performance. Source 3m OHLC does not prove intrabar order. History begins Sep 2026; original C39 ranking depends on closed BOS candle and is not available at BOS bar start. Repeated 36 routes are correlated.",
+    "native15m_exact_decimal": 15360,
+    "orders": 0,
+    "original3m_wick_touch_availability": "ONLY_AFTER_ORIGINAL_1H_SOURCE_KNOWN_AND_BEFORE_BOS_BAR_START",
+    "original_native3m_closed": 76800,
+    "original_usdm_binance_zip": 45,
+    "parent_C41_git_blob": "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c",
+    "parent_C42_git_blob": "bddf315c58a906fe58546512bc416c24bd1ce95f",
+    "parent_correlated_contexts": 17316,
+    "policy_source_rerank_summary": {
+      "ANY_PREKNOWN_RESEARCH_OBSTACLE_V1": {
+        "reselected_distinct_alternate_source": 0,
+        "selected_after_per_candidate_rerank": 17289,
+        "selected_original_c39_candidate": 17289
+      },
+      "EXCLUDE_PRIOR_STRICT_SWEEP_OR_FULL_TRAVERSAL_V1": {
+        "reselected_distinct_alternate_source": 12840,
+        "selected_after_per_candidate_rerank": 17262,
+        "selected_original_c39_candidate": 4422
+      },
+      "REQUIRE_NO_PRIOR_OBSERVED_TOUCH_V1": {
+        "reselected_distinct_alternate_source": 14829,
+        "selected_after_per_candidate_rerank": 17262,
+        "selected_original_c39_candidate": 2433
+      }
+    },
+    "readiness": "NOT_TRADE_READY",
+    "schema": "EMBER_C43_ADAPTED_SOURCE_PER_CANDIDATE_FTA_RERANK_45ZIP_V1",
+    "source_author_goldens": 0,
+    "source_rank_decision_availability": "AT_3M_BOS_BAR_CLOSE_RETROSPECTIVE_C39",
+    "source_route_count": 36,
+    "trades": 0
+  },
+  "schema": "EMBER_C43_ORIGINAL_45ZIP_FIVE_MARKET_COMPLETE_SOURCE_MANIFEST_V1"
+}
