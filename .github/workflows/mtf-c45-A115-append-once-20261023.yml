@@ -1,0 +1,92 @@
+name: EMBER C45 A115 append-once accepted recovered course textual provenance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c45-A115-append-once-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  append_a115:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate previous A114 114/114 immutable SHA, C44 original Git blob, and all 40 C45 text cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/previous-ledger.txt
+          grep -Fq 'entries 114 tip_sha256 6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558' /tmp/previous-ledger.txt
+          python tests/test_journal_integrity.py | tee /tmp/previous-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/previous-evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c44/C44_ORIGINAL_BOUNDED_FTA_SOURCE_45ZIP.json)" = "0f8cd79824af85569ffef87bfbec808a8a2b89b3"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json)" = "d310373c0bff1b48a6e677461d15077eeb9c3ca8"
+          cd d05
+          python -m unittest -v test_c45_recovered_course_text_contract 2>&1 | tee /tmp/c45-40.txt
+          grep -Fq 'Ran 40 tests' /tmp/c45-40.txt
+          grep -qx 'OK' /tmp/c45-40.txt
+      - name: Assert 9 original course sources and 18 source rule IDs; prove missing C44 POI source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          import json,pathlib,hashlib
+          meta=json.loads(pathlib.Path('d05/C45_RECOVERED_AUTHOR_TEXT_RULES_20261023.json').read_text())
+          assert len(meta['source_files'])==9
+          assert len(meta['claims'])==18 and len(set(c['id'] for c in meta['claims']))==18
+          assert len({c['file'] for c in meta['claims']})==9
+          audit=json.loads(pathlib.Path('evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json').read_text())
+          assert audit['frozen_C44_complete_JSON_sha256']=='62a8ef144a045733e2cdc35592056417916c9ab6db41e2dc8ffb9ea0c41f4892'
+          assert audit['repeated_correlated_context_copies']==17316
+          assert audit['source_only_author_poi_evidence_statuses']=={'COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT':17316}
+          assert audit['author_verified_trade_setups']==audit['orders']==audit['trades']==0
+          assert audit['readiness']=='NOT_TRADE_READY'
+          print('C45_RECOVERED_9_LESSONS_18_RULES_AND_C44_17316_NOT_CERTIFIED_PASS')
+          PY
+      - name: Append one new A115 seven source-text SHA evidence files then verify record chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A115 \
+            --cycle B1/C45 \
+            --planned 'Recover original Google Drive academic lesson text and map necessary POI IMB SNR RB IDM 1H3M BOS StrongHL and timeframe-matched FTA rules without treating 4H/1D candle ranges or synthetic examples as author-verified trades' \
+            --executed 'Read 9 actual original course text lessons, preserve Drive source identifiers/anchors and 18 semantic rule claims, implement isolated fail-closed 8-mode course text route A/B/C contract, 40 adverse and synthetic text-correctness tests each on Python 3.10 3.11 3.12, independently audit all 17316 correlated original frozen C44 contexts in its immutable 97764435-byte source JSON for missing required academic POI/FTA evidence, CI 40012781400 full source audit exact byte equality 4/4 jobs. Preserve parent A114 114 SHA and original C44 blob.' \
+            --result 'C45 academic TEXT-only source contract and semantic evidence gap accepted: 9 source lessons, 18 text claims, 8 route description modes. Existing 17316 correlated C44 context records all lack verifiable typed author POI test/route/FTA proof. This is missing proof, not 17316 invalid market signals. No original instructor 2023 chart golden candle annotations obtained, no academic engine ready, no orders/trades/PNL.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'First CI 40011783197 FAIL because initial 9 lessons only 8 represented claim files; later C45 test stale 17 rule unique count failed in CI 40012414945/40012515604; corrected 18 unique claims and 40 tests. Corrected CI 40012592712 PASS 3/3 Python 40 per version. First full C44 source gap audit CI 40012653362 PASS, pinned original derived JSON Git blob d310373c0bff1b48a6e677461d15077eeb9c3ca8. Independently re-read full 97764435 bytes frozen C44 original source and byte-compare entire small derived C45 gap proof CI 40012781400 SUCCESS 4/4, plus separate 40x3 Python tests. Parent A114 SHA 6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558 unchanged. No author chart positive/negative golden or trading authorization.' \
+            --evidence d05/C45_RECOVERED_AUTHOR_TEXT_RULES_20261023.json \
+            --evidence d05/c45_recovered_course_text_contract.py \
+            --evidence d05/test_c45_recovered_course_text_contract.py \
+            --evidence tests/probe_c45_course_text_compatibility_c44.py \
+            --evidence evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json \
+            --evidence evidence/c45/C45_INDEPENDENT_RECOVERED_COURSE_TEXT_WITNESS_20261023.json \
+            --evidence cycles/B1_C45_RECOVERED_COURSE_AUTHOR_TEXT_CONTRACT.md
+          python tools/auditlog.py verify | tee /tmp/115.txt
+          grep -Fq 'entries 115' /tmp/115.txt
+          python tests/test_journal_integrity.py | tee /tmp/115-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/115-evidence.txt
+      - name: Commit ONLY append-once A115 JSONL and safely rebase remote
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C45): append-once A115 seven Google Drive recovered course text source SHA records'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
