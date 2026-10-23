@@ -208,7 +208,7 @@ def evaluate_bounded_candidates(event,source,observed_by_fta,closed4h,closed1d):
         expected=observed_by_fta[f]
         if (expected.original_bos_3m_row_id!=event.break_original_native3m_row_id or
             expected.original_raid_fractal_center_ms!=event.raid_fractal_center_ms or
-            expected.original_bos_closed_ms!=event.break_bar_closed_known_ms):
+            expected.bos_bar_closed_known_ms!=event.break_bar_closed_known_ms):
             raise ValueError("C44_C43_EVENT_PROVENANCE_DRIFT")
         ranked=_reorder(verified,f)
         bound=tuple(bound_info(x,event) for x in ranked)
@@ -277,7 +277,7 @@ def scan_original_c44_bounded_source(source,*,as_of_ms):
                 for i,(e,x) in enumerate(zip(stream.events,parent.contexts)):
                     if (x.original_bos_3m_row_id!=e.break_original_native3m_row_id or
                         x.original_raid_fractal_center_ms!=e.raid_fractal_center_ms or
-                        x.original_bos_closed_ms!=e.break_bar_closed_known_ms or
+                        x.bos_bar_closed_known_ms!=e.break_bar_closed_known_ms or
                         x.bos!=stream.hypothesis_id or x.reaction!=reaction or
                         x.fta!=fta or x.orders or x.trades or
                         x.readiness!="NOT_TRADE_READY"):
