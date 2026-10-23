@@ -1,0 +1,80 @@
+name: EMBER C43 first full 45ZIP source sharded immutable freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c43-original-45zip-sharded-freeze-20261023.yml'
+permissions:
+  contents: write
+jobs:
+  original-five-market-parts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A112 112/112 evidence and 28 C43 negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/112.txt
+          grep -Fq 'entries 112 tip_sha256 5b258f6c17f2505f6dfb36c31f6b225b9e701b3b94c4d382b89938dbf8140d7f' /tmp/112.txt
+          python tests/test_journal_integrity.py > /tmp/evidence-old.txt
+          grep -Fq '"validations_pass": true' /tmp/evidence-old.txt
+          cd d05
+          python -m unittest -v test_c43_adapted_per_candidate_fta_rerank 2>&1 | tee /tmp/c43tests.txt
+          grep -Fq 'Ran 28 tests' /tmp/c43tests.txt
+          grep -qx 'OK' /tmp/c43tests.txt
+      - name: Verify frozen parent C38-C42 evidence Git blobs unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c38/C38_ORIGINAL_FOUR_BOS_BY_THREE_REACTION_MATRIX.json)" = "a69d69de29d4b52a9ee68ccdf0dbcb20222a6440"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c39/C39_ORIGINAL_FOUR_BOS_BY_THREE_POTENTIAL_FTA.json)" = "15dacbe47ba2b6e133d8b97d970a96d6242cd80f"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c40/C40_ORIGINAL_PRE_BOS_PRIOR_FTA_TOUCH_STATES.json)" = "718ce971dd781b2046c530992b4c9743225ef5b7"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c41/C41_ORIGINAL_36_SOURCE_JOIN_MATRIX.json)" = "ac3bb2b2babafdb28af71c4cbaa2b53fce03b06c"
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c42/C42_ORIGINAL_SOURCE_FTA_ELIGIBILITY_45ZIP.json)" = "bddf315c58a906fe58546512bc416c24bd1ce95f"
+      - name: Rebuild full C43 45 original ZIP JSON and partition into five SHA-auditable original files
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c43_original_per_candidate_fta_45zip.py" /tmp/c43-full-source.json > /tmp/c43-log.txt 2>&1 || { tail -c 9000 /tmp/c43-log.txt; exit 1; }
+          python "$R/tools/partition_c43_source_result.py" /tmp/c43-full-source.json "$R/evidence/c43" | tee /tmp/c43sha.txt
+          grep -Fq 'C43_FIVE_PARTS_REASSEMBLE_EXACT_CANONICAL_168MB_JSON_PASS' /tmp/c43sha.txt
+          python - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('research/mtf-element-audit-v1/evidence/c43')
+          m=json.loads((root/'C43_ORIGINAL_45ZIP_MANIFEST.json').read_text())
+          assert m['parent_metadata']['original_usdm_binance_zip']==45
+          assert m['parent_metadata']['original_native3m_closed']==76800
+          assert m['parent_metadata']['native15m_exact_decimal']==15360
+          assert m['parent_metadata']['source_route_count']==36
+          assert m['parent_metadata']['parent_correlated_contexts']==17316
+          assert m['parent_metadata']['orders']==m['parent_metadata']['trades']==m['parent_metadata']['source_author_goldens']==0
+          assert len(m['market_parts'])==5
+          for p in m['market_parts']:
+            assert p['bytes']<95000000
+            print(p['symbol'],p['bytes'],p['sha256'])
+          print("C43_ALL_FIVE_MARKETS_SOURCE_PROVENANCE_REBUILT")
+          PY
+      - name: Rebase only the new immutable C43 original parts and SHA manifest then commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_*_ALL_CANDIDATE_RERANK.json
+          git add research/mtf-element-audit-v1/evidence/c43/C43_ORIGINAL_45ZIP_MANIFEST.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 6
+          git diff --cached --name-only | grep -v '^research/mtf-element-audit-v1/evidence/c43/' && exit 1 || true
+          git commit -m 'evidence(C43): freeze five original USD-M markets with exact aggregate SHA source manifest'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
