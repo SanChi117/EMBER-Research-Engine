@@ -73,7 +73,7 @@ def recovered_text_claims(path=RULES_PATH):
     claims=data["claims"]
     claim_ids=[x["id"] for x in claims]
     if (len(files)!=9 or len(ids)!=9 or len(titles)!=9 or
-        len(claims)!=18 or len(set(claim_ids))!=17 or
+        len(claims)!=18 or len(set(claim_ids))!=18 or
         any(c["file"] not in titles or c["scope"] not in
             ("TEXT_RULE","KNOWN_LIMITATION") for c in claims) or
         any(not x["url"].startswith("https://drive.google.com/file/d/"+x["id"]+"/")
