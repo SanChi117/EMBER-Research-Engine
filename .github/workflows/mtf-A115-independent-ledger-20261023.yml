@@ -1,0 +1,62 @@
+name: EMBER C45 independent 115 SHA recovered academic source contract
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A115-independent-ledger-20261023.yml'
+permissions:
+  contents: read
+jobs:
+  verify_115:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify A001-A115 chained SHA records and all seven new C45 source claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A115-verify.txt
+          grep -Fq 'entries 115 tip_sha256 928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37' /tmp/A115-verify.txt
+          python tests/test_journal_integrity.py | tee /tmp/A115-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A115-evidence.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          records=[json.loads(s) for s in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(records)==115
+          old,new=records[-2:]
+          assert old['action_id']=='A114' and old['record_sha256']=='6b25a87578a0ee2f9aa4645cac88b99c43a90a0ccf5528d02f42a3da427f3558'
+          assert new['action_id']=='A115' and new['seq']==115
+          assert new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='928d427390b7d81a47f61c97221132609ab804c8a5c07e8696ff00bb3b0bed37'
+          assert new['cycle']=='B1/C45' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==7
+          for ev in new['evidence']:
+              buf=pathlib.Path(ev['path']).read_bytes()
+              assert len(buf)==ev['bytes'] and hashlib.sha256(buf).hexdigest()==ev['sha256']
+          j=json.loads(pathlib.Path('d05/C45_RECOVERED_AUTHOR_TEXT_RULES_20261023.json').read_text())
+          assert len(j['source_files'])==9 and len(j['claims'])==18 and len({x['id'] for x in j['claims']})==18
+          assert len({x['file'] for x in j['claims']})==9
+          a=json.loads(pathlib.Path('evidence/c45/C45_ALL_C44_CONTEXTS_COURSE_TEXT_GAP_AUDIT.json').read_text())
+          assert a['repeated_correlated_context_copies']==17316
+          assert a['source_only_author_poi_evidence_statuses']=={'COURSE_AUTHOR_POI_EVIDENCE_NOT_PRESENT':17316}
+          assert a['author_verified_trade_setups']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C45_INDEPENDENT_A115_115_SHA_SEVEN_SOURCE_LESSON_EVIDENCE_PASS')
+          PY
+      - name: Independently rerun all 40 positive-text and adversarial route tests without skips
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c45_recovered_course_text_contract 2>&1 | tee /tmp/40.txt
+          grep -Fq 'Ran 40 tests' /tmp/40.txt
+          grep -qx 'OK' /tmp/40.txt
+          ! grep -q 'skipped=' /tmp/40.txt
