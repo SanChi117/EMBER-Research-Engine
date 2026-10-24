@@ -1,0 +1,40 @@
+name: EMBER C50 academic source causality 39 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c50-course-source-causality-negatives-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/c50_course_route_a_source_causality_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c50_course_route_a_source_causality_gate.py'
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify A119 immutable predecessor and C47 C49 original source blobs
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A119.txt
+          grep -Fq 'entries 119 tip_sha256 0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd' /tmp/A119.txt
+          python tests/test_journal_integrity.py | tee /tmp/journal.txt
+          grep -Fq '"validations_pass": true' /tmp/journal.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json)" = 'c213c36a2e26caf63d9d65403429d1419a844bd9'
+      - name: Re-run 39 anti-forgery academic source and temporal mismatch tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c50_course_route_a_source_causality_gate 2>&1 | tee /tmp/C50.txt
+          grep -Fq 'Ran 39 tests' /tmp/C50.txt
+          grep -qx 'OK' /tmp/C50.txt
+          ! grep -q 'skipped=' /tmp/C50.txt
