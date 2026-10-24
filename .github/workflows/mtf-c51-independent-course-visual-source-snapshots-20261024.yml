@@ -1,0 +1,81 @@
+name: EMBER C51 independent two original owner Google Drive course image metadata snapshots
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c51-independent-course-visual-source-snapshots-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  negative_visual:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify previous A120 120 immutable source SHA and C50 original frozen source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A120.txt
+          grep -Fq 'entries 120 tip_sha256 03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3' /tmp/A120.txt
+          python tests/test_journal_integrity.py | tee /tmp/A120proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A120proof.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json)" = '66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08'
+      - name: Rerun 36 independent image source positive-existence and no-forged-author-entry goldens
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c51_academic_visual_source_golden_gate 2>&1 | tee /tmp/C51neg.txt
+          grep -Fq 'Ran 36 tests' /tmp/C51neg.txt
+          grep -qx 'OK' /tmp/C51neg.txt
+          ! grep -q 'skipped=' /tmp/C51neg.txt
+  independent_metadata_snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently match both authenticated owner Drive folder listing snapshots by ALL 49 exact image IDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          PYTHONPATH=d05 python - <<'PY'
+          import json,pathlib
+          from c51_academic_visual_source_golden_gate import audited_inventory,observe_visual_candidate,BARRIERS
+          a=json.loads(pathlib.Path('d05/C51_RECOVERED_COURSE_VISUAL_FOLDER_INVENTORY_20261024.json').read_text())
+          b=json.loads(pathlib.Path('evidence/c51/C51_SECOND_LIVE_DRIVE_COURSE_VISUAL_SOURCE_WITNESS_20261024.json').read_text())
+          images,reviewed=audited_inventory()
+          assert len(images)==49 and len(reviewed)==6
+          assert a['folder_count']==b['folder_count']==7
+          assert b['distinct_png_image_count']==49
+          assert b['image_binary_republished_to_repo']==False
+          assert b['confirmed_2023_author_positive_golden_with_original_candle_id']==0
+          assert b['confirmed_2023_author_negative_golden_with_original_candle_id']==0
+          assert b['confirmed_original_candle_chart_alignment']==0
+          assert b['orders']==b['trades']==0 and b['readiness']=='NOT_TRADE_READY'
+          assert len(b['folder_checks'])==7
+          assert len(b['visually_inspected_six_raw_image_sizes_bytes'])==6
+          assert {x['id'] for x in b['visually_inspected_six_raw_image_sizes_bytes']}==set(reviewed)
+          assert all(x['bytes']>10000 for x in b['visually_inspected_six_raw_image_sizes_bytes'])
+          for folder,w in zip(a['folder_inventories'],b['folder_checks']):
+              assert folder['name']==w['folder'] and folder['folder_id']==w['id']
+              assert folder['total_direct_items']==w['verified_direct_files']
+              assert sorted(z['id'] for z in folder['files'])==w['verified_png_id_set']
+          assert len({i for x in b['folder_checks'] for i in x['verified_png_id_set']})==49
+          for id in images:
+              x=observe_visual_candidate(id)
+              assert x.blockers==BARRIERS and x.source_image_available
+              assert x.author_positive_golden==x.author_negative_golden==False
+              assert x.trades==x.orders==() and x.readiness=='NOT_TRADE_READY'
+          print('C51_BOTH_LIVE_OWNER_DRIVE_SNAPSHOTS_MATCH_49_EXACT_IDS_SEVEN_FOLDERS_AND_SIX_VISUALLY_READ_IMAGES_WITH_ZERO_AUTHOR_GOLDENS_PASS')
+          PY
