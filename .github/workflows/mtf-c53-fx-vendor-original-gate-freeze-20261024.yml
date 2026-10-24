@@ -1,0 +1,76 @@
+name: EMBER C53 original 8 FX course source provider gap registry first freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c53-fx-vendor-original-gate-freeze-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  c53_first:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Confirm 122/122 previous ledger and C52 entire original 49 image-derived frozen JSON unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A122evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json)" = '4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67'
+      - name: Run all 43 OANDA SAXO bid ask provider original screenshot publication no-false-label negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c53_fx_provider_original_source_attestation_gate 2>&1 | tee /tmp/C53-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C53-43.txt
+          grep -qx 'OK' /tmp/C53-43.txt
+      - name: Freeze deterministic 8 real original FX screenshot provider source receipts absent 0 OHLC
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c53"
+          python "$R/tests/probe_c53_all8_owner_course_fx_original_vendor_gate.py" "$R/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json"
+          python - <<'PY'
+          import json,hashlib,pathlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json')
+          j=json.loads(p.read_text())
+          assert j['owner_course_source_figures_with_real_FX_headers']==8
+          assert j['provider_exact_original_market_2024_2025_FX_candles_downloaded']==0
+          assert j['original_course_to_vendor_OHLC_candle_ID_matches']==0
+          assert j['original_2023_course_chart_entry_goldens']==0
+          assert j['author_verified_typed_POI_first_test']==j['author_verified_1H_VC']==j['author_verified_15M_entry_VC']==0
+          assert j['unrelated_BINANCE_USDM_2026_source_rejected_for_EURUSD']
+          assert j['no_forced_same_4H_UTC_alignment_for_OANDA_dailyAligned_H4_source']
+          assert j['course_screenshot_quote_mid_bid_ask_basis_verified'] is False
+          assert j['provider_authentication_credentials_received_or_stored'] is False
+          assert j['orders']==j['trades']==0 and j['PnL'] is None and j['readiness']=='NOT_TRADE_READY'
+          assert len(j['verified_original_FX_figure_source_gates'])==8
+          assert all(z['source_attestation_state']=='SOURCE_NOT_RETRIEVED' for z in j['verified_original_FX_figure_source_gates'])
+          print('C53_ORIGINAL_EIGHT_FX_SOURCE_BAR_GATE_FIRST_FROZEN',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Commit only C53 frozen source-absence manifest (no API token, no orders, no fake FX OHLC)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json' /tmp/staged.txt
+          git commit -m 'evidence(C53): original 8 course EURUSD OANDA SAXO author source chart receipts unknown, no PnL'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
