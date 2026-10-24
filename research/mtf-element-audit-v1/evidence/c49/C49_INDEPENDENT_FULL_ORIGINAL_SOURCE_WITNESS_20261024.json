@@ -1,0 +1,63 @@
+{
+  "schema": "EMBER_C49_INDEPENDENT_FULL_BINANCE_ORIGINAL_45ZIP_CLOSED_3M_PRICE_RESPONSE_WITNESS_V1",
+  "date_utc": "2026-10-24",
+  "predecessor_A118_SHA": "3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea",
+  "immutable_C46_original_parent_git_blob": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+  "first_C49_negative_ci": 40049832589,
+  "first_C49_original_full_45ZIP_ci": 40049920656,
+  "independent_C49_full_original_45ZIP_ci": 40050049709,
+  "all_four_independent_jobs_success": true,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "negative_cases_each_python": 39,
+  "original_binance_usdm_45ZIP": 45,
+  "original_native3m_closed": 76800,
+  "native15m_exact_decimal_equalities": 15360,
+  "first_contact_source_candidates": 153,
+  "first_observed_original3m_contacts": 132,
+  "original_source_frozen_git_blob": "c213c36a2e26caf63d9d65403429d1419a844bd9",
+  "original_frozen_full_bytes": 463807,
+  "original_frozen_full_sha256": "e1315222e3bf492580abb435998bb79235d0db6e787f456cd03cccb2fafd7597",
+  "independent_full_original_45ZIP_and_JSON_byte_exact": true,
+  "physically_cut_earlier_asof_matches_complete_source_prefix": true,
+  "window_hours": [
+    1,
+    4,
+    12
+  ],
+  "first_later_original3m_close_favorable_counts": [
+    97,
+    100,
+    100
+  ],
+  "first_later_original3m_close_adverse_counts": [
+    25,
+    28,
+    29
+  ],
+  "no_first_later_directional_close_horizon_complete": [
+    10,
+    4,
+    3
+  ],
+  "no_first_source_contact": [
+    21,
+    21,
+    21
+  ],
+  "not_a_win_rate_or_backtest": true,
+  "academically_verified_source_reaction_count": 0,
+  "academically_verified_1h_vc_count": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "limitations": [
+    "First later fully closed original3m wick-gap directional boundary CLOSE only, not filled entry, stop or target",
+    "All observed source reactions lack independent instructor chart goldens and academic POI/VC semantics",
+    "Source3m OHLC wick crossings have no tick sequencing or order execution proofs",
+    "Finite windows are ADAPTED research alternatives, no holdout, PnL or profitability optimization"
+  ]
+}
