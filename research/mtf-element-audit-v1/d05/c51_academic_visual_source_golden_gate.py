@@ -9,6 +9,7 @@ source candidate metadata only. It cannot approve trades.
 from dataclasses import dataclass
 from pathlib import Path
 import json,re
+from c45_recovered_course_text_contract import recovered_text_claims
 
 INVENTORY=Path(__file__).with_name("C51_RECOVERED_COURSE_VISUAL_FOLDER_INVENTORY_20261024.json")
 FOLDERS={
@@ -55,6 +56,9 @@ class VisualGate:
     readiness:str="NOT_TRADE_READY"
 
 def audited_inventory(path=INVENTORY):
+    original_course_rules=recovered_text_claims()
+    if len(original_course_rules)!=18:
+        raise ValueError("C51_NOT_ALL_9_GDRIVE_COURSE_TEXT_SOURCES_PRESENT")
     o=json.loads(Path(path).read_text(encoding="utf8"))
     if (o.get("schema")!="EMBER_C51_RETRIEVED_ACADEMIC_DRIVE_VISUAL_SOURCE_INVENTORY_V1"
         or o.get("folder_count")!=7 or o.get("unique_direct_image_png_count")!=49
