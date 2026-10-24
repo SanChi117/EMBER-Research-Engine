@@ -1,0 +1,69 @@
+name: EMBER C50 independent final A120 120 SHA original academic causality
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A120-independent-ledger-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  verify_a120:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Independently verify entire A001-A120 SHA chain and all six C50 academic source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A120.txt
+          grep -Fq 'entries 120 tip_sha256 03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3' /tmp/A120.txt
+          python tests/test_journal_integrity.py | tee /tmp/A120-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A120-evidence.txt
+          python - <<'PY'
+          import pathlib,json,hashlib
+          arr=[json.loads(s) for s in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(arr)==120
+          old,new=arr[-2:]
+          assert old['action_id']=='A119' and old['record_sha256']=='0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd'
+          assert new['seq']==120 and new['action_id']=='A120' and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3'
+          assert new['cycle']=='B1/C50' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==6
+          for item in new['evidence']:
+              raw=pathlib.Path(item['path']).read_bytes()
+              assert len(raw)==item['bytes'] and hashlib.sha256(raw).hexdigest()==item['sha256']
+          p=pathlib.Path('evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json')
+          assert len(p.read_bytes())==282204
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='460bd50cb393c6f3d4fc73d9f204fca6b8dceeec32f27d6f6854983036394826'
+          z=json.loads(p.read_text())
+          assert z['original_Binance_USDM_ZIP_lineage']==45 and z['original_native3m_closed']==76800
+          assert z['original_parent_source_4h_geometry']==153 and z['original_first_native3m_contacts']==132
+          assert z['technical_source_event_classification_counts']=={
+            'CONTACT_NO_DIRECTIONAL_3M_CLOSE_WITHIN_12H':3,
+            'DIRECTIONAL_CLOSE_NO_LATER_1H_IMB':2,
+            'FIRST_1H_IMB_CLOSED_AFTER_24H_OBSERVATION_WINDOW':23,
+            'FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE':104,
+            'NO_ORIGINAL_4H_FIRST_3M_CONTACT':21}
+          assert z['direction_side_by_event_classification']['FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE__FAVORABLE']==78
+          assert z['direction_side_by_event_classification']['FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE__ADVERSE']==26
+          assert z['author_verified_POI_first_test']==z['author_verified_onehour_VC']==z['author_verified_market_entry']==z['orders']==z['trades']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          print('C50_A120_INDEPENDENT_120_SHA_SIX_FULL_ORIGINAL_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Independently rerun all 39 academic source provenance C47 C49 causality negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c50_course_route_a_source_causality_gate 2>&1 | tee /tmp/C50-39.txt
+          grep -Fq 'Ran 39 tests' /tmp/C50-39.txt
+          grep -qx 'OK' /tmp/C50-39.txt
+          ! grep -q 'skipped=' /tmp/C50-39.txt
