@@ -1,0 +1,42 @@
+name: EMBER C51 49 recovered owner course images academic golden fail-closed 36 negative
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c51-course-drive-visual-golden-negative-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/C51_RECOVERED_COURSE_VISUAL_FOLDER_INVENTORY_20261024.json'
+      - 'research/mtf-element-audit-v1/d05/c51_academic_visual_source_golden_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c51_academic_visual_source_golden_gate.py'
+permissions:
+  contents: read
+jobs:
+  course_source_images:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify A120 prior SHA and original frozen 45ZIP source evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A120.txt
+          grep -Fq 'entries 120 tip_sha256 03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3' /tmp/A120.txt
+          python tests/test_journal_integrity.py | tee /tmp/A120evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A120evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json)" = '66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08'
+      - name: Run all 36 course source image authenticity metadata and no-author-golden tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c51_academic_visual_source_golden_gate 2>&1 | tee /tmp/C51.txt
+          grep -Fq 'Ran 36 tests' /tmp/C51.txt
+          grep -qx 'OK' /tmp/C51.txt
+          ! grep -q 'skipped=' /tmp/C51.txt
