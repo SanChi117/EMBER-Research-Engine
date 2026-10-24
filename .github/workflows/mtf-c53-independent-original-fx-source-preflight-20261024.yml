@@ -1,0 +1,81 @@
+name: EMBER C53 independent 8 EURUSD original provider OANDA SAXO source-absence audit
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c53-independent-original-fx-source-preflight-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  vendor_negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify A122 122/122 predecessor chain SHA and six frozen C52 files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A122evidence.txt
+      - name: Independently rerun all 43 OANDA SAXO source original market data receipt fraud and 2024-25 future screenshot tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c53_fx_provider_original_source_attestation_gate 2>&1 | tee /tmp/C53-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C53-43.txt
+          grep -qx 'OK' /tmp/C53-43.txt
+          ! grep -q 'skipped=' /tmp/C53-43.txt
+  metadata_full_replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify exact C52 owner charts and source C53 8 missing-OHLC no golden JSON blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json)" = '4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json)" = 'c38da1ec093bc37006942f7206018288e8884240'
+      - name: Rebuild full 8 owner EURUSD 2024/25 source metadata exactly, not counterfeit OHLC
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c53_all8_owner_course_fx_original_vendor_gate.py" /tmp/C53-INDEPENDENT-EIGHT-FX-CHART-SOURCE.json
+          cmp -s /tmp/C53-INDEPENDENT-EIGHT-FX-CHART-SOURCE.json "$R/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json"
+          python - <<'PY'
+          import pathlib,hashlib,json
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c53/C53_EIGHT_ORIGINAL_FX_ACADEMIC_CHART_SOURCE_PROVIDER_PREFLIGHT.json')
+          assert len(p.read_bytes())==11871
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='01464f1a7b92f1185137b024d730a9bd7fbd39457c787935e46b65f8b7c7a61a'
+          j=json.loads(p.read_text())
+          assert j['owner_course_source_figures_with_real_FX_headers']==8
+          assert j['provider_instrument_timeframe_counts']==[
+            {'instrument':'EURUSD','provider':'OANDA','sources':1,'timeframe':'15M'},
+            {'instrument':'EURUSD','provider':'OANDA','sources':2,'timeframe':'1H'},
+            {'instrument':'EURUSD','provider':'OANDA','sources':3,'timeframe':'4H'},
+            {'instrument':'EURUSD','provider':'SAXO','sources':2,'timeframe':'4H'}]
+          assert j['provider_exact_original_market_2024_2025_FX_candles_downloaded']==0
+          assert j['original_course_to_vendor_OHLC_candle_ID_matches']==0
+          assert j['original_2023_course_chart_entry_goldens']==0
+          assert j['author_verified_typed_POI_first_test']==j['author_verified_1H_VC']==j['author_verified_15M_entry_VC']==0
+          assert j['course_screenshot_quote_mid_bid_ask_basis_verified'] is False
+          assert j['provider_authentication_credentials_received_or_stored'] is False
+          assert j['orders']==j['trades']==0 and j['PnL'] is None and j['readiness']=='NOT_TRADE_READY'
+          assert len(j['verified_original_FX_figure_source_gates'])==8
+          assert all(a['source_attestation_state']=='SOURCE_NOT_RETRIEVED' for a in j['verified_original_FX_figure_source_gates'])
+          print('C53_INDEPENDENT_EIGHT_FX_11871BYTE_ORIGINAL_COURSE_SOURCE_METADATA_BYTE_EXACT_PASS',p.stat().st_size)
+          PY
