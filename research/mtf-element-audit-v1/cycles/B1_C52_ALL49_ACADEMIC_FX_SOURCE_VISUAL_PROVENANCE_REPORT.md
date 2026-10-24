@@ -41,7 +41,7 @@
 
 ## 4. Правила, которые можно доказать текстом на картинках без подмены фактами о рынке
 
-- `Untitled (39).png` из Entry Model Logic содержит явно выписанные **две отдельные цепочки**: `4H TF POI [IMB,RB,SNR] -> 1H TF Trigger [Liquidity or IMB] -> 15M Entry VC [IMB,SNR]`, и `1H TF POI [IMB,RB,SNR] -> 15H TF Trigger` ***нет*** (изображение реально говорит **15M**!), `15M TF Trigger [Liquidity or IMB] -> 5M Entry VC [IMB,SNR]`. Это визуальный артефакт, который согласуется с C45 text contract; **не** даёт разрешения исполнять сделки или использовать 5M вместо 15M по иной пользовательской временной настройке.
+- `Untitled (39).png` из Entry Model Logic явно фиксирует **две отдельные цепочки**: `4H POI [IMB,RB,SNR] → 1H Trigger [Liquidity or IMB] → 15M Entry VC [IMB,SNR]` и `1H POI [IMB,RB,SNR] → 15M Trigger [Liquidity or IMB] → 5M Entry VC [IMB,SNR]`. Это визуальное подтверждение описания C45 (условные маршруты академии), а **не** право исполнять сделку или менять выбранное пользователем 15m подтверждение.
 - `Slide 16_9 - 492.png` наглядно отмечает `OB - Order Block`; `Slide 16_9 - 502.png` — `RB - Rejection Block` с отличием. `fvg.png` помечает `IMB - Imbalance / FVG - Fair Value Gap`; `image (1).png` — `SNR - Support & Resistance`. Они показывают, что нельзя автоматически объединить POI/OB/RB/SNR/IMB в один универсальный wick-gap механизм.
 - `image (2).png` демонстрирует на концептуальном свечном примере SSL raid / SNR и реакцию как структурное понятие. Это **не доказательство** наличия в архиве курса авторских raw trade entries/STOP/TP.
 
