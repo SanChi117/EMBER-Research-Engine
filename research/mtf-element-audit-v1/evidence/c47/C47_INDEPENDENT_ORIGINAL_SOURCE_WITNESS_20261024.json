@@ -1,0 +1,42 @@
+{
+  "schema": "EMBER_C47_INDEPENDENT_FULL_ORIGINAL_45ZIP_POST_4H_CONTACT_TO_1H_SOURCE_WITNESS_V1",
+  "date": "2026-10-24",
+  "predecessor_A116_sha": "453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c",
+  "frozen_C46_git_blob": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+  "first_C47_original_45ZIP_ci": 40048673466,
+  "independent_C47_45ZIP_ci": 40048767312,
+  "first_C47_negative_test_ci": 40048587745,
+  "independent_job_statuses": [
+    "success",
+    "success",
+    "success",
+    "success"
+  ],
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "negative_test_count_per_python": 35,
+  "original_Binance_USDM_ZIPs": 45,
+  "original_native3m_closed": 76800,
+  "original_native1h_closed": 3840,
+  "exact_native15m_Decimal_source_parity": 15360,
+  "physical_cut_earlier_asof_prefix_equal": true,
+  "parent_C46_153_source_zones_parity": true,
+  "frozen_C47_original_source_bytes": 322066,
+  "frozen_C47_original_git_blob": "b2727f081d8a73f522a97a54b4582507ee969244",
+  "frozen_C47_original_full_SHA256": "8760ba25e7c8b85e74a66e481e293ca0d9c43fb0e621a38e72bb3ddbbbc2a72d",
+  "entire_C47_original_JSON_byte_exact_independent": true,
+  "source_4h_IMB_zones": 153,
+  "first_3m_contacts": 132,
+  "contacted_4h_sources_with_later_closed_1h_IMB": 130,
+  "contacted_without_later_1h_source": 2,
+  "historical_unbounded_later_source_is_not_course_VC": true,
+  "academic_author_poi_goldens": 0,
+  "academic_author_first_test_goldens": 0,
+  "academic_author_1h_vc_goldens": 0,
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
