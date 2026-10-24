@@ -1,0 +1,74 @@
+name: EMBER C49 original 45ZIP first subsequent native3m close source observation freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c49-original-45zip-first-freeze-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  c49_full_original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify A118 SHA and C46 original Git source blob
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A118.txt
+          grep -Fq 'entries 118 tip_sha256 3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea' /tmp/A118.txt
+          python tests/test_journal_integrity.py | tee /tmp/A118proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A118proof.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = "dc03c181912ffbb800bc191fbc16ec0d05c335e0"
+      - name: Rerun all C49 source-close and first-contact 39 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c49_original3m_post_contact_directional_close 2>&1 | tee /tmp/C49-39.txt
+          grep -Fq 'Ran 39 tests' /tmp/C49-39.txt
+          grep -qx 'OK' /tmp/C49-39.txt
+      - name: Fresh original Binance USD-M all 45 source ZIP and 3m first later close response source observations
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c49"
+          python "$R/tests/probe_c49_original3m_first_post_4h_contact_45zip.py" "$R/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json" > /tmp/c49source.log 2>&1 || { tail -c 16000 /tmp/c49source.log; exit 1; }
+          tail -c 1400 /tmp/c49source.log
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json')
+          x=json.loads(p.read_text())
+          assert x['original_USDM_45ZIP_source']==45
+          assert x['original_native3m_closed']==76800 and x['original_native15m_exact']==15360
+          assert x['original_C46_4H_source_candidates']==153
+          assert x['original_C46_native3m_first_contacts']==132
+          assert x['market_count']==5
+          assert len(x['preregistered_horizon_ids'])==3
+          for v in x['source_horizon_state_counts'].values(): assert sum(v.values())==153
+          assert x['academic_author_verified_reactions']==x['academic_author_verified_1h_volume_confirmations']==x['original_author_chart_trade_goldens']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C49_FIRST_ORIGINAL_45ZIP_SOURCE',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest(),x['source_horizon_state_counts'])
+          PY
+      - name: Commit only original C49 full source evidence without changing historical journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json' /tmp/staged.txt
+          git commit -m 'evidence(C49): original 45USD-M ZIP 3m closed source favorable adverse post first4H contact'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
