@@ -1,0 +1,80 @@
+name: EMBER C52 freeze complete visually reviewed 49 academic course images and 8 FX headers
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c52-original49-owner-visual-manifest-freeze-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  c52_full_provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently confirm A121 121/121 predecessor SHA and five unchanged evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A121.txt
+          grep -Fq 'entries 121 tip_sha256 5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b' /tmp/A121.txt
+          python tests/test_journal_integrity.py | tee /tmp/A121full.txt
+          grep -Fq '"validations_pass": true' /tmp/A121full.txt
+      - name: Rerun all 43 original academic 49 PNG figure author-negative source tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c52_full_course_visual_49_source_inspection 2>&1 | tee /tmp/C52-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C52-43.txt
+          grep -qx 'OK' /tmp/C52-43.txt
+      - name: Original 49 actual image visual categorical labels, eight observed provider header hashes and no executable author goldens
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c52"
+          python "$R/tests/probe_c52_all49_course_visual_source_binary_witness.py" "$R/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json" > /tmp/C52src.txt 2>&1 || { cat /tmp/C52src.txt; exit 1; }
+          tail -c 1200 /tmp/C52src.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json')
+          j=json.loads(p.read_text())
+          assert len(j['source_figures'])==j['actual_images_visually_read']==49
+          assert j['newly_visually_seen_c52_png_count']==43
+          assert j['chart_category_counts']=={
+            'FULL_CHART_READABLE_EURUSD_SOURCE_HEADER':8,
+            'CROPPED_MARKET_STYLE_CHART_NO_VERIFIABLE_PROVIDER':19,
+            'CONCEPTUAL_OR_COURSE_RULE_DIAGRAM':8,
+            'DESKTOP_SCREENSHOT_NESTED_LESSON_VIEW':14}
+          assert j['source_OANDA_EURUSD_2024_publish_count']==5 and j['source_SAXO_EURUSD_2025_publish_count']==2 and j['source_OANDA_EURUSD_2025_publish_count']==1
+          assert j['local_all49_image_binary_bytes_observed']==14135731
+          assert j['local_all49_image_binary_aggregate_sha256_filename_NUL_perfile_sha_hex_LF']=='842232ca132f836edafbeaac41403d251b0c36449fb17768921ff8b39a7ce696'
+          assert j['private_original_file_content_republished'] is False
+          assert j['full_original_FX_OANDA_SAXO_raw_candles_retrieved'] is False
+          assert j['original_Binance_USDM_2026_data_cannot_be_matched_to_EURUSD_OANDA_SAXO']
+          assert j['these_are_image_publication_times_not_candle_trade_dates']
+          assert j['2023_author_chart_positive_raw_candle_goldens']==j['2023_author_chart_negative_raw_candle_goldens']==j['orders']==j['trades']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C52_SOURCE_ONLY_49_ALL_INSPECTED_FX_HEADERS_8',len(p.read_bytes()),hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Commit ONLY frozen C52 metadata source JSON, never original owner image binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json' /tmp/staged.txt
+          git commit -m 'evidence(C52): freeze 49 directly viewed owner course PNG metadata, 8 observable EURUSD publisher headers no author trades'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
