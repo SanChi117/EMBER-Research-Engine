@@ -1,0 +1,92 @@
+name: EMBER C50 append-once A120 original 45ZIP course causality source gap
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c50-A120-append-once-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  append_a120:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify predecessor A119 exact 119 SHA and three full original C47 C49 C50 Git blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A119.txt
+          grep -Fq 'entries 119 tip_sha256 0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd' /tmp/A119.txt
+          python tests/test_journal_integrity.py | tee /tmp/A119evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A119evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json)" = 'c213c36a2e26caf63d9d65403429d1419a844bd9'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json)" = '66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08'
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json')
+          assert len(p.read_bytes())==282204
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='460bd50cb393c6f3d4fc73d9f204fca6b8dceeec32f27d6f6854983036394826'
+          x=json.loads(p.read_text())
+          assert x['original_Binance_USDM_ZIP_lineage']==45 and x['original_native3m_closed']==76800
+          assert x['original_parent_source_4h_geometry']==153 and x['original_first_native3m_contacts']==132
+          assert x['technical_source_event_classification_counts']=={
+            'NO_ORIGINAL_4H_FIRST_3M_CONTACT':21,
+            'CONTACT_NO_DIRECTIONAL_3M_CLOSE_WITHIN_12H':3,
+            'DIRECTIONAL_CLOSE_NO_LATER_1H_IMB':2,
+            'FIRST_1H_IMB_CLOSED_AFTER_24H_OBSERVATION_WINDOW':23,
+            'FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE':104}
+          assert x['direction_side_by_event_classification']['FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE__FAVORABLE']==78
+          assert x['direction_side_by_event_classification']['FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE__ADVERSE']==26
+          assert x['author_verified_POI_first_test']==x['author_verified_onehour_VC']==x['author_verified_market_entry']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c50_course_route_a_source_causality_gate 2>&1 | tee /tmp/C50neg.txt
+          grep -Fq 'Ran 39 tests' /tmp/C50neg.txt
+          grep -qx 'OK' /tmp/C50neg.txt
+      - name: Append exactly one A120 six source-only course causality proof SHA files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A120 \
+            --cycle B1/C50 \
+            --planned 'Independently challenge treating retrospective 1H classic IMB source as already-known academic 1H VC confirming earlier original3m 4H POI contact reaction, using 9 recovered original course lessons to retain Route A contextual 1H VC vs trigger + 15m entry distinctions' \
+            --executed 'Independent isolated C50 original source join C47 and C49 on identical original 4H candidate side known-ms and original first 3m bar ID known-ms; 12h first later directional 3m close versus 24h first same-side fully closed 1H source knowledge chronology; six no-author-golden academic blockers; 39 negative/source tests x Python 3.10 3.11 3.12; pinned full original 45ZIP source C47 and C49 complete original JSON, full C50 282204-byte source, first CI 40094974447 PASS, second independent fresh complete original45ZIP C47 and C49 plus byte exact C50 CI 40095081674 PASS 4/4.' \
+            --result 'C50 source-only 153 parent source geometries: 21 no first 3m contact, 3 no 12h 3m exit, 2 no later 1H source, 23 earliest 1H source later than 24h, 104 first 3m source boundary closes BEFORE later 1H IMB completion (78 favorable vs technical zone 26 adverse), 0 later 1H source known before those closed 3m departures within bound. These are NOT author POI tests/VC/entry, no trade, no profit, NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous immutable A119 SHA 0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd, original full C47 Git blob b2727f081d8a73f522a97a54b4582507ee969244, C49 Git blob c213c36a2e26caf63d9d65403429d1419a844bd9 unchanged. Initial C50 negative CI 40094714327 FAIL because 5 malformed test constructor fixtures and one absent forged future event; fixed only fixtures, 39x3 Python CI 40094785714 PASS; first frozen full 282204 byte C50 Git blob 66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08 and SHA256 460bd50cb393c6f3d4fc73d9f204fca6b8dceeec32f27d6f6854983036394826 CI 40094974447 PASS. Independent two full original45ZIP replay C47 and C49 plus exact full C50 JSON CI 40095081674 PASS 4/4. No 2023 author chart-to-raw candle golden, source case only, never trade ready.' \
+            --evidence d05/c50_course_route_a_source_causality_gate.py \
+            --evidence d05/test_c50_course_route_a_source_causality_gate.py \
+            --evidence tests/probe_c50_original_course_source_chronology_c47_c49.py \
+            --evidence evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json \
+            --evidence evidence/c50/C50_INDEPENDENT_ORIGINAL_45ZIP_COURSE_CAUSALITY_WITNESS_20261024.json \
+            --evidence cycles/B1_C50_ORIGINAL_C47_C49_ACADEMIC_SOURCE_CAUSAL_GAP_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A120.txt
+          grep -Fq 'entries 120' /tmp/A120.txt
+          python tests/test_journal_integrity.py | tee /tmp/A120evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A120evidence.txt
+      - name: Commit only append-once A120 journal and safely rebase without history rewriting
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C50): append-once A120 six original45ZIP C47 C49 source academic causal gap SHA proofs'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
