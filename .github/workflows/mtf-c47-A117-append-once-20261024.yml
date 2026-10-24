@@ -1,0 +1,89 @@
+name: EMBER C47 append-once A117 independently verified original 4H-to-1H source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c47-A117-append-once-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  append_a117:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently verify accepted A116 116/116 SHA and original C47 complete 322066-byte source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A116.txt
+          grep -Fq 'entries 116 tip_sha256 453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c' /tmp/A116.txt
+          python tests/test_journal_integrity.py | tee /tmp/A116proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A116proof.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json')
+          assert len(p.read_bytes())==322066
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='8760ba25e7c8b85e74a66e481e293ca0d9c43fb0e621a38e72bb3ddbbbc2a72d'
+          a=json.loads(p.read_text())
+          assert a['original_binance_USDM_zip']==45
+          assert a['original_native3m_closed']==76800
+          assert a['original_native1h_closed']==3840
+          assert a['native15m_decimal_equalities']==15360
+          assert a['original_C46_source_4h_candidate_count']==153
+          assert a['original_C46_first3m_contact_count']==132
+          assert a['same_side_later_closed_1h_source_candidate_parent_count']==130
+          assert a['contacted_parent_without_later_same_side_1h_count']==2
+          assert a['academic_author_4h_poi_verified']==a['academic_author_1h_volume_confirmation_verified']==a['academic_author_chart_goldens']==a['trades']==a['orders']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c47_post_4h_contact_1h_imb_source_link 2>&1 | tee /tmp/C47-35.txt
+          grep -Fq 'Ran 35 tests' /tmp/C47-35.txt
+          grep -qx 'OK' /tmp/C47-35.txt
+      - name: Append one A117 source-only original 45ZIP 4H first touch and subsequent 1H proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A117 \
+            --cycle B1/C47 \
+            --planned 'Causal original4H classic three-bar IMB source known before first native3m contact, then only later three fully closed native3m-derived 1H same-side classic IMB technical source, preserving source identities and no academic POI/VC or author trade assertion' \
+            --executed 'Independently recover 1H original3m-backed full three-bar classic IMB source; separately validate strict all three 1H source bars START after 4H first 3m contact CLOSE, source provenance, no future, correct side, immutable C46 full parent IDs, physical-cut asof, 35 negatives times three Python. Fresh download all original 45 Binance USD-M signed ZIP 76800 native3m 3840 full hours 15360 exact15m; first full C47 source CI 40048673466 SUCCESS and second complete 322066-byte JSON byte-exact rerun CI 40048767312 SUCCESS 4/4 jobs.' \
+            --result 'C47 original 4H IMB geometries 153, post-zone 3m contacts 132, post-contact same-side fully closed 1H technical IMB found for 130 parents, not found for 2; all unbounded retrospective source observations, not academic author VC or quality metrics, no trades/orders/fills/PnL, NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'A116 predecessor 116 SHA tip 453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c unchanged and source C46 original full frozen Git blob dc03c181912ffbb800bc191fbc16ec0d05c335e0. First source-negative 35x3 CI 40048587745 PASS; first all 45 original ZIP C47 freeze CI 40048673466 PASS; independent fresh entire 45ZIP byte-exact 322066-byte C47 full JSON CI 40048767312 PASS 4/4, frozen Git blob b2727f081d8a73f522a97a54b4582507ee969244, SHA256 8760ba25e7c8b85e74a66e481e293ca0d9c43fb0e621a38e72bb3ddbbbc2a72d. 130/132 unbounded later sources demonstrates weak discriminating power, NOT 130 successful author-confirmed trades; C48 should test preregistered finite time windows without optimizing profits.' \
+            --evidence d05/c47_post_4h_contact_1h_imb_source_link.py \
+            --evidence d05/test_c47_post_4h_contact_1h_imb_source_link.py \
+            --evidence tests/probe_c47_original_4h_contact_1h_source_45zip.py \
+            --evidence evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json \
+            --evidence evidence/c47/C47_INDEPENDENT_ORIGINAL_SOURCE_WITNESS_20261024.json \
+            --evidence cycles/B1_C47_ORIGINAL_4H_FIRST_CONTACT_TO_1H_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A117.txt
+          grep -Fq 'entries 117' /tmp/A117.txt
+          python tests/test_journal_integrity.py | tee /tmp/A117proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A117proof.txt
+      - name: Commit ONLY append-once A117 journal and rebase/push research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changes.txt
+          test "$(wc -l < /tmp/changes.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changes.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C47): A117 original full 45ZIP native4H touch to later1H source six SHA append-only'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
