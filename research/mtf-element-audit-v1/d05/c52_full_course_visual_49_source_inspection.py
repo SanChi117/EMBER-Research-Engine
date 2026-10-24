@@ -73,8 +73,8 @@ def review_all_original_course_figures(*,author_label_override=None,
     if author_label_override is not None or market_source_override is not None:
         raise ValueError("C52_UNVERIFIED_AUTHOR_LABEL_OR_EXTERNAL_MARKET_SOURCE_PROMOTION")
     sources,old=audited_inventory()
-    if len(sources)!=49 or len(old)!=6 or
-        len(FULL_SOURCE_HEADERS)!=8 or len(CONCEPTUAL_IDS)!=8:
+    if (len(sources)!=49 or len(old)!=6 or
+        len(FULL_SOURCE_HEADERS)!=8 or len(CONCEPTUAL_IDS)!=8):
         raise ValueError("C52_SOURCE_REGISTRY_COUNT_DRIFT")
     if not set(FULL_SOURCE_HEADERS).issubset(sources) or not CONCEPTUAL_IDS.issubset(sources):
         raise ValueError("C52_MISSING_VISUALLY_VERIFIED_COURSE_IMAGE_ID")
