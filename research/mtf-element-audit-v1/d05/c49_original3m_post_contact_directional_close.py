@@ -61,7 +61,7 @@ class C49SourceReview:
     as_of_ms:int
     original_native3m_closed:int
     original_4h_source_candidates:int
-    3m_first_contact_count:int
+    native3m_first_contact_count:int
     window_count:int
     observations:tuple[C49ParentReactionSource,...]
     course_reaction_goldens:int=0
