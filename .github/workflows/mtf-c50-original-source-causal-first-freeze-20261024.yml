@@ -1,0 +1,77 @@
+name: EMBER C50 original frozen 45ZIP C47 C49 course causal identity first freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c50-original-source-causal-first-freeze-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  c50_source_first:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate A119 predecessor SHA + immutable C45 recovered 9 course lessons and full C47/C49 sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a119.txt
+          grep -Fq 'entries 119 tip_sha256 0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd' /tmp/a119.txt
+          python tests/test_journal_integrity.py | tee /tmp/a119-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/a119-evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json)" = 'c213c36a2e26caf63d9d65403429d1419a844bd9'
+      - name: Independently run 39 course-source chronology 1H volume confirmation falsification tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c50_course_route_a_source_causality_gate 2>&1 | tee /tmp/C50neg.txt
+          grep -Fq 'Ran 39 tests' /tmp/C50neg.txt
+          grep -qx 'OK' /tmp/C50neg.txt
+      - name: Cross-join all 153 original C47 and C49 source contexts preserving exact 3m parent source IDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c50"
+          python "$R/tests/probe_c50_original_course_source_chronology_c47_c49.py" "$R/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json" > /tmp/c50-source.txt 2>&1 || { tail -c 13000 /tmp/c50-source.txt; exit 1; }
+          tail -c 1400 /tmp/c50-source.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json')
+          x=json.loads(p.read_text())
+          assert x['original_Binance_USDM_ZIP_lineage']==45 and x['original_native3m_closed']==76800
+          assert x['original_native15m_decimal_equalities']==15360
+          assert x['original_parent_source_4h_geometry']==153 and x['original_first_native3m_contacts']==132
+          assert x['technical_source_event_classification_counts']=={
+           'NO_ORIGINAL_4H_FIRST_3M_CONTACT':21,
+           'CONTACT_NO_DIRECTIONAL_3M_CLOSE_WITHIN_12H':3,
+           'DIRECTIONAL_CLOSE_NO_LATER_1H_IMB':2,
+           'FIRST_1H_IMB_CLOSED_AFTER_24H_OBSERVATION_WINDOW':23,
+           'FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE':104}
+          assert x['author_verified_POI_first_test']==x['author_verified_onehour_VC']==x['author_verified_market_entry']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C50_ORIGINAL_45ZIP_SOURCE_COURSE_GAP_FREEZE',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Commit only fresh complete original frozen C50 causality and academic source semantic gate JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json
+          git diff --cached --name-only | tee /tmp/C50-staged.txt
+          test "$(wc -l < /tmp/C50-staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json' /tmp/C50-staged.txt
+          git commit -m 'evidence(C50): freeze original 45ZIP C47 C49 exact course 1H source causality semantic gap'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
