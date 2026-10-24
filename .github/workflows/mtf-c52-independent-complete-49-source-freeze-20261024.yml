@@ -1,0 +1,87 @@
+name: EMBER C52 independent complete 49 reviewed course figures source manifest
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c52-independent-complete-49-source-freeze-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  c52_negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify predecessor A121 SHA and source evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A121.txt
+          grep -Fq 'entries 121 tip_sha256 5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b' /tmp/A121.txt
+          python tests/test_journal_integrity.py | tee /tmp/A121sha.txt
+          grep -Fq '"validations_pass": true' /tmp/A121sha.txt
+      - name: Independently validate all 43 raw image provenance/no-author-entry goldens tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c52_full_course_visual_49_source_inspection 2>&1 | tee /tmp/C52-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C52-43.txt
+          grep -qx 'OK' /tmp/C52-43.txt
+          ! grep -q 'skipped=' /tmp/C52-43.txt
+  metadata_byte_exact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check exact original C52 full frozen metadata Git blob (not private raw image binary)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json)" = '4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json)" = '66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08'
+      - name: Independently rebuild entire original 49-source metadata JSON and byte-match 52913 bytes exactly
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c52_all49_course_visual_source_binary_witness.py" /tmp/C52-INDEPENDENT-FULL49-SOURCE-ORIGINAL-JSON.json | tee /tmp/C52.txt
+          cmp -s /tmp/C52-INDEPENDENT-FULL49-SOURCE-ORIGINAL-JSON.json "$R/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json"
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json')
+          q=pathlib.Path('/tmp/C52-INDEPENDENT-FULL49-SOURCE-ORIGINAL-JSON.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert len(p.read_bytes())==52913
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='734fe20d117efc7b805ef407ca06ec20af663a0458732a2f4d49c2dbcbd814ec'
+          d=json.loads(p.read_text())
+          assert d['actual_images_visually_read']==49 and d['newly_visually_seen_c52_png_count']==43
+          assert d['chart_category_counts']=={
+              'CONCEPTUAL_OR_COURSE_RULE_DIAGRAM':8,
+              'CROPPED_MARKET_STYLE_CHART_NO_VERIFIABLE_PROVIDER':19,
+              'DESKTOP_SCREENSHOT_NESTED_LESSON_VIEW':14,
+              'FULL_CHART_READABLE_EURUSD_SOURCE_HEADER':8}
+          assert len(d['source_figures'])==49
+          assert len({x['drive_id'] for x in d['source_figures']})==49
+          rows=[x for x in d['source_figures'] if x['visible_instrument']=='EURUSD']
+          assert len(rows)==8
+          assert {x['visible_data_provider'] for x in rows}=={'OANDA','SAXO'}
+          assert all(x['visible_tradingview_publication_timestamp'].startswith(('2024-','2025-')) for x in rows)
+          assert all(x['original_market_bar_timestamp'] is None for x in rows)
+          assert d['original_Binance_USDM_2026_data_cannot_be_matched_to_EURUSD_OANDA_SAXO']
+          assert d['private_original_file_content_republished'] is False
+          assert d['local_all49_image_binary_bytes_observed']==14135731
+          assert d['local_all49_image_binary_aggregate_sha256_filename_NUL_perfile_sha_hex_LF']=='842232ca132f836edafbeaac41403d251b0c36449fb17768921ff8b39a7ce696'
+          assert d['2023_author_chart_positive_raw_candle_goldens']==d['2023_author_chart_negative_raw_candle_goldens']==0
+          assert d['orders']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C52_INDEPENDENT_49_OWNER_SOURCE_FIGURE_METADATA_JSON_BYTE_EXACT_PASS',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
