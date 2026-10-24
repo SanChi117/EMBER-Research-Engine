@@ -13,6 +13,8 @@ Public API documentation (not downloaded price evidence):
 """
 from dataclasses import dataclass
 from decimal import Decimal
+from datetime import datetime
+from urllib.parse import urlparse
 import re
 from c52_full_course_visual_49_source_inspection import (
  FULL_SOURCE_HEADERS,review_all_original_course_figures,CATEGORIES)
@@ -84,15 +86,15 @@ def _validated_receipt(r,*,expected_provider,expected_tf):
         r.provider not in OFFICIAL_DOCUMENTATION or
         r.pricing_component not in PRICE_SIDES):
         raise ValueError("C53_PROVIDER_INSTRUMENT_TF_OR_PRICE_SIDE_MISMATCH")
-    if not r.original_provider_source_endpoint.startswith(
-        "https://") or not (
-        ("oanda" in r.original_provider_source_endpoint.lower() if r.provider=="OANDA"
-        else "saxo" in r.original_provider_source_endpoint.lower())):
+    endpoint=urlparse(r.original_provider_source_endpoint)
+    trusted_hosts=(("api-fxtrade.oanda.com","api-fxpractice.oanda.com")
+          if r.provider=="OANDA" else ("gateway.saxobank.com",))
+    if endpoint.scheme!="https" or endpoint.hostname not in trusted_hosts:
         raise ValueError("C53_CANDLE_SOURCE_ENDPOINT_WRONG_PROVIDER")
     if (not re.fullmatch(r"[a-f0-9]{64}",r.native_source_digest_sha256)
         or not r.source_closed_bar_id or
         type(r.start_ms) is not int or type(r.closed_known_ms) is not int or
-        r.start_ms%TF_MILLIS[r.timeframe] or
+        r.start_ms%(15*60*1000 if r.timeframe=="15M" else HOUR) or
         r.closed_known_ms!=r.start_ms+TF_MILLIS[r.timeframe]):
         raise ValueError("C53_NONCAUSAL_OR_UNTRACEABLE_FX_OHLC_ID")
     raw=[]
@@ -125,6 +127,13 @@ def assess_course_figure_original_fx_source(image_id,*,market_receipt=None,
         raise ValueError("C53_CORRUPTED_C52_FX_SOURCE_HEADER")
     if market_receipt is not None:
         _validated_receipt(market_receipt,expected_provider=provider,expected_tf=tf)
+        # Screenshot PUBLICATION limits possible visible market bars.
+        # A 2026 OANDA candle can NEVER validate an image published in 2024.
+        published=datetime.strptime(
+            fig.visible_tradingview_publication_timestamp,
+            "%Y-%m-%d %H:%M UTC%z")
+        if market_receipt.closed_known_ms>int(published.timestamp()*1000):
+            raise ValueError("C53_MARKET_BAR_KNOWN_AFTER_SCREENSHOT_PUBLICATION")
     return CourseOriginalFxSourceGate(image_id,provider,fig.visible_instrument,
         tf,fig.visible_tradingview_publication_timestamp,
         market_receipt is not None,STATES[int(market_receipt is not None)])
