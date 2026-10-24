@@ -1,0 +1,41 @@
+name: EMBER C48 6h 24h 72h future-masked technical 1H source windows negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c48-adapted-1h-source-window-negative-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/c48_adapted_post_contact_1h_source_windows.py'
+      - 'research/mtf-element-audit-v1/d05/test_c48_adapted_post_contact_1h_source_windows.py'
+permissions:
+  contents: read
+jobs:
+  negative_windows:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify immutable A117 117 SHA and frozen original C47
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A117.txt
+          grep -Fq 'entries 117 tip_sha256 5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be' /tmp/A117.txt
+          python tests/test_journal_integrity.py | tee /tmp/A117evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A117evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+      - name: Run all 36 C48 no-lookahead 6h 24h 72h finite source window tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c48_adapted_post_contact_1h_source_windows 2>&1 | tee /tmp/C48.txt
+          grep -Fq 'Ran 36 tests' /tmp/C48.txt
+          grep -qx 'OK' /tmp/C48.txt
+          ! grep -q 'skipped=' /tmp/C48.txt
