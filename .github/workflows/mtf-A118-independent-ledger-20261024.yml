@@ -1,0 +1,69 @@
+name: EMBER C48 independent final A118 118 SHA three source windows
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A118-independent-ledger-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  verify_a118:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify A001-A118 SHA ledger and six immutable C48 evidence bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A118.txt
+          grep -Fq 'entries 118 tip_sha256 3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea' /tmp/A118.txt
+          python tests/test_journal_integrity.py | tee /tmp/A118evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A118evidence.txt
+          python - <<'PY'
+          import json,hashlib,pathlib
+          j=[json.loads(v) for v in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==118
+          before,now=j[-2:]
+          assert before['action_id']=='A117' and before['record_sha256']=='5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be'
+          assert now['action_id']=='A118' and now['seq']==118 and now['prev_sha256']==before['record_sha256']
+          assert now['record_sha256']=='3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea'
+          assert now['cycle']=='B1/C48' and now['verdict']=='DONE' and now['cycle_result']=='PASSED'
+          assert len(now['evidence'])==6
+          for e in now['evidence']:
+              buf=pathlib.Path(e['path']).read_bytes()
+              assert len(buf)==e['bytes'] and hashlib.sha256(buf).hexdigest()==e['sha256']
+          p=pathlib.Path('evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json')
+          assert len(p.read_bytes())==406626
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='3ffeb1728cd2cda3ef6a87e5a22fc283bfc957b2b15e465ec0e59110dff952f8'
+          a=json.loads(p.read_text())
+          assert a['source_original_USDM_zip_lineage']==45
+          assert a['source_native3m_closed']==76800 and a['source_native1h_closed']==3840
+          assert a['source_native15m_exact_Decimal']==15360
+          assert a['original_4h_poi_source_candidates_not_author_labeled']==153
+          assert a['original_3m_first_contacts_not_author_labeled']==132
+          assert a['unbounded_later_1h_technical_IMB_parents_not_VC']==130
+          assert a['per_policy_passed_source_counts']=={
+            'C48_ADAPTED_6H_POST_CONTACT_1H_CLOSE_V1':27,
+            'C48_ADAPTED_24H_POST_CONTACT_1H_CLOSE_V1':106,
+            'C48_ADAPTED_72H_POST_CONTACT_1H_CLOSE_V1':130}
+          assert a['course_author_poi_goldens']==a['course_author_1h_vc_goldens']==a['order_count']==a['trade_count']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C48_A118_INDEPENDENT_118_SHA_AND_ALL_SIX_SOURCE_ONLY_EVIDENCE_PASS')
+          PY
+      - name: Independently rerun all 36 C48 no-lookahead adapted 6 24 72h eligibility tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c48_adapted_post_contact_1h_source_windows 2>&1 | tee /tmp/C48neg.txt
+          grep -Fq 'Ran 36 tests' /tmp/C48neg.txt
+          grep -qx 'OK' /tmp/C48neg.txt
+          ! grep -q 'skipped=' /tmp/C48neg.txt
