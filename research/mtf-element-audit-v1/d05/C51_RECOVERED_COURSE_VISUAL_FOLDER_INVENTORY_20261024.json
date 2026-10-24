@@ -1,0 +1,504 @@
+{
+  "schema": "EMBER_C51_RETRIEVED_ACADEMIC_DRIVE_VISUAL_SOURCE_INVENTORY_V1",
+  "date_utc": "2026-10-24",
+  "source_system": "Authenticated user Google Drive direct folders",
+  "source_purpose": "Recover previously overlooked visual course examples without claiming unverified 2023 chart-to-candle goldens",
+  "discovery_method": "Exact authenticated folder URLs returned by Google Drive search, each folder enumerated with list_folder top_k 100",
+  "coverage": "SEVEN_GROUNDED_FOLDERS_ONLY_NOT_PROOF_ENTIRE_COURSE_ARCHIVED",
+  "folder_count": 7,
+  "unique_direct_image_png_count": 49,
+  "inspect_sample_count": 6,
+  "source_text_c45_nine_actual_course_lessons_retained": true,
+  "folder_inventories": [
+    {
+      "name": "POI",
+      "folder_id": "1zTtDPok57ZUFlvDEgylzawe-lT3wX-qQ",
+      "folder_url": "https://drive.google.com/drive/folders/1zTtDPok57ZUFlvDEgylzawe-lT3wX-qQ",
+      "total_direct_items": 31,
+      "files": [
+        {
+          "id": "1TkRlW9atcwqTjT6eS7xMOqqNzud_0qJh",
+          "name": "Untitled (23).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1TkRlW9atcwqTjT6eS7xMOqqNzud_0qJh/view?usp=drivesdk"
+        },
+        {
+          "id": "1_f_EEaMnRuTmBCx7fcrryM0w2OSpvU7k",
+          "name": "Untitled (22).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1_f_EEaMnRuTmBCx7fcrryM0w2OSpvU7k/view?usp=drivesdk"
+        },
+        {
+          "id": "1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b",
+          "name": "image (5).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b/view?usp=drivesdk"
+        },
+        {
+          "id": "1F0LLCklPaPNCBWHwVpsKUPqp1hdsh35p",
+          "name": "image (4).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1F0LLCklPaPNCBWHwVpsKUPqp1hdsh35p/view?usp=drivesdk"
+        },
+        {
+          "id": "1b78gDdyIZO21QWoKKRUK47PbYyq35U3C",
+          "name": "image (3).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1b78gDdyIZO21QWoKKRUK47PbYyq35U3C/view?usp=drivesdk"
+        },
+        {
+          "id": "15vA7Iz6nu1MoeLcLSQSiD2O5shJa9RbU",
+          "name": "image (2).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/15vA7Iz6nu1MoeLcLSQSiD2O5shJa9RbU/view?usp=drivesdk"
+        },
+        {
+          "id": "1L7sXn8-RHn7p1J8-8qDs8XbRDyCJYoDN",
+          "name": "image (1).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1L7sXn8-RHn7p1J8-8qDs8XbRDyCJYoDN/view?usp=drivesdk"
+        },
+        {
+          "id": "19_U7tNBtOS4SOZvv80HodXPhcnK8weah",
+          "name": "Untitled (21).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/19_U7tNBtOS4SOZvv80HodXPhcnK8weah/view?usp=drivesdk"
+        },
+        {
+          "id": "1ajusMiZ_ol0REwlMjE6ld8iqjM60-9oR",
+          "name": "Untitled (20).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1ajusMiZ_ol0REwlMjE6ld8iqjM60-9oR/view?usp=drivesdk"
+        },
+        {
+          "id": "1uCRf6_uVB9cMAbMgKEaqVYvgNDsO0qkf",
+          "name": "Untitled (19).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1uCRf6_uVB9cMAbMgKEaqVYvgNDsO0qkf/view?usp=drivesdk"
+        },
+        {
+          "id": "18zENq_cRtC307GXSHRxRpUqHVZe2N4Kn",
+          "name": "Untitled (18).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/18zENq_cRtC307GXSHRxRpUqHVZe2N4Kn/view?usp=drivesdk"
+        },
+        {
+          "id": "1VEFjMdf947pGviHfbdCJDIoRwZ6dCvjC",
+          "name": "Untitled (17).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1VEFjMdf947pGviHfbdCJDIoRwZ6dCvjC/view?usp=drivesdk"
+        },
+        {
+          "id": "1Qa6fxonLzWkxbxTPO3jo5oNJ3DNeCVdd",
+          "name": "Slide 16_9 - 492.png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1Qa6fxonLzWkxbxTPO3jo5oNJ3DNeCVdd/view?usp=drivesdk"
+        },
+        {
+          "id": "16FAvYNlgUccCvUGkZIv8iRZqhXCzDpYl",
+          "name": "Untitled (16).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/16FAvYNlgUccCvUGkZIv8iRZqhXCzDpYl/view?usp=drivesdk"
+        },
+        {
+          "id": "1fbJjatTOxxMvCR-zkAR9B6RoeEdxId1u",
+          "name": "Untitled (15).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1fbJjatTOxxMvCR-zkAR9B6RoeEdxId1u/view?usp=drivesdk"
+        },
+        {
+          "id": "1rclcfEFbs9WDkPGlQyuHH1zsQUW1PnEf",
+          "name": "Untitled (14).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1rclcfEFbs9WDkPGlQyuHH1zsQUW1PnEf/view?usp=drivesdk"
+        },
+        {
+          "id": "194E8ujJ516owjhNh2XT8rvrA4GPVeeir",
+          "name": "Untitled (13).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/194E8ujJ516owjhNh2XT8rvrA4GPVeeir/view?usp=drivesdk"
+        },
+        {
+          "id": "16vCNQUWXniT2bGAeEO9I9JueQuFNQmVD",
+          "name": "Untitled (12).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/16vCNQUWXniT2bGAeEO9I9JueQuFNQmVD/view?usp=drivesdk"
+        },
+        {
+          "id": "1edU35FIxzsbErBIpv-2Or_GLhWO4zKLT",
+          "name": "Untitled (11).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1edU35FIxzsbErBIpv-2Or_GLhWO4zKLT/view?usp=drivesdk"
+        },
+        {
+          "id": "1IwN9b1dLQFj1_pPKE8RA-wqMdMf1UBo-",
+          "name": "Slide 16_9 - 502.png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1IwN9b1dLQFj1_pPKE8RA-wqMdMf1UBo-/view?usp=drivesdk"
+        },
+        {
+          "id": "10eGpOY9DkYpV1vbbOymoWZ0PaSCvI_GX",
+          "name": "Untitled (10).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/10eGpOY9DkYpV1vbbOymoWZ0PaSCvI_GX/view?usp=drivesdk"
+        },
+        {
+          "id": "1xZkgxbf2BavbIbgQfeG2kx22ox_cj1Sm",
+          "name": "Untitled (9).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1xZkgxbf2BavbIbgQfeG2kx22ox_cj1Sm/view?usp=drivesdk"
+        },
+        {
+          "id": "11eRdDeQgRZHjFb5n9Vf4yG0rcQhC9Qpz",
+          "name": "Untitled (8).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/11eRdDeQgRZHjFb5n9Vf4yG0rcQhC9Qpz/view?usp=drivesdk"
+        },
+        {
+          "id": "1diTa_JRkdAmTi6n15fntUj0Lx-8O9s9K",
+          "name": "Untitled (7).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1diTa_JRkdAmTi6n15fntUj0Lx-8O9s9K/view?usp=drivesdk"
+        },
+        {
+          "id": "1F_pTX-icMg_bKv4kV5KGBCDLZBAIHoKb",
+          "name": "Untitled (6).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1F_pTX-icMg_bKv4kV5KGBCDLZBAIHoKb/view?usp=drivesdk"
+        },
+        {
+          "id": "1m_Dbbs1XrkPGh4y3TY7czaLGRCBc_z71",
+          "name": "fvg.png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1m_Dbbs1XrkPGh4y3TY7czaLGRCBc_z71/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m",
+          "name": "5. Support And Resistance .txt"
+        },
+        {
+          "id": "102w8UWvfGgS_ZMc-fD3xc6b7-AZ3IBg5",
+          "name": "4. Order Block.txt"
+        },
+        {
+          "id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+          "name": "3. Rejection Block.txt"
+        },
+        {
+          "id": "1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN",
+          "name": "Fair Value Gap  Imbalance.txt"
+        },
+        {
+          "id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+          "name": "POI.txt"
+        }
+      ],
+      "child_folders": []
+    },
+    {
+      "name": "ENTRY_MODEL_LOGIC",
+      "folder_id": "1ZLSbVT4IylIiwU1qPpff3dZW5eBxaLNW",
+      "folder_url": "https://drive.google.com/drive/folders/1ZLSbVT4IylIiwU1qPpff3dZW5eBxaLNW",
+      "total_direct_items": 14,
+      "files": [
+        {
+          "id": "12k5YK1GyzeIT1oFXpnVFKNL-zvKFTXOX",
+          "name": "Снимок экрана (2093).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/12k5YK1GyzeIT1oFXpnVFKNL-zvKFTXOX/view?usp=drivesdk"
+        },
+        {
+          "id": "1Yv1Q--0aKYGqVHYlBNdTEFHtXg-04r79",
+          "name": "Снимок экрана (2092).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1Yv1Q--0aKYGqVHYlBNdTEFHtXg-04r79/view?usp=drivesdk"
+        },
+        {
+          "id": "15iGjZdGhX-ScEB1TXyMxnvD5LHS8CnJT",
+          "name": "Untitled (47).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/15iGjZdGhX-ScEB1TXyMxnvD5LHS8CnJT/view?usp=drivesdk"
+        },
+        {
+          "id": "1YziNr_aqDbfUMhrt1b5zfg31yrFR-qCR",
+          "name": "Untitled (46).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1YziNr_aqDbfUMhrt1b5zfg31yrFR-qCR/view?usp=drivesdk"
+        },
+        {
+          "id": "1tJW5eTs2TRK2mYTOgQxPJtcnSz41-DIP",
+          "name": "Untitled (45).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1tJW5eTs2TRK2mYTOgQxPJtcnSz41-DIP/view?usp=drivesdk"
+        },
+        {
+          "id": "1OeV2mNl-nlbvGNPPJYiFVtDSnB3lFCC3",
+          "name": "Untitled (44).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1OeV2mNl-nlbvGNPPJYiFVtDSnB3lFCC3/view?usp=drivesdk"
+        },
+        {
+          "id": "1obj4bBVqplvrL2E_iNHXOHoOaDhj5gKx",
+          "name": "Untitled (43).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1obj4bBVqplvrL2E_iNHXOHoOaDhj5gKx/view?usp=drivesdk"
+        },
+        {
+          "id": "1HuwTCxVYvm_YSmaPpZ2RxD7PA9UuzwtC",
+          "name": "Untitled (42).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1HuwTCxVYvm_YSmaPpZ2RxD7PA9UuzwtC/view?usp=drivesdk"
+        },
+        {
+          "id": "153eXt9lGrrhRumOfFsLQryS-3FBBX8Vl",
+          "name": "Untitled (41).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/153eXt9lGrrhRumOfFsLQryS-3FBBX8Vl/view?usp=drivesdk"
+        },
+        {
+          "id": "1IhQMc8F6Ir1ZXA2Ymit3RGIhhu0T-OWg",
+          "name": "Untitled (40).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1IhQMc8F6Ir1ZXA2Ymit3RGIhhu0T-OWg/view?usp=drivesdk"
+        },
+        {
+          "id": "1FdyrtyZYzYcw_y2MZn_s6jrknQjiWR5L",
+          "name": "Untitled (39).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1FdyrtyZYzYcw_y2MZn_s6jrknQjiWR5L/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+          "name": "2. Entry by IMB & SNR.txt"
+        }
+      ],
+      "child_folders": [
+        {
+          "id": "1UIdJbqQqesYLW_XjBcDRaqbiB5a13rpr",
+          "name": "3. Entry by Inducement [IDM]"
+        },
+        {
+          "id": "10vLM9oodqyas33ohhcW4tbQVFUvKltHV",
+          "name": "4. Entry By BOS"
+        }
+      ]
+    },
+    {
+      "name": "IDM_ENTRY",
+      "folder_id": "1UIdJbqQqesYLW_XjBcDRaqbiB5a13rpr",
+      "folder_url": "https://drive.google.com/drive/folders/1UIdJbqQqesYLW_XjBcDRaqbiB5a13rpr",
+      "total_direct_items": 4,
+      "files": [
+        {
+          "id": "1SEn0TcoqatPW03kVst6lcSI-6NbAVCq8",
+          "name": "Снимок экрана (2100).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1SEn0TcoqatPW03kVst6lcSI-6NbAVCq8/view?usp=drivesdk"
+        },
+        {
+          "id": "1Jhd2LCveoFZc4QFOf34NGAm7aqL-JgV1",
+          "name": "Снимок экрана (2099).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1Jhd2LCveoFZc4QFOf34NGAm7aqL-JgV1/view?usp=drivesdk"
+        },
+        {
+          "id": "1BAvuLqkNRgAqNnAkanKPH0DERDUWMziv",
+          "name": "Снимок экрана (2098).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1BAvuLqkNRgAqNnAkanKPH0DERDUWMziv/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs",
+          "name": "3. Entry by Inducement [IDM].txt"
+        }
+      ],
+      "child_folders": []
+    },
+    {
+      "name": "BOS_ENTRY",
+      "folder_id": "10vLM9oodqyas33ohhcW4tbQVFUvKltHV",
+      "folder_url": "https://drive.google.com/drive/folders/10vLM9oodqyas33ohhcW4tbQVFUvKltHV",
+      "total_direct_items": 2,
+      "files": [
+        {
+          "id": "1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ",
+          "name": "Снимок экрана (2102).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "1wwGRmEo-3sNd9EHqmyKCVdevusQc-2SO",
+          "name": "4. Entry By BOS.txt"
+        }
+      ],
+      "child_folders": []
+    },
+    {
+      "name": "STRONG_HIGH_LOW",
+      "folder_id": "1w9sPKjvZrURTJUTPGlELC8vNLHHGs2s8",
+      "folder_url": "https://drive.google.com/drive/folders/1w9sPKjvZrURTJUTPGlELC8vNLHHGs2s8",
+      "total_direct_items": 3,
+      "files": [
+        {
+          "id": "1sOAN3n6ZeplmYcJOYcmr_tSeuXnR4PDE",
+          "name": "Снимок экрана (2144).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1sOAN3n6ZeplmYcJOYcmr_tSeuXnR4PDE/view?usp=drivesdk"
+        },
+        {
+          "id": "1gBx_bPk5jmD3LqrIORU5ZnECF5Q6sLnv",
+          "name": "Снимок экрана (2143).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1gBx_bPk5jmD3LqrIORU5ZnECF5Q6sLnv/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+          "name": "Strong High & Low.txt"
+        }
+      ],
+      "child_folders": []
+    },
+    {
+      "name": "IDM_ELEMENT",
+      "folder_id": "1xwot5OWwAhhP33pMpWJZUcJVCT02I_Lb",
+      "folder_url": "https://drive.google.com/drive/folders/1xwot5OWwAhhP33pMpWJZUcJVCT02I_Lb",
+      "total_direct_items": 3,
+      "files": [
+        {
+          "id": "1x8JhP_5RxFtpcFdFFeLPF1en3GvRBhGk",
+          "name": "Снимок экрана (2142).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1x8JhP_5RxFtpcFdFFeLPF1en3GvRBhGk/view?usp=drivesdk"
+        },
+        {
+          "id": "1dUIzehpUBZaEt-geVUL3DqjfzskgnTsb",
+          "name": "Снимок экрана (2141).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1dUIzehpUBZaEt-geVUL3DqjfzskgnTsb/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "1CJaLi_rssYaf_EupYUgz63s95nukvZRb",
+          "name": "Inducement   IDM.txt"
+        }
+      ],
+      "child_folders": []
+    },
+    {
+      "name": "SESSION_LIQUIDITY_CONTEXT",
+      "folder_id": "1ajc3skl_m8YnZBehNfEoy3Lyti700TRK",
+      "folder_url": "https://drive.google.com/drive/folders/1ajc3skl_m8YnZBehNfEoy3Lyti700TRK",
+      "total_direct_items": 6,
+      "files": [
+        {
+          "id": "1b_LBYgVCYgQv9A5NS-NnW2pSF5Y6UmN7",
+          "name": "Снимок экрана (2130).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1b_LBYgVCYgQv9A5NS-NnW2pSF5Y6UmN7/view?usp=drivesdk"
+        },
+        {
+          "id": "1n6fcNDacbef6Hd4cdHalxgw9bhCpB-jC",
+          "name": "Снимок экрана (2129).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1n6fcNDacbef6Hd4cdHalxgw9bhCpB-jC/view?usp=drivesdk"
+        },
+        {
+          "id": "1CLE1pTWoXcpE3srnkEjd0fFcHtxqD3GC",
+          "name": "Снимок экрана (2128).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1CLE1pTWoXcpE3srnkEjd0fFcHtxqD3GC/view?usp=drivesdk"
+        },
+        {
+          "id": "1OABu44bbT0f2wc3u46ZnqpEMfqVaEL39",
+          "name": "Снимок экрана (2127).png",
+          "mime_type": "image/png",
+          "drive_url": "https://drive.google.com/file/d/1OABu44bbT0f2wc3u46ZnqpEMfqVaEL39/view?usp=drivesdk"
+        }
+      ],
+      "text_refs": [
+        {
+          "id": "1HqGlqYUZptdNvOVLBHftx03XYASvo9MZ",
+          "name": "PDPWPM High&Low. Session Liquidity.txt"
+        }
+      ],
+      "child_folders": [
+        {
+          "id": "1lThQtV39d9HkISTF3fayaJdB0kO8-gfY",
+          "name": "типы сесий"
+        }
+      ]
+    }
+  ],
+  "inspected_samples": [
+    {
+      "id": "1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ",
+      "folder": "BOS_ENTRY",
+      "visual_kind": "DESKTOP_SCREENSHOT_WITH_NESTED_DOCUMENT_NOT_EXTRACTED_GOLDEN",
+      "inspected": true,
+      "author_annotated_raw_candle_golden_verified": false
+    },
+    {
+      "id": "1TkRlW9atcwqTjT6eS7xMOqqNzud_0qJh",
+      "folder": "POI",
+      "visual_kind": "CONCEPTUAL_CANDLE_DIAGRAM_NO_RAW_CANDLE_KEY",
+      "inspected": true,
+      "author_annotated_raw_candle_golden_verified": false
+    },
+    {
+      "id": "12k5YK1GyzeIT1oFXpnVFKNL-zvKFTXOX",
+      "folder": "ENTRY_MODEL_LOGIC",
+      "visual_kind": "DESKTOP_SCREENSHOT_WITH_NESTED_COURSE_FIGURES_NOT_GOLDEN",
+      "inspected": true,
+      "author_annotated_raw_candle_golden_verified": false
+    },
+    {
+      "id": "1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b",
+      "folder": "POI",
+      "visual_kind": "CHART_WITH_ANNOTATION_NO_VERIFIED_EXCHANGE_SYMBOL_TIMEFRAME_DATE",
+      "inspected": true,
+      "author_annotated_raw_candle_golden_verified": false
+    },
+    {
+      "id": "15iGjZdGhX-ScEB1TXyMxnvD5LHS8CnJT",
+      "folder": "ENTRY_MODEL_LOGIC",
+      "visual_kind": "CONCEPTUAL_ROUTING_DIAGRAM_NO_NATIVE_CANDLE_TIMESTAMP",
+      "inspected": true,
+      "author_annotated_raw_candle_golden_verified": false
+    },
+    {
+      "id": "1sOAN3n6ZeplmYcJOYcmr_tSeuXnR4PDE",
+      "folder": "STRONG_HIGH_LOW",
+      "visual_kind": "DESKTOP_SCREENSHOT_NESTED_TWO_FIGURES_NOT_NATIVE_GOLDEN",
+      "inspected": true,
+      "author_annotated_raw_candle_golden_verified": false
+    }
+  ],
+  "confirmed_author_candle_goldens": 0,
+  "confirmed_positive_route_entry_goldens": 0,
+  "confirmed_negative_route_entry_goldens": 0,
+  "confirmed_original_market_source_chart_bindings": 0,
+  "image_binary_copied_to_public_repository": false,
+  "missing_for_positive_golden": [
+    "author screenshot chart identifies ticker/exchange and source timeframe",
+    "actual example time interval and candle open/close timestamps",
+    "original raw market OHLC data of corresponding author example period",
+    "POI first test location and source parent class",
+    "subsequent 1H trigger or 1H contextual VC path",
+    "15m entry VC if required; instructor objective StrongHL, FTA and stop",
+    "independently reviewed negative examples"
+  ],
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
