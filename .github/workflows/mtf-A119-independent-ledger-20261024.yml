@@ -1,0 +1,72 @@
+name: EMBER C49 independent final A119 119 SHA original 45ZIP 3m source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A119-independent-ledger-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  verify_119:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify all A001-A119 chained SHA and exact six C49 original source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A119.txt
+          grep -Fq 'entries 119 tip_sha256 0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd' /tmp/A119.txt
+          python tests/test_journal_integrity.py | tee /tmp/A119evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A119evidence.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          j=[json.loads(line) for line in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==119
+          prev,x=j[-2:]
+          assert prev['action_id']=='A118' and prev['record_sha256']=='3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea'
+          assert x['action_id']=='A119' and x['seq']==119
+          assert x['prev_sha256']==prev['record_sha256']
+          assert x['record_sha256']=='0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd'
+          assert x['cycle']=='B1/C49' and x['verdict']=='DONE' and x['cycle_result']=='PASSED'
+          assert len(x['evidence'])==6
+          for ev in x['evidence']:
+              raw=pathlib.Path(ev['path']).read_bytes()
+              assert len(raw)==ev['bytes'] and hashlib.sha256(raw).hexdigest()==ev['sha256']
+          path=pathlib.Path('evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json')
+          assert len(path.read_bytes())==463807
+          assert hashlib.sha256(path.read_bytes()).hexdigest()=='e1315222e3bf492580abb435998bb79235d0db6e787f456cd03cccb2fafd7597'
+          a=json.loads(path.read_text())
+          assert a['original_USDM_45ZIP_source']==45
+          assert a['original_native3m_closed']==76800 and a['original_native15m_exact']==15360
+          assert a['original_C46_4H_source_candidates']==153 and a['original_C46_native3m_first_contacts']==132
+          assert a['source_horizon_state_counts']['C49_ADAPTED_1H_FIRST_LATER_3M_CLOSE_V1']=={
+              'FIRST_LATER_ADVERSE_3M_CLOSE':25,'FIRST_LATER_FAVORABLE_3M_CLOSE':97,
+              'NO_LATER_DIRECTIONAL_CLOSE_HORIZON_COMPLETE':10,'NO_PARENT_4H_FIRST_CONTACT_AS_OF':21}
+          assert a['source_horizon_state_counts']['C49_ADAPTED_4H_FIRST_LATER_3M_CLOSE_V1']=={
+              'FIRST_LATER_ADVERSE_3M_CLOSE':28,'FIRST_LATER_FAVORABLE_3M_CLOSE':100,
+              'NO_LATER_DIRECTIONAL_CLOSE_HORIZON_COMPLETE':4,'NO_PARENT_4H_FIRST_CONTACT_AS_OF':21}
+          assert a['source_horizon_state_counts']['C49_ADAPTED_12H_FIRST_LATER_3M_CLOSE_V1']=={
+              'FIRST_LATER_ADVERSE_3M_CLOSE':29,'FIRST_LATER_FAVORABLE_3M_CLOSE':100,
+              'NO_LATER_DIRECTIONAL_CLOSE_HORIZON_COMPLETE':3,'NO_PARENT_4H_FIRST_CONTACT_AS_OF':21}
+          assert a['academic_author_verified_reactions']==a['academic_author_verified_1h_volume_confirmations']==a['original_author_chart_trade_goldens']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C49_A119_INDEPENDENT_ALL_119_SHA_SIX_SOURCE_FILES_VERIFIED')
+          PY
+      - name: Independently rerun all 39 negative original3m later strict-close and no-lookahead source checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c49_original3m_post_contact_directional_close 2>&1 | tee /tmp/C49-39.txt
+          grep -Fq 'Ran 39 tests' /tmp/C49-39.txt
+          grep -qx 'OK' /tmp/C49-39.txt
+          ! grep -q 'skipped=' /tmp/C49-39.txt
