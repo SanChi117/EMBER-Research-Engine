@@ -1,0 +1,91 @@
+name: EMBER C48 append-once A118 bounded 6h 24h 72h source proof
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c48-A118-append-once-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  append_a118:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify prior independent A117 117 SHA evidence and full original C48 source window matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A117.txt
+          grep -Fq 'entries 117 tip_sha256 5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be' /tmp/A117.txt
+          python tests/test_journal_integrity.py | tee /tmp/A117proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A117proof.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json)" = 'ebd6acd799c1b2424b61b844222d11d50a51afc7'
+          python - <<'PY'
+          import hashlib,pathlib,json
+          p=pathlib.Path('evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json')
+          assert len(p.read_bytes())==406626
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='3ffeb1728cd2cda3ef6a87e5a22fc283bfc957b2b15e465ec0e59110dff952f8'
+          x=json.loads(p.read_text())
+          assert x['source_original_USDM_zip_lineage']==45
+          assert x['source_native3m_closed']==76800 and x['source_native1h_closed']==3840
+          assert x['source_native15m_exact_Decimal']==15360
+          assert x['original_4h_poi_source_candidates_not_author_labeled']==153
+          assert x['original_3m_first_contacts_not_author_labeled']==132
+          assert x['unbounded_later_1h_technical_IMB_parents_not_VC']==130
+          assert x['per_policy_passed_source_counts']=={
+            'C48_ADAPTED_6H_POST_CONTACT_1H_CLOSE_V1':27,
+            'C48_ADAPTED_24H_POST_CONTACT_1H_CLOSE_V1':106,
+            'C48_ADAPTED_72H_POST_CONTACT_1H_CLOSE_V1':130}
+          assert x['course_author_poi_goldens']==x['course_author_1h_vc_goldens']==x['order_count']==x['trade_count']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c48_adapted_post_contact_1h_source_windows 2>&1 | tee /tmp/C48neg.txt
+          grep -Fq 'Ran 36 tests' /tmp/C48neg.txt
+          grep -qx 'OK' /tmp/C48neg.txt
+      - name: Append A118 exactly six research-only C48 source SHA evidence records
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A118 \
+            --cycle B1/C48 \
+            --planned 'Preregister three independent 6h 24h 72h ADAPTED source-time hypotheses from original closed native3m first 4H IMB contact to third fully closed 1H IMB candidate with strict as-of nonfuture masking and no academic course VC/POI promotion' \
+            --executed 'Separate C48 fail-closed source-window module, 36 causal negative/synthetic tests each Python 3.10 3.11 3.12, original C47 whole 45ZIP-derived 322066-byte parent source exact, 153 4H source candidates 132 first contacts 130 unbounded 1H technical candidates, all 153x3 finite source classifications, first output CI 40049325839 SUCCESS full 406626-byte frozen C48 JSON; independently re-download 45 original Binance USD-M ZIP and full C47 replay plus byte exact full C48 window matrix CI 40049394589 SUCCESS 4/4.' \
+            --result 'C48 technical source eligibility after 4H contact: 6h 27, 24h 106, 72h 130 of 132 observed original contacts; two no later 1H candidates right-censored near sample end at 24/72h, zero author POI/VC goldens, 0 orders/trades/PnL. Historical source research only, no fitted profitability, NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'A117 predecessor 117/117 SHA tip 5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be and original C47 full Git blob b2727f081d8a73f522a97a54b4582507ee969244 unchanged. 36x3 source window negatives CI 40049185784 SUCCESS. First publication CI 40049267228 failed due raw Python tuple vs JSON list equality in frozen current audit probe; fixed solely JSON normalization in evidence assertion, not rule logic. First full C48 frozen CI 40049325839 PASS; independent complete 45 original ZIP and full 406626-byte byte-equal C48 source JSON CI 40049394589 PASS 4/4; frozen Git blob ebd6acd799c1b2424b61b844222d11d50a51afc7 SHA256 3ffeb1728cd2cda3ef6a87e5a22fc283bfc957b2b15e465ec0e59110dff952f8. 6/24/72h explicitly ADAPTED time bounds not course original rules, NOT predicted trades.' \
+            --evidence d05/c48_adapted_post_contact_1h_source_windows.py \
+            --evidence d05/test_c48_adapted_post_contact_1h_source_windows.py \
+            --evidence tests/probe_c48_original_c47_bounded_1h_windows.py \
+            --evidence evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json \
+            --evidence evidence/c48/C48_INDEPENDENT_45ZIP_SOURCE_WINDOW_WITNESS_20261024.json \
+            --evidence cycles/B1_C48_ADAPTED_6_24_72H_SOURCE_WINDOW_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A118.txt
+          grep -Fq 'entries 118' /tmp/A118.txt
+          python tests/test_journal_integrity.py | tee /tmp/A118proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A118proof.txt
+      - name: Commit ONLY A118 append-once journal and rebase without force push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changes.txt
+          test "$(wc -l < /tmp/changes.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changes.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C48): append-once A118 six original 45ZIP adapted source-window SHA proofs'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
