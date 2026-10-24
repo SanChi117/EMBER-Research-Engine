@@ -1,0 +1,82 @@
+name: EMBER C48 independent original 45ZIP bounded post-contact 1H source window audit
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c48-independent-original-45zip-window-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify complete A117 117 SHA and original C47 input blob
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a117.txt
+          grep -Fq 'entries 117 tip_sha256 5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be' /tmp/a117.txt
+          python tests/test_journal_integrity.py | tee /tmp/A117evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A117evidence.txt
+      - name: Independently rerun all 36 preregistered source-window and time-prefix tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c48_adapted_post_contact_1h_source_windows 2>&1 | tee /tmp/c48.txt
+          grep -Fq 'Ran 36 tests' /tmp/c48.txt
+          grep -qx 'OK' /tmp/c48.txt
+          ! grep -q 'skipped=' /tmp/c48.txt
+  independent_complete_original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify Git blob of first frozen C48, unchanged C46 and C47 complete original sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json)" = 'ebd6acd799c1b2424b61b844222d11d50a51afc7'
+      - name: Fresh replay entire original 45 ZIP C47 parent and independently repeat complete C48 original source bound JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c47_original_4h_contact_1h_source_45zip.py" /tmp/C48-INDEPENDENT-REPLAY-PARENT-C47.json > /tmp/c47parent.log 2>&1 || { tail -c 11000 /tmp/c47parent.log; exit 1; }
+          cmp -s /tmp/C48-INDEPENDENT-REPLAY-PARENT-C47.json "$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json"
+          python "$R/tests/probe_c48_original_c47_bounded_1h_windows.py" /tmp/C48-INDEPENDENT-6-24-72-HOURS.json > /tmp/c48original.log 2>&1 || { tail -c 11000 /tmp/c48original.log; exit 1; }
+          cmp -s /tmp/C48-INDEPENDENT-6-24-72-HOURS.json "$R/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json"
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json')
+          independent=pathlib.Path('/tmp/C48-INDEPENDENT-6-24-72-HOURS.json')
+          assert p.read_bytes()==independent.read_bytes()
+          x=json.loads(p.read_text())
+          assert x['source_original_USDM_zip_lineage']==45
+          assert x['source_native3m_closed']==76800 and x['source_native1h_closed']==3840
+          assert x['source_native15m_exact_Decimal']==15360
+          assert x['original_4h_poi_source_candidates_not_author_labeled']==153
+          assert x['original_3m_first_contacts_not_author_labeled']==132
+          assert x['unbounded_later_1h_technical_IMB_parents_not_VC']==130
+          assert x['per_policy_passed_source_counts']=={
+            'C48_ADAPTED_6H_POST_CONTACT_1H_CLOSE_V1':27,
+            'C48_ADAPTED_24H_POST_CONTACT_1H_CLOSE_V1':106,
+            'C48_ADAPTED_72H_POST_CONTACT_1H_CLOSE_V1':130}
+          assert x['course_author_poi_goldens']==x['course_author_1h_vc_goldens']==x['trade_count']==x['order_count']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C48_INDEPENDENT_FRESH_45ZIP_C47_AND_FULL_C48_SOURCE_BYTE_EXACT',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
