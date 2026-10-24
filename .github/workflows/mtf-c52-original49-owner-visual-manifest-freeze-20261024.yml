@@ -4,6 +4,7 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c52-original49-owner-visual-manifest-freeze-20261024.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c52_all49_course_visual_source_binary_witness.py'
 permissions:
   contents: write
 jobs:
