@@ -1,0 +1,67 @@
+name: EMBER C51 independent final A121 121 SHA owner course 49 real images
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A121-independent-ledger-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  verify_121:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify chained A001-A121 ledger and every C51 owner course source file SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A121.txt
+          grep -Fq 'entries 121 tip_sha256 5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b' /tmp/A121.txt
+          python tests/test_journal_integrity.py | tee /tmp/A121evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A121evidence.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          arr=[json.loads(s) for s in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(arr)==121
+          before,now=arr[-2:]
+          assert before['action_id']=='A120' and before['record_sha256']=='03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3'
+          assert now['seq']==121 and now['action_id']=='A121'
+          assert now['prev_sha256']==before['record_sha256']
+          assert now['record_sha256']=='5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b'
+          assert now['cycle']=='B1/C51' and now['verdict']=='DONE' and now['cycle_result']=='PASSED'
+          assert len(now['evidence'])==5
+          for x in now['evidence']:
+              buf=pathlib.Path(x['path']).read_bytes()
+              assert len(buf)==x['bytes'] and hashlib.sha256(buf).hexdigest()==x['sha256']
+          catalog=json.loads(pathlib.Path('d05/C51_RECOVERED_COURSE_VISUAL_FOLDER_INVENTORY_20261024.json').read_text())
+          live=json.loads(pathlib.Path('evidence/c51/C51_SECOND_LIVE_DRIVE_COURSE_VISUAL_SOURCE_WITNESS_20261024.json').read_text())
+          assert catalog['folder_count']==live['folder_count']==7
+          assert catalog['unique_direct_image_png_count']==live['distinct_png_image_count']==49
+          assert catalog['inspect_sample_count']==6
+          assert catalog['confirmed_author_candle_goldens']==catalog['confirmed_positive_route_entry_goldens']==catalog['confirmed_negative_route_entry_goldens']==0
+          assert live['confirmed_original_candle_chart_alignment']==0
+          for a,b in zip(catalog['folder_inventories'],live['folder_checks']):
+              assert a['name']==b['folder'] and a['folder_id']==b['id']
+              assert sorted(x['id'] for x in a['files'])==b['verified_png_id_set']
+          assert len({p for x in live['folder_checks'] for p in x['verified_png_id_set']})==49
+          assert catalog['readiness']==live['readiness']=='NOT_TRADE_READY'
+          assert catalog['orders']==catalog['trades']==live['orders']==live['trades']==0
+          print('C51_A121_INDEPENDENT_121_SHA_FIVE_SOURCE_SHA_SEVEN_FOLDERS_49_IMAGE_IDS_PASS')
+          PY
+      - name: Re-run all 36 C51 source existence, forgery and no-trading academic author golden tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c51_academic_visual_source_golden_gate 2>&1 | tee /tmp/C51neg.txt
+          grep -Fq 'Ran 36 tests' /tmp/C51neg.txt
+          grep -qx 'OK' /tmp/C51neg.txt
+          ! grep -q 'skipped=' /tmp/C51neg.txt
