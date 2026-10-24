@@ -1,0 +1,75 @@
+name: EMBER C48 first frozen original C47 source finite 6 24 72h windows
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c48-source-windows-first-freeze-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  freeze_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A117 117 SHA and immutable full original 45ZIP C47 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a117.txt
+          grep -Fq 'entries 117 tip_sha256 5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be' /tmp/a117.txt
+          python tests/test_journal_integrity.py > /tmp/prev-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/prev-evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+      - name: Run 36 future-masked C48 source-window causal negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c48_adapted_post_contact_1h_source_windows 2>&1 | tee /tmp/c48-36.txt
+          grep -Fq 'Ran 36 tests' /tmp/c48-36.txt
+          grep -qx 'OK' /tmp/c48-36.txt
+      - name: Derive and freeze full original 45ZIP-linked C48 finite windows from unchanged C47 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c48"
+          python "$R/tests/probe_c48_original_c47_bounded_1h_windows.py" "$R/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json" > /tmp/c48.log 2>&1 || { tail -c 12000 /tmp/c48.log; exit 1; }
+          tail -c 1200 /tmp/c48.log
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json')
+          x=json.loads(p.read_text())
+          assert x['source_original_USDM_zip_lineage']==45
+          assert x['source_native3m_closed']==76800 and x['source_native1h_closed']==3840
+          assert x['original_4h_poi_source_candidates_not_author_labeled']==153
+          assert x['original_3m_first_contacts_not_author_labeled']==132
+          assert x['unbounded_later_1h_technical_IMB_parents_not_VC']==130
+          assert len(x['source_policies'])==3
+          vals=[x['per_policy_passed_source_counts'][a['id']] for a in x['source_policies']]
+          assert 0<=vals[0]<=vals[1]<=vals[2]<=130
+          assert x['course_author_poi_goldens']==x['course_author_1h_vc_goldens']==x['trade_count']==x['order_count']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C48_FIRST_ORIGINAL_C47_SOURCE_BOUNDED_FULL',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest(),vals)
+          PY
+      - name: Commit only C48 complete original C47 source window research JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c48/C48_ORIGINAL_C47_6_24_72H_SOURCE_WINDOWS.json' /tmp/staged.txt
+          git commit -m 'evidence(C48): freeze source-only 6h 24h 72h first post-contact 1H technical geometry windows'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
