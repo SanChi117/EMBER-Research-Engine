@@ -1,0 +1,40 @@
+name: EMBER C52 49 original image inspected and eight source EURUSD published 2024-25 43 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c52-49-visual-fx-eurusd-source-negative-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/c52_full_course_visual_49_source_inspection.py'
+      - 'research/mtf-element-audit-v1/d05/test_c52_full_course_visual_49_source_inspection.py'
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify previous immutable A121 SHA and all five C51 evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A121.txt
+          grep -Fq 'entries 121 tip_sha256 5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b' /tmp/A121.txt
+          python tests/test_journal_integrity.py | tee /tmp/A121full.txt
+          grep -Fq '"validations_pass": true' /tmp/A121full.txt
+      - name: Verify all 43 C52 image class and real EURUSD provider publication anti-future/author goldens tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c52_full_course_visual_49_source_inspection 2>&1 | tee /tmp/C52-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C52-43.txt
+          grep -qx 'OK' /tmp/C52-43.txt
+          ! grep -q 'skipped=' /tmp/C52-43.txt
