@@ -1,0 +1,43 @@
+{
+  "schema": "EMBER_C53_INDEPENDENT_EIGHT_REAL_COURSE_EURUSD_OANDA_SAXO_SOURCE_GATE_WITNESS_V1",
+  "utc_date": "2026-10-24",
+  "predecessor_A122_SHA": "5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428",
+  "previous_original_C52_full_49_course_image_source_Git_blob": "4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67",
+  "first_C53_negative_43x3_CI": 40101543442,
+  "first_C53_frozen_manifest_CI": 40101699823,
+  "independent_full_original_C53_frozen_JSON_byte_exact_CI": 40101894607,
+  "independent_CI_jobs_success": 4,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "negative_case_tests_each": 43,
+  "actual_course_images_with_legible_EURUSD_original_source_header": 8,
+  "OANDA_2024_2025_4h_1h_15m_source_images": 6,
+  "SAXO_2025_4h_source_images": 2,
+  "provider_original_historical_OHLC_bars_fetched": 0,
+  "vendor_specific_readonly_authentication_token_supplied": false,
+  "source_original_screenshot_quote_side_verified": false,
+  "original_chart_bar_UTC_candle_timestamp_verified": 0,
+  "original_course_author_annotated_entry_goldens": 0,
+  "academic_POI_first_test_and_VC_goldens": 0,
+  "frozen_C53_full_meta_Git_blob": "c38da1ec093bc37006942f7206018288e8884240",
+  "frozen_C53_full_meta_bytes": 11871,
+  "frozen_C53_full_meta_sha256": "01464f1a7b92f1185137b024d730a9bd7fbd39457c787935e46b65f8b7c7a61a",
+  "full_metadata_provenance_byte_exact_reproduction": true,
+  "official_OANDA_broker_reference": "https://developer.oanda.com/rest-live-v20/instrument-ep/",
+  "official_OANDA_price_group_warning_reference": "https://help.oanda.com/au/en/faqs/rest-v20-api-troubleshooting-guide.htm",
+  "official_SAXO_FxSpot_bid_ask_reference": "https://developer.saxobank.com/openapi/referencedocs/chart/v3/charts/get__chart",
+  "limitations": [
+    "This record attests to truthful absence of original authenticated vendor FX market OHLC, not to author-certified entry reconstruction",
+    "TradingView screenshot PUBLICATION timestamp is not historical source candle date",
+    "Same named OANDA or SAXO broker feed does not alone establish matching price component/time alignment or TradingView chart original",
+    "OANDA H4 can be day aligned to selected timezone; UTC multiple-of-4h must not be assumed",
+    "Matched raw FX market source not available, so cannot infer POI, VC, SL, TP, RR or trade fills",
+    "No private credentials or images copied to repository"
+  ],
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
