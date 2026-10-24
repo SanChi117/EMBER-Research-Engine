@@ -53,3 +53,10 @@ C47 нашёл технический 1H classic three-candle IMB после ori
 ## Следующий этап C51
 
 Нужно восстановить **позитивные и негативные авторские chart-annotated 2023 market goldens** с привязкой к raw original candle/source ID и семантику *настоящих* ПОИ/первого теста/1H trigger/1H contextual VC/15m entry VC, а также Strong High/Low и original FTA для 4H POI. Отсутствие source-chart goldens — главный риск академической корректности. Не создавать фиктивные авторские метки, не использовать C50 source time screen как live-сигнал. **PAPER ONLY / NOT_TRADE_READY.**
+
+
+## Окончательная независимая проверка оригинальных ZIP до A120
+
+[CI 40095081674](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40095081674) **SUCCESS 4/4**. Отдельная 4-я job **самостоятельно повторно скачала все 45 исходных Binance USD-M ZIP** для каждого из C47 и C49 — два оригинальных прогона; сначала точно сопоставила **полный** C47 JSON и **полный** C49 JSON с их принятыми SHA, затем заново построила **полную** C50 causal/course JSON, которая совпала **побайтно на всех 282 204 байтах**. SHA256 `460bd50cb393c6f3d4fc73d9f204fca6b8dceeec32f27d6f6854983036394826`; Git blob C50 `66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08`. Другие три jobs независимо подтвердили A119 119/119 SHA всех исторических доказательств и **39/39** отрицательных тестов на Python 3.10/3.11/3.12. Зафиксирован отдельный witness `evidence/c50/C50_INDEPENDENT_ORIGINAL_45ZIP_COURSE_CAUSALITY_WITNESS_20261024.json`.
+
+Для завершения **только исследовательского source-only C50** остаётся append-once A120 и независимый 120/120 SHA CI. **Никаких** true academic goldens / подтверждённых 1H VC / сигналов/сделок в отчёте нет.
