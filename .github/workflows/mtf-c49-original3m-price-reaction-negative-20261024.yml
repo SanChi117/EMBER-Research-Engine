@@ -1,0 +1,41 @@
+name: EMBER C49 original3m first later close directional response negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c49-original3m-price-reaction-negative-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/c49_original3m_post_contact_directional_close.py'
+      - 'research/mtf-element-audit-v1/d05/test_c49_original3m_post_contact_directional_close.py'
+permissions:
+  contents: read
+jobs:
+  c49_negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A118 predecessor journal and frozen original C46 4H source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A118.txt
+          grep -Fq 'entries 118 tip_sha256 3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea' /tmp/A118.txt
+          python tests/test_journal_integrity.py | tee /tmp/A118evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A118evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+      - name: Rerun exactly 39 future-proof original3m closed price response source tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c49_original3m_post_contact_directional_close 2>&1 | tee /tmp/c49neg.txt
+          grep -Fq 'Ran 39 tests' /tmp/c49neg.txt
+          grep -qx 'OK' /tmp/c49neg.txt
+          ! grep -q 'skipped=' /tmp/c49neg.txt
