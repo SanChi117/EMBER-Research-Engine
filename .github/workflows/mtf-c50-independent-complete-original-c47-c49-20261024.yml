@@ -1,0 +1,86 @@
+name: EMBER C50 independently repeat original 45ZIP C47 and C49 course causal join
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c50-independent-complete-original-c47-c49-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  c50_negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify A119 predecessor immutable SHA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A119.txt
+          grep -Fq 'entries 119 tip_sha256 0b929ac42ee3e4790e563da1a7923d66e026f5d65992d9cfa7756f07ad8c28dd' /tmp/A119.txt
+          python tests/test_journal_integrity.py | tee /tmp/A119evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A119evidence.txt
+      - name: Independently run 39 adversarial academic POI/VC evidence chronology source tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c50_course_route_a_source_causality_gate 2>&1 | tee /tmp/C50-39.txt
+          grep -Fq 'Ran 39 tests' /tmp/C50-39.txt
+          grep -qx 'OK' /tmp/C50-39.txt
+          ! grep -q 'skipped=' /tmp/C50-39.txt
+  original_45zip_complete_byte_audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin original accepted C47 C49 and first C50 Git evidence blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json)" = 'c213c36a2e26caf63d9d65403429d1419a844bd9'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json)" = '66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08'
+      - name: Fresh complete original 45ZIP from C47 first contact and C49 first later 3m close, byte-compare all three JSON proofs
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c47_original_4h_contact_1h_source_45zip.py" /tmp/C50-INDEPENDENT-C47-FULL45ZIP.json > /tmp/C50-C47.log 2>&1 || { tail -c 12000 /tmp/C50-C47.log; exit 1; }
+          cmp -s /tmp/C50-INDEPENDENT-C47-FULL45ZIP.json "$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json"
+          python "$R/tests/probe_c49_original3m_first_post_4h_contact_45zip.py" /tmp/C50-INDEPENDENT-C49-FULL45ZIP.json > /tmp/C50-C49.log 2>&1 || { tail -c 12000 /tmp/C50-C49.log; exit 1; }
+          cmp -s /tmp/C50-INDEPENDENT-C49-FULL45ZIP.json "$R/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json"
+          python "$R/tests/probe_c50_original_course_source_chronology_c47_c49.py" /tmp/C50-INDEPENDENT-COURSE-CAUSAL-COMPLETE.json > /tmp/C50-GAP.log 2>&1 || { tail -c 12000 /tmp/C50-GAP.log; exit 1; }
+          cmp -s /tmp/C50-INDEPENDENT-COURSE-CAUSAL-COMPLETE.json "$R/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json"
+          python - <<'PY'
+          import pathlib,json,hashlib
+          a=pathlib.Path('research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json')
+          b=pathlib.Path('/tmp/C50-INDEPENDENT-COURSE-CAUSAL-COMPLETE.json')
+          assert a.read_bytes()==b.read_bytes()
+          j=json.loads(a.read_text())
+          assert j['original_Binance_USDM_ZIP_lineage']==45
+          assert j['original_native3m_closed']==76800
+          assert j['original_parent_source_4h_geometry']==153
+          assert j['original_first_native3m_contacts']==132
+          assert j['technical_source_event_classification_counts']=={
+            'CONTACT_NO_DIRECTIONAL_3M_CLOSE_WITHIN_12H':3,
+            'DIRECTIONAL_CLOSE_NO_LATER_1H_IMB':2,
+            'FIRST_1H_IMB_CLOSED_AFTER_24H_OBSERVATION_WINDOW':23,
+            'FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE':104,
+            'NO_ORIGINAL_4H_FIRST_3M_CONTACT':21}
+          assert j['direction_side_by_event_classification']['FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE__FAVORABLE']==78
+          assert j['direction_side_by_event_classification']['FIRST_DIRECTIONAL_3M_CLOSE_BEFORE_1H_IMB_CLOSE__ADVERSE']==26
+          assert j['author_verified_POI_first_test']==j['author_verified_onehour_VC']==j['author_verified_market_entry']==j['orders']==j['trades']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C50_INDEPENDENT_FULL_SOURCE_C47_C49_AND_45ZIP_SEMANTIC_AUDIT_BYTE_EXACT_PASS',a.stat().st_size,hashlib.sha256(a.read_bytes()).hexdigest())
+          PY
