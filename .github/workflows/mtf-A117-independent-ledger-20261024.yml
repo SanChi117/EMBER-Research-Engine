@@ -1,0 +1,67 @@
+name: EMBER C47 independent final A117 117/117 source SHA acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A117-independent-ledger-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  verify_a117:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify all A001-A117 immutable SHA and original C47 six evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A117.txt
+          grep -Fq 'entries 117 tip_sha256 5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be' /tmp/A117.txt
+          python tests/test_journal_integrity.py | tee /tmp/A117evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A117evidence.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          a=[json.loads(s) for s in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(a)==117
+          prev,x=a[-2:]
+          assert prev['action_id']=='A116' and prev['record_sha256']=='453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c'
+          assert x['action_id']=='A117' and x['seq']==117
+          assert x['prev_sha256']==prev['record_sha256']
+          assert x['record_sha256']=='5d4ea3f94c9124ba5e56da27653a7ff41956d94c5b9550e0c3d458865fcab7be'
+          assert x['cycle']=='B1/C47' and x['verdict']=='DONE' and x['cycle_result']=='PASSED'
+          assert len(x['evidence'])==6
+          for e in x['evidence']:
+              buf=pathlib.Path(e['path']).read_bytes()
+              assert len(buf)==e['bytes']
+              assert hashlib.sha256(buf).hexdigest()==e['sha256']
+          p=pathlib.Path('evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json')
+          assert len(p.read_bytes())==322066
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='8760ba25e7c8b85e74a66e481e293ca0d9c43fb0e621a38e72bb3ddbbbc2a72d'
+          c=json.loads(p.read_text())
+          assert c['original_binance_USDM_zip']==45
+          assert c['original_native3m_closed']==76800 and c['original_native1h_closed']==3840
+          assert c['native15m_decimal_equalities']==15360
+          assert c['original_C46_source_4h_candidate_count']==153 and c['original_C46_first3m_contact_count']==132
+          assert c['same_side_later_closed_1h_source_candidate_parent_count']==130
+          assert c['contacted_parent_without_later_same_side_1h_count']==2
+          assert c['academic_author_1h_volume_confirmation_verified']==c['academic_author_chart_goldens']==c['orders']==c['trades']==0
+          assert c['readiness']=='NOT_TRADE_READY'
+          print('C47_A117_INDEPENDENT_117_ALL_SHA_SIX_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Rerun all 35 C47 no-lookahead original 4H contact later 1H source tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c47_post_4h_contact_1h_imb_source_link 2>&1 | tee /tmp/C47-35.txt
+          grep -Fq 'Ran 35 tests' /tmp/C47-35.txt
+          grep -qx 'OK' /tmp/C47-35.txt
+          ! grep -q 'skipped=' /tmp/C47-35.txt
