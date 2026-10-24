@@ -1,4 +1,4 @@
-name: EMBER C48 first frozen original C47 source finite 6 24 72h windows
+name: EMBER C48 corrected first frozen C47 source finite 6 24 72h windows
 on:
   push:
     branches: [research/academic-engine-recovery-20261015]
