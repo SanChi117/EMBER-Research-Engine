@@ -78,7 +78,7 @@ def create(out=None):
         p=Path(out);p.parent.mkdir(exist_ok=True,parents=True)
         p.write_text(json.dumps(x,sort_keys=True,indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     if PIN.exists():
-        assert x==json.loads(PIN.read_text(encoding="utf8")),"C52_FROZEN_VISUAL_GOLDEN_SOURCE_DRIFT"
+        assert json.loads(json.dumps(x,sort_keys=True))==json.loads(PIN.read_text(encoding="utf8")),"C52_FROZEN_VISUAL_GOLDEN_SOURCE_DRIFT"
     print(json.dumps({"source_49":49,"categories":dict(kinds),
       "real_EURUSD_2024_2025_publisher_headers":8,"author_goldens":0,
       "fills":0,"orders":0},sort_keys=True),flush=True)
