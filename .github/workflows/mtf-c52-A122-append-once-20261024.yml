@@ -1,0 +1,93 @@
+name: EMBER C52 append-once A122 all 49 original course visual source metadata
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c52-A122-append-once-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  append_a122:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify immutable A121 121 SHA predecessor and original source figures frozen 52913 metadata JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A121.txt
+          grep -Fq 'entries 121 tip_sha256 5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b' /tmp/A121.txt
+          python tests/test_journal_integrity.py | tee /tmp/A121evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A121evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json)" = '4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67'
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json')
+          assert len(p.read_bytes())==52913
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='734fe20d117efc7b805ef407ca06ec20af663a0458732a2f4d49c2dbcbd814ec'
+          j=json.loads(p.read_text())
+          assert j['image_file_count']==j['actual_images_visually_read']==49
+          assert j['newly_visually_seen_c52_png_count']==43
+          assert j['chart_category_counts']=={
+            'CONCEPTUAL_OR_COURSE_RULE_DIAGRAM':8,
+            'CROPPED_MARKET_STYLE_CHART_NO_VERIFIABLE_PROVIDER':19,
+            'DESKTOP_SCREENSHOT_NESTED_LESSON_VIEW':14,
+            'FULL_CHART_READABLE_EURUSD_SOURCE_HEADER':8}
+          assert j['source_OANDA_EURUSD_2024_publish_count']==5
+          assert j['source_SAXO_EURUSD_2025_publish_count']==2
+          assert j['source_OANDA_EURUSD_2025_publish_count']==1
+          assert j['these_are_image_publication_times_not_candle_trade_dates']
+          assert j['full_original_FX_OANDA_SAXO_raw_candles_retrieved'] is False
+          assert j['private_original_file_content_republished'] is False
+          assert j['2023_author_chart_positive_raw_candle_goldens']==j['2023_author_chart_negative_raw_candle_goldens']==0
+          assert j['orders']==j['trades']==0 and j['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c52_full_course_visual_49_source_inspection 2>&1 | tee /tmp/C52-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C52-43.txt
+          grep -qx 'OK' /tmp/C52-43.txt
+      - name: Append one A122 with six immutable source-only visual and independent byte exact evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A122 \
+            --cycle B1/C52 \
+            --planned 'Actually inspect each of remaining 43 original private owner Google Drive educational images after C51 and retain all 49, distinguish diagrams, cropped images, nested screenshots and real external forex source chart headers, absolutely never generate 2023 author candle golden from picture existence' \
+            --executed 'Directly downloaded/read all 49 authenticated Drive source PNGs in current model review (43 new plus prior 6); identified 8 legible original TradingView EURUSD OANDA and SAXO image publication headers 2024/2025, publication dates NOT underlying candle date, eight source original PNG bytes/dimensions/SHA attested locally and complete aggregate 49-file local original byte digest not independently available to GitHub. Created separate source-only 49 figure categorizer 8 confirmed full FX headers, 19 cropped candle pictures, 8 academic diagrams, 14 desktop screenshots. Preserved all C51 original source IDs and 18 actual course text rules. 43x3 adversarial no-golden tests, 52913-byte frozen JSON metadata first CI 40100339396 PASS, independent complete JSON byte exact and 43x3 tests CI 40100616805 PASS 4/4.' \
+            --result 'All 49 known educational PNG actually visited, 8 exact chart headers EURUSD OANDA/SAXO with 2024 May and 2025 Jan PUBLICATION times, including source 4H-1H-15M family; 19 unverified cropped charts, 8 textual/conceptual diagrams, 14 nested desktop screenshots. Original 2023 source author market candle trade positive/negative goldens still zero, real OANDA/SAXO historical FX OHLC absent. This disproves implicit assumption that crypto Binance USD-M 2026 OHLC proves these EURUSD course pictures. No orders/trades/PnL, NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Immutable prior A121 SHA 5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b and its owner Drive double-verified 49 source IDs unchanged. First negative CI 40100024944 FAILED solely on Python multiline conditional syntax; corrected; CI 40100103354 all 43x3 tests PASS. First frozen C52 40100253564 FAIL due tuple-vs-JSON list equality after writing same full metadata, corrected JSON-normalized assertion only; CI 40100339396 PASS frozen original complete metadata 52913-byte Git blob 4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67 SHA256 734fe20d117efc7b805ef407ca06ec20af663a0458732a2f4d49c2dbcbd814ec. Independent 40100616805 PASS 4/4 entire C52 JSON exact and 43x3 negatives. GitHub runner cannot access private image PNG originals; only source metadata byte replay independent, original image SHA locally observed and explicit limitation, no fabricated original 2023 market-candle labels.' \
+            --evidence d05/c52_full_course_visual_49_source_inspection.py \
+            --evidence d05/test_c52_full_course_visual_49_source_inspection.py \
+            --evidence tests/probe_c52_all49_course_visual_source_binary_witness.py \
+            --evidence evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json \
+            --evidence evidence/c52/C52_INDEPENDENT_OWNER_DRIVE_49_IMAGE_VISUAL_SOURCE_WITNESS_20261024.json \
+            --evidence cycles/B1_C52_ALL49_ACADEMIC_FX_SOURCE_VISUAL_PROVENANCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A122evidence.txt
+      - name: Commit ONLY append-once A122 journal after six immutable file proof digests
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C52): append-once A122 six real 49 owner course visual and eight FX publisher source SHA evidence'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
