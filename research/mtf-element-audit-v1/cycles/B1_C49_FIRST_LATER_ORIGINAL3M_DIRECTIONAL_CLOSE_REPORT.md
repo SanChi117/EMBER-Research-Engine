@@ -43,3 +43,10 @@ C46/A116 source-only технически обнаружил 153 полност�
 Отдельный второй независимый прогон [CI 40050049709](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40050049709) должен скачать все original 45ZIP, повторить source C49 и подтвердить побайтовое совпадение **всего** C49 JSON, плюс 39 отрицательных тестов ×3 Python. Не принимать C49 до `SUCCESS` этой проверки.
 
 После полного PASS: witness независимого replay, append-once A119 со SHA256 исходного C49-модуля, 39-тестового набора, original 45ZIP проба, полного frozen JSON, witness, этого отчёта; отдельная независимая CI SHA 119/119 на Python 3.10/3.11/3.12. Курсные авторские размеченные 2023 примеры, настоящая source-classified POI/VC, StrongHL, FTA, SL/TP/fees, проскальзывание, funding, OOS/fills остаются не готовы. Только после выяснения этих семантических связей можно говорить о полноценной PAPER-механике, **но не о живой торговле**.
+
+
+## 6. Независимый оригинальный 45ZIP повтор — подтверждён PASS
+
+[CI 40050049709](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40050049709) **SUCCESS 4/4 jobs**: повторно скачаны **все 45 первичных Binance USD-M ZIP**, архивы сверены, полный original C49 source 3m и 4H candidate IDs восстановлены. Весь полный **463 807-байтный JSON** посимвольно и побайтно совпал с первичным frozen-original файлом: SHA256 **`e1315222e3bf492580abb435998bb79235d0db6e787f456cd03cccb2fafd7597`**, Git blob **`c213c36a2e26caf63d9d65403429d1419a844bd9`**. Три другие jobs — самостоятельная проверка прежнего A118 118/118 SHA/evidence и все **39/39** C49 negatives × Python 3.10/3.11/3.12. Принятый независимый witness `evidence/c49/C49_INDEPENDENT_FULL_ORIGINAL_SOURCE_WITNESS_20261024.json` отдельно фиксирует 1/4/12h и 97/100/100 favorable CLOSED source3m events, 25/28/29 adverse, 10/4/3 complete horizon no event, без сделок.
+
+C49 допускается принять как **source-only историческую геометрию закрытых свечей** после append-once A119 и отдельного 119/119 CI. Цифры никак не измеряют trade expectancy, не включают fees, slippage, funding и не доказывают академический first POI test или Volume Confirmation.
