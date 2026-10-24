@@ -1,0 +1,41 @@
+name: EMBER C47 original 4H contact to later closed 1H source negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c47-original-4h-to-1h-negative-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/c47_post_4h_contact_1h_imb_source_link.py'
+      - 'research/mtf-element-audit-v1/d05/test_c47_post_4h_contact_1h_imb_source_link.py'
+permissions:
+  contents: read
+jobs:
+  c47_causal_negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A116 prior immutable journal SHA/evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A116.txt
+          grep -Fq 'entries 116 tip_sha256 453fd21e1a0f0a409d2948eadc79d7191cd5cad1a9a7cc6573b3fb1206db3a1c' /tmp/A116.txt
+          python tests/test_journal_integrity.py | tee /tmp/A116evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A116evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = "dc03c181912ffbb800bc191fbc16ec0d05c335e0"
+      - name: Independently run 35 4H POI contact -> later original closed1H IMB source negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c47_post_4h_contact_1h_imb_source_link 2>&1 | tee /tmp/c47.txt
+          grep -Fq 'Ran 35 tests' /tmp/c47.txt
+          grep -qx 'OK' /tmp/c47.txt
+          ! grep -q 'skipped=' /tmp/c47.txt
