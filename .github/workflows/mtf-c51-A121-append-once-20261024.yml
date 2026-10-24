@@ -1,0 +1,95 @@
+name: EMBER C51 append-once A121 recovered real course source 49 images
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c51-A121-append-once-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  append_a121:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify prior A120 120/120 source SHA ledger and 9 recovered course text source claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A120.txt
+          grep -Fq 'entries 120 tip_sha256 03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3' /tmp/A120.txt
+          python tests/test_journal_integrity.py | tee /tmp/A120evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A120evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c50/C50_ORIGINAL_C47_C49_COURSE_1H_CAUSALITY_GAP_45ZIP.json)" = '66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08'
+      - name: Recheck both independent authenticated source image metadata snapshots and all 36 visual no-golden negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          PYTHONPATH=d05 python - <<'PY'
+          import json,pathlib
+          from c51_academic_visual_source_golden_gate import audited_inventory,observe_visual_candidate
+          meta=json.loads(pathlib.Path('d05/C51_RECOVERED_COURSE_VISUAL_FOLDER_INVENTORY_20261024.json').read_text())
+          second=json.loads(pathlib.Path('evidence/c51/C51_SECOND_LIVE_DRIVE_COURSE_VISUAL_SOURCE_WITNESS_20261024.json').read_text())
+          images,inspected=audited_inventory()
+          assert len(images)==meta['unique_direct_image_png_count']==second['distinct_png_image_count']==49
+          assert len(inspected)==meta['inspect_sample_count']==6
+          assert len(meta['folder_inventories'])==len(second['folder_checks'])==7
+          for a,b in zip(meta['folder_inventories'],second['folder_checks']):
+              assert a['name']==b['folder'] and a['folder_id']==b['id']
+              assert a['total_direct_items']==b['verified_direct_files']
+              assert sorted(z['id'] for z in a['files'])==b['verified_png_id_set']
+          assert len({z for b in second['folder_checks'] for z in b['verified_png_id_set']})==49
+          assert second['confirmed_2023_author_positive_golden_with_original_candle_id']==0
+          assert second['confirmed_2023_author_negative_golden_with_original_candle_id']==0
+          assert second['confirmed_original_candle_chart_alignment']==0
+          assert second['orders']==second['trades']==0 and second['readiness']=='NOT_TRADE_READY'
+          print('C51_SOURCE_VISUAL_PRESENT_49_BUT_NO_AUTHOR_MARKET_CANDLE_GOLDEN_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c51_academic_visual_source_golden_gate 2>&1 | tee /tmp/C51-36.txt
+          grep -Fq 'Ran 36 tests' /tmp/C51-36.txt
+          grep -qx 'OK' /tmp/C51-36.txt
+      - name: Append exactly one A121 five immutable source image provenance evidence SHA records
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A121 \
+            --cycle B1/C51 \
+            --planned 'Find previously overlooked original academic course figures in connected owner Google Drive, distinguish real PNG availability from independently chart-time-aligned 2023 author POI VC entry/StrongHL/FTA goldens, stop source images being incorrectly declared unavailable or promoted as trading signals' \
+            --executed 'Direct authenticated owner Google Drive search found 7 grounded educational folders; listed their contents twice independently and matched ALL 49 image/png IDs exactly: POI 26, Entry Model Logic 11, Entry IDM 3, Entry BOS 1, Strong High Low 2, IDM concept 2, Session Liquidity 4. Downloaded and visually inspected 6 original actual PNG (diagram, market-style chart without source date/Ticker/TF, several nested desktop screenshots); kept private image binaries out of GitHub, preserved Drive metadata links only. New isolated fail-closed source image-to-market golden gate with 36 adversarial provenance tests x 3 Python, independent CI 40096489989 PASS 4/4, previous original course text C45 9 file/18 rule claims unchanged.' \
+            --result '49 ACTUAL available source PNG across seven owner Drive course folders recovered, 6 visually examined and classified conservatively, source ID sets independently repeated and exact. Zero source-chart example raw market candle IDs or author-certified 2023 positive/negative goldens, zero POI first-test/VC/entry approvals, no order/trade/PnL. This closes metadata inventory / anti-forgery SOURCE gate only; academic chart verification still missing, NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous A120 SHA tip 03f82e410bfa831914c1cd6874278227aa77edd32dbefdce2a653cbcb02013d3 unchanged, complete original C50 Git blob 66b3b4c26c1d9abb3d5137f6e8fe73a1788c4b08 unchanged. First 36 x3 source metadata negative CI 40096076063 PASS; after C45 original 9 course text-claim dependency, independent CI 40096489989 PASS 4/4, 36 tests per Python 3.10 3.11 3.12. Second authenticated Drive list_folder queries separately verified exactly 49 image IDs 7 source folders. Course images are present but 6 examined samples lack independently verifiable author market candle timestamp TF/ticker; not positive chart goldens. Never fabricate raw image hashes, 2023 raw IDs or author signals.' \
+            --evidence d05/C51_RECOVERED_COURSE_VISUAL_FOLDER_INVENTORY_20261024.json \
+            --evidence d05/c51_academic_visual_source_golden_gate.py \
+            --evidence d05/test_c51_academic_visual_source_golden_gate.py \
+            --evidence evidence/c51/C51_SECOND_LIVE_DRIVE_COURSE_VISUAL_SOURCE_WITNESS_20261024.json \
+            --evidence cycles/B1_C51_RECOVERED_OWNER_ACADEMIC_VISUAL_IMAGE_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A121.txt
+          grep -Fq 'entries 121' /tmp/A121.txt
+          python tests/test_journal_integrity.py | tee /tmp/A121evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A121evidence.txt
+      - name: Commit ONLY A121 append-once JSONL and safe non-force rebase
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C51): append-once A121 five owner-course 49 PNG visual source metadata SHA proofs'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
