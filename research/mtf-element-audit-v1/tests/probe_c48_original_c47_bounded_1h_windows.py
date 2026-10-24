@@ -135,7 +135,7 @@ def run(out=None):
         p=Path(out);p.parent.mkdir(parents=True,exist_ok=True)
         p.write_text(json.dumps(doc,sort_keys=True,ensure_ascii=False,indent=2)+"\n",encoding="utf8")
     if PIN.exists():
-        assert json.loads(PIN.read_text(encoding="utf8"))==doc,"C48_ADAPTED_SOURCE_WINDOW_FROZEN_DRIFT"
+        assert json.loads(PIN.read_text(encoding="utf8"))==json.loads(json.dumps(doc,sort_keys=True)),"C48_ADAPTED_SOURCE_WINDOW_FROZEN_DRIFT"
     print(json.dumps({"unbounded":130,"passed_source_counts":passing,"orders":0,"trades":0},
         sort_keys=True),flush=True)
     return doc
