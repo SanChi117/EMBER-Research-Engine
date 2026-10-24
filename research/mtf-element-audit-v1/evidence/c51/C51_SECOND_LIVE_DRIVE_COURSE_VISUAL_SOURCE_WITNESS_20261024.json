@@ -1,0 +1,149 @@
+{
+  "schema": "EMBER_C51_LIVE_OWNER_GOOGLE_DRIVE_VISUAL_IMAGE_SOURCE_DOUBLE_CHECK_V1",
+  "date_utc": "2026-10-24",
+  "owner_google_drive_access": "AUTHENTICATED",
+  "verification": "All 7 exact original folders listed again; checked unique image/png IDs against first separately saved C51 image folder inventory",
+  "folder_count": 7,
+  "distinct_png_image_count": 49,
+  "folder_checks": [
+    {
+      "folder": "POI",
+      "id": "1zTtDPok57ZUFlvDEgylzawe-lT3wX-qQ",
+      "verified_direct_files": 31,
+      "verified_png_id_set": [
+        "10eGpOY9DkYpV1vbbOymoWZ0PaSCvI_GX",
+        "11eRdDeQgRZHjFb5n9Vf4yG0rcQhC9Qpz",
+        "15vA7Iz6nu1MoeLcLSQSiD2O5shJa9RbU",
+        "16FAvYNlgUccCvUGkZIv8iRZqhXCzDpYl",
+        "16vCNQUWXniT2bGAeEO9I9JueQuFNQmVD",
+        "18zENq_cRtC307GXSHRxRpUqHVZe2N4Kn",
+        "194E8ujJ516owjhNh2XT8rvrA4GPVeeir",
+        "19_U7tNBtOS4SOZvv80HodXPhcnK8weah",
+        "1F0LLCklPaPNCBWHwVpsKUPqp1hdsh35p",
+        "1F_pTX-icMg_bKv4kV5KGBCDLZBAIHoKb",
+        "1IwN9b1dLQFj1_pPKE8RA-wqMdMf1UBo-",
+        "1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b",
+        "1L7sXn8-RHn7p1J8-8qDs8XbRDyCJYoDN",
+        "1Qa6fxonLzWkxbxTPO3jo5oNJ3DNeCVdd",
+        "1TkRlW9atcwqTjT6eS7xMOqqNzud_0qJh",
+        "1VEFjMdf947pGviHfbdCJDIoRwZ6dCvjC",
+        "1_f_EEaMnRuTmBCx7fcrryM0w2OSpvU7k",
+        "1ajusMiZ_ol0REwlMjE6ld8iqjM60-9oR",
+        "1b78gDdyIZO21QWoKKRUK47PbYyq35U3C",
+        "1diTa_JRkdAmTi6n15fntUj0Lx-8O9s9K",
+        "1edU35FIxzsbErBIpv-2Or_GLhWO4zKLT",
+        "1fbJjatTOxxMvCR-zkAR9B6RoeEdxId1u",
+        "1m_Dbbs1XrkPGh4y3TY7czaLGRCBc_z71",
+        "1rclcfEFbs9WDkPGlQyuHH1zsQUW1PnEf",
+        "1uCRf6_uVB9cMAbMgKEaqVYvgNDsO0qkf",
+        "1xZkgxbf2BavbIbgQfeG2kx22ox_cj1Sm"
+      ]
+    },
+    {
+      "folder": "ENTRY_MODEL_LOGIC",
+      "id": "1ZLSbVT4IylIiwU1qPpff3dZW5eBxaLNW",
+      "verified_direct_files": 14,
+      "verified_png_id_set": [
+        "12k5YK1GyzeIT1oFXpnVFKNL-zvKFTXOX",
+        "153eXt9lGrrhRumOfFsLQryS-3FBBX8Vl",
+        "15iGjZdGhX-ScEB1TXyMxnvD5LHS8CnJT",
+        "1FdyrtyZYzYcw_y2MZn_s6jrknQjiWR5L",
+        "1HuwTCxVYvm_YSmaPpZ2RxD7PA9UuzwtC",
+        "1IhQMc8F6Ir1ZXA2Ymit3RGIhhu0T-OWg",
+        "1OeV2mNl-nlbvGNPPJYiFVtDSnB3lFCC3",
+        "1Yv1Q--0aKYGqVHYlBNdTEFHtXg-04r79",
+        "1YziNr_aqDbfUMhrt1b5zfg31yrFR-qCR",
+        "1obj4bBVqplvrL2E_iNHXOHoOaDhj5gKx",
+        "1tJW5eTs2TRK2mYTOgQxPJtcnSz41-DIP"
+      ]
+    },
+    {
+      "folder": "IDM_ENTRY",
+      "id": "1UIdJbqQqesYLW_XjBcDRaqbiB5a13rpr",
+      "verified_direct_files": 4,
+      "verified_png_id_set": [
+        "1BAvuLqkNRgAqNnAkanKPH0DERDUWMziv",
+        "1Jhd2LCveoFZc4QFOf34NGAm7aqL-JgV1",
+        "1SEn0TcoqatPW03kVst6lcSI-6NbAVCq8"
+      ]
+    },
+    {
+      "folder": "BOS_ENTRY",
+      "id": "10vLM9oodqyas33ohhcW4tbQVFUvKltHV",
+      "verified_direct_files": 2,
+      "verified_png_id_set": [
+        "1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ"
+      ]
+    },
+    {
+      "folder": "STRONG_HIGH_LOW",
+      "id": "1w9sPKjvZrURTJUTPGlELC8vNLHHGs2s8",
+      "verified_direct_files": 3,
+      "verified_png_id_set": [
+        "1gBx_bPk5jmD3LqrIORU5ZnECF5Q6sLnv",
+        "1sOAN3n6ZeplmYcJOYcmr_tSeuXnR4PDE"
+      ]
+    },
+    {
+      "folder": "IDM_ELEMENT",
+      "id": "1xwot5OWwAhhP33pMpWJZUcJVCT02I_Lb",
+      "verified_direct_files": 3,
+      "verified_png_id_set": [
+        "1dUIzehpUBZaEt-geVUL3DqjfzskgnTsb",
+        "1x8JhP_5RxFtpcFdFFeLPF1en3GvRBhGk"
+      ]
+    },
+    {
+      "folder": "SESSION_LIQUIDITY_CONTEXT",
+      "id": "1ajc3skl_m8YnZBehNfEoy3Lyti700TRK",
+      "verified_direct_files": 6,
+      "verified_png_id_set": [
+        "1CLE1pTWoXcpE3srnkEjd0fFcHtxqD3GC",
+        "1OABu44bbT0f2wc3u46ZnqpEMfqVaEL39",
+        "1b_LBYgVCYgQv9A5NS-NnW2pSF5Y6UmN7",
+        "1n6fcNDacbef6Hd4cdHalxgw9bhCpB-jC"
+      ]
+    }
+  ],
+  "visually_inspected_six_raw_image_sizes_bytes": [
+    {
+      "id": "1DjAUNwDiNmr3a_ySSreSdtfBzVCWZPaZ",
+      "bytes": 878104,
+      "kind": "DESKTOP_NESTED_COURSE_IMAGE"
+    },
+    {
+      "id": "1TkRlW9atcwqTjT6eS7xMOqqNzud_0qJh",
+      "bytes": 26316,
+      "kind": "CONCEPTUAL_POI_CANDLE_DIAGRAM"
+    },
+    {
+      "id": "12k5YK1GyzeIT1oFXpnVFKNL-zvKFTXOX",
+      "bytes": 1004786,
+      "kind": "DESKTOP_NESTED_ENTRY_MODEL_IMAGES"
+    },
+    {
+      "id": "1JlQcYmNst3GEp4ohLArGVL9eqJi8i2-b",
+      "bytes": 100584,
+      "kind": "ANNNOTATED_MARKET_STYLE_CHART_WITHOUT_VERIFIED_SYMBOL_TIMEFRAME_TIME"
+    },
+    {
+      "id": "15iGjZdGhX-ScEB1TXyMxnvD5LHS8CnJT",
+      "bytes": 88291,
+      "kind": "CONCEPTUAL_ENTRY_SOURCE_DIAGRAM"
+    },
+    {
+      "id": "1sOAN3n6ZeplmYcJOYcmr_tSeuXnR4PDE",
+      "bytes": 811273,
+      "kind": "DESKTOP_WITH_NESTED_STRONG_HL_CHART"
+    }
+  ],
+  "image_binary_republished_to_repo": false,
+  "visual_source_lesson_labels_not_author_entry_goldens": true,
+  "confirmed_2023_author_positive_golden_with_original_candle_id": 0,
+  "confirmed_2023_author_negative_golden_with_original_candle_id": 0,
+  "confirmed_original_candle_chart_alignment": 0,
+  "bottleneck": "Images existed and were overlooked; 6 visually inspected images do not independently identify original exchange symbol timeframe and exact raw source candle IDs, and cannot grant author market-entry certification.",
+  "orders": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY"
+}
