@@ -1,0 +1,94 @@
+name: EMBER C49 append-once A119 source 3m directional close evidence SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c49-A119-append-once-20261024.yml'
+permissions:
+  contents: write
+jobs:
+  append_a119:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify immutable A118 118/118 predecessor and all original C49 45ZIP evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A118.txt
+          grep -Fq 'entries 118 tip_sha256 3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea' /tmp/A118.txt
+          python tests/test_journal_integrity.py | tee /tmp/A118evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A118evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json)" = 'c213c36a2e26caf63d9d65403429d1419a844bd9'
+          python - <<'PY'
+          import json,hashlib,pathlib
+          p=pathlib.Path('evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json')
+          assert len(p.read_bytes())==463807
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='e1315222e3bf492580abb435998bb79235d0db6e787f456cd03cccb2fafd7597'
+          a=json.loads(p.read_text())
+          assert a['original_USDM_45ZIP_source']==45
+          assert a['original_native3m_closed']==76800 and a['original_native15m_exact']==15360
+          assert a['original_C46_4H_source_candidates']==153 and a['original_C46_native3m_first_contacts']==132
+          assert a['source_horizon_state_counts']=={
+            'C49_ADAPTED_1H_FIRST_LATER_3M_CLOSE_V1':{
+              'FIRST_LATER_ADVERSE_3M_CLOSE':25,'FIRST_LATER_FAVORABLE_3M_CLOSE':97,
+              'NO_LATER_DIRECTIONAL_CLOSE_HORIZON_COMPLETE':10,'NO_PARENT_4H_FIRST_CONTACT_AS_OF':21},
+            'C49_ADAPTED_4H_FIRST_LATER_3M_CLOSE_V1':{
+              'FIRST_LATER_ADVERSE_3M_CLOSE':28,'FIRST_LATER_FAVORABLE_3M_CLOSE':100,
+              'NO_LATER_DIRECTIONAL_CLOSE_HORIZON_COMPLETE':4,'NO_PARENT_4H_FIRST_CONTACT_AS_OF':21},
+            'C49_ADAPTED_12H_FIRST_LATER_3M_CLOSE_V1':{
+              'FIRST_LATER_ADVERSE_3M_CLOSE':29,'FIRST_LATER_FAVORABLE_3M_CLOSE':100,
+              'NO_LATER_DIRECTIONAL_CLOSE_HORIZON_COMPLETE':3,'NO_PARENT_4H_FIRST_CONTACT_AS_OF':21}}
+          assert a['academic_author_verified_reactions']==a['academic_author_verified_1h_volume_confirmations']==a['original_author_chart_trade_goldens']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c49_original3m_post_contact_directional_close 2>&1 | tee /tmp/C49-39.txt
+          grep -Fq 'Ran 39 tests' /tmp/C49-39.txt
+          grep -qx 'OK' /tmp/C49-39.txt
+      - name: Append exactly one A119 six source proof SHA evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A119 \
+            --cycle B1/C49 \
+            --planned 'Find only FIRST subsequent strictly LATER CLOSED original native3m directional exit beyond technical original4H classic IMB after first3m contact; source-only 1h/4h/12h preregistered horizons, no same-bar fake reaction, no academic PoI or VC promotion and no fills/orders' \
+            --executed 'Separate original3m source-only temporal price close observer with raw 3m ID, strict close beyond positive or negative 4H technical wick-gap bounds, first-event dominance, right censor on incomplete window, no lookahead, 39 adverse synthetic/source tests ×3 Python; full 45 original signed Binance USD-M ZIP replay, 76800 native3m, 15360 native15m exact, 153 C46 parent geometry and 132 original first contacts, 1h/4h/12h classifications. First 463807-byte frozen C49 original JSON CI 40049920656 PASS, independent full original45ZIP byte exact C49 CI 40050049709 PASS 4/4.' \
+            --result 'C49 source directional price closes among 132 contacted technical 4H IMBs: at 1h 97 first favorable 25 first adverse 10 no boundary exit; 4h 100 favorable 28 adverse 4 no exit; 12h 100 favorable 29 adverse 3 no exit. Additional 21 parent zones never first-contact in observed original source. These are NOT author-confirmed POI tests, Volume Confirmation, trades or win rates; zero orders, trades, PnL, NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'A118 predecessor tip 3bc8ed467154290e7b4534969b0176fbeea6b8ac210d0a752130592b06ff0aea unchanged, C46 original 293203-byte Git blob dc03c181912ffbb800bc191fbc16ec0d05c335e0 unchanged, C48 original frozen 406626-byte source unchanged. 39x3 source negative CI 40049832589 PASS, first original 45ZIP source CI 40049920656 PASS; independent second fresh 45ZIP full original 463807-byte complete JSON CI 40050049709 PASS 4/4, blob c213c36a2e26caf63d9d65403429d1419a844bd9 and SHA256 e1315222e3bf492580abb435998bb79235d0db6e787f456cd03cccb2fafd7597. Source price closes in favorable direction are NOT filled profitable trades or true instructor VC; all code isolated research-only.' \
+            --evidence d05/c49_original3m_post_contact_directional_close.py \
+            --evidence d05/test_c49_original3m_post_contact_directional_close.py \
+            --evidence tests/probe_c49_original3m_first_post_4h_contact_45zip.py \
+            --evidence evidence/c49/C49_ORIGINAL_45ZIP_4H_CONTACT_FIRST_LATER_3M_CLOSE.json \
+            --evidence evidence/c49/C49_INDEPENDENT_FULL_ORIGINAL_SOURCE_WITNESS_20261024.json \
+            --evidence cycles/B1_C49_FIRST_LATER_ORIGINAL3M_DIRECTIONAL_CLOSE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A119.txt
+          grep -Fq 'entries 119' /tmp/A119.txt
+          python tests/test_journal_integrity.py | tee /tmp/A119proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A119proof.txt
+      - name: Commit ONLY append-once A119 JSONL and safely rebase remote
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C49): append-once A119 six original 45ZIP native3m first later closed boundary source SHA'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
