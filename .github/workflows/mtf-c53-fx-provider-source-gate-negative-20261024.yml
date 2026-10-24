@@ -1,0 +1,41 @@
+name: EMBER C53 8 owner course EURUSD FX source provider receipt strict chronology 43 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c53-fx-provider-source-gate-negative-20261024.yml'
+      - 'research/mtf-element-audit-v1/d05/c53_fx_provider_original_source_attestation_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c53_fx_provider_original_source_attestation_gate.py'
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify immutable A122 122 SHA original 49 image metadata evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122source.txt
+          grep -Fq '"validations_pass": true' /tmp/A122source.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json)" = '4a06ac1e1ed846f3c23adb4dba7d6f56b6afba67'
+      - name: Run all 43 FX source vendor quote side genuine 4H alignment no future/false author golden tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c53_fx_provider_original_source_attestation_gate 2>&1 | tee /tmp/C53-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C53-43.txt
+          grep -qx 'OK' /tmp/C53-43.txt
+          ! grep -q 'skipped=' /tmp/C53-43.txt
