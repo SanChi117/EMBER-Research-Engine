@@ -41,3 +41,10 @@
 Только после независимой CI полного C53 source-only manifest byte-to-byte, 43×3 negative, A123 append-once SHA и независимой 123/123 ledger проверки эта часть gate принимается как **[x] этап контроля качества данных, НЕ [x] реконструкция исходной академической сделки**.
 
 Далее требуется законный точный оригинальный провайдер EURUSD M15/H1/H4 в исторические интервалы, сначала OANDA 2024 и Saxo 2025. Сохранить price side / feed group / alignment / chart source provenance; если authenticated raw bars недоступны, C54 должен иметь статус **UNKNOWN + отсутствие авторских эталонов**, а не использовать чужие котировки ради «совпадения». PAPER ONLY / NOT_TRADE_READY.
+
+
+## 6. Независимая проверка первой заморозки завершена
+
+[CI 40101894607](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40101894607) **SUCCESS 4/4**: отдельный source replay **побайтно** повторил весь 11 871-байтный C53 JSON, Git blob `c38da1ec093bc37006942f7206018288e8884240`, SHA256 `01464f1a7b92f1185137b024d730a9bd7fbd39457c787935e46b65f8b7c7a61a`. Три независимых матричных Python 3.10, 3.11, 3.12 jobs повторно прошли все **43/43** negative anti-forged market/candle/author tests, проверили неизменную предыдущую цепочку A122 (122/122) и шесть C52 SHA доказательств. Свидетельство `evidence/c53/C53_INDEPENDENT_FX_VENDOR_SOURCE_GATE_WITNESS_20261024.json` фиксирует неизвлечённые 0 original FX OHLC, 0 авторских goldens и отсутствие API-токенов.
+
+Для принятия *source preflight / missing-vendor-feed gate*, но **не** полностью воспроизведённой академической торговой системы, требуется append-once A123 и независимый 123/123 SHA CI.
