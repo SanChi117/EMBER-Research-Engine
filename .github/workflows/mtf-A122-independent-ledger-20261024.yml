@@ -1,0 +1,67 @@
+name: EMBER C52 independent final A122 122 SHA all 49 visual source FX headers
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A122-independent-ledger-20261024.yml'
+permissions:
+  contents: read
+jobs:
+  verify_a122:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify all A001-A122 chained SHA and exact six C52 owner-course source evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A122evidence.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          chain=[json.loads(x) for x in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(chain)==122
+          before,now=chain[-2:]
+          assert before['action_id']=='A121' and before['record_sha256']=='5052650462e22657e9db85ddfc2c539a74e628d4eef3cb413a5b868d6262949b'
+          assert now['seq']==122 and now['action_id']=='A122'
+          assert now['prev_sha256']==before['record_sha256']
+          assert now['record_sha256']=='5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428'
+          assert now['cycle']=='B1/C52' and now['verdict']=='DONE' and now['cycle_result']=='PASSED'
+          assert len(now['evidence'])==6
+          for e in now['evidence']:
+              buf=pathlib.Path(e['path']).read_bytes()
+              assert len(buf)==e['bytes'] and hashlib.sha256(buf).hexdigest()==e['sha256']
+          p=pathlib.Path('evidence/c52/C52_ALL_49_AUTHENTIC_OWNER_COURSE_VISUAL_CLASSIFICATION_AND_8_FX_HEADERS.json')
+          assert len(p.read_bytes())==52913
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='734fe20d117efc7b805ef407ca06ec20af663a0458732a2f4d49c2dbcbd814ec'
+          j=json.loads(p.read_text())
+          assert j['actual_images_visually_read']==49
+          assert j['newly_visually_seen_c52_png_count']==43
+          assert j['source_OANDA_EURUSD_2024_publish_count']==5
+          assert j['source_SAXO_EURUSD_2025_publish_count']==2
+          assert j['source_OANDA_EURUSD_2025_publish_count']==1
+          assert j['full_original_FX_OANDA_SAXO_raw_candles_retrieved'] is False
+          assert j['private_original_file_content_republished'] is False
+          assert j['2023_author_chart_positive_raw_candle_goldens']==j['2023_author_chart_negative_raw_candle_goldens']==0
+          assert j['orders']==j['trades']==0 and j['readiness']=='NOT_TRADE_READY'
+          print('C52_A122_INDEPENDENT_122_SHA_ALL_SIX_ORIGINAL_VISUAL_SOURCE_FILES_PASS')
+          PY
+      - name: Independently rerun all 43 original owner academy source image 2024/25 FX publisher and no-forged-author-golden tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c52_full_course_visual_49_source_inspection 2>&1 | tee /tmp/C52neg.txt
+          grep -Fq 'Ran 43 tests' /tmp/C52neg.txt
+          grep -qx 'OK' /tmp/C52neg.txt
+          ! grep -q 'skipped=' /tmp/C52neg.txt
