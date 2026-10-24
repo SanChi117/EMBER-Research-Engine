@@ -104,20 +104,23 @@ def match_later_closed_source(poi_obs,onehour,*,as_of_ms):
     if type(as_of_ms) is not int or as_of_ms%THREE:
         raise ValueError("C47_INVALID_CLOSED_ASOF")
     c=poi_obs.candidate
-    if c.side not in ("LONG","SHORT") or c.fully_known_ms>as_of_ms:
+    if (c.side not in ("LONG","SHORT") or c.fully_known_ms>as_of_ms
+        or c.fully_known_ms% (4*HOUR) or
+        c.source_status!="C46_NATIVE_4H_CLASSIC_IMB_GEOMETRY_ONLY"):
         raise ValueError("C47_INVALID_PARENT_4H_KNOWN")
     if poi_obs.first_contact_closed_known_ms is None:
         if (poi_obs.first_contact_original3m_id is not None or
             poi_obs.first_contact_bar_start_ms is not None):
             raise ValueError("C47_FICTITIOUS_FIRST_CONTACT")
-        return ()
-    if (poi_obs.first_contact_original3m_id is None or
-        poi_obs.first_contact_bar_start_ms is None or
-        poi_obs.first_contact_closed_known_ms!=poi_obs.first_contact_bar_start_ms+THREE
-        or poi_obs.first_contact_bar_start_ms<c.fully_known_ms
-        or poi_obs.first_contact_closed_known_ms>as_of_ms):
-        raise ValueError("C47_INVALID_SOURCE_FIRST_CONTACT_CHRONOLOGY")
-    cutoff=poi_obs.first_contact_closed_known_ms
+        cutoff=None
+    else:
+        if (poi_obs.first_contact_original3m_id is None or
+            poi_obs.first_contact_bar_start_ms is None or
+            poi_obs.first_contact_closed_known_ms!=poi_obs.first_contact_bar_start_ms+THREE
+            or poi_obs.first_contact_bar_start_ms<c.fully_known_ms
+            or poi_obs.first_contact_closed_known_ms>as_of_ms):
+            raise ValueError("C47_INVALID_SOURCE_FIRST_CONTACT_CHRONOLOGY")
+        cutoff=poi_obs.first_contact_closed_known_ms
     selected=[]
     last_end=None
     for h in onehour:
@@ -132,12 +135,15 @@ def match_later_closed_source(poi_obs,onehour,*,as_of_ms):
             h.first_hour_start_ms%HOUR or
             len(h.first_raw_native3m_ids)!=3 or len(h.last_raw_native3m_ids)!=3
             or any(not x for x in h.first_raw_native3m_ids+h.last_raw_native3m_ids)
+            or not Decimal(h.bottom).is_finite() or not Decimal(h.top).is_finite()
             or Decimal(h.bottom)<=0 or Decimal(h.top)<=Decimal(h.bottom)):
             raise ValueError("C47_MALFORMED_1H_SOURCE_PROVENANCE")
         if last_end is not None and h.fully_known_ms<=last_end:
             raise ValueError("C47_1H_SOURCE_GAP_ORDER_DRIFT")
         last_end=h.fully_known_ms
-        if h.side==c.side and h.first_hour_start_ms>=cutoff:
+        if h.side not in ("LONG","SHORT"):
+            raise ValueError("C47_FORGED_1H_SOURCE_DIRECTION")
+        if cutoff is not None and h.side==c.side and h.first_hour_start_ms>=cutoff:
             selected.append(h)
     return tuple(selected)
 
