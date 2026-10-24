@@ -2,6 +2,7 @@
 from dataclasses import replace
 import unittest
 from c21b_original_3m_raid_break_geometry import THREE,HOUR
+from c36_adapted_slot_registry import ACADEMIC_CORE_ID
 from c47_post_4h_contact_1h_imb_source_link import (
  OneHourImbSource,FourToOneSourceObservation,C47SourceJoin)
 from c49_original3m_post_contact_directional_close import (
@@ -44,7 +45,7 @@ def parents(a=None,b=None):
     return (
       C47SourceJoin("SYNTHUSDT",ASOF,10000,100,1,
           int(x.original4h_first_contact_native3m_id is not None),
-          int(x.first_post_contact_1h_imb_source is not None),0,(x,)),
+          int(x.first_post_contact_1h_imb_source is not None),0,ACADEMIC_CORE_ID,(x,)),
       C49SourceReview("SYNTHUSDT",ASOF,10000,1,
           int(y.source_original3m_first_contact_id is not None),3,(y,))
     )
@@ -131,8 +132,13 @@ class C50TextGateAndCausalProvenance(unittest.TestCase):
         self.blocked("FORGED_OR_FUTURE_ORIGINAL_1H_SOURCE",
             replace(x,first_post_contact_1h_imb_source=onehour(start=ASOF-HOUR)))
     def test_future_3m_price_source_rejected(self):
-        bad=reaction(exit_close=ASOF+THREE)
-        self.blocked("FUTURE_OR_FORGED_3M_DIRECTIONAL_CLOSE",b=bad)
+        original=reaction(exit_close=None)
+        altered=list(original.window_observations)
+        altered[2]=replace(altered[2],status="FIRST_LATER_FAVORABLE_3M_CLOSE",
+            first_later_event_original3m_id="forged-future",first_later_event_close_known_ms=ASOF+THREE,
+            first_later_event_close_price="105",favorable_3m_close=True)
+        self.blocked("FUTURE_OR_FORGED_3M_DIRECTIONAL_CLOSE",
+            b=replace(original,window_observations=tuple(altered)))
     def test_exit_before_contact_rejected(self):
         self.blocked("FUTURE_OR_FORGED_3M_DIRECTIONAL_CLOSE",
             b=reaction(exit_close=TOUCH))
