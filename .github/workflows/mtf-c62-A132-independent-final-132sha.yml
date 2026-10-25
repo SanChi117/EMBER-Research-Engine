@@ -1,0 +1,72 @@
+name: EMBER C62 independent final 132 SHA 6 evidence original 45 ZIP SNR RB MB x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c62-A132-independent-final-132sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify all 132 SHA and 6 evidence, preserved C46-C61 original Git blobs, 22 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A132
+          grep -Fq 'entries 132 tip_sha256 7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab' /tmp/A132
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib,subprocess
+          from pathlib import Path
+          records=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(records)==132
+          old,new=records[-2:]
+          assert old['action_id']=='A131' and old['record_sha256']=='c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d'
+          assert new['action_id']=='A132' and new['seq']==132 and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab'
+          assert new['cycle']=='B1/C62' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          expected={"d05/c62_academic_snr_rb_imb_liquidity_source_separation.py":"418028b367894d60499fcb5f47f26088667a8c81eaf7ebc752a6178289e558be","d05/test_c62_academic_snr_rb_imb_liquidity_source_separation.py":"5b1375d4ea032b513470b9622e36fcec2edbaf5c5f9ea15aad15ca779f85a517","tests/probe_c62_original45zip_1h_snr_rb_imb_separate_source.py":"beffcc51ce3e3197a6e8e1d4dd938bf0c1c9f16ab718c8def505472a3f03a69b","evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json":"8ac92d6406845568a2e0178be81fc2fec529da2d26697b6f08b7fbaa4e5a0c80","evidence/c62/C62_INDEPENDENT_ORIGINAL45ZIP_SNR_RB_MB_WICK_SOURCE_WITNESS_20261025.json":"8ab2affce4aa8e9abc8d8c6b4321eb1ca514330427a3248013b9e90baf70c433","cycles/B1_C62_CRYPTO_ORIGINAL45ZIP_1H_SNR_RB_MB_IMB_SOURCE_SEPARATION_REPORT.md":"ec19a4f18f924d746571260e488fe3302c07456dff422fcf07d2daedccb3b3a0"}
+          assert len(new['evidence'])==6 and {x['path'] for x in new['evidence']}==set(expected)
+          for x in new['evidence']:
+            data=Path(x['path']).read_bytes()
+            assert len(data)==x['bytes'] and hashlib.sha256(data).hexdigest()==x['sha256']==expected[x['path']]
+          oldblobs={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json":"b2727f081d8a73f522a97a54b4582507ee969244","evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json":"2b4f944ddbdff0871a7fd553de2ab9955d220b91","evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json":"98f087a731d30c2191dc443038c371751456f316","evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json":"08f24050d19bb390cf2985a901e2a8f2ea3c0ec3","evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json":"06f2ff7decd2aa9660381947d3cf43f6b722cd8e","evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json":"46077ffb3495c14c906963156dd4a93c7acf9911","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd","evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json":"305624e592f55bd699e94e45f4316e4efabdb726"}
+          for p,blob in oldblobs.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+p],text=True).strip()==blob
+          f=Path('evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json')
+          assert f.stat().st_size==2498773
+          z=json.loads(f.read_bytes())
+          assert z['original_signed_zip_counts']['total']==45
+          assert z['original_native3m_closed']==76800 and z['original_native1d_closed']==160
+          assert z['original_native15m_exact_decimal_equalities']==15360
+          assert z['source_derived_closed_1h_bars']==3840
+          assert z['original_c46_4h_source_parents_checked']==153
+          assert z['original_1h_source_category_totals']=={
+             'MB_WEAKER_SOURCE_ONLY_NO_RAID_OR_IMB_NOT_VOLUME_CONFIRMATION':62,
+             'RB_TWO_OPPOSITE_HOURLY_CANDLES_WITHOUT_VERIFIED_WICK_RAID':1039,
+             'RB_WICK_ONLY_IMB_SOURCE_PROXY':556,
+             'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY':394,
+             'SNR_ACCEPTED_CLOSE_WITH_SOURCE_IMB_PROXY':213,
+             'SNR_ACCEPTED_CLOSE_WITH_SOURCE_LIQUIDITY_PROXY':128,
+             'original_1h_technical_classic_gap':646}
+          assert z['author_snr_goldens']==z['author_rb_goldens']==z['author_imb_goldens']==0
+          assert z['orders']==z['trades']==z['fills']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          print('C62_A132_INDEPENDENT_132_SHA_SIX_EVIDENCE_PREVIOUS_ORIGINAL_BLOBS_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c62_academic_snr_rb_imb_liquidity_source_separation 2>&1 | tee /tmp/C62neg
+          grep -Fq 'Ran 22 tests' /tmp/C62neg
+          grep -qx 'OK' /tmp/C62neg
+          ! grep -q 'skipped=' /tmp/C62neg
