@@ -1,0 +1,80 @@
+name: EMBER final C55 supplemental independent A126 all 126 SHA 13MB source and 43 negatives x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-A126-independent-final-126-sha-20261025.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent_126:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify 126/126 SHA including full 13MB C55 six independent A126 source evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A126.txt
+          grep -Fq 'entries 126 tip_sha256 f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba' /tmp/A126.txt
+          python tests/test_journal_integrity.py | tee /tmp/A126-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A126-evidence.txt
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,subprocess
+          q=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf-8').splitlines()]
+          assert len(q)==126
+          a124,a125,a126=q[-3:]
+          assert a124['action_id']=='A124' and a124['record_sha256']=='90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd'
+          assert a125['action_id']=='A125' and a125['record_sha256']=='6b2eea23ac4a4b27b430be63cf731c8ad12ecd75335b33e59cbb386561517350'
+          assert a126['seq']==126 and a126['action_id']=='A126' and a126['prev_sha256']==a125['record_sha256']
+          assert a126['record_sha256']=='f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba'
+          assert a126['cycle']=='B1/C55-LIFECYCLE-SUPPLEMENT' and a126['verdict']=='DONE' and a126['cycle_result']=='PASSED'
+          want={
+           'd05/c55_crypto_1h_liquidity_raid_bos_lifecycle.py':'cf7906538d44b35031f309518022b7d8ab07d9044cc6633dd5adae637b1028d4',
+           'd05/test_c55_crypto_1h_liquidity_raid_bos_lifecycle.py':'a8b4b027c5ac361ad930fc76ff345b8bb5e7077b6abaf3d200a8eda8e5fc5d98',
+           'tests/probe_c55_original_crypto_1h_raid_3m_bos_45zip.py':'b0d1e5fd2cb53558b05c1f63b5f666562f963e3820d77f48d12cda9b72de5723',
+           'evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json':'63526354af9c450f0e659ab59c793987177a9b023ada69730726e6de10842411',
+           'evidence/c55/C55_INDEPENDENT_FULL45ZIP_LIQUIDITY_LIFECYCLE_WITNESS_20261025.json':'49e50311010019ee7b9b96f490c0444a561cfb75491899da98630c4b33deb96b',
+           'cycles/B1_C55_CRYPTO_1H_LIQUIDITY_RAID_NATIVE3M_BOS_LIFECYCLE_REPORT.md':'5c22907dc596b0d694803857f4333a7836330d5b8ab5a9636e43df9f8a325f23'}
+          assert len(a126['evidence'])==6 and {e['path'] for e in a126['evidence']}==set(want)
+          for e in a126['evidence']:
+              content=Path(e['path']).read_bytes()
+              assert len(content)==e['bytes']
+              assert hashlib.sha256(content).hexdigest()==e['sha256']==want[e['path']]
+          p=Path('evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json')
+          assert p.stat().st_size==13029668
+          doc=json.loads(p.read_bytes())
+          assert doc['original_zip_count']==45
+          assert doc['original_closed_native3m']==76800
+          assert doc['first_confirmed_1h_wick_raids']==642 and doc['adapted_3m_price_breaks']==539
+          assert doc['orders']==doc['trades']==doc['fills']==0
+          assert doc['readiness']=='NOT_TRADE_READY'
+          for name,wantblob in {
+           'evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+           'evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json':'2b4f944ddbdff0871a7fd553de2ab9955d220b91',
+           'evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json':'98f087a731d30c2191dc443038c371751456f316',
+          }.items():
+           got=subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+name],text=True).strip()
+           assert got==wantblob,(name,got,wantblob)
+          print('A126_FULL_126_SHA_SIX_INDEPENDENT_C55_LIFECYCLE_EVIDENCE_AND_C56_A125_IMMUTABLE_PASS')
+          PY
+      - name: Independent C55 original first 1H raid lifecycle 43 anti-forgery tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_bos_lifecycle 2>&1 | tee /tmp/C55-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C55-43.txt
+          grep -qx 'OK' /tmp/C55-43.txt
+          ! grep -q 'skipped=' /tmp/C55-43.txt
