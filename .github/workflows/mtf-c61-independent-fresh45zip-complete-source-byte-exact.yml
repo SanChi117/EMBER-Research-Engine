@@ -55,7 +55,7 @@ jobs:
           assert d['readiness']=='NOT_TRADE_READY'
           print('C61_FULL_INDEPENDENT_SECOND_45ZIP_SOURCE_SHA256',digest,a.stat().st_size)
           PY
-  semantic_48:
+  semantic_51:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -66,7 +66,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Independently recheck C61 48 fail-closed academic tests and prior 130 SHA
+      - name: Independently recheck C61 51 fail-closed academic tests and prior 130 SHA
         run: |
           set -euo pipefail
           cd research/mtf-element-audit-v1
@@ -74,6 +74,6 @@ jobs:
           python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
           cd d05
           python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/C61tests
-          grep -Fq 'Ran 48 tests' /tmp/C61tests
+          grep -Fq 'Ran 51 tests' /tmp/C61tests
           grep -qx 'OK' /tmp/C61tests
           ! grep -q 'skipped=' /tmp/C61tests
