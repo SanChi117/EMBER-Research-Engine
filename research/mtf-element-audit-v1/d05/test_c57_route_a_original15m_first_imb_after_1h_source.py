@@ -168,7 +168,7 @@ class C57RouteAFirstAnyNative15mSourceTests(unittest.TestCase):
     def test_reject_1h_missing_with_nonzero_source_candidates(self):
         p=parent()
         bad=replace(p,first_post_contact_1h_imb_source=None,post_contact_same_side_1h_candidate_count=1)
-        with self.assertRaisesRegex(ValueError,"UNVERIFIED_C47"):
+        with self.assertRaisesRegex(ValueError,"MISSING_FIRST_1H_CANDIDATE"):
             self.review(bad)
     def test_reject_borrowed_fake_15m_imb_event(self):
         gs=observed_15m_gaps(native()); p=parent()
