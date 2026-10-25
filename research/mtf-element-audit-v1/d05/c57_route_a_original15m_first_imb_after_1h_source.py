@@ -139,6 +139,26 @@ def first_any_after_parent(p,gaps,*,symbol,as_of_ms):
     if (p.original4h_first_contact_native3m_id is None)!=(
         p.original4h_first_contact_closed_known_ms is None):
         raise ValueError("C57_PARTIAL_FIRST_CONTACT")
+    if not isinstance(gaps,tuple):
+        raise ValueError("C57_UNTRUSTED_NATIVE15M_GAP_TIMELINE")
+    last=None
+    for g in gaps:
+        if (not isinstance(g,FifteenMinuteImb) or g.academic_vc_certified or
+            g.orders or g.trades or g.side not in ("LONG","SHORT") or
+            type(g.first_start_ms) is not int or
+            g.first_start_ms%FIFTEEN or
+            g.third_start_ms!=g.first_start_ms+2*FIFTEEN or
+            g.fully_known_ms!=g.third_start_ms+FIFTEEN or
+            g.fully_known_ms>as_of_ms or
+            len(g.original_native15m_ids)!=3 or
+            not all(RAW.fullmatch(x) and int(x.rsplit(":",1)[1])==
+                g.first_start_ms+i*FIFTEEN
+                for i,x in enumerate(g.original_native15m_ids)) or
+            not Decimal(g.bottom).is_finite() or not Decimal(g.top).is_finite() or
+            not (0<Decimal(g.bottom)<Decimal(g.top)) or
+            (last is not None and g.fully_known_ms<=last)):
+            raise ValueError("C57_FORGED_OR_UNCLOSED_15M_IMB_SOURCE")
+        last=g.fully_known_ms
     one=p.first_post_contact_1h_imb_source
     if p.original4h_first_contact_closed_known_ms is None:
         if one is not None or p.post_contact_same_side_1h_candidate_count:
@@ -166,8 +186,14 @@ def first_any_after_parent(p,gaps,*,symbol,as_of_ms):
                 one.third_hour_start_ms!=one.second_hour_start_ms+HOUR or
                 one.fully_known_ms!=one.third_hour_start_ms+HOUR or
                 one.fully_known_ms>as_of_ms or
-                not all(RAW.fullmatch(x) for x in one.first_raw_native3m_ids+
-                        one.last_raw_native3m_ids) or
+                len(one.first_raw_native3m_ids)!=3 or
+                len(one.last_raw_native3m_ids)!=3 or
+                not all(RAW.fullmatch(x) and int(x.rsplit(":",1)[1])==
+                    one.first_hour_start_ms+i*HOUR
+                    for i,x in enumerate(one.first_raw_native3m_ids)) or
+                not all(RAW.fullmatch(x) and int(x.rsplit(":",1)[1])==
+                    one.first_hour_start_ms+(i+1)*HOUR-180000
+                    for i,x in enumerate(one.last_raw_native3m_ids)) or
                 not (Decimal(one.top)>Decimal(one.bottom)>0)):
                 raise ValueError("C57_1H_C47_GEOMETRY_OR_KNOWN_TIME_FORGED")
             bound=min(as_of_ms,one.fully_known_ms+WINDOW)
