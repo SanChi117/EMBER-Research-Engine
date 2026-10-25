@@ -70,7 +70,7 @@ class C58CryptoOnlyUnsweptPreknownSourceTests(unittest.TestCase):
     def test_both_BSL_and_SSL_observed_without_picking_winner(self):
         z=self.calc(pivots=(piv(kind="BSL"),piv(kind="SSL",level="107")))
         self.assertEqual(len(z.preknown_inside_1h_liquidity),2)
-        self.assertEqual(z.source_state,STATUS[2])
+        self.assertEqual(z.source_state,STATUS[3])
     def test_duplicate_same_liquidity_is_kept_not_fake_distinct_trades(self):
         z=self.calc(pivots=(piv(),piv()))
         self.assertEqual(len(z.preknown_inside_1h_liquidity),2)
