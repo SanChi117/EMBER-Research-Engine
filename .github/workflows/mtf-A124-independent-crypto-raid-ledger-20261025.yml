@@ -1,0 +1,68 @@
+name: EMBER C55 independent final A124 124 SHA original crypto 1H raid to 3m BOS
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A124-independent-crypto-raid-ledger-20261025.yml'
+permissions:
+  contents: read
+jobs:
+  independent_124:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify A001-A124 SHA chain and all six accepted C55 45ZIP source evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A124.txt
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/A124.txt
+          python tests/test_journal_integrity.py | tee /tmp/A124evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A124evidence.txt
+          python - <<'PY'
+          import pathlib,json,hashlib
+          q=[json.loads(x) for x in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(q)==124
+          old,new=q[-2:]
+          assert old['action_id']=='A123' and old['record_sha256']=='a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15'
+          assert new['seq']==124 and new['action_id']=='A124' and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd'
+          assert new['cycle']=='B1/C55' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==6
+          for e in new['evidence']:
+              raw=pathlib.Path(e['path']).read_bytes()
+              assert len(raw)==e['bytes']
+              assert hashlib.sha256(raw).hexdigest()==e['sha256']
+          p=pathlib.Path('evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json')
+          assert len(p.read_bytes())==2045882
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='9f9939603a3d4b4e9b7cb8569727a6013aaa06ee94d9f151a6c4d7acbb95924b'
+          doc=json.loads(p.read_text())
+          assert doc['original_Binance_USDM_zip_lineage']==45
+          assert doc['original_closed_native3m']==76800 and doc['exact_native15m']==15360
+          assert doc['adapted_source_total_contexts']==1924
+          assert doc['adapted_source_hypothesis_event_counts']=={
+           'LATEST_CONFIRMED_V1':539,'EARLIEST_CONFIRMED_V1':462,
+           'DEEP_RAID_SIDE_V1':412,'NEAREST_RAID_SIDE_V1':511}
+          assert doc['adapted_source_raid_BSL_SSL_counts']=={'BSL':866,'SSL':1058}
+          assert doc['original_5m_Route_C_probed_from_3m'] is False
+          assert doc['author_confirmed_BOS']==doc['author_confirmed_1h_liquidity']==doc['orders']==doc['trades']==0
+          assert doc['readiness']=='NOT_TRADE_READY'
+          print('C55_A124_INDEPENDENT_124_SHA_ALL_SIX_FULL_ORIGINAL_45ZIP_SOURCE_EVIDENCE_PASS')
+          PY
+      - name: Independent 31 real source 1H liquidity raid preknown fractal 3m break at close 5m isolation negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard 2>&1 | tee /tmp/C55neg.txt
+          grep -Fq 'Ran 31 tests' /tmp/C55neg.txt
+          grep -qx 'OK' /tmp/C55neg.txt
+          ! grep -q 'skipped=' /tmp/C55neg.txt
