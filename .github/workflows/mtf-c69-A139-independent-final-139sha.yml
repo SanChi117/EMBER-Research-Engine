@@ -1,0 +1,68 @@
+name: EMBER C69 independent final 139 SHA exact first native15m source raid
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c69-A139-independent-final-139sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  sha139:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently check 139 immutable source SHA, all six C69 receipts, old C46-C68 blobs and 30 strict first-15m tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A139
+          grep -Fq 'entries 139 tip_sha256 78271dd0a96a54713e4559fe47107ccf063b7ba8f4ed384d8aa166f2cae9c227' /tmp/A139
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json,subprocess
+          from pathlib import Path
+          z=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(z)==139
+          a,b=z[-2:]
+          assert a['action_id']=='A138' and a['record_sha256']=='c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a'
+          assert b['action_id']=='A139' and b['prev_sha256']==a['record_sha256']
+          assert b['record_sha256']=='78271dd0a96a54713e4559fe47107ccf063b7ba8f4ed384d8aa166f2cae9c227'
+          assert b['cycle']=='B1/C69' and b['verdict']=='DONE' and b['cycle_result']=='PASSED'
+          shas={"d05/c69_exact_native15m_first_liquidity_raid_vs_poi_test.py":"3420548dcf806a2e26fe8f90449634a845343844d13872fb061abc6528d472e9","d05/test_c69_exact_native15m_first_liquidity_raid_vs_poi_test.py":"d8ee1686b028ccdc58a81f9869618971ca98d144a9a25442c96755c544bd0b22","tests/probe_c69_original45zip_exact_first_native15m_raid_poi.py":"e47517e94ad183e8cb0088419f11eb66ce9f31f3596c3c71ef65ae0f1f2bd9ef","evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json":"ffe2568a1c8384630bed156d94e0dbd4cf89ce6d03ab79ce5946e31ec88fab1c","evidence/c69/C69_INDEPENDENT_ORIGINAL45ZIP_PREKNOWN_1H_15M_FIRST_WICK_WITNESS_20261025.json":"c4f6932f5d2f4f23030096178cbf14b84808f593a7b232d8149eb6441c844522","cycles/B1_C69_FIRST_REAL_NATIVE15M_LIQUIDITY_BAR_AND_NEW1H_POI_SOURCE_REPORT.md":"04c1d371e995a854db2fe6125f8ad7fe1d8459f64a925e2cf5c54c0d2a4992eb"}
+          assert len(b['evidence'])==6 and {x['path'] for x in b['evidence']}==set(shas)
+          for e in b['evidence']:
+            raw=Path(e['path']).read_bytes()
+            assert len(raw)==e['bytes']
+            assert hashlib.sha256(raw).hexdigest()==e['sha256']==shas[e['path']]
+          frozen={
+            'evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json':'dc03c181912ffbb800bc191fbc16ec0d05c335e0',
+            'evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json':'899373e4a1dc1999d1485ac8c1f790d39071aebd',
+            'evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json':'8428bf7d6cd3bc26f617cfc32a34c91a27c813b2',
+            'evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json':'fdc77c7ec942f03b4efae83b935d994c8435a24f',
+            'evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json':'c693058cdb28b0e118879d32ddcbbd0d2a66bfc6',
+            'evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json':'87409101a6fad4897b32e13085c9a0cc13566594',
+            'evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json':'587779a7dd1736099e8270c8823c15822f0e77a0',
+            'evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json':'b22860dfa13e4b19d16e8dd892719a772485e847'}
+          for path,blob in frozen.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+path],text=True).strip()==blob
+          d=json.loads(Path('evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json').read_bytes())
+          assert d['original_zip_counts']['total']==45 and d['source_4h_C46_parent_count']==153
+          assert d['source_first_exact_native15m_contact_state_totals']['RAID_FIRST_NATIVE15M_BAR_WICK_ONLY_RECLAIM_1H']==19
+          assert d['source_first_exact_native15m_contact_state_totals']['RAID_FIRST_NATIVE15M_BAR_CLOSE_BEYOND_LEVEL_RECLAIM_LATER_1H']==4
+          assert d['source_first_exact_native15m_contact_state_totals']['AMBIGUOUS_MULTIPLE_PREKNOWN_LIQUIDITY_LEVELS_SAME_FIRST_BAR']==3
+          assert d['source_first_exact_native15m_contact_state_totals']['NEW_1H_POI_SOURCE_FIRST15M_WICK_TEST_NOT_AUTHOR_VALID']==35
+          assert d['orders']==d['trades']==d['fills']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C69_A139_INDEPENDENT_139_SHA_SIX_ORIGINAL45_SOURCE_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c69_exact_native15m_first_liquidity_raid_vs_poi_test 2>&1 | tee /tmp/C69
+          grep -Fq 'Ran 30 tests' /tmp/C69
+          grep -qx 'OK' /tmp/C69
