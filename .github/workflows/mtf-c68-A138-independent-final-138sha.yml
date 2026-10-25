@@ -1,10 +1,10 @@
 name: EMBER C68 independent final 138 SHA all six original crypto source evidence x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c68-A138-independent-final-138sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 353f90d87cc995016eb88ef1bbe1fb7322226a7c
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
