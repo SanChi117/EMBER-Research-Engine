@@ -1,10 +1,10 @@
 name: EMBER C72 independent final A142 142 original60 ZIP 5m SHA x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c72-A142-independent-final-142sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: aee42e569ebe093ff92f4037bcf9e3750a961f13
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
