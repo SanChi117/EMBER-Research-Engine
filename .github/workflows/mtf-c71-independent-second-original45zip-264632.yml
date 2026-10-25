@@ -1,0 +1,79 @@
+name: EMBER C71 second independent signed original45 ZIP 264632byte Route A source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c71-independent-second-original45zip-264632.yml'
+      - 'research/mtf-element-audit-v1/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json'
+permissions:
+  contents: read
+jobs:
+  independent_original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify old immutable A140 and C70 original SHA crypto source then full second fresh 45 authentic ZIP
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A140
+          grep -Fq 'entries 140 tip_sha256 f799fa6b65ae8044971fa95e355fca9c8e228e2dbf90cd3108081b39ab6d21bb' /tmp/A140
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json)" = e100ca8a70a32484fd311ae2dcf31a311d85865c
+          test "$(git rev-parse HEAD:$R/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97
+          python "$R/tests/probe_c71_original45zip_after_first3m_contact_vc_bos.py" /tmp/C71-second.json >/tmp/C71-second.log 2>&1 || { tail -c 21000 /tmp/C71-second.log; exit 1; }
+          cmp -s /tmp/C71-second.json "$R/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('research/mtf-element-audit-v1/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json')
+          assert p.stat().st_size==264632
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='b02777bc871e6471d349989179da3452df6a185c4db805cf5b6071e5a377b253'
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert d['post_actual_3m_contact_source15m_or_1h_first_any_state_totals']=={
+            'FIRST_ANY_15M_IMB_ALIGNED_NOT_AUTHOR_VC':8,
+            'FIRST_ANY_15M_SNR_ALIGNED_NOT_AUTHOR_VC':3,
+            'FIRST_ANY_1H_BOS_PROXY_NOT_AUTHOR_VC_OR_BOS':0,
+            'FIRST_ANY_NEW1H_POI_15M_IMB_TRIGGER_VS_VC_UNRESOLVED':6,
+            'FIRST_ANY_NEW1H_POI_15M_SNR_TRIGGER_VS_VC_UNRESOLVED':6,
+            'FIRST_ANY_SOURCE_OPPOSITE_DIRECTION':32,
+            'FIRST_ANY_SOURCE_SAME_TIME_15M_AND_1H_BOS_AMBIGUOUS':0,
+            'FIRST_ANY_SOURCE_SAME_TIME_MULTIPLE_15M_KINDS_AMBIGUOUS':2,
+            'FIRST_ANY_SOURCE_TWO_DIRECTIONS_AMBIGUOUS':0,
+            'NO_FIRST_ANY_SOURCE_POST_GATE_FULL_WINDOW':0,
+            'NO_FIRST_ANY_SOURCE_POST_GATE_RIGHT_CENSORED':1,
+            'NO_UNAMBIGUOUS_ORIGINAL3M_CONTACT':95}
+          assert d['author_verified_routeA_15m_vc_or_bos']==0
+          assert d['author_verified_new1h_poi_first_valid_test']==0 and d['author_verified_5m_vc']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C71_SECOND_INDEPENDENT_FULL_ORIGINAL45_BYTE_EQUAL_SHA',p.stat().st_size,sha)
+          PY
+  adverse30:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Repeat 30 strict adverse cases each Python, no 3m 15m 1h future author VC
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c71_post_contact_closed_15m_vc_1h_bos_semantic_gate 2>&1 | tee /tmp/C71
+          grep -Fq 'Ran 30 tests' /tmp/C71
+          grep -qx 'OK' /tmp/C71
