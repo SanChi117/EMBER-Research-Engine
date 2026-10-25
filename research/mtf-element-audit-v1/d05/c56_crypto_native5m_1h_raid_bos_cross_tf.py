@@ -61,6 +61,8 @@ def validate_original_crypto_5m_break(e):
     if (not isinstance(p.center_ms,int) or not isinstance(p.known_ms,int) or
         p.known_ms!=p.center_ms+2*HOUR or
         r.first_breach_ms is None or r.confirmed_at_ms is None or
+        r.verdict!="WICK_FRACTAL_GEOMETRY" or
+        r.first_breach_close_ms!=r.first_breach_ms+HOUR or
         r.confirmed_at_ms!=r.first_breach_ms+2*HOUR or
         p.known_ms>r.first_breach_ms or
         r.first_breach_ms%HOUR or
