@@ -1,0 +1,33 @@
+name: EMBER C63 original source first ANY 1h VC/BOS research 29 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c63-original-contact-first-any-vc-bos-29negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c63_closed_4h_source_contact_to_first_any_1h_reaction.py'
+      - 'research/mtf-element-audit-v1/d05/test_c63_closed_4h_source_contact_to_first_any_1h_reaction.py'
+permissions:
+  contents: read
+jobs:
+  source_chronology:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: A132 ledger and 29 source first-any proxy with no author strongHL
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A132
+          grep -Fq 'entries 132 tip_sha256 7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab' /tmp/A132
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c63_closed_4h_source_contact_to_first_any_1h_reaction 2>&1 | tee /tmp/C63
+          grep -Fq 'Ran 29 tests' /tmp/C63
+          grep -qx 'OK' /tmp/C63
