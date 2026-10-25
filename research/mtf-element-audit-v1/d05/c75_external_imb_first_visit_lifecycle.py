@@ -70,6 +70,8 @@ def _validate(rows, tf, as_of_ms):
             or type(rows) is not tuple or not rows):
         raise C75Rejected("SOURCE_TF_ASOF_OR_TUPLE")
     step = PERIOD[tf]
+    if type(rows[0]) is not BAR_CLASS[tf]:
+        raise C75Rejected("NATIVE_TYPE_OR_CROSS_SYMBOL")
     symbol = rows[0].symbol
     if symbol not in SYMBOLS:
         raise C75Rejected("CRYPTO_SYMBOL")
