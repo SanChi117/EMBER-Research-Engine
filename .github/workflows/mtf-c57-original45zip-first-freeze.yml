@@ -1,0 +1,107 @@
+name: EMBER C57 original45zip Route A source chronology first native15m
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c57-original45zip-first-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c57_original45zip_route_a_4h_1h_native15m_first_imb.py'
+permissions:
+  contents: write
+concurrency:
+  group: c57-original-source-freeze
+  cancel-in-progress: false
+jobs:
+  original_45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify accepted original C46 C47 and 126 ledger hashes
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger
+          grep -Fq 'entries 126 tip_sha256 f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba' /tmp/ledger
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+      - name: Re-download 45 original SHA sources 15m 1d 3m and compute C57 full parent/first-any15m
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c57_original45zip_route_a_4h_1h_native15m_first_imb.py" /tmp/C57-original.json >/tmp/C57-replay.log 2>&1 || { tail -c 20000 /tmp/C57-replay.log; exit 1; }
+          tail -c 1800 /tmp/C57-replay.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('/tmp/C57-original.json')
+          x=json.loads(p.read_bytes())
+          assert x['source_archives']['total']==45
+          assert x['native_original3m_closed']==76800
+          assert x['native_original15m_closed']==15360
+          assert x['source_first3m_contacts']==132
+          assert x['post_contact_technical1h_candidates']==130
+          assert x['author_POI_first_test_goldens']==x['academic_author_15m_vc_goldens']==0
+          assert x['orders']==x['trades']==x['fills']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C57_ORIGINAL_FULL_JSON_BYTES',p.stat().st_size)
+          print('C57_ORIGINAL_FULL_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c57-full-replay
+          path: /tmp/C57-original.json
+          if-no-files-found: error
+  negative_42:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify 42 synthetic rejected-source tests and previous A126
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c57_route_a_original15m_first_imb_after_1h_source 2>&1 | tee /tmp/tests
+          grep -Fq 'Ran 42 tests' /tmp/tests
+          grep -qx 'OK' /tmp/tests
+  freeze:
+    runs-on: ubuntu-latest
+    needs: [original_45zip,negative_42]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c57-full-replay
+          path: /tmp/c57
+      - name: Freeze only after independent checks pass
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c57/C57-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c57/C57-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C57): freeze original45ZIP 4H contact then 1H then first native15m research-only'
+          for i in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              exit 0
+            fi
+          done
+          exit 1
