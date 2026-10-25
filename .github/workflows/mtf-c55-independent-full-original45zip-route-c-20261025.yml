@@ -1,0 +1,92 @@
+name: EMBER C55 independently repeat original 45ZIP 1H liquidity raid native3m BOS
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-independent-full-original45zip-route-c-20261025.yml'
+permissions:
+  contents: read
+jobs:
+  full_original_45zip_c37_c55:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original frozen C37 2310174-byte and C55 2045882-byte Git blobs pinned; A123 123/123
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123full.txt
+          grep -Fq '"validations_pass": true' /tmp/A123full.txt
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json)" = 'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json)" = '2b4f944ddbdff0871a7fd553de2ab9955d220b91'
+      - name: Fresh COMPLETE original 45 Binance USD-M ZIP, C37 4 distinct adapted 3M BOS source streams exact JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c37_original_adapted_45zip_event_scan.py" /tmp/C55-INDEPENDENT-C37-SOURCE45ZIP.json > /tmp/C55C37.log 2>&1 || { tail -c 17000 /tmp/C55C37.log; exit 1; }
+          cmp -s /tmp/C55-INDEPENDENT-C37-SOURCE45ZIP.json "$R/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json"
+          python - <<'PY'
+          import pathlib
+          a=pathlib.Path('/tmp/C55-INDEPENDENT-C37-SOURCE45ZIP.json')
+          assert len(a.read_bytes())==2310174
+          print('C55_INDEPENDENT_ORIGINAL_C37_FULL_45ZIP_SOURCE_JSON_PASS',a.stat().st_size)
+          PY
+      - name: Independent FULL C55 4 hypotheses all 1924 context events full JSON byte exact
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c55_original_crypto_route_c_1h_raid_3m_bos_from_c37.py" /tmp/C55-INDEPENDENT-FULL-3M-ROUTE-C.json > /tmp/C55.log 2>&1 || { tail -c 17000 /tmp/C55.log; exit 1; }
+          cmp -s /tmp/C55-INDEPENDENT-FULL-3M-ROUTE-C.json "$R/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json"
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json')
+          q=pathlib.Path('/tmp/C55-INDEPENDENT-FULL-3M-ROUTE-C.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert p.stat().st_size==2045882
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='9f9939603a3d4b4e9b7cb8569727a6013aaa06ee94d9f151a6c4d7acbb95924b'
+          z=json.loads(p.read_text())
+          assert z['original_Binance_USDM_zip_lineage']==45
+          assert z['original_closed_native3m']==76800 and z['exact_native15m']==15360
+          assert z['adapted_source_total_contexts']==1924
+          assert z['adapted_source_hypothesis_event_counts']=={
+            'LATEST_CONFIRMED_V1':539,'EARLIEST_CONFIRMED_V1':462,
+            'DEEP_RAID_SIDE_V1':412,'NEAREST_RAID_SIDE_V1':511}
+          assert z['adapted_source_raid_BSL_SSL_counts']=={'BSL':866,'SSL':1058}
+          assert z['original_5m_Route_C_probed_from_3m'] is False
+          assert z['author_confirmed_BOS']==z['author_confirmed_1h_liquidity']==z['orders']==z['trades']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          print('C55_INDEPENDENT_ORIGINAL_45ZIP_FULL_C37_C55_2045882_BYTE_JSON_EXACT_PASS')
+          PY
+  anti_forgery_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify 123/123 SHA and original C37, replay 31 x3 Route C causal source negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          cd d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard 2>&1 | tee /tmp/C55-31.txt
+          grep -Fq 'Ran 31 tests' /tmp/C55-31.txt
+          grep -qx 'OK' /tmp/C55-31.txt
+          ! grep -q 'skipped=' /tmp/C55-31.txt
