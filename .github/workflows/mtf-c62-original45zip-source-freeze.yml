@@ -1,0 +1,103 @@
+name: EMBER C62 signed original45ZIP separate 1H SNR MB RB wick and IMB research source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c62-original45zip-source-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c62_original45zip_1h_snr_rb_imb_separate_source.py'
+permissions:
+  contents: write
+concurrency:
+  group: c62-original45zip-source-only-freeze
+  cancel-in-progress: false
+jobs:
+  original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify immutable A131 and original source C46 and C61
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/131
+          grep -Fq 'entries 131 tip_sha256 c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d' /tmp/131
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json)" = 305624e592f55bd699e94e45f4316e4efabdb726
+      - name: Re-download all original 45 signed Binance USD-M ZIP and split 1h source categories
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c62_original45zip_1h_snr_rb_imb_separate_source.py" /tmp/C62-original.json >/tmp/C62-original.log 2>&1 || { tail -c 16000 /tmp/C62-original.log; exit 1; }
+          tail -c 2200 /tmp/C62-original.log
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('/tmp/C62-original.json');x=json.loads(p.read_bytes())
+          assert x['original_signed_zip_counts']['total']==45
+          assert x['original_native3m_closed']==76800
+          assert x['original_native1d_closed']==160
+          assert x['original_native15m_exact_decimal_equalities']==15360
+          assert x['source_derived_closed_1h_bars']==3840
+          assert x['original_c46_4h_source_parents_checked']==153
+          assert x['author_rb_goldens']==x['author_snr_goldens']==x['author_imb_goldens']==0
+          assert x['orders']==x['trades']==x['fills']==0 and x['readiness']=='NOT_TRADE_READY'
+          print('C62_ORIGINAL45ZIP_JSON_BYTES',p.stat().st_size)
+          print('C62_ORIGINAL45ZIP_JSON_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c62-original-full-source
+          path: /tmp/C62-original.json
+          if-no-files-found: error
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 22 source-only SNR RB MB liquidity separation adversarial tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c62_academic_snr_rb_imb_liquidity_source_separation 2>&1 | tee /tmp/C62tests
+          grep -Fq 'Ran 22 tests' /tmp/C62tests
+          grep -qx 'OK' /tmp/C62tests
+  freeze:
+    needs: [original45,negatives]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c62-original-full-source
+          path: /tmp/c62
+      - name: Freeze original only if full 45ZIP and 22x3 negatives passed
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c62/C62-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c62/C62-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C62): original45ZIP source-only 1H SNR vs MB and RB wick vs IMB split'
+          for i in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+          done
+          exit 1
