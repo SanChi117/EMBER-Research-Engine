@@ -135,7 +135,10 @@ def run(out=None):
         assert observed5.readiness=="NOT_TRADE_READY"
         actual3=[asdict(x) for x in baseline.events]
         expected3=p3[symbol]["adapted_routes"][BASELINE]["native_3m_research_events"]
-        assert actual3==expected3,"C56_FRESH_45ZIP_C37_LATEST_FULL_EVENT_JSON_DRIFT"
+        # JSON decoding turns dataclass tuple defaults into lists.
+        # Compare canonical JSON objects, retaining every original source field.
+        normalized3=json.loads(json.dumps(actual3,sort_keys=True))
+        assert normalized3==expected3,"C56_FRESH_45ZIP_C37_LATEST_FULL_EVENT_JSON_DRIFT"
         # Each source is physically truncated with known end, then compared with
         # computation over a complete source with exactly the same CLOSED as-of.
         prec3=reconcile_native_3m(tuple(z[0] for z in source3),htf,as_of_ms=CUT)
