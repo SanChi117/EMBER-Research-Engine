@@ -1,4 +1,4 @@
-name: EMBER C67 Route A 1H trigger vs new VC POI first source test 33 cases
+name: EMBER C67 Route A 1H trigger vs new VC POI first source test 35 cases
 on:
   push:
     branches: [research/academic-engine-recovery-20261015]
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Gate old 136/136 SHA and Route A context fork 33 academic failclosed cases
+      - name: Gate old 136/136 SHA and Route A context fork 35 academic failclosed cases
         run: |
           set -euo pipefail
           cd research/mtf-element-audit-v1
@@ -29,5 +29,5 @@ jobs:
           python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
           cd d05
           python -m unittest -v test_c67_route_a_1h_trigger_vs_new_poi_source_fork 2>&1 | tee /tmp/c67
-          grep -Fq 'Ran 33 tests' /tmp/c67
+          grep -Fq 'Ran 35 tests' /tmp/c67
           grep -qx 'OK' /tmp/c67
