@@ -41,7 +41,10 @@ def inspect(case,blocks,gaps,bars,asof):
         classes=RB if types=="RB" else SNR
         match=[x for x in blocks if x.side==side and x.type==types and x.fully_known_ms==t and x.source_class in classes]
         status="SOURCE_RB_WICK_WORK" if types=="RB" else "SOURCE_SNR_CONFIRMED_WORK"
-    if len(match)!=1:raise C77Rejected("C62_SOURCE_PARENT_MATCH_"+str(len(match)))
+    if len(match)!=1:
+        nearby=[(x.type,x.side,x.fully_known_ms,x.source_class) for x in blocks if x.fully_known_ms==t]
+        near_gaps=[(x.side,x.known_ms,x.bottom,x.top) for x in gaps if x.known_ms==t]
+        raise C77Rejected("C62_SOURCE_PARENT_MATCH_"+str(len(match))+" "+str((sym,kind,t,side,nearby[:7],near_gaps[:5])))
     times=[x.start_ms for x in bars]
     i=bisect_left(times,t)
     if i>=len(bars) or bars[i].start_ms!=t:raise C77Rejected("UNALIGNED_PARENT_CREATION")
