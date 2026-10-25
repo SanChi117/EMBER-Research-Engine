@@ -54,7 +54,7 @@ class SourceSplitTest(unittest.TestCase):
         self.assertFalse(matches(z,"RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY"))
     def test_body_breach_snr_may_still_test_liquidity_source(self):
         q=list(baseline());q[3]=replace(q[3],close=D("88"),low=D("87"))
-        q[4]=replace(q[4],open=D("88"))
+        q[4]=replace(q[4],open=D("88"),low=D("88"))
         z=run(tuple(q))
         self.assertTrue(matches(z,"SNR_ACCEPTED_CLOSE_WITH_SOURCE_LIQUIDITY_PROXY"))
     def test_no_late_followup_close_means_no_snr_or_mb(self):
