@@ -1,0 +1,34 @@
+name: EMBER C59 author StrongHL and first POI test, nested 1H IMB veto
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c59-author-stronghl-firsttest-gate-negatives.yml'
+      - 'research/mtf-element-audit-v1/d05/c59_academic_stronghl_first_test_semantic_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c59_academic_stronghl_first_test_semantic_gate.py'
+permissions:
+  contents: read
+jobs:
+  course_contract_49:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check previous 128 actions and 49 author semantic failures
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A128
+          grep -Fq 'entries 128 tip_sha256 dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b' /tmp/A128
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c59_academic_stronghl_first_test_semantic_gate 2>&1 | tee /tmp/C59
+          grep -Fq 'Ran 49 tests' /tmp/C59
+          grep -qx 'OK' /tmp/C59
+          ! grep -q 'skipped=' /tmp/C59
