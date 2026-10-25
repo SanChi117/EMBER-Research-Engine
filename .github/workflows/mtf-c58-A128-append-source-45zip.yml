@@ -1,0 +1,97 @@
+name: EMBER C58 append-once A128 original45ZIP source-only 1H interior liquidity
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c58-A128-append-source-45zip.yml'
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c58-A128-append-once
+  cancel-in-progress: false
+jobs:
+  append_a128:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check prior A127 127 SHA, original C58 45ZIP bytes/witness and 28 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A127
+          grep -Fq 'entries 127 tip_sha256 f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005' /tmp/A127
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          python - <<'PY'
+          import pathlib,hashlib,json
+          p=pathlib.Path('evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json')
+          w=pathlib.Path('evidence/c58/C58_INDEPENDENT_ORIGINAL45ZIP_PREKNOWN_1H_INSIDE_WITNESS_20261025.json')
+          report=pathlib.Path('cycles/B1_C58_ROUTE_B_PREKNOWN_1H_LIQUIDITY_INSIDE_4H_ORIGINAL_SOURCE_REPORT.md')
+          assert all(f.exists() and f.stat().st_size>0 for f in (p,w,report))
+          assert p.stat().st_size==193355
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='405a34b939845357412ab4ec2d055d71885e3f6a1b22f55bc25c87c60272808e'
+          j=json.loads(p.read_bytes());x=json.loads(w.read_bytes())
+          assert j['original_BINANCE_USDM_ZIP']['total']==45
+          assert j['original_native3m_closed']==76800 and j['original_native15m_decimal_equalities']==15360
+          assert j['source_4h_technical_IMB']==153 and j['first_original3m_contact']==132
+          assert j['source_statuses']=={'NO_ORIGINAL_NATIVE3M_FIRST_4H_SOURCE_CONTACT':21,'NO_PREKNOWN_1H_FRACTAL_INSIDE_4H_SOURCE_GAP':103,'PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_GAP':29}
+          assert j['candidate_links']=={'BSL':18,'SSL':11,'unbroken':29}
+          assert j['author_verified_idm']==j['orders']==j['trades']==j['fills']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          assert x['independent_second_full_original_source_run']==40201692307
+          assert x['independent_CI_jobs']=='SUCCESS_4_OF_4'
+          assert x['full_source_sha256']==hashlib.sha256(p.read_bytes()).hexdigest()
+          assert x['negative_28_tests_python_versions']==['3.10','3.11','3.12']
+          print('A128_C58_SIX_FROZEN_SOURCE_EVIDENCE_GUARDS_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c58_route_b_preknown_original1h_liquidity_inside_4h_source 2>&1 | tee /tmp/C58
+          grep -Fq 'Ran 28 tests' /tmp/C58
+          grep -qx 'OK' /tmp/C58
+      - name: Append exactly one A128 evidence record after full independent source confirmation
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A128 \
+            --cycle B1/C58 \
+            --planned 'Course Route B true lower timeframe IDM BSL SSL inside or ahead contextual tested 4H POI requires source and StrongHL author confirmation. Research only preknown unswept original 1H BSL SSL fractal INSIDE technical C46 original 4H wick IMB at first original native3m contact. Never infer ahead or fake IDM/StrongHL from plain fractal.' \
+            --executed 'Independent 45 original Binance USD-M ZIP checksum first and second scans 76800 closed native3m, exact 15360 original15m Decimal parities and 3840 closed hourly bars, first 4H classic source IMB 153, first3m touch 132. Every source original 1H fractal known after 4H formation and before first3m contact bar start, source native3m price prior wick breach checked, original row SHA IDs preserved. Technical 1H inside only: 29 preknown unswept parent levels (18 BSL 11 SSL), 103 no interior source, 21 untouched original4H zones. Full source 193355-byte SHA256 405a34b939845357412ab4ec2d055d71885e3f6a1b22f55bc25c87c60272808e Git blob 06f2ff7decd2aa9660381947d3cf43f6b722cd8e, first original45ZIP CI 40201560854 PASS and independent fresh45 ZIP complete byte-exact CI 40201692307 SUCCESS 4/4; 28 negatives x Python 3.10 3.11 3.12.' \
+            --result 'Only technical chronological source 29 candidate preknown unswept 1H levels interior to nonacademic 4H classic gap. Not author IDM, not selected 4H typed/tested POI, not StrongHL, no defined ahead, no trade entries, no stop/target or PnL, ZERO orders/fills/trades. CRYPTO ONLY, PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Prior A127 127/127 SHA tip f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005 preserved; original C46 4H first contact frozen Git blob dc03c181912ffbb800bc191fbc16ec0d05c335e0 unchanged, also C47 C55 C56 C57 frozen. First C58 negative CI 40201363229 failed because malformed negative pivot outside source gap was skipped before validation; changed validation to check ALL 1H original pivot price kind raw source BEFORE filtering by gap; post-fix negatives CI 40201503417 PASS 3/3 and independent exact full45ZIP source CI 40201692307 PASS 4/4. Do not promote technical original 1H fractals to author IDM, do not mix with Route A VC.' \
+            --evidence d05/c58_route_b_preknown_original1h_liquidity_inside_4h_source.py \
+            --evidence d05/test_c58_route_b_preknown_original1h_liquidity_inside_4h_source.py \
+            --evidence tests/probe_c58_original45zip_route_b_preknown_unswept_1h_inside_4h.py \
+            --evidence evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json \
+            --evidence evidence/c58/C58_INDEPENDENT_ORIGINAL45ZIP_PREKNOWN_1H_INSIDE_WITNESS_20261025.json \
+            --evidence cycles/B1_C58_ROUTE_B_PREKNOWN_1H_LIQUIDITY_INSIDE_4H_ORIGINAL_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A128
+          grep -Fq 'entries 128' /tmp/A128
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Append only journal A128 with no forced push
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changes
+          test "$(wc -l < /tmp/changes)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changes
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C58): append-once A128 source-only 45ZIP 1H preknown inside 4H six SHA'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
