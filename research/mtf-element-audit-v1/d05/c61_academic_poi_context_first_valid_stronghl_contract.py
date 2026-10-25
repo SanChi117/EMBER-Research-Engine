@@ -129,8 +129,16 @@ def academic_poi_lifecycle_contract(x):
         must(x.rb_raid_or_imb_overlap_author_verified,
              "C61_RB_REQUIRES_RAID_OR_IMB_WORK")
     if is_idm:
-        must(x.confirming_event_kind is not None,
-             "C61_IDM_REQUIRES_PREEXISTING_VC_CONTEXT")
+        # Direct IDM may be placed before the *POI test*, NEVER before the
+        # parent VC/BOS or protected StrongHL is fully confirmed and known.
+        must(x.direct_idm_known_ms is not None and
+             x.confirming_event_known_ms is not None and
+             x.direct_idm_known_ms>=x.confirming_event_known_ms,
+             "C61_IDM_PRECEDES_CONFIRMED_PARENT_VC")
+    elif x.original_first_contact_known_ms is not None:
+        must(x.confirming_event_known_ms is not None and
+             x.confirming_event_known_ms>x.original_first_contact_known_ms,
+             "C61_ROUTE_A_OR_C_CONFIRMATION_BEFORE_FIRST_TEST")
     return AcademicPoiVerdict(not errors,tuple(dict.fromkeys(errors)))
 
 @dataclass(frozen=True)
