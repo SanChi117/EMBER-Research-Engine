@@ -130,8 +130,8 @@ def run(output=None):
     assert sum(x["original_native1d_closed"] for x in markets)==160
     assert sum(x["native15m_exact_decimal_parity"] for x in markets)==15360
     assert sum(x["closed_source1h"] for x in markets)==3840
-    assert sum(tot[s] for s in STATES)==153
-    assert tot["NO_C64_CONFIRMED_SOURCE_ANCHOR"]>=83
+    assert sum(totals[s] for s in STATES)==153
+    assert totals["NO_C64_CONFIRMED_SOURCE_ANCHOR"]>=83
     doc={
       "schema":"EMBER_C65_ORIGINAL_BINANCE45ZIP_SOURCE_OF_LAST_LINK_HTF_TARGET_DUAL_INVALIDATION_V1",
       "market":"BINANCE_USDM_FUTURES_CRYPTO_RESEARCH_ONLY",
@@ -144,8 +144,8 @@ def run(output=None):
       "original_4h_C46_candidates":153,
       "source_lookahead_prevented":True,
       "source_48h_observation_window":True,
-      "original_4h_full_source_status_totals":{s:tot[s] for s in STATES},
-      "source_extra_counts":{k:v for k,v in sorted(tot.items()) if k not in STATES},
+      "original_4h_full_source_status_totals":{s:totals[s] for s in STATES},
+      "source_extra_counts":{k:v for k,v in sorted(totals.items()) if k not in STATES},
       "original_git_source_unchanged":SOURCE_BLOBS,
       "strict_text_source_rules":[
         "Order Flow requires STRUCTURE + liquidity AND IMB source interaction",
