@@ -1,0 +1,26 @@
+name: C77 Independent Original 45 ZIP Replay
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c77-independent-archive-repeat.yml'
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Recompute independent market evidence
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tests/probe_c77_original45zip_1h_poi.py /tmp/C77-REPEAT.json
+          cmp /tmp/C77-REPEAT.json evidence/c77/C77_FRESH_ORIGINAL45ZIP_BRANCH_AWARE_POI_REPLAY.json
+          sha256sum /tmp/C77-REPEAT.json evidence/c77/C77_FRESH_ORIGINAL45ZIP_BRANCH_AWARE_POI_REPLAY.json
+          python tools/auditlog.py verify
+          echo C77_SECOND_FRESH_45ZIP_BYTE_EQUAL_PASS
