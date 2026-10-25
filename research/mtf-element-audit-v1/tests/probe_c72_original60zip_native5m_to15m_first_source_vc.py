@@ -46,7 +46,31 @@ from c71_post_contact_closed_15m_vc_1h_bos_semantic_gate import (
 from c72_original_native5m_source_vc_after15m_gate import (
     original5m_url,parse_original5m_zip,reconcile_original5m_to_native15m,
     scan_original5m_source_events,first_any_5m_after_provisional15m,STATES)
-from verify_d04_full_manifest_c08 import checked_download
+import urllib.request,urllib.parse
+from strict_vision_d04 import _SingleHostRedirect
+def checked_new5m(url,limit=25000000):
+    # D04 legacy parse_url explicitly restricts historical source tfs to
+    # 3m/15m/1d; NEW genuine native5m needs independently pinned host path.
+    if not isinstance(url,str) or not url.startswith("https://data.binance.vision/"):
+        raise ValueError("C72_FORBIDDEN_NEW5M_HOST")
+    original=url[:-9] if url.endswith(".CHECKSUM") else url
+    from c72_original_native5m_source_vc_after15m_gate import original5m_url
+    a=original.rsplit("/",1)[-1]
+    parts=a.split("-5m-")
+    if len(parts)!=2 or not parts[1].endswith(".zip"):
+        raise ValueError("C72_FORBIDDEN_NEW5M_NAME")
+    symbol=parts[0];period=parts[1][:-4]
+    if original!=original5m_url(symbol,period):
+        raise ValueError("C72_FORBIDDEN_NEW5M_PATH")
+    opener=urllib.request.build_opener(_SingleHostRedirect())
+    with opener.open(urllib.request.Request(url,headers={
+        "User-Agent":"EMBER-C72-original-native5m-source-readonly/1.0"}),timeout=40) as response:
+        remote=urllib.parse.urlsplit(response.geturl())
+        if remote.scheme!="https" or remote.netloc!="data.binance.vision":
+            raise ValueError("C72_CROSS_HOST_REDIRECT")
+        data=response.read(limit+1)
+    if not 0<len(data)<=limit:raise ValueError("C72_MISSING_OR_OVERSIZE_ORIGINAL_5M")
+    return data
 OLD={
 "c46":ROOT/"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json",
 "c60":ROOT/"evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json",
@@ -101,8 +125,8 @@ def run(output=None):
         original5=[];original5_proof=[]
         for period in PERIODS:
             url=original5m_url(symbol,period)
-            raw=checked_download(url,25000000,40)
-            check=checked_download(url+".CHECKSUM",1024,40)
+            raw=checked_new5m(url,25000000)
+            check=checked_new5m(url+".CHECKSUM",1024)
             a=parse_original5m_zip(symbol,period,raw,check)
             original5.append(a)
             original5_proof.append({"period":period,"url":url,
