@@ -20,12 +20,12 @@ def bar(i,*,low=None,high=None,close=None):
        tuple(rid(t+k*TF_MS["15m"]) for k in range(4)),(SHA,))
 def market(*,target=True,closebreach=True):
     rows=[bar(i) for i in range(60)]
-    if target:rows[15]=bar(15,high=125)
+    if target:rows[14]=bar(14,high=125)
     if closebreach:rows[17]=bar(17,close=82,low=81)
     return tuple(rows)
 def days(*,price=120):
     t=O-DAY
-    return (NativeKline("BTCUSDT","1d",t,O,D("100"),D(str(price)),D("80"),D("105"),D("200"),rid(t),SHA),)
+    return (NativeKline("BTCUSDT","1d",t,O,D("100"),D(str(price)),D("80"),D(str(min(105,price))),D("200"),rid(t),SHA),)
 def anchor():
     return SourceProtectedExtremeAudit(
        "BTCUSDT","LONG","LONG",rid(O),O+10*H,
@@ -56,7 +56,7 @@ class C65FailclosedTests(unittest.TestCase):
     def test_full_context_has_close_after_target_proxy(self):
         q=observe()
         self.assertEqual(q.state,"SOURCE_FIRST_INVALIDATION_LINK_CLOSE_PROXY")
-        self.assertEqual(q.source_htf_target_first_wick_reached_ms,O+16*H)
+        self.assertEqual(q.source_htf_target_first_wick_reached_ms,O+15*H)
         self.assertEqual(q.source_first_any_invalidation_known_ms,O+18*H)
         self.assertFalse(q.author_of_invalidation_verified)
     def test_last_source_link_is_distinct_from_c64_source_extreme(self):
@@ -76,10 +76,13 @@ class C65FailclosedTests(unittest.TestCase):
         self.assertEqual(q.state,"SOURCE_SIMULTANEOUS_TWO_INVALIDATION_PROXIES")
         self.assertEqual(q.source_first_any_invalidation_kind,"BOTH_SOURCE_PROXIES")
     def test_first_opposite_poi_not_retrospectively_filtered(self):
-        q=observe(e=(opposite(O+17*H),))
+        m=list(market())
+        m[17]=bar(17)
+        m[18]=bar(18,close=82,low=81)
+        q=observe(h=tuple(m),e=(opposite(O+18*H),))
         self.assertEqual(q.source_first_any_invalidation_kind,"OPPOSITE_SOURCE_POI_PROXY")
     def test_poi_pattern_began_before_target_does_not_count(self):
-        q=observe(e=(opposite(O+18*H),))
+        q=observe(e=(opposite(O+17*H),))
         self.assertEqual(q.state,"SOURCE_FIRST_INVALIDATION_LINK_CLOSE_PROXY")
     def test_target_not_reached_is_not_automatic_reversal(self):
         q=observe(h=market(target=False,closebreach=False))
@@ -127,7 +130,7 @@ class C65FailclosedTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"UNTRUSTED_C64"):
             observe(m=replace(anchor(),orders=("FAKE",)))
     def test_target_not_ahead_at_link_is_rejected(self):
-        q=observe(d=days(price=105))
+        q=observe(d=days(price=100))
         self.assertEqual(q.state,"NO_PREKNOWN_OR_AHEAD_1D_TARGET")
     def test_native1d_known_only_after_link_not_allowed(self):
         q=observe(d=())
@@ -154,7 +157,7 @@ class C65FailclosedTests(unittest.TestCase):
     def test_source_close_before_htf_target_does_not_invalidate(self):
         m=list(market(target=False,closebreach=False))
         m[12]=bar(12,close=82,low=81)
-        m[15]=bar(15,high=125)
+        m[14]=bar(14,high=125)
         q=observe(h=tuple(m))
         self.assertEqual(q.state,"SOURCE_TARGET_REACHED_NO_INVALIDATION_FULL_WINDOW")
     def test_original_1h_gap_rejected(self):
