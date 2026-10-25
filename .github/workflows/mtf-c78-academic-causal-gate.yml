@@ -1,0 +1,28 @@
+name: EMBER C78 Academic Causal Gate
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c78-academic-causal-gate.yml'
+permissions:
+  contents: read
+jobs:
+  C78:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Source proof and negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/probe_c78_frozen_route_semantics.py
+          cd d05
+          python -m unittest -v test_c78_academic_causal_gate
