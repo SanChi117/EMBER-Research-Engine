@@ -1,0 +1,77 @@
+name: EMBER C63 second independent 45 original ZIP first-any 1h full byte exact x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c63-independent-second-original45zip-full-byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json'
+permissions:
+  contents: read
+jobs:
+  independent45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Full independent original Binance 45ZIP re-download 153 parents, exactly 302827 JSON bytes
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A132
+          grep -Fq 'entries 132 tip_sha256 7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab' /tmp/A132
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          python "$R/tests/probe_c63_original45zip_first_any_1h_after_original3m_contact.py" /tmp/C63-independent.json >/tmp/C63-ind.log 2>&1 || { tail -c 18000 /tmp/C63-ind.log; exit 1; }
+          cmp -s /tmp/C63-independent.json "$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json"
+          python - <<'PY'
+          import hashlib,json,pathlib
+          f=pathlib.Path('research/mtf-element-audit-v1/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json')
+          assert f.stat().st_size==302827
+          digest=hashlib.sha256(f.read_bytes()).hexdigest()
+          assert digest=='a681e2941d45b9658ab02c98c5dd06e4bfd85388982537241d8a5bd0708c31be'
+          z=json.loads(f.read_bytes())
+          assert z['source_signed_original_crypto_zip']['total']==45
+          assert z['original_native3m_closed']==76800
+          assert z['original_native1d_closed']==160
+          assert z['native15m_exact_original_decimal_parity']==15360
+          assert z['fully_closed_original_1h']==3840
+          assert z['4h_source_parent_candidates']==153
+          assert z['original_first3m_source_contact_parents']==132
+          assert z['all_parent_status_counts']=={
+            'FIRST_ANY_BOTH_SIDES_AMBIGUOUS':7,
+            'FIRST_ANY_OPPOSITE_SIDE_SOURCE_ONLY':61,
+            'FIRST_ANY_SAME_SIDE_SOURCE_ONLY':64,
+            'FULL_WINDOW_NO_SOURCE_EVENT':0,
+            'NO_4H_SOURCE_FIRST_CONTACT':21,
+            'RIGHT_CENSORED_NO_SOURCE_EVENT':0}
+          assert z['author_strongHL']==z['author_true_BOS']==z['author_selected_POI']==0
+          assert z['orders']==z['trades']==z['fills']==0 and z['readiness']=='NOT_TRADE_READY'
+          print('C63_INDEPENDENT_ORIGINAL45ZIP_BYTE_EQUAL',f.stat().st_size,digest)
+          PY
+  negative29:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Strict first ANY opposite/ambiguous, right-censored and no-golden 29 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c63_closed_4h_source_contact_to_first_any_1h_reaction 2>&1 | tee /tmp/C63negative
+          grep -Fq 'Ran 29 tests' /tmp/C63negative
+          grep -qx 'OK' /tmp/C63negative
