@@ -1,10 +1,10 @@
 name: EMBER C64 independent final all 134 SHA six original source evidence and 28x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c64-A134-independent-final-134sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: f9e1d924221586e612581232daae287c7188c33d
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
