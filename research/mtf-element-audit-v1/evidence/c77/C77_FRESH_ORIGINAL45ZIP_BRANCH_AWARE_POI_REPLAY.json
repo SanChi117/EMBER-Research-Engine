@@ -1,0 +1,255 @@
+{
+  "author_verified": 0,
+  "evidence_class": "ADAPTED_HYPOTHESIS",
+  "fills": 0,
+  "limitations": [
+    "Not a 5m replay",
+    "C62 source rules are proxy semantics only",
+    "No author's timestamped positive/negative crypto goldens"
+  ],
+  "markets": [
+    {
+      "author_approved": 0,
+      "closed_3m": 15360,
+      "review": {
+        "author_certified": 0,
+        "contexts": 19,
+        "eligibility": {
+          "NO_SOURCE_NEW_POI": 7,
+          "SOURCE_RB_WICK_WORK": 9,
+          "SOURCE_SNR_CONFIRMED_WORK": 3
+        },
+        "fills": 0,
+        "first_source_touches": 12,
+        "known_source_episodes": {
+          "1": 5,
+          "2": 1,
+          "None": 13
+        },
+        "orders": 0,
+        "readiness": "NOT_TRADE_READY",
+        "trades": 0,
+        "types": {
+          "NO_PARENT": 7,
+          "RB": 9,
+          "SNR": 3
+        },
+        "unselected_source_contexts": 13
+      },
+      "symbol": "BCHUSDT",
+      "trades": 0,
+      "verified_15m_zip": [
+        "49582e810b01a7d77a65ef8c2a50895b5a7010ef5911e1a1469596ef32268fda",
+        "f8067b373b982b1e9cfd000c2d87285edc72422f5ca18d12c2692eb361b96207",
+        "cbcb5799460762588a9a0401bb416750ca1c5a46c2b4a65d3acba9a67ab56aa8"
+      ],
+      "verified_1d_zip": [
+        "1c77f5066f46b5aba1089e69390f4dce679eeafe1fdecc805a28d81c16cd826a",
+        "53f23f6880847550e1c5dd3e96f0d486a1c32fb2057e10f348d559f701d6443c",
+        "ad64da32b387c307efa183216b8da23518ca88c4bd111c009cc276bab581a899"
+      ],
+      "verified_3m_zip": [
+        "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92",
+        "b60e17fa2c01a70f83dfd3f7658b4d4d63b2ec58dcb1fd6038de690ea97780f7",
+        "65364acd9d3793e225805be8fc4f3edd7f44c0d3c501d5a931b53ef031763983"
+      ]
+    },
+    {
+      "author_approved": 0,
+      "closed_3m": 15360,
+      "review": {
+        "author_certified": 0,
+        "contexts": 16,
+        "eligibility": {
+          "NO_SOURCE_NEW_POI": 9,
+          "SOURCE_RB_WICK_WORK": 6,
+          "SOURCE_SNR_CONFIRMED_WORK": 1
+        },
+        "fills": 0,
+        "first_source_touches": 7,
+        "known_source_episodes": {
+          "1": 2,
+          "4": 1,
+          "None": 13
+        },
+        "orders": 0,
+        "readiness": "NOT_TRADE_READY",
+        "trades": 0,
+        "types": {
+          "NO_PARENT": 9,
+          "RB": 6,
+          "SNR": 1
+        },
+        "unselected_source_contexts": 14
+      },
+      "symbol": "BTCUSDT",
+      "trades": 0,
+      "verified_15m_zip": [
+        "e879fa6903fd905201bd1f59e456773638cdf8c13848da79331cee89b0046964",
+        "07fad98f8134a909c5d4a4862e00b7583a90104ad5a0f17414ccab8968cb251b",
+        "62742a246cee4ec9363e96f2270e00e9f23fd54f137c08ba732113a7a2e284be"
+      ],
+      "verified_1d_zip": [
+        "34ec2bc722aea637ded6df5b2f9a71c17396ca8e010019f4711defb81c14a589",
+        "393805be09ccdfad1885fdd6ecd1b65632beaff2fb7d696df2e8ac86472117b9",
+        "44ee45ab56dc32fd59539f4f05536ab340b0a3ca45bd3e8b80f35ea074dd2361"
+      ],
+      "verified_3m_zip": [
+        "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7",
+        "e83334ea360225d700f87f51f44a81e9c9c3b90924138ad76e868576ff68ba8c",
+        "44620e004fb1a950906b20fc08a5c7cbd136f34c4895d7bcddc9ffda5780c1f2"
+      ]
+    },
+    {
+      "author_approved": 0,
+      "closed_3m": 15360,
+      "review": {
+        "author_certified": 0,
+        "contexts": 18,
+        "eligibility": {
+          "NO_SOURCE_NEW_POI": 11,
+          "SOURCE_RB_WICK_WORK": 6,
+          "SOURCE_SNR_CONFIRMED_WORK": 1
+        },
+        "fills": 0,
+        "first_source_touches": 7,
+        "known_source_episodes": {
+          "1": 1,
+          "None": 17
+        },
+        "orders": 0,
+        "readiness": "NOT_TRADE_READY",
+        "trades": 0,
+        "types": {
+          "NO_PARENT": 11,
+          "RB": 6,
+          "SNR": 1
+        },
+        "unselected_source_contexts": 13
+      },
+      "symbol": "ETHUSDT",
+      "trades": 0,
+      "verified_15m_zip": [
+        "1dc572ea53979b37c55d950b2a8ad337eb3846cdcfd85864a609c70c526d934a",
+        "3c2621fada8ae069986c661152738c775a1f9c17515a4abaf221b773ea97ce6a",
+        "1920007a2ad141d54a00ec5a8ead8c9ac88fc7e82f5bc508bf991475fc9a5745"
+      ],
+      "verified_1d_zip": [
+        "eb0edbe8f19c6b27c7ab98e6ad6041297e1c3f50b47b4f200b3e421d190b537a",
+        "46221d5ff51698e218810e5035c273218646cc4a939d96b9a181379256b8c155",
+        "5438cba1919f91aeb1e644d00587a196b9f275fd38d4184aff647aa0e3d0b4ba"
+      ],
+      "verified_3m_zip": [
+        "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4",
+        "54e991bf8f483bfe684bb6192138b2723b06d931031704e75f1f8b522a59d781",
+        "fee42273ae6f94033de51aa7dcddcc969a68f76b6df4713a7ab7599c370fb7fa"
+      ]
+    },
+    {
+      "author_approved": 0,
+      "closed_3m": 15360,
+      "review": {
+        "author_certified": 0,
+        "contexts": 18,
+        "eligibility": {
+          "NO_SOURCE_NEW_POI": 10,
+          "SOURCE_RB_WICK_WORK": 6,
+          "SOURCE_SNR_CONFIRMED_WORK": 2
+        },
+        "fills": 0,
+        "first_source_touches": 8,
+        "known_source_episodes": {
+          "1": 1,
+          "None": 17
+        },
+        "orders": 0,
+        "readiness": "NOT_TRADE_READY",
+        "trades": 0,
+        "types": {
+          "NO_PARENT": 10,
+          "RB": 6,
+          "SNR": 2
+        },
+        "unselected_source_contexts": 13
+      },
+      "symbol": "SOLUSDT",
+      "trades": 0,
+      "verified_15m_zip": [
+        "d6b4f23739c277032b3ffaf849b5a9bbb5c1026dbcfb0de0c80d35909ec63a33",
+        "a003a9184850ff39227e56712a37b41b34c09d28ec64b20262a3c40adf4ba22e",
+        "7a545bce3c9c5f1db99202fd4d4a51f3d6c01f8a357b791b17d6daa808275776"
+      ],
+      "verified_1d_zip": [
+        "42ec43a6d1c2763012f9f7134040903681a34a77621dbc602da2836fec8c1017",
+        "f34d65cde85792eb031bbcabed5ec786932dc6b48bc7993769830eb4c2b4a191",
+        "e98f81c0dc6b8fba155e82f03e87995ef167bc7d50f9132f186bacaf34283a71"
+      ],
+      "verified_3m_zip": [
+        "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7",
+        "3f36c202959c9715099391ebb4c757957e3b00fce480e06dfd87d3f664f10d79",
+        "9dc3928129a3de09518051e45b2de4a575a3b9d084e32022605d75c515cb866d"
+      ]
+    },
+    {
+      "author_approved": 0,
+      "closed_3m": 15360,
+      "review": {
+        "author_certified": 0,
+        "contexts": 11,
+        "eligibility": {
+          "NO_SOURCE_NEW_POI": 10,
+          "SOURCE_RB_WICK_WORK": 1
+        },
+        "fills": 0,
+        "first_source_touches": 1,
+        "known_source_episodes": {
+          "2": 1,
+          "None": 10
+        },
+        "orders": 0,
+        "readiness": "NOT_TRADE_READY",
+        "trades": 0,
+        "types": {
+          "NO_PARENT": 10,
+          "RB": 1
+        },
+        "unselected_source_contexts": 18
+      },
+      "symbol": "XRPUSDT",
+      "trades": 0,
+      "verified_15m_zip": [
+        "9c88a2290a1083fb16baa66ecfb80ab9d694adc2f6a94720f1bb7791d721ccb4",
+        "a4a27966006a93d49c5dd320b9f0bdbf290d960a0d6853eface63a72c1c6621f",
+        "04928f59a57b577c46553a358ff92da969737179d6afc5b4f14f6871e91acefa"
+      ],
+      "verified_1d_zip": [
+        "bbc66ab23b274a88c1df0dc94fd81d77fad8c43758bd36f6d158aef1a3aedfa4",
+        "6b129297b79f667de003a0b10343ab076b35d9632e324f79f7cb509dc57c55e7",
+        "71eb5d7b65f61cb2e735f2fd40e765901add2060a0958735c79f1f3b52afc100"
+      ],
+      "verified_3m_zip": [
+        "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77",
+        "b6c504a547b11e9bc040ef91b0e03c42911fa41e0c0cbdf83fea1f9aabe36c3d",
+        "a2a14bb06482720761e2258f525baf77cd772c822c22d338f576d847ac834d87"
+      ]
+    }
+  ],
+  "native15m_equalities": 15360,
+  "orders": 0,
+  "original3m_closed": 76800,
+  "original_zip_counts": {
+    "15m": 15,
+    "1d": 15,
+    "3m": 15,
+    "total": 45
+  },
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "schema": "EMBER_C77_FRESH_ORIGINAL45ZIP_FIRST3M_PARENT_C62_AUDIT_V1",
+  "source_C73_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+  "source_contexts": 153,
+  "trades": 0
+}
