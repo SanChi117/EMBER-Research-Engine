@@ -1,0 +1,117 @@
+name: EMBER C69 append-once A139 original45 first native15m raid six SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c69-A139-append-once-first-native15m-raid.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c69-a139-first-15m-source-append-once
+  cancel-in-progress: false
+jobs:
+  append139:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify prior accepted A138, two independent original45 signed ZIP and full source checksums
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A138
+          grep -Fq 'entries 138 tip_sha256 c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a' /tmp/A138
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json')
+          w=Path('evidence/c69/C69_INDEPENDENT_ORIGINAL45ZIP_PREKNOWN_1H_15M_FIRST_WICK_WITNESS_20261025.json')
+          report=Path('cycles/B1_C69_FIRST_REAL_NATIVE15M_LIQUIDITY_BAR_AND_NEW1H_POI_SOURCE_REPORT.md')
+          assert all(q.is_file() and q.stat().st_size>0 for q in (p,w,report))
+          assert p.stat().st_size==214806
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='ffe2568a1c8384630bed156d94e0dbd4cf89ce6d03ab79ce5946e31ec88fab1c'
+          d=json.loads(p.read_bytes());z=json.loads(w.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          expected={
+            '1H_IMB_TRIGGER_NOT_RAID_OR_POI_FIRST_TEST':0,
+            'AMBIGUOUS_MULTIPLE_PREKNOWN_LIQUIDITY_LEVELS_SAME_FIRST_BAR':3,
+            'MISSING_OR_FAKE_ORIGINAL15M_HOUR':0,
+            'NEW_1H_POI_NO_SOURCE_FIRST_TEST':0,
+            'NEW_1H_POI_SOURCE_FIRST15M_WICK_TEST_NOT_AUTHOR_VALID':35,
+            'NO_PREKNOWN_SOURCE_LIQUIDITY_LEVEL':0,
+            'NO_REAL_NATIVE15M_LIQUIDITY_CROSS':0,
+            'NO_UNAMBIGUOUS_C67_CONTEXT':92,
+            'RAID_FIRST_NATIVE15M_BAR_CLOSE_BEYOND_LEVEL_RECLAIM_LATER_1H':4,
+            'RAID_FIRST_NATIVE15M_BAR_WICK_ONLY_RECLAIM_1H':19}
+          assert d['source_first_exact_native15m_contact_state_totals']==expected
+          assert z['source_totals']==expected and z['first_full_original_source_sha256']==sha
+          assert z['first_full_original_source_bytes']==214806
+          assert z['original_binance_usdm_45signed_zip_first_ci']==40222498858
+          assert z['independent_second_complete_45signed_zip_ci']==40222632285
+          assert z['second_complete_original_source_byte_exact'] is True
+          assert z['negative_tests_per_Python']==30
+          assert d['author_verified_first_new1h_poi_valid_test']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C69_SOURCE_45_ZIP_TWO_FULL_BYTES_WITNESS_30x3_ACCEPTED')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+          test "$(git rev-parse HEAD:$R/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = 587779a7dd1736099e8270c8823c15822f0e77a0
+          test "$(git rev-parse HEAD:$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json)" = b22860dfa13e4b19d16e8dd892719a772485e847
+          cd "$R/d05"
+          python -m unittest -v test_c69_exact_native15m_first_liquidity_raid_vs_poi_test 2>&1 | tee /tmp/C69
+          grep -Fq 'Ran 30 tests' /tmp/C69
+          grep -qx 'OK' /tmp/C69
+      - name: Append A139 only with six immutable original source crypto evidence SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A139 \
+            --cycle B1/C69 \
+            --planned 'Replace C68 last-native15m-of-1h-raid technical proxy with genuine earliest original native15m candle taking PREKNOWN unswept strict 1H SSL/BSL liquidity. Prove 1H OHLCV exactly aggregated from four SHA-ID raw native15m and preserve 15m wick-only vs first15m body-close beyond with final1h reclaim. Source NEW 1H POI first native15m test physically after full 1H VC context close, not author first VALID test. Keep all Route A B C separation, no lookahead or author trade promotion.' \
+            --executed 'C69 pure native15m original source module, 30 synthetic adversarial SHA/OHLCV/chronology negative tests x Python3.10 3.11 3.12, signed original Binance USD-M 45 ZIP BTC ETH SOL XRP BCH 2026 Sep1 to Oct2 two independent fresh full downloads CI 40222498858 SUCCESS 5/5, CI 40222632285 SUCCESS 4/4 complete byte-exact 214806 source JSON SHA256 ffe2568a1c8384630bed156d94e0dbd4cf89ce6d03ab79ce5946e31ec88fab1c git blob b22860dfa13e4b19d16e8dd892719a772485e847; 76800 genuine closed native3m,15360 genuine closed native15m,160 native1d,3840 derived1h. All original previous C46 C60 C62 C63 C66 C67 C68 parent SHA source prices recomputed with no changes. Multiple preknown levels first hit in same 15m leave ambiguity, not cherry-pick.' \
+            --result '153 original 4h source parent contexts: 92 no unambiguous C67 source path, 19 original first15m SSL/BSL wick-only reclaim in bar, 4 first15m closes beyond source level and later1h reclaimed, 3 same first15m bar multiple preknown liquidity levels ambiguous, 35 original first15m wick test of source NEW 1H POI not author first VALID test. 0 owner-approved raid, 0 academic first valid POI test, 0 actual VC or StrongHL or order. PAPER ONLY NOT_TRADE_READY 0 orders fills trades PnL.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous append only A138 SHA tip c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a unchanged. C46 C60 C62 C63 C66 C67 C68 immutable source blobs remained exact; two independent fresh 45 original checksum ZIP and full 214806 bytes SHA match; 30 x three Python synthetic negative 1h source OHLCV parity, first 15m timing, level ambiguity, source POI first overlap validation, forged author fields, no future. C68 last15m used only as known historical proxy and not secretly retroactively changed. None of source 19 4 3 35 constitute trading opportunities or academic goldens.' \
+            --evidence d05/c69_exact_native15m_first_liquidity_raid_vs_poi_test.py \
+            --evidence d05/test_c69_exact_native15m_first_liquidity_raid_vs_poi_test.py \
+            --evidence tests/probe_c69_original45zip_exact_first_native15m_raid_poi.py \
+            --evidence evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json \
+            --evidence evidence/c69/C69_INDEPENDENT_ORIGINAL45ZIP_PREKNOWN_1H_15M_FIRST_WICK_WITNESS_20261025.json \
+            --evidence cycles/B1_C69_FIRST_REAL_NATIVE15M_LIQUIDITY_BAR_AND_NEW1H_POI_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A139
+          grep -Fq 'entries 139' /tmp/A139
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Git commit only append-once SHA journal no force
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only >/tmp/changed
+          test "$(wc -l </tmp/changed)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C69): append-once A139 first original15m source 1h liquidity raid, new1h POI source test six SHA'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
