@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: c66-original45zip-native15m-first-freeze
+  group: c66-original45zip-native15m-optimized-first-freeze
   cancel-in-progress: false
 jobs:
   fresh_full45:
