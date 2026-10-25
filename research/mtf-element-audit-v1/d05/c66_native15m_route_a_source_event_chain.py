@@ -93,22 +93,34 @@ def _check15(rows,*,as_of_ms):
         prev=v.known_at_ms
     return tuple(x for x in rows if x.known_at_ms<=as_of_ms)
 
+def _level_schedule(bars):
+    """Source-only strict confirmed native15m swing levels known BEFORE bar j.
+    Invalidated levels disappear after their first later wick-through;
+    no lookahead; linear times number of active levels, not quadratic
+    rebuild for every opposing-candle pair.
+    """
+    live=[]
+    history=[]
+    for j in range(len(bars)):
+        if j:
+            prev=bars[j-1]
+            live=[v for v in live if (
+                prev.high<=v[1] if v[0]=="BSL" else prev.low>=v[1])]
+        if j>=3:
+            a,p,z=bars[j-3:j]
+            if p.high>a.high and p.high>z.high:
+                live.append(("BSL",p.high,z.known_at_ms))
+            if p.low<a.low and p.low<z.low:
+                live.append(("SSL",p.low,z.known_at_ms))
+        history.append(tuple(live))
+    return tuple(history)
+
 def scan_original15m_source(rows,*,as_of_ms):
     bars=_check15(rows,as_of_ms=as_of_ms)
-    levels=[]
+    preknown_levels=_level_schedule(bars)
     gaps=[]
     events=[]
     for i,x in enumerate(bars):
-        if i:
-            previous=bars[i-1]
-            levels=[z for z in levels if (
-                previous.high<=z[1] if z[0]=="BSL" else previous.low>=z[1])]
-        if i>=3:
-            a,p,z=bars[i-3:i]
-            if p.high>a.high and p.high>z.high:
-                levels.append(("BSL",p.high,z.known_at_ms))
-            if p.low<a.low and p.low<z.low:
-                levels.append(("SSL",p.low,z.known_at_ms))
         # Only the levels and gaps already known when this first bar starts.
         if i>=2:
             a,m=bars[i-2:i]
@@ -135,7 +147,7 @@ def scan_original15m_source(rows,*,as_of_ms):
         # the second pair candle. Only use known BEFORE first pair started.
         # A pivot can be marked swept by current pair; reconstructed prior
         # knowledge is conserved using levels snapshots below.
-        pivots=_levels_known_before_pair(bars,i-2)
+        pivots=preknown_levels[i-2]
         liquidity=next((
             known for kind,price,known in reversed(pivots)
             if ((side=="LONG" and kind=="SSL" and
@@ -159,21 +171,6 @@ def scan_original15m_source(rows,*,as_of_ms):
         events.append(Source15Event(kind,side,a.start_ms,z.known_at_ms,
             a.origin_raw_row_id,z.origin_raw_row_id,reference,proof))
     return tuple(sorted(events,key=lambda e:(e.known_ms,e.kind,e.side,e.first_original15m_id)))
-
-def _levels_known_before_pair(bars,start_idx):
-    """Strict three-bar source fractal preknown at pair start, unswept
-    by all candles AFTER pivot became known and BEFORE first pair bar.
-    """
-    known=[]
-    for j in range(3,start_idx+1):
-        a,p,z=bars[j-3:j]
-        if p.high>a.high and p.high>z.high:
-            known.append(("BSL",p.high,z.known_at_ms))
-        if p.low<a.low and p.low<z.low:
-            known.append(("SSL",p.low,z.known_at_ms))
-    return tuple((kind,price,known_ms) for kind,price,known_ms in known
-        if all((v.high<=price if kind=="BSL" else v.low>=price)
-             for v in bars[:start_idx] if v.start_ms>=known_ms))
 
 def route_a_15m_source_review(chain,events,*,as_of_ms):
     if (not isinstance(chain,SourceReactionChain) or chain.symbol not in SYMBOLS
