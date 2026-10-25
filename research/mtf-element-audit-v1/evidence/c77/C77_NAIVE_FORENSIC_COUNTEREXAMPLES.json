@@ -1,0 +1,659 @@
+{
+  "author_grade_verified": 0,
+  "decision": "CONFLICTS_BLOCK_ROUTE_A_PROMOTION",
+  "fills": 0,
+  "fully_strict_verified_contexts": 82,
+  "issues": [
+    {
+      "parent_index": 0,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_RB_SOURCE', 1788411600000, 'SHORT', [('RB', 'LONG', 1788411600000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788411600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 1,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788580800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 2,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_RB_SOURCE', 1788494400000, 'LONG', [('RB', 'SHORT', 1788494400000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788494400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 4,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_IMB_SOURCE', 1788595200000, 'SHORT', [], [('LONG', 1788595200000, '248.77', '250.46')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788595200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 5,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788627600000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 8,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788832800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 13,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789272000000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 14,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_RB_SOURCE', 1789563600000, 'LONG', [('RB', 'SHORT', 1789563600000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789563600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 18,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_IMB_SOURCE', 1789822800000, 'SHORT', [], [('LONG', 1789822800000, '250.43', '250.60')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789822800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 19,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_RB_SOURCE', 1789866000000, 'LONG', [('RB', 'SHORT', 1789866000000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789866000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 22,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789952400000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 25,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_RB_SOURCE', 1790575200000, 'LONG', [('RB', 'SHORT', 1790575200000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790575200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 29,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BCHUSDT', '1H_NEW_VC_RB_SOURCE', 1790784000000, 'SHORT', [('RB', 'LONG', 1790784000000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790784000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BCHUSDT"
+    },
+    {
+      "parent_index": 0,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_IMB_SOURCE', 1788451200000, 'SHORT', [], [('LONG', 1788451200000, '78964.00', '80320.90')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788451200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 1,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788512400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 3,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788796800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 4,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789138800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 5,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_IMB_SOURCE', 1789448400000, 'LONG', [], [('SHORT', 1789448400000, '77712.90', '77757.20')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789448400000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 6,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_RB_SOURCE', 1789729200000, 'SHORT', [('RB', 'LONG', 1789729200000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789729200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 8,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_RB_SOURCE', 1789502400000, 'SHORT', [('RB', 'LONG', 1789502400000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789502400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 13,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_IMB_SOURCE', 1789923600000, 'SHORT', [], [('LONG', 1789923600000, '80762.20', '80767.70')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789923600000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 14,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_RB_SOURCE', 1789948800000, 'LONG', [('RB', 'SHORT', 1789948800000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [('LONG', 1789948800000, '81050.00', '81090.00')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789948800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 15,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790182800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 17,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790089200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 18,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_RB_SOURCE', 1790928000000, 'SHORT', [('RB', 'LONG', 1790928000000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790928000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 19,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790244000000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 20,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('BTCUSDT', '1H_NEW_VC_RB_SOURCE', 1790557200000, 'LONG', [('RB', 'SHORT', 1790557200000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790557200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "parent_index": 0,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_IMB_SOURCE', 1788465600000, 'SHORT', [], [('LONG', 1788465600000, '2505.73', '2506.22')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788465600000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 1,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1788534000000, 'LONG', [('RB', 'SHORT', 1788534000000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788534000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 2,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1788645600000, 'SHORT', [('RB', 'LONG', 1788645600000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788645600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 3,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788721200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 5,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_IMB_SOURCE', 1789207200000, 'SHORT', [('RB', 'SHORT', 1789207200000, 'RB_TWO_OPPOSITE_HOURLY_CANDLES_WITHOUT_VERIFIED_WICK_RAID')], [('LONG', 1789207200000, '2523.74', '2528.17')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789207200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 7,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_IMB_SOURCE', 1789243200000, 'LONG', [], [('SHORT', 1789243200000, '2522.10', '2523.51')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789243200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 15,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1789894800000, 'LONG', [('RB', 'SHORT', 1789894800000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789894800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 19,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_IMB_SOURCE', 1790179200000, 'LONG', [], [('SHORT', 1790179200000, '2683.81', '2706.00')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790179200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 20,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1790092800000, 'SHORT', [('RB', 'LONG', 1790092800000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790092800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 21,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1790348400000, 'SHORT', [('RB', 'LONG', 1790348400000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790348400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 22,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1790218800000, 'SHORT', [('RB', 'LONG', 1790218800000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790218800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 23,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1790571600000, 'SHORT', [('RB', 'LONG', 1790571600000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790571600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 25,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('ETHUSDT', '1H_NEW_VC_RB_SOURCE', 1790704800000, 'LONG', [('RB', 'SHORT', 1790704800000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790704800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "parent_index": 2,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_RB_SOURCE', 1788501600000, 'LONG', [('RB', 'SHORT', 1788501600000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788501600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 3,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_RB_SOURCE', 1788588000000, 'SHORT', [('RB', 'LONG', 1788588000000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788588000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 4,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_RB_SOURCE', 1788789600000, 'LONG', [('RB', 'SHORT', 1788789600000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788789600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 6,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789138800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 9,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_IMB_SOURCE', 1789444800000, 'LONG', [], [('SHORT', 1789444800000, '101.9300', '102.0800')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789444800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 14,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_IMB_SOURCE', 1789858800000, 'LONG', [('RB', 'LONG', 1789858800000, 'RB_TWO_OPPOSITE_HOURLY_CANDLES_WITHOUT_VERIFIED_WICK_RAID')], [('SHORT', 1789858800000, '110.7600', '110.9300')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789858800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 19,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_RB_SOURCE', 1790092800000, 'SHORT', [('RB', 'LONG', 1790092800000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790092800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 20,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_RB_SOURCE', 1790294400000, 'SHORT', [('RB', 'LONG', 1790294400000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790294400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 21,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_RB_SOURCE', 1790211600000, 'SHORT', [('RB', 'LONG', 1790211600000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790211600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 22,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790334000000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 24,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('SOLUSDT', '1H_NEW_VC_IMB_SOURCE', 1790524800000, 'LONG', [('RB', 'LONG', 1790524800000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [('SHORT', 1790524800000, '121.8400', '122.2800')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790524800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 25,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790611200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 26,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790611200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "parent_index": 1,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1788613200000, 'SHORT', [('RB', 'LONG', 1788613200000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1788613200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 2,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1788670800000, 'LONG', [('RB', 'SHORT', 1788670800000, 'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788670800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 3,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1788912000000, 'LONG', [('RB', 'SHORT', 1788912000000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1788912000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 6,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789138800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 7,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1789333200000, 'SHORT', [('RB', 'LONG', 1789333200000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789333200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 8,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1789333200000, 'SHORT', [('RB', 'LONG', 1789333200000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789333200000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 10,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1789444800000, 'LONG', [('RB', 'SHORT', 1789444800000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789444800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 12,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789549200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 14,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1789880400000, 'LONG', [('RB', 'SHORT', 1789880400000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1789880400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 15,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1789930800000, 'SHORT', [('RB', 'LONG', 1789930800000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789930800000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 16,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1789905600000, 'SHORT', [('RB', 'LONG', 1789905600000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1789905600000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 17,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790258400000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 21,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790244000000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 22,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1790370000000, 'LONG', [('RB', 'SHORT', 1790370000000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790370000000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 23,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_IMB_SOURCE', 1790499600000, 'SHORT', [('RB', 'SHORT', 1790499600000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [('LONG', 1790499600000, '1.5249', '1.5334')])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790499600000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 24,
+      "reason": "MISSING_FIRST_TOUCH_WRONG",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790611200000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 25,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_RB_SOURCE', 1790744400000, 'SHORT', [('RB', 'LONG', 1790744400000, 'RB_WICK_ONLY_IMB_SOURCE_PROXY')], [])",
+      "source_context_side": "SHORT",
+      "source_created_ms": 1790744400000,
+      "source_kind": "1H_NEW_VC_RB_SOURCE",
+      "symbol": "XRPUSDT"
+    },
+    {
+      "parent_index": 26,
+      "reason": "C62_SOURCE_PARENT_MATCH_0 ('XRPUSDT', '1H_NEW_VC_IMB_SOURCE', 1790956800000, 'LONG', [], [('SHORT', 1790956800000, '1.5146', '1.5283')])",
+      "source_context_side": "LONG",
+      "source_created_ms": 1790956800000,
+      "source_kind": "1H_NEW_VC_IMB_SOURCE",
+      "symbol": "XRPUSDT"
+    }
+  ],
+  "markets": [
+    {
+      "contexts": 32,
+      "source_rejected_groups": {
+        "C62_SOURCE_PARENT_MATCH_0": 8,
+        "MISSING_FIRST_TOUCH_WRONG": 5
+      },
+      "source_verified_groups": {
+        "NO_PARENT": 7,
+        "RB": 9,
+        "SNR": 3
+      },
+      "symbol": "BCHUSDT"
+    },
+    {
+      "contexts": 30,
+      "source_rejected_groups": {
+        "C62_SOURCE_PARENT_MATCH_0": 8,
+        "MISSING_FIRST_TOUCH_WRONG": 6
+      },
+      "source_verified_groups": {
+        "NO_PARENT": 9,
+        "RB": 6,
+        "SNR": 1
+      },
+      "symbol": "BTCUSDT"
+    },
+    {
+      "contexts": 31,
+      "source_rejected_groups": {
+        "C62_SOURCE_PARENT_MATCH_0": 12,
+        "MISSING_FIRST_TOUCH_WRONG": 1
+      },
+      "source_verified_groups": {
+        "NO_PARENT": 11,
+        "RB": 6,
+        "SNR": 1
+      },
+      "symbol": "ETHUSDT"
+    },
+    {
+      "contexts": 31,
+      "source_rejected_groups": {
+        "C62_SOURCE_PARENT_MATCH_0": 9,
+        "MISSING_FIRST_TOUCH_WRONG": 4
+      },
+      "source_verified_groups": {
+        "NO_PARENT": 10,
+        "RB": 6,
+        "SNR": 2
+      },
+      "symbol": "SOLUSDT"
+    },
+    {
+      "contexts": 29,
+      "source_rejected_groups": {
+        "C62_SOURCE_PARENT_MATCH_0": 13,
+        "MISSING_FIRST_TOUCH_WRONG": 5
+      },
+      "source_verified_groups": {
+        "NO_PARENT": 10,
+        "RB": 1
+      },
+      "symbol": "XRPUSDT"
+    }
+  ],
+  "orders": 0,
+  "original_zip_verified": {
+    "native15m": 15,
+    "native1d": 15,
+    "native3m": 15,
+    "total": 45
+  },
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "readiness": "NOT_TRADE_READY",
+  "schema": "EMBER_C77_FORENSIC_ORIGINAL45ZIP_SOURCE_CONTRADICTIONS_V1",
+  "source_C73_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+  "source_contexts": 153,
+  "source_semantic_conflict_contexts": 71,
+  "trades": 0
+}
