@@ -1,0 +1,77 @@
+name: EMBER C72 independently redownload full original60 ZIP 5m original15m 197266 byte source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c72-independent-second-original60zip-197266.yml'
+      - 'research/mtf-element-audit-v1/evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json'
+permissions:
+  contents: read
+jobs:
+  original60_again:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently re-download all 60 Binance original sources 45 old plus 15 real 5m and verify full exact 197266 bytes
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A141
+          grep -Fq 'entries 141 tip_sha256 9f6e2a7bb92e9b105e446be0f0e0c6c0397359a74f25071ada0297cb099e6a9f' /tmp/A141
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97
+          test "$(git rev-parse HEAD:$R/evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json)" = 19b7e0357600b70b3f26467339a417e0f99a1302
+          python "$R/tests/probe_c72_original60zip_native5m_to15m_first_source_vc.py" /tmp/C72-independent.json >/tmp/C72-independent.log 2>&1 || { tail -c 21000 /tmp/C72-independent.log; exit 1; }
+          cmp -s /tmp/C72-independent.json "$R/evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('research/mtf-element-audit-v1/evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json')
+          assert p.stat().st_size==197266
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='3541b5a7f6f8fa9d16dabd28c944343b8e65e1f0055942d3c25b55ee46a22acf'
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']=={'native3m':15,'native15m':15,'native1d':15,'new_native5m':15,'total':60}
+          assert d['original_native3m_closed']==76800 and d['original_native5m_closed']==46080
+          assert d['original_native15m_closed']==d['native5m_to_native15m_original_decimal_equalities']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert d['original5m_first_any_post_c71_source_state_totals']=={
+            'FIRST_5M_IMB_ALIGNED_NOT_AUTHOR_VC':3,
+            'FIRST_5M_SNR_ALIGNED_NOT_AUTHOR_VC':1,
+            'FIRST_5M_SOURCE_MULTIPLE_KINDS_AMBIGUOUS':3,
+            'FIRST_5M_SOURCE_OPPOSITE_SIDE':5,
+            'FIRST_5M_SOURCE_TWO_SIDES_AMBIGUOUS':0,
+            'NO_5M_VC_SOURCE_FULL_24H_WINDOW':0,
+            'NO_5M_VC_SOURCE_RIGHT_CENSORED':0,
+            'NO_C71_SINGLE_NEW_1H_POI_15M_SOURCE':141}
+          assert d['author_verified_native5m_volume_confirmation']==0
+          assert d['author_verified_5m_vc']==0 and d['author_verified_StrongHL']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          assert d['source5m_same_host_checksum_not_independent_signature'] is True
+          print('C72_SECOND_FRESH_ALL60_ORIGINAL_SOURCE_ZIP_BYTE_EQUAL',p.stat().st_size,sha)
+          PY
+  adverse30_again:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Thirty 5m source no owner trigger VC mutation/parity tests x3
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c72_original_native5m_source_vc_after15m_gate 2>&1 | tee /tmp/C72
+          grep -Fq 'Ran 30 tests' /tmp/C72
+          grep -qx 'OK' /tmp/C72
