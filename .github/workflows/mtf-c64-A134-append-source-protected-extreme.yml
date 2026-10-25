@@ -1,0 +1,115 @@
+name: EMBER C64 append-once A134 original45ZIP candidate protected source extreme six SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c64-A134-append-source-protected-extreme.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c64-a134-append-once
+  cancel-in-progress: false
+jobs:
+  append134:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A133 prior 133 SHA, C46 C60 C62 C63 original frozen and C64 independent evidence
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A133
+          grep -Fq 'entries 133 tip_sha256 3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac' /tmp/A133
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json')
+          w=Path('evidence/c64/C64_INDEPENDENT_ORIGINAL45ZIP_PROTECTED_SOURCE_EXTREME_WITNESS_20261025.json')
+          report=Path('cycles/B1_C64_SOURCE_EXTREME_PRECONFIRM_WICK_VS_CLOSE_OF_INVALIDATION_REPORT.md')
+          assert all(x.is_file() and x.stat().st_size>0 for x in (p,w,report))
+          assert p.stat().st_size==238920
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='a921947a70a330cad76f63c0d3faa95069941e8793d24816291df87766cb729e'
+          d=json.loads(p.read_bytes());q=json.loads(w.read_bytes())
+          assert d['source_signed_original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native1d_closed']==160
+          assert d['original_native15m_decimal_parities']==15360
+          assert d['source_derived_closed1h']==3840
+          assert d['original_4h_technical_source_parents']==153
+          assert d['source_status_totals']=={
+           'FIRST_ANY_AMBIGUOUS_NO_PROTECTED_DIRECTION':7,
+           'NO_1H_REACTION_NO_PROTECTED_CANDIDATE':0,
+           'NO_ORIGINAL_4H_FIRST_CONTACT':21,
+           'REACTION_START_NOT_AFTER_CONTACT':0,
+           'SOURCE_ANCHOR_BREACHED_BEFORE_EVENT_CONFIRMATION':55,
+           'SOURCE_ANCHOR_KNOWN_AT_REACTION_CLOSE':70}
+          assert d['source_breach_totals']=={
+           'full_postevent_24h_window':61,
+           'postevent_1h_close_beyond':28,
+           'postevent_3m_close_beyond':31,
+           'postevent_3m_wick_breach':35,
+           'preactivation_wick_breach':55,
+           'source_candidate_extreme_with_price':125}
+          assert d['author_verified_stronghl']==d['author_of_invalidation']==d['author_sl']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          assert q['first_original45_zip_replay_success_run']==40213320619
+          assert q['independent_second_original45_zip_replay_success_run']==40213466284
+          assert q['independent_second_workflow_jobs']=='SUCCESS_4_OF_4'
+          assert q['full_original_source_sha256']==sha and q['independent_tests_per_python']==28
+          print('C64_A134_INDEPENDENT_ORIGINAL45ZIP_SIX_SOURCE_EVIDENCE_ACCEPTED')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          cd "$R/d05"
+          python -m unittest -v test_c64_original3m_source_protected_extreme_invalidation 2>&1 | tee /tmp/C64neg
+          grep -Fq 'Ran 28 tests' /tmp/C64neg
+          grep -qx 'OK' /tmp/C64neg
+      - name: Append immutable A134 after full twice signed original45ZIP x 28 negatives x3
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A134 \
+            --cycle B1/C64 \
+            --planned 'Re-read owner Strong High Low, Order Flow and POI primary lesson text. A true StrongHL needs genuine liquidity/inefficiency contact then VC POI/BOS, and true OF invalidation needs closed beyond last OF link or opposing author POI after target. Study original Binance USD-M source-only candidate min/max price anchored from original 3m 4H contact to before earliest 1H source pattern, freeze only upon its full close, veto preconfirmation raw 3m wick breach, distinguish later raw3m wick breach from 3m and 1h closes without author upgrade. Fixed 24h right censor. Never generate orders.' \
+            --executed 'Created C64 pure source extreme observer, 28 adversarial negative tests Python 3.10 3.11 3.12, and C64 full signed original Binance USDT-M 45ZIP replay on BTC ETH SOL XRP BCH 2026-09-01 to 2026-10-02. Twice independently SHA-check downloaded original45ZIP, 76800 native3m 160 native1d 15360 exact original15m Decimal parities, 3840 closed derived1h, 153 previous frozen C46 source 4H parent IDs, C60 native3m first contacts, exact C62 source SNR RB IMB and C63 first ANY later 1H source sequence. First CI 40213320619 and independent full byte second original45 ZIP 40213466284 SUCCESS 4/4, all 238920 source JSON bytes exact SHA256 a921947a70a330cad76f63c0d3faa95069941e8793d24816291df87766cb729e Git blob f70b0493a0c4964c618c09c75fee900dd65f5c05.' \
+            --result '153 original technical 4H IMB parents: 21 no source first contact, seven first 1H reaction both sides ambiguous no source extreme, 55 source anchors breached by native3m wick BEFORE source 1H reaction event fully closed, 70 source anchors remained unbreached when 1H event fully known. Of 70, 61 had complete postevent 24h price window, nine right censored. Source-only after confirmed event: 35 crossed 3m wick, 31 crossed by 3m CLOSE and 28 by fully closed 1H CLOSE, overlapping sets not trades or academic OF invalidation. No approved author POI first valid test, VC/BOS, true StrongHL/OF invalidation/SL/TP, entry, fill or PnL; PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'A133 prior immutable 133/133 tip 3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac unchanged. Frozen Git blob C46 dc03c181912ffbb800bc191fbc16ec0d05c335e0 C60 899373e4a1dc1999d1485ac8c1f790d39071aebd C62 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2 C63 fdc77c7ec942f03b4efae83b935d994c8435a24f unchanged; all 153 parents raw SHA IDs price equality. 28 adversarial source cases x three independent Python versions, no author goldens, no late extreme hindsight reposition. Independently both original45 ZIP full JSON 238920 byte exact, no first favorable cherry pick, preconfirmation breach veto; 3m wick breach never automatically true academic OF reversal.' \
+            --evidence d05/c64_original3m_source_protected_extreme_invalidation.py \
+            --evidence d05/test_c64_original3m_source_protected_extreme_invalidation.py \
+            --evidence tests/probe_c64_original45zip_3m_extreme_protected_invalidations.py \
+            --evidence evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json \
+            --evidence evidence/c64/C64_INDEPENDENT_ORIGINAL45ZIP_PROTECTED_SOURCE_EXTREME_WITNESS_20261025.json \
+            --evidence cycles/B1_C64_SOURCE_EXTREME_PRECONFIRM_WICK_VS_CLOSE_OF_INVALIDATION_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A134
+          grep -Fq 'entries 134' /tmp/A134
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Commit only journal appended SHA line with no force
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changed
+          test "$(wc -l < /tmp/changed)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C64): append-once A134 original 3m 1h source protected extreme no OF author claims six SHA'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
