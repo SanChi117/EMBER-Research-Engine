@@ -1,0 +1,41 @@
+name: EMBER C55 source 1H liquidity BSL SSL raid to original3m adapted closed BOS 31 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-crypto-1h-raid-3m-bos-negatives-20261025.yml'
+      - 'research/mtf-element-audit-v1/d05/c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard.py'
+      - 'research/mtf-element-audit-v1/d05/test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard.py'
+permissions:
+  contents: read
+jobs:
+  route_c_no_trading:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.py }}
+      - name: Verify immutable crypto-only A123 original sources and full audit SHA before new 1H raid
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A123evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json)" = 'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+      - name: Run 31 anti-lookahead crypto-only 1H first fractal raid 3M closed break and never borrow 5M
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard 2>&1 | tee /tmp/C55.txt
+          grep -Fq 'Ran 31 tests' /tmp/C55.txt
+          grep -qx 'OK' /tmp/C55.txt
+          ! grep -q 'skipped=' /tmp/C55.txt
