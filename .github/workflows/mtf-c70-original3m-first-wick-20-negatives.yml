@@ -1,0 +1,33 @@
+name: EMBER C70 exact original3m first liquidity wick inside C69 native15m 20 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c70-original3m-first-wick-20-negatives.yml'
+      - 'research/mtf-element-audit-v1/d05/c70_exact_native3m_first_raid_or_poi_source_wick.py'
+      - 'research/mtf-element-audit-v1/d05/test_c70_exact_native3m_first_raid_or_poi_source_wick.py'
+permissions:
+  contents: read
+jobs:
+  source20:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify immutable A138 + original Binance native3m 5-to-one 15m Decimal parity tests and 1h asof no future
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A138
+          grep -Fq 'entries 138 tip_sha256 c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a' /tmp/A138
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c70_exact_native3m_first_raid_or_poi_source_wick 2>&1 | tee /tmp/C70
+          grep -Fq 'Ran 20 tests' /tmp/C70
+          grep -qx 'OK' /tmp/C70
