@@ -1,0 +1,31 @@
+name: EMBER C76 independent full 60ZIP source SHA duplicate replay
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c76-independent-second-original60zip.yml'
+permissions:
+  contents: read
+jobs:
+  independent-full-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify prior C75 journal and pinned C76 source invariants
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 145 tip_sha256 693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea'
+          python tests/probe_c76_pinned_original60zip_static_review.py
+      - name: Independently fresh repeat all original60ZIP and exact full JSON bytes
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tests/probe_c76_fresh_original60zip_fvg_parent.py /tmp/C76_REPEAT.json | grep -F 'C76_FINAL_REPLAY_PASS 60 ORIGINAL ZIP'
+          cmp /tmp/C76_REPEAT.json evidence/c76/C76_FRESH_ORIGINAL60ZIP_ADAPTED_FVG_PARENT_REPLAY.json
+          sha256sum /tmp/C76_REPEAT.json evidence/c76/C76_FRESH_ORIGINAL60ZIP_ADAPTED_FVG_PARENT_REPLAY.json
+          echo C76_SECOND_FRESH_ORIGINAL60_ZIP_JSON_BYTE_EQUAL_PASS

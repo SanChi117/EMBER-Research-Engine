@@ -1,37 +1,61 @@
-# C76 — independent original crypto FVG plus 1H POI source lineage
+# C76 — original60ZIP FVG 1H parent technical source verification
 
-Date: 2026-10-26. Starting point independently verified C75/A145, append-only
-145 SHA tip `693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea`.
-Source-only technical replay; old evidence C46–C75 immutable.
+**2026-10-26; PAPER ONLY / NOT_TRADE_READY.** Start from C75/A145 SHA
+`693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea`.
 
-## Intended falsification
-- Re-download **all 60** September and October 1–2 original Binance USD-M
-  3m/5m/15m/1d ZIPs for BTCUSDT, ETHUSDT, SOLUSDT, XRPUSDT, BCHUSDT.
-  Read original 3m/15m/1d with existing C21 and C08 pinned SHA readers;
-  5m with C72's strict ZIP CHECKSUM and frozen C73 ZIP and CSV SHA witness.
-- Independently require exactly 76,800 original 3m, 46,080 original 5m,
-  15,360 original 15m and 160 original 1d closed candles, source Decimal
-  OHLCV parity 3m→15m and 5m→15m for 15,360 15m candles.
-- Reuse C75 ADAPTED three-closed-bar strict wick FVG on each original 3m,
-  5m and 15m stream; deterministic first candidate lifecycle for each symbol
-  and TF with at least one actual source FVG.
-- Bind **all** 153 frozen C73 source parents to independently revalidated
-  original 15m FVGs; distinguish 1H source RB/SNR/IMB, contained candidate,
-  partial overlap and IMB-within-IMB. Source FVG known before POI first
-  visit must be separate from *future* 15m after-test pattern. No using
-  downstream reactions to select candidate retrospectively.
-- *Never* certify first valid POI test, author IMB eligible Trigger,
-  VC, true StrongHL, structural stop or trade based only on outside source
-  FVG geometry; Route B IDM and C Liquidity Raid→BOS remain independent.
+## Done — full original-source validation
 
-## What is NOT proven
-The academic screenshots show examples of logic but carry no exact
-author positive/negative Binance candle/time/ZIP source labels. This is a
-price-source fidelity test, **not** proof of strategy efficacy or calibrated
-entry model. Same Binance domain checksum is not an independent digital
-signature. A fresh 60ZIP geometry replay is not a rerun of every previously
-archived C73 decision algorithm: pinned C73 source state remains frozen.
+Five crypto symbols BCH, BTC, ETH, SOL, XRP on Binance USD-M Sept 1–Oct 2 2026.
+Full **60 original ZIP fresh** in [initial C76 workflow](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40238301069).
+All original 3m (76,800), 5m (46,080), 15m (15,360), native1d (160);
+3m→15m and 5m→15m exact Decimal OHLCV parity 15,360/15,360 each.
+Original source ZIP and CSV SHA pinned with original frozen C08/C21/C73
+proofs and original .CHECKSUM from the **same Binance host** (NOT third-party
+digital authentication). Technical C75 FVG detector rescans all source data.
 
-Results: see C76 source JSON evidence and independent CI before marking A146.
+**ADAPTED_HYPOTHESIS geometric results — NOT signal count:**
 
-**PAPER ONLY / NOT_TRADE_READY, orders=fills=trades=0.**
+| Period | Raw closed three-candle wick FVG |
+|---|---:|
+| Native3m | 18,762 |
+| Native5m | 10,338 |
+| Native15m | 3,048 |
+
+153 original C73 parent 4H contexts, source-only classifications:
+47 no proposed new 1H POI, 71 new 1H POI without source first touch,
+29 without pre-touch parent-contained same-side 15m FVG, 5 with contained
+15m FVG in parent source RB/SNR, 1 partial parent-zone overlap.
+Six technically same-clock 15m FVG and first original 15m event are
+not owner-verified 15m Trigger or VC. No source nested IMB promoted.
+
+## Tests and falsification
+
+Module `d05/c76_original_crypto_fvg_1h_parent_semantic_audit.py` enforces
+parent POI RB/SNR/IMB source distinction, strict event clocks, parent nesting,
+adversarial flag rejection, no 5m VC by association. Tests on Python
+3.10/3.11/3.12 each pass the full negative suite under original C76 workflow.
+Initial C76 proof and archive receipts are preserved byte-for-byte in
+`evidence/c76/C76_FRESH_ORIGINAL60ZIP_ADAPTED_FVG_PARENT_REPLAY.json`;
+static independent audit:
+`tests/probe_c76_pinned_original60zip_static_review.py`.
+
+Independent second fresh archive download and byte-comparison is in
+`.github/workflows/mtf-c76-independent-second-original60zip.yml`.
+Record actual CI result; do not claim duplicate success until green.
+
+## Limits: academic and trade readiness
+
+C76 rescans **real original crypto candles** and verifies parent source
+linkage against the pinned 153 C73 cases; it does *not* independently
+re-run the full earlier C73 153-case algorithm. External three-candle
+FVG geometry is hypothesis and is not author-certified Volume Confirmation,
+valid first test, eligible Trigger, IDM, Raid→BOS, StrongHL, stop/FTA/TP,
+fills, winrate or return. There are still no timestamped authored Binance
+positive/negative crypto goldens. **Zero orders, fills, trades, PnL.**
+
+## Next C77
+
+Validate genuine parent-sourced RB/SNR/IMB candidate eligibility and
+source first/revisit versus closure chronology on all potential cases,
+separate strict author text rules from adapted source patterns, never
+force a route or construct a live order; OOS PAPER only after proof gates.
