@@ -1,0 +1,34 @@
+name: EMBER C65 OF last structural link target invalidation 31 adversarial tests x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c65-of-last-link-target-31-negatives.yml'
+      - 'research/mtf-element-audit-v1/d05/c65_of_last_link_target_invalidation_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c65_of_last_link_target_invalidation_source.py'
+permissions:
+  contents: read
+jobs:
+  source_contract:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify original ledger 134 SHA and 31 negative/positive source OF contracts
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/134
+          grep -Fq 'entries 134 tip_sha256 2a01f3845779390187305475c609d407b0e790605de3d3183884baba81795960' /tmp/134
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c65_of_last_link_target_invalidation_source 2>&1 | tee /tmp/c65test
+          grep -Fq 'Ran 31 tests' /tmp/c65test
+          grep -qx 'OK' /tmp/c65test
+          ! grep -q 'skipped=' /tmp/c65test
