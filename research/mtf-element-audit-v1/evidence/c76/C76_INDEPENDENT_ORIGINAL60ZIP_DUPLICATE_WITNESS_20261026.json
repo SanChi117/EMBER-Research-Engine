@@ -1,0 +1,62 @@
+{
+  "schema": "EMBER_C76_INDEPENDENT_TWO_FULL_ORIGINAL60ZIP_REPLAY_WITNESS_V1",
+  "utc_date": "2026-10-26",
+  "repo": "SanChi117/EMBER-Research-Engine",
+  "branch": "research/academic-engine-recovery-20261015",
+  "first_real_original60zip_ci": 40238301069,
+  "second_independent_real_original60zip_ci": 40238604771,
+  "first_ci_status": "SUCCESS",
+  "second_ci_status": "SUCCESS",
+  "complete_source_json_path": "evidence/c76/C76_FRESH_ORIGINAL60ZIP_ADAPTED_FVG_PARENT_REPLAY.json",
+  "complete_source_json_bytes": 40791,
+  "complete_source_json_sha256": "ca5717073a30dd14c5ec830b065e4d4f67764bd9de856411d86a55e154270de7",
+  "second_full_json_byte_equal": true,
+  "native_zip_counts": {
+    "native3m": 15,
+    "native5m": 15,
+    "native15m": 15,
+    "native1d": 15,
+    "total": 60
+  },
+  "source_period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "source_closed_bar_counts": {
+    "native3m": 76800,
+    "native5m": 46080,
+    "native15m": 15360,
+    "native1d": 160
+  },
+  "exact_decimal_parity": {
+    "native3m_to_15m": 15360,
+    "native5m_to_15m": 15360
+  },
+  "adapted_technical_fvg_patterns": {
+    "native3m": 18762,
+    "native5m": 10338,
+    "native15m": 3048
+  },
+  "frozen_C73_parent_contexts": 153,
+  "source_poi_fvg_categories": {
+    "no_new_1h_poi": 47,
+    "no_first_poi_contact": 71,
+    "no_pretest_fvg": 29,
+    "contained_fvg_rb_snr": 5,
+    "partial_overlap": 1
+  },
+  "same_clock_first_15m_source_pattern_fvg": 6,
+  "independent_40_adversarial_cases_per_python": "3.10/3.11/3.12 passed",
+  "author_labels_verified": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "state": "PAPER_ONLY_NOT_TRADE_READY",
+  "limitations": [
+    "Same-host Binance checksum is not third-party cryptographic signature",
+    "The full prior C73 algorithm was not independently rerun, only its pinned source lineage was",
+    "C75 adapted FVG geometry and C76 source associations do not certify author POI/Trigger/VC",
+    "All archive-derived pattern counts are observations not fills or strategy winrate"
+  ]
+}

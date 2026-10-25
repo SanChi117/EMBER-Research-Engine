@@ -59,3 +59,13 @@ Validate genuine parent-sourced RB/SNR/IMB candidate eligibility and
 source first/revisit versus closure chronology on all potential cases,
 separate strict author text rules from adapted source patterns, never
 force a route or construct a live order; OOS PAPER only after proof gates.
+
+
+## Final observed independent CI — no inference from pending results
+
+- **First genuine complete 60ZIP replay:** [GitHub Actions #40238301069](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40238301069), **SUCCESS**, with all 60 original archives freshly fetched and source reconciled.
+- **Second independent genuine complete 60ZIP replay:** [GitHub Actions #40238604771](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40238604771), **SUCCESS**. Python `cmp` checks the entire new 40,791-byte C76 JSON evidence against freshly independently recreated C76 result: **BYTE EQUAL**.
+- **Full source proof SHA256:** `ca5717073a30dd14c5ec830b065e4d4f67764bd9de856411d86a55e154270de7`. Both complete runs reproduced this exact file digest.
+- **Adversarial independent matrix:** 40 tests × Python 3.10/3.11/3.12 (120 test executions) **SUCCESS**, all C76 proof grades remain SOURCE_TECHNICAL / ADAPTED_HYPOTHESIS, no trading decisions.
+- **Same-clock 15m geometric FVG vs frozen first 15m event:** 6 source cases. Those six are **NOT** course author's independently confirmed 15m Trigger/VC.
+- Frozen original C73 303,327-byte, 153-context source SHA remains `c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b`; the entire C73 153-case algorithm was not independently rerun in C76, while the original 60 ZIP price sources were.
