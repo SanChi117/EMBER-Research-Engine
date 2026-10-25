@@ -115,7 +115,10 @@ def observe_original3m_zone_visits(rows,candidate,*,as_of_ms):
             if not started and row.start_ms!=candidate.fully_known_ms:
                 raise ValueError("C60_GAPPED_AFTER_KNOWN_4H_SOURCE")
             started=True;after.append(row)
-    if rows[-1].known_ms!=as_of_ms or not started:
+    # A 4H candidate created by the VERY LAST fully closed candle has
+    # exactly zero post-known 3m bars. It is correctly untouched, not a
+    # missing-prefix error: there is no future source yet to observe.
+    if rows[-1].known_ms!=as_of_ms or (not started and candidate.fully_known_ms!=as_of_ms):
         raise ValueError("C60_INCOMPLETE_OR_FUTURE_SOURCE_PREFIX")
     result=[];first=None;last_hit=None;n=0
     for row in after:
