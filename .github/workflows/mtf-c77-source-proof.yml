@@ -37,3 +37,14 @@ jobs:
           python-version: '3.11'
       - name: Recheck original 45 ZIP source
         run: python research/mtf-element-audit-v1/tests/probe_c77_original45zip_1h_poi.py
+
+  forensic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Inventory failed original source confirmations
+        run: python research/mtf-element-audit-v1/tests/probe_c77_45zip_forensic_conflicts.py
