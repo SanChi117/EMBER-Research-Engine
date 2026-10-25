@@ -1,0 +1,32 @@
+name: EMBER C58 Route B technical 1H inside 4H source preknown liquidity negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c58-route-b-preknown-original1h-negatives.yml'
+      - 'research/mtf-element-audit-v1/d05/c58_route_b_preknown_original1h_liquidity_inside_4h_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c58_route_b_preknown_original1h_liquidity_inside_4h_source.py'
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Prior accepted 127 SHA and C58 28 negative unit tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A127
+          grep -Fq 'entries 127 tip_sha256 f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005' /tmp/A127
+          cd d05
+          python -m unittest -v test_c58_route_b_preknown_original1h_liquidity_inside_4h_source 2>&1 | tee /tmp/C58
+          grep -Fq 'Ran 28 tests' /tmp/C58
+          grep -qx 'OK' /tmp/C58
