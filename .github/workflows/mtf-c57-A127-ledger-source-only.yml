@@ -1,0 +1,95 @@
+name: EMBER C57 append-once A127 45ZIP Route A native15m six SHA evidence
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c57-A127-ledger-source-only.yml'
+permissions:
+  contents: write
+concurrency:
+  group: ember-c57-a127-append
+  cancel-in-progress: false
+jobs:
+  append_a127:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify 126 previous immutable hashes, 45 original source research evidence and 42 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A126
+          grep -Fq 'entries 126 tip_sha256 f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba' /tmp/A126
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          python - <<'PY'
+          import json,pathlib,hashlib
+          s=pathlib.Path("evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json")
+          w=pathlib.Path("evidence/c57/C57_INDEPENDENT_45ZIP_NATIVE15M_FIRST_ANY_WITNESS_20261025.json")
+          report=pathlib.Path("cycles/B1_C57_ROUTE_A_NATIVE15M_ORIGINAL_FIRST_ANY_SOURCE_REPORT.md")
+          assert all(p.exists() and p.stat().st_size>0 for p in (s,w,report))
+          raw=s.read_bytes()
+          assert len(raw)==292187
+          assert hashlib.sha256(raw).hexdigest()=="3ce556499294bb005f4ecfc57a817488ab6a66ef498c1181ceca2874acff1b95"
+          x=json.loads(raw); y=json.loads(w.read_bytes())
+          assert x['source_archives']['total']==45
+          assert x['native_original3m_closed']==76800 and x['native_original15m_closed']==15360
+          assert x['independent_original3m_native15m_OHLCV_equalities']==15360
+          assert x['4h_source_IMB_candidates']==153 and x['source_first3m_contacts']==132 and x['post_contact_technical1h_candidates']==130
+          assert x['statuses']=={'FIRST_ANY_NATIVE15M_IMB_SAME_SIDE_AS_4H':59,'FIRST_ANY_NATIVE15M_IMB_OPPOSITE_SIDE_TO_4H':65,'NO_ORIGINAL_3M_FIRST_CONTACT':21,'NO_POST_CONTACT_1H_IMB_SOURCE':2,'RIGHT_CENSORED_NO_15M_IMB_BY_SOURCE_END':6}
+          assert x['author_POI_first_test_goldens']==x['academic_author_15m_vc_goldens']==x['orders']==x['trades']==x['fills']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          assert y['independent_original45zip_second_run']==40200457478 and y['independent_run_status']=='SUCCESS_4_OF_4'
+          assert y['negative_tests_each_python']==42 and y['pinned_source_sha256']==hashlib.sha256(raw).hexdigest()
+          print("C57_A127_SIX_EVIDENCE_GATE_SUCCESS")
+          PY
+          cd d05
+          python -m unittest -v test_c57_route_a_original15m_first_imb_after_1h_source 2>&1 | tee /tmp/C57
+          grep -Fq 'Ran 42 tests' /tmp/C57
+          grep -qx 'OK' /tmp/C57
+      - name: Append A127 only once for C57 source-only six independent evidence files
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A127 \
+            --cycle B1/C57 \
+            --planned 'Course Route A 4H typed tested POI 1H IMB trigger 15m IMB SNR VC requires evidence; research source-only original C46 technical 4H IMB first native3m contact then C47 later 1H technical IMB followed by first ANY original native15m classic wick IMB within fixed six hour window. Never promote these technical sources into author-selected POI, 1H trigger or true volume confirmation.' \
+            --executed 'Added isolated C57 source observer, 42 Python negative tests x3, and complete crypto original 45 Binance USD-M checksum ZIP replay. Native original3m 76800, original15m 15360 with 15360 exact Decimal price parities. Original C46/C47 unchanged and C47 per-parent entire JSON confirmed. Source 153 4H candidates /132 first original3m contacts /130 later 1H candidates. Initial complete 45ZIP CI 40200305505 PASS and independent second entire original45ZIP 292187-byte exact SHA256 3ce556499294bb005f4ecfc57a817488ab6a66ef498c1181ceca2874acff1b95 CI 40200457478 PASS 4/4, negatives 42 x Python 3.10 3.11 3.12.' \
+            --result 'Among 153 source 4H candidate contexts, 59 first-any native15m classic gaps same side, 65 opposite side, 21 no 4H source contact, 2 no later 1H technical source, 6 right-censored without a 15m gap before source end. Correlated source observations only, zero real course-author chosen POI/first valid test/trigger/VC or trade execution. No fills, orders, trades, PnL; CRYPTO ONLY PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous A126 126/126 tip f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba unchanged. Frozen source C46 blob dc03c181912ffbb800bc191fbc16ec0d05c335e0 and C47 blob b2727f081d8a73f522a97a54b4582507ee969244 unchanged. First unit CI 40199972533 red on wrong expected rejection label, repaired without changing real source. First full45 CI 40200264623 red on wrong C47 key, corrected to exact C47 key and later independent complete C57 original45ZIP source 40200305505/40200457478 both PASS. Original full C57 evidence 292187 bytes SHA256 3ce556499294bb005f4ecfc57a817488ab6a66ef498c1181ceca2874acff1b95 Git blob 08f24050d19bb390cf2985a901e2a8f2ea3c0ec3. No author VC or paper signals inferred.' \
+            --evidence d05/c57_route_a_original15m_first_imb_after_1h_source.py \
+            --evidence d05/test_c57_route_a_original15m_first_imb_after_1h_source.py \
+            --evidence tests/probe_c57_original45zip_route_a_4h_1h_native15m_first_imb.py \
+            --evidence evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json \
+            --evidence evidence/c57/C57_INDEPENDENT_45ZIP_NATIVE15M_FIRST_ANY_WITNESS_20261025.json \
+            --evidence cycles/B1_C57_ROUTE_A_NATIVE15M_ORIGINAL_FIRST_ANY_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A127
+          grep -Fq 'entries 127' /tmp/A127
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Non-forcing single SHA journal append commit, never touch earlier records
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changes
+          test "$(wc -l < /tmp/changes)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changes
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C57): A127 append once original45ZIP 4H 1H native15m Route A six evidence SHA'
+          for attempt in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
