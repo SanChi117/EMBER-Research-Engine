@@ -15,6 +15,7 @@ No author market-screenshot goldens. No signal, orders, SL/TP, PnL.
 """
 from dataclasses import dataclass
 from decimal import Decimal
+import re
 from c16_c08_monthly_daily_htf_lineage import DerivedClosedTF,TF_MS,SEPT_START
 from c59_academic_stronghl_first_test_semantic_gate import _num
 
@@ -63,7 +64,14 @@ def _validate(hours,as_of_ms):
             or not all(isinstance(v,Decimal) and v.is_finite() for v in
                        (h.open,h.high,h.low,h.close,h.volume))
             or not (0<h.low<=min(h.open,h.close)<=max(h.open,h.close)<=h.high and h.volume>=0)
-            or any(not isinstance(s,str) or ":" not in s for s in h.source_native_15m_rows)):
+            or len(h.source_native_15m_zip_shas)<1
+            or any(not isinstance(z,str) or not re.fullmatch(r"[0-9a-f]{64}",z)
+                   for z in h.source_native_15m_zip_shas)
+            or any(not isinstance(s,str) or
+                   not re.fullmatch(r"[0-9a-f]{64}:[0-9]{13}",s) or
+                   s.split(":")[0] not in h.source_native_15m_zip_shas or
+                   int(s.split(":")[1])!=h.start_ms+k*TF_MS["15m"]
+                   for k,s in enumerate(h.source_native_15m_rows))):
             raise ValueError("C62_FORGED_OR_UNCLOSED_1H_SOURCE")
         last=h.known_at_ms
     return tuple(h for h in hours if h.known_at_ms<=as_of_ms)
@@ -81,19 +89,26 @@ def _gaps(hours):
             z.source_native_15m_rows[0])))
     return tuple(result)
 
-def _known_levels(hours,first_start):
-    """Only already-confirmed 1H fractals, unswept until pair start."""
-    levels=[]
-    for j in range(1,len(hours)-1):
-        a,p,z=hours[j-1:j+2]
-        if z.known_at_ms>first_start:break
-        if p.high>a.high and p.high>z.high:
-            if all(t.high<=p.high for t in hours[j+2:] if t.known_at_ms<=first_start):
-                levels.append(("BSL",p.high,z.known_at_ms))
-        if p.low<a.low and p.low<z.low:
-            if all(t.low>=p.low for t in hours[j+2:] if t.known_at_ms<=first_start):
-                levels.append(("SSL",p.low,z.known_at_ms))
-    return tuple(levels)
+def _preknown_unswept_levels_schedule(hours):
+    """O(N*active_levels), only fully closed as-of evidence, no future.
+    A strict center swing at j-2 becomes known when the right-side
+    j-1 1H candle closes, before j begins. Previously known pivots
+    that were subsequently wicked through cease to be unswept.
+    """
+    live=[];before=[]
+    for j in range(len(hours)):
+        if j:
+            prev=hours[j-1]
+            live=[x for x in live if (
+                prev.high<=x[1] if x[0]=="BSL" else prev.low>=x[1])]
+        if j>=3:
+            a,p,z=hours[j-3:j]
+            if p.high>a.high and p.high>z.high:
+                live.append(("BSL",p.high,z.known_at_ms))
+            if p.low<a.low and p.low<z.low:
+                live.append(("SSL",p.low,z.known_at_ms))
+        before.append(tuple(live))
+    return tuple(before)
 
 def _work(side,pair,knownlevels,knownGaps,*,wick_only):
     """Return SOURCE witness only; NOT academic author liquidity/IMB."""
@@ -126,12 +141,13 @@ def _side(a,b):
 def observe_hourly_source_poi_split(hours,*,as_of_ms):
     bars=_validate(hours,as_of_ms)
     gaps=_gaps(bars)
+    preknown_schedule=_preknown_unswept_levels_schedule(bars)
     cases=[]
     for i in range(1,len(bars)):
         first,second=bars[i-1:i+1]
         direction=_side(first,second)
         if direction is None:continue
-        levels=_known_levels(bars,first.start_ms)
+        levels=preknown_schedule[i-1]
         preknown=tuple(z for z in gaps if z.known_ms<=first.start_ms)
         ref,source=_work(direction,(first,second),levels,preknown,wick_only=True)
         if source=="LIQUIDITY_SOURCE_PROXY":status="RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY"
