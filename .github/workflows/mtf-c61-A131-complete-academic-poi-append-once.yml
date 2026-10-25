@@ -1,0 +1,106 @@
+name: EMBER C61 append-once A131 complete source HTF POI first valid StrongHL
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c61-A131-complete-academic-poi-append-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c61-A131-append-once
+  cancel-in-progress: false
+jobs:
+  append_131:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate previous immutable 130, previous SHA source, frozen C61 original 45ZIP and 51 tests
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A130
+          grep -Fq 'entries 130 tip_sha256 e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810' /tmp/A130
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json')
+          witness=Path('evidence/c61/C61_INDEPENDENT_COURSE_POI_DAILY_45ZIP_STRONGHL_WITNESS_20261025.json')
+          report=Path('cycles/B1_C61_COMPLETE_ACADEMIC_DAILY_4H_POI_FIRST_VALID_STRONGHL_SOURCE_REPORT.md')
+          assert all(v.is_file() and v.stat().st_size>0 for v in (p,witness,report))
+          assert p.stat().st_size==260561
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='00a99d9d31f551ed18fedc850fbd0da7fb2c50db6feedba41f920224f9857426'
+          z=json.loads(p.read_bytes());w=json.loads(witness.read_bytes())
+          assert z['original_45_sha_checked_zip_archives']['total']==45
+          assert z['original_native3m_closed']==76800 and z['original_native1d_closed']==160
+          assert z['original_native15m_decimal_equalities']==15360
+          assert z['original_4h_classic_imb_source_parents']==153
+          assert z['original_4h_source_first_native3m_contacts']==132
+          assert z['source_stats']['had_prior_closed_original_daily_candle']==150
+          assert z['source_stats']['no_prior_closed_original_daily_candle']==3
+          assert z['source_stats']['post_touch_1h_technical_imb_but_not_author_vc']==130
+          assert z['source_stats']['REVISITED_TECHNICAL_ZONE']==127
+          assert z['source_stats']['NO_OBSERVED_FIRST_SOURCE_CONTACT']==21
+          assert z['author_selected_1d_or_4h_poi_goldens']==z['author_verified_first_valid_poi_tests']==z['author_verified_strong_high_low']==0
+          assert z['orders']==z['trades']==z['fills']==0 and z['readiness']=='NOT_TRADE_READY'
+          assert w['fourth_complete_independent_original45ZIP_with_51_tests_CI']==40205841182
+          assert w['complete_independent_CI']=='SUCCESS_4_OF_4'
+          assert w['updated_negative_semantic_tests_each_python']==51
+          assert w['full_original_source_sha256']==sha
+          assert w['original_native1d_physically_cut_prefix_at_each_4h_creation_equal_full_asof']
+          print('C61_ALL_SIX_ORIGINAL_ACADEMIC_RESEARCH_EVIDENCE_GATED')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          test "$(git rev-parse HEAD:$R/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json)" = 46077ffb3495c14c906963156dd4a93c7acf9911
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          cd "$R/d05"
+          python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/C61
+          grep -Fq 'Ran 51 tests' /tmp/C61
+          grep -qx 'OK' /tmp/C61
+      - name: Append A131 only after independent all 45 original Binance ZIP and 51 x3 Python
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A131 \
+            --cycle B1/C61 \
+            --planned 'Re-read owner academic POI RB Order Flow Strong High Low FVG and Route A IMB/SNR plus Route B IDM and prior day liquidity original lessons. Recover strict HTF contextual typed POI 1D to 4H to 1H, first valid source test distinct from wick contact, liquidity/inefficiency contact followed by actual VC POI/BOS for StrongHL; Route B direct IDM only after already known parent VC, Route A/C confirmation after first test. No trade if actual author candle ID POI/StrongHL cases unavailable.' \
+            --executed 'Created independent C61 academic text contract and 51 synthetic fail-closed guards across Python 3.10 3.11 3.12: typed POI, RB raid/IMB, 1D prior-context source, original first/repeated native3m source, 4H IMB 1H nesting, direct IDM chronology, VC POI/BOS and StrongHL. Fresh 45 original signed Binance USD-M crypto ZIP twice plus repeat twice with physically shortened original native1d at exact each 4H created asof. Original native3m 76800, 1d 160, native15m Decimal parities 15360; all 153 original C46 C47 C59 C60 source parent full ID joins. Final full 260561byte original source SHA256 00a99d9d31f551ed18fedc850fbd0da7fb2c50db6feedba41f920224f9857426 blob 305624e592f55bd699e94e45f4316e4efabdb726, first real45 ZIP CI 40205429138 PASS, second independently 40205560855 PASS, physical native1d replay 40205832842 PASS and stronger independent final 40205841182 SUCCESS 4/4 with 51 x3 Python. Eight owner academic original Drive lessons documented separately.' \
+            --result '153 source original technical 4H IMB contexts, 150 with earlier fully closed original daily candle, three with no available prior day, 132 first original native3m wick contacts, 130 later same side technical 1H IMB sources, 127 4H source contexts with distinct return visits. No author labelled crypto typed POI, first valid test, RB/SNR, StrongHL, volume confirmation, actual entry/SL/TP/FTA or OOS. Source-only is NOT course trade; 0 orders fills trades and PnL, CRYPTO ONLY PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous immutable A130 130/130 tip e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810 unchanged. Frozen original source C46 dc03c181912ffbb800bc191fbc16ec0d05c335e0 C47 b2727f081d8a73f522a97a54b4582507ee969244 C59 46077ffb3495c14c906963156dd4a93c7acf9911 and C60 899373e4a1dc1999d1485ac8c1f790d39071aebd unchanged. Recheck physically shortened original native1d time prefix equals closed asof. History CI 40205819439 failure stale expected 48 tests after three chronology regression tests; corrected to 51 and CI 40205826270 success 3/3. Two original45ZIP full-byte independent complete passes; no cherry-picked favorable cases and no author StrongHL upgrade.' \
+            --evidence d05/c61_academic_poi_context_first_valid_stronghl_contract.py \
+            --evidence d05/test_c61_academic_poi_context_first_valid_stronghl_contract.py \
+            --evidence tests/probe_c61_original45zip_academic_poi_stronghl_complete_source.py \
+            --evidence evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json \
+            --evidence evidence/c61/C61_INDEPENDENT_COURSE_POI_DAILY_45ZIP_STRONGHL_WITNESS_20261025.json \
+            --evidence cycles/B1_C61_COMPLETE_ACADEMIC_DAILY_4H_POI_FIRST_VALID_STRONGHL_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A131
+          grep -Fq 'entries 131' /tmp/A131
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Only one append-only journal diff is permitted, no force
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changed
+          test "$(wc -l < /tmp/changed)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C61): append-once A131 complex academic HTF 1D POI first StrongHL six original SHA evidence'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
