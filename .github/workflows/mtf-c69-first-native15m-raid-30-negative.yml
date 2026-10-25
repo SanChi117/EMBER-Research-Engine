@@ -1,0 +1,33 @@
+name: EMBER C69 precise first 15m native liquidity raid and first source POI 30 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c69-first-native15m-raid-30-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c69_exact_native15m_first_liquidity_raid_vs_poi_test.py'
+      - 'research/mtf-element-audit-v1/d05/test_c69_exact_native15m_first_liquidity_raid_vs_poi_test.py'
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify previous immutable 138 SHA and exact source 15m first wick 30 x3 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A138
+          grep -Fq 'entries 138 tip_sha256 c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a' /tmp/A138
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c69_exact_native15m_first_liquidity_raid_vs_poi_test 2>&1 | tee /tmp/C69
+          grep -Fq 'Ran 30 tests' /tmp/C69
+          grep -qx 'OK' /tmp/C69
