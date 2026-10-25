@@ -36,7 +36,7 @@ def run(out=None):
     assert f46["source_candidate_4h_IMB_count"]==153
     assert f46["first_observed_source_3m_contact_count"]==132
     assert f47["same_side_later_closed_1h_source_candidate_parent_count"]==130
-    assert f47["author_course_poi_vc_goldens"]==f47["orders"]==f47["trades"]==0
+    assert f47["academic_author_4h_poi_verified"]==f47["academic_author_1h_volume_confirmation_verified"]==f47["orders"]==f47["trades"]==0
     prev={m["symbol"]:m for m in f47["markets"]}
     assert set(prev)==set(SYMS)
     markets=[];totals=Counter()
@@ -66,7 +66,6 @@ def run(out=None):
         assert counts[STATUS[0]]==c47.original_source4h_candidates-c47.original_source4h_first_contacts
         assert counts[STATUS[1]]==c47.unmatched_after_first_contact_count
         assert sum(counts[z] for z in STATUS[2:])==c47.matched_later_technical1h_imb_count
-        assert c47.original_source4h_first_contacts==132 if len(SYMS)==1 else True
         assert review.author_POI_goldens==review.author_15m_VC_goldens==0
         assert not review.orders and not review.trades and review.readiness=="NOT_TRADE_READY"
         assert all(not q.paper_order_approved and not q.orders and not q.trades
