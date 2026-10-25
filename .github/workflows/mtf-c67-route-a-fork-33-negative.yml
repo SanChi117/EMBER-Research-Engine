@@ -1,0 +1,33 @@
+name: EMBER C67 Route A 1H trigger vs new VC POI first source test 33 cases
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c67-route-a-fork-33-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c67_route_a_1h_trigger_vs_new_poi_source_fork.py'
+      - 'research/mtf-element-audit-v1/d05/test_c67_route_a_1h_trigger_vs_new_poi_source_fork.py'
+permissions:
+  contents: read
+jobs:
+  c67_route_a:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Gate old 136/136 SHA and Route A context fork 33 academic failclosed cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A136
+          grep -Fq 'entries 136 tip_sha256 03f5277ae06bc2249e90b92669ca9dc222d73eb5ebf047ae3406eebd082bafea' /tmp/A136
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c67_route_a_1h_trigger_vs_new_poi_source_fork 2>&1 | tee /tmp/c67
+          grep -Fq 'Ran 33 tests' /tmp/c67
+          grep -qx 'OK' /tmp/c67
