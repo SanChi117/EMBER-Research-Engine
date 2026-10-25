@@ -1,0 +1,78 @@
+name: EMBER C64 independent final all 134 SHA six original source evidence and 28x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c64-A134-independent-final-134sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  all134:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify 134/134 SHA, all six new C64 frozen source SHA, all previous originals and 28 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/134
+          grep -Fq 'entries 134 tip_sha256 2a01f3845779390187305475c609d407b0e790605de3d3183884baba81795960' /tmp/134
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,subprocess
+          rec=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rec)==134
+          old,new=rec[-2:]
+          assert old['action_id']=='A133' and old['record_sha256']=='3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac'
+          assert new['action_id']=='A134' and new['seq']==134 and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='2a01f3845779390187305475c609d407b0e790605de3d3183884baba81795960'
+          assert new['cycle']=='B1/C64' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          expected={"d05/c64_original3m_source_protected_extreme_invalidation.py":"db54e892158e4468376b85c8eccb7c23dd03c9d8bcb379c7f13ade215afd7b27","d05/test_c64_original3m_source_protected_extreme_invalidation.py":"0ee7b7e6e1fa47f165239dcab2c473a7190a2f915de93e94d49dcbea065b48c2","tests/probe_c64_original45zip_3m_extreme_protected_invalidations.py":"adb84189c8bec9bcb2cba2a96a49513ada7a4829a3a25556adcd445779b550ec","evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json":"a921947a70a330cad76f63c0d3faa95069941e8793d24816291df87766cb729e","evidence/c64/C64_INDEPENDENT_ORIGINAL45ZIP_PROTECTED_SOURCE_EXTREME_WITNESS_20261025.json":"ad2ab2a35f5efcd7f4f96841fd517355e733f32588f3b6392f9f6047a02b56fe","cycles/B1_C64_SOURCE_EXTREME_PRECONFIRM_WICK_VS_CLOSE_OF_INVALIDATION_REPORT.md":"fbfee8fd574ea2a90538c6d5067b56b8af194a3cf8359aa545cc7b46120afe9f"}
+          assert len(new['evidence'])==6 and set(expected)=={e['path'] for e in new['evidence']}
+          for e in new['evidence']:
+            raw=Path(e['path']).read_bytes()
+            assert len(raw)==e['bytes']
+            assert hashlib.sha256(raw).hexdigest()==e['sha256']==expected[e['path']]
+          older={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json":"b2727f081d8a73f522a97a54b4582507ee969244","evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json":"2b4f944ddbdff0871a7fd553de2ab9955d220b91","evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json":"98f087a731d30c2191dc443038c371751456f316","evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json":"08f24050d19bb390cf2985a901e2a8f2ea3c0ec3","evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json":"06f2ff7decd2aa9660381947d3cf43f6b722cd8e","evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json":"46077ffb3495c14c906963156dd4a93c7acf9911","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd","evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json":"305624e592f55bd699e94e45f4316e4efabdb726","evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json":"8428bf7d6cd3bc26f617cfc32a34c91a27c813b2","evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json":"fdc77c7ec942f03b4efae83b935d994c8435a24f"}
+          for f,blob in older.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+f],text=True).strip()==blob
+          source=Path('evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json')
+          assert source.stat().st_size==238920
+          d=json.loads(source.read_bytes())
+          assert d['source_signed_original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native1d_closed']==160
+          assert d['original_native15m_decimal_parities']==15360
+          assert d['source_derived_closed1h']==3840
+          assert d['original_4h_technical_source_parents']==153
+          assert d['source_status_totals']=={
+            'FIRST_ANY_AMBIGUOUS_NO_PROTECTED_DIRECTION':7,
+            'NO_1H_REACTION_NO_PROTECTED_CANDIDATE':0,
+            'NO_ORIGINAL_4H_FIRST_CONTACT':21,
+            'REACTION_START_NOT_AFTER_CONTACT':0,
+            'SOURCE_ANCHOR_BREACHED_BEFORE_EVENT_CONFIRMATION':55,
+            'SOURCE_ANCHOR_KNOWN_AT_REACTION_CLOSE':70}
+          assert d['source_breach_totals']=={
+            'full_postevent_24h_window':61,
+            'postevent_1h_close_beyond':28,
+            'postevent_3m_close_beyond':31,
+            'postevent_3m_wick_breach':35,
+            'preactivation_wick_breach':55,
+            'source_candidate_extreme_with_price':125}
+          assert d['author_verified_stronghl']==d['author_of_invalidation']==d['author_sl']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C64_A134_INDEPENDENT_ALL_134_SHA_SIX_C64_AND_OLDER_FROZEN_ZIP_PROOFS_SUCCESS')
+          PY
+          cd d05
+          python -m unittest -v test_c64_original3m_source_protected_extreme_invalidation 2>&1 | tee /tmp/C64
+          grep -Fq 'Ran 28 tests' /tmp/C64
+          grep -qx 'OK' /tmp/C64
+          ! grep -q 'skipped=' /tmp/C64
