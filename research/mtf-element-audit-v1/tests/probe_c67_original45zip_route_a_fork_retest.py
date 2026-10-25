@@ -65,7 +65,15 @@ def run(output=None):
         assert normalize([asdict(x) for x in c62["technical_original_1h_imb_gaps"]])==by["c62"][symbol]["source_gaps"],"C67_C62_ORIGINAL_1H_GAP_DRIFT"
         h_events=convert_c62_closed_source_events(c62,htf.derived_1h_closed,as_of_ms=END)
         l_events=scan_original15m_source(htf.native_15m_closed,as_of_ms=END)
-        assert normalize([asdict(x) for x in l_events])==by["c66"][symbol]["all_native15m_source_events"],"C67_C66_ORIGINAL_15M_EVENT_DRIFT"
+        fresh=normalize([asdict(x) for x in l_events])
+        prior=by["c66"][symbol]["all_native15m_source_events"]
+        if fresh!=prior:
+            print("C67_C66_MISMATCH_SYMBOL",symbol,"CURRENT",len(fresh),"FROZEN",len(prior),flush=True)
+            for k,(left,right) in enumerate(zip(fresh,prior)):
+                if left!=right:
+                    print("C67_FIRST_MISMATCH_INDEX",k,"FRESH",left,"FROZEN",right,flush=True)
+                    break
+        assert fresh==prior,"C67_C66_ORIGINAL_15M_EVENT_DRIFT"
         cut=OCT_START+DAY+6*TF_MS["1h"]
         idx=(cut-htf.native_15m_closed[0].start_ms)//TF_MS["15m"]
         assert scan_original15m_source(htf.native_15m_closed,as_of_ms=cut)==scan_original15m_source(
