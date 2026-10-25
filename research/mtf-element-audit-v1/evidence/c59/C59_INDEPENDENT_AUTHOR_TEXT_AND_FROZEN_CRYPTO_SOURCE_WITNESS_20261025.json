@@ -1,0 +1,61 @@
+{
+  "schema": "EMBER_C59_INDEPENDENT_C46_C47_C58_ORIGINAL_USDM_AUTHOR_STRONGHL_COURSE_GATE_V1",
+  "verification_date_utc": "2026-10-25",
+  "user_google_drive_lessons_rechecked": [
+    {
+      "name": "Strong High & Low.txt",
+      "id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "rule": "Strong High Low = contact liquidity or inefficiency, then a confirming VC POI or BOS"
+    },
+    {
+      "name": "Fair Value Gap  Imbalance.txt",
+      "id": "1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN",
+      "rule": "Only first true POI test is pristine; repeated touches can accumulate liquidity"
+    },
+    {
+      "name": "2. Entry by IMB & SNR.txt",
+      "id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "rule": "If 4H context POI IMB, do not treat 1H IMB nested inside as a trigger"
+    }
+  ],
+  "original_source_lineages": "C46/C47/C58 each previously independently replayed Binance USD-M original 45 ZIP and frozen, no fresh Binance ZIP downloaded for this post-processing cycle",
+  "original_source_git_blobs": {
+    "c46": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+    "c47": "b2727f081d8a73f522a97a54b4582507ee969244",
+    "c58": "06f2ff7decd2aa9660381947d3cf43f6b722cd8e"
+  },
+  "first_source_join_run": 40202934959,
+  "independent_second_source_join_run": 40203051046,
+  "independent_ci_jobs": "SUCCESS_4_OF_4",
+  "checked_original_4h_parent_events": 153,
+  "first_contacts": 132,
+  "later_same_side_1h_IMB": 130,
+  "nested_veto": 21,
+  "partial_overlap_unresolved_veto": 12,
+  "outside_source_only": 97,
+  "no_post_contact_1h": 2,
+  "no_4h_first_contact": 21,
+  "full_json_identical_second_run": true,
+  "evidence_full_json_bytes": 202187,
+  "evidence_full_json_sha256": "31af44acd6a1060c4871a473ad916dd0cb7b139576e35789d5a29c1982b8409a",
+  "evidence_git_blob": "46077ffb3495c14c906963156dd4a93c7acf9911",
+  "negative_test_count_each": 49,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "course_text_semantic_verification_scope": "TEXT_RULES_ONLY_NOT_AUTHOR_CHART_OR_PRICE_GOLDEN",
+  "author_poi_test_goldens": 0,
+  "author_stronghl_goldens": 0,
+  "author_routeA_trigger_goldens": 0,
+  "author_IDM_goldens": 0,
+  "readiness": "NOT_TRADE_READY",
+  "paper_signals": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "previous_ledger_seq": 128,
+  "previous_ledger_tip_sha256": "dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b"
+}
