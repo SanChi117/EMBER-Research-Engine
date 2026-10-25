@@ -1,0 +1,50 @@
+name: EMBER C76 fresh original60ZIP adapted FVG 1H parent source replay
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c76-fresh-original60zip-fvg-parent.yml'
+      - 'research/mtf-element-audit-v1/d05/c76_original_crypto_fvg_1h_parent_semantic_audit.py'
+      - 'research/mtf-element-audit-v1/d05/test_c76_original_crypto_fvg_1h_parent_semantic_audit.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c76_fresh_original60zip_fvg_parent.py'
+permissions:
+  contents: read
+jobs:
+  adversarial:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify prior 145 SHA and strict new C76 source semantics
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 145 tip_sha256 693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea'
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c76_original_crypto_fvg_1h_parent_semantic_audit
+  original60zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fresh pinned Binance native3m/native5m/native15m/native1d replay
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tests/probe_c76_fresh_original60zip_fvg_parent.py /tmp/C76_FRESH_ORIGINAL60ZIP_SOURCE.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: C76-FRESH-ORIGINAL60ZIP-REPLAY
+          path: /tmp/C76_FRESH_ORIGINAL60ZIP_SOURCE.json
+          retention-days: 30
