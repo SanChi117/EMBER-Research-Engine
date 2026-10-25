@@ -120,13 +120,13 @@ def observe_source_stronghl_after_contact(fork,bars,events15,events1,
             str(v) if v is not None else None,first_id,protected,
             state,end,full)
     first=fork.source_first_1h_event
-    if first is None or fork.first_source_1h_category not in (
+    if (first is None or fork.first_source_1h_category not in (
             "TRIGGER","NEW_1H_VC_POI") or
         fork.source_first_1h_conflict_kinds and len(
             fork.source_first_1h_conflict_kinds)>1 or
         fork.state in ("FIRST_ANY_1H_TRIGGER_AND_VC_AMBIGUOUS",
                        "FIRST_ANY_1H_TWO_SIDES_AMBIGUOUS",
-                       "FIRST_ANY_1H_SOURCE_OPPOSITE_SIDE"):
+                       "FIRST_ANY_1H_SOURCE_OPPOSITE_SIDE")):
         return out(STATES[0])
     if fork.first_source_1h_category=="TRIGGER":
         if first.kind not in ("1H_SSL_RAID_SOURCE","1H_BSL_RAID_SOURCE"):
