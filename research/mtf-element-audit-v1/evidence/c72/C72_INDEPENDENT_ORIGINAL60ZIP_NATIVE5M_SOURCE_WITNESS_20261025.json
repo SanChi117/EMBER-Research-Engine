@@ -1,0 +1,82 @@
+{
+  "schema": "EMBER_C72_ORIGINAL_BINANCE60_ZIP_NATIVE5M_CHECKSUM_CROSS_TF_AND_POST_15M_SOURCE_GATE_V1",
+  "date_utc": "2026-10-25",
+  "repo": "SanChi117/EMBER-Research-Engine",
+  "branch": "research/academic-engine-recovery-20261015",
+  "previous_immutable_A141_tip": "9f6e2a7bb92e9b105e446be0f0e0c6c0397359a74f25071ada0297cb099e6a9f",
+  "original_academic_route_A": {
+    "title": "2. Entry by IMB & SNR.txt",
+    "google_drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+    "rule": "After real new1H POI valid test, a true15m Trigger implies wait for true5m VC IMB/SNR. Without 15m Trigger, require direct 15m VC IMB/SNR; a technical C71 gap or SNR cannot decide which author route."
+  },
+  "original_academic_StrongHL": {
+    "title": "Strong High & Low.txt",
+    "google_drive_id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+    "rule": "Liquidity OR inefficiency contact THEN actual VC POI or BOS, not technical 5m gap by itself."
+  },
+  "new_original_crypto_native5m_ZIP_per_full_run": 15,
+  "old_original_crypto_native3m_15m_1d_ZIP": 45,
+  "all_original_zip_per_full_run": 60,
+  "original_symbols": [
+    "BCHUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "original_period_UTC": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "source_provenance": "HTTPS data.binance.vision futures um monthly Sept and daily Oct01/Oct02 5m ZIP and same-host .CHECKSUM; SHA256 zip and CSV, strict 12 column closed candle, no resampled fake 5m, no independent third-party cryptographic signature.",
+  "first_complete_60_zip_ci": 40228652375,
+  "second_fresh_complete_60_zip_ci": 40228845271,
+  "first_ci_job_result": "SUCCESS_5_OF_5",
+  "second_ci_job_result": "SUCCESS_4_OF_4",
+  "same_host_checksum_is_not_independent_signature": true,
+  "two_independent_all60_archive_runs": true,
+  "second_replay_full_source_197266_bytes_equal": true,
+  "native3m_original_candles": 76800,
+  "native5m_original_candles": 46080,
+  "native15m_original_candles": 15360,
+  "native1d_original_candles": 160,
+  "derived_closed1h": 3840,
+  "native5m_to_original15m_3_to_1_exact_decimal_OHLCV_count": 15360,
+  "independently_recomputed_C46_C60_C62_C63_C66_C67_C68_C69_C70_C71_immutable_provenance": true,
+  "original_C46_4h_source_parent_count": 153,
+  "provisional_NEW1H_POI_branch_15m_IMB_SNR_source_candidates": 12,
+  "source_outcomes": {
+    "FIRST_5M_IMB_ALIGNED_NOT_AUTHOR_VC": 3,
+    "FIRST_5M_SNR_ALIGNED_NOT_AUTHOR_VC": 1,
+    "FIRST_5M_SOURCE_MULTIPLE_KINDS_AMBIGUOUS": 3,
+    "FIRST_5M_SOURCE_OPPOSITE_SIDE": 5,
+    "FIRST_5M_SOURCE_TWO_SIDES_AMBIGUOUS": 0,
+    "NO_5M_VC_SOURCE_FULL_24H_WINDOW": 0,
+    "NO_5M_VC_SOURCE_RIGHT_CENSORED": 0,
+    "NO_C71_SINGLE_NEW_1H_POI_15M_SOURCE": 141
+  },
+  "original_complete_source_path": "evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json",
+  "original_complete_source_bytes": 197266,
+  "original_complete_source_sha256": "3541b5a7f6f8fa9d16dabd28c944343b8e65e1f0055942d3c25b55ee46a22acf",
+  "original_complete_source_git_blob": "19b7e0357600b70b3f26467339a417e0f99a1302",
+  "guard_tests_each_Python": 30,
+  "guard_Python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "recovered_initial_full_run_error": "C72 first CI 40228571926 failed due old D04 URL parser whitelist not including newly requested 5m; implemented narrowly validated original5m URL and original single-host redirect-only reader, no weakening old 3m/15m/1d URL guards, final original 60 ZIP x2 passes.",
+  "author_annotated_Binance_crypto_positive_and_negative_goldens": 0,
+  "author_first_valid_1H_POI_test": 0,
+  "author_15m_trigger": 0,
+  "author_5m_VC": 0,
+  "author_StrongHL": 0,
+  "author_BOS": 0,
+  "author_trade_ready_signals": 0,
+  "SL_TP_FTA_executable": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY"
+}
