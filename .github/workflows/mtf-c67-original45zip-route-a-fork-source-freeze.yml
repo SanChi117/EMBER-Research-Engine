@@ -1,0 +1,111 @@
+name: EMBER C67 original45ZIP Route A 1H trigger vs new POI source fork first full
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c67-original45zip-route-a-fork-source-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c67_original45zip_route_a_fork_retest.py'
+permissions:
+  contents: write
+concurrency:
+  group: c67-source-original45zip-freeze
+  cancel-in-progress: false
+jobs:
+  original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify 136 immutable SHA and prior original crypto source frozen blobs
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A136
+          grep -Fq 'entries 136 tip_sha256 03f5277ae06bc2249e90b92669ca9dc222d73eb5ebf047ae3406eebd082bafea' /tmp/A136
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+      - name: Independently fresh 45 original authenticated Binance USD-M ZIP and exact C46-C66 owner Route A context forks
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c67_original45zip_route_a_fork_retest.py" /tmp/C67-original.json >/tmp/C67-original.log 2>&1 || { tail -c 19000 /tmp/C67-original.log; exit 1; }
+          tail -c 2800 /tmp/C67-original.log
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          f=Path('/tmp/C67-original.json')
+          d=json.loads(f.read_bytes())
+          assert d['original_archives']['total']==45
+          assert d['native3m_original_closed']==76800
+          assert d['native15m_original_closed']==15360
+          assert d['native1d_original_closed']==160
+          assert d['derived1h_closed']==3840
+          assert d['original_c46_4h_parent_count']==153
+          assert sum(d['source_route_a_fork_parent_status_totals'].values())==153
+          assert d['source_route_a_fork_parent_status_totals']['NO_4H_SOURCE_FIRST_TOUCH']==21
+          assert d['route_a_owner_1h_raid_or_imb_trigger_confirmed']==0
+          assert d['route_a_owner_15m_final_VC_confirmed']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C67_ORIGINAL45ZIP_SOURCE_JSON_BYTES',f.stat().st_size)
+          print('C67_ORIGINAL45ZIP_SOURCE_SHA256',hashlib.sha256(f.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c67-original45-full-fork
+          path: /tmp/C67-original.json
+          if-no-files-found: error
+  negative35:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 35 separate 1H trigger vs new POI first source test nested gap and no author trade x3
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c67_route_a_1h_trigger_vs_new_poi_source_fork 2>&1 | tee /tmp/c67
+          grep -Fq 'Ran 35 tests' /tmp/c67
+          grep -qx 'OK' /tmp/c67
+  freeze:
+    needs: [original45,negative35]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c67-original45-full-fork
+          path: /tmp/c67
+      - name: Freeze original source only if full ZIP + 35 x3 no errors
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json
+          if test -e "$p"; then cmp -s "$p" /tmp/c67/C67-original.json; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c67/C67-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C67): original signed 45 ZIP 4h1h route A trigger vs new POI retest source fork not author signal'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
