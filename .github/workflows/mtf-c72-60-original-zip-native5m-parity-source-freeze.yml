@@ -1,0 +1,104 @@
+name: EMBER C72 60 original Binance ZIP 5m to15m 3:1 price parity and source VC
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c72-60-original-zip-native5m-parity-source-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c72_original60zip_native5m_to15m_first_source_vc.py'
+permissions:
+  contents: write
+concurrency:
+  group: c72-original-60-zip-native5m-3-to-1
+  cancel-in-progress: false
+jobs:
+  original60:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Guard last accepted A141 and immutable crypto original C70 C71 signed source SHA
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/a141
+          grep -Fq 'entries 141 tip_sha256 9f6e2a7bb92e9b105e446be0f0e0c6c0397359a74f25071ada0297cb099e6a9f' /tmp/a141
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json)" = e100ca8a70a32484fd311ae2dcf31a311d85865c
+          test "$(git rev-parse HEAD:$R/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97
+      - name: Download all original 45 previous ZIP plus new 15 original native5m ZIP; 153 parent source and entire 15360 original15m 3-to-1 Decimal parity
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c72_original60zip_native5m_to15m_first_source_vc.py" /tmp/C72-original.json >/tmp/C72-original.log 2>&1 || { tail -c 24000 /tmp/C72-original.log; exit 1; }
+          tail -c 4000 /tmp/C72-original.log
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('/tmp/C72-original.json');d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==60
+          assert d['original_zip_counts']['new_native5m']==15
+          assert d['original_native3m_closed']==76800 and d['original_native5m_closed']==46080
+          assert d['original_native15m_closed']==15360 and d['native5m_to_native15m_original_decimal_equalities']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert sum(d['original5m_first_any_post_c71_source_state_totals'].values())==153
+          assert d['author_verified_native5m_volume_confirmation']==0 and d['author_verified_5m_vc']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C72_ORIGINAL60_JSON_BYTES',p.stat().st_size)
+          print('C72_ORIGINAL60_JSON_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c72-original60-native5m
+          path: /tmp/C72-original.json
+          if-no-files-found: error
+  negative30:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Strict source5m original ZIP parser and first-any 5m future events 30x3
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c72_original_native5m_source_vc_after15m_gate 2>&1 | tee /tmp/c72
+          grep -Fq 'Ran 30 tests' /tmp/c72
+          grep -qx 'OK' /tmp/c72
+  freeze:
+    needs: [original60,negative30]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c72-original60-native5m
+          path: /tmp/c72
+      - name: Freeze full original60 ZIP 5m vs 15m source evidence after all tests
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json
+          if test -e "$p"; then cmp -s "$p" /tmp/c72/C72-original.json; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c72/C72-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C72): all 60 Binance original SHA source ZIP native5m 3x to source 15m parity plus first-after-15m source VC not owner'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
