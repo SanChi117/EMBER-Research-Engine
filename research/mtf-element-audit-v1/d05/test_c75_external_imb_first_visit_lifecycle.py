@@ -203,5 +203,56 @@ def fake_c73():
     return c
 
 
+class C75NativeSourceAllTimeframes(unittest.TestCase):
+    def test_3m_original_source_bullish(self):
+        from c21_native3m_source_bridge import Original3mRow
+        t = 180000
+        a = (row(0, 95, 100, 90, 96),
+             row(1, 100, 110, 99, 108),
+             row(2, 104, 112, 102, 111))
+        bars = tuple(
+            Original3mRow(x.symbol, B + i*t, B + (i+1)*t,
+                          x.open, x.high, x.low, x.close, x.volume,
+                          SHA + ":" + str(B+i*t), SHA)
+            for i, x in enumerate(a))
+        result = scan_native_fvg(bars, tf="3m", as_of_ms=B+3*t)
+        self.assertEqual(len(result), 1)
+        self.assertEqual((result[0].side, result[0].lower, result[0].upper),
+                         ("LONG", D("100"), D("102")))
+        self.assertFalse(result[0].author_imb_vc)
+
+    def test_native15m_original_bullish(self):
+        from c16_c08_monthly_daily_htf_lineage import NativeKline
+        t = 900000
+        v = ((95,100,90,96),(100,110,99,108),(104,112,102,111))
+        rows = tuple(NativeKline(
+            "BTCUSDT","15m",B+i*t,B+(i+1)*t,
+            *(D(str(z)) for z in entry),D("1"),SHA+":"+str(B+i*t),SHA)
+            for i,entry in enumerate(v))
+        result = scan_native_fvg(rows, tf="15m", as_of_ms=B+3*t)
+        self.assertEqual((len(result), result[0].tf, result[0].side),
+                         (1, "15m", "LONG"))
+        self.assertFalse(result[0].author_15m_trigger)
+        self.assertEqual(inspect_fvg_visits(result[0],rows,as_of_ms=B+3*t).separate_visits,0)
+
+    def test_native15m_unclosed_candle_rejected(self):
+        from c16_c08_monthly_daily_htf_lineage import NativeKline
+        t = 900000
+        rows = tuple(NativeKline("BTCUSDT","15m",B+i*t,B+(i+1)*t,
+                                 D("95"),D("100"),D("90"),D("96"),D("1"),
+                                 SHA+":"+str(B+i*t),SHA) for i in range(3))
+        with self.assertRaises(C75Rejected):
+            scan_native_fvg(rows, tf="15m", as_of_ms=B+3*t-1)
+
+    def test_duplicate_original3m_row_rejected(self):
+        from c21_native3m_source_bridge import Original3mRow
+        t=180000
+        r=Original3mRow("BTCUSDT", B, B+t, D("95"), D("100"), D("90"),
+                        D("96"), D("1"), SHA+":"+str(B), SHA)
+        with self.assertRaises(C75Rejected):
+            scan_native_fvg((r,r,r),tf="3m",as_of_ms=B+3*t)
+
+
+
 if __name__ == "__main__":
     unittest.main()
