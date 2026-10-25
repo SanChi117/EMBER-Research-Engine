@@ -66,12 +66,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: 22 source first versus repeated 3m episode anti-fraud negatives
+      - name: 23 source first versus repeated 3m episode anti-fraud negatives
         run: |
           set -euo pipefail
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c60_original_4h_imb_3m_contact_episode_lifecycle 2>&1 | tee /tmp/C60tests
-          grep -Fq 'Ran 22 tests' /tmp/C60tests
+          grep -Fq 'Ran 23 tests' /tmp/C60tests
           grep -qx 'OK' /tmp/C60tests
   freeze:
     needs: [replay,negatives]
