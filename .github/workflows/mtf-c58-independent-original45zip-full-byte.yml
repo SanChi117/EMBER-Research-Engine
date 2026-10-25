@@ -1,0 +1,68 @@
+name: EMBER C58 independent fresh original45 ZIP 1H inside source 28 negatives x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c58-independent-original45zip-full-byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json'
+permissions:
+  contents: read
+jobs:
+  original_full45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Full fresh original USD-M 45ZIP redo original 3m 1h preknown levels, 193355 byte source equality
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A127
+          grep -Fq 'entries 127 tip_sha256 f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005' /tmp/A127
+          cd ../..
+          R=research/mtf-element-audit-v1
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          python "$R/tests/probe_c58_original45zip_route_b_preknown_unswept_1h_inside_4h.py" /tmp/C58-independent.json >/tmp/C58-log 2>&1 || { tail -c 18000 /tmp/C58-log; exit 1; }
+          cmp -s /tmp/C58-independent.json "$R/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json"
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json')
+          q=pathlib.Path('/tmp/C58-independent.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert p.stat().st_size==193355
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='405a34b939845357412ab4ec2d055d71885e3f6a1b22f55bc25c87c60272808e'
+          j=json.loads(p.read_bytes())
+          assert j['original_BINANCE_USDM_ZIP']['total']==45
+          assert j['original_native3m_closed']==76800
+          assert j['original_native15m_decimal_equalities']==15360
+          assert j['source_4h_technical_IMB']==153 and j['first_original3m_contact']==132
+          assert j['source_statuses']=={'NO_ORIGINAL_NATIVE3M_FIRST_4H_SOURCE_CONTACT':21,'NO_PREKNOWN_1H_FRACTAL_INSIDE_4H_SOURCE_GAP':103,'PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_GAP':29}
+          assert j['candidate_links']=={'BSL':18,'SSL':11,'unbroken':29}
+          assert j['author_verified_idm']==j['author_verified_strong_high_low']==j['paper_signals']==j['orders']==j['trades']==j['fills']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C58_INDEPENDENT_ALL_45ZIP_SOURCE_EXACT',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+  anti_forgery:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 28 independent no-future/forgery Route B source negatives, ledger A127
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c58_route_b_preknown_original1h_liquidity_inside_4h_source 2>&1 | tee /tmp/C58-tests
+          grep -Fq 'Ran 28 tests' /tmp/C58-tests
+          grep -qx 'OK' /tmp/C58-tests
