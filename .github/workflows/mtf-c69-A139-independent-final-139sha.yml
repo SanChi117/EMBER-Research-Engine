@@ -1,10 +1,10 @@
 name: EMBER C69 independent final 139 SHA exact first native15m source raid
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c69-A139-independent-final-139sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ebe4c3f5540820c9fe40dd2298d05a2679f8eb06
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
