@@ -1,0 +1,94 @@
+name: EMBER C66 independent second original45ZIP 3295302byte native15m 4h1h source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c66-independent-second-original45zip-full-byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json'
+permissions:
+  contents: read
+jobs:
+  independent45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A135 older frozen original source and fresh second ZIP native15m full JSON identical
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A135
+          grep -Fq 'entries 135 tip_sha256 76014ca82efd4ddb4d40da272fd54b514310d370fce90a8ccb22064b9a6b6787' /tmp/A135
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json)" = 791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          python "$R/tests/probe_c66_original45zip_4h1h_to_native15m_route_a_source.py" /tmp/C66-independent.json > /tmp/C66-repeat.log 2>&1 || { tail -c 16000 /tmp/C66-repeat.log; exit 1; }
+          cmp -s /tmp/C66-independent.json "$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          f=Path('research/mtf-element-audit-v1/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json')
+          second=Path('/tmp/C66-independent.json')
+          assert second.read_bytes()==f.read_bytes()
+          assert f.stat().st_size==3295302
+          sha=hashlib.sha256(f.read_bytes()).hexdigest()
+          assert sha=='23c6eaac7ebcd3f9cd447f9a3690da023d6fc30e50f03e48f57c5037bff15bd3'
+          d=json.loads(f.read_bytes())
+          assert d['original_sha_checked_zip']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160
+          assert d['derived_closed1h']==3840
+          assert d['original_4h_c46_contexts']==153
+          assert d['source_15m_event_type_totals']=={
+            '15M_CLASSIC_IMB_SOURCE_ONLY':3048,
+            '15M_SNR_LIQUIDITY_SOURCE_ONLY':514,
+            '15M_SNR_PRIOR_IMB_SOURCE_ONLY':1209}
+          assert d['source_4h1h15m_first_any_route_a_counts']=={
+            '1H_KIND_UNRESOLVED_NO_OWNER_TRIGGER_VC':0,
+            'AMBIGUOUS_1H_SOURCE_DIRECTION':7,
+            'FIRST_ANY_15M_SOURCE_BOTH_DIRECTIONS':0,
+            'FIRST_ANY_15M_SOURCE_OPPOSITE_DIRECTION':35,
+            'FIRST_ANY_15M_SOURCE_SAME_DIRECTION':29,
+            'NO_15M_SOURCE_CANDIDATE_FULL_WINDOW':0,
+            'NO_15M_SOURCE_CANDIDATE_RIGHT_CENSORED':0,
+            'NO_4H_FIRST_SOURCE_TOUCH':21,
+            'NO_FIRST_CLOSED_1H_SOURCE_EVENT':0,
+            'OPPOSITE_1H_SOURCE_DIRECTION':61}
+          assert d['golden_author_price_cases']==d['author_final_entry_approved']==0
+          assert d['author_vc_15m_confirmed']==d['author_StrongHL']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C66_INDEPENDENT_45ZIP_FULL_3295302_BYTES_SHA_EQUAL',f.stat().st_size,sha)
+          PY
+  negatives33:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Strict academic Route A native15m SNR IMB failclosed 33 tests and A135 SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c66_native15m_route_a_source_event_chain 2>&1 | tee /tmp/C66neg
+          grep -Fq 'Ran 33 tests' /tmp/C66neg
+          grep -qx 'OK' /tmp/C66neg
+          ! grep -q 'skipped=' /tmp/C66neg
