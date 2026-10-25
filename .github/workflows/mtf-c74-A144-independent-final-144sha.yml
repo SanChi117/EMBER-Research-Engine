@@ -1,0 +1,61 @@
+name: EMBER C74 independent final A144 source-and-semantic SHA x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c74-A144-independent-final-144sha.yml'
+permissions:
+  contents: read
+jobs:
+  frozen-c74:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A144 SHA, all historical evidence, six new evidence, course failclosed
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A144
+          grep -Fq 'entries 144 tip_sha256 6fb263fbf4661fe47a34334f175466d58277dbbbf9359b2fc3f7319b4d07ce3d' /tmp/A144
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,subprocess
+          rows=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==144
+          a143,a144=rows[-2:]
+          assert a143["record_sha256"]=="73dff2c95292c6f8f6dea5e6eb2bf56492d9537941fe8df2755d3cafb4e6b6e2"
+          assert a144["seq"]==144 and a144["action_id"]=="A144" and a144["cycle"]=="B1/C74"
+          assert a144["prev_sha256"]==a143["record_sha256"]
+          assert a144["record_sha256"]=="6fb263fbf4661fe47a34334f175466d58277dbbbf9359b2fc3f7319b4d07ce3d"
+          assert a144["verdict"]=="DONE" and a144["cycle_result"]=="PASSED"
+          expected={
+            "d05/c74_author_academic_golden_failclosed.py":"3e479d1c02cc66a729cb46d6b842bdff53672297f78a6711f69811424779273c",
+            "d05/test_c74_author_academic_golden_failclosed.py":"0c3c0ce83bfb1cb37a41667b8478fae10e1c4b1e9ececbffda4b1c93a0cc94cc",
+            "tests/probe_c74_static_source_anchor.py":"69af36ffe58c6a5219a03f5207b33c885f7d5bd3b2be66b6df230514ce8dcd04",
+            "evidence/c74/C74_STATIC_AUTHOR_GOLDEN_GAP_WITNESS.json":"849832e0b2f49e082321b59102abc572ec13a329aab91d09c002e8d34b486cd7",
+            "evidence/c74/C74_ACADEMY_RULE_LINEAGE.md":"f24701c82deb04bce0ffc0d3b1c9bfe6f8305174b190a278716ba71f006ba0e5",
+            "cycles/B1_C74_AUTHOR_GOLDEN_FAILCLOSED_STATIC_CONTRACT_REPORT.md":"12d916ad34206fdcec9142188f4a45913d10d6cd13372a5a1b99953d84bb7bb4",
+          }
+          assert {x["path"] for x in a144["evidence"]}==set(expected)
+          for e in a144["evidence"]:
+            raw=Path(e["path"]).read_bytes()
+            assert len(raw)==e["bytes"]
+            assert hashlib.sha256(raw).hexdigest()==e["sha256"]==expected[e["path"]]
+          p=Path("evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json")
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b"
+          x=json.loads(p.read_bytes())
+          assert sum(x["original3m_new1h_poi_first_visit_source_state_totals"].values())==153
+          assert (x["orders"],x["fills"],x["trades"])==(0,0,0)
+          print("C74_A144_INDEPENDENT_FINAL_144_SHA_SIX_FROZEN_C74_EVIDENCE_PASS")
+          PY
+          python tests/probe_c74_static_source_anchor.py
+          cd d05
+          python -m unittest -v test_c74_author_academic_golden_failclosed
