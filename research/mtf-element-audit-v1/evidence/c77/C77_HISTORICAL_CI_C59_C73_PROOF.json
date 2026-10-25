@@ -1,0 +1,104 @@
+{
+  "schema": "EMBER_C77_HISTORICAL_CI_A129_A143_REPRODUCED_V1",
+  "date": "2026-10-26",
+  "purpose": "Fix obsolete current-journal append triggers while verifying each historic checkpoint on original commit",
+  "original_historic_final_tests": 15,
+  "legacy_range": "C59-C73 / A129-A143",
+  "trigger": "manual and workflow-self-change only",
+  "implementation": "checkout immutable commit of respective A129...A143; old strict journal length and evidence SHA tests remain unchanged",
+  "run_results": [
+    {
+      "cycle": "C59",
+      "historic_action": "A129",
+      "run_id": 40242276521,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C60",
+      "historic_action": "A130",
+      "run_id": 40242279665,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C61",
+      "historic_action": "A131",
+      "run_id": 40242282946,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C62",
+      "historic_action": "A132",
+      "run_id": 40242299782,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C63",
+      "historic_action": "A133",
+      "run_id": 40242303288,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C64",
+      "historic_action": "A134",
+      "run_id": 40242307563,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C65",
+      "historic_action": "A135",
+      "run_id": 40242310622,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C66",
+      "historic_action": "A136",
+      "run_id": 40242329508,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C67",
+      "historic_action": "A137",
+      "run_id": 40242333661,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C68",
+      "historic_action": "A138",
+      "run_id": 40242337762,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C69",
+      "historic_action": "A139",
+      "run_id": 40242342188,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C70",
+      "historic_action": "A140",
+      "run_id": 40242362790,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C71",
+      "historic_action": "A141",
+      "run_id": 40242365942,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C72",
+      "historic_action": "A142",
+      "run_id": 40242369902,
+      "conclusion": "success"
+    },
+    {
+      "cycle": "C73",
+      "historic_action": "A143",
+      "run_id": 40242373288,
+      "conclusion": "success"
+    }
+  ],
+  "historical_runs_all_green": true,
+  "modern_ci_full_chain_still_required": true,
+  "claimed_profitability": false
+}
