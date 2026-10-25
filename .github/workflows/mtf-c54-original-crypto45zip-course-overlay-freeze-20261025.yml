@@ -4,6 +4,8 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c54-original-crypto45zip-course-overlay-freeze-20261025.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c54_original_crypto_45zip_course_route_scope.py'
+      - 'research/mtf-element-audit-v1/d05/test_c54_crypto_only_course_logic_source_bridge.py'
 permissions:
   contents: write
 jobs:
