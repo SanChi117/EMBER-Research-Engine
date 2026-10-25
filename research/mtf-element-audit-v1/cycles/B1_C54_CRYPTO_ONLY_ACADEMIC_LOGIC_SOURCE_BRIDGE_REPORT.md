@@ -54,3 +54,10 @@ Frozen полный source-only результат: `evidence/c54/C54_CRYPTO_ONL
 ## 6. Что делать дальше
 
 Следующий цикл **C55**: строить **отдельную оригинальную крипто 1H структурную модель для Route C raid / BOS** и Route B IDM / Route A context, вместо попыток объявить 4H IMB готовой 1H POI. Проверять 1H BSL/SSL liquidity, raid wick, 3m/5m confirmed BOS **по закрытым свечам**, genuine 15m entry VC, first test, 4H target FTA StrongHL. Каждая гипотеза отдельно ADAPTED, без lookahead, с original native crypto source IDs, chronological countertests и held-out исследованием. Paper only. Нет необходимости искать EUR/USD ценовые данные.
+
+
+## 7. Независимая приёмка завершена до внесения записи A123
+
+[CI 40192657583](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40192657583) **SUCCESS 4/4 jobs**. Самостоятельная job **ещё раз загрузила исходные 45 Binance USD-M ZIP для каждого C46 и C47**, воспроизвела **полный** оригинальный JSON C46 и C47 и сравнила оба побайтно с принятыми исходниками; после чего независимо воссоздала **полный C54 202 874-байтный JSON**, побайтно равный frozen source `f6870d0dcb2dbfbe821c29bb7489e2b51a551218`, SHA256 `43c69fcfb3e64db82d98511e7c9036b5bf8ddd69dd4bc65a226b875af45e0353`. Отдельные Python 3.10/3.11/3.12 jobs заново прошли **49/49** тестов и перепроверили A122 122/122 SHA, четыре job итог PASS. Witness `evidence/c54/C54_INDEPENDENT_ORIGINAL_CRYPTO_45ZIP_SCOPE_WITNESS_20261025.json` явно закрепляет, что картинки — только логика, ноль EURUSD feed, ноль авторских crypto golden/signal.
+
+**Следующее обязательное действие**: append-once A123 шести замороженных C54 evidence SHA, после чего отдельная независимая 123/123 CI. Не обозначать C54 окончательно принятым до завершения обоих проверочных событий. Перенос механики на криптовалюты проводится без торговли.
