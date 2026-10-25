@@ -133,3 +133,14 @@
 | C55 дополнительный source-only lifecycle (13MB, 43×3) | [~] ПОКА НЕ В НОВОЙ SHA ЗАПИСИ | Прежняя полная независимая [CI 40193879074](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40193879074) SUCCESS 4/4; отдельно от C55 A124 и C56 A125 | Следующая запись только отдельная A126 после проверки; старые evidence/ledger НЕ изменять. |
 
 Границы: крипта только, академические иллюстрации не являются FX-свечами. Пока нет авторской семантической сертификации, исследовательский Route C НЕ становится готовым входом, а 385 ранних 3m подтверждений НЕ доказывают преимущество. **PAPER ONLY / NOT_TRADE_READY, 0 заявок, 0 исполнений, 0 PnL.** Старые исторические разделы C38/C39 внизу карты — журнал прошлого, не текущая рабочая очередь; актуальный этап определяется этой записью и единым handoff. Общая карта 29 завершённых, 3 частичных, 8 открытых из 40 крупными блоками, без изменения.
+
+
+
+## 2026-10-25 — последующая отдельная приёмка C55 supplemental / A126
+
+| Этап | Статус | Зафиксировано |
+|---|---|---|
+| C55 extra first 1H liquidity raid lifecycle (13MB) | [x] SOURCE-ONLY, отдельно от C55 A124 и C56 A125 | 45 оригинальных crypto USD-M ZIP, 1873 1H fractal levels; 131 never breach / 772 body first breach / 328 wick without fractal confirmation / 103 confirmed wick without 3m close break / 539 with ADAPTED native3m close break. 642 подтверждённых 1H рейда, не сделки. [Побайтный independent source CI 40193879074](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40193879074) SUCCESS 4/4, 43 tests ×3. |
+| A126 independent append-once acceptance | [x] 126/126 SHA | 6 immutable evidence C55 extra; отдельно от A124 и A125. Ledger tip f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba. [Независимая CI 40198550465](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40198550465) SUCCESS 3/3, 43 x3 negative tests, old source blobs intact. |
+
+**Следующая очередь: A127 ещё не существует.** Сначала выбрать следующий новый крипто-академический элемент (Route A first valid POI / IMB&SNR / 1H-15m / separate VC, либо независимый Route B IDM), затем source contract и отрицательные тесты, оригинальные Binance price candles, CI full replay, только после этого append-once. Общий B1/Route A/B/C семантический движок пока НЕ ГОТОВ к торговле; статистика C55/C56 — технические контексты, не исполненные сделки. 29/40 крупных завершённых пунктов, 3 частичных, 8 открытых НЕ являются долей готовности.
