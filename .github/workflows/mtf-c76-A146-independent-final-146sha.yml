@@ -1,0 +1,56 @@
+name: EMBER C76 final independent A146 full journal seven SHA and 40x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c76-A146-independent-final-146sha.yml'
+permissions:
+  contents: read
+jobs:
+  final-A146:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify complete 146 chained SHA all frozen previous evidence seven C76 exact SHA and 40 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a146
+          grep -Fq 'entries 146 tip_sha256 c48534af9c167eee6465966b696e368764becdfb244c5e4382efcd9899d3ef40' /tmp/a146
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          rows=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==146
+          old,new=rows[-2:]
+          assert old['action_id']=='A145' and old['record_sha256']=='693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea'
+          assert new['action_id']=='A146' and new['seq']==146 and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='c48534af9c167eee6465966b696e368764becdfb244c5e4382efcd9899d3ef40'
+          assert new['cycle']=='B1/C76' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          checks={
+             'd05/c76_original_crypto_fvg_1h_parent_semantic_audit.py':'9503f41141927baa51af4b8e19919ae5262d9f334748b1adf266ed26c4e14a27',
+             'd05/test_c76_original_crypto_fvg_1h_parent_semantic_audit.py':'a5123bdc3b0e2ecc75f42f2d2421266d632755345936feda32403990a9a82a36',
+             'tests/probe_c76_fresh_original60zip_fvg_parent.py':'d8a510cf7d7c7bc2929f910f9e60bf308d7b6ddafd5d07c23b0ab62ad8d4d61b',
+             'tests/probe_c76_pinned_original60zip_static_review.py':'b38c2c67f61a1a6271922adda87ffb6f322a4be5d533f310bde456a330c10afc',
+             'evidence/c76/C76_FRESH_ORIGINAL60ZIP_ADAPTED_FVG_PARENT_REPLAY.json':'ca5717073a30dd14c5ec830b065e4d4f67764bd9de856411d86a55e154270de7',
+             'evidence/c76/C76_INDEPENDENT_ORIGINAL60ZIP_DUPLICATE_WITNESS_20261026.json':'28e8c76491fb3d6de43d7ec17694c95d4887e6d0fb9382e924cd130da3186b6c',
+             'cycles/B1_C76_FRESH_ORIGINAL60ZIP_FVG_1H_PARENT_SOURCE_REPORT.md':'6c79c1a800c53fd767302d05cd115216d4db84b9e6995cab03017964552c471b'}
+          assert len(new['evidence'])==7 and set(checks)=={e['path'] for e in new['evidence']}
+          for e in new['evidence']:
+             data=Path(e['path']).read_bytes()
+             assert len(data)==e['bytes'] and hashlib.sha256(data).hexdigest()==e['sha256']==checks[e['path']]
+          print('C76_A146_FINAL_146_SHA_7_NEW_PROOFS_ALL_OLD_EVIDENCE_PASS')
+          PY
+          python tests/probe_c76_pinned_original60zip_static_review.py
+          cd d05
+          python -m unittest -v test_c76_original_crypto_fvg_1h_parent_semantic_audit 2>&1 | tee /tmp/c76
+          grep -Fq 'Ran 40 tests' /tmp/c76
+          grep -qx 'OK' /tmp/c76
