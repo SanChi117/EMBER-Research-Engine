@@ -1,0 +1,120 @@
+name: EMBER C73 A143 immutable SHA original60 new 1h POI native3m visits append once
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c73-A143-append-once-original60-new1h-pwi.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c73-a143-append-once-source-visits
+  cancel-in-progress: false
+jobs:
+  append143:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate old A142 SHA and C73 two independent signed original60 Binance ZIP full byte match
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A142
+          grep -Fq 'entries 142 tip_sha256 347507f363d03a3bde2008a5690976ec3110925cc0ac514c1a6434299848059f' /tmp/A142
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json')
+          w=Path('evidence/c73/C73_INDEPENDENT_ORIGINAL60ZIP_FIRST_NEW1H_POI_VISIT_WITNESS_20261025.json')
+          report=Path('cycles/B1_C73_ORIGINAL60ZIP_NEW1H_POI_FIRST_3M_VISIT_EPISODES_ROUTE_SEMANTICS_REPORT.md')
+          assert all(z.is_file() and z.stat().st_size>0 for z in (p,w,report))
+          assert p.stat().st_size==303327
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b'
+          d=json.loads(p.read_bytes());z=json.loads(w.read_bytes())
+          assert d['original_zip_counts']['total']==60 and d['original_zip_counts']['new_native5m']==15
+          assert d['original_native3m_closed']==76800 and d['original_native5m_closed']==46080
+          assert d['original_native15m_closed']==d['native5m_to_native15m_original_decimal_equalities']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          expected={
+            'NOT_NEW_1H_POI_SOURCE_BRANCH':47,
+            'NEW_1H_POI_SOURCE_NO_ORIGINAL3M_FIRST_TOUCH':71,
+            'NEW_1H_POI_FIRST_ANY_RAW3M_TOUCH_NO_UNAMBIGUOUS_15M_CHAIN':23,
+            'NEW_1H_POI_FIRST_15M_PATTERN_SINGLE_SOURCE_VISIT_NOT_OWNER_VALID':9,
+            'NEW_1H_POI_FIRST_15M_PATTERN_REVISITED_SOURCE_POI_NOT_OWNER_VALID':3}
+          assert d['original3m_new1h_poi_first_visit_source_state_totals']==expected
+          assert z['source_totals']==expected
+          assert z['first_source_full_json_sha256']==sha and z['first_source_full_json_bytes']==303327
+          assert z['first_full60_ci']==40230881038 and z['second_full60_independent_ci']==40231128409
+          assert z['first_full60_job_result']=='SUCCESS_5_OF_5'
+          assert z['second_full60_job_result']=='SUCCESS_4_OF_4'
+          assert z['complete_original_source_byte_equal'] is True
+          assert z['adversarial_negative_tests_per_python']==30
+          assert d['author_verified_original3m_first_valid_1h_poi_test']==0
+          assert d['author_verified_routeA_15m_trigger_or_15m_vc_split']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C73_TWO_COMPLETE_ORIGINAL60_SOURCE_FRESH_ZIP_SOURCE_WITNESS_30x3_ACCEPTED')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+          test "$(git rev-parse HEAD:$R/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = 587779a7dd1736099e8270c8823c15822f0e77a0
+          test "$(git rev-parse HEAD:$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json)" = b22860dfa13e4b19d16e8dd892719a772485e847
+          test "$(git rev-parse HEAD:$R/evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json)" = e100ca8a70a32484fd311ae2dcf31a311d85865c
+          test "$(git rev-parse HEAD:$R/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97
+          test "$(git rev-parse HEAD:$R/evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json)" = 19b7e0357600b70b3f26467339a417e0f99a1302
+          test "$(git rev-parse HEAD:$R/evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json)" = 65db9aeaddaa58612bb4c743227cc9d28894cc31
+          cd "$R/d05"
+          python -m unittest -v test_c73_new1h_poi_original3m_visit_episodes_route_split 2>&1 | tee /tmp/C73
+          grep -Fq 'Ran 30 tests' /tmp/C73
+          grep -qx 'OK' /tmp/C73
+      - name: Append exactly six SHA frozen evidence C73 original 3m POI first vs revisit and no owner VC upgrade
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A143 \
+            --cycle B1/C73 \
+            --planned 'Original owner 2. Entry by IMB & SNR rule: 1H new POI after genuine parent 4H POI VC must have actual test; real 15m SSL BSL eligible IMB Trigger leads to 5m VC [IMB SNR], absent Trigger leads to direct 15m VC [IMB SNR]. First physical source 3m wick is not author FIRST VALID POI test. Count continuous original 3m POI source contact episodes before first downstream 15m candidate starts, second episode only after at least one full 3m outside POI; verify previously frozen C71 C72 independently; fail closed no author goldens.' \
+            --executed 'Independent C73 source module and 30 negative adversarial tests each Python3.10 3.11 3.12. Verify actual first native3m source wick after fully known 1h proposed POI from original SHA raw IDs then continuous vs separate source visit intervals ending strictly before the first post-contact 15m source pattern START. Independently recompute C71 first ANY 15m or 1h chronology and C72 first ANY 5m original source event, forbid forged author POI Trigger VC StrongHL SL orders. Two independent fresh COMPLETE original Binance USD-M 60 ZIP SHA+same-host checksum BTC ETH SOL XRP BCH Sep1 Oct2: 45 pinned original3m15m1d and 15 new original5m, 76800 genuine3m,46080 original5m,15360 original15m,160 original1d,3840 derived closed1h, all 15360 native15m exact Decimal 3:1 5m source. Recomputed all frozen C46 C60 C62 C63 C66 C67 C68 C69 C70 C71 C72 original price SHA IDs, first CI 40230881038 SUCCESS 5/5 second CI 40231128409 SUCCESS 4/4 complete source 303327 byte exact SHA256 c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b Git blob 65db9aeaddaa58612bb4c743227cc9d28894cc31.' \
+            --result 'Of 153 original crypto technical 4h source contexts: 47 no new1h POI source branch, 71 source new1h POI never physically first raw3m touched, 23 physically touched but no single aligned 15m source event, 9 with first aligned 15m pattern and only one CONTINUOUS raw3m POI source visit before pattern begins, 3 with first aligned 15m pattern but earlier separate technical POI revisit after at least one full outside original3m bar. The 12 aligned source cases are NOT author-labelled valid first POI tests, neither original15m source IMB/SNR proves owner Trigger nor VC; source5m is NOT author VC, no certified StrongHL, FTA SL TP PnL or trades. PAPER ONLY NOT_TRADE_READY zero orders fills trades.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Old A142/142 SHA tip 347507f363d03a3bde2008a5690976ec3110925cc0ac514c1a6434299848059f immutable. All old original frozen source C46 C60 C62 C63 C66 C67 C68 C69 C70 C71 C72 Git SHA blobs unchanged. Two independent complete authenticated-by-same-host-original60 ZIP fresh replay full 303327 bytes equal; note same-host checksum NOT independent third-party cryptographic signature. Each 5m triple exact independent15m price equality and source original3m first touch provenance. One contiguous repeated wick does NOT falsely count multiple POI tests; only earlier fully outside 3m separates episode. Do not create author-valid labels without positive+negative crypto timestamp goldens. 30 x 3 Python adverse tests passed, author flags false, no trades.' \
+            --evidence d05/c73_new1h_poi_original3m_visit_episodes_route_split.py \
+            --evidence d05/test_c73_new1h_poi_original3m_visit_episodes_route_split.py \
+            --evidence tests/probe_c73_original60zip_new1h_poi_3m_visits_semantic_split.py \
+            --evidence evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json \
+            --evidence evidence/c73/C73_INDEPENDENT_ORIGINAL60ZIP_FIRST_NEW1H_POI_VISIT_WITNESS_20261025.json \
+            --evidence cycles/B1_C73_ORIGINAL60ZIP_NEW1H_POI_FIRST_3M_VISIT_EPISODES_ROUTE_SEMANTICS_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A143
+          grep -Fq 'entries 143' /tmp/A143
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Commit ONLY one append-only A143 SHA journal, immutable evidence
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only >/tmp/changed
+          test "$(wc -l </tmp/changed)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C73): append-once A143 six SHA 60 Binance original source first POI 3m visit versus revisit before15m no owner VC'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
