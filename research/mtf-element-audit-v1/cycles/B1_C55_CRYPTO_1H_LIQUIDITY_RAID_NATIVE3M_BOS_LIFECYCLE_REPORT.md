@@ -60,4 +60,4 @@ C55 **не переписывает** ни 1H-фрактал C20B, ни базо
 
 В полном source-asof на конец периода не осталось уровня в `FIRST_WICK_NEEDS_NEXT_CLOSED_1H`. Для подтверждённых 1H raids: **103+539=642**, совпадает с принятым C21B 60ZIP parent evidence. Никакого академически доказанного BOS/учебной 2023 сделки/ордеров/PnL по-прежнему нет.
 
-Отдельный независимый repeat [CI 401937***](https://github.com/SanChi117/EMBER-Research-Engine/actions) должен проверить **все 13 029 668 байт** C55 против нового полного source fresh download и 43 source-negative теста × 3 Python. До его успеха A124 не добавлять, прежнюю SHA цепочку не менять.
+Отдельный независимый repeat [CI 40193879074](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40193879074) должен проверить **все 13 029 668 байт** C55 против нового полного source fresh download и 43 source-negative теста × 3 Python. До его успеха A124 не добавлять, прежнюю SHA цепочку не менять.
