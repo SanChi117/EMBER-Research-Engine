@@ -1,0 +1,82 @@
+name: EMBER C56 final independent A125 125 SHA six original 60ZIP source proofs 26 negatives x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c56-A125-independent-final-125-sha-20261025.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent_125_sha:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent all 125 ledger hashes, exactly six A125 source evidence, no alteration of A124 or old C37/C55
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A125.txt
+          grep -Fq 'entries 125 tip_sha256 6b2eea23ac4a4b27b430be63cf731c8ad12ecd75335b33e59cbb386561517350' /tmp/A125.txt
+          python tests/test_journal_integrity.py | tee /tmp/A125evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A125evidence.txt
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,subprocess
+          q=[json.loads(i) for i in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf8').splitlines()]
+          assert len(q)==125
+          old,new=q[-2:]
+          assert old['action_id']=='A124' and old['record_sha256']=='90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd'
+          assert new['seq']==125 and new['action_id']=='A125' and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='6b2eea23ac4a4b27b430be63cf731c8ad12ecd75335b33e59cbb386561517350'
+          assert new['cycle']=='B1/C56' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          assert len(new['evidence'])==6
+          expected={
+            'd05/c56_crypto_native5m_1h_raid_bos_cross_tf.py':'645d8aca9d045fcefc42106ae32913ba10976f778bf5c6cbab4c67567e60e0ae',
+            'd05/test_c56_crypto_native5m_1h_raid_bos_cross_tf.py':'2106e5746f181e6d7464daaa271cb7ce500c573a85d0731a2aab4259097d231a',
+            'tests/probe_c56_original_crypto_native5m_3m_same_raid_60zip.py':'5e6ed11b91b4821246eaa66594600cd45d5703663db93d9e45164091a3a165f3',
+            'evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json':'24db86b20e0454d6ac5abd1e4506f092f23d9c448d77c1862c3c777c40b7af07',
+            'evidence/c56/C56_INDEPENDENT_ORIGINAL_60ZIP_NATIVE3M_NATIVE5M_WITNESS_20261025.json':'2a74172ead5215732482b28f7affcf99d52379c61479b3fb93039f5ca7368f27',
+            'cycles/B1_C56_CRYPTO_NATIVE3M_NATIVE5M_SAME_RAID_SOURCE_REPORT.md':'aad2a42d34a719a8ec8e950e8ca188b9c39feccd59a8eb1abaf173207be5f51d',
+          }
+          assert {e['path'] for e in new['evidence']}==set(expected)
+          for x in new['evidence']:
+            raw=Path(x['path']).read_bytes()
+            assert len(raw)==x['bytes'] and hashlib.sha256(raw).hexdigest()==x['sha256']==expected[x['path']]
+          p=Path('evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json')
+          assert p.stat().st_size==971017
+          j=json.loads(p.read_bytes())
+          assert j['source_native_zip_count']['total']==60
+          assert j['source_closed_native3m']==76800 and j['source_closed_native5m']==46080
+          assert j['source_hourly_OHLC_parities']==3840
+          assert j['source_3m_candidate_contexts']==539 and j['source_5m_candidate_contexts']==512
+          assert j['source_shared_1h_parents']==509 and j['source_unique_1h_parents']==542
+          assert j['status_counts']=={'FIRST_3M_CLOSE_EARLIER':385,'FIRST_5M_CLOSE_EARLIER':91,'SAME_KNOWN_CLOSE_TIME':33,'NO_5M_RESEARCH_CLOSED_BREAK_FOR_PARENT':30,'NO_3M_RESEARCH_CLOSED_BREAK_FOR_PARENT':3}
+          assert j['author_confirmed_signals']==j['fills']==j['orders']==j['trades']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          for name,blob in {
+            'evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json':'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56',
+            'evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json':'2b4f944ddbdff0871a7fd553de2ab9955d220b91',
+          }.items():
+            path='research/mtf-element-audit-v1/'+name
+            assert subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()==blob
+          print('C56_A125_125_SHA_SIX_FULL_SOURCE_EVIDENCE_AND_UNCHANGED_C37_C55_A124_PASS')
+          PY
+      - name: Verify 26 native crypto source anti-fraud and no-lookahead negatives independently
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c56_crypto_native5m_1h_raid_bos_cross_tf 2>&1 | tee /tmp/C56-26.txt
+          grep -Fq 'Ran 26 tests' /tmp/C56-26.txt
+          grep -qx 'OK' /tmp/C56-26.txt
+          ! grep -q 'skipped=' /tmp/C56-26.txt
