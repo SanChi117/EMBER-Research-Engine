@@ -73,8 +73,14 @@ class C57RouteAFirstAnyNative15mSourceTests(unittest.TestCase):
         self.assertEqual(x.observations[0].source_status,STATUS[4])
         self.assertEqual(x.observations[0].first_any_15m_imb.side,"SHORT")
     def test_synthetic_no_native15m_source_first_in_window(self):
-        x=self.review(rows=native(mode="NO_GAP"))
+        asof=O+16*HOUR
+        x=self.review(rows=native(mode="NO_GAP",asof=asof),asof=asof)
         self.assertEqual(x.observations[0].source_status,STATUS[2])
+        self.assertTrue(x.observations[0].fixed_six_hour_window_fully_observed)
+    def test_source_window_without_15m_is_right_censored_at_asof(self):
+        x=self.review(rows=native(mode="NO_GAP"))
+        self.assertEqual(x.observations[0].source_status,STATUS[5])
+        self.assertFalse(x.observations[0].fixed_six_hour_window_fully_observed)
     def test_missing_original_3m_first_contact(self):
         x=self.review(par=parent(contact=False))
         self.assertEqual(x.observations[0].source_status,STATUS[0])
