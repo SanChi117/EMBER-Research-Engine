@@ -1,0 +1,66 @@
+name: EMBER C60 final independent A130 all 130 SHA and original visit evidence x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c60-A130-final-independent-130sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  full130:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently confirm 130/130 SHA, all six original C60 first and repeated source files, 23x3 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A130
+          grep -Fq 'entries 130 tip_sha256 e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810' /tmp/A130
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib,subprocess
+          from pathlib import Path
+          items=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(items)==130
+          old,new=items[-2:]
+          assert old['action_id']=='A129' and old['record_sha256']=='dfca90b0f376ae36f8d50f5230ae19d9ed56dfc8dc435197fb1ead29f5e9dc86'
+          assert new['action_id']=='A130' and new['seq']==130 and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810'
+          assert new['cycle']=='B1/C60' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          expected={"d05/c60_original_4h_imb_3m_contact_episode_lifecycle.py":"8d41deeb13755d9fc4a17364c5a276d21db29be1d9ba6de4ac6641265176d446","d05/test_c60_original_4h_imb_3m_contact_episode_lifecycle.py":"ca1424a57bebcc5c4e1137bd337b2e0f69386cde8ebf6412843c916c055b0afe","tests/probe_c60_original45zip_4h_imb_first_vs_repeated_3m_visits.py":"46fe0d269a1d6a1abfe03a0ccb75a8da85c7290a61fa721fb00454bfde24272e","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"dd94e32421d383cae4d5d9d8d20c264418d74b3b0e59a222378586a4490050de","evidence/c60/C60_INDEPENDENT_ORIGINAL45ZIP_FIRST_RETURN_SOURCE_WITNESS_20261025.json":"e1c398da6e21d21cb233716d8301bb97757fb73c6fc34204d61bf10a913f8fae","cycles/B1_C60_ORIGINAL45ZIP_FIRST_VS_REPEATED_4H_IMB_NATIVE3M_SOURCE_REPORT.md":"f34a474c0fb4ac90939fcf34f5c5bdf7af08206f5e842c2cd78780d7ba4bc6ef"}
+          assert len(new['evidence'])==6 and {x['path'] for x in new['evidence']}==set(expected)
+          for entry in new['evidence']:
+            raw=Path(entry['path']).read_bytes()
+            assert len(raw)==entry['bytes'] and hashlib.sha256(raw).hexdigest()==entry['sha256']==expected[entry['path']]
+          d=json.loads(Path('evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json').read_bytes())
+          assert d['source_zip_counts']['total']==45 and d['original_closed_native3m']==76800
+          assert d['technical_4h_imb_candidate_total']==153 and d['original_first_native3m_contact_total']==132
+          assert d['distinct_source_visit_episodes_total']==4421
+          assert d['candidate_status_totals']=={'no_original_source_contact':21,
+            'single_observed_visit':5,'two_or_more_distinct_source_visits':127,
+            'source_right_censored_active_last_visit':5}
+          assert d['orders']==d['trades']==d['fills']==d['author_first_valid_POI_tests']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          for name,blob in {
+            'evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json':'dc03c181912ffbb800bc191fbc16ec0d05c335e0',
+            'evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json':'b2727f081d8a73f522a97a54b4582507ee969244',
+            'evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json':'06f2ff7decd2aa9660381947d3cf43f6b722cd8e',
+            'evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json':'46077ffb3495c14c906963156dd4a93c7acf9911'
+          }.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+name],text=True).strip()==blob
+          print('C60_A130_FINAL_SIX_SHA_ORIGINAL_C46_C47_C58_C59_UNCHANGED_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c60_original_4h_imb_3m_contact_episode_lifecycle 2>&1 | tee /tmp/C60tests
+          grep -Fq 'Ran 23 tests' /tmp/C60tests
+          grep -qx 'OK' /tmp/C60tests
+          ! grep -q 'skipped=' /tmp/C60tests
