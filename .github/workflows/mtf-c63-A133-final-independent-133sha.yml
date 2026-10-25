@@ -1,10 +1,10 @@
 name: EMBER C63 final independent 133 SHA source-only first-any VC BOS 29x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c63-A133-final-independent-133sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 3fa2964b7889ebc9044963741ce587b264077dcc
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
