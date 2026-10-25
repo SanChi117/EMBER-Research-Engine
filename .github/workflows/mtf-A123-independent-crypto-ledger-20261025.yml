@@ -1,0 +1,72 @@
+name: EMBER C54 independent final A123 123 SHA crypto-only original 45ZIP source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-A123-independent-crypto-ledger-20261025.yml'
+permissions:
+  contents: read
+jobs:
+  verify_123:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify 123/123 chained SHA + exact six frozen C54 original Binance source evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A123evidence.txt
+          python - <<'PY'
+          import pathlib,json,hashlib
+          j=[json.loads(x) for x in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==123
+          old,n=j[-2:]
+          assert old['action_id']=='A122' and old['record_sha256']=='5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428'
+          assert n['action_id']=='A123' and n['seq']==123 and n['prev_sha256']==old['record_sha256']
+          assert n['cycle']=='B1/C54' and n['verdict']=='DONE' and n['cycle_result']=='PASSED'
+          assert n['record_sha256']=='a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15'
+          assert len(n['evidence'])==6
+          for item in n['evidence']:
+              raw=pathlib.Path(item['path']).read_bytes()
+              assert len(raw)==item['bytes']
+              assert hashlib.sha256(raw).hexdigest()==item['sha256']
+          p=pathlib.Path('evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json')
+          assert len(p.read_bytes())==202874
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='43c69fcfb3e64db82d98511e7c9036b5bf8ddd69dd4bc65a226b875af45e0353'
+          d=json.loads(p.read_text())
+          assert d['target']=='BINANCE_USDM_CRYPTO_PAPER_ONLY'
+          assert d['original_BINANCE_USDM_ZIP_lineage']==45
+          assert d['original_native3m_closed']==76800 and d['native15m_exact']==15360
+          assert d['source_4h_technical_IMBs']==153 and d['first_original3m_contacts']==132
+          assert d['later_1h_technical_IMBs']==130
+          assert d['route_source_contexts_checked']==1224 and d['academic_route_model_count']==8
+          assert d['source_states']=={
+            'CONTEXT_TF_NOT_EVIDENCED_FOR_COURSE_ROUTE':765,
+            'TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY':390,
+            'TECHNICAL_FIRST_TOUCH_WITHOUT_1H_SOURCE':6,
+            'TECHNICAL_FIRST_TOUCH_UNKNOWN':63}
+          assert d['teacher_images_role']=='LOGIC_EXAMPLES_NOT_FX_RAW_CANDLES'
+          assert d['academic_PoI_verified']==d['academic_VC_verified']==d['academic_IDM_BOS_verified']==d['orders']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C54_A123_INDEPENDENT_123_SHA_SIX_FILES_ORIGINAL_CRYPTO_PROVENANCE_PASS')
+          PY
+      - name: Rerun 49 owner-scope CRYPTO-only source identity and no-author-trade negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c54_crypto_only_course_logic_source_bridge 2>&1 | tee /tmp/C54-49.txt
+          grep -Fq 'Ran 49 tests' /tmp/C54-49.txt
+          grep -qx 'OK' /tmp/C54-49.txt
+          ! grep -q 'skipped=' /tmp/C54-49.txt
