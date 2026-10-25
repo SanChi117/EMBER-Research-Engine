@@ -1,0 +1,89 @@
+name: EMBER C64 independent second original45ZIP 238920 source extreme 28x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c64-independent-second-original45zip-238920-byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json'
+permissions:
+  contents: read
+jobs:
+  second45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original immutable A133 and source full SHA confirmed, second independent all original Binance 45ZIP
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A133
+          grep -Fq 'entries 133 tip_sha256 3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac' /tmp/A133
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          python "$R/tests/probe_c64_original45zip_3m_extreme_protected_invalidations.py" /tmp/C64-independent.json >/tmp/C64-repeat.log 2>&1 || { tail -c 20000 /tmp/C64-repeat.log; exit 1; }
+          cmp -s /tmp/C64-independent.json "$R/evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          a=Path('research/mtf-element-audit-v1/evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json')
+          b=Path('/tmp/C64-independent.json')
+          assert a.read_bytes()==b.read_bytes()
+          assert a.stat().st_size==238920
+          sha=hashlib.sha256(a.read_bytes()).hexdigest()
+          assert sha=='a921947a70a330cad76f63c0d3faa95069941e8793d24816291df87766cb729e'
+          d=json.loads(a.read_bytes())
+          assert d['source_signed_original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native1d_closed']==160
+          assert d['original_native15m_decimal_parities']==15360
+          assert d['source_derived_closed1h']==3840
+          assert d['original_4h_technical_source_parents']==153
+          assert d['source_status_totals']=={
+            'FIRST_ANY_AMBIGUOUS_NO_PROTECTED_DIRECTION':7,
+            'NO_1H_REACTION_NO_PROTECTED_CANDIDATE':0,
+            'NO_ORIGINAL_4H_FIRST_CONTACT':21,
+            'REACTION_START_NOT_AFTER_CONTACT':0,
+            'SOURCE_ANCHOR_BREACHED_BEFORE_EVENT_CONFIRMATION':55,
+            'SOURCE_ANCHOR_KNOWN_AT_REACTION_CLOSE':70}
+          assert d['source_breach_totals']=={
+            'full_postevent_24h_window':61,
+            'postevent_1h_close_beyond':28,
+            'postevent_3m_close_beyond':31,
+            'postevent_3m_wick_breach':35,
+            'preactivation_wick_breach':55,
+            'source_candidate_extreme_with_price':125}
+          assert d['author_verified_stronghl']==d['author_of_invalidation']==d['author_sl']==0
+          assert d['orders']==d['trades']==d['fills']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C64_INDEPENDENT_SECOND_45ZIP_FULL_BYTES_SHA',a.stat().st_size,sha)
+          PY
+  negative28:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 28 adversarial original source extreme preconfirmation and wick vs close body no-author tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c64_original3m_source_protected_extreme_invalidation 2>&1 | tee /tmp/C64neg
+          grep -Fq 'Ran 28 tests' /tmp/C64neg
+          grep -qx 'OK' /tmp/C64neg
+          ! grep -q 'skipped=' /tmp/C64neg
