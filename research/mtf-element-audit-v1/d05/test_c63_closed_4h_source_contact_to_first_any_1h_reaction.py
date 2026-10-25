@@ -120,7 +120,7 @@ class FirstAnyTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"UNTRUSTED"):
             check((),asof=O+36*HOUR+1)
     def test_first_source_event_at_exact_24h_window_inclusive(self):
-        z=check((evt(at=TOUCH+MAX_WINDOW_MS-HOUR),),asof=O+30*HOUR)
+        z=check((evt(at=O+23*HOUR),),asof=O+30*HOUR)
         self.assertEqual(z.status,"FIRST_ANY_SAME_SIDE_SOURCE_ONLY")
     def test_technical_event_not_author_stronghl_even_after_source_vc(self):
         z=check((evt(),))
