@@ -170,6 +170,7 @@ def reconcile_original5m_to_native15m(archives,native15m,*,as_of_ms):
         type(native15m) is not tuple or type(as_of_ms) is not int or
         as_of_ms%FIVE or not SEPT_START<=as_of_ms<=END):
         raise C72Rejected("C72_UNTRUSTED_5M_RECONCILIATION_INPUT")
+    if not native15m:raise C72Rejected("C72_INCOMPLETE_ORIGINAL15M_CONTEXT")
     native=_check15(native15m,as_of_ms=END)
     symbol=native[0].symbol
     if len(native)!=3072 or native[0].start_ms!=SEPT_START:
