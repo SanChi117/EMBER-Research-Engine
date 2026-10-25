@@ -155,3 +155,14 @@
 | A127 append-only proof | [x] 127/127 SHA | six immutable C57 source files; source SHA256 3ce556499294bb005f4ecfc57a817488ab6a66ef498c1181ceca2874acff1b95. Ledger tip f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005. [Final independent CI 40200863289](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40200863289) SUCCESS 3/3, 42 negative tests ×3. |
 
 **C58 следующий:** независимая Route B IDM причинность и академические границы. Не заменять Idr/IDM голым pivot, не смешивать Route A 15m VC. Пока исключительно crypto source-only и NO TRADE. В укрупнённой карте 29/40 x, 3 частичных и 8 ожидающих, это не процент завершённости торговой механики.
+
+
+
+## 2026-10-25 — B1/C58 A128 independently accepted research-only Route B liquidity source
+
+| Уровень | Статус | Доказательство и границы |
+|---|---|---|
+| C58 preknown 1H BSL/SSL numeric INSIDE original 4H technical wick IMB before first genuine original3m contact | [x] ИССЛЕДОВАНИЕ source-only (не готовый IDM) | 45 Binance USDT-M оригинальных ZIP+SHA, 76800 closed3m, 15360 decimal native15m parity, 3840 complete1h, 153 C46 technical4H gaps: 21 untouched, 103 touched without earlier known inside level, **29** with PREKNOWN UNSWEPT numeric inside 1H pivot levels (18 BSL, 11 SSL). Ни одно не авторское IDM, StrongHL, POI valid test, entry или profit. [Independent full source45ZIP byte exact CI 40201692307](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40201692307) SUCCESS 4/4. |
+| A128 append-once | [x] 128/128 | 6 оригинальных source+negative+replay+witness+report C58 evidence, 28 negatives x Python3.10/3.11/3.12, 193355-byte source SHA256 405a34b939845357412ab4ec2d055d71885e3f6a1b22f55bc25c87c60272808e. Новая tip dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b. [Final CI 40202055500](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40202055500) SUCCESS 3/3. |
+
+**Ближайший C59:** типизированные настоящие POI, first valid test и академическая StrongHL связь, без перезаписи C46/C58 и без объявления плоских pivots IDM. Route A C57 и Route C C55/C56 остаются отдельными источниковыми ветвями. NO TRADES, PAPER ONLY, NOT_TRADE_READY. Укрупнённые 29 завершённых, 3 частичных, 8 ожидающих не являются оценкой торговой готовности.
