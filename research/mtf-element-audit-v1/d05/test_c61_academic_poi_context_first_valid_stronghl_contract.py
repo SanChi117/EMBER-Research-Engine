@@ -130,9 +130,22 @@ class AcademicContractTests(unittest.TestCase):
     def test_routeB_direct_idm_does_not_require_poi_first_test(self):
         z=academic_poi_lifecycle_contract(case(route="B_4H_VC_1H_IDM",
              original_first_contact_known_ms=None,first_valid_test_author_verified=False,
-             direct_idm_known_ms=O+9*3600000))
+             direct_idm_known_ms=O+12*3600000))
         self.assertTrue(z.text_preconditions_consistent)
         self.assertFalse(z.author_verified_entry)
+    def test_routeB_fails_if_limit_precedes_parent_vc_even_if_poi_not_tested(self):
+        self.reject("C61_IDM_PRECEDES_CONFIRMED_PARENT_VC",
+            route="B_4H_VC_1H_IDM",
+            original_first_contact_known_ms=None,
+            first_valid_test_author_verified=False,
+            direct_idm_known_ms=O+10*3600000)
+    def test_routeA_fails_if_vc_after_liquidity_but_before_original_first_test(self):
+        self.reject("C61_ROUTE_A_OR_C_CONFIRMATION_BEFORE_FIRST_TEST",
+            liquidity_or_inefficiency_contact_known_ms=O+8*3600000,
+            confirming_event_known_ms=O+9*3600000)
+    def test_routeA_requires_confirmation_strictly_after_first_test(self):
+        self.reject("C61_ROUTE_A_OR_C_CONFIRMATION_BEFORE_FIRST_TEST",
+            confirming_event_known_ms=O+10*3600000)
     def test_routeB_missing_idm(self):
         self.reject("C61_ROUTE_B_IDM_NOT_PROVEN",route="B_4H_VC_1H_IDM")
     def test_routeB_early_idm_time(self):
