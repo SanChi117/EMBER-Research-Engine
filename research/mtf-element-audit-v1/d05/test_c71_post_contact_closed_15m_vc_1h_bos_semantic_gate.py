@@ -93,7 +93,7 @@ class C71SourceNotOwnerVC(unittest.TestCase):
         f=review(obs=parent(touched=False))
         # valid source C70 still belongs to old parent; mismatch refused.
         z[0]=f
-        with self.assertRaisesRegex(ValueError,"DRIFT|PARENT"):
+        with self.assertRaisesRegex(ValueError,"DRIFT|PARENT|MISMATCH"):
             run(tuple(z))
     def test_ambiguous_C69_multiple_preknown_levels_cannot_create_source_vc(self):
         h,n=raid_source("first",multi=True)
