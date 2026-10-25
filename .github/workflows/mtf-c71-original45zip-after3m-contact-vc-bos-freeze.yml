@@ -1,0 +1,105 @@
+name: EMBER C71 original45ZIP after first 3m source contact -> 15m VC 1h BOS freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c71-original45zip-after3m-contact-vc-bos-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c71_original45zip_after_first3m_contact_vc_bos.py'
+permissions:
+  contents: write
+concurrency:
+  group: c71-crypto-first3m-then-first15m-or1h-source
+  cancel-in-progress: false
+jobs:
+  original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A140/140 immutable SHA and previous signed original45 source Git blobs C69 C70
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A140
+          grep -Fq 'entries 140 tip_sha256 f799fa6b65ae8044971fa95e355fca9c8e228e2dbf90cd3108081b39ab6d21bb' /tmp/A140
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json)" = b22860dfa13e4b19d16e8dd892719a772485e847
+          test "$(git rev-parse HEAD:$R/evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json)" = e100ca8a70a32484fd311ae2dcf31a311d85865c
+      - name: Original Binance USD-M all45 signed SHA ZIP true3m contact and following source first-any 15m SNR IMB / 1h BOS
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c71_original45zip_after_first3m_contact_vc_bos.py" /tmp/C71-original.json >/tmp/C71-original.log 2>&1 || { tail -c 22000 /tmp/C71-original.log; exit 1; }
+          tail -c 3300 /tmp/C71-original.log
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('/tmp/C71-original.json');d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert sum(d['post_actual_3m_contact_source15m_or_1h_first_any_state_totals'].values())==153
+          assert d['author_verified_routeA_15m_vc_or_bos']==0
+          assert d['author_verified_new1h_poi_first_valid_test']==0
+          assert d['author_verified_5m_vc']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C71_ORIGINAL45_FULL_JSON_BYTES',p.stat().st_size)
+          print('C71_ORIGINAL45_FULL_JSON_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c71-original45-post-contact
+          path: /tmp/C71-original.json
+          if-no-files-found: error
+  negative30:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 30 x3 negative first ANY after real3m and hour closed no fake owner approval
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c71_post_contact_closed_15m_vc_1h_bos_semantic_gate 2>&1 | tee /tmp/C71
+          grep -Fq 'Ran 30 tests' /tmp/C71
+          grep -qx 'OK' /tmp/C71
+  freeze:
+    needs: [original45,negative30]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c71-original45-post-contact
+          path: /tmp/c71
+      - name: Freeze only if full signed original crypto sources and 30x3 negative pass
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json
+          if test -e "$p"; then cmp -s "$p" /tmp/c71/C71-original.json; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c71/C71-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C71): signed original45 ZIP 3m first contact + full1h close then first-any source15m VC or 1h BOS no owner upgrade'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
