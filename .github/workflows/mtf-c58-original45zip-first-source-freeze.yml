@@ -1,0 +1,104 @@
+name: EMBER C58 original 45ZIP preknown BSL SSL source inside technical 4H first contact
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c58-original45zip-first-source-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c58_original45zip_route_b_preknown_unswept_1h_inside_4h.py'
+permissions:
+  contents: write
+concurrency:
+  group: c58-source-original45zip-freeze
+  cancel-in-progress: false
+jobs:
+  original_source45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Keep 127/127 SHA and archived C46 original stable
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A127
+          grep -Fq 'entries 127 tip_sha256 f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005' /tmp/A127
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+      - name: Independently read original45 SHA ZIP and source-only Route B inside 1H preknown liquidity
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c58_original45zip_route_b_preknown_unswept_1h_inside_4h.py" /tmp/C58-original.json >/tmp/C58-replay.log 2>&1 || { tail -c 18000 /tmp/C58-replay.log; exit 1; }
+          tail -c 2500 /tmp/C58-replay.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('/tmp/C58-original.json')
+          j=json.loads(p.read_bytes())
+          assert j['original_BINANCE_USDM_ZIP']['total']==45
+          assert j['original_native3m_closed']==76800
+          assert j['original_native15m_decimal_equalities']==15360
+          assert j['source_4h_technical_IMB']==153 and j['first_original3m_contact']==132
+          assert j['source_statuses']['NO_ORIGINAL_NATIVE3M_FIRST_4H_SOURCE_CONTACT']==21
+          assert j['author_verified_idm']==j['author_verified_strong_high_low']==0
+          assert j['orders']==j['trades']==j['fills']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C58_ORIGINAL45ZIP_BYTES',p.stat().st_size)
+          print('C58_ORIGINAL45ZIP_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c58-original-source
+          path: /tmp/C58-original.json
+          if-no-files-found: error
+  unit_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 28 negative source-only 1H liquidity research guards
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c58_route_b_preknown_original1h_liquidity_inside_4h_source 2>&1 | tee /tmp/C58-tests
+          grep -Fq 'Ran 28 tests' /tmp/C58-tests
+          grep -qx 'OK' /tmp/C58-tests
+  freeze:
+    runs-on: ubuntu-latest
+    needs: [original_source45,unit_matrix]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c58-original-source
+          path: /tmp/c58
+      - name: Freeze C58 source once without rewriting historical evidence
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c58/C58-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c58/C58-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C58): original45ZIP preknown inside 1h liquidity source-only no course IDM'
+          for i in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              exit 0
+            fi
+          done
+          exit 1
