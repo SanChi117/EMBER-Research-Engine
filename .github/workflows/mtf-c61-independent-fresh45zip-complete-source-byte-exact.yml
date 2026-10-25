@@ -1,0 +1,79 @@
+name: EMBER C61 independent second fresh45ZIP 1D 4H 1H StrongHL academic source full bytes
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c61-independent-fresh45zip-complete-source-byte-exact.yml'
+      - 'research/mtf-element-audit-v1/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json'
+permissions:
+  contents: read
+jobs:
+  second_real45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent signed native1d 15m 3m source 45ZIP, all 153 exact linked original contexts
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/a130
+          grep -Fq 'entries 130 tip_sha256 e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810' /tmp/a130
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          test "$(git rev-parse HEAD:$R/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json)" = 46077ffb3495c14c906963156dd4a93c7acf9911
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          python "$R/tests/probe_c61_original45zip_academic_poi_stronghl_complete_source.py" /tmp/C61-independent.json >/tmp/C61-second.log 2>&1 || { tail -c 20000 /tmp/C61-second.log; exit 1; }
+          cmp -s /tmp/C61-independent.json "$R/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          a=Path('research/mtf-element-audit-v1/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json')
+          b=Path('/tmp/C61-independent.json')
+          assert a.read_bytes()==b.read_bytes()
+          assert a.stat().st_size==260561
+          digest=hashlib.sha256(a.read_bytes()).hexdigest()
+          assert digest=='00a99d9d31f551ed18fedc850fbd0da7fb2c50db6feedba41f920224f9857426'
+          d=json.loads(a.read_bytes())
+          assert d['original_45_sha_checked_zip_archives']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native1d_closed']==160
+          assert d['original_native15m_decimal_equalities']==15360
+          assert d['source_stats']['had_prior_closed_original_daily_candle']==150
+          assert d['source_stats']['no_prior_closed_original_daily_candle']==3
+          assert d['source_stats']['NO_OBSERVED_FIRST_SOURCE_CONTACT']==21
+          assert d['source_stats']['REVISITED_TECHNICAL_ZONE']==127
+          assert d['source_stats']['ONE_TECHNICAL_SOURCE_VISIT']==5
+          assert d['source_stats']['post_touch_1h_technical_imb_but_not_author_vc']==130
+          assert d['author_selected_1d_or_4h_poi_goldens']==d['author_verified_strong_high_low']==0
+          assert d['author_verified_first_valid_poi_tests']==d['orders']==d['trades']==d['fills']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C61_FULL_INDEPENDENT_SECOND_45ZIP_SOURCE_SHA256',digest,a.stat().st_size)
+          PY
+  semantic_48:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently recheck C61 48 fail-closed academic tests and prior 130 SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/C61tests
+          grep -Fq 'Ran 48 tests' /tmp/C61tests
+          grep -qx 'OK' /tmp/C61tests
+          ! grep -q 'skipped=' /tmp/C61tests
