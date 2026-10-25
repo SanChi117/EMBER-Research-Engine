@@ -1,0 +1,74 @@
+name: EMBER C72 independent final A142 142 original60 ZIP 5m SHA x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c72-A142-independent-final-142sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  sha142:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent full 142 SHA six exact source receipts old frozen C46-C71 Git blobs 30 negative 5m tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A142
+          grep -Fq 'entries 142 tip_sha256 347507f363d03a3bde2008a5690976ec3110925cc0ac514c1a6434299848059f' /tmp/A142
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json,subprocess
+          from pathlib import Path
+          rows=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==142
+          prev,new=rows[-2:]
+          assert prev['action_id']=='A141' and prev['record_sha256']=='9f6e2a7bb92e9b105e446be0f0e0c6c0397359a74f25071ada0297cb099e6a9f'
+          assert new['action_id']=='A142' and new['seq']==142 and new['prev_sha256']==prev['record_sha256']
+          assert new['record_sha256']=='347507f363d03a3bde2008a5690976ec3110925cc0ac514c1a6434299848059f'
+          assert new['cycle']=='B1/C72' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          shas={"d05/c72_original_native5m_source_vc_after15m_gate.py":"994bc5ccd2d6184c91f43a93daeb800733b19cc673d964bc55f25a06a0ebd67d","d05/test_c72_original_native5m_source_vc_after15m_gate.py":"273007a00a75bf82476d5d414c31c8225483335ffead8059fdd5129f6dbd643d","tests/probe_c72_original60zip_native5m_to15m_first_source_vc.py":"d1b98caaeea5bedcce5b760efedbcd7a5ceea7237731c94c7127e9b54fed84e4","evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json":"3541b5a7f6f8fa9d16dabd28c944343b8e65e1f0055942d3c25b55ee46a22acf","evidence/c72/C72_INDEPENDENT_ORIGINAL60ZIP_NATIVE5M_SOURCE_WITNESS_20261025.json":"995646c1bbb937c588cbf39ed89756f5762d7ef0b316cc307a69f6cfb93d784b","cycles/B1_C72_ORIGINAL60ZIP_NATIVE5M_15M_FIRST_ANY_SOURCE_REPORT.md":"755bac5e59d34e8276d63d55fd52ae5e7c67b6a7288503ddac239877486777ec"}
+          assert len(new['evidence'])==6 and {e['path'] for e in new['evidence']}==set(shas)
+          for row in new['evidence']:
+            raw=Path(row['path']).read_bytes()
+            assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256']==shas[row['path']]
+          previous={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd","evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json":"8428bf7d6cd3bc26f617cfc32a34c91a27c813b2","evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json":"fdc77c7ec942f03b4efae83b935d994c8435a24f","evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json":"c693058cdb28b0e118879d32ddcbbd0d2a66bfc6","evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json":"87409101a6fad4897b32e13085c9a0cc13566594","evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json":"587779a7dd1736099e8270c8823c15822f0e77a0","evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json":"b22860dfa13e4b19d16e8dd892719a772485e847","evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json":"e100ca8a70a32484fd311ae2dcf31a311d85865c","evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json":"ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97","evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json":"19b7e0357600b70b3f26467339a417e0f99a1302"}
+          for path,blob in previous.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+path],text=True).strip()==blob
+          p=Path('evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json')
+          assert p.stat().st_size==197266
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==60 and d['original_zip_counts']['new_native5m']==15
+          assert d['original_native3m_closed']==76800 and d['original_native5m_closed']==46080
+          assert d['original_native15m_closed']==d['native5m_to_native15m_original_decimal_equalities']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert d['original5m_first_any_post_c71_source_state_totals']=={
+            'FIRST_5M_IMB_ALIGNED_NOT_AUTHOR_VC':3,
+            'FIRST_5M_SNR_ALIGNED_NOT_AUTHOR_VC':1,
+            'FIRST_5M_SOURCE_MULTIPLE_KINDS_AMBIGUOUS':3,
+            'FIRST_5M_SOURCE_OPPOSITE_SIDE':5,
+            'FIRST_5M_SOURCE_TWO_SIDES_AMBIGUOUS':0,
+            'NO_5M_VC_SOURCE_FULL_24H_WINDOW':0,
+            'NO_5M_VC_SOURCE_RIGHT_CENSORED':0,
+            'NO_C71_SINGLE_NEW_1H_POI_15M_SOURCE':141}
+          assert d['source5m_same_host_checksum_not_independent_signature'] is True
+          assert d['author_verified_5m_vc']==d['author_verified_native5m_volume_confirmation']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C72_A142_INDEPENDENT_FINAL_142_SHA_ALL_ORIGINAL_CRYPTO_SOURCE_GIT_BLOBS_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c72_original_native5m_source_vc_after15m_gate 2>&1 | tee /tmp/C72
+          grep -Fq 'Ran 30 tests' /tmp/C72
+          grep -qx 'OK' /tmp/C72
+          ! grep -q 'skipped=' /tmp/C72
