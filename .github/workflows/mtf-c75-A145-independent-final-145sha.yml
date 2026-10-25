@@ -1,0 +1,61 @@
+name: EMBER C75 A145 final independent 145 SHA six evidence x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - ".github/workflows/mtf-c75-A145-independent-final-145sha.yml"
+permissions:
+  contents: read
+jobs:
+  c75-final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10","3.11","3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Entire SHA journal and all evidence frozen, then C75 source x39
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a145
+          grep -Fq 'entries 145 tip_sha256 693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea' /tmp/a145
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          a=[json.loads(line) for line in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(a)==145
+          p,n=a[-2:]
+          assert p['action_id']=='A144' and p['record_sha256']=='6fb263fbf4661fe47a34334f175466d58277dbbbf9359b2fc3f7319b4d07ce3d'
+          assert n['action_id']=='A145' and n['seq']==145 and n['cycle']=='B1/C75'
+          assert n['verdict']=='DONE' and n['cycle_result']=='PASSED'
+          assert n['record_sha256']=='693bf5425ea68b76a06643ddb887243f091b399c7017a20c93634da1c9591cea'
+          assert n['prev_sha256']==p['record_sha256']
+          sha={
+          'd05/c75_external_imb_first_visit_lifecycle.py':'b8796e79be34781ac90d4a1585b2c963943ab8e1e07eab525c5f6d2ab95488fa',
+          'd05/test_c75_external_imb_first_visit_lifecycle.py':'a80892d4c4898792e5fa980366ac927f39823b94ae646043a33bd16bf9a76ecf',
+          'tests/probe_c75_frozen_original60zip_adaptation.py':'dce657b52a28a21d3050cb55cbb60c73bf636de6ecceebbcf0e2bb6176d2b68b',
+          'evidence/c75/C75_EXTERNAL_ADAPTED_RULE_REGISTRY.md':'a0ff1d40527db75129de202be42509440c3dfdcbaf8c1883097cca92955d3850',
+          'evidence/c75/C75_PINNED_C73_STATIC_ADAPTATION_WITNESS.json':'7a02ccdd97654881c4bdccac677b1710af35a53c038bfb4d46e0dbe80783d240',
+          'cycles/B1_C75_EXTERNAL_VALIDATED_FOR_COMPATIBILITY_IMB_LIFECYCLE_REPORT.md':'a830b5d526099e2a194638247944331d25585e7002d9fda689d779c729c1c68f'
+          }
+          assert set(sha)=={x['path'] for x in n['evidence']}
+          for x in n['evidence']:
+              content=Path(x['path']).read_bytes()
+              assert len(content)==x['bytes']
+              assert hashlib.sha256(content).hexdigest()==x['sha256']==sha[x['path']]
+          q=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json')
+          assert len(q.read_bytes())==303327
+          assert hashlib.sha256(q.read_bytes()).hexdigest()=='c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b'
+          print('C75_A145_FINAL_JOURNAL_EVIDENCE_STATIC_FROZEN_C73_SUCCESS')
+          PY
+          python tests/probe_c75_frozen_original60zip_adaptation.py
+          cd d05
+          python -m unittest -v test_c75_external_imb_first_visit_lifecycle 2>&1 | tee /tmp/testc75
+          grep -Fq 'Ran 39 tests' /tmp/testc75
+          grep -qx 'OK' /tmp/testc75
