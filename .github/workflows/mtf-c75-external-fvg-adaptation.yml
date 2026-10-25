@@ -1,0 +1,32 @@
+name: EMBER C75 external IMB hypothesis lifecycle 3.10 3.11 3.12
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - ".github/workflows/mtf-c75-external-fvg-adaptation.yml"
+      - "research/mtf-element-audit-v1/d05/c75_external_imb_first_visit_lifecycle.py"
+      - "research/mtf-element-audit-v1/d05/test_c75_external_imb_first_visit_lifecycle.py"
+      - "research/mtf-element-audit-v1/tests/probe_c75_frozen_original60zip_adaptation.py"
+permissions:
+  contents: read
+jobs:
+  adapted-fvg-source:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10","3.11","3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Full prior 144 SHA and typed adapted source negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 144 tip_sha256 6fb263fbf4661fe47a34334f175466d58277dbbbf9359b2fc3f7319b4d07ce3d'
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python tests/probe_c75_frozen_original60zip_adaptation.py
+          cd d05
+          python -m unittest -v test_c75_external_imb_first_visit_lifecycle

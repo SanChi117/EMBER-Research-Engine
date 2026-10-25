@@ -1,0 +1,40 @@
+{
+  "schema": "EMBER_C75_EXTERNAL_SOURCE_ADAPTATION_V1",
+  "phase": "SOURCE_ONLY_STATIC",
+  "market": "Binance USD-M crypto",
+  "lineage": {
+    "C74_tip": "6fb263fbf4661fe47a34334f175466d58277dbbbf9359b2fc3f7319b4d07ce3d",
+    "C73_sha": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+    "C73_bytes": 303327
+  },
+  "source_group_counts": {
+    "source_insufficient": 141,
+    "first_physical_visit": 9,
+    "repeat_source_visit": 3
+  },
+  "adaptation": [
+    "C75-FVG-001",
+    "C75-LIFECYCLE-002",
+    "C75-NOREPAINT-003"
+  ],
+  "deferred": [
+    "C75-PARENT-005"
+  ],
+  "rejected": [
+    "C75-AUTOENTRY-004"
+  ],
+  "external_urls": [
+    "https://cmcmarketsfunded.com/learn/fair-value-gap/",
+    "https://github.com/SrsBlack/ict-knowledge-library/blob/master/concepts/06-fair-value-gaps/fair-value-gap.md",
+    "https://www.tradingview.com/pine-script-docs/concepts/repainting/",
+    "https://github.com/binance/binance-public-data"
+  ],
+  "author_verified_positive_crypto": 0,
+  "author_verified_negative_crypto": 0,
+  "author_15m_trigger_vs_15m_vc_resolved": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "fresh_original_zip_download": false
+}

@@ -1,0 +1,18 @@
+# C75 — internet-compatible IMB/FVG geometry fallback: registry and falsification plan
+
+## Priority and exact accepted rule
+1. **AUTHOR_RULE** — User's original course `2. Entry by IMB & SNR.txt` (Drive ID `1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ`) requires actual parent POI test and actual VC/Trigger; if 15m Trigger -> only genuine 5m VC, if no Trigger -> genuine 15m VC. StrongHL and RB definitions stay original. No replacement of routes B/C.
+2. **ADAPTED_HYPOTHESIS / C75-FVG-001** — only an explicit mechanical geometric candidate: three **successive CLOSED** candles with `low(c3) > high(c1)` for bullish or `high(c3) < low(c1)` for bearish; zone bounded by those two outer wicks, no equality. Secondary external references: https://cmcmarketsfunded.com/learn/fair-value-gap/ and https://github.com/SrsBlack/ict-knowledge-library/blob/master/concepts/06-fair-value-gaps/fair-value-gap.md . These support a common definition, **not** strategy validity, profitability, or that the user's IMB & SNR course author certifies an instance.
+3. **ADAPTED_HYPOTHESIS / C75-LIFECYCLE-002** — first source return and distinct return measured only after candle 3 fully closes; contiguous wick overlaps are one episode, a new visit requires at least one candle wholly outside (same cautious observational convention as frozen C73). A source candle closing beyond the far edge marks candidate `CLOSED_THROUGH_FVG_NOT_AUTHOR`; unknown intrabar touch/break ordering not simulated.
+4. **AUTHOR_RULE / C75-NOREPAINT-003** — candles unavailable until closed; source timestamps/TF and archived raw IDs are not inferred from later candles. External engineering rationale: https://www.tradingview.com/pine-script-docs/concepts/repainting/ (confirmed higher TF data, avoid lookahead). Historical source format: https://github.com/binance/binance-public-data — ZIP+.CHECKSUM verify source-host consistency, **not** an independent third-party signature.
+5. **REJECTED / C75-AUTOENTRY-004** — any source-only FVG qualifies as true author's 15m Trigger/VC, StrongHL, first VALID POI test, SL/TP, order or profitable trade. No author crypto timestamp goldens or OOS performance proof.
+6. **DEFERRED / C75-PARENT-005** — SNR/RB, liquidity sweep, eligible nested-IMB disambiguation and real author Trigger/VC require independent contextual price/author tests. No internet shortcut may override the course.
+
+## Reusable typed adapter
+`d05/c75_external_imb_first_visit_lifecycle.py` reads typed C21 native3m, C72 native5m, or C16 native15m records with exact Decimal OHLCV and closed clock and source raw-ID format. It computes ALL geometric FVG occurrences only after third candle close and source visit episodes. It never asserts archive verification itself; upstream original ZIP reader remains responsible for actual ZIP+CSV source validation.
+
+## Scope of C75 original data recheck
+`tests/probe_c75_frozen_original60zip_adaptation.py` verifies exact SHA of original C73 frozen 303,327-byte evidence and exhaustively classifies **all 153** contexts as 141 insufficient, 9 physical first visit, 3 separate returns, always unresolved 15m Trigger vs VC, zero author certification and zero trades. This is an **existing original60ZIP-derived frozen replay**, NOT 60 newly downloaded ZIP and NOT a full recomputation of each original candle.
+
+## Promotion policy
+No direct `ADAPTED_HYPOTHESIS -> AUTHOR_VERIFIED` transition. Any future promotion needs: full source ZIP/CSV SHA and timestamps, independent raw candle reconstruction, meaningful comparison with primary academic rules, at least one clear positive and negative course-consistent evaluation, counterexamples/rejection, out-of-sample PAPER and no leakage/fees/slippage mistakes. Until then `PAPER ONLY / NOT_TRADE_READY`.
