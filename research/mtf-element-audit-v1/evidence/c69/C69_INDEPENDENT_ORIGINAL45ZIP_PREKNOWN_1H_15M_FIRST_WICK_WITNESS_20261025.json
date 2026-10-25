@@ -1,0 +1,90 @@
+{
+  "schema": "EMBER_C69_ORIGINAL_BINANCE45ZIP_NATIVE15M_FIRST_STRICT_PREKNOWN_1H_LIQUIDITY_SOURCE_WITNESS_V1",
+  "date_utc": "2026-10-25",
+  "repository": "SanChi117/EMBER-Research-Engine",
+  "branch": "research/academic-engine-recovery-20261015",
+  "prev_A138_ledger_sha": "c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a",
+  "course_originals": [
+    {
+      "title": "Strong High & Low.txt",
+      "id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "rule": "Real StrongHL contact liquidity OR inefficiency THEN volume confirmation with POI/BOS on same or lower TF"
+    },
+    {
+      "title": "Order Flow.txt",
+      "id": "1r6sH0XjEoK4Jwq4EVLz8vqPSWVh9qerN",
+      "rule": "Liquidity and imbalance both required for actual Order Flow, source pivot not author strong extreme"
+    },
+    {
+      "title": "POI.txt",
+      "id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+      "rule": "Strong POI worked with SSL/BSL or FVG and must actually react, source wick overlap not author valid first test"
+    }
+  ],
+  "original_binance_usdm_45signed_zip_first_ci": 40222498858,
+  "independent_second_complete_45signed_zip_ci": 40222632285,
+  "original_archive_count_per_run": 45,
+  "original_assets": [
+    "BCHUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "source_original_native3m_closed": 76800,
+  "source_original_native15m_closed": 15360,
+  "source_original_native1d_closed": 160,
+  "source_derived1h_closed": 3840,
+  "source_c46_parent_count": 153,
+  "previous_frozen_C46_C60_C62_C63_C66_C67_C68_exact_SHA_OHLCV_recomputed": true,
+  "native15m_to_closed1h_exact_decimal_ohlcv_parity_verified": true,
+  "first_native15m_source_bar_may_precede_last_native15m_hour_bar": true,
+  "native15m_close_beyond_1h_level_differentiated_from_1h_reclaim": true,
+  "multiple_prior_liquidity_levels_first_swept_same_bar_unresolved": true,
+  "source_totals": {
+    "1H_IMB_TRIGGER_NOT_RAID_OR_POI_FIRST_TEST": 0,
+    "AMBIGUOUS_MULTIPLE_PREKNOWN_LIQUIDITY_LEVELS_SAME_FIRST_BAR": 3,
+    "MISSING_OR_FAKE_ORIGINAL15M_HOUR": 0,
+    "NEW_1H_POI_NO_SOURCE_FIRST_TEST": 0,
+    "NEW_1H_POI_SOURCE_FIRST15M_WICK_TEST_NOT_AUTHOR_VALID": 35,
+    "NO_PREKNOWN_SOURCE_LIQUIDITY_LEVEL": 0,
+    "NO_REAL_NATIVE15M_LIQUIDITY_CROSS": 0,
+    "NO_UNAMBIGUOUS_C67_CONTEXT": 92,
+    "RAID_FIRST_NATIVE15M_BAR_CLOSE_BEYOND_LEVEL_RECLAIM_LATER_1H": 4,
+    "RAID_FIRST_NATIVE15M_BAR_WICK_ONLY_RECLAIM_1H": 19
+  },
+  "first_full_original_source_path": "evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json",
+  "first_full_original_source_bytes": 214806,
+  "first_full_original_source_sha256": "ffe2568a1c8384630bed156d94e0dbd4cf89ce6d03ab79ce5946e31ec88fab1c",
+  "first_full_original_source_git_blob": "b22860dfa13e4b19d16e8dd892719a772485e847",
+  "second_complete_original_source_byte_exact": true,
+  "negative_tests_per_Python": 30,
+  "Python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "previous_original_git_blobs": {
+    "C46": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+    "C60": "899373e4a1dc1999d1485ac8c1f790d39071aebd",
+    "C62": "8428bf7d6cd3bc26f617cfc32a34c91a27c813b2",
+    "C63": "fdc77c7ec942f03b4efae83b935d994c8435a24f",
+    "C66": "c693058cdb28b0e118879d32ddcbbd0d2a66bfc6",
+    "C67": "87409101a6fad4897b32e13085c9a0cc13566594",
+    "C68": "587779a7dd1736099e8270c8823c15822f0e77a0"
+  },
+  "author_first_valid_poi_test": 0,
+  "author_verified_raid": 0,
+  "author_stronghl": 0,
+  "author_volume_confirmation": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "next_C70": "Further original signed 3m first exact source wick inside source first15m, with 5 to 1 OHLCV parity and forbid treating 3m pre-1h close as known 1h academic trigger; author fidelity remains absent."
+}
