@@ -1,10 +1,10 @@
 name: EMBER C60 final independent A130 all 130 SHA and original visit evidence x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c60-A130-final-independent-130sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 3e23c3b78bb17a0326883c69770318a318ae4221
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
