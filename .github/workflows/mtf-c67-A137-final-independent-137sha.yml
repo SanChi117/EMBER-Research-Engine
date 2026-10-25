@@ -1,0 +1,86 @@
+name: EMBER C67 final independent 137 SHA six original crypto sources x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c67-A137-final-independent-137sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  sha137:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify 137 SHA six C67 45 ZIP source evidence, old Git SHA and 35 author fork vetoes
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/137
+          grep -Fq 'entries 137 tip_sha256 f54fc6edba0324df7dfd08e51bd1efa78b1674fb33d4cf21d3fc96ad83f9ccab' /tmp/137
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,subprocess
+          records=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(records)==137
+          a,b=records[-2:]
+          assert a['action_id']=='A136' and a['record_sha256']=='03f5277ae06bc2249e90b92669ca9dc222d73eb5ebf047ae3406eebd082bafea'
+          assert b['action_id']=='A137' and b['seq']==137 and b['prev_sha256']==a['record_sha256']
+          assert b['record_sha256']=='f54fc6edba0324df7dfd08e51bd1efa78b1674fb33d4cf21d3fc96ad83f9ccab'
+          assert b['cycle']=='B1/C67' and b['verdict']=='DONE' and b['cycle_result']=='PASSED'
+          expected={"d05/c67_route_a_1h_trigger_vs_new_poi_source_fork.py":"b4c0ce14ec605433df83b64e7a58d413f357d4e024742f9b78af31657e7d3b24","d05/test_c67_route_a_1h_trigger_vs_new_poi_source_fork.py":"63a94e6122e9c5e0fc632a27ff940ad11faa5e72d7f7d678c50a74d263dbf8c0","tests/probe_c67_original45zip_route_a_fork_retest.py":"b0f4d72ecd8824d2a5f682ce5635030527adbd92223c6bd0aac89878e036d5e1","evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json":"f16a8be9e01d9edc3f71d7c091665e32f22cdd66ba0eb7fef466551f482c8c4a","evidence/c67/C67_INDEPENDENT_ORIGINAL45ZIP_ROUTE_A_1H_FORK_WITNESS_20261025.json":"591391a8226a7f82f89893a8ff67e48562bfa881e2475f74a0f8273fe78c4753","cycles/B1_C67_ROUTE_A_1H_TRIGGER_NEW_POI_FIRST_RETEST_SOURCE_REPORT.md":"e8d78cfb587bfabd101aa7693b5ad0e02e2d6437e4292b36ccc9bb2300349fd3"}
+          assert len(b['evidence'])==6 and {z['path'] for z in b['evidence']}==set(expected)
+          for z in b['evidence']:
+            raw=Path(z['path']).read_bytes()
+            assert len(raw)==z['bytes']
+            assert hashlib.sha256(raw).hexdigest()==z['sha256']==expected[z['path']]
+          original={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json":"b2727f081d8a73f522a97a54b4582507ee969244","evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json":"2b4f944ddbdff0871a7fd553de2ab9955d220b91","evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json":"98f087a731d30c2191dc443038c371751456f316","evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json":"08f24050d19bb390cf2985a901e2a8f2ea3c0ec3","evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json":"06f2ff7decd2aa9660381947d3cf43f6b722cd8e","evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json":"46077ffb3495c14c906963156dd4a93c7acf9911","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd","evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json":"305624e592f55bd699e94e45f4316e4efabdb726","evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json":"8428bf7d6cd3bc26f617cfc32a34c91a27c813b2","evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json":"fdc77c7ec942f03b4efae83b935d994c8435a24f","evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json":"f70b0493a0c4964c618c09c75fee900dd65f5c05","evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json":"791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5","evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json":"c693058cdb28b0e118879d32ddcbbd0d2a66bfc6"}
+          for path,blob in original.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+path],text=True).strip()==blob
+          p=Path('evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json')
+          assert p.stat().st_size==348943
+          x=json.loads(p.read_bytes())
+          assert x['original_archives']['total']==45
+          assert x['native3m_original_closed']==76800
+          assert x['native15m_original_closed']==15360
+          assert x['native1d_original_closed']==160
+          assert x['derived1h_closed']==3840
+          assert x['original_c46_4h_parent_count']==153
+          assert x['nested_1h_imb_4h_trigger_veto_source_occurrences']==187
+          assert x['source_route_a_fork_parent_status_totals']=={
+            'FIRST_ANY_1H_SOURCE_OPPOSITE_SIDE':42,
+            'FIRST_ANY_1H_TRIGGER_AND_VC_AMBIGUOUS':18,
+            'FIRST_ANY_1H_TWO_SIDES_AMBIGUOUS':11,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_OPPOSITE_SOURCE':21,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_TRIGGER_NEEDS_5M_VC':6,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_TWO_SIDES_AMBIGUOUS':1,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_VC_NO_TRIGGER':6,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_NO_15M_CANDIDATE':1,
+            'NEW_1H_VC_NO_SUBSEQUENT_POI_SOURCE_TEST':0,
+            'NO_1H_SOURCE_FORK_FULL_WINDOW':0,
+            'NO_1H_SOURCE_FORK_RIGHT_CENSORED':0,
+            'NO_4H_SOURCE_FIRST_TOUCH':21,
+            'TRIGGER_FIRST_15M_BOTH_SIDES_AMBIGUOUS':0,
+            'TRIGGER_FIRST_15M_IMB_SNR_OPPOSITE_SOURCE':13,
+            'TRIGGER_FIRST_15M_IMB_SNR_SAME_SOURCE':13,
+            'TRIGGER_FIRST_NO_15M_SOURCE_FULL_WINDOW':0,
+            'TRIGGER_FIRST_NO_15M_SOURCE_RIGHT_CENSORED':0}
+          assert x['orders']==x['fills']==x['trades']==0
+          assert x['route_a_owner_1h_raid_or_imb_trigger_confirmed']==0
+          assert x['route_a_owner_first_valid_new1h_POI_test_confirmed']==0
+          assert x['route_a_owner_15m_final_VC_confirmed']==0 and x['readiness']=='NOT_TRADE_READY'
+          print('C67_137_IMMUTABLE_SHA_SIX_ORIGINAL45ZIP_ALL_PREVIOUS_BLOBS_STRICT_TEST_SUCCESS')
+          PY
+          cd d05
+          python -m unittest -v test_c67_route_a_1h_trigger_vs_new_poi_source_fork 2>&1 | tee /tmp/C67
+          grep -Fq 'Ran 35 tests' /tmp/C67
+          grep -qx 'OK' /tmp/C67
+          ! grep -q 'skipped=' /tmp/C67
