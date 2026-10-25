@@ -173,8 +173,7 @@ def _levels_known_before_pair(bars,start_idx):
             known.append(("SSL",p.low,z.known_at_ms))
     return tuple((kind,price,known_ms) for kind,price,known_ms in known
         if all((v.high<=price if kind=="BSL" else v.low>=price)
-             for v in bars[(known_ms-SEPT_START)//Q:start_idx]
-             if v.start_ms>=known_ms))
+             for v in bars[:start_idx] if v.start_ms>=known_ms))
 
 def route_a_15m_source_review(chain,events,*,as_of_ms):
     if (not isinstance(chain,SourceReactionChain) or chain.symbol not in SYMBOLS
@@ -211,7 +210,13 @@ def route_a_15m_source_review(chain,events,*,as_of_ms):
         return out(STATES[0])
     if direction=="BOTH":return out(STATES[1])
     if known is None:return out(STATES[2])
-    if known>as_of_ms:raise ValueError("C66_FUTURE_1H_CONTEXT")
+    if (known>as_of_ms or not chain.first_any_source_events or
+        any(x.fully_known_ms!=known or x.side!=direction or
+            x.is_author_vc or x.is_author_bos or x.is_author_stronghl or
+            x.orders or x.trades or
+            x.first_pattern_bar_start_ms<chain.first3m_contact_closed_ms
+            for x in chain.first_any_source_events)):
+        raise ValueError("C66_FORGED_OR_FUTURE_C63_FIRST_ANY")
     if direction!=side:return out(STATES[3])
     # Important: this is SOURCE 1H event, not a certified owner trigger
     # or owner VC POI. A distinction is deliberately NOT inferred.
