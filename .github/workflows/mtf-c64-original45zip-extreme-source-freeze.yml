@@ -1,0 +1,110 @@
+name: EMBER C64 original45ZIP first technical protected 3m extreme pre/post event invalidation
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c64-original45zip-extreme-source-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c64_original45zip_3m_extreme_protected_invalidations.py'
+permissions:
+  contents: write
+concurrency:
+  group: c64-signed-45zip-protected-source-freeze
+  cancel-in-progress: false
+jobs:
+  full45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Previous accepted A133 and original source Git blobs preserved
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A133
+          grep -Fq 'entries 133 tip_sha256 3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac' /tmp/A133
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+      - name: Download all 45 original 3m 15m 1d crypto USDM ZIP, research source extreme and 3m/1h breach
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c64_original45zip_3m_extreme_protected_invalidations.py" /tmp/C64-original.json >/tmp/C64.log 2>&1 || { tail -c 19000 /tmp/C64.log; exit 1; }
+          tail -c 2200 /tmp/C64.log
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('/tmp/C64-original.json');z=json.loads(p.read_bytes())
+          assert z['source_signed_original_zip_counts']['total']==45
+          assert z['original_native3m_closed']==76800
+          assert z['original_native1d_closed']==160
+          assert z['original_native15m_decimal_parities']==15360
+          assert z['source_derived_closed1h']==3840
+          assert z['original_4h_technical_source_parents']==153
+          assert z['source_status_totals']['NO_ORIGINAL_4H_FIRST_CONTACT']==21
+          assert sum(z['source_status_totals'].values())==153
+          assert z['author_verified_stronghl']==z['author_of_invalidation']==0
+          assert z['orders']==z['fills']==z['trades']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          print('C64_FULL_ORIGINAL45ZIP_JSON_BYTES',p.stat().st_size)
+          print('C64_FULL_ORIGINAL45ZIP_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c64-original45-source
+          path: /tmp/C64-original.json
+          if-no-files-found: error
+  negative28:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check 28 adversarial original 3m source-only extreme invalidation x3
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c64_original3m_source_protected_extreme_invalidation 2>&1 | tee /tmp/C64tests
+          grep -Fq 'Ran 28 tests' /tmp/C64tests
+          grep -qx 'OK' /tmp/C64tests
+  freeze:
+    needs: [full45,negative28]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c64-original45-source
+          path: /tmp/c64
+      - name: Freeze only all45 original source and 28 x3 negatives independently accepted
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c64/C64-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c64/C64-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C64): Binance original45ZIP contact/reaction source candidate extreme preconfirmation veto and later wick close'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+          done
+          exit 1
