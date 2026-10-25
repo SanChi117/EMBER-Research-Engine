@@ -1,0 +1,110 @@
+name: EMBER C68 full original45ZIP StrongHL post-contact 15m VC 1H BOS source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c68-original45zip-stronghl-contact-vc-bos-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c68_original45zip_stronghl_contact_confirmation_source.py'
+permissions:
+  contents: write
+concurrency:
+  group: c68-crypto-original45-stronghl-first-freeze
+  cancel-in-progress: false
+jobs:
+  first_original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify previous 137 SHA and SHA Git original frozen source records
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/137
+          grep -Fq 'entries 137 tip_sha256 f54fc6edba0324df7dfd08e51bd1efa78b1674fb33d4cf21d3fc96ad83f9ccab' /tmp/137
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+      - name: Fresh original signed ZIP 45 BTC ETH SOL XRP BCH, exact original C46-C67 parent raw prices then C68 technical protected extrema
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c68_original45zip_stronghl_contact_confirmation_source.py" /tmp/C68-source.json >/tmp/C68-source.log 2>&1 || { tail -c 16000 /tmp/C68-source.log; exit 1; }
+          tail -c 1800 /tmp/C68-source.log
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('/tmp/C68-source.json')
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160
+          assert d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert sum(d['source_extreme_post_contact_first_any_state_totals'].values())==153
+          assert d['author_verified_StrongHL']==d['author_verified_OF']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C68_FRESH_ORIGINAL45_ZIP_JSON_BYTES',p.stat().st_size)
+          print('C68_FRESH_ORIGINAL45_ZIP_JSON_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c68-original45-stronghl
+          path: /tmp/C68-source.json
+          if-no-files-found: error
+  negative33:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Strict source contact, post contact first ANY and pre-confirm breach 33 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c68_stronghl_post_contact_vc_bos_source 2>&1 | tee /tmp/C68
+          grep -Fq 'Ran 33 tests' /tmp/C68
+          grep -qx 'OK' /tmp/C68
+  freeze:
+    needs: [first_original45,negative33]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c68-original45-stronghl
+          path: /tmp/c68
+      - name: Freeze source SHA only after original45 ZIP and 33x3 negative passes
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json
+          if test -e "$p"; then cmp -s "$p" /tmp/c68/C68-source.json; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c68/C68-source.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C68): original45ZIP crypto source first contact then 15m confirmation or 1h BOS preconfirm extreme veto, no owner StrongHL'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
