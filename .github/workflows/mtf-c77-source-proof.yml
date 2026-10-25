@@ -1,0 +1,7 @@
+name: C77 Source Proof
+on: workflow_dispatch
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
