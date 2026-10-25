@@ -1,0 +1,100 @@
+name: EMBER C56 append-once A125 original 60ZIP crypto native3m native5m 1H same parent source SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c56-A125-append-once-original60zip-20261025.yml'
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c56-A125-append-once-ledger
+  cancel-in-progress: false
+jobs:
+  append_a125:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require previous 124/124 hashes + frozen full C56 source + independent CI evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A124-pre.txt
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/A124-pre.txt
+          python tests/test_journal_integrity.py | tee /tmp/A124-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A124-evidence.txt
+          python - <<'PY'
+          import json,pathlib,hashlib
+          source=pathlib.Path('evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json')
+          witness=pathlib.Path('evidence/c56/C56_INDEPENDENT_ORIGINAL_60ZIP_NATIVE3M_NATIVE5M_WITNESS_20261025.json')
+          report=pathlib.Path('cycles/B1_C56_CRYPTO_NATIVE3M_NATIVE5M_SAME_RAID_SOURCE_REPORT.md')
+          assert all(p.exists() and p.stat().st_size>0 for p in (source,witness,report))
+          assert len(source.read_bytes())==971017
+          assert hashlib.sha256(source.read_bytes()).hexdigest()=='24db86b20e0454d6ac5abd1e4506f092f23d9c448d77c1862c3c777c40b7af07'
+          x=json.loads(source.read_bytes()); w=json.loads(witness.read_bytes())
+          assert x["source_unique_1h_parents"]==542 and x["source_shared_1h_parents"]==509
+          assert (x["source_closed_native3m"],x["source_closed_native5m"])==(76800,46080)
+          assert x["author_confirmed_signals"]==x["orders"]==x["trades"]==0
+          assert w["source_independent_second_full_run"]==40197616359 and w["independent_run_status"]=="SUCCESS_4_OF_4"
+          assert w["pinned_source_sha256"]==hashlib.sha256(source.read_bytes()).hexdigest()
+          assert w["negative_tests_each"]==26 and len(w["negative_test_python_versions"])==3
+          assert w["prior_journal_entries"]==124 and w["readiness"]=="NOT_TRADE_READY"
+          print("C56_A125_PRECHECK_SIX_SOURCE_FILES_AND_INDEPENDENT_60ZIP_PASS")
+          PY
+          cd d05
+          python -m unittest -v test_c56_crypto_native5m_1h_raid_bos_cross_tf 2>&1 | tee /tmp/C56-neg.txt
+          grep -Fq 'Ran 26 tests' /tmp/C56-neg.txt
+          grep -qx 'OK' /tmp/C56-neg.txt
+          ! grep -q 'skipped=' /tmp/C56-neg.txt
+      - name: Record A125 B1 C56 once with 6 original source, independent and report proofs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A125 \
+            --cycle B1/C56 \
+            --planned 'Crypto only separate original native 5m Route C first fully closed 1h BSL SSL wick raid then native5m close break, compared causally to fixed C37 LATEST_CONFIRMED_V1 original native3m, exact same hourly parent first breach and next closed 1h confirmation. Do not infer author BOS, entries or deals from technical data; never backfill different source swing strategies.' \
+            --executed 'Preserved old A124 and C37 original source. Reused existing C08/C20/C20B/C21/C37 source readers to download and SHA verify 60 Binance USD-M ZIP, 76800 original closed 3m and 46080 5m rows, 15360 native15m Decimal equalities per LTF, 3840 native1h OHLC parities, 542 distinct 1h parents. First original full scan CI 40197404808 PASS, after correction for tuple versus JSON list equality. Frozen C56 full 971017 bytes Git blob 98f087a731d30c2191dc443038c371751456f316 SHA256 24db86b20e0454d6ac5abd1e4506f092f23d9c448d77c1862c3c777c40b7af07. Independent complete second fresh original60ZIP source and full byte-exact comparison, negative 26 x Python 3.10/3.11/3.12, CI 40197616359 SUCCESS 4/4; independent witness and report recorded.' \
+            --result '539 fixed original crypto3m adapted context events, 512 independently source-native5m events, same exact first raid hourly parents: 509 both, 30 3m-only, 3 5m-only, 542 union; when both, 385 3m closed earlier, 91 5m closed earlier, 33 simultaneous. Each includes original raw ZIP SHA:row id and 1h parent chronology. These are technical dependent contexts, NOT author BOS or trade performance. No actual execution, author goldens, orders, trades, PnL; PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous A124 124/124 tip 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd unchanged, C37 blob e4b702e8c6cdc34f1c2475df73ef44ae1631fe56 untouched, frozen C55 A124 blob 2b4f944ddbdff0871a7fd553de2ab9955d220b91 untouched. Initial C56 full CI 40197312055 FAILED false Python tuple vs JSON list and frozen nothing; fixed a5cefb82dcb31bed891f57eb81be57daa60b1a11 and then exact complete source passed 40197404808. Independent original 60 ZIP and full 971017 bytes repeated exactly in CI 40197616359 SUCCESS 4/4 with 26x3 negatives. Separate supplementary C55 13MB lifecycle is NOT accepted in A124/A125, must be recorded later independently.' \
+            --evidence d05/c56_crypto_native5m_1h_raid_bos_cross_tf.py \
+            --evidence d05/test_c56_crypto_native5m_1h_raid_bos_cross_tf.py \
+            --evidence tests/probe_c56_original_crypto_native5m_3m_same_raid_60zip.py \
+            --evidence evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json \
+            --evidence evidence/c56/C56_INDEPENDENT_ORIGINAL_60ZIP_NATIVE3M_NATIVE5M_WITNESS_20261025.json \
+            --evidence cycles/B1_C56_CRYPTO_NATIVE3M_NATIVE5M_SAME_RAID_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A125.txt
+          grep -Fq 'entries 125' /tmp/A125.txt
+          python tests/test_journal_integrity.py | tee /tmp/A125evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A125evidence.txt
+      - name: Commit only a single A125 SHA journal append without force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C56): append-once A125 60ZIP source native3m vs distinct native5m parent SHA'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              echo "C56_A125_SINGLE_APPEND_NON_FORCE_PUSH_ACCEPTED attempt=$attempt"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "C56_A125_REFUSED_TO_FORCE_PUSH" >&2
+          exit 1
