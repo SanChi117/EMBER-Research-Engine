@@ -32,11 +32,11 @@ def hours(raid=False,gap=None,newpoi_range=None,n=20):
     if gap=="nested":
         a[5]=hbar(5,hi=100,lo=94)
         a[6]=hbar(6,hi=110,lo=99)
-        a[7]=hbar(7,hi=116,lo=109)
+        a[7]=hbar(7,hi=116,lo=109,op=112,cl=113)
     if gap=="nonnested":
         a[5]=hbar(5,hi=100,lo=94)
         a[6]=hbar(6,hi=115,lo=99)
-        a[7]=hbar(7,hi=122,lo=117)
+        a[7]=hbar(7,hi=122,lo=117,op=118,cl=119)
     if newpoi_range is not None:
         lo,hi=newpoi_range
         a[5]=hbar(5,hi=hi,lo=lo,op=hi-2,cl=hi-1)
