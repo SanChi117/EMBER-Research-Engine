@@ -1,0 +1,87 @@
+name: EMBER C56 independent all original 60 ZIP full byte equality and 26 negative tests x 3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c56-independent-original60zip-byte-exact-20261025.yml'
+      - 'research/mtf-element-audit-v1/evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json'
+      - 'research/mtf-element-audit-v1/tests/probe_c56_original_crypto_native5m_3m_same_raid_60zip.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent_full60_original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Freeze prior 124 proofs and C37 original parent oracle
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger124
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/ledger124
+          python tests/test_journal_integrity.py > /tmp/evidence124.json
+          grep -Fq '"validations_pass": true' /tmp/evidence124.json
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json)" = e4b702e8c6cdc34f1c2475df73ef44ae1631fe56
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json)" = 2b4f944ddbdff0871a7fd553de2ab9955d220b91
+      - name: Redownload and independently recompute full original 60 ZIP C56 source evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c56_original_crypto_native5m_3m_same_raid_60zip.py" /tmp/C56-independent-full.json >/tmp/C56-independent.log 2>&1 || { tail -c 18000 /tmp/C56-independent.log; exit 1; }
+          cmp -s /tmp/C56-independent-full.json "$R/evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json"
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json')
+          q=pathlib.Path('/tmp/C56-independent-full.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert p.stat().st_size==971017
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='24db86b20e0454d6ac5abd1e4506f092f23d9c448d77c1862c3c777c40b7af07'
+          d=json.loads(p.read_bytes())
+          assert d["source_native_zip_count"]=={"C08_15m_1d":30,"C21_3m":15,"C20_5m":15,"total":60}
+          assert (d["source_closed_native3m"],d["source_closed_native5m"])==(76800,46080)
+          assert (d["source_shared_1h_parents"],d["source_unique_1h_parents"])==(509,542)
+          assert d["source_hourly_OHLC_parities"]==3840
+          assert d["status_counts"]=={
+            "FIRST_3M_CLOSE_EARLIER":385,"FIRST_5M_CLOSE_EARLIER":91,
+            "SAME_KNOWN_CLOSE_TIME":33,
+            "NO_5M_RESEARCH_CLOSED_BREAK_FOR_PARENT":30,
+            "NO_3M_RESEARCH_CLOSED_BREAK_FOR_PARENT":3}
+          assert d["original_all_parent_row_sha_and_closed_times_included"]
+          assert d["physical_prefix_no_future_suffix_3m_5m"]
+          assert d["author_confirmed_signals"]==d["fills"]==d["orders"]==d["trades"]==0
+          assert d["readiness"]=="NOT_TRADE_READY"
+          assert all(m['physical_prefix_equal_source_asof_both_timeframes'] for m in d["markets"])
+          print("C56_INDEPENDENT_60ZIP_BYTE_EXACT",q.stat().st_size,hashlib.sha256(q.read_bytes()).hexdigest())
+          PY
+
+  independent_26_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: No-forgery original source tests 26 in each Python version
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A124.txt
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/A124.txt
+          cd d05
+          python -m unittest -v test_c56_crypto_native5m_1h_raid_bos_cross_tf 2>&1 | tee /tmp/C56-tests.txt
+          grep -Fq 'Ran 26 tests' /tmp/C56-tests.txt
+          grep -qx 'OK' /tmp/C56-tests.txt
+          ! grep -q 'skipped=' /tmp/C56-tests.txt
