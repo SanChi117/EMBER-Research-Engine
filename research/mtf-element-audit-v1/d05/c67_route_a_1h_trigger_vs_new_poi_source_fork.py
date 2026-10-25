@@ -180,15 +180,24 @@ def route_a_fork_1h_to_15m(observation,hours,original15m,oneh_source_events,
     bars=_validate(hours,as_of_ms)
     n15=_check15(original15m,as_of_ms=as_of_ms)
     if (bars[0].symbol!=n15[0].symbol or
+        bars[-1].known_at_ms!=n15[-1].known_at_ms or
         observation.candidate.fully_known_ms>as_of_ms or
         type(as_of_ms) is not int or as_of_ms%H or
         not isinstance(source15m_events,tuple)):
         raise ValueError("C67_DIFFERENT_OR_FUTURE_SOURCE")
+    by15={x.start_ms:x for x in n15}
     for e in source15m_events:
         if (not isinstance(e,Source15Event) or e.kind not in E15KINDS or
             e.side not in ("LONG","SHORT") or
             e.author_volume_confirmation or e.author_entry or
-            e.orders or e.trades or e.known_ms>as_of_ms):
+            e.orders or e.trades or e.known_ms>as_of_ms or
+            e.known_ms-e.pattern_start_ms!=3*Q or
+            e.first_original15m_id!=(
+               by15[e.pattern_start_ms].origin_raw_row_id
+               if e.pattern_start_ms in by15 else None) or
+            e.last_original15m_id!=(
+               by15[e.known_ms-Q].origin_raw_row_id
+               if e.known_ms-Q in by15 else None)):
             raise ValueError("C67_FORGED_15M_OWNER_VOLUME_OR_SOURCE")
     ev,nested=observe_1h_route_a_source_events(
         observation,hours,oneh_source_events,as_of_ms=as_of_ms)
@@ -198,7 +207,7 @@ def route_a_fork_1h_to_15m(observation,hours,original15m,oneh_source_events,
         (touch<=c.fully_known_ms or touch>as_of_ms or
          not observation.first_contact_original3m_id)):
         raise ValueError("C67_INVALID_FIRST_ORIGINAL3M_CONTACT")
-    def make(status,first=None,conflicts=(),testbar=None,last=None,
+    def make(status,first=None,conflicts=(),testbar=None,
              first15=None,end=None):
         return RouteAForkSource(
             bars[0].symbol,c.side,observation.first_contact_original3m_id,
