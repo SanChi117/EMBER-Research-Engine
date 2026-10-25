@@ -13,6 +13,7 @@ entry, stop, fill or PnL are inferred.
 """
 from dataclasses import dataclass
 from decimal import Decimal,InvalidOperation
+import re
 from c21b_original_3m_raid_break_geometry import _source,THREE
 from c46_original_4h_classic_imb_first_contact import (
     FourHourImbCandidate,inspect_original_4h_imb_source)
@@ -99,6 +100,9 @@ def observe_original3m_zone_visits(rows,candidate,*,as_of_ms):
         if (not hasattr(row,"start_ms") or not hasattr(row,"known_ms") or
             not hasattr(row,"raw_id") or not hasattr(row,"high") or
             not hasattr(row,"low") or type(row.start_ms) is not int or
+            not isinstance(row.raw_id,str) or
+            not re.fullmatch(r"[0-9a-f]{64}:[0-9]{13}",row.raw_id) or
+            int(row.raw_id.rsplit(":",1)[1])!=row.start_ms or
             row.known_ms!=row.start_ms+THREE or
             row.known_ms>as_of_ms or
             (last is not None and row.start_ms!=last) or
@@ -113,7 +117,7 @@ def observe_original3m_zone_visits(rows,candidate,*,as_of_ms):
             started=True;after.append(row)
     if rows[-1].known_ms!=as_of_ms or not started:
         raise ValueError("C60_INCOMPLETE_OR_FUTURE_SOURCE_PREFIX")
-    result=[];first=None;last_hit=None;n=0;closed=False;left_since_last=False
+    result=[];first=None;last_hit=None;n=0
     for row in after:
         touches=(row.high>=lower and row.low<=upper)
         if touches:
@@ -129,7 +133,6 @@ def observe_original3m_zone_visits(rows,candidate,*,as_of_ms):
                 last_hit.raw_id,last_hit.known_ms,n,
                 bool(result),False))
             first=None;last_hit=None;n=0
-        left_since_last=True
     if first is not None:
         result.append(SourceVisit(
             "FIRST_SOURCE_WICK_VISIT" if not result else "REPEATED_SOURCE_WICK_RETURN",
