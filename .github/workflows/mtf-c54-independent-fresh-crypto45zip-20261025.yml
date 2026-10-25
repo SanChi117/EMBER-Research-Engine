@@ -1,0 +1,98 @@
+name: EMBER C54 independent FULL 45 original Binance USDM ZIP course logic source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c54-independent-fresh-crypto45zip-20261025.yml'
+permissions:
+  contents: read
+jobs:
+  original_crypto_zip_replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Confirm all three frozen Git original source blobs and original journal 122/122
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/a122.txt
+          python tests/test_journal_integrity.py | tee /tmp/a122files.txt
+          grep -Fq '"validations_pass": true' /tmp/a122files.txt
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json)" = 'f6870d0dcb2dbfbe821c29bb7489e2b51a551218'
+      - name: RE-DOWNLOAD ORIGINAL Binance USD-M 45ZIP and fully recreate C46 4H source
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c46_original_4h_imb_first_touch_45zip.py" /tmp/C54-INDEPENDENT-C46.json > /tmp/C54-c46.log 2>&1 || { tail -c 18000 /tmp/C54-c46.log; exit 1; }
+          cmp -s /tmp/C54-INDEPENDENT-C46.json "$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json"
+          tail -c 800 /tmp/C54-c46.log
+      - name: RE-DOWNLOAD ORIGINAL Binance USD-M 45ZIP and fully recreate C47 1H source
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c47_original_4h_contact_1h_source_45zip.py" /tmp/C54-INDEPENDENT-C47.json > /tmp/C54-c47.log 2>&1 || { tail -c 18000 /tmp/C54-c47.log; exit 1; }
+          cmp -s /tmp/C54-INDEPENDENT-C47.json "$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json"
+          tail -c 800 /tmp/C54-c47.log
+      - name: Independently recompute ALL 1224 x8 original crypto academic route maps with complete BYTE equality
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c54_original_crypto_45zip_course_route_scope.py" /tmp/C54-INDEPENDENT-SOURCE.json > /tmp/C54.log 2>&1 || { tail -c 16000 /tmp/C54.log; exit 1; }
+          cmp -s /tmp/C54-INDEPENDENT-SOURCE.json "$R/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json"
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json')
+          q=pathlib.Path('/tmp/C54-INDEPENDENT-SOURCE.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert len(p.read_bytes())==202874
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='43c69fcfb3e64db82d98511e7c9036b5bf8ddd69dd4bc65a226b875af45e0353'
+          d=json.loads(p.read_text())
+          assert d['original_BINANCE_USDM_ZIP_lineage']==45 and d['original_native3m_closed']==76800 and d['native15m_exact']==15360
+          assert d['source_4h_technical_IMBs']==153 and d['first_original3m_contacts']==132 and d['later_1h_technical_IMBs']==130
+          assert d['academic_route_model_count']==8 and d['route_source_contexts_checked']==1224
+          assert d['source_states']=={
+            'CONTEXT_TF_NOT_EVIDENCED_FOR_COURSE_ROUTE':765,
+            'TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY':390,
+            'TECHNICAL_FIRST_TOUCH_WITHOUT_1H_SOURCE':6,
+            'TECHNICAL_FIRST_TOUCH_UNKNOWN':63}
+          assert d['target']=='BINANCE_USDM_CRYPTO_PAPER_ONLY'
+          assert d['teacher_images_role']=='LOGIC_EXAMPLES_NOT_FX_RAW_CANDLES'
+          assert d['academic_PoI_verified']==d['academic_VC_verified']==d['academic_IDM_BOS_verified']==d['orders']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C54_INDEPENDENT_45_ORIGINAL_ZIPS_COMPLETE_C46_C47_C54_ALL_JSON_BYTE_EXACT_PASS',len(p.read_bytes()))
+          PY
+  crypto_route_unit_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify unchanged A122 and 49 crypto-only source negative tests on each Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/a122.txt
+          cd d05
+          python -m unittest -v test_c54_crypto_only_course_logic_source_bridge 2>&1 | tee /tmp/c54tests.txt
+          grep -Fq 'Ran 49 tests' /tmp/c54tests.txt
+          grep -qx 'OK' /tmp/c54tests.txt
+          ! grep -q 'skipped=' /tmp/c54tests.txt
