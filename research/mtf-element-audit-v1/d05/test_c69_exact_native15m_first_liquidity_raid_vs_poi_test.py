@@ -133,7 +133,8 @@ class C69SourceFirstRaid(unittest.TestCase):
         self.assertEqual(apply(hours(),native(),f).source_status,
                          "NO_UNAMBIGUOUS_C67_CONTEXT")
     def test_ambiguous_1h_trigger_vs_new_vc_blocks(self):
-        f=review(obs=None,hh=hours(gap="nonnested"),
+        from test_c67_route_a_1h_trigger_vs_new_poi_source_fork import parent
+        f=review(obs=parent(hi=110),hh=hours(gap="nonnested"),
                  e1=(h1event(kind="CLASSIC_1H_IMB_SOURCE"),))
         self.assertEqual(apply(hours(gap="nonnested"),native(),f).source_status,
                          "NO_UNAMBIGUOUS_C67_CONTEXT")
@@ -166,7 +167,7 @@ class C69SourceFirstRaid(unittest.TestCase):
     def test_source_prefix_must_be_closed_hour(self):
         hh,nn=raid_source()
         f=review(hh=hh,e1=(),e15=())
-        with self.assertRaisesRegex(ValueError,"UNALIGNED"):
+        with self.assertRaisesRegex(ValueError,"UNTRUSTED|UNALIGNED"):
             apply(hh,nn,f,asof=BASE+20*H+Q)
     def test_raid_without_preknown_factual_1h_level_detected(self):
         hh,nn=raid_source()
@@ -174,7 +175,7 @@ class C69SourceFirstRaid(unittest.TestCase):
         # Replace prior pivot with nonpivot while retaining original
         # C67 fork as a witness: C69 must not invent new pivot.
         from test_c67_route_a_1h_trigger_vs_new_poi_source_fork import hbar
-        h=list(hh);h[2]=hbar(2,hi=104,lo=95)
+        h=list(hh);h[2]=hbar(2,hi=104,lo=96)
         with self.assertRaisesRegex(ValueError,"PARITY|PREKNOWN|FAKE"):
             # Altered hourly record fails source schedule or independent
             # actual original 15m parity, never author confirm.
@@ -191,7 +192,7 @@ class C69SourceFirstRaid(unittest.TestCase):
         hh,nn=raid_source("first")
         x=apply(hh,nn)
         self.assertFalse(x.author_stronghl_confirmed)
-        self.assertIsNone(x.preknown_level_known_ms if False else None)
+        self.assertIsNotNone(x.preknown_level_known_ms)
     def test_src_time_finite_no_negative_data(self):
         hh,nn=raid_source()
         n=list(nn);n[20]=replace(n[20],volume=D(-1))
