@@ -1,0 +1,34 @@
+name: EMBER C61 complete course prerequisites and original daily 4H source lineage negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c61-academic-complete-contract-48-negatives.yml'
+      - 'research/mtf-element-audit-v1/d05/c61_academic_poi_context_first_valid_stronghl_contract.py'
+      - 'research/mtf-element-audit-v1/d05/test_c61_academic_poi_context_first_valid_stronghl_contract.py'
+permissions:
+  contents: read
+jobs:
+  original_semantic:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Immutable prior 130/130 SHA and C61 academic 48 negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a130
+          grep -Fq 'entries 130 tip_sha256 e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810' /tmp/a130
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/c61
+          grep -Fq 'Ran 48 tests' /tmp/c61
+          grep -qx 'OK' /tmp/c61
+          ! grep -q 'skipped=' /tmp/c61
