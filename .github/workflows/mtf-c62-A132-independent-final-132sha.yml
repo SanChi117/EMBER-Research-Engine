@@ -1,10 +1,10 @@
 name: EMBER C62 independent final 132 SHA 6 evidence original 45 ZIP SNR RB MB x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c62-A132-independent-final-132sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 86144d1f89ff801b4a93cf115775e4d66aac816d
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
