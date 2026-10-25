@@ -1,0 +1,34 @@
+name: EMBER C64 source protected extreme 3m/1h invalidation strict 28 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c64-original3m-protected-extreme-28negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c64_original3m_source_protected_extreme_invalidation.py'
+      - 'research/mtf-element-audit-v1/d05/test_c64_original3m_source_protected_extreme_invalidation.py'
+permissions:
+  contents: read
+jobs:
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify accepted A133 original source and 28 C64 wick vs closed OF invalidation tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a133
+          grep -Fq 'entries 133 tip_sha256 3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac' /tmp/a133
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c64_original3m_source_protected_extreme_invalidation 2>&1 | tee /tmp/c64tests
+          grep -Fq 'Ran 28 tests' /tmp/c64tests
+          grep -qx 'OK' /tmp/c64tests
+          ! grep -q 'skipped=' /tmp/c64tests
