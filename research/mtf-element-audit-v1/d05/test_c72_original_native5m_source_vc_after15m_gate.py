@@ -147,7 +147,7 @@ class C72Source5m(unittest.TestCase):
     def test_29_orig_archive_missing_full_month_rejected(self):
         a=Original5mArchive("BTCUSDT","2026-09",SHA,SHA,
                             original5m_url("BTCUSDT","2026-09"),(row(0),))
-        with self.assertRaisesRegex(C72Rejected,"WRONG_5M"):
+        with self.assertRaisesRegex(C72Rejected,"INCOMPLETE_ORIGINAL15M"):
             reconcile_original5m_to_native15m((a,a,a),(),as_of_ms=END)
     def test_30_parse_bad_checksum_reject(self):
         with self.assertRaisesRegex(C72Rejected,"INVALID_CHECKSUM"):
