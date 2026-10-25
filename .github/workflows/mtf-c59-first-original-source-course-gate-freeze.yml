@@ -1,0 +1,101 @@
+name: EMBER C59 source-frozen three crypto45ZIP lineages and author StrongHL exclusions
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c59-first-original-source-course-gate-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c59_frozen_original_course_stronghl_nesting_join.py'
+permissions:
+  contents: write
+concurrency:
+  group: c59-original-source-course-gate-freeze
+  cancel-in-progress: false
+jobs:
+  original_join:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: A128 SHA and three unchanged independently verified original crypto source blobs
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a128
+          grep -Fq 'entries 128 tip_sha256 dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b' /tmp/a128
+          cd ../..
+          R=research/mtf-element-audit-v1
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          test "$(git rev-parse HEAD:$R/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json)" = 06f2ff7decd2aa9660381947d3cf43f6b722cd8e
+      - name: Recompute every original 153 frozen parent with exact provenance, no author promotion
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c59_frozen_original_course_stronghl_nesting_join.py" /tmp/C59-source.json >/tmp/C59.log 2>&1 || { tail -c 15000 /tmp/C59.log; exit 1; }
+          tail -c 2000 /tmp/C59.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('/tmp/C59-source.json');d=json.loads(p.read_bytes())
+          assert d['original_c46_4h_source_candidate_total']==153
+          assert d['original_c47_after_first_contact_later1h_source']==130
+          assert sum(d['source_status_totals'].values())==153
+          assert d['academic_author_StrongHL_goldens']==d['academic_author_first_valid_poi_test_verified']==0
+          assert d['orders']==d['trades']==d['fills']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C59_ORIGINAL_THREE_SOURCE_BYTES',p.stat().st_size)
+          print('C59_ORIGINAL_THREE_SOURCE_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c59-exact-source-join
+          path: /tmp/C59-source.json
+          if-no-files-found: error
+  negative_49:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Academic author-text and original parent no-future 49 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c59_academic_stronghl_first_test_semantic_gate 2>&1 | tee /tmp/C59-neg
+          grep -Fq 'Ran 49 tests' /tmp/C59-neg
+          grep -qx 'OK' /tmp/C59-neg
+  freeze:
+    needs: [original_join,negative_49]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c59-exact-source-join
+          path: /tmp/c59
+      - name: Freeze source once only after 49x3 and exact parent match
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c59/C59-source.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c59/C59-source.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C59): preserve original 153 parent nested IMB veto and StrongHL text research'
+          for i in 1 2 3 4; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+          done
+          exit 1
