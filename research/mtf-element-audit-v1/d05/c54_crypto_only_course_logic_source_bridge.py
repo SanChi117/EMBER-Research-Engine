@@ -110,9 +110,7 @@ def validate_original_crypto_parent(x):
     if (firsts[1]-firsts[0]!=4*HOUR or
         firsts[2]-firsts[1]!=4*HOUR or
         x.original_4h_known_ms!=firsts[2]+4*HOUR or
-        x.original_4h_known_ms>x.source_as_of_ms or
-        any(i.split(":")[0]!=x.original_4h_source3m_ids[0].split(":")[0]
-            for i in x.original_4h_source3m_ids)):
+        x.original_4h_known_ms>x.source_as_of_ms):
         raise ValueError("C54_NONCAUSAL_OR_MIXED_4H_CRYPTO_SOURCE")
     touch=_validate_id(x.first_original3m_touch_id,required=False)
     later=_validate_id(x.first_later_1h_technical_imb_source3m_id,required=False)
@@ -120,16 +118,17 @@ def validate_original_crypto_parent(x):
         raise ValueError("C54_TOUCH_BAR_ID_KNOWN_AT_MISMATCH")
     if (later is None)!=(x.first_later_1h_technical_imb_known_ms is None):
         raise ValueError("C54_LATER_1H_CANDLE_ID_KNOWN_AT_MISMATCH")
-    prefix=x.original_4h_source3m_ids[0].split(":")[0]
+    # Native3m original ZIP SHA legitimately CHANGES at monthly Sep/Oct
+    # boundary. Require temporal/ID shape here; frozen C46/C47 source
+    # evidence verifies per-row SHA against the actual immutable ZIP files.
     if touch is not None:
-        if (touch.split(":")[0]!=prefix or
-            type(x.first_original3m_touch_known_ms) is not int or
+        if (type(x.first_original3m_touch_known_ms) is not int or
             x.first_original3m_touch_known_ms!=_raw_start(touch)+THREE or
             x.first_original3m_touch_known_ms<=x.original_4h_known_ms or
             x.first_original3m_touch_known_ms>x.source_as_of_ms):
             raise ValueError("C54_CRYPTO_FIRST_TOUCH_PRE_PARENT_OR_FUTURE")
     if later is not None:
-        if (touch is None or later.split(":")[0]!=prefix or
+        if (touch is None or
             type(x.first_later_1h_technical_imb_known_ms) is not int or
             _raw_start(later)%HOUR or
             x.first_later_1h_technical_imb_known_ms!=_raw_start(later)+3*HOUR or
