@@ -1,10 +1,10 @@
 name: EMBER C65 final independent 135 SHA six original OF source + 31x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c65-A135-independent-final-135sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 9388d524f6eacc6dd14c32fd3d37104cfb4dc842
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
