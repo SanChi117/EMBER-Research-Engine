@@ -109,11 +109,16 @@ class CryptoOnlyLogicalCourseSource(unittest.TestCase):
         q=parent();self.fail("NONCAUSAL_OR_MIXED_4H_CRYPTO_SOURCE",
             replace(q,original_4h_source3m_ids=(q.original_4h_source3m_ids[0],
               q.original_4h_source3m_ids[1],PREFIX+str(BASE+9*HOUR))))
-    def test_mixed_original_native_zip_id_rejected(self):
-        q=parent();self.fail("NONCAUSAL_OR_MIXED_4H_CRYPTO_SOURCE",
-            replace(q,original_4h_source3m_ids=(
-              q.original_4h_source3m_ids[0],q.original_4h_source3m_ids[1],
-              "b"*64+":"+str(BASE+8*HOUR))))
+    def test_segmented_original_zip_shas_are_valid_across_4h_bars(self):
+        # Original 45 ZIP file content digests change even between adjacent
+        # monthly/segment 3m bars; all exact IDs still must be proven by
+        # the separate immutable C46/C47 source evidence cross-join.
+        q=parent()
+        split=replace(q,original_4h_source3m_ids=(
+            q.original_4h_source3m_ids[0],q.original_4h_source3m_ids[1],
+            "b"*64+":"+str(BASE+8*HOUR)))
+        self.assertTrue(validate_original_crypto_parent(split))
+        self.assertFalse(overlay_crypto_course_routes(split)[0].academic_PoI_VC_entry_confirmed)
     def test_future_original4h_parent_unavailable_rejected(self):
         self.fail("NONCAUSAL_OR_MIXED_4H_CRYPTO_SOURCE",
             replace(parent(),source_as_of_ms=BASE+11*HOUR))
