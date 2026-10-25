@@ -1,0 +1,98 @@
+name: EMBER C67 second 45 authentic ZIP 348943byte Route A context fork independent
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c67-independent-second-original45zip-348943byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json'
+permissions:
+  contents: read
+jobs:
+  independently_repeat_original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen A136, original C46 C60 C62 C63 C66 SHA and new source 348943 bytes
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A136
+          grep -Fq 'entries 136 tip_sha256 03f5277ae06bc2249e90b92669ca9dc222d73eb5ebf047ae3406eebd082bafea' /tmp/A136
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+          python "$R/tests/probe_c67_original45zip_route_a_fork_retest.py" /tmp/C67-independent.json >/tmp/c67-second.log 2>&1 || { tail -c 19000 /tmp/c67-second.log; exit 1; }
+          cmp -s /tmp/C67-independent.json "$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('research/mtf-element-audit-v1/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json')
+          assert p.stat().st_size==348943
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='f16a8be9e01d9edc3f71d7c091665e32f22cdd66ba0eb7fef466551f482c8c4a'
+          d=json.loads(p.read_bytes())
+          assert d['original_archives']['total']==45
+          assert d['native3m_original_closed']==76800
+          assert d['native15m_original_closed']==15360
+          assert d['native1d_original_closed']==160
+          assert d['derived1h_closed']==3840 and d['original_c46_4h_parent_count']==153
+          assert d['nested_1h_imb_4h_trigger_veto_source_occurrences']==187
+          assert sum(d['source_route_a_fork_parent_status_totals'].values())==153
+          expected={
+            'FIRST_ANY_1H_SOURCE_OPPOSITE_SIDE':42,
+            'FIRST_ANY_1H_TRIGGER_AND_VC_AMBIGUOUS':18,
+            'FIRST_ANY_1H_TWO_SIDES_AMBIGUOUS':11,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_OPPOSITE_SOURCE':21,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_TRIGGER_NEEDS_5M_VC':6,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_TWO_SIDES_AMBIGUOUS':1,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_VC_NO_TRIGGER':6,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_NO_15M_CANDIDATE':1,
+            'NEW_1H_VC_NO_SUBSEQUENT_POI_SOURCE_TEST':0,
+            'NO_1H_SOURCE_FORK_FULL_WINDOW':0,
+            'NO_1H_SOURCE_FORK_RIGHT_CENSORED':0,
+            'NO_4H_SOURCE_FIRST_TOUCH':21,
+            'TRIGGER_FIRST_15M_BOTH_SIDES_AMBIGUOUS':0,
+            'TRIGGER_FIRST_15M_IMB_SNR_OPPOSITE_SOURCE':13,
+            'TRIGGER_FIRST_15M_IMB_SNR_SAME_SOURCE':13,
+            'TRIGGER_FIRST_NO_15M_SOURCE_FULL_WINDOW':0,
+            'TRIGGER_FIRST_NO_15M_SOURCE_RIGHT_CENSORED':0}
+          assert d['source_route_a_fork_parent_status_totals']==expected
+          assert d['route_a_owner_1h_raid_or_imb_trigger_confirmed']==0
+          assert d['route_a_owner_new_1h_VC_POI_confirmed']==0
+          assert d['route_a_owner_first_valid_new1h_POI_test_confirmed']==0
+          assert d['route_a_owner_15m_final_VC_confirmed']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C67_INDEPENDENT_SECOND_FRESH_45ZIP_COMPLETE_BYTES_SHA',p.stat().st_size,sha)
+          PY
+  negatives35:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 35 source chronology true owner fork false positive guards each Python
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c67_route_a_1h_trigger_vs_new_poi_source_fork 2>&1 | tee /tmp/c67
+          grep -Fq 'Ran 35 tests' /tmp/c67
+          grep -qx 'OK' /tmp/c67
+          ! grep -q 'skipped=' /tmp/c67
