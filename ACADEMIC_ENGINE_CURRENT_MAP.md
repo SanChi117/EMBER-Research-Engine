@@ -179,3 +179,15 @@
 | A130 финальный аудит | [x] 130/130 SHA | Шесть C60 evidence, 23 негативных теста×3 Python, tip `e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810`. [Independent CI 40204411177](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40204411177) SUCCESS 3/3. |
 
 **C61 NEXT (не принят):** авторская классификация typed POI (Daily/4H, IMB/SNR/RB/Liquidity), первый *валидный* тест (не просто wick overlap), Strong High/Low после контакта + VC POI/BOS. Route A/B/C не объединять и не создавать ордера. **PAPER ONLY / NOT_TRADE_READY**, 29[x]/3[~]/8[ ] coarse high-level milestones остаются неизменными.
+
+
+
+## 2026-10-25 — B1/C61 A131 комплексный 1D HTF → 4H POI first source / StrongHL course prerequisites PASS (NOT trade-ready)
+
+| Элемент | Статус | Контроль и ограничения |
+|---|---|---|
+| C61 owner text course contract: Daily/4H typed POI → first valid test → contact liquidity/inefficiency → later VC POI/BOS → StrongHL | [x] ИССЛЕДОВАТЕЛЬСКИЙ CONTRACT ONLY | Восемь оригинальных Google Drive lesson texts, RB обязателен liquidity raid или IMB work, route B IDM limit разрешается до POI TEST, но после подтверждённого parent VC. Route A/C temporal negative guards. **51 tests × Python 3.10/3.11/3.12**. No author crypto price goldens. |
+| C61 original crypto 45 ZIP native 1d contextual source → 4H/1H C46/C47/C59/C60 chronological family | [x] SOURCE VERIFIED | 5 Binance USD-M crypto symbols, **76800 native3m, 160 native1d, 15360 original15m Decimal exact parity**, **153** technical4H source IMB parents. 150 with fully CLOSED previous 1D, 3 missing prior 1D (not future proxy), 132 first source touches, 130 later 1H technical sources, 127 contexts with repeated source visits. Full JSON **260561 bytes** SHA256 **00a99d9d31f551ed18fedc850fbd0da7fb2c50db6feedba41f920224f9857426**. Two separate independent [C61 byte exact CI 40205560855](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40205560855) and [40205841182](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40205841182) SUCCESS 4/4, physical original1d asof-prefix proof on every 4H parent. |
+| A131 append-only & final independent acceptance | [x] 131/131 SHA PASS | Six SHA C61 evidence, prior C46/C47/C55/C56/C57/C58/C59/C60 source frozen unchanged. Tip SHA **c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d**. [Final CI 40206303076](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40206303076) SUCCESS 3/3 + 51 negatives each. |
+
+**Область готовности:** C61 имеет полный исследовательский contract/source audit, но истинные POI, author first valid test, VC/BOS↔StrongHL, FTA/SL/TP и скриншотные goldens отсутствуют. Ближайший C62: отдельно academia SNR/RB/IMB POI classification + price-source liquidity raid/overlap, confirmed reaction/BOS StrongHL case labeling. **NO ORDER, NO TRADING, PAPER ONLY / NOT_TRADE_READY**. Укрупнённая карта 29[x]/3[~]/8[ ] не меняется от дополнения source-уровня.
