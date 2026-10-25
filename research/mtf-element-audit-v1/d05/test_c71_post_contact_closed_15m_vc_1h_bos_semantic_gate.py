@@ -57,11 +57,11 @@ class C71SourceNotOwnerVC(unittest.TestCase):
         x=run(e15=(event15(side="SHORT"),event15()))
         self.assertEqual(x.state,"FIRST_ANY_SOURCE_TWO_DIRECTIONS_AMBIGUOUS")
     def test_first_1h_bos_closed_before_later_15m_does_not_become_15m_vc(self):
-        x=run(e1=(h1event(),bos(start=BASE+7*H)))
+        x=run(e15=(event15(start=BASE+9*H),), e1=(h1event(),bos(start=BASE+8*H)))
         self.assertEqual(x.state,"FIRST_ANY_1H_BOS_PROXY_NOT_AUTHOR_VC_OR_BOS")
         self.assertFalse(x.author_1h_bos or x.author_15m_vc)
     def test_opposite_1h_bos_first_is_not_favorable(self):
-        x=run(e1=(h1event(),bos(start=BASE+7*H,side="SHORT")))
+        x=run(e15=(event15(start=BASE+9*H),), e1=(h1event(),bos(start=BASE+8*H,side="SHORT")))
         self.assertEqual(x.state,"FIRST_ANY_SOURCE_OPPOSITE_DIRECTION")
     def test_1h_bos_and_15m_source_same_close_no_cross_tf_cherry_pick(self):
         x=run(e15=(event15(start=BASE+8*H+Q),),
