@@ -202,3 +202,14 @@
 | A132 original-source append and final verification | [x] 132/132 SHA | Six new frozen original source/classification/evidence hashes, all A001–A131 and older source C46–C61 unchanged; tip `7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab`. [Final independent CI 40210826201](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40210826201) **SUCCESS 3/3**, 22 negative tests each. |
 
 **C63 NEXT:** source chronology true parent contact → price reaction → VC/BOS → protected StrongHL, avoid retrospective pivot/StrongHL promotion. Owner annotated source crypto goldens remain 0, 1H source SNR is **ADAPTED** geometric proxy, not author area selected or Volume Confirmation. Separate Route A/B/C and full PAPER only; no SMOKE/real orders. Coarse 29/3/8 unchanged.
+
+
+
+## 2026-10-25 — C63/A133: first ANY original 1H source after first 4H native3m wick contact, 133/133 SHA
+
+| Элемент | Статус | Не путать с торговой готовностью |
+|---|---|---|
+| C63 4H original source → true native3m first wick contact → 1H earliest ANY SNR/RB/IMB/BOS-proxy closed source | [x] SOURCE CHRONOLOGY ONLY | 5 original Binance USD-M symbols, twice independently downloaded 45 SHA ZIP; 76800 native3m, 160 native1d, 15360 native15m exact Decimal parities, 3840 closed original derived1h. Все 153 C46 parent, C60 first contact, C62 SNR/RB/IMB original IDs exact checked. Fixed research window **24h**, event must start after first source contact fully closed; earliest ANY side incl. opposite, tied opposite/same classed AMBIGUOUS, right-censor when needed. 153 parents: 21 no first source contact; **64** same, **61** opposite, **7** ambiguous first events; **не winrate и не сделки**. Full 302827 JSON bytes SHA256 `a681e2941d45b9658ab02c98c5dd06e4bfd85388982537241d8a5bd0708c31be`, first [CI 40211919023](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40211919023) SUCCESS and independent [40212064161](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40212064161) SUCCESS 4/4, 29 negative tests×3. |
+| A133 append-once six SHA & final independent full audit | [x] 133/133 SHA PASS | Tip `3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac`; A001–A132 and older source C46–C62 intact; final [CI 40212451982](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40212451982) **SUCCESS 3/3**, 29×3. |
+
+**Academic StrongHL remains UNPROVEN**, same for exact author POI first valid test and VC/BOS; C63 is source-only chronology, no ENTRY or SL/TP. Next C64: protect candidate extremes and verify invalidation with closed source before author goldens, no retroactive labels, then Route A/B/C and PAPER OOS. Coarse roadmap 29 complete, 3 partial, 8 pending unchanged. **NOT_TRADE_READY**.
