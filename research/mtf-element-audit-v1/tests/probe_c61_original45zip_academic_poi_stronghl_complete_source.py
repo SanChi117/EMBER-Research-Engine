@@ -81,6 +81,19 @@ def run(output=None):
                 htf.native_1d_closed,
                 symbol=symbol,
                 zone_known_ms=p["candidate"]["fully_known_ms"],as_of_ms=END)
+            # Physical 1D source prefix at the moment the 4H parent became
+            # known MUST equal the complete original source filtered by asof.
+            # This rejects a high/low from a later, still-open 1D candle.
+            day_prefix=tuple(k for k in htf.native_1d_closed
+                if k.known_at_ms<=p["candidate"]["fully_known_ms"])
+            if day_prefix:
+                physical_day=last_closed_original_day_before_zone(
+                    day_prefix,symbol=symbol,
+                    zone_known_ms=p["candidate"]["fully_known_ms"],
+                    as_of_ms=p["candidate"]["fully_known_ms"])
+                assert physical_day==day,"C61_FUTURE_NATIVE_1D_PREFIX_LEAK"
+            else:
+                assert day.latest_prior_closed_native1d_id is None
             combined=join_source_poi_context(p,h,g,v,day)
             assert combined["symbol"]==symbol
             assert not any(combined[x] for x in (
