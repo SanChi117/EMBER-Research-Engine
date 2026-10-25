@@ -1,0 +1,33 @@
+name: EMBER C71 post real3m contact + 1h close first-any 15m VC/BOS 30 negative
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c71-post-contact-routeA-source-30-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c71_post_contact_closed_15m_vc_1h_bos_semantic_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c71_post_contact_closed_15m_vc_1h_bos_semantic_gate.py'
+permissions:
+  contents: read
+jobs:
+  negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Previously accepted A140 SHA + 30 negative first 15m 1h BOS post-contact chronology
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A140
+          grep -Fq 'entries 140 tip_sha256 f799fa6b65ae8044971fa95e355fca9c8e228e2dbf90cd3108081b39ab6d21bb' /tmp/A140
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c71_post_contact_closed_15m_vc_1h_bos_semantic_gate 2>&1 | tee /tmp/C71
+          grep -Fq 'Ran 30 tests' /tmp/C71
+          grep -qx 'OK' /tmp/C71
