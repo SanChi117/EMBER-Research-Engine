@@ -1,0 +1,85 @@
+{
+  "schema": "EMBER_C64_SOURCE_EXTREME_CONTACT_CONFIRMATION_AND_WICK_CLOSE_INVALIDATION_INDEPENDENT_45ZIP_V1",
+  "accepted_run_date_utc": "2026-10-25",
+  "repo_branch": "research/academic-engine-recovery-20261015",
+  "previous_ledger_A133_tip_sha256": "3c222f47db62f0c2477f1c6d487444bcd46645770d0e545b31be1e8102a1b4ac",
+  "source_lessons": [
+    {
+      "name": "Strong High & Low.txt",
+      "gdrive_file_id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "contract": "StrongHL only after contact with genuine liquidity/inefficiency AND subsequent VC POI or BOS; bare extreme is not StrongHL"
+    },
+    {
+      "name": "Order Flow.txt",
+      "gdrive_file_id": "1r6sH0XjEoK4Jwq4EVLz8vqPSWVh9qerN",
+      "contract": "OF invalidation is close beyond last OF structure link BOS or opposite author POI after target; wick probe of source candidate is NOT author OF invalidation"
+    },
+    {
+      "name": "POI.txt",
+      "gdrive_file_id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+      "contract": "Strong POI interacts with liquidity or FVG, but price 3m source geometry alone is not course-selected POI"
+    }
+  ],
+  "first_original45_zip_replay_success_run": 40213320619,
+  "independent_second_original45_zip_replay_success_run": 40213466284,
+  "both_all_zip_replay_independent": "SUCCESS",
+  "independent_second_workflow_jobs": "SUCCESS_4_OF_4",
+  "independent_tests_per_python": 28,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "original_crypto_symbols": [
+    "BCHUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "original_signed_binance_usdm_zip_archive_count_per_replay": 45,
+  "original_native3m_closed": 76800,
+  "original_native1d_closed": 160,
+  "exact_native15m_decimal_parity": 15360,
+  "original_derived_closed1h": 3840,
+  "original_4h_source_parents": 153,
+  "frozen_provenance_unchanged_git_blobs": {
+    "C46": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+    "C60": "899373e4a1dc1999d1485ac8c1f790d39071aebd",
+    "C62": "8428bf7d6cd3bc26f617cfc32a34c91a27c813b2",
+    "C63": "fdc77c7ec942f03b4efae83b935d994c8435a24f"
+  },
+  "full_original_source_path": "evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json",
+  "full_original_source_bytes": 238920,
+  "full_original_source_sha256": "a921947a70a330cad76f63c0d3faa95069941e8793d24816291df87766cb729e",
+  "full_original_source_git_blob": "f70b0493a0c4964c618c09c75fee900dd65f5c05",
+  "full_original_source_second_replay_byte_identical": true,
+  "source_status_totals": {
+    "FIRST_ANY_AMBIGUOUS_NO_PROTECTED_DIRECTION": 7,
+    "NO_1H_REACTION_NO_PROTECTED_CANDIDATE": 0,
+    "NO_ORIGINAL_4H_FIRST_CONTACT": 21,
+    "REACTION_START_NOT_AFTER_CONTACT": 0,
+    "SOURCE_ANCHOR_BREACHED_BEFORE_EVENT_CONFIRMATION": 55,
+    "SOURCE_ANCHOR_KNOWN_AT_REACTION_CLOSE": 70
+  },
+  "source_breach_totals": {
+    "full_postevent_24h_window": 61,
+    "postevent_1h_close_beyond": 28,
+    "postevent_3m_close_beyond": 31,
+    "postevent_3m_wick_breach": 35,
+    "preactivation_wick_breach": 55,
+    "source_candidate_extreme_with_price": 125
+  },
+  "unobserved_24h_postevent_window_count": 9,
+  "candidate_extreme_is_academic_StrongHL": false,
+  "original_1h_close_beyond_source_anchor_is_academic_OF_invalidation": false,
+  "fully_known_event_precedes_anchor_activation": true,
+  "author_labels_on_crypto_source": 0,
+  "approved_PAPER_trades": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "limitations": "Source-only min/max based on native3m contact interval up to first 1h event pattern start is a conservative ADAPTED placeholder, NOT author-confirmed Strong High/Low or SL. Wick, 3m close and 1h close beyond source threshold are three distinct observed source measurements, NOT genuine OF invalidation/BOS without last author OF link. No author timestamp-price crypto positive goldens; no OOS trades or win rate."
+}
