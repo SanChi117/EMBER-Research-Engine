@@ -1,0 +1,3 @@
+# C78 — academic causal proof gate
+
+C77/A147 verified. Original course requires first valid 1H POI test. A valid 15m Trigger then requires 5m VC; without Trigger, direct 15m VC is the route. C78 checks only source clocks and refuses to certify geometry as author confirmation. From 153 source contexts, 47 no new 1H POI, 71 ambiguous/unselected, 35 selected; 23 first physical touches with no clear 15m event and 12 technical 15m events. The latter have 6 IMB and 6 SNR patterns; 5m follow-ups are 4 aligned, 5 opposite, 3 ambiguous. There are zero author-approved entries, orders, fills, trades. Tests: 38 each Python 3.10/3.11/3.12, GitHub Actions 40244049908 SUCCESS. Used pinned source records C73/C72/C77, no fresh ZIP downloads. PAPER ONLY, NOT_TRADE_READY.
