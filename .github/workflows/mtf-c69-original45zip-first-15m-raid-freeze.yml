@@ -1,0 +1,106 @@
+name: EMBER C69 original45ZIP first exact native15m liquidity raid and POI source freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c69-original45zip-first-15m-raid-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c69_original45zip_exact_first_native15m_raid_poi.py'
+permissions:
+  contents: write
+concurrency:
+  group: c69-fresh-original45-native15m-first-wick
+  cancel-in-progress: false
+jobs:
+  original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate immutable A138 original sha ledger and C68 original full source frozen git blob
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/138
+          grep -Fq 'entries 138 tip_sha256 c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a' /tmp/138
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+          test "$(git rev-parse HEAD:$R/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = 587779a7dd1736099e8270c8823c15822f0e77a0
+      - name: Fresh 45 Binance original authenticated ZIP source first 15m raid and exact C46-C68 price SHA lineage
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c69_original45zip_exact_first_native15m_raid_poi.py" /tmp/C69-original.json >/tmp/C69-original.log 2>&1 || { tail -c 17000 /tmp/C69-original.log; exit 1; }
+          tail -c 2200 /tmp/C69-original.log
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('/tmp/C69-original.json');d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert sum(d['source_first_exact_native15m_contact_state_totals'].values())==153
+          assert d['author_verified_technical_first_raid_is_author_valid']==0
+          assert d['author_verified_first_new1h_poi_valid_test']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C69_ORIGINAL45_SOURCE_BYTES',p.stat().st_size)
+          print('C69_ORIGINAL45_SOURCE_SHA',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c69-full-original45-source
+          path: /tmp/C69-original.json
+          if-no-files-found: error
+  negatives30:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Original native15m first liquidity bar must differ from last1h candle unless proven 30x3
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c69_exact_native15m_first_liquidity_raid_vs_poi_test 2>&1 | tee /tmp/C69
+          grep -Fq 'Ran 30 tests' /tmp/C69
+          grep -qx 'OK' /tmp/C69
+  freeze:
+    needs: [original45,negatives30]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c69-full-original45-source
+          path: /tmp/c69
+      - name: Freeze only after original 45 ZIP and 30x3 source chronology tests
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json
+          if test -e "$p"; then cmp -s "$p" /tmp/c69/C69-original.json; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c69/C69-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C69): original45 ZIP first exact preknown liquidity native15m raid, no author first valid POI'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
