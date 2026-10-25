@@ -1,0 +1,49 @@
+{
+  "schema": "EMBER_C58_LOCAL_FULL_FROZEN_C56_REGISTRY_WITNESS_V1",
+  "recorded_utc_date": "2026-10-25",
+  "scope": "ISOLATED_C58_BRANCH_ONLY",
+  "working_branch": "research/c58-route-c-parent-state-20261025",
+  "shared_research_branch_modified": false,
+  "shared_handoff_modified": false,
+  "audit_journal_appended": false,
+  "source_c56_path": "evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json",
+  "source_c56_git_blob": "98f087a731d30c2191dc443038c371751456f316",
+  "source_c56_bytes": 971017,
+  "source_c56_sha256": "24db86b20e0454d6ac5abd1e4506f092f23d9c448d77c1862c3c777c40b7af07",
+  "source_original_60zip_redownloaded_by_c58": false,
+  "complete_frozen_c56_json_replayed": true,
+  "unique_parent_objects": 542,
+  "observation_state_counts": {
+    "BOTH_CHILD_BREAKS_OBSERVED": 509,
+    "ONLY_3M_CHILD_BREAK_OBSERVED_5M_ABSENT_IN_COMPLETE_SOURCE": 30,
+    "ONLY_5M_CHILD_BREAK_OBSERVED_3M_ABSENT_IN_COMPLETE_SOURCE": 3
+  },
+  "incomplete_5m_unknown_control": 30,
+  "incomplete_3m_unknown_control": 3,
+  "duplicate_parent_identity_rejected": true,
+  "registry_order_source_permutation_invariant": true,
+  "negative_tests_each_python": 40,
+  "negative_test_matrix": {
+    "3.10.22": "PASS_40_OF_40",
+    "3.11.2": "PASS_40_OF_40",
+    "3.12.12": "PASS_40_OF_40"
+  },
+  "full_registry_replay_matrix": {
+    "3.10.22": "PASS_BYTE_EQUAL",
+    "3.11.2": "PASS_BYTE_EQUAL",
+    "3.12.12": "PASS_BYTE_EQUAL"
+  },
+  "derived_registry_bytes": 1025051,
+  "derived_registry_sha256": "81d1d0350b9f0e59a5f2d27c12e7296de792714c62bb83e9e7860d82f28ebeab",
+  "derived_registry_git_blob_not_published": "fe0239222e9f67c853e20fa7a79dbd22fc67ce5f",
+  "derived_full_registry_committed": false,
+  "reproduction": "python tests/probe_c58_frozen_c56_parent_state_registry.py /tmp/C58-registry.json",
+  "github_workflow_status": "NOT_CREATED_403_INSUFFICIENT_SCOPES",
+  "author_object_identities_approved": 0,
+  "author_bos_approved": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "notice": "Local reproducible semantic/state replay over already accepted frozen C56 evidence, not independent original-market validation, not author certification and not trade readiness."
+}
