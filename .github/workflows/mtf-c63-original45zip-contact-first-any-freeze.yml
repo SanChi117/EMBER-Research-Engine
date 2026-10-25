@@ -1,0 +1,109 @@
+name: EMBER C63 full fresh original45ZIP first-any 1h VC BOS proxy from 4h contact
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c63-original45zip-contact-first-any-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c63_original45zip_first_any_1h_after_original3m_contact.py'
+permissions:
+  contents: write
+concurrency:
+  group: c63-original45zip-first-any-full-research
+  cancel-in-progress: false
+jobs:
+  replay_original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check accepted A132 and preserved source SHA blobs
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A132
+          grep -Fq 'entries 132 tip_sha256 7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab' /tmp/A132
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+      - name: Re-download 45 original signed Binance ZIP and replay 153 4h source first ANY cases
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c63_original45zip_first_any_1h_after_original3m_contact.py" /tmp/C63-original.json > /tmp/C63.log 2>&1 || { tail -c 17000 /tmp/C63.log; exit 1; }
+          tail -c 1800 /tmp/C63.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('/tmp/C63-original.json')
+          x=json.loads(p.read_bytes())
+          assert x['source_signed_original_crypto_zip']['total']==45
+          assert x['original_native3m_closed']==76800
+          assert x['original_native1d_closed']==160
+          assert x['native15m_exact_original_decimal_parity']==15360
+          assert x['fully_closed_original_1h']==3840
+          assert x['4h_source_parent_candidates']==153
+          assert x['original_first3m_source_contact_parents']==132
+          assert x['all_parent_status_counts']['NO_4H_SOURCE_FIRST_CONTACT']==21
+          assert sum(x['all_parent_status_counts'].values())==153
+          assert x['author_strongHL']==x['author_true_BOS']==x['author_selected_POI']==0
+          assert x['orders']==x['fills']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C63_ORIGINAL_FULL_JSON_BYTES',p.stat().st_size)
+          print('C63_ORIGINAL_FULL_JSON_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c63-complete-original45
+          path: /tmp/C63-original.json
+          if-no-files-found: error
+  unit_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 29 closed first ANY including adverse opposite and right censor
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c63_closed_4h_source_contact_to_first_any_1h_reaction 2>&1 | tee /tmp/c63
+          grep -Fq 'Ran 29 tests' /tmp/c63
+          grep -qx 'OK' /tmp/c63
+  freeze:
+    needs: [replay_original45,unit_matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c63-complete-original45
+          path: /tmp/c63
+      - name: Freeze once source proved all 45 ZIP and 29x3 without promoting StrongHL
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c63/C63-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c63/C63-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C63): source first ANY closed 1H reaction after original3m 4H touch, no StrongHL claims'
+          for n in 1 2 3 4; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+          done
+          exit 1
