@@ -157,15 +157,14 @@ def source_first_any_after_contact(*,symbol,side,zone_known_ms,
     if first_original3m_id is None:
         if first_contact_known_ms is not None:
             raise ValueError("C63_FORGED_MISSING_FIRST_SOURCE_CONTACT")
-        return SourceReactionChain(symbol,side,zone_known_ms,
-           None,None,None,False,STATUS[0],None,(),None,False)
-    if (type(first_contact_known_ms) is not int or
+    elif (type(first_contact_known_ms) is not int or
         not _valid_id(first_original3m_id,first_contact_known_ms-THREE) or
         first_contact_known_ms<=zone_known_ms or
         first_contact_known_ms>as_of_ms):
         raise ValueError("C63_INVALID_FIRST_ORIGINAL_3M_CONTACT")
-    right_edge=first_contact_known_ms+MAX_WINDOW_MS
-    fully_observed=(as_of_ms>=right_edge)
+    right_edge=(first_contact_known_ms+MAX_WINDOW_MS
+                if first_original3m_id is not None else None)
+    fully_observed=(as_of_ms>=right_edge) if right_edge is not None else False
     consider=[]
     for e in events:
         if (not isinstance(e,SourceReactionEvent) or e.kind not in KINDS or
@@ -175,15 +174,21 @@ def source_first_any_after_contact(*,symbol,side,zone_known_ms,
             e.fully_known_ms>as_of_ms or e.fully_known_ms%HOUR or
             e.first_pattern_bar_start_ms%HOUR or
             e.first_pattern_bar_start_ms>=e.fully_known_ms or
+            e.fully_known_ms-e.first_pattern_bar_start_ms!=(
+                HOUR if e.kind=="BOS_PREKNOWN_1H_FRACTAL_CLOSE_SOURCE"
+                else 2*HOUR if e.kind=="RB_1H_SOURCE" else 3*HOUR) or
             e.is_author_vc or e.is_author_bos or e.is_author_stronghl or
             e.orders or e.trades):
             raise ValueError("C63_FORGED_OR_FUTURE_1H_EVENT")
         # Never inspect a pattern formed partly before original contact,
         # even if the last bar closes later.
-        if e.first_pattern_bar_start_ms>=first_contact_known_ms and (
-            e.fully_known_ms<=right_edge
-        ):
+        if (first_contact_known_ms is not None and
+            e.first_pattern_bar_start_ms>=first_contact_known_ms and
+            e.fully_known_ms<=right_edge):
             consider.append(e)
+    if first_original3m_id is None:
+        return SourceReactionChain(symbol,side,zone_known_ms,
+           None,None,None,False,STATUS[0],None,(),None,False)
     first=min((z.fully_known_ms for z in consider),default=None)
     earliest=tuple(x for x in consider if x.fully_known_ms==first) if first is not None else ()
     if earliest:
