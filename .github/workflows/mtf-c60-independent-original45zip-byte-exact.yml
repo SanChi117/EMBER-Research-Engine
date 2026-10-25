@@ -1,0 +1,72 @@
+name: EMBER C60 independent second original45 ZIP closed 3m touch episode full-byte reproducibility
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c60-independent-original45zip-byte-exact.yml'
+      - 'research/mtf-element-audit-v1/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json'
+permissions:
+  contents: read
+jobs:
+  full45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Re-download original crypto 45 source ZIP and compare whole 3471251-byte C60 proof
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/129sha
+          grep -Fq 'entries 129 tip_sha256 dfca90b0f376ae36f8d50f5230ae19d9ed56dfc8dc435197fb1ead29f5e9dc86' /tmp/129sha
+          cd ../..
+          R=research/mtf-element-audit-v1
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          python "$R/tests/probe_c60_original45zip_4h_imb_first_vs_repeated_3m_visits.py" /tmp/C60-independent.json >/tmp/C60-repeat.log 2>&1 || { tail -c 18000 /tmp/C60-repeat.log; exit 1; }
+          cmp -s /tmp/C60-independent.json "$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json')
+          q=Path('/tmp/C60-independent.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert p.stat().st_size==3471251
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='dd94e32421d383cae4d5d9d8d20c264418d74b3b0e59a222378586a4490050de'
+          doc=json.loads(p.read_bytes())
+          assert doc['source_zip_counts']['total']==45
+          assert doc['original_closed_native3m']==76800
+          assert doc['crosschecked_native15m_exact_Decimal_parities']==15360
+          assert doc['technical_4h_imb_candidate_total']==153
+          assert doc['original_first_native3m_contact_total']==132
+          assert doc['candidate_status_totals']=={'no_original_source_contact':21,
+               'single_observed_visit':5,'source_right_censored_active_last_visit':5,
+               'two_or_more_distinct_source_visits':127}
+          assert doc['author_first_valid_POI_tests']==doc['author_StrongHL_goldens']==0
+          assert doc['orders']==doc['fills']==doc['trades']==0
+          assert doc['readiness']=='NOT_TRADE_READY'
+          print('C60_INDEPENDENT_SECOND_ORIGINAL45ZIP_FULL_BYTE_EQUAL_SHA',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+  negative_23:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 23 first versus return no-future adversarial tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c60_original_4h_imb_3m_contact_episode_lifecycle 2>&1 | tee /tmp/C60-tests
+          grep -Fq 'Ran 23 tests' /tmp/C60-tests
+          grep -qx 'OK' /tmp/C60-tests
