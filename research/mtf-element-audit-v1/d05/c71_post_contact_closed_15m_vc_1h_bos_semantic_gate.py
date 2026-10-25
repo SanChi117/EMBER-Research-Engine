@@ -19,6 +19,7 @@ No 5m verification and NEVER trades, stops, FTA, PnL.
 """
 from dataclasses import dataclass
 from c16_c08_monthly_daily_htf_lineage import TF_MS
+from c21_native3m_source_bridge import THREE
 from c66_native15m_route_a_source_event_chain import _check15,Source15Event,KINDS as K15
 from c63_closed_4h_source_contact_to_first_any_1h_reaction import SourceReactionEvent,KINDS as K1
 from c62_academic_snr_rb_imb_liquidity_source_separation import _validate
@@ -151,7 +152,7 @@ def classify_after_original3m_contact(fork,c69,c70,native15m,original3m,
         return result(STATES[0])
     if (known< c70.actual_first_native3m_closed_ms or
         known<c69.source_event_fully_known_ms or known>as_of_ms or
-        known%Q):
+        known%THREE):
         raise ValueError("C71_SOURCE_CONTACT_NOT_CLOSED_BEFORE_GATE")
     if (fork.first_source_1h_category=="NEW_1H_VC_POI"
         and c70.source_status!="NEW1H_POI_FIRST_ORIGINAL3M_WICK_TEST_NOT_AUTHOR_VALID"):
