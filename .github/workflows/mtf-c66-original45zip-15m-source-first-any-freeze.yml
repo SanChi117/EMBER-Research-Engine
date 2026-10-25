@@ -1,0 +1,112 @@
+name: EMBER C66 full original45ZIP 4H1H to native15m Route A source first-any only
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c66-original45zip-15m-source-first-any-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c66_original45zip_4h1h_to_native15m_route_a_source.py'
+permissions:
+  contents: write
+concurrency:
+  group: c66-original45zip-native15m-first-freeze
+  cancel-in-progress: false
+jobs:
+  fresh_full45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate A135 old 135 immutable audit and original source SHA git blobs
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A135
+          grep -Fq 'entries 135 tip_sha256 76014ca82efd4ddb4d40da272fd54b514310d370fce90a8ccb22064b9a6b6787' /tmp/A135
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json)" = 791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5
+      - name: Download 45 original SHA-verified Binance USD-M ZIP and source-joined native15m first-any technical IMB SNR
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c66_original45zip_4h1h_to_native15m_route_a_source.py" /tmp/C66-source.json >/tmp/C66.log 2>&1 || { tail -c 19000 /tmp/C66.log; exit 1; }
+          tail -c 3000 /tmp/C66.log
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          f=Path('/tmp/C66-source.json')
+          d=json.loads(f.read_bytes())
+          assert d['original_sha_checked_zip']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160
+          assert d['derived_closed1h']==3840
+          assert d['original_4h_c46_contexts']==153
+          assert sum(d['source_4h1h15m_first_any_route_a_counts'].values())==153
+          assert d['source_4h1h15m_first_any_route_a_counts']['NO_4H_FIRST_SOURCE_TOUCH']==21
+          assert d['author_final_entry_approved']==d['author_vc_15m_confirmed']==0
+          assert d['orders']==d['trades']==d['fills']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C66_FULL_ORIGINAL45_SOURCE_BYTES',f.stat().st_size)
+          print('C66_FULL_ORIGINAL45_SOURCE_SHA256',hashlib.sha256(f.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c66-full-original45-native15m
+          path: /tmp/C66-source.json
+          if-no-files-found: error
+  synthetic33:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Route A source and native15m SNR gap 33x3 no author entry
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c66_native15m_route_a_source_event_chain 2>&1 | tee /tmp/C66
+          grep -Fq 'Ran 33 tests' /tmp/C66
+          grep -qx 'OK' /tmp/C66
+  freeze:
+    needs: [fresh_full45,synthetic33]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c66-full-original45-native15m
+          path: /tmp/c66
+      - name: Freeze full original evidence ONLY after 45 ZIP and 33x3 succeed
+        run: |
+          set -euo pipefail
+          f=research/mtf-element-audit-v1/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json
+          if test -e "$f"; then
+            cmp -s "$f" /tmp/c66/C66-source.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$f")"
+          cp /tmp/c66/C66-source.json "$f"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$f"
+          git commit -m 'evidence(C66): original45ZIP native15m SNR gap raw IDs and first any after 4h1h crypto research source'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
