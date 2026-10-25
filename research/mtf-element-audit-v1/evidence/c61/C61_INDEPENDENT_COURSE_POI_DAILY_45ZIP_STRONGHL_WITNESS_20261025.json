@@ -1,0 +1,87 @@
+{
+  "schema": "EMBER_C61_INDEPENDENT_COMPLEX_COURSE_POI_FIRST_VALID_STRONGHL_ORIGINAL45ZIP_V1",
+  "date_utc": "2026-10-25",
+  "scope": "CRYPTO_ONLY_BINANCE_USDM_RESEARCH_NO_ORDERS",
+  "prior_A130_tip": "e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810",
+  "original_owner_course_drive_files": [
+    {
+      "name": "POI.txt",
+      "file_id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R"
+    },
+    {
+      "name": "3. Rejection Block.txt",
+      "file_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT"
+    },
+    {
+      "name": "Order Flow.txt",
+      "file_id": "1r6sH0XjEoK4Jwq4EVLz8vqPSWVh9qerN"
+    },
+    {
+      "name": "Strong High & Low.txt",
+      "file_id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t"
+    },
+    {
+      "name": "Fair Value Gap Imbalance.txt",
+      "file_id": "1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN"
+    },
+    {
+      "name": "2. Entry by IMB & SNR.txt",
+      "file_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ"
+    },
+    {
+      "name": "3. Entry by Inducement [IDM].txt",
+      "file_id": "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs"
+    },
+    {
+      "name": "PDPWPM High&Low Session Liquidity.txt",
+      "file_id": "1HqGlqYUZptdNvOVLBHftx03XYASvo9MZ"
+    }
+  ],
+  "trading_route_text_boundaries": [
+    "A_ROUTE_4H_POI_1H_TRIGGER_15M_VC",
+    "B_ROUTE_PARENT_VC_THEN_DIRECT_IDM_NO_POI_TEST_REQUIRED",
+    "C_ROUTE_RAID_THEN_BOS"
+  ],
+  "author_tested_price_candle_chart_goldens": 0,
+  "author_approval_or_real_executions": false,
+  "original_binance_USDM_zip_archives_per_replay": 45,
+  "source_original_native_3m_closed": 76800,
+  "source_original_native_1d_closed": 160,
+  "native_original_15m_exact_decimal_parities": 15360,
+  "source_original_4h_technical_IMB_candidates": 153,
+  "source_4h_with_last_prior_day_closed": 150,
+  "source_4h_without_prior_day_available": 3,
+  "source_first_original_3m_contact": 132,
+  "source_postcontact_original_1h_technical_IMB": 130,
+  "source_multiple_wick_visit_candidates": 127,
+  "no_author_1d_or_4h_selected_POI": true,
+  "no_author_StrongHL_or_first_valid_test": true,
+  "first_original45ZIP_CI": 40205429138,
+  "first_complete_second_independent_original45ZIP_CI": 40205560855,
+  "third_original45ZIP_with_physical_native1d_asof_prefix_CI": 40205832842,
+  "fourth_complete_independent_original45ZIP_with_51_tests_CI": 40205841182,
+  "complete_independent_CI": "SUCCESS_4_OF_4",
+  "updated_negative_semantic_tests_each_python": 51,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "original_4h_source_C46_git_blob": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+  "original_later1h_C47_git_blob": "b2727f081d8a73f522a97a54b4582507ee969244",
+  "original_4h_nested1h_C59_git_blob": "46077ffb3495c14c906963156dd4a93c7acf9911",
+  "original_first3m_touch_return_C60_git_blob": "899373e4a1dc1999d1485ac8c1f790d39071aebd",
+  "full_original_complete_source_file": "evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json",
+  "full_source_git_blob": "305624e592f55bd699e94e45f4316e4efabdb726",
+  "full_original_source_json_bytes": 260561,
+  "full_original_source_sha256": "00a99d9d31f551ed18fedc850fbd0da7fb2c50db6feedba41f920224f9857426",
+  "all_independent_source_json_bytes_equal": true,
+  "original_native1d_physically_cut_prefix_at_each_4h_creation_equal_full_asof": true,
+  "original_source_paper_signals": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "limitations": "Text-only course prerequisites are enforced; author case-specific labels and graph annotations lack timestamped Binance USD-M price evidence. Historical source 4H three-wick IMB and prior-day high/low are NEVER automatically course POI, original 3m first source wick is NEVER automatically author first valid test, 1h technical IMB never automatically VC, StrongHL not inferred. Route A/B/C separate. No trade approval or OOS."
+}
