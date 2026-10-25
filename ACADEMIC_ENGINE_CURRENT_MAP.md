@@ -191,3 +191,14 @@
 | A131 append-only & final independent acceptance | [x] 131/131 SHA PASS | Six SHA C61 evidence, prior C46/C47/C55/C56/C57/C58/C59/C60 source frozen unchanged. Tip SHA **c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d**. [Final CI 40206303076](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40206303076) SUCCESS 3/3 + 51 negatives each. |
 
 **Область готовности:** C61 имеет полный исследовательский contract/source audit, но истинные POI, author first valid test, VC/BOS↔StrongHL, FTA/SL/TP и скриншотные goldens отсутствуют. Ближайший C62: отдельно academia SNR/RB/IMB POI classification + price-source liquidity raid/overlap, confirmed reaction/BOS StrongHL case labeling. **NO ORDER, NO TRADING, PAPER ONLY / NOT_TRADE_READY**. Укрупнённая карта 29[x]/3[~]/8[ ] не меняется от дополнения source-уровня.
+
+
+
+## 2026-10-25 — C62/A132 independently accepted source-only differentiation RB / SNR / MB / IMB
+
+| Компонент | Статус | Граница и доказательства |
+|---|---|---|
+| C62 Source original derived1h separation: SNR→MB versus RB wick-only and classic IMB | [x] SOURCE / TEXT, НЕ author approved POI | Original owner SNR and RB lesson re-read. **SNR** requires two opposing bodies plus next candle acceptance, source known liquidity/IMB; without it weaker **MB no VC**. **RB** strictly wick liquidity raid or earlier IMB wick test, bare pair is insufficient; classic IMB after three closed bars. Binance original 45ZIP ×2 (BTC ETH SOL XRP BCH) **3840 closed1H**, 76800 native3m, 160 native1d, 15360 Decimal native15m equalities, 153 old C46 sources unchanged. 646 original source1h classic gap, 128+213 source SNR, 62 source MB, 394+556 source wick RB, 1039 bare opposing source pairs not certified. These events are correlated **not trades**. Full frozen original JSON **2 498 773 bytes**, SHA256 `8ac92d6406845568a2e0178be81fc2fec529da2d26697b6f08b7fbaa4e5a0c80`, blob `8428bf7d6cd3bc26f617cfc32a34c91a27c813b2`. Independent original fresh45 byte-exact [CI 40210402103](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40210402103) **SUCCESS 4/4**; 22 negatives×3. |
+| A132 original-source append and final verification | [x] 132/132 SHA | Six new frozen original source/classification/evidence hashes, all A001–A131 and older source C46–C61 unchanged; tip `7b6f58a0007783307b25d8876cc3f2332dddd5a0935c2ac9d677b34be4b2c4ab`. [Final independent CI 40210826201](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40210826201) **SUCCESS 3/3**, 22 negative tests each. |
+
+**C63 NEXT:** source chronology true parent contact → price reaction → VC/BOS → protected StrongHL, avoid retrospective pivot/StrongHL promotion. Owner annotated source crypto goldens remain 0, 1H source SNR is **ADAPTED** geometric proxy, not author area selected or Volume Confirmation. Separate Route A/B/C and full PAPER only; no SMOKE/real orders. Coarse 29/3/8 unchanged.
