@@ -1,0 +1,66 @@
+name: EMBER C61 final independent A131 131SHA complete academic source & 51 tests x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c61-A131-independent-final-131sha-all-evidence.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  all131:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently confirm all 131 SHA and six original C61 evidence, all previous frozen originals and 51 negatives
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/sha131
+          grep -Fq 'entries 131 tip_sha256 c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d' /tmp/sha131
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib,subprocess
+          from pathlib import Path
+          records=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(records)==131
+          prev,new=records[-2:]
+          assert prev['action_id']=='A130' and prev['record_sha256']=='e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810'
+          assert new['seq']==131 and new['action_id']=='A131' and new['prev_sha256']==prev['record_sha256']
+          assert new['record_sha256']=='c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d'
+          assert new['cycle']=='B1/C61' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          expected={"d05/c61_academic_poi_context_first_valid_stronghl_contract.py":"9815f96c2fdae33c8147f44928985715473ae2f70479785a8c417b3d4700f31c","d05/test_c61_academic_poi_context_first_valid_stronghl_contract.py":"cd3bc234099426c5cca3b34b35abe8cd0d1b70cd9a356f861231f65b6823b960","tests/probe_c61_original45zip_academic_poi_stronghl_complete_source.py":"fa8b58d71d3acc27c020089e53b65e2a8f4ac8a59f977568cae2eda5ac47ed35","evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json":"00a99d9d31f551ed18fedc850fbd0da7fb2c50db6feedba41f920224f9857426","evidence/c61/C61_INDEPENDENT_COURSE_POI_DAILY_45ZIP_STRONGHL_WITNESS_20261025.json":"aa7d30c43ed944fe8b9f7ea48e46431025c5336a992ae3e24efb447a364775cb","cycles/B1_C61_COMPLETE_ACADEMIC_DAILY_4H_POI_FIRST_VALID_STRONGHL_SOURCE_REPORT.md":"11b1a996b459635b123593997be6835918f0b98556ca8b2ebe7018cc7755cc7e"}
+          assert len(new['evidence'])==6 and {e['path'] for e in new['evidence']}==set(expected)
+          for e in new['evidence']:
+            raw=Path(e['path']).read_bytes()
+            assert len(raw)==e['bytes'] and hashlib.sha256(raw).hexdigest()==e['sha256']==expected[e['path']]
+          prior={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json":"b2727f081d8a73f522a97a54b4582507ee969244","evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json":"2b4f944ddbdff0871a7fd553de2ab9955d220b91","evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json":"98f087a731d30c2191dc443038c371751456f316","evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json":"08f24050d19bb390cf2985a901e2a8f2ea3c0ec3","evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json":"06f2ff7decd2aa9660381947d3cf43f6b722cd8e","evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json":"46077ffb3495c14c906963156dd4a93c7acf9911","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd"}
+          for file,blob in prior.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+file],text=True).strip()==blob
+          source=Path('evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json')
+          assert source.stat().st_size==260561
+          doc=json.loads(source.read_bytes())
+          assert doc['original_45_sha_checked_zip_archives']['total']==45
+          assert doc['original_native3m_closed']==76800 and doc['original_native1d_closed']==160
+          assert doc['original_native15m_decimal_equalities']==15360
+          assert doc['original_4h_classic_imb_source_parents']==153
+          assert doc['source_stats']['had_prior_closed_original_daily_candle']==150
+          assert doc['source_stats']['no_prior_closed_original_daily_candle']==3
+          assert doc['source_stats']['post_touch_1h_technical_imb_but_not_author_vc']==130
+          assert doc['source_stats']['REVISITED_TECHNICAL_ZONE']==127
+          assert doc['author_selected_1d_or_4h_poi_goldens']==doc['author_verified_first_valid_poi_tests']==doc['author_verified_strong_high_low']==0
+          assert doc['orders']==doc['trades']==doc['fills']==0 and doc['readiness']=='NOT_TRADE_READY'
+          print('C61_A131_INDEPENDENT_131_SHA_ALL_6_SOURCE_DIGESTS_AND_ALL_FROZEN_PREDECESSORS_SUCCESS')
+          PY
+          cd d05
+          python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/c61neg
+          grep -Fq 'Ran 51 tests' /tmp/c61neg
+          grep -qx 'OK' /tmp/c61neg
+          ! grep -q 'skipped=' /tmp/c61neg
