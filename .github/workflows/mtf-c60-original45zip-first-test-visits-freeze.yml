@@ -1,0 +1,104 @@
+name: EMBER C60 original45ZIP first versus repeated 3m 4H IMB source visit episodes
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c60-original45zip-first-test-visits-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c60_original45zip_4h_imb_first_vs_repeated_3m_visits.py'
+      - 'research/mtf-element-audit-v1/d05/test_c60_original_4h_imb_3m_contact_episode_lifecycle.py'
+permissions:
+  contents: write
+concurrency:
+  group: c60-45zip-replay-first-episode-source
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all prior A129 and exact original C46
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger
+          grep -Fq 'entries 129 tip_sha256 dfca90b0f376ae36f8d50f5230ae19d9ed56dfc8dc435197fb1ead29f5e9dc86' /tmp/ledger
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+      - name: Fresh 45 original crypto USD-M ZIP checksums, first technical contact and closed noncontact returns
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c60_original45zip_4h_imb_first_vs_repeated_3m_visits.py" /tmp/C60-original.json >/tmp/C60.log 2>&1 || { tail -c 22000 /tmp/C60.log; exit 1; }
+          tail -c 2000 /tmp/C60.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('/tmp/C60-original.json')
+          x=json.loads(p.read_bytes())
+          assert x['source_zip_counts']['total']==45
+          assert x['original_closed_native3m']==76800
+          assert x['crosschecked_native15m_exact_Decimal_parities']==15360
+          assert x['technical_4h_imb_candidate_total']==153
+          assert x['original_first_native3m_contact_total']==132
+          assert x['candidate_status_totals']['no_original_source_contact']==21
+          assert x['author_first_valid_POI_tests']==x['author_StrongHL_goldens']==0
+          assert x['orders']==x['fills']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          print('C60_FULL_ORIGINAL45ZIP_BYTES',p.stat().st_size)
+          print('C60_FULL_ORIGINAL45ZIP_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c60-full-source
+          path: /tmp/C60-original.json
+          if-no-files-found: error
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 22 source first versus repeated 3m episode anti-fraud negatives
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c60_original_4h_imb_3m_contact_episode_lifecycle 2>&1 | tee /tmp/C60tests
+          grep -Fq 'Ran 22 tests' /tmp/C60tests
+          grep -qx 'OK' /tmp/C60tests
+  freeze:
+    needs: [replay,negatives]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c60-full-source
+          path: /tmp/c60
+      - name: Freeze only source-proven original 45ZIP episodes and never modify old evidence
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c60/C60-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c60/C60-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C60): original45ZIP first and repeated 4H source touch episodes no author trade'
+          for i in 1 2 3 4; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+          done
+          exit 1
