@@ -1,0 +1,90 @@
+{
+  "schema": "EMBER_C68_CRYPTO_STRONGHL_SOURCE_TWO_INDEPENDENT45ZIP_V1",
+  "date_utc": "2026-10-25",
+  "repo": "SanChi117/EMBER-Research-Engine",
+  "branch": "research/academic-engine-recovery-20261015",
+  "prior_A137_tip": "f54fc6edba0324df7dfd08e51bd1efa78b1674fb33d4cf21d3fc96ad83f9ccab",
+  "original_user_lessons": [
+    {
+      "title": "Strong High & Low.txt",
+      "id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "rule": "Strong High/Low requires liquidity OR inefficiency CONTACT and confirmation of movement forming VC POI or BOS same or lower timeframe; source pivot not StrongHL"
+    },
+    {
+      "title": "Order Flow.txt",
+      "id": "1r6sH0XjEoK4Jwq4EVLz8vqPSWVh9qerN",
+      "rule": "Real OF requires both liquidity and imbalances working, target and last structural link; source BOS technical fractal not author BOS"
+    },
+    {
+      "title": "POI.txt",
+      "id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+      "rule": "Strong POI is worked with liquidity SSL/BSL or FVG; original 1h raw pair/gap not author POI by geometry alone"
+    }
+  ],
+  "first_source_original45_zip_success_run": 40221068602,
+  "independent_second_original45_zip_success_run": 40221225389,
+  "independent_second_workflow_jobs": "SUCCESS_4_OF_4",
+  "test_count_per_python": 33,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "source_crypto_symbols": [
+    "BCHUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "source_period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "original_sha_verified_binance_usdm_ZIP_count_each": 45,
+  "native3m_original_closed": 76800,
+  "native15m_original_closed": 15360,
+  "native1d_original_closed": 160,
+  "derived_1h_closed": 3840,
+  "original_source_4h_parent_count": 153,
+  "source_4h_1h_15m_old_frozen_parents_exact_equal": true,
+  "old_git_blob_c46": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+  "old_git_blob_c60": "899373e4a1dc1999d1485ac8c1f790d39071aebd",
+  "old_git_blob_c62": "8428bf7d6cd3bc26f617cfc32a34c91a27c813b2",
+  "old_git_blob_c63": "fdc77c7ec942f03b4efae83b935d994c8435a24f",
+  "old_git_blob_c66": "c693058cdb28b0e118879d32ddcbbd0d2a66bfc6",
+  "old_git_blob_c67": "87409101a6fad4897b32e13085c9a0cc13566594",
+  "source_status_totals": {
+    "1H_IMB_TRIGGER_CREATION_NOT_A_LIQUIDITY_OR_POI_TEST": 0,
+    "CONTACT_SOURCE_BAR_UNAVAILABLE": 0,
+    "FIRST_ANY_SOURCE_CONFIRMATION_BOTH_SIDES_AMBIGUOUS": 0,
+    "FIRST_ANY_SOURCE_CONFIRMATION_OPPOSITE_SIDE": 34,
+    "NO_C67_SINGLE_SOURCE_CONTACT": 92,
+    "NO_POST_CONTACT_SOURCE_CONFIRMATION_FULL_WINDOW": 0,
+    "NO_POST_CONTACT_SOURCE_CONFIRMATION_RIGHT_CENSORED": 1,
+    "SOURCE_ANCHOR_BREACHED_BEFORE_CONFIRMATION_CLOSED": 11,
+    "SOURCE_EXTREME_WITH_POST_CONTACT_CONFIRMATION_NOT_AUTHOR": 15
+  },
+  "frozen_source_path": "evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json",
+  "frozen_source_bytes": 238542,
+  "frozen_source_sha256": "ee8b9471ff9f6c53e747f423673d64fa9c76a647fe731c686d108bd4891d296f",
+  "frozen_source_git_blob": "587779a7dd1736099e8270c8823c15822f0e77a0",
+  "second_replay_all_bytes_equal": true,
+  "first_source_replay_earlier_error": "Two syntactic Python if-group parentheses errors in first draft; corrected before first successful original source replay, 33 tests x3 pass",
+  "source_contact_scope": "Technical 1H raid LAST original15m candle proxy OR NEW 1H POI first original15m wick technical overlap after actual full 1H close. Not author first raid wick or author first valid POI test.",
+  "source_confirmation_scope": "First ANY actually closed 15m classic IMB/SNR or 1H preknown strict fractal BOS source, not volume or owner-approved VC/BOS.",
+  "source_preconfirmation_veto": true,
+  "source_technical_protected_candidate_count": 15,
+  "golden_author_crypto_timestamp_SHA_positive_labels": 0,
+  "verified_academic_stronghl": 0,
+  "verified_academic_VC": 0,
+  "verified_academic_BOS": 0,
+  "verified_academic_OF": 0,
+  "author_structural_sl_tp_fta": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "interpretation": "15 provisional technical source extrema are neither verified author StrongHL nor real stops; no profitable or trade-ready setup can be inferred."
+}
