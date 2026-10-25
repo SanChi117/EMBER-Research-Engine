@@ -1,0 +1,112 @@
+name: EMBER C61 full original45ZIP Daily HTF typed POI first valid StrongHL source research
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c61-original45zip-academic-complete-source-first-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c61_original45zip_academic_poi_stronghl_complete_source.py'
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c61-original45-source-freeze
+  cancel-in-progress: false
+jobs:
+  full_crypto_original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original accepted 130 ledger and C46 C47 C59 C60 unchanged Git blobs
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger
+          grep -Fq 'entries 130 tip_sha256 e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810' /tmp/ledger
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          R=research/mtf-element-audit-v1
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          test "$(git rev-parse HEAD:$R/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json)" = 46077ffb3495c14c906963156dd4a93c7acf9911
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+      - name: Download all 45 signed original crypto Binance ZIP and verify full course prerequisite source join
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c61_original45zip_academic_poi_stronghl_complete_source.py" /tmp/C61-original.json >/tmp/C61-original.log 2>&1 || { tail -c 18000 /tmp/C61-original.log; exit 1; }
+          tail -c 2000 /tmp/C61-original.log
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('/tmp/C61-original.json')
+          doc=json.loads(p.read_bytes())
+          assert doc['original_45_sha_checked_zip_archives']['total']==45
+          assert doc['original_native3m_closed']==76800
+          assert doc['original_native1d_closed']==160
+          assert doc['original_native15m_decimal_equalities']==15360
+          assert doc['original_4h_classic_imb_source_parents']==153
+          assert doc['original_4h_source_first_native3m_contacts']==132
+          assert doc['original_c47_postcontact_same_side_1h_imb_sources']==130
+          assert doc['original_c60_distinct_technical_3m_wick_visits']==4421
+          assert doc['source_stats']['NO_OBSERVED_FIRST_SOURCE_CONTACT']==21
+          assert doc['source_stats']['REVISITED_TECHNICAL_ZONE']==127
+          assert doc['source_stats']['ONE_TECHNICAL_SOURCE_VISIT']==5
+          assert doc['orders']==doc['trades']==doc['fills']==0
+          assert doc['readiness']=='NOT_TRADE_READY'
+          print('C61_FULL_45ZIP_BYTES',p.stat().st_size)
+          print('C61_FULL_45ZIP_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c61-original45-source
+          path: /tmp/C61-original.json
+          if-no-files-found: error
+  semantic_48:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Academic typed POI first valid/StrongHL and source 1d 4h 1h 48 negatives
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/c61test
+          grep -Fq 'Ran 48 tests' /tmp/c61test
+          grep -qx 'OK' /tmp/c61test
+  freeze:
+    runs-on: ubuntu-latest
+    needs: [full_crypto_original45,semantic_48]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c61-original45-source
+          path: /tmp/c61
+      - name: Immutable C61 research source freeze after 45 real original ZIP and 48 x3 tests
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json
+          if test -e "$p"; then
+            cmp -s "$p" /tmp/c61/C61-original.json
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c61/C61-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C61): full original45ZIP daily context first visit StrongHL academic fail-closed source'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+          done
+          exit 1
