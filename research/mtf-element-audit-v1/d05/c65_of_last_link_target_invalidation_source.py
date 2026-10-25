@@ -13,6 +13,7 @@ equal-time ties. Wicks don't invalidate an OF link. No future candle use.
 """
 from dataclasses import dataclass
 from decimal import Decimal
+import re
 from c16_c08_monthly_daily_htf_lineage import (
     DerivedClosedTF,NativeKline,TF_MS,DAY,SEPT_START)
 from c62_academic_snr_rb_imb_liquidity_source_separation import (
@@ -82,7 +83,9 @@ def _original_daily(days,symbol,asof):
             (last is not None and z.start_ms!=last)
             or z.known_at_ms>asof or
             not isinstance(z.origin_raw_row_id,str) or
-            z.origin_raw_row_id!=z.origin_zip_sha256+":"+str(z.start_ms)
+            z.origin_raw_row_id!=z.origin_zip_sha256+":"+str(z.start_ms) or
+            not isinstance(z.origin_zip_sha256,str) or
+            not re.fullmatch(r"[0-9a-f]{64}",z.origin_zip_sha256)
             or not all(isinstance(v,Decimal) and v.is_finite()
               for v in (z.open,z.high,z.low,z.close,z.volume))
             or not (0<z.low<=min(z.open,z.close)<=max(z.open,z.close)<=z.high
@@ -91,9 +94,10 @@ def _original_daily(days,symbol,asof):
         last=z.known_at_ms
     return days
 
-def _source_work(blocks,symbol,first_contact,known):
+def _source_work(blocks,symbol,first_contact,known,side,bars):
     if not isinstance(blocks,tuple):raise ValueError("C65_UNTRUSTED_C62_BLOCKS")
     liquidity=[];imb=[]
+    row_by_start={x.start_ms:x for x in bars}
     for x in blocks:
         if (not isinstance(x,SourceBlockCase) or
             x.type not in ("RB","SNR_OR_MB") or x.side not in ("LONG","SHORT") or
@@ -104,7 +108,15 @@ def _source_work(blocks,symbol,first_contact,known):
             x.fully_known_ms%HOUR):
             raise ValueError("C65_C62_BLOCK_FORGED_AUTHOR_OR_TIME")
         if x.fully_known_ms>known:continue
-        if x.pair_first_known_ms-HOUR<first_contact:continue
+        if x.side!=side:continue
+        if x.pair_first_known_ms-HOUR<max(first_contact,known-WINDOW):continue
+        first=x.pair_first_known_ms-HOUR
+        if (first not in row_by_start or first+HOUR not in row_by_start or
+            x.pair_first_native15m_id!=row_by_start[first].source_native_15m_rows[0] or
+            x.pair_second_native15m_id!=row_by_start[first+HOUR].source_native_15m_rows[0] or
+            (x.type=="SNR_OR_MB" and (first+2*HOUR not in row_by_start or
+             x.confirmation_first_native15m_id!=row_by_start[first+2*HOUR].source_native_15m_rows[0]))):
+            raise ValueError("C65_C62_ORIGINAL_BLOCK_ID_MISMATCH")
         if x.source_liquidity_reference is not None and x.source_class in (
             "RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY",
             "SNR_ACCEPTED_CLOSE_WITH_SOURCE_LIQUIDITY_PROXY"):
@@ -140,7 +152,7 @@ def source_of_last_link_target_invalidation(anchor,hours,days,blocks,events,*,as
         raise ValueError("C65_C64_PREACTIVATION_OR_FUTURE_FRAUD")
     contact=int(anchor.first_contact_native3m_id.split(":")[-1])+TF_MS["15m"]//5
     if contact>=known:raise ValueError("C65_ANCHOR_PREDATES_CONTACT")
-    liq,imb=_source_work(blocks,anchor.symbol,contact,known)
+    liq,imb=_source_work(blocks,anchor.symbol,contact,known,anchor.event_side,bars)
     if liq is None:return _out(anchor,STATES[1])
     if imb is None:return _out(anchor,STATES[2],liq=liq)
     # Pivot is independently selected from source structure. Do NOT
@@ -152,6 +164,10 @@ def source_of_last_link_target_invalidation(anchor,hours,days,blocks,events,*,as
     pivots=[x for x in schedule[i] if x[0]==wanted]
     if not pivots:return _out(anchor,STATES[3],liq=liq,imb=imb)
     typ,pivot,pk=max(pivots,key=lambda x:x[2])
+    # Pivot cannot be preknown, unbreached until the event bar and then
+    # secretly breached during that very confirmation candle.
+    if (bars[i].low<pivot if anchor.event_side=="LONG" else bars[i].high>pivot):
+        return _out(anchor,STATES[3],liq=liq,imb=imb)
     earlier=[x for x in dates if x.known_at_ms<=known]
     if not earlier:return _out(anchor,STATES[4],liq=liq,imb=imb,pivot=pk,price=pivot)
     d=earlier[-1]
@@ -162,12 +178,18 @@ def source_of_last_link_target_invalidation(anchor,hours,days,blocks,events,*,as
         return _out(anchor,STATES[4],liq=liq,imb=imb,pivot=pk,price=pivot,
                     day=d.known_at_ms,target=target)
     if not isinstance(events,tuple):raise ValueError("C65_UNTRUSTED_OPPOSITE_SOURCE_EVENTS")
+    hour_map={h.start_ms:h for h in bars}
     for e in events:
+        duration=(HOUR if getattr(e,"kind",None)=="BOS_PREKNOWN_1H_FRACTAL_CLOSE_SOURCE" else
+                  2*HOUR if getattr(e,"kind",None)=="RB_1H_SOURCE" else 3*HOUR)
         if (not isinstance(e,SourceReactionEvent) or e.kind not in KINDS or
             e.side not in ("LONG","SHORT") or
             e.is_author_vc or e.is_author_bos or e.is_author_stronghl or
             e.orders or e.trades or
             e.first_pattern_bar_start_ms>=e.fully_known_ms or
+            e.fully_known_ms-e.first_pattern_bar_start_ms!=duration or
+            e.first_pattern_bar_start_ms not in hour_map or
+            e.raw_first_original15m_id!=hour_map[e.first_pattern_bar_start_ms].source_native_15m_rows[0] or
             e.fully_known_ms>as_of_ms or e.fully_known_ms%HOUR):
             raise ValueError("C65_FORGED_OR_FUTURE_C63_EVENTS")
     full=as_of_ms>=known+WINDOW
