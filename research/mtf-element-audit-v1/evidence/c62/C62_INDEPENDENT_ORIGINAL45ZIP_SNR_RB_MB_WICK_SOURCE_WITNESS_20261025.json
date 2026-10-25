@@ -1,0 +1,71 @@
+{
+  "schema": "EMBER_C62_INDEPENDENT_ORIGINAL45ZIP_SNR_MB_RB_WICK_IMB_CLASSIFICATION_SOURCE_ONLY_V1",
+  "date_utc": "2026-10-25",
+  "scope": "CRYPTO_ONLY_BINANCE_USDM_PAPER_ONLY",
+  "prior_A131_sha_tip": "c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d",
+  "course_lessons_rechecked": [
+    {
+      "name": "5. Support And Resistance .txt",
+      "drive_id": "1OOyS7C8T8H4FdD47dXsnx7y3u33lNG7m",
+      "rule": "pair Sell+Buy / Buy+Sell, then next confirming body close, liquidity raid or FVG work; without liquidity/IMB condition weaker Mitigation Block, not VC"
+    },
+    {
+      "name": "3. Rejection Block.txt",
+      "drive_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "rule": "opposing pair; liquidity raid or IMB test must be WICK ONLY; body settlement outside IMB"
+    },
+    {
+      "name": "Fair Value Gap Imbalance.txt",
+      "drive_id": "1ajvG1554qQ-5AnIV8HVmoDflkNRrU-LN",
+      "rule": "strict three-candle gap after last full close, no need preceding/succeeding matching candle colors"
+    },
+    {
+      "name": "2. Entry by IMB & SNR.txt",
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "rule": "route A origin HTF, then 1H/15M and final VC; only SNR/IMB entry triggers, RB may be context VC but not final entry"
+    }
+  ],
+  "original_source_replay_first_CI": 40210255871,
+  "original_source_replay_independent_second_CI": 40210402103,
+  "independent_jobs_passed": "4_OF_4_SUCCESS",
+  "original_binance_USDM_sha_zip_per_run": 45,
+  "original_native_3m_closed": 76800,
+  "original_native_1d_closed": 160,
+  "original_native_15m_exact_decimal_parities": 15360,
+  "source_1h_closed_bars": 3840,
+  "frozen_C46_parents_verified": 153,
+  "full_original_source_git_blob": "8428bf7d6cd3bc26f617cfc32a34c91a27c813b2",
+  "full_original_source_size_bytes": 2498773,
+  "full_original_source_sha256": "8ac92d6406845568a2e0178be81fc2fec529da2d26697b6f08b7fbaa4e5a0c80",
+  "source_1h_category_totals": {
+    "MB_WEAKER_SOURCE_ONLY_NO_RAID_OR_IMB_NOT_VOLUME_CONFIRMATION": 62,
+    "RB_TWO_OPPOSITE_HOURLY_CANDLES_WITHOUT_VERIFIED_WICK_RAID": 1039,
+    "RB_WICK_ONLY_IMB_SOURCE_PROXY": 556,
+    "RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY": 394,
+    "SNR_ACCEPTED_CLOSE_WITH_SOURCE_IMB_PROXY": 213,
+    "SNR_ACCEPTED_CLOSE_WITH_SOURCE_LIQUIDITY_PROXY": 128,
+    "original_1h_technical_classic_gap": 646
+  },
+  "all_2498773_json_bytes_identical_second_download": true,
+  "physical_1h_prefix_equals_full_asof": true,
+  "adversarial_test_count_per_python": 22,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "first_failed_negative_CI": 40209939146,
+  "first_negative_failure": "Malformed synthetic 1h candle open88 low99 failed strict OHLC verification; changed test low88, did not relax production integrity validator; next CI 40210045297 and 40210099486 succeeded",
+  "author_snr_approved_goldens": 0,
+  "author_rb_approved_goldens": 0,
+  "author_imb_approved_goldens": 0,
+  "author_stronghl": 0,
+  "author_first_valid_poi": 0,
+  "author_volume_confirmation": 0,
+  "orders": 0,
+  "trades": 0,
+  "fills": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "note": "Source-only 1H proxies. SNR close beyond pair extreme is conservative operationalization, NOT owner-confirmed SNR level from visual screenshots. RB source wick + prior strict fractal/gap is NOT author accepted RB. Candidate count can overlap and is NOT independent trades or probabilities."
+}
