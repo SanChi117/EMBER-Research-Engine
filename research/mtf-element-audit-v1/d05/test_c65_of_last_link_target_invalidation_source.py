@@ -73,6 +73,7 @@ class C65FailclosedTests(unittest.TestCase):
         self.assertIsNotNone(q.opposite_source_poi_first_original15m_id)
     def test_same_close_two_invalidation_mechanisms_is_ambiguous(self):
         q=observe(e=(opposite(O+18*H),))
+        print("C65DEBUG simultaneous",q)
         self.assertEqual(q.state,"SOURCE_SIMULTANEOUS_TWO_INVALIDATION_PROXIES")
         self.assertEqual(q.source_first_any_invalidation_kind,"BOTH_SOURCE_PROXIES")
     def test_first_opposite_poi_not_retrospectively_filtered(self):
@@ -80,6 +81,7 @@ class C65FailclosedTests(unittest.TestCase):
         m[17]=bar(17)
         m[18]=bar(18,close=82,low=81)
         q=observe(h=tuple(m),e=(opposite(O+18*H),))
+        print("C65DEBUG first_opposite",q)
         self.assertEqual(q.source_first_any_invalidation_kind,"OPPOSITE_SOURCE_POI_PROXY")
     def test_poi_pattern_began_before_target_does_not_count(self):
         q=observe(e=(opposite(O+17*H),))
@@ -131,6 +133,7 @@ class C65FailclosedTests(unittest.TestCase):
             observe(m=replace(anchor(),orders=("FAKE",)))
     def test_target_not_ahead_at_link_is_rejected(self):
         q=observe(d=days(price=100))
+        print("C65DEBUG target",q)
         self.assertEqual(q.state,"NO_PREKNOWN_OR_AHEAD_1D_TARGET")
     def test_native1d_known_only_after_link_not_allowed(self):
         q=observe(d=())
