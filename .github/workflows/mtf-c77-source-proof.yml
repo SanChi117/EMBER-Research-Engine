@@ -1,7 +1,18 @@
 name: C77 Source Proof
-on: workflow_dispatch
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c77-source-proof.yml'
+permissions:
+  contents: read
 jobs:
   proof:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test academic source gate
+        run: python research/mtf-element-audit-v1/d05/test_c77_original_parent_source_first3m.py
