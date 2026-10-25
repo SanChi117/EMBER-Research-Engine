@@ -1,0 +1,34 @@
+name: EMBER C66 native15m Route A academic source-only gap SNR chronology 33 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c66-native15m-academic-route-a-33-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c66_native15m_route_a_source_event_chain.py'
+      - 'research/mtf-element-audit-v1/d05/test_c66_native15m_route_a_source_event_chain.py'
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify immutable A135 and 33 source-only 15m route A chronology guards
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A135
+          grep -Fq 'entries 135 tip_sha256 76014ca82efd4ddb4d40da272fd54b514310d370fce90a8ccb22064b9a6b6787' /tmp/A135
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c66_native15m_route_a_source_event_chain 2>&1 | tee /tmp/c66
+          grep -Fq 'Ran 33 tests' /tmp/c66
+          grep -qx 'OK' /tmp/c66
+          ! grep -q 'skipped=' /tmp/c66
