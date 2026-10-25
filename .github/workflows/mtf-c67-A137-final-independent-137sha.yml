@@ -1,10 +1,10 @@
 name: EMBER C67 final independent 137 SHA six original crypto sources x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c67-A137-final-independent-137sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: a6d112b5d485620e9e598ae43b5954122a62ab17
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
