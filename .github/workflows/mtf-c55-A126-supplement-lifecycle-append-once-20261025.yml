@@ -1,0 +1,107 @@
+name: EMBER C55 extra lifecycle independent A126 append-once original45ZIP frozen source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-A126-supplement-lifecycle-append-once-20261025.yml'
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c55-A126-supplement-append-once
+  cancel-in-progress: false
+jobs:
+  append_once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Previous A125 125/125 and full existing C55 extra independent 45ZIP source witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A125.txt
+          grep -Fq 'entries 125 tip_sha256 6b2eea23ac4a4b27b430be63cf731c8ad12ecd75335b33e59cbb386561517350' /tmp/A125.txt
+          python tests/test_journal_integrity.py | tee /tmp/A125-all.txt
+          grep -Fq '"validations_pass": true' /tmp/A125-all.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json)" = f26ebde00fff15977e39b4b626fb8625c5fb7341
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json)" = 2b4f944ddbdff0871a7fd553de2ab9955d220b91
+          python - <<'PY'
+          import pathlib,json,hashlib
+          base=pathlib.Path("evidence/c55")
+          s=base/"C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json"
+          w=base/"C55_INDEPENDENT_FULL45ZIP_LIQUIDITY_LIFECYCLE_WITNESS_20261025.json"
+          assert len(s.read_bytes())==13029668
+          assert hashlib.sha256(s.read_bytes()).hexdigest()=="63526354af9c450f0e659ab59c793987177a9b023ada69730726e6de10842411"
+          x=json.loads(s.read_bytes()); y=json.loads(w.read_bytes())
+          assert x["original_zip_count"]==45 and x["original_closed_native3m"]==76800
+          assert x["first_confirmed_1h_wick_raids"]==642 and x["adapted_3m_price_breaks"]==539
+          assert x["orders"]==x["trades"]==x["fills"]==0 and x["readiness"]=="NOT_TRADE_READY"
+          assert y["independent_fresh_original_45ZIP_second_CI"]==40193879074
+          assert y["independent_job_success_count"]==4 and y["negative_tests_each_Python"]==43
+          assert y["independent_fresh_original_45ZIP_full_13MB_derived_JSON_byte_exact"] is True
+          assert y["frozen_C55_full_source_SHA256"]==hashlib.sha256(s.read_bytes()).hexdigest()
+          assert y["strict_first_event_state_counts"]=={
+           "LEVEL_PREKNOWN_NO_FIRST_BREACH":131,
+           "FIRST_BREACH_BODY_NOT_WICK_RAID":772,
+           "FIRST_WICK_NONFRACTAL":328,
+           "CONFIRMED_1H_RAID_NO_CLOSED_3M_BREAK":103,
+           "CONFIRMED_1H_RAID_WITH_ADAPTED_3M_CLOSED_BREAK":539}
+          print("A126_INDEPENDENT_ALREADY_FROZEN_C55_SOURCE_VALIDATED")
+          PY
+          cd d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_bos_lifecycle 2>&1 | tee /tmp/C55-43.txt
+          grep -Fq 'Ran 43 tests' /tmp/C55-43.txt
+          grep -qx 'OK' /tmp/C55-43.txt
+          ! grep -q 'skipped=' /tmp/C55-43.txt
+      - name: Append exactly one A126 for separate C55 supplemental source lifecycle six immutable evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A126 \
+            --cycle B1/C55-LIFECYCLE-SUPPLEMENT \
+            --planned 'Independently register previously fully verified but ledger-unaccepted C55 supplemental crypto-only first 1H BSL SSL breach life-cycle source evidence, preserving original A124 and A125 in place and without implying course-author-approved BOS or a trade. Do not alter original C55 four-hypothesis A124 or C56 native5m A125.' \
+            --executed 'Previously source-frozen original 45 Binance USD-M ZIP native3m lifecycle with 1873 preknown hourly fractal levels, 642 first confirmed wick raided parents, 539 later adapted 3m BOS events and 43 negative tests across Python 3.10/3.11/3.12. Independent fresh full 45ZIP exact 13029668-byte JSON CI 40193879074 SUCCESS 4/4, first CI 40193694018 SUCCESS and negative CI 40193572232 SUCCESS. This cycle has verified original frozen source, independent witness, full report, no-changes to C55 A124 and C56 A125.' \
+            --result 'Original crypto 1H liquidity lifecycle: 1873 preknown fractals partitioned into 131 no first breach, 772 first body breach, 328 first wick nonfractal, 103 confirmed 1H raids without 3m technical break, 539 confirmed raids with later adapted 3m closed break, all source-only. Zero academic original author BOS, author 1H liquidity selection, trade entry/SL/TP/FTA goldens, real or paper orders/trades/fills/PnL. PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Prior A125 125/125 tip 6b2eea23ac4a4b27b430be63cf731c8ad12ecd75335b33e59cbb386561517350 unchanged. Original frozen C55 A124 2045882 bytes blob 2b4f944ddbdff0871a7fd553de2ab9955d220b91 unchanged. Frozen supplemental C55 original source 13029668 bytes SHA256 63526354af9c450f0e659ab59c793987177a9b023ada69730726e6de10842411 Git blob f26ebde00fff15977e39b4b626fb8625c5fb7341 and independent full source replay CI 40193879074 PASS 4/4. Do not mislabel events as author entries/trades. C56 independent native5m A125 source untouched.' \
+            --evidence d05/c55_crypto_1h_liquidity_raid_bos_lifecycle.py \
+            --evidence d05/test_c55_crypto_1h_liquidity_raid_bos_lifecycle.py \
+            --evidence tests/probe_c55_original_crypto_1h_raid_3m_bos_45zip.py \
+            --evidence evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json \
+            --evidence evidence/c55/C55_INDEPENDENT_FULL45ZIP_LIQUIDITY_LIFECYCLE_WITNESS_20261025.json \
+            --evidence cycles/B1_C55_CRYPTO_1H_LIQUIDITY_RAID_NATIVE3M_BOS_LIFECYCLE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A126.txt
+          grep -Fq 'entries 126' /tmp/A126.txt
+          python tests/test_journal_integrity.py | tee /tmp/A126-evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A126-evidence.txt
+      - name: Commit only append-once ledger A126 safely without force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changes.txt
+          test "$(wc -l < /tmp/changes.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changes.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C55): A126 standalone supplemental 45ZIP lifecycle append-once six evidence SHA'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              echo "A126_C55_SUPPLEMENT_NONFORCE_PUSH_SUCCESS attempt=$attempt"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "A126_APPEND_NONFORCE_PUSH_RETRIES_EXHAUSTED" >&2
+          exit 1
