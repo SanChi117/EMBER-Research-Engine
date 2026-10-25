@@ -96,9 +96,10 @@ def academic_poi_lifecycle_contract(x):
         and x.parent_context_known_ms is not None and
         x.parent_context_known_ms<=x.source_created_known_ms,
         "C61_UNVERIFIED_PRIOR_HTF_CONTEXT")
-    must(x.source_created_known_ms<=x.original_first_contact_known_ms
-        if x.original_first_contact_known_ms is not None else False,
-        "C61_UNVERIFIED_FIRST_SOURCE_CONTACT")
+    must((x.original_first_contact_known_ms is not None and
+          x.source_created_known_ms<=x.original_first_contact_known_ms)
+         or (x.route.startswith("B_") and x.direct_idm_known_ms is not None),
+         "C61_UNVERIFIED_FIRST_SOURCE_CONTACT")
     is_idm=x.route.startswith("B_")
     # The owner explicitly allows direct IDM limit BEFORE a first POI test;
     # forbid imposing Route A first-test condition on direct Route B.
@@ -109,7 +110,7 @@ def academic_poi_lifecycle_contract(x):
     else:
         must(x.first_valid_test_author_verified and
              x.original_first_contact_known_ms is not None and
-             not x.source_visited_again,
+             x.source_created_known_ms<=x.original_first_contact_known_ms,
              "C61_NOT_FIRST_VALID_POI_TEST")
     must(x.liquidity_or_inefficiency_kind in ("LIQUIDITY","INEFFICIENCY") and
          x.liquidity_or_inefficiency_contact_known_ms is not None and
@@ -225,11 +226,17 @@ def join_source_poi_context(c46obs,c47obs,c59obs,c60obs,prior):
         or str(c.get("top"))!=str(c60obs.get("zone_top"))):
         raise ValueError("C61_CROSS_SOURCE_PARENT_ID_OR_PRICE_MISMATCH")
     visits=c60obs["all_closed_3m_visit_episodes"]
-    if (visits and (visits[0].get("first_original3m_raw_id")!=c46obs.get("first_contact_original3m_id")
-                   or visits[0].get("first_bar_known_ms")!=c46obs.get("first_contact_closed_known_ms"))
-        or not visits and c46obs.get("first_contact_original3m_id") is not None
-        or len(visits)-1!=c60obs.get("repeated_distinct_returns_after_first",0) if visits else
-        c60obs.get("repeated_distinct_returns_after_first",0)!=0):
+    if (bool(visits)!=(c46obs.get("first_contact_original3m_id") is not None)
+        or (visits and (visits[0].get("first_original3m_raw_id")!=c46obs.get("first_contact_original3m_id")
+                        or visits[0].get("first_bar_known_ms")!=c46obs.get("first_contact_closed_known_ms")))
+        or max(0,len(visits)-1)!=c60obs.get("repeated_distinct_returns_after_first")
+        or c59obs.get("post_contact_1h_imb_known_ms")!=
+           ((c47obs.get("first_post_contact_1h_imb_source") or {}).get("fully_known_ms"))
+        or c59obs.get("status") not in (
+           "NO_4H_SOURCE_FIRST_CONTACT","4H_FIRST_CONTACT_NO_LATER_1H_SOURCE",
+           "LATER_1H_IMB_INSIDE_PARENT_4H_IMB_VETO",
+           "LATER_1H_IMB_PARTIALLY_OVERLAPS_PARENT_VETO",
+           "LATER_1H_IMB_OUTSIDE_PARENT_GEOMETRY_ONLY")):
         raise ValueError("C61_FIRST_VISIT_AND_REVISIT_LINEAGE_DRIFT")
     if (c59obs.get("post_contact_1h_imb_known_ms") is not None and
         c59obs["post_contact_1h_imb_known_ms"]<=c46obs["first_contact_closed_known_ms"]):
