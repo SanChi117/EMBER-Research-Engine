@@ -1,0 +1,33 @@
+name: EMBER C72 real original5m native source and provisional Route A 30 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c72-original-5m-30-strict-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c72_original_native5m_source_vc_after15m_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c72_original_native5m_source_vc_after15m_gate.py'
+permissions:
+  contents: read
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify immutable A141 source ledger and C72 native5m SHA chronology 30 negative cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A141
+          grep -Fq 'entries 141 tip_sha256 9f6e2a7bb92e9b105e446be0f0e0c6c0397359a74f25071ada0297cb099e6a9f' /tmp/A141
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c72_original_native5m_source_vc_after15m_gate 2>&1 | tee /tmp/C72
+          grep -Fq 'Ran 30 tests' /tmp/C72
+          grep -qx 'OK' /tmp/C72
