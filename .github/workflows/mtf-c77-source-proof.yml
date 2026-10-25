@@ -4,15 +4,36 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c77-source-proof.yml'
+      - 'research/mtf-element-audit-v1/d05/c77_original_parent_source_first3m.py'
+      - 'research/mtf-element-audit-v1/d05/test_c77_original_parent_source_first3m.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c77_original45zip_1h_poi.py'
 permissions:
   contents: read
 jobs:
   proof:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Prior A146 and original semantic tests
+        run: |
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c77_original_parent_source_first3m
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Test academic source gate
-        run: python research/mtf-element-audit-v1/d05/test_c77_original_parent_source_first3m.py
+      - name: Recheck original 45 ZIP source
+        run: python research/mtf-element-audit-v1/tests/probe_c77_original45zip_1h_poi.py
