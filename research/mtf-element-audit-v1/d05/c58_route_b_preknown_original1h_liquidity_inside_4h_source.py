@@ -158,11 +158,20 @@ def source_inside_first_contact(c46obs,pivots,original3m,*,symbol,as_of_ms):
             (last_known is not None and pivot.known_ms<last_known)):
             raise ValueError("C58_UNORDERED_OR_UNTRUSTED_1H_PIVOT_SOURCE")
         last_known=pivot.known_ms
+        # Validate every supplied source pivot BEFORE any zone/known-time
+        # filtering. Invalid negative/NaN/future-shaped pivots must not
+        # disappear just because their price lies outside a POI candidate.
+        if pivot.kind not in ("BSL","SSL"):
+            raise ValueError("C58_FORGED_1H_LIQUIDITY_KIND")
+        if (not isinstance(pivot.level,Decimal) or not pivot.level.is_finite()
+            or pivot.level<=0 or type(pivot.center_ms) is not int or
+            pivot.center_ms%HOUR or pivot.known_ms!=pivot.center_ms+2*HOUR or
+            len(pivot.source_rows)!=60 or
+            not _id(pivot.source_rows[20],pivot.center_ms)):
+            raise ValueError("C58_FUTURE_OR_UNPROVEN_1H_FRACTAL")
         if (pivot.known_ms<c.fully_known_ms or pivot.known_ms>contact or
             pivot.level<bottom or pivot.level>top):
             continue
-        if pivot.kind not in ("BSL","SSL"):
-            raise ValueError("C58_FORGED_1H_LIQUIDITY_KIND")
         start=(pivot.known_ms-original3m[0].start_ms)//THREE
         end=(contact-original3m[0].start_ms)//THREE
         if start<0 or end>len(original3m) or end<start:
