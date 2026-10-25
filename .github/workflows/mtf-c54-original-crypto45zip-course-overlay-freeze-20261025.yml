@@ -1,0 +1,81 @@
+name: EMBER C54 frozen 45ZIP original crypto 153 technical parents x 8 academic route logic
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c54-original-crypto45zip-course-overlay-freeze-20261025.yml'
+permissions:
+  contents: write
+jobs:
+  c54_full_original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify A122 122/122 and 2 frozen original 45ZIP crypto research source Git blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122.txtproof
+          grep -Fq '"validations_pass": true' /tmp/A122.txtproof
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+      - name: Recheck 49 crypto-only academic course source negative tests with original C45 18 lesson claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c54_crypto_only_course_logic_source_bridge 2>&1 | tee /tmp/C54-49.txt
+          grep -Fq 'Ran 49 tests' /tmp/C54-49.txt
+          grep -qx 'OK' /tmp/C54-49.txt
+      - name: Join frozen C46 C47 original 45ZIP crypto source 153 4H cases to all 8 independent academic routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c54"
+          python "$R/tests/probe_c54_original_crypto_45zip_course_route_scope.py" "$R/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json" > /tmp/C54.log 2>&1 || { tail -c 14000 /tmp/C54.log; exit 1; }
+          tail -c 2000 /tmp/C54.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json')
+          d=json.loads(p.read_text())
+          assert d['target']=='BINANCE_USDM_CRYPTO_PAPER_ONLY'
+          assert d['teacher_images_role']=='LOGIC_EXAMPLES_NOT_FX_RAW_CANDLES'
+          assert d['course_original_golden_FX_raw_candle_matching_required'] is False
+          assert d['original_BINANCE_USDM_ZIP_lineage']==45 and d['original_native3m_closed']==76800
+          assert d['native15m_exact']==15360
+          assert d['source_4h_technical_IMBs']==153 and d['first_original3m_contacts']==132
+          assert d['later_1h_technical_IMBs']==130
+          assert d['route_source_contexts_checked']==1224 and d['academic_route_model_count']==8
+          assert d['source_states']=={
+           'CONTEXT_TF_NOT_EVIDENCED_FOR_COURSE_ROUTE':765,
+           'TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY':390,
+           'TECHNICAL_FIRST_TOUCH_WITHOUT_1H_SOURCE':6,
+           'TECHNICAL_FIRST_TOUCH_UNKNOWN':63}
+          assert d['academic_PoI_verified']==d['academic_VC_verified']==d['academic_IDM_BOS_verified']==d['orders']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C54_ALL_45ZIP_FROZEN_CRYPTO_8_ROUTE_SOURCE',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Commit only frozen C54 derived original crypto source-only evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json' /tmp/staged.txt
+          git commit -m 'evidence(C54): 45ZIP frozen crypto-only 153 source 4H x 8 academic route logic overlays not FX market'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
