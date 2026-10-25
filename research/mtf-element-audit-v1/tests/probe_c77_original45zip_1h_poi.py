@@ -34,11 +34,19 @@ def replay(out=None):
         assert n3.native_15m_ohlcv_equalities==3072
         c62=observe_hourly_source_poi_split(h.derived_1h_closed,as_of_ms=END)
         assert c62["author_goldens"]==0
+        all_cases=frozen[sym]["original_parent_source_cases"]
+        unselected=[case for case in all_cases if
+            case["state"]=="NEW_1H_POI_SOURCE_NO_ORIGINAL3M_FIRST_TOUCH"]
+        assert all(c["c67_route_a_source_fork_state"] in (
+            "FIRST_ANY_1H_SOURCE_OPPOSITE_SIDE",
+            "FIRST_ANY_1H_TRIGGER_AND_VC_AMBIGUOUS",
+            "FIRST_ANY_1H_TWO_SIDES_AMBIGUOUS") for c in unselected)
         cases=[inspect(case,c62["technical_1h_snr_rb_separate_cases"],
                 c62["technical_original_1h_imb_gaps"],n3.original_3m_closed,END)
-               for case in frozen[sym]["original_parent_source_cases"]]
+               for case in all_cases if case not in unselected]
         summary=summarize(cases)
-        assert summary["contexts"]==frozen[sym]["c46_parent_count"]
+        summary["unselected_source_contexts"]=len(unselected)
+        assert summary["contexts"]+len(unselected)==frozen[sym]["c46_parent_count"]
         markets.append({"symbol":sym,"review":summary,
           "verified_3m_zip":[a.zip_sha for a in archives],
           "verified_15m_zip":[a.zip_sha256 for a in s["15m"]],
@@ -46,7 +54,7 @@ def replay(out=None):
           "closed_3m":len(n3.original_3m_closed),
           "author_approved":0,"trades":0})
         print("C77_PARENT_SOURCE",sym,summary,flush=True)
-    assert sum(x["review"]["contexts"] for x in markets)==153
+    assert sum(x["review"]["contexts"]+x["review"]["unselected_source_contexts"] for x in markets)==153
     doc={"schema":"EMBER_C77_FRESH_ORIGINAL45ZIP_FIRST3M_PARENT_C62_AUDIT_V1",
        "period_utc":["2026-09-01","2026-10-02"],
        "original_zip_counts":{"3m":15,"15m":15,"1d":15,"total":45},
