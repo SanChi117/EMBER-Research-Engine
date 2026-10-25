@@ -1,0 +1,118 @@
+name: EMBER C66 append-once A136 original45ZIP native15m Route A six SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c66-A136-append-original-native15m-source.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c66-a136-append-once
+  cancel-in-progress: false
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gated previous 135 SHA and strict full 3295302 byte original source witnesses
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A135
+          grep -Fq 'entries 135 tip_sha256 76014ca82efd4ddb4d40da272fd54b514310d370fce90a8ccb22064b9a6b6787' /tmp/A135
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json')
+          witness=Path('evidence/c66/C66_INDEPENDENT_45ZIP_4H1H_NATIVE15M_ROUTE_A_WITNESS_20261025.json')
+          report=Path('cycles/B1_C66_ORIGINAL_NATIVE15M_ROUTE_A_FIRST_ANY_SOURCE_REPORT.md')
+          assert all(z.is_file() and z.stat().st_size>0 for z in (p,witness,report))
+          assert p.stat().st_size==3295302
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='23c6eaac7ebcd3f9cd447f9a3690da023d6fc30e50f03e48f57c5037bff15bd3'
+          d=json.loads(p.read_bytes());w=json.loads(witness.read_bytes())
+          assert d['original_sha_checked_zip']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160
+          assert d['derived_closed1h']==3840 and d['original_4h_c46_contexts']==153
+          assert d['source_15m_event_type_totals']=={
+            '15M_CLASSIC_IMB_SOURCE_ONLY':3048,
+            '15M_SNR_LIQUIDITY_SOURCE_ONLY':514,
+            '15M_SNR_PRIOR_IMB_SOURCE_ONLY':1209}
+          assert d['source_4h1h15m_first_any_route_a_counts']=={
+            '1H_KIND_UNRESOLVED_NO_OWNER_TRIGGER_VC':0,
+            'AMBIGUOUS_1H_SOURCE_DIRECTION':7,
+            'FIRST_ANY_15M_SOURCE_BOTH_DIRECTIONS':0,
+            'FIRST_ANY_15M_SOURCE_OPPOSITE_DIRECTION':35,
+            'FIRST_ANY_15M_SOURCE_SAME_DIRECTION':29,
+            'NO_15M_SOURCE_CANDIDATE_FULL_WINDOW':0,
+            'NO_15M_SOURCE_CANDIDATE_RIGHT_CENSORED':0,
+            'NO_4H_FIRST_SOURCE_TOUCH':21,
+            'NO_FIRST_CLOSED_1H_SOURCE_EVENT':0,
+            'OPPOSITE_1H_SOURCE_DIRECTION':61}
+          assert w['original_full_source_sha256']==sha and w['original_full_source_bytes']==3295302
+          assert w['independent_second_fresh45_full_byte_ci']==40217312270
+          assert w['independent_second_result']=='SUCCESS_4_OF_4'
+          assert w['synthetic_adversarial_tests_per_python']==33
+          assert w['total_15m_source_technical_events']==4771
+          assert d['golden_author_price_cases']==d['author_final_entry_approved']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C66_FROZEN_INDEPENDENT_SOURCE_45ZIP_FULL_SHA_AND_OWNER_VC_VETO_PASS')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json)" = 791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          cd "$R/d05"
+          python -m unittest -v test_c66_native15m_route_a_source_event_chain 2>&1 | tee /tmp/C66negative
+          grep -Fq 'Ran 33 tests' /tmp/C66negative
+          grep -qx 'OK' /tmp/C66negative
+      - name: Append A136 exactly six original C66 SHA evidence after repeated signed ZIP
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A136 \
+            --cycle B1/C66 \
+            --planned 'Restore owner Route A 4H POI actual first test then 1H Trigger SSL BSL allowable IMB then 15M final VC SNR or IMB; distinguish from no 1H Trigger leading to owner 1H VC NEW POI and independent actual 1H POI retest before 15M trigger or VC. Keep 1H IMB entirely nested in 4H IMB veto, 1H RB contextual not final entry, weaker MB not VC, separate Route B IDM and Route C raid BOS. Build original Binance native15m strictly closed source evidence using previous C46 C60 C62 C63 original parent timeline; use earliest ANY LTF event and never claim owner trade.' \
+            --executed 'Re-read original connected Google Drive Entry by IMB & SNR, Entry by IDM and Order Flow. Added C66 pure native15m SHA-bound source classifier: strictly closed 3-bar classic wick gap, SNR opposite candle pair with THIRD close beyond pair and previously known unswept 15m liquidity raid or previously closed old IMB actual test; MB without liquidity/IMB vetoed. Strict source physical asof prefix equal truncated original. C66 Route A source chronology 153 original C46 C60 C62 C63 parents 4H first original3m touch then 1H first ANY then 15m first ANY within fixed24h, no lookahead or owner source grade promotion, Route B/C untouched. Thirty-three adversarial tests Python3.10 3.11 3.12 each. Re-downloaded 45 signed authentic Binance USD-M ZIP multiple times with 76800 native3m,15360 native15m,160 native1d,3840 closed derived1h; original raw SHA IDs verified for every emitted 15m event; independent whole 3295302 byte JSON equality SHA256 23c6eaac7ebcd3f9cd447f9a3690da023d6fc30e50f03e48f57c5037bff15bd3 git blob c693058cdb28b0e118879d32ddcbbd0d2a66bfc6. First original full CI 40216949092 SUCCESS, optimized same output CI 40217165803 SUCCESS, second independent exact source CI 40217312270 SUCCESS 4 of 4 and 33x3 negatives.' \
+            --result 'Source native15m ORIGINAL technical classes across five crypto over 32d: classic 3bar IMB 3048, SNR preknown 15m liquidity test 514, SNR prior preknown IMB test 1209, total 4771 overlapping technical source events NOT trades. From original 153 4H technical candidates 21 no first 3m contact, 61 earliest1H opposite source, 7 earliest1H ambiguous, 29 earliest same side 15m technical after same1H source side, 35 earliest opposite 15m after same1H source side; no other 15m statuses in sample. Zero author-labelled crypto candle goldens, zero author certified 4H POI/1H trigger/new 1H VC first true retest/15m VC, zero approved Route A B C trades, orders, fills, PnL or performance. PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Old accepted A135 135/135 SHA tip 76014ca82efd4ddb4d40da272fd54b514310d370fce90a8ccb22064b9a6b6787 untouched. Old original C46 blob dc03c181912ffbb800bc191fbc16ec0d05c335e0 C60 blob 899373e4a1dc1999d1485ac8c1f790d39071aebd C62 blob 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2 C63 blob fdc77c7ec942f03b4efae83b935d994c8435a24f C65 blob 791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5 unchanged and all 153 previous source price/id joins checked. Original slow scan CI 40216949092 full signed ZIP gave exactly same frozen original JSON as optimized preknown unswept level schedule CI 40217165803. Second fresh full signed ZIP CI 40217312270 byte exact all 3295302 and 33x3 negative SUCCESS. No favorable hindsight, no fake owner POI or 15m volume confirmation. No author goldens; research-only. Route B and C not touched.' \
+            --evidence d05/c66_native15m_route_a_source_event_chain.py \
+            --evidence d05/test_c66_native15m_route_a_source_event_chain.py \
+            --evidence tests/probe_c66_original45zip_4h1h_to_native15m_route_a_source.py \
+            --evidence evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json \
+            --evidence evidence/c66/C66_INDEPENDENT_45ZIP_4H1H_NATIVE15M_ROUTE_A_WITNESS_20261025.json \
+            --evidence cycles/B1_C66_ORIGINAL_NATIVE15M_ROUTE_A_FIRST_ANY_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A136
+          grep -Fq 'entries 136' /tmp/A136
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Push ONLY SHA append journal without force and without other file changes
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changed
+          test "$(wc -l < /tmp/changed)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C66): append-once A136 six original45 native15m Route A source SHA not trade ready'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
