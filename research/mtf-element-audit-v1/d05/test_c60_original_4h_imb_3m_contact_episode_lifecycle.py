@@ -101,6 +101,10 @@ class SourceEpisodeGuards(unittest.TestCase):
         self.reject("INVALID_ORIGINAL_4H_ZONE",g=gap(bottom="120"))
     def test_reject_future_parent_4h(self):
         self.reject("FORGED_AUTHOR_OR_UNCLOSED_PARENT_4H",g=gap(fully_known_ms=O+4*3600000))
+    def test_new_4h_source_created_at_final_asof_has_zero_future_bars(self):
+        q=source(*([False]*80))
+        future_gap=gap(fully_known_ms=O+4*3600000)
+        self.assertEqual(self.scan(rows=q,g=future_gap),())
     def test_no_independently_tradable_source_signal(self):
         x=self.scan()
         self.assertTrue(all(not v.author_valid_poi_test_verified and
