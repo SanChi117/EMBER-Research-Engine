@@ -1,10 +1,10 @@
 name: EMBER C70 final independent 140 SHA six original 45 ZIP native3m source 20x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c70-A140-independent-final-140sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 7e9bfb4c5b23d695b22079552b054cef9f2288c0
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
