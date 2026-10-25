@@ -1,0 +1,100 @@
+{
+  "schema": "EMBER_C71_INDEPENDENT_ORIGINAL45ZIP_ROUTE_A_POST_REAL3M_CONTACT_VC_BOS_FIRST_ANY_V1",
+  "date_utc": "2026-10-25",
+  "repo": "SanChi117/EMBER-Research-Engine",
+  "branch": "research/academic-engine-recovery-20261015",
+  "prior_accepted_a140_tip": "f799fa6b65ae8044971fa95e355fca9c8e228e2dbf90cd3108081b39ab6d21bb",
+  "original_academic_sources": [
+    {
+      "title": "2. Entry by IMB & SNR.txt",
+      "id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "rule": "Only real 4H POI test -> 1H BSL SSL or eligible IMB trigger -> 15m VC IMB/SNR; no 1H trigger -> 1H VC RB/SNR/IMB new POI -> true 1H POI test -> 15m trigger + 5m VC or if no trigger 15m VC; genuine 4H liquidity raid implies no 1H trigger"
+    },
+    {
+      "title": "Strong High & Low.txt",
+      "id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "rule": "Actual liquidity OR inefficiency contact FOLLOWED by confirmed VC POI or BOS same or lower timeframe"
+    }
+  ],
+  "first_full_45_source_ci": 40225168132,
+  "independent_second_full_45_ci": 40225345999,
+  "first_full_jobs": "SUCCESS_5_OF_5",
+  "second_full_jobs": "SUCCESS_4_OF_4",
+  "negative_tests_per_python": 30,
+  "python": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "original_crypto_symbols": [
+    "BCHUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "original_period": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "original_signed_binance_usdm_archives_per_full_run": 45,
+  "native3m_original_closed": 76800,
+  "native15m_original_closed": 15360,
+  "native1d_original_closed": 160,
+  "derived_1h_closed": 3840,
+  "source_4h_parent_cases": 153,
+  "previous_C46_C60_C62_C63_C66_C67_C68_C69_C70_immutable_original_sha_time_prices_exactly_recomputed": true,
+  "c70_first_original3m_wick_5_to_1_native15m_decimal_parity_independently_recomputed": true,
+  "post_contact_1h_fully_closed_before_any_15m_or_1h_source_pattern_starts": true,
+  "all_first_any_opposite_and_simultaneous_events_retained": true,
+  "route_A_1h_trigger_and_new_1h_VC_POI_branches_separated": true,
+  "route_B_IDM_separate": true,
+  "route_C_raid_BOS_separate": true,
+  "source_totals": {
+    "FIRST_ANY_15M_IMB_ALIGNED_NOT_AUTHOR_VC": 8,
+    "FIRST_ANY_15M_SNR_ALIGNED_NOT_AUTHOR_VC": 3,
+    "FIRST_ANY_1H_BOS_PROXY_NOT_AUTHOR_VC_OR_BOS": 0,
+    "FIRST_ANY_NEW1H_POI_15M_IMB_TRIGGER_VS_VC_UNRESOLVED": 6,
+    "FIRST_ANY_NEW1H_POI_15M_SNR_TRIGGER_VS_VC_UNRESOLVED": 6,
+    "FIRST_ANY_SOURCE_OPPOSITE_DIRECTION": 32,
+    "FIRST_ANY_SOURCE_SAME_TIME_15M_AND_1H_BOS_AMBIGUOUS": 0,
+    "FIRST_ANY_SOURCE_SAME_TIME_MULTIPLE_15M_KINDS_AMBIGUOUS": 2,
+    "FIRST_ANY_SOURCE_TWO_DIRECTIONS_AMBIGUOUS": 0,
+    "NO_FIRST_ANY_SOURCE_POST_GATE_FULL_WINDOW": 0,
+    "NO_FIRST_ANY_SOURCE_POST_GATE_RIGHT_CENSORED": 1,
+    "NO_UNAMBIGUOUS_ORIGINAL3M_CONTACT": 95
+  },
+  "aligned_source15m_total_not_author": 23,
+  "original_json_path": "evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json",
+  "original_json_full_bytes": 264632,
+  "original_json_sha256": "b02777bc871e6471d349989179da3452df6a185c4db805cf5b6071e5a377b253",
+  "original_json_git_blob": "ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97",
+  "second_replay_whole_264632_bytes_identical": true,
+  "old_original_git_blobs": {
+    "C46": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+    "C60": "899373e4a1dc1999d1485ac8c1f790d39071aebd",
+    "C62": "8428bf7d6cd3bc26f617cfc32a34c91a27c813b2",
+    "C63": "fdc77c7ec942f03b4efae83b935d994c8435a24f",
+    "C66": "c693058cdb28b0e118879d32ddcbbd0d2a66bfc6",
+    "C67": "87409101a6fad4897b32e13085c9a0cc13566594",
+    "C68": "587779a7dd1736099e8270c8823c15822f0e77a0",
+    "C69": "b22860dfa13e4b19d16e8dd892719a772485e847",
+    "C70": "e100ca8a70a32484fd311ae2dcf31a311d85865c"
+  },
+  "initial_ci_red_recovery": "First 30x3 had genuine 3m known time incorrectly checked for 15m alignment and two synthetic BOS events started before contact, corrected gate to 3m alignment and test BOS time after contact; all subsequent tests 30x3 passed.",
+  "author_labeled_positive_crypto_goldens": 0,
+  "owner_first_valid_4h_poi_test": 0,
+  "owner_first_valid_1h_poi_test": 0,
+  "owner_1h_trigger": 0,
+  "owner_15m_trigger": 0,
+  "owner_15m_volume_confirmation": 0,
+  "owner_5m_volume_confirmation": 0,
+  "owner_1h_bos": 0,
+  "owner_stronghl": 0,
+  "owner_sl_tp_fta": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY"
+}
