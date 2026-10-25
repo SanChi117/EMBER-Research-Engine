@@ -1,0 +1,41 @@
+name: EMBER C55 source 1H liquidity confirmed raid to 3M closed BOS 43 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-crypto-1h-liquidity-raid-bos-negative-20261025.yml'
+      - 'research/mtf-element-audit-v1/d05/c55_crypto_1h_liquidity_raid_bos_lifecycle.py'
+      - 'research/mtf-element-audit-v1/d05/test_c55_crypto_1h_liquidity_raid_bos_lifecycle.py'
+permissions:
+  contents: read
+jobs:
+  audit_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify accepted A123 123/123 and previous original Binance USD-M C54 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123_files.txt
+          grep -Fq '"validations_pass": true' /tmp/A123_files.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json)" = 'f6870d0dcb2dbfbe821c29bb7489e2b51a551218'
+      - name: Independent 43 first-wick, 1H future and 3M BOS no-lookahead synthetic-negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_bos_lifecycle 2>&1 | tee /tmp/C55.txt
+          grep -Fq 'Ran 43 tests' /tmp/C55.txt
+          grep -qx 'OK' /tmp/C55.txt
+          ! grep -q 'skipped=' /tmp/C55.txt
