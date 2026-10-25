@@ -1,0 +1,70 @@
+name: EMBER C57 independent fresh original45zip exact native15m and 42 unit tests x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c57-independent-original45zip-full-byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json'
+permissions:
+  contents: read
+jobs:
+  original_full45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently repeat all original 45 Binance crypto ZIP and entire frozen C57 JSON
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A126
+          grep -Fq 'entries 126 tip_sha256 f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba' /tmp/A126
+          cd ../..
+          R=research/mtf-element-audit-v1
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          python "$R/tests/probe_c57_original45zip_route_a_4h_1h_native15m_first_imb.py" /tmp/C57-independent.json >/tmp/C57.log 2>&1 || { tail -c 18000 /tmp/C57.log; exit 1; }
+          cmp -s /tmp/C57-independent.json "$R/evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json')
+          r=Path('/tmp/C57-independent.json')
+          assert p.read_bytes()==r.read_bytes()
+          assert p.stat().st_size==292187
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='3ce556499294bb005f4ecfc57a817488ab6a66ef498c1181ceca2874acff1b95'
+          z=json.loads(p.read_bytes())
+          assert z['source_archives']['total']==45
+          assert z['native_original3m_closed']==76800 and z['native_original15m_closed']==15360
+          assert z['independent_original3m_native15m_OHLCV_equalities']==15360
+          assert z['4h_source_IMB_candidates']==153 and z['source_first3m_contacts']==132 and z['post_contact_technical1h_candidates']==130
+          assert z['statuses']=={'FIRST_ANY_NATIVE15M_IMB_SAME_SIDE_AS_4H':59,'FIRST_ANY_NATIVE15M_IMB_OPPOSITE_SIDE_TO_4H':65,'NO_ORIGINAL_3M_FIRST_CONTACT':21,'NO_POST_CONTACT_1H_IMB_SOURCE':2,'RIGHT_CENSORED_NO_15M_IMB_BY_SOURCE_END':6}
+          assert z['orders']==z['trades']==z['fills']==z['academic_author_15m_vc_goldens']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          print('C57_INDEPENDENT_FULL_45ZIP_NATIVE15M_BYTE_EXACT',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+  source_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently repeat negative 42 source tests and check 126 SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c57_route_a_original15m_first_imb_after_1h_source 2>&1 | tee /tmp/tests
+          grep -Fq 'Ran 42 tests' /tmp/tests
+          grep -qx 'OK' /tmp/tests
+          ! grep -q 'skipped=' /tmp/tests
