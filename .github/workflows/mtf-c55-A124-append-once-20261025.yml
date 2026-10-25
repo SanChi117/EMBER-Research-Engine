@@ -1,0 +1,89 @@
+name: EMBER C55 append-once A124 original crypto 1H raid native3m BOS paper research
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-A124-append-once-20261025.yml'
+permissions:
+  contents: write
+jobs:
+  append_a124:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original immutable 123/123 predecessor ledger and C37 C55 full source blob, 31 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A123evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json)" = 'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json)" = '2b4f944ddbdff0871a7fd553de2ab9955d220b91'
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json')
+          assert len(p.read_bytes())==2045882
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='9f9939603a3d4b4e9b7cb8569727a6013aaa06ee94d9f151a6c4d7acbb95924b'
+          x=json.loads(p.read_text())
+          assert x['original_Binance_USDM_zip_lineage']==45
+          assert x['original_closed_native3m']==76800 and x['exact_native15m']==15360
+          assert x['adapted_source_total_contexts']==1924
+          assert x['adapted_source_hypothesis_event_counts']=={
+            'LATEST_CONFIRMED_V1':539,'EARLIEST_CONFIRMED_V1':462,
+            'DEEP_RAID_SIDE_V1':412,'NEAREST_RAID_SIDE_V1':511}
+          assert x['adapted_source_raid_BSL_SSL_counts']=={'BSL':866,'SSL':1058}
+          assert x['original_5m_Route_C_probed_from_3m'] is False
+          assert x['author_confirmed_BOS']==x['author_confirmed_1h_liquidity']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard 2>&1 | tee /tmp/C55-31.txt
+          grep -Fq 'Ran 31 tests' /tmp/C55-31.txt
+          grep -qx 'OK' /tmp/C55-31.txt
+      - name: Append-once exactly A124 / B1 C55 six immutable verified original source evidence SHA files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A124 \
+            --cycle B1/C55 \
+            --planned 'After owner CRYPTO-only C54 correction, research genuine independent 1H BSL SSL closed fractal known-before-raid, strict 1H wick raid confirmed by following closed hour, source-native3m independently confirmed strict swing before BOS bar start and 3m BOS only at close. Preserve 5m course Route C independent not inferred from 3m or course FX picture.' \
+            --executed 'Created isolated C55 source-only C37 AdaptedClosedBreak validator and 31 independent negative synthetic tests x Python 3.10 3.11 3.12; scanned frozen original C37 all four adapted pivot hypotheses over 45 Binance USD-M original signed ZIP history (76800 closed native3m, 15360 exact native15m), 1924 correlated source contexts, 1h BSL/SSL wick raids with confirmed levels, native3m original raw SHA+timestamp ID. Original original source C37 2310174-byte Git blob e4b702e8c6cdc34f1c2475df73ef44ae1631fe56 unchanged, first C55 2045882-byte complete source CI 40193558668 PASS. Independent fresh complete original 45ZIP re-download original C37 full JSON byte exact and C55 full 2045882-byte exact, 31x3 negative tests and prior A123 SHA CI 40193652733 PASS 4/4.' \
+            --result 'C55 academic Route C crypto source-only adapted closed 3m: LATEST 539, EARLIEST 462, DEEP 412, NEAREST 511 = 1924 correlated technical contexts, 866 BSL raid contexts and 1058 SSL; not independent deals. 1H pivot preknown, raid wick confirmed by later closed 1H, 3m swing confirmed before break bar start; later 3m BOS at CLOSE. Original 5m separate route NOT evaluated from 3m. Zero author-selected BOS and POI/VC goldens, zero orders/trades/fills/PnL; NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Prior owner crypto-only A123 123/123 SHA tip a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15 unchanged; original frozen C37 full 2310174-byte Git blob e4b702e8c6cdc34f1c2475df73ef44ae1631fe56 unchanged. Frozen C55 complete 2045882-byte Git blob 2b4f944ddbdff0871a7fd553de2ab9955d220b91 SHA256 9f9939603a3d4b4e9b7cb8569727a6013aaa06ee94d9f151a6c4d7acbb95924b. Independent full 45 original ZIP C37 replay and independent full C55 JSON byte exact CI 40193652733 PASS 4/4, tests 31x3 PASS. No 5m inferred, no author 2023 market-chart price goldens prerequisite and no FX feeds.' \
+            --evidence d05/c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard.py \
+            --evidence d05/test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard.py \
+            --evidence tests/probe_c55_original_crypto_route_c_1h_raid_3m_bos_from_c37.py \
+            --evidence evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json \
+            --evidence evidence/c55/C55_INDEPENDENT_ORIGINAL_CRYPTO_ROUTE_C_45ZIP_WITNESS_20261025.json \
+            --evidence cycles/B1_C55_CRYPTO_1H_LIQUIDITY_RAID_3M_BOS_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A124.txt
+          grep -Fq 'entries 124' /tmp/A124.txt
+          python tests/test_journal_integrity.py | tee /tmp/A124evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A124evidence.txt
+      - name: Commit ONLY appended A124 SHA-chain journal without changing any earlier evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C55): append-once A124 six original crypto 1H BSL SSL raid native3m BOS source evidence SHA'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
