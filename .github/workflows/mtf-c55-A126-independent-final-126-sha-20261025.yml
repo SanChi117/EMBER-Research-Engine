@@ -4,7 +4,6 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c55-A126-independent-final-126-sha-20261025.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: c3449365690be4dfacdefbed4deaae37ecbeac44
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
