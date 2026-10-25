@@ -84,6 +84,16 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
           git commit -m 'audit(C55): append-once A124 six original crypto 1H BSL SSL raid native3m BOS source evidence SHA'
-          git fetch origin research/academic-engine-recovery-20261015
-          git rebase origin/research/academic-engine-recovery-20261015
-          git push origin HEAD:research/academic-engine-recovery-20261015
+          # Concurrent documentation commits can race with a single fetch/push.
+          # Retry non-force, rebase only local A124 append, never discard origin history.
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              echo "C55_A124_SINGLE_APPEND_NON_FORCE_PUSH_ACCEPTED attempt=$attempt"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "C55_A124_REFUSED_TO_FORCE_PUSH_AFTER_CONCURRENT_UPDATES" >&2
+          exit 1
