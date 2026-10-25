@@ -1,0 +1,72 @@
+name: EMBER C59 independent second C46 C47 C58 original crypto source join and 49x3 negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c59-independent-three-original-sources-49negative.yml'
+      - 'research/mtf-element-audit-v1/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json'
+permissions:
+  contents: read
+jobs:
+  source_exact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently rederive every 153 original parent from immutable 3 independently 45ZIP-replayed baselines, byte compare
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/a128
+          grep -Fq 'entries 128 tip_sha256 dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b' /tmp/a128
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          test "$(git rev-parse HEAD:$R/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json)" = 06f2ff7decd2aa9660381947d3cf43f6b722cd8e
+          python "$R/tests/probe_c59_frozen_original_course_stronghl_nesting_join.py" /tmp/C59-second.json >/tmp/C59-second.log 2>&1 || { tail -c 16000 /tmp/C59-second.log; exit 1; }
+          cmp -s /tmp/C59-second.json "$R/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json"
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json')
+          q=pathlib.Path('/tmp/C59-second.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert p.stat().st_size==202187
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='31af44acd6a1060c4871a473ad916dd0cb7b139576e35789d5a29c1982b8409a'
+          z=json.loads(p.read_bytes())
+          assert z['source_status_totals']=={
+            'NO_4H_SOURCE_FIRST_CONTACT':21,
+            '4H_FIRST_CONTACT_NO_LATER_1H_SOURCE':2,
+            'LATER_1H_IMB_INSIDE_PARENT_4H_IMB_VETO':21,
+            'LATER_1H_IMB_PARTIALLY_OVERLAPS_PARENT_VETO':12,
+            'LATER_1H_IMB_OUTSIDE_PARENT_GEOMETRY_ONLY':97}
+          assert z['original_c46_4h_source_candidate_total']==153
+          assert z['original_c47_after_first_contact_later1h_source']==130
+          assert z['orders']==z['trades']==z['fills']==z['academic_author_StrongHL_goldens']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          print('C59_INDEPENDENT_SOURCE_BYTES_SHA',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+  negative_49:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Assert 49 tests without skips or promotions
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c59_academic_stronghl_first_test_semantic_gate 2>&1 | tee /tmp/C59-negative
+          grep -Fq 'Ran 49 tests' /tmp/C59-negative
+          grep -qx 'OK' /tmp/C59-negative
+          ! grep -q 'skipped=' /tmp/C59-negative
