@@ -44,7 +44,9 @@ FORK_STATES=(
  "NEW_1H_VC_NO_SUBSEQUENT_POI_SOURCE_TEST",
  "NEW_1H_VC_FIRST_SOURCE_TEST_15M_TRIGGER_NEEDS_5M_VC",
  "NEW_1H_VC_FIRST_SOURCE_TEST_15M_VC_NO_TRIGGER",
- "NEW_1H_VC_FIRST_SOURCE_TEST_NO_15M_CANDIDATE")
+ "NEW_1H_VC_FIRST_SOURCE_TEST_NO_15M_CANDIDATE",
+ "NEW_1H_VC_FIRST_SOURCE_TEST_15M_OPPOSITE_SOURCE",
+ "NEW_1H_VC_FIRST_SOURCE_TEST_15M_TWO_SIDES_AMBIGUOUS")
 @dataclass(frozen=True)
 class OneHourForkSource:
     category:str
@@ -155,7 +157,8 @@ def observe_1h_route_a_source_events(observation,hours,oneh_source_events,*,as_o
         lo,hi=_zone_for_event(e,lookup)
         if e.kind=="CLASSIC_1H_IMB_SOURCE":
             is_nested=lo>=lower and hi<=upper
-            if is_nested:
+            if (is_nested and e.side==c.side and
+                e.first_pattern_bar_start_ms>=c.fully_known_ms):
                 nested+=1
             else:
                 found.append(OneHourForkSource("TRIGGER",e.side,
@@ -268,8 +271,16 @@ def route_a_fork_1h_to_15m(observation,hours,original15m,oneh_source_events,
         return make(FORK_STATES[14],chosen,names,first_test,end=min(as_of_ms,gate+WINDOW))
     t=min(z.known_ms for z in next15)
     first=tuple(x for x in next15 if x.known_ms==t)
-    # Even a 15m gap is NOT a 15m trigger unless the correct parent
-    # 1H POI was selected/validated; source-only evidence recorded.
-    if any(z.kind=="15M_CLASSIC_IMB_SOURCE_ONLY" for z in first):
+    # Preserve the actual earliest ANY, never pick preferred side/kind
+    # after a new 1H POI source test. A 15m geometry is not author Trigger/VC.
+    if len({z.side for z in first})>1:
+        return make(FORK_STATES[16],chosen,names,first_test,first[0],min(as_of_ms,gate+WINDOW))
+    if first[0].side!=c.side:
+        return make(FORK_STATES[15],chosen,names,first_test,first[0],min(as_of_ms,gate+WINDOW))
+    if len({z.kind for z in first})>1:
+        return make(FORK_STATES[16],chosen,names,first_test,first[0],min(as_of_ms,gate+WINDOW))
+    # Even a 15m classic source IMB is not an academic trigger without
+    # correct POI support and parent first VALID test; 5m VC still absent.
+    if first[0].kind=="15M_CLASSIC_IMB_SOURCE_ONLY":
         return make(FORK_STATES[12],chosen,names,first_test,first[0],min(as_of_ms,gate+WINDOW))
     return make(FORK_STATES[13],chosen,names,first_test,first[0],min(as_of_ms,gate+WINDOW))
