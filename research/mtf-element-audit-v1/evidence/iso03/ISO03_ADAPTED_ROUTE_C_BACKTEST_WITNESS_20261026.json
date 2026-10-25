@@ -1,0 +1,126 @@
+{
+  "accounting_delta": 5.820766091346741e-11,
+  "author_strategy_certified": false,
+  "base_result_bytes": 1755781,
+  "base_result_sha256": "2ef7ff3f18982eff0e0bca4d2f5017387f4dbd000360b92788cbb77f4d92192a",
+  "code_sha256": {
+    "fetch_iso03_original_3m.py": "8b0e2d139dc9faeafc1325c42fa5a1466ba19477653430a4a623612fec571a7a",
+    "iso03_adapted_route_c_backtest.py": "d4cea101e4de4b0f4dd9f808967b618e7c6182acf734315900db4074e7176e53",
+    "probe_iso03_adapted_route_c_backtest.py": "56c0858fa23fe4cf74ccd03d9d80c4fcfb9600df38e0f1cbf7c8301dbed227dd",
+    "test_iso03_adapted_route_c_backtest.py": "1e91590ce1adeb6a4bf0486a07a4ddc2f2ef8f1a995717e41986eaf2d6900caf"
+  },
+  "funding_included": false,
+  "future_entries": 0,
+  "limitation": "One 32-day adapted mechanical experiment, not author validation, OOS evidence or expected-profit claim. Controls change equity-dependent sizing and are not paired-trade counterfactuals.",
+  "liquidation_model": false,
+  "mode": "ADAPTED_RESEARCH_NOT_AUTHOR_STRATEGY",
+  "open_positions_at_end": 0,
+  "orders_live": 0,
+  "out_of_sample": false,
+  "parameter_optimization": false,
+  "readiness": "NOT_TRADE_READY",
+  "repeat_byte_identical": true,
+  "results": {
+    "base_adapted": {
+      "exit_reasons": {
+        "STOP": 268,
+        "TARGET": 114,
+        "TIME_STOP": 2
+      },
+      "metrics": {
+        "fees": 54108.11170550448,
+        "final_equity": 19654.099849604783,
+        "gross_loss": 134456.89232629794,
+        "gross_profit": 54110.992175902655,
+        "initial_equity": 100000.0,
+        "losses": 271,
+        "max_drawdown_close_ms": 1790951040000,
+        "max_drawdown_fraction": 0.8170363192826536,
+        "net_pnl": -80345.90015039522,
+        "profit_factor": 0.40244119315644244,
+        "return_fraction": -0.8034590015039522,
+        "signals": 542,
+        "skipped_signals": 158,
+        "trades": 384,
+        "win_rate": 0.2942708333333333,
+        "wins": 113
+      }
+    },
+    "fees_without_slippage_control": {
+      "exit_reasons": {
+        "STOP": 255,
+        "TARGET": 128,
+        "TIME_STOP": 2
+      },
+      "metrics": {
+        "fees": 64963.84337016021,
+        "final_equity": 30979.285622923115,
+        "gross_loss": 145878.95439538427,
+        "gross_profit": 76858.24001830755,
+        "initial_equity": 100000.0,
+        "losses": 259,
+        "max_drawdown_close_ms": 1790951040000,
+        "max_drawdown_fraction": 0.7132664824874272,
+        "net_pnl": -69020.71437707689,
+        "profit_factor": 0.5268631128928589,
+        "return_fraction": -0.6902071437707689,
+        "signals": 542,
+        "skipped_signals": 157,
+        "trades": 385,
+        "win_rate": 0.32727272727272727,
+        "wins": 126
+      }
+    },
+    "zero_cost_control": {
+      "exit_reasons": {
+        "STOP": 255,
+        "TARGET": 128,
+        "TIME_STOP": 2
+      },
+      "metrics": {
+        "fees": 0.0,
+        "final_equity": 92855.2975146897,
+        "gross_loss": 170039.30246916573,
+        "gross_profit": 162894.59998385553,
+        "initial_equity": 100000.0,
+        "losses": 256,
+        "max_drawdown_close_ms": 1789846020000,
+        "max_drawdown_fraction": 0.2279747098378614,
+        "net_pnl": -7144.702485310307,
+        "profit_factor": 0.9579820524928007,
+        "return_fraction": -0.07144702485310306,
+        "signals": 542,
+        "skipped_signals": 157,
+        "trades": 385,
+        "win_rate": 0.33506493506493507,
+        "wins": 129
+      }
+    }
+  },
+  "schema": "EMBER_ISO03_ADAPTED_ROUTE_C_BACKTEST_WITNESS_V1",
+  "signals": 542,
+  "source_archives": 160,
+  "source_manifest_sha256": "5e4b4a1e8ddb4be0bd556eb18e33345475936a63b49a38abeef064c21e9bce46",
+  "source_native3m_bars": 76800,
+  "source_symbols": 5,
+  "verification": {
+    "all_versions_passed": true,
+    "cross_version_result_bytes_equal": true,
+    "python_versions": [
+      "3.10.22",
+      "3.11.2",
+      "3.12.12"
+    ],
+    "result_sha256_by_version": {
+      "3.10.22": "2ef7ff3f18982eff0e0bca4d2f5017387f4dbd000360b92788cbb77f4d92192a",
+      "3.11.2": "2ef7ff3f18982eff0e0bca4d2f5017387f4dbd000360b92788cbb77f4d92192a",
+      "3.12.12": "2ef7ff3f18982eff0e0bca4d2f5017387f4dbd000360b92788cbb77f4d92192a"
+    },
+    "test_suites": {
+      "ISO01": 40,
+      "ISO02": 46,
+      "ISO03": 30
+    },
+    "tests_per_version": 116
+  }
+}
