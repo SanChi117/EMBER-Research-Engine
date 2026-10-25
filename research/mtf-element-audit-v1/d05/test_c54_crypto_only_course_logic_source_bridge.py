@@ -62,9 +62,10 @@ class CryptoOnlyLogicalCourseSource(unittest.TestCase):
         x=overlay_crypto_course_routes(parent(),mode="C_1H_RAID_3M_BOS")[0]
         self.assertEqual(x.route_family,"C_RAID_TO_BOS")
         self.assertFalse(x.academic_PoI_VC_entry_confirmed)
-    def test_all_route_variants_have_paper_state(self):
-        self.assertTrue(all(x.final_state=="TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY"
-                    for x in overlay_crypto_course_routes(parent())))
+    def test_fourhour_context_only_three_route_variants_get_technical_overlay(self):
+        items=overlay_crypto_course_routes(parent())
+        self.assertEqual(sum(x.final_state=="TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY" for x in items),3)
+        self.assertEqual(sum(x.final_state=="CONTEXT_TF_NOT_EVIDENCED_FOR_COURSE_ROUTE" for x in items),5)
     def test_no_original_3m_touch_does_not_make_trade(self):
         a=overlay_crypto_course_routes(parent(touch=False,later=False))[0]
         self.assertEqual(a.final_state,"TECHNICAL_FIRST_TOUCH_UNKNOWN")
