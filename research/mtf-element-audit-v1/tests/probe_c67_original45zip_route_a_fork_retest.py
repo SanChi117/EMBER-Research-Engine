@@ -66,7 +66,8 @@ def run(output=None):
         h_events=convert_c62_closed_source_events(c62,htf.derived_1h_closed,as_of_ms=END)
         l_events=scan_original15m_source(htf.native_15m_closed,as_of_ms=END)
         fresh=normalize([asdict(x) for x in l_events])
-        prior=by["c66"][symbol]["all_native15m_source_events"]
+        prior=by["c66"][symbol]["all_native15m_original_source_events"]
+        assert len(fresh)==by["c66"][symbol]["all_native15m_source_events"]
         if fresh!=prior:
             print("C67_C66_MISMATCH_SYMBOL",symbol,"CURRENT",len(fresh),"FROZEN",len(prior),flush=True)
             for k,(left,right) in enumerate(zip(fresh,prior)):
