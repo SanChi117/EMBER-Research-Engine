@@ -1,0 +1,88 @@
+name: EMBER C65 independent second original45ZIP source OF 237284 bytes + 31x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c65-independent-second-original45zip-byte-exact.yml'
+      - 'research/mtf-element-audit-v1/evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json'
+permissions:
+  contents: read
+jobs:
+  freshsecond45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Re-fetch 45 signed original Binance ZIP source and verify exact 237284 immutable bytes
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A134
+          grep -Fq 'entries 134 tip_sha256 2a01f3845779390187305475c609d407b0e790605de3d3183884baba81795960' /tmp/A134
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json)" = f70b0493a0c4964c618c09c75fee900dd65f5c05
+          python "$R/tests/probe_c65_original45zip_of_last_link_target_invalidation.py" /tmp/C65-independent.json >/tmp/C65-repeat.log 2>&1 || { tail -c 18000 /tmp/C65-repeat.log; exit 1; }
+          cmp -s /tmp/C65-independent.json "$R/evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          x=Path('research/mtf-element-audit-v1/evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json')
+          y=Path('/tmp/C65-independent.json')
+          assert x.read_bytes()==y.read_bytes()
+          assert x.stat().st_size==237284
+          sha=hashlib.sha256(x.read_bytes()).hexdigest()
+          assert sha=='0865735c653925230e29ee978df2f59090a3711243d93db09cdf11994990b07b'
+          d=json.loads(x.read_bytes())
+          assert d['original_sha_checked_zip_archives']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native1d_closed']==160
+          assert d['exact_original_native15m_decimal_parities']==15360
+          assert d['derived_closed1h']==3840 and d['4h_frozen_source_parents']==153
+          assert d['source_of_states']=={
+             'NO_C64_CONFIRMED_SOURCE_ANCHOR':83,
+             'NO_EARLIER_SOURCE_LIQUIDITY_WORK':69,
+             'NO_EARLIER_SOURCE_IMB_WORK':1,
+             'NO_PREKNOWN_1H_LAST_LINK_PIVOT':0,
+             'NO_PREKNOWN_OR_AHEAD_1D_TARGET':0,
+             'SOURCE_OF_PREREQUISITES_NOT_AUTHOR_CERTIFIED':0,
+             'SOURCE_TARGET_NOT_REACHED_WITHIN_WINDOW':0,
+             'SOURCE_TARGET_REACHED_NO_INVALIDATION_FULL_WINDOW':0,
+             'SOURCE_TARGET_REACHED_NO_INVALIDATION_RIGHT_CENSORED':0,
+             'SOURCE_FIRST_INVALIDATION_LINK_CLOSE_PROXY':0,
+             'SOURCE_FIRST_INVALIDATION_OPPOSITE_POI_PROXY':0,
+             'SOURCE_SIMULTANEOUS_TWO_INVALIDATION_PROXIES':0}
+          assert d['author_OF_links']==d['author_OF_invalidation']==d['author_StrongHL']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C65_INDEPENDENT_FULL45ZIP_BYTE_EXACT',x.stat().st_size,sha)
+          PY
+  negative31:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Second matrix 31 genuine chronology negative synthetic cases with prior 134 SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c65_of_last_link_target_invalidation_source 2>&1 | tee /tmp/C65negative
+          grep -Fq 'Ran 31 tests' /tmp/C65negative
+          grep -qx 'OK' /tmp/C65negative
+          ! grep -q 'skipped=' /tmp/C65negative
