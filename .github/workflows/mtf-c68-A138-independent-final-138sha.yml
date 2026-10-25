@@ -1,0 +1,73 @@
+name: EMBER C68 independent final 138 SHA all six original crypto source evidence x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c68-A138-independent-final-138sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  sha138:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify 138 immutable ledger SHA, all six C68 original45 source files, 15 old original crypto Git blobs and 33 negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A138
+          grep -Fq 'entries 138 tip_sha256 c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a' /tmp/A138
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib,subprocess
+          from pathlib import Path
+          ledger=[json.loads(z) for z in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(ledger)==138
+          prev,current=ledger[-2:]
+          assert prev['action_id']=='A137' and prev['record_sha256']=='f54fc6edba0324df7dfd08e51bd1efa78b1674fb33d4cf21d3fc96ad83f9ccab'
+          assert current['action_id']=='A138' and current['seq']==138 and current['prev_sha256']==prev['record_sha256']
+          assert current['record_sha256']=='c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a'
+          assert current['cycle']=='B1/C68' and current['verdict']=='DONE' and current['cycle_result']=='PASSED'
+          refs={"d05/c68_stronghl_post_contact_vc_bos_source.py":"c544e3964c62ee574c50a071ab04d1ee6d1d303ceaad24bae8cc744d599a3865","d05/test_c68_stronghl_post_contact_vc_bos_source.py":"821b18c4291b6ca3e5c2bbe99c30ba80f0ac4f9d62eafbe280cc8bfdb8dfc3a1","tests/probe_c68_original45zip_stronghl_contact_confirmation_source.py":"b4348db66bcbe2d7265cf6e71ef1e09409013de096dfac59b706b3e4849e5ac5","evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json":"ee8b9471ff9f6c53e747f423673d64fa9c76a647fe731c686d108bd4891d296f","evidence/c68/C68_INDEPENDENT_ORIGINAL45ZIP_STRONGHL_SOURCE_WITNESS_20261025.json":"c9a9c70fb3c6de3a22b7c8db8d63bf19d1be41ba381a3b4b1bccfe3edd028a49","cycles/B1_C68_STRONGHL_CONTACT_THEN_VC_BOS_FIRST_ANY_SOURCE_REPORT.md":"fffde5fe0b58ec65693692f18b3a2fbad5e85219a76d7480a34dec27f3a9f494"}
+          assert len(current['evidence'])==6 and {z['path'] for z in current['evidence']}==set(refs)
+          for row in current['evidence']:
+            raw=Path(row['path']).read_bytes()
+            assert len(raw)==row['bytes']
+            assert hashlib.sha256(raw).hexdigest()==row['sha256']==refs[row['path']]
+          originals={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json":"b2727f081d8a73f522a97a54b4582507ee969244","evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json":"2b4f944ddbdff0871a7fd553de2ab9955d220b91","evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json":"98f087a731d30c2191dc443038c371751456f316","evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json":"08f24050d19bb390cf2985a901e2a8f2ea3c0ec3","evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json":"06f2ff7decd2aa9660381947d3cf43f6b722cd8e","evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json":"46077ffb3495c14c906963156dd4a93c7acf9911","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd","evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json":"305624e592f55bd699e94e45f4316e4efabdb726","evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json":"8428bf7d6cd3bc26f617cfc32a34c91a27c813b2","evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json":"fdc77c7ec942f03b4efae83b935d994c8435a24f","evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json":"f70b0493a0c4964c618c09c75fee900dd65f5c05","evidence/c65/C65_ORIGINAL45ZIP_OF_SOURCE_LAST_LINK_HTF_TARGET_FIRST_ANY_INVALIDATION.json":"791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5","evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json":"c693058cdb28b0e118879d32ddcbbd0d2a66bfc6","evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json":"87409101a6fad4897b32e13085c9a0cc13566594"}
+          for p,blob in originals.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+p],text=True).strip()==blob
+          p=Path('evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json')
+          assert p.stat().st_size==238542
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert d['source_extreme_post_contact_first_any_state_totals']=={
+            '1H_IMB_TRIGGER_CREATION_NOT_A_LIQUIDITY_OR_POI_TEST':0,
+            'CONTACT_SOURCE_BAR_UNAVAILABLE':0,
+            'FIRST_ANY_SOURCE_CONFIRMATION_BOTH_SIDES_AMBIGUOUS':0,
+            'FIRST_ANY_SOURCE_CONFIRMATION_OPPOSITE_SIDE':34,
+            'NO_C67_SINGLE_SOURCE_CONTACT':92,
+            'NO_POST_CONTACT_SOURCE_CONFIRMATION_FULL_WINDOW':0,
+            'NO_POST_CONTACT_SOURCE_CONFIRMATION_RIGHT_CENSORED':1,
+            'SOURCE_ANCHOR_BREACHED_BEFORE_CONFIRMATION_CLOSED':11,
+            'SOURCE_EXTREME_WITH_POST_CONTACT_CONFIRMATION_NOT_AUTHOR':15}
+          assert d['author_verified_StrongHL']==d['author_verified_OF']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C68_A138_INDEPENDENT_138_SHA_SIX_C68_ORIGINAL_CRYPTO_AND_OLDER_FROZEN_BLOBS_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c68_stronghl_post_contact_vc_bos_source 2>&1 | tee /tmp/c68
+          grep -Fq 'Ran 33 tests' /tmp/c68
+          grep -qx 'OK' /tmp/c68
+          ! grep -q 'skipped=' /tmp/c68
