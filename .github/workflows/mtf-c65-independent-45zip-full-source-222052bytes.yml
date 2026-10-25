@@ -1,0 +1,79 @@
+name: EMBER C65 independent original45ZIP dual OF last link source full 222052 bytes
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c65-independent-45zip-full-source-222052bytes.yml'
+      - 'research/mtf-element-audit-v1/evidence/c65/C65_ORIGINAL45ZIP_LAST_STRUCTURAL_OF_LINK_FIRST_TARGET_INVALIDATION_SOURCE.json'
+permissions:
+  contents: read
+jobs:
+  independent_second_45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently re-download entire 45 signed original Binance ZIP and confirm exact full 222052 bytes
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A134
+          grep -Fq 'entries 134 tip_sha256 2a01f3845779390187305475c609d407b0e790605de3d3183884baba81795960' /tmp/A134
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c64/C64_ORIGINAL45ZIP_STRICT_SOURCE_EXTREME_PRECONFIRM_POST_WICK_CLOSE_INVALIDATION.json)" = f70b0493a0c4964c618c09c75fee900dd65f5c05
+          python "$R/tests/probe_c65_original45zip_of_last_link_target_first_invalidation.py" /tmp/C65-independent.json > /tmp/C65-independent.log 2>&1 || { tail -c 18000 /tmp/C65-independent.log; exit 1; }
+          cmp -s /tmp/C65-independent.json "$R/evidence/c65/C65_ORIGINAL45ZIP_LAST_STRUCTURAL_OF_LINK_FIRST_TARGET_INVALIDATION_SOURCE.json"
+          python - <<'PY'
+          import json,hashlib,pathlib
+          a=pathlib.Path('research/mtf-element-audit-v1/evidence/c65/C65_ORIGINAL45ZIP_LAST_STRUCTURAL_OF_LINK_FIRST_TARGET_INVALIDATION_SOURCE.json')
+          b=pathlib.Path('/tmp/C65-independent.json')
+          assert a.read_bytes()==b.read_bytes()
+          assert a.stat().st_size==222052
+          sha=hashlib.sha256(a.read_bytes()).hexdigest()
+          assert sha=='a178de99d78cb5bbf1f75c5dfa61c7750705c9f7b500c9712a6bdab3f672ae08'
+          d=json.loads(a.read_bytes())
+          assert d['fresh_signed_original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800
+          assert d['original_native1d_closed']==160
+          assert d['original_native15m_decimal_equalities']==15360
+          assert d['derived_closed_original1h']==3840
+          assert d['original_4h_C46_candidates']==153
+          states=d['original_4h_full_source_status_totals']
+          assert states['NO_C64_CONFIRMED_SOURCE_ANCHOR']==83
+          assert states['NO_EARLIER_SOURCE_LIQUIDITY_WORK']==69
+          assert states['NO_EARLIER_SOURCE_IMB_WORK']==1
+          assert sum(states.values())==153
+          assert d['author_actual_OF_invalidation']==d['author_StrongHL']==0
+          assert d['orders']==d['trades']==d['fills']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C65_SECOND_FRESH45ZIP_BYTE_EQUAL',a.stat().st_size,sha)
+          PY
+  negatives31:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify current unchanged 134SHA and 31 source-only OF temporal negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c65_of_last_link_target_invalidation_source 2>&1 | tee /tmp/C65tests
+          grep -Fq 'Ran 31 tests' /tmp/C65tests
+          grep -qx 'OK' /tmp/C65tests
+          ! grep -q 'skipped=' /tmp/C65tests
