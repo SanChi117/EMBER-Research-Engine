@@ -144,3 +144,14 @@
 | A126 independent append-once acceptance | [x] 126/126 SHA | 6 immutable evidence C55 extra; отдельно от A124 и A125. Ledger tip f47e459f6fda6bed5fc89d61a172b120eceee0702596cfd9de21f3382ec23dba. [Независимая CI 40198550465](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40198550465) SUCCESS 3/3, 43 x3 negative tests, old source blobs intact. |
 
 **Следующая очередь: A127 ещё не существует.** Сначала выбрать следующий новый крипто-академический элемент (Route A first valid POI / IMB&SNR / 1H-15m / separate VC, либо независимый Route B IDM), затем source contract и отрицательные тесты, оригинальные Binance price candles, CI full replay, только после этого append-once. Общий B1/Route A/B/C семантический движок пока НЕ ГОТОВ к торговле; статистика C55/C56 — технические контексты, не исполненные сделки. 29/40 крупных завершённых пунктов, 3 частичных, 8 открытых НЕ являются долей готовности.
+
+
+
+## 2026-10-25 — C57/A127 academic Route A SOURCE-ONLY original 15m chronology independently accepted
+
+| Блок | Статус | Проверено и чего не следует утверждать |
+|---|---|---|
+| C57 — original crypto 4H source IMB → first native3m touch → 1H technical IMB → first ANY original15m classic IMB | [x] ИССЛЕДОВАНИЕ, не академическая Route A торговая модель | 45 original Binance ZIP, 76800 original3m, 15360 original15m + 15360 Decimal equality, frozen C46/C47 original parent JSON full equality, no lookahead and 6h source-only bound with explicit censorship. 153 4H candidates → 132 first contacts → 130 later technical 1H; 59 first same-side 15m gap, 65 opposite, 21 no contact, 2 no 1H, 6 right-censored. **0 author selected POI/first-test/1H trigger/15m volume confirmation, 0 orders/trades/PnL**. [Independent original45ZIP full 292187 bytes CI 40200457478](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40200457478) SUCCESS 4/4. |
+| A127 append-only proof | [x] 127/127 SHA | six immutable C57 source files; source SHA256 3ce556499294bb005f4ecfc57a817488ab6a66ef498c1181ceca2874acff1b95. Ledger tip f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005. [Final independent CI 40200863289](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40200863289) SUCCESS 3/3, 42 negative tests ×3. |
+
+**C58 следующий:** независимая Route B IDM причинность и академические границы. Не заменять Idr/IDM голым pivot, не смешивать Route A 15m VC. Пока исключительно crypto source-only и NO TRADE. В укрупнённой карте 29/40 x, 3 частичных и 8 ожидающих, это не процент завершённости торговой механики.
