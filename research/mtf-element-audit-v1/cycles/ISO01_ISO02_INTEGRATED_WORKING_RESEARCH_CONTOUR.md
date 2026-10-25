@@ -47,6 +47,7 @@
 Запуск из `research/mtf-element-audit-v1`:
 
 ```bash
+export PYTHONPATH="$PWD/d05:$PWD/tests:$PWD/tools:$PWD/../mtf-course-v05/src"
 python3 -m unittest discover -s d05 -p 'test_iso0*.py'
 python3 tests/probe_iso02_integrated_perception_graph.py /tmp/ember-iso02-graph.json
 ```
