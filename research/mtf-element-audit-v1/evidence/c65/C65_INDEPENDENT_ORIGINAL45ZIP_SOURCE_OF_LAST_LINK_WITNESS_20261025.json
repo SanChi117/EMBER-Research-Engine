@@ -1,0 +1,85 @@
+{
+  "schema": "EMBER_C65_INDEPENDENT_OWNER_ORDERFLOW_LAST_STRUCTURAL_LINK_SOURCE_ONLY_V1",
+  "date_utc": "2026-10-25",
+  "repo_branch": "research/academic-engine-recovery-20261015",
+  "prior_accepted_A134_tip": "2a01f3845779390187305475c609d407b0e790605de3d3183884baba81795960",
+  "owner_lessons_rechecked": [
+    {
+      "name": "Order Flow.txt",
+      "drive_id": "1r6sH0XjEoK4Jwq4EVLz8vqPSWVh9qerN",
+      "owner_requirement": "OF must work with liquidity AND imbalances/POI; invalidation after target via BOS confirmed CLOSE beyond final structural link or opposite POI created on same TF; target alone need not reverse"
+    },
+    {
+      "name": "Strong High & Low.txt",
+      "drive_id": "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+      "owner_requirement": "contact with true liquidity or inefficiency followed by real VC POI or BOS, bare source fractal or C64 price anchor not author StrongHL"
+    },
+    {
+      "name": "POI.txt",
+      "drive_id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+      "owner_requirement": "strong selected POI works with liquidity or FVG; native1d prior day high/low only source HTF target proxy"
+    }
+  ],
+  "source_gate_separation": [
+    "Known-before-source link C62 1h SNR/RB liquidity-work evidence, same side",
+    "Independent previously known C62 1h SNR/RB actual IMB-TEST evidence, not mere FVG creation",
+    "Confirmed prior unbreached 1h strict fractal source pivot distinct from C64 candidate",
+    "Fully CLOSED prior original native1d source target high for LONG / low for SHORT ahead of price",
+    "HTF target must first be reached on fully closed original source 1h before consideration of invalidation",
+    "First ANY source 1h close behind separate link vs opposite 1h SNR/RB/classic IMB fully formed after target; equal timestamps ambiguous",
+    "Nothing may be author OF invalidation or StrongHL until timestamped crypto goldens are supplied"
+  ],
+  "first_original45_zip_replay_run": 40215080339,
+  "second_independent_original45_zip_full_byte_run": 40215245033,
+  "second_independent_workflow_result": "SUCCESS_4_OF_4",
+  "negative_synthetic_regression_initial_fail_run": 40214646246,
+  "initial_failure_explanation": "Three synthetic test expectations attempted an opposing three-hour POI before the HTF target was hit and an HTF target high which was still above price; fixed synthetic chronology and OHLC, not loosened live engine logic",
+  "negative_synthetic_regression_corrected_success_run": 40214720404,
+  "after_source_provenance_hardening_ci_run": 40214855551,
+  "negative_tests_per_python": 31,
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "original_checked_binance_zip_per_replay": 45,
+  "original_native3m_closed": 76800,
+  "original_native1d_closed": 160,
+  "original_native15m_decimal_parities": 15360,
+  "original_derived1h_closed": 3840,
+  "original_4h_source_parents": 153,
+  "frozen_original_github_blob": {
+    "C46": "dc03c181912ffbb800bc191fbc16ec0d05c335e0",
+    "C60": "899373e4a1dc1999d1485ac8c1f790d39071aebd",
+    "C62": "8428bf7d6cd3bc26f617cfc32a34c91a27c813b2",
+    "C63": "fdc77c7ec942f03b4efae83b935d994c8435a24f",
+    "C64": "f70b0493a0c4964c618c09c75fee900dd65f5c05"
+  },
+  "source_status_totals": {
+    "NO_C64_CONFIRMED_SOURCE_ANCHOR": 83,
+    "NO_EARLIER_SOURCE_LIQUIDITY_WORK": 69,
+    "NO_EARLIER_SOURCE_IMB_WORK": 1,
+    "NO_PREKNOWN_1H_LAST_LINK_PIVOT": 0,
+    "NO_PREKNOWN_OR_AHEAD_1D_TARGET": 0,
+    "SOURCE_OF_PREREQUISITES_NOT_AUTHOR_CERTIFIED": 0,
+    "SOURCE_TARGET_NOT_REACHED_WITHIN_WINDOW": 0,
+    "SOURCE_TARGET_REACHED_NO_INVALIDATION_FULL_WINDOW": 0,
+    "SOURCE_TARGET_REACHED_NO_INVALIDATION_RIGHT_CENSORED": 0,
+    "SOURCE_FIRST_INVALIDATION_LINK_CLOSE_PROXY": 0,
+    "SOURCE_FIRST_INVALIDATION_OPPOSITE_POI_PROXY": 0,
+    "SOURCE_SIMULTANEOUS_TWO_INVALIDATION_PROXIES": 0
+  },
+  "technical_full_gate_candidates": 0,
+  "author_verified_crypto_source_of_links": 0,
+  "author_verified_crypto_of_invalidations": 0,
+  "source_json_bytes": 237284,
+  "source_sha256": "0865735c653925230e29ee978df2f59090a3711243d93db09cdf11994990b07b",
+  "original_full_source_git_blob": "791f20fcf0a8d6c4697f02fd7247b45cfd4b6de5",
+  "full_independent_second_source_bytes_equal": true,
+  "orders": 0,
+  "trades": 0,
+  "fills": 0,
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "limitations": "Strict 1H-only conjunction finds no fully evidenced source OF link on 32d sample. This is not proof that real market OF is absent. The author's academy explicitly allows context same/lower TF; an isolated future C66 4H/15m across actual original source must independently assess other suitable confirmation levels and annotated screenshots. Never weaken C65 one-hour gate post hoc or call source SNR/RB technically classified author goldens."
+}
