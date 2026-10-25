@@ -166,3 +166,16 @@
 | A128 append-once | [x] 128/128 | 6 оригинальных source+negative+replay+witness+report C58 evidence, 28 negatives x Python3.10/3.11/3.12, 193355-byte source SHA256 405a34b939845357412ab4ec2d055d71885e3f6a1b22f55bc25c87c60272808e. Новая tip dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b. [Final CI 40202055500](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40202055500) SUCCESS 3/3. |
 
 **Ближайший C59:** типизированные настоящие POI, first valid test и академическая StrongHL связь, без перезаписи C46/C58 и без объявления плоских pivots IDM. Route A C57 и Route C C55/C56 остаются отдельными источниковыми ветвями. NO TRADES, PAPER ONLY, NOT_TRADE_READY. Укрупнённые 29 завершённых, 3 частичных, 8 ожидающих не являются оценкой торговой готовности.
+
+
+
+## 2026-10-25 — новые принятые исследования C59/A129 + C60/A130
+
+| Элемент | Статус | Проверено / ограничения |
+|---|---|---|
+| C59 академическая семантика Strong High/Low, true first POI test, недопуск вложенной 1H IMB как триггера при 4H IMB | [x] SOURCE/TEXT, не торговая механика | Оригинальные уроки Google Drive и 3 frozen ранее оригинал45ZIP-backed источника C46/C47/C58, все 153 родители. 21 nested 1H veto, 12 partial overlap unresolved, 97 outside geometry-only, 2 without later1h, 21 no first 4h contact. 49 отрицательных тестов×3; independent byte replay [CI 40203051046](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40203051046) SUCCESS 4/4. Отсутствуют оригинальные авторские case goldens. |
+| A129 фиксированный audit | [x] 129/129 SHA | Шесть SHA evidence, tip `dfca90b0f376ae36f8d50f5230ae19d9ed56dfc8dc435197fb1ead29f5e9dc86`, independent [CI 40203380526](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40203380526) SUCCESS 3/3 (49×3). |
+| C60 original native3m first vs repeated contact episode lifecycle | [x] SOURCE, не авторский первый POI test | 45+45 original Binance USD-M SHA ZIP, 76800 closed 3m и 15360 точных 15m Decimal parity, 153 технических 4H IMB: 21 no touch, 5 single visit, 127 multiple return; 4421 distinct observational episodes, 5 right-censored last. Source 3 471 251 bytes SHA256 `dd94e32421d383cae4d5d9d8d20c264418d74b3b0e59a222378586a4490050de`. Fresh byte equality independent [CI 40204057080](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40204057080) SUCCESS 4/4. |
+| A130 финальный аудит | [x] 130/130 SHA | Шесть C60 evidence, 23 негативных теста×3 Python, tip `e649e975970f9e940e3bdc87b7c65a8ce363d2d5241226b2876e0c07dd788810`. [Independent CI 40204411177](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40204411177) SUCCESS 3/3. |
+
+**C61 NEXT (не принят):** авторская классификация typed POI (Daily/4H, IMB/SNR/RB/Liquidity), первый *валидный* тест (не просто wick overlap), Strong High/Low после контакта + VC POI/BOS. Route A/B/C не объединять и не создавать ордера. **PAPER ONLY / NOT_TRADE_READY**, 29[x]/3[~]/8[ ] coarse high-level milestones остаются неизменными.
