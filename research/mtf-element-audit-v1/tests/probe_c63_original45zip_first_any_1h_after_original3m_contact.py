@@ -48,8 +48,8 @@ def run(output=None):
         source46=inspect_original_4h_imb_source(native,as_of_ms=END)
         assert json.loads(json.dumps(asdict(source46),sort_keys=True))==p46[symbol]["source_only_4h_classic_imb_first_contact"]
         source62=observe_hourly_source_poi_split(htf.derived_1h_closed,as_of_ms=END)
-        assert [asdict(x) for x in source62["technical_1h_snr_rb_separate_cases"]]==p62[symbol]["source_cases"],"C63_FROZEN_C62_BLOCK_SOURCE_DRIFT"
-        assert [asdict(x) for x in source62["technical_original_1h_imb_gaps"]]==p62[symbol]["source_gaps"],"C63_FROZEN_C62_CLASSIC_GAP_SOURCE_DRIFT"
+        assert json.loads(json.dumps([asdict(x) for x in source62["technical_1h_snr_rb_separate_cases"]],sort_keys=True))==p62[symbol]["source_cases"],"C63_FROZEN_C62_BLOCK_SOURCE_DRIFT"
+        assert json.loads(json.dumps([asdict(x) for x in source62["technical_original_1h_imb_gaps"]],sort_keys=True))==p62[symbol]["source_gaps"],"C63_FROZEN_C62_CLASSIC_GAP_SOURCE_DRIFT"
         full_events=convert_c62_closed_source_events(source62,htf.derived_1h_closed,as_of_ms=END)
         parent60=p60[symbol]["complete_original_source_visit_lifecycle"]
         assert len(parent60)==len(source46.observations)
