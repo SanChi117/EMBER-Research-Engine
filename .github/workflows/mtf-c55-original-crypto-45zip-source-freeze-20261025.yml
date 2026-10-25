@@ -1,0 +1,85 @@
+name: EMBER C55 original 45 ZIP 1H first liquidity raid to later native3m strict break
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-original-crypto-45zip-source-freeze-20261025.yml'
+permissions:
+  contents: write
+jobs:
+  original_crypto_45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check A123 chained history and original C21B 60ZIP evidence unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123proof.txt
+          grep -Fq '"validations_pass": true' /tmp/A123proof.txt
+          python - <<'PY'
+          import pathlib,json
+          p=pathlib.Path('evidence/c21/C21B_ORIGINAL_3M_VS_5M_REPLAY_RECEIPT.json')
+          z=json.loads(p.read_text())
+          assert z['original_total_zip']==60
+          assert z['totals']['native3m_cand_edges']==539
+          assert sum(x['1h_first_fractal_wick'] for x in z['observations'])==642
+          assert z['author_approved_trades']==0 and z['readiness']=='NOT_TRADE_READY'
+          PY
+      - name: Recheck 43 source-only negative 1H first wick vs 3m BOS life-cycle tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_bos_lifecycle 2>&1 | tee /tmp/C55test.txt
+          grep -Fq 'Ran 43 tests' /tmp/C55test.txt
+          grep -qx 'OK' /tmp/C55test.txt
+      - name: Download all 45 original checksum-verified crypto USD-M 1d 15m 3m zip and full 1H first wick raid -> 3m break replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c55"
+          python "$R/tests/probe_c55_original_crypto_1h_raid_3m_bos_45zip.py" "$R/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json" > /tmp/C55source.log 2>&1 || { tail -c 18000 /tmp/C55source.log; exit 1; }
+          tail -c 3200 /tmp/C55source.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json')
+          j=json.loads(p.read_text())
+          assert j['original_zip_count']==45
+          assert j['original_closed_native3m']==76800
+          assert j['original_complete_1h']==3840
+          assert j['first_confirmed_1h_wick_raids']==642
+          assert j['adapted_3m_price_breaks']==539
+          assert len(j['markets'])==5
+          assert sum(j['source_states'].values())==sum(x['preknown_1h_liquidity_levels'] for x in j['markets'])
+          assert j['source_states']['CONFIRMED_1H_RAID_WITH_ADAPTED_3M_CLOSED_BREAK']==539
+          assert all(x['physically_cut_native3m_matches_original_source_asof'] for x in j['markets'])
+          assert j['academic_1h_liquidity_goldens']==j['academic_3m_BOS_goldens']==j['academic_entry_goldens']==j['fills']==j['orders']==j['trades']==0
+          assert j['route_families_A_B_not_changed'] and j['source_5m_original_BOS_not_implemented_in_C55']
+          assert j['readiness']=='NOT_TRADE_READY'
+          print('C55_ORIGINAL_45_ZIP_1H_RAID_3M_BOS_SOURCE_FULL',p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Freeze only source original C55 event journal; no real orders
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json
+          git diff --cached --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json' /tmp/changed.txt
+          git commit -m 'evidence(C55): frozen original 45 ZIP 1H first wick/closed 3M research BOS and physical prefix source chronology'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
