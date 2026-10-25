@@ -157,10 +157,13 @@ def overlay_crypto_course_routes(parent,*,illustration=None,mode=None):
         expected=TEXT_ROUTE_MODES[variant]
         # The existing 4H IMB is only a technical research overlay, NOT
         # academic 4H typed POI/1H typed POI or raid/IDM entry trigger.
-        state=("TECHNICAL_FIRST_TOUCH_UNKNOWN" if parent.first_original3m_touch_id is None
-               else "TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY"
-               if parent.first_later_1h_technical_imb_source3m_id is not None
-               else "TECHNICAL_FIRST_TOUCH_WITHOUT_1H_SOURCE")
+        state=("CONTEXT_TF_NOT_EVIDENCED_FOR_COURSE_ROUTE"
+               if expected[0]!="4H" else
+               "TECHNICAL_FIRST_TOUCH_UNKNOWN"
+               if parent.first_original3m_touch_id is None else
+               "TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY"
+               if parent.first_later_1h_technical_imb_source3m_id is not None else
+               "TECHNICAL_FIRST_TOUCH_WITHOUT_1H_SOURCE")
         result.append(CryptoCourseOverlay(
             parent.symbol,TARGET,parent.source_as_of_ms,
             parent.original_4h_source3m_ids,variant,family,
