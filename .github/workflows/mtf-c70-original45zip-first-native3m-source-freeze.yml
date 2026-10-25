@@ -1,0 +1,102 @@
+name: EMBER C70 complete original45ZIP first 3m source wick inside C69 15m
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c70-original45zip-first-native3m-source-freeze.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c70_original45zip_exact_first_native3m_wick.py'
+permissions:
+  contents: write
+concurrency:
+  group: c70-crypto-45zip-first-native3m-source
+  cancel-in-progress: false
+jobs:
+  original45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate accepted append-only A139 and previous source blobs immutable
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A139
+          grep -Fq 'entries 139 tip_sha256 78271dd0a96a54713e4559fe47107ccf063b7ba8f4ed384d8aa166f2cae9c227' /tmp/A139
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = 587779a7dd1736099e8270c8823c15822f0e77a0
+          test "$(git rev-parse HEAD:$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json)" = b22860dfa13e4b19d16e8dd892719a772485e847
+      - name: Original Binance 45 signed original SHA ZIP full crypto proof 3m within 15m first contact plus C46-C69 frozen source
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c70_original45zip_exact_first_native3m_wick.py" /tmp/C70-original.json >/tmp/C70-original.log 2>&1 || { tail -c 20000 /tmp/C70-original.log; exit 1; }
+          tail -c 2400 /tmp/C70-original.log
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('/tmp/C70-original.json');d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert sum(d['source_first_exact_native3m_contact_state_totals'].values())==153
+          assert d['author_verified_original3m_first_wick_is_owner_valid']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C70_FIRST_ORIGINAL45_SOURCE_BYTES',p.stat().st_size)
+          print('C70_FIRST_ORIGINAL45_SOURCE_SHA',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c70-original45-first-3m
+          path: /tmp/C70-original.json
+          if-no-files-found: error
+  negatives20:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: First 3m wick and 5:1 strict 15m raw price parity tests on all Python
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c70_exact_native3m_first_raid_or_poi_source_wick 2>&1 | tee /tmp/c70
+          grep -Fq 'Ran 20 tests' /tmp/c70
+          grep -qx 'OK' /tmp/c70
+  freeze:
+    needs: [original45,negatives20]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: c70-original45-first-3m
+          path: /tmp/c70
+      - name: Freeze only after original signed ZIP x45 and 20 negative x3
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json
+          if test -e "$p"; then cmp -s "$p" /tmp/c70/C70-original.json; exit 0; fi
+          mkdir -p "$(dirname "$p")"
+          cp /tmp/c70/C70-original.json "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C70): complete Binance 45 ZIP original native3m first exact wick inside C69 15m source, no owner trade'
+          for n in 1 2 3 4 5; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
