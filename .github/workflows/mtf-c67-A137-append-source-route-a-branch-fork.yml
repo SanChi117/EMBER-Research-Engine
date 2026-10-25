@@ -1,0 +1,128 @@
+name: EMBER C67 A137 immutable original45ZIP Route A 1H fork six SHA append
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c67-A137-append-source-route-a-branch-fork.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c67-immutable-a137-append-once
+  cancel-in-progress: false
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate A136 and six full original45 ZIP new C67 source evidence only
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/136
+          grep -Fq 'entries 136 tip_sha256 03f5277ae06bc2249e90b92669ca9dc222d73eb5ebf047ae3406eebd082bafea' /tmp/136
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json')
+          w=Path('evidence/c67/C67_INDEPENDENT_ORIGINAL45ZIP_ROUTE_A_1H_FORK_WITNESS_20261025.json')
+          rpt=Path('cycles/B1_C67_ROUTE_A_1H_TRIGGER_NEW_POI_FIRST_RETEST_SOURCE_REPORT.md')
+          assert all(x.exists() and x.stat().st_size>0 for x in (p,w,rpt))
+          assert p.stat().st_size==348943
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='f16a8be9e01d9edc3f71d7c091665e32f22cdd66ba0eb7fef466551f482c8c4a'
+          d=json.loads(p.read_bytes());witness=json.loads(w.read_bytes())
+          assert d['original_archives']['total']==45
+          assert d['native3m_original_closed']==76800
+          assert d['native15m_original_closed']==15360
+          assert d['native1d_original_closed']==160
+          assert d['derived1h_closed']==3840
+          assert d['original_c46_4h_parent_count']==153
+          assert d['nested_1h_imb_4h_trigger_veto_source_occurrences']==187
+          assert d['source_route_a_fork_parent_status_totals']=={
+            'FIRST_ANY_1H_SOURCE_OPPOSITE_SIDE':42,
+            'FIRST_ANY_1H_TRIGGER_AND_VC_AMBIGUOUS':18,
+            'FIRST_ANY_1H_TWO_SIDES_AMBIGUOUS':11,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_OPPOSITE_SOURCE':21,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_TRIGGER_NEEDS_5M_VC':6,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_TWO_SIDES_AMBIGUOUS':1,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_15M_VC_NO_TRIGGER':6,
+            'NEW_1H_VC_FIRST_SOURCE_TEST_NO_15M_CANDIDATE':1,
+            'NEW_1H_VC_NO_SUBSEQUENT_POI_SOURCE_TEST':0,
+            'NO_1H_SOURCE_FORK_FULL_WINDOW':0,
+            'NO_1H_SOURCE_FORK_RIGHT_CENSORED':0,
+            'NO_4H_SOURCE_FIRST_TOUCH':21,
+            'TRIGGER_FIRST_15M_BOTH_SIDES_AMBIGUOUS':0,
+            'TRIGGER_FIRST_15M_IMB_SNR_OPPOSITE_SOURCE':13,
+            'TRIGGER_FIRST_15M_IMB_SNR_SAME_SOURCE':13,
+            'TRIGGER_FIRST_NO_15M_SOURCE_FULL_WINDOW':0,
+            'TRIGGER_FIRST_NO_15M_SOURCE_RIGHT_CENSORED':0}
+          assert d['route_a_owner_1h_raid_or_imb_trigger_confirmed']==0
+          assert d['route_a_owner_first_valid_new1h_POI_test_confirmed']==0
+          assert d['route_a_owner_15m_final_VC_confirmed']==0
+          assert d['orders']==d['trades']==d['fills']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          assert witness['first_full_source_sha256']==sha
+          assert witness['first_full_source_bytes']==p.stat().st_size
+          assert witness['first_source_replay_ci']==40219282645
+          assert witness['independent_second_source_replay_ci']==40219450625
+          assert witness['second_workflow_jobs']=='SUCCESS_4_OF_4'
+          assert witness['synthetic_tests_per_python']==35
+          assert witness['source_parent_class_counts']==d['source_route_a_fork_parent_status_totals']
+          print('C67_A137_INDEPENDENT_FULL_45_ZIP_WITNESS_ACCEPTED')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+          cd "$R/d05"
+          python -m unittest -v test_c67_route_a_1h_trigger_vs_new_poi_source_fork 2>&1 | tee /tmp/c67
+          grep -Fq 'Ran 35 tests' /tmp/c67
+          grep -qx 'OK' /tmp/c67
+      - name: Append once immutable A137 six SHA source receipts after two independent original 45 ZIP
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A137 \
+            --cycle B1/C67 \
+            --planned 'Restore and separate two owner Route A branches: 4H author POI first valid test -> 1H SSL/BSL raid or allowed not-nested IMB trigger -> 15m SNR or IMB owner VC; alternatively no 1H trigger -> 1H RB/SNR/IMB owner VC NEW POI, first true new 1H POI retest then 15m trigger and 5m VC or 15m VC. Reject entirely nested 1H IMB inside 4H parent source classic gap as trigger, record source-first ANY and ambiguity rather than cherry-pick, keep separate Route B IDM and Route C 3m5m BOS and never claim missing author crypto goldens.' \
+            --executed 'Added independent C67 1H trigger-vs-new1H VC source fork module, conservative preknown unswept 1H BSL SSL wick-only raid observations and allowed nonnested classic source 1H IMB; 1H RB/SNR/IMB as new contextual POI requires first closed original15m wick source retest after 1H fully known, then first ANY closed 15m SNR/IMB source event with opposite and simultaneous ties retained. Source case that is both trigger and VC at same 1H timestamp marked ambiguous, never an owner entry. 35 adverse Python3.10 3.11 3.12 cases; full fresh downloaded SHA checked Binance USD-M 45 ZIP BTC ETH SOL XRP BCH Sep01 Oct02 original76800 native3m,15360 native15m,160 native1d,3840 derived closed1h; recomputed every 153 C46 parent and C60 first native3m touch, C62 1H cases, C63 first ANY and every frozen C66 original15m source event without price drift. Full first successful CI 40219282645, second independent whole 45 ZIP byte exact CI 40219450625 SUCCESS 4/4. Full immutable 348943 bytes SHA256 f16a8be9e01d9edc3f71d7c091665e32f22cdd66ba0eb7fef466551f482c8c4a Git blob 87409101a6fad4897b32e13085c9a0cc13566594.' \
+            --result 'Source technical 153 original 4H contexts: 21 no contact, 42 first 1H opposite, 11 two sides, 18 simultaneous source trigger and new POI ambiguous; 26 1H trigger-first then 15m first-any events (13 same,13 opposite); 35 source 1H new POI retests then 15m (21 opposite, six technical SNR no trigger, six 15m source IMB needs 5m VC not author, one both sides, one no later15m). 187 nested 1H IMB within parent4H IMB technical trigger veto OCCURRENCES across correlated parent contexts, NOT trades or unique market events. Zero author-verified true 4H POI first test, 1H owner trigger, 1H VC new POI first valid test, 15m or 5m VC, StrongHL, FTA SL TP, orders, fills trades or PnL. SOURCE-ONLY CRYPTO PAPER NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Prior immutable A136 SHA tip 03f5277ae06bc2249e90b92669ca9dc222d73eb5ebf047ae3406eebd082bafea unchanged. Frozen original SHA blobs C46 dc03c181912ffbb800bc191fbc16ec0d05c335e0, C60 899373e4a1dc1999d1485ac8c1f790d39071aebd, C62 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2, C63 fdc77c7ec942f03b4efae83b935d994c8435a24f, C66 c693058cdb28b0e118879d32ddcbbd0d2a66bfc6 identical. Two earlier red original CI 40219112041 and 40219214487 due wrong frozen C66 integer count key vs complete native15m source list, corrected only reference, no source price changes; first negative CI 40218779842 had invalid synthetic candle open less than low fixed only synthetic test. 35 x three Python pass; independent second 45 fresh ZIP full JSON exact 348943 bytes. No semantic promotion into trading and no workaround for owner data goldens.' \
+            --evidence d05/c67_route_a_1h_trigger_vs_new_poi_source_fork.py \
+            --evidence d05/test_c67_route_a_1h_trigger_vs_new_poi_source_fork.py \
+            --evidence tests/probe_c67_original45zip_route_a_fork_retest.py \
+            --evidence evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json \
+            --evidence evidence/c67/C67_INDEPENDENT_ORIGINAL45ZIP_ROUTE_A_1H_FORK_WITNESS_20261025.json \
+            --evidence cycles/B1_C67_ROUTE_A_1H_TRIGGER_NEW_POI_FIRST_RETEST_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A137
+          grep -Fq 'entries 137' /tmp/A137
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Push only append-only journal A137 without force
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changed
+          test "$(wc -l < /tmp/changed)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C67): append-once A137 six SHA original crypto Route A branch fork source no author trade'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
