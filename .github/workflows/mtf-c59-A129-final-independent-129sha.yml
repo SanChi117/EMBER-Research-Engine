@@ -1,10 +1,10 @@
 name: EMBER C59 final independently verified A129 all 129 SHA and StrongHL evidence
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c59-A129-final-independent-129sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: cc1b84746a068e0ef634e3ef0e0d67c7d6a99138
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
