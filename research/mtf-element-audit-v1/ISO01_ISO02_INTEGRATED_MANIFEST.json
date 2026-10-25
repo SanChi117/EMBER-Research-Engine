@@ -1,0 +1,48 @@
+{
+  "base_commit": "46a57eaa38c1e6f03cabf8b6d3be8d1a69f311cf",
+  "blocked_layers": [
+    "author semantic certification E",
+    "trade decisions",
+    "execution",
+    "backtest F/G",
+    "paper Trade Plan H",
+    "live trading"
+  ],
+  "branch": "research/ember-integrated-working-20261025",
+  "entrypoint": "tests/probe_iso02_integrated_perception_graph.py",
+  "isolation": {
+    "cross_route_object_joins": false,
+    "merge": false,
+    "pull_request": false,
+    "shared_journal_modified": false,
+    "shared_map_or_handoff_modified": false
+  },
+  "note": "Working means deterministic source-only perception, identification, state, relationships and observation scenarios. It does not mean academic completion or trade readiness.",
+  "readiness": "NOT_TRADE_READY",
+  "routes": {
+    "route_a": {
+      "author_route_certified": false,
+      "integration": "ISO02",
+      "meaning": "A_4H_TRIGGER_15M_VC",
+      "namespace": "C57"
+    },
+    "route_b": {
+      "author_route_certified": false,
+      "integration": "ISO02",
+      "meaning": "B_4H_VC_1H_IDM",
+      "namespace": "C58"
+    },
+    "route_c": {
+      "author_route_certified": false,
+      "integration": "ISO02",
+      "meaning": "1H raid to native 3m/5m technical break observation",
+      "namespace": "ISO01"
+    }
+  },
+  "schema": "EMBER_ISOLATED_INTEGRATED_WORKING_MANIFEST_V1",
+  "scope": "WORKING_READ_ONLY_RESEARCH_PERCEPTION_GRAPH",
+  "tests": [
+    "d05/test_iso01_route_c_parent_object_state.py",
+    "d05/test_iso02_integrated_perception_graph.py"
+  ]
+}

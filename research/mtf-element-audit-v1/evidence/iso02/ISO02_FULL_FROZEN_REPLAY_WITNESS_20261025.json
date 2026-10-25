@@ -1,0 +1,101 @@
+{
+  "PnL": null,
+  "code_sha256": {
+    "iso01_route_c_parent_object_state.py": "f28ba06da6b6d6ffe98edd4424c0a5e147bd2d71a1173b80f5408d07d02c8b68",
+    "iso02_integrated_perception_graph.py": "e480e422ed3a8194c0dcced9e324f74261773867366bccb5d018f6ccd60bc0f5",
+    "probe_iso01_frozen_c56_parent_state_registry.py": "eaa49b1ed77d744ec6bf97b34a9ac11f222b6d23b4b14ae29caa52e7feacd760",
+    "probe_iso02_integrated_perception_graph.py": "7f4642ee81f2defca5a047fbd3d1606ee97d0186cce84887538e7da10ec306a9"
+  },
+  "cross_route_relationships": 0,
+  "decision_state": "BLOCKED_SEMANTIC_GATE",
+  "fills": 0,
+  "graph_bytes": 2415236,
+  "graph_sha256": "86bb21675c9dd179b7f153b61a2fcf01c049dfc843b95c1ecc87ac3dc9afc8eb",
+  "limitation": "Replay of pinned frozen evidence, not a new independent market-data attestation, author semantic certification, backtest or performance claim.",
+  "objects": 2052,
+  "objects_by_kind": {
+    "1h_raid_parent": 542,
+    "4h_parent": 306,
+    "native15m_imb": 124,
+    "native3m_break": 539,
+    "native5m_break": 512,
+    "preknown1h_liquidity": 29
+  },
+  "objects_by_route": {
+    "route_a": 277,
+    "route_b": 182,
+    "route_c": 1593
+  },
+  "orders": 0,
+  "original_market_redownloaded": false,
+  "readiness": "NOT_TRADE_READY",
+  "relationships": 1204,
+  "relationships_by_type": {
+    "PREKNOWN_AT_CONTACT": 29,
+    "SUBSEQUENT_CHILD": 1175
+  },
+  "repeat_byte_identical": true,
+  "scenario_states": {
+    "ABSENT_IN_COMPLETE_FROZEN_SOURCE": 23,
+    "ABSENT_OR_NO_CONTACT_IN_COMPLETE_FROZEN_SOURCE": 124,
+    "BOTH_CHILD_BREAKS_OBSERVED": 509,
+    "ONLY_3M_CHILD_BREAK_OBSERVED_5M_ABSENT_IN_COMPLETE_SOURCE": 30,
+    "ONLY_5M_CHILD_BREAK_OBSERVED_3M_ABSENT_IN_COMPLETE_SOURCE": 3,
+    "PREKNOWN_UNSWEPT_CHILD_CANDIDATES_OBSERVED": 29,
+    "RIGHT_CENSORED_UNKNOWN": 6,
+    "TECHNICAL_4H_3M_1H_15M_SEQUENCE_OBSERVED": 124
+  },
+  "scenarios": 848,
+  "schema": "EMBER_ISO02_FULL_FROZEN_REPLAY_WITNESS_V1",
+  "semantic_gates": [
+    {
+      "capability": "AUTHOR_TYPED_POI_AND_VALID_TEST",
+      "state": "NEEDS_SOURCE"
+    },
+    {
+      "capability": "AUTHOR_VOLUME_CONFIRMATION_VC",
+      "state": "NEEDS_SOURCE"
+    },
+    {
+      "capability": "AUTHOR_IDM_STRONGHL_AND_AHEAD",
+      "state": "NEEDS_SOURCE"
+    },
+    {
+      "capability": "AUTHOR_TIMESTAMPED_BOS",
+      "state": "NEEDS_SOURCE"
+    },
+    {
+      "capability": "AUTHOR_FTA_SESSION_AND_STRUCTURED_STOP",
+      "state": "NEEDS_SOURCE"
+    },
+    {
+      "capability": "AUTHOR_ENTRY_DECISION_AND_GOLDENS",
+      "state": "NEEDS_SOURCE"
+    },
+    {
+      "capability": "EXECUTION_PAPER_OOS_AND_PERFORMANCE",
+      "state": "NOT_STARTED"
+    }
+  ],
+  "source_commit": "46a57eaa38c1e6f03cabf8b6d3be8d1a69f311cf",
+  "trades": 0,
+  "verification": {
+    "all_versions_passed": true,
+    "cross_version_graph_bytes_equal": true,
+    "graph_sha256_by_version": {
+      "3.10.22": "86bb21675c9dd179b7f153b61a2fcf01c049dfc843b95c1ecc87ac3dc9afc8eb",
+      "3.11.2": "86bb21675c9dd179b7f153b61a2fcf01c049dfc843b95c1ecc87ac3dc9afc8eb",
+      "3.12.12": "86bb21675c9dd179b7f153b61a2fcf01c049dfc843b95c1ecc87ac3dc9afc8eb"
+    },
+    "python_versions": [
+      "3.10.22",
+      "3.11.2",
+      "3.12.12"
+    ],
+    "test_suites": {
+      "ISO01": 40,
+      "ISO02": 46
+    },
+    "tests_per_version": 86
+  }
+}
