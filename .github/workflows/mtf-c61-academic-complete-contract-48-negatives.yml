@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Immutable prior 130/130 SHA and C61 academic 48 negative tests
+      - name: Immutable prior 130/130 SHA and C61 academic 51 negative tests
         run: |
           set -euo pipefail
           cd research/mtf-element-audit-v1
@@ -29,6 +29,6 @@ jobs:
           python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
           cd d05
           python -m unittest -v test_c61_academic_poi_context_first_valid_stronghl_contract 2>&1 | tee /tmp/c61
-          grep -Fq 'Ran 48 tests' /tmp/c61
+          grep -Fq 'Ran 51 tests' /tmp/c61
           grep -qx 'OK' /tmp/c61
           ! grep -q 'skipped=' /tmp/c61
