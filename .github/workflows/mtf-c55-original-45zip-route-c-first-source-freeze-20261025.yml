@@ -1,0 +1,72 @@
+name: EMBER C55 first original 45ZIP crypto 1H BSL SSL raid 3m adapted BOS 4-source freeze
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-original-45zip-route-c-first-source-freeze-20261025.yml'
+permissions:
+  contents: write
+jobs:
+  c55_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all 123/123 source chain SHA and pinned complete original C37 45ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A123evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json)" = 'e4b702e8c6cdc34f1c2475df73ef44ae1631fe56'
+      - name: Re-run 31 1H raid after preknown fractal 3m BOS closure and no 5m leakage
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_3m_bos_route_c_guard 2>&1 | tee /tmp/C55-31.txt
+          grep -Fq 'Ran 31 tests' /tmp/C55-31.txt
+          grep -qx 'OK' /tmp/C55-31.txt
+      - name: Build first complete SOURCE native3m 1H raid BOS C37 four-stream research-only archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          mkdir -p "$R/evidence/c55"
+          python "$R/tests/probe_c55_original_crypto_route_c_1h_raid_3m_bos_from_c37.py" "$R/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json" > /tmp/C55.log 2>&1 || { tail -c 17000 /tmp/C55.log; exit 1; }
+          tail -c 1500 /tmp/C55.log
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json')
+          a=json.loads(p.read_text())
+          assert a['owner_scope']=='CRYPTO_ONLY' and a['original_Binance_USDM_zip_lineage']==45
+          assert a['original_closed_native3m']==76800 and a['exact_native15m']==15360
+          assert a['independent_hypothesis_count']==4
+          assert a['adapted_source_hypothesis_event_counts']['LATEST_CONFIRMED_V1']==539
+          assert a['original_5m_Route_C_probed_from_3m'] is False
+          assert a['author_confirmed_BOS']==a['author_confirmed_1h_liquidity']==a['orders']==a['trades']==0
+          assert a['readiness']=='NOT_TRADE_READY'
+          print('C55_FIRST_FROZEN_ALL_FOUR_3M_SOURCE_ROUTE_C',len(p.read_bytes()),hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - name: Commit only derived C55 original C37 source review without any trading commands
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json
+          git diff --cached --name-only | tee /tmp/staged.txt
+          test "$(wc -l < /tmp/staged.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json' /tmp/staged.txt
+          git commit -m 'evidence(C55): 1H crypto liquidity raid after preknown fractal -> 3m adapted closed BOS 4 C37 source hypotheses, 5m unverified'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
