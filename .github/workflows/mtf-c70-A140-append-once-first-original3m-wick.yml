@@ -1,0 +1,113 @@
+name: EMBER C70 A140 append-once first real original3m source wick six SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c70-A140-append-once-first-original3m-wick.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c70-a140-append-once-crypto-original3m
+  cancel-in-progress: false
+jobs:
+  append140:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate A139 original signed 45 Binance ZIP twice full exact C70 source, all old prices unchanged
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A139
+          grep -Fq 'entries 139 tip_sha256 78271dd0a96a54713e4559fe47107ccf063b7ba8f4ed384d8aa166f2cae9c227' /tmp/A139
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json')
+          w=Path('evidence/c70/C70_INDEPENDENT_ORIGINAL45ZIP_FIRST_NATIVE3M_SOURCE_WITNESS_20261025.json')
+          report=Path('cycles/B1_C70_FIRST_ORIGINAL3M_WICK_WITHIN_15M_LIQUIDITY_OR_POI_SOURCE_REPORT.md')
+          assert all(q.is_file() and q.stat().st_size>0 for q in (p,w,report))
+          assert p.stat().st_size==214905
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='b93edbb2eabdefeff6161f80c17d5e35013bc8b0205aaefac63e15f0a6b37ef9'
+          d=json.loads(p.read_bytes());z=json.loads(w.read_bytes())
+          assert d['original_zip_counts']['total']==45 and d['source_4h_C46_parent_count']==153
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          expected={
+            'C69_SOURCE_15M_BAR_MISSING':0,
+            'NEW1H_POI_FIRST_ORIGINAL3M_WICK_TEST_NOT_AUTHOR_VALID':35,
+            'NO_C69_UNAMBIGUOUS_SOURCE_CONTACT':95,
+            'NO_ORIGINAL3M_WICK_CROSS':0,
+            'RAID_FIRST_ORIGINAL3M_CLOSE_THROUGH_LEVEL_NOT_AUTHOR':8,
+            'RAID_FIRST_ORIGINAL3M_WICK_ONLY_NOT_AUTHOR':15}
+          assert d['source_first_exact_native3m_contact_state_totals']==expected
+          assert z['source_status_totals']==expected and z['first_full_source_sha256']==sha
+          assert z['first_full_source_bytes']==214905
+          assert z['first_full_original45_zip_ci']==40223455747
+          assert z['second_independent_full_original45_zip_ci']==40223655477
+          assert z['second_complete_original45_zip_jobs']=='SUCCESS_4_OF_4'
+          assert z['independent_negative_tests_per_python']==20
+          assert d['author_verified_original3m_first_wick_is_owner_valid']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C70_INDEPENDENT_CRYPTO_NATIVE3M_45_ZIP_SOURCE_WITNESS_ACCEPTED')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json)" = 899373e4a1dc1999d1485ac8c1f790d39071aebd
+          test "$(git rev-parse HEAD:$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json)" = 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2
+          test "$(git rev-parse HEAD:$R/evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json)" = fdc77c7ec942f03b4efae83b935d994c8435a24f
+          test "$(git rev-parse HEAD:$R/evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json)" = c693058cdb28b0e118879d32ddcbbd0d2a66bfc6
+          test "$(git rev-parse HEAD:$R/evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json)" = 87409101a6fad4897b32e13085c9a0cc13566594
+          test "$(git rev-parse HEAD:$R/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = 587779a7dd1736099e8270c8823c15822f0e77a0
+          test "$(git rev-parse HEAD:$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json)" = b22860dfa13e4b19d16e8dd892719a772485e847
+          test "$(git rev-parse HEAD:$R/evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json)" = e100ca8a70a32484fd311ae2dcf31a311d85865c
+          cd "$R/d05"
+          python -m unittest -v test_c70_exact_native3m_first_raid_or_poi_source_wick 2>&1 | tee /tmp/C70
+          grep -Fq 'Ran 20 tests' /tmp/C70
+          grep -qx 'OK' /tmp/C70
+      - name: Append immutable A140 six C70 SHA receipts source native3m only, never owner StrongHL
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A140 \
+            --cycle B1/C70 \
+            --planned 'Within C69 earliest real native15m first strict PREKNOWN original1H SSL/BSL raid, find earliest original native3m wick from five fully source SHA signed genuine 3m bars exactly aggregated to the known original native15m OHLCV. Preserve native3m wick-only vs body close distinctions, first proposed NEW1H POI source3m wick not author first VALID POI test. Never make source 1H raid valid before original 1H closes; no route B IDM / route C raid BOS mixing, no author StrongHL, FTA, SL, TP, trades.' \
+            --executed 'Separate original3m native first wick C70 module and 20 strict synthetic adversarial SHA source tests Python3.10 3.11 3.12 each; verified each selected native15m by exactly five earlier original native3m signed SHA candle IDs Decimal high low open close sum volume; first ANY 3m candle crossing preknown SSL BSL level or technical NEW1H POI source range, no favorable future cherry pick; technical1H approval timestamp=max(closed first native3m wick, whole 1H close). Fresh independent two full Binance USDT-M original 45 SHA ZIP replay BTC ETH SOL XRP BCH Sep01-Oct02, 76800 original3m,15360 original15m,160 original1d,3840 derived closed1h. First full CI 40223455747 SUCCESS, second full byte exact 214905 source file CI 40223655477 SUCCESS 4 of 4; frozen SHA256 b93edbb2eabdefeff6161f80c17d5e35013bc8b0205aaefac63e15f0a6b37ef9 git blob e100ca8a70a32484fd311ae2dcf31a311d85865c, all original C46 C60 C62 C63 C66 C67 C68 C69 source parent chronology and SHA IDs exact.' \
+            --result '153 original crypto 4h source parents: 95 no unambiguous C69 source raid or POI level (92 no 1H valid source branch and 3 multiple liquidity levels same original15m unresolved), 15 genuine first native3m source wick-only SSL/BSL, 8 earliest original3m bar closed through source liquidity level (15m and 1h can reclaim later), 35 proposed NEW1H POI first genuine original3m technical wick not author first VALID test. Zero author StrongHL, real VC/BOS or POI true valid test, no SL TP orders fills trades PnL, research-only PAPER NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous A139 immutable 139/139 SHA tip 78271dd0a96a54713e4559fe47107ccf063b7ba8f4ed384d8aa166f2cae9c227 unchanged, all previously frozen C46 C60 C62 C63 C66 C67 C68 C69 source original SHA Git blobs immutable. Two independent original Binance 45 ZIP full replays byte exact 214905 source JSON, 20 negative unit tests each Python 3.10 3.11 3.12, 5-to-1 Decimal OHLCV parity of original signed raw candle source, neither 3m wick nor 15m wick automatically proves author valid POI or executable 1H trigger. No trading actions.' \
+            --evidence d05/c70_exact_native3m_first_raid_or_poi_source_wick.py \
+            --evidence d05/test_c70_exact_native3m_first_raid_or_poi_source_wick.py \
+            --evidence tests/probe_c70_original45zip_exact_first_native3m_wick.py \
+            --evidence evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json \
+            --evidence evidence/c70/C70_INDEPENDENT_ORIGINAL45ZIP_FIRST_NATIVE3M_SOURCE_WITNESS_20261025.json \
+            --evidence cycles/B1_C70_FIRST_ORIGINAL3M_WICK_WITHIN_15M_LIQUIDITY_OR_POI_SOURCE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A140
+          grep -Fq 'entries 140' /tmp/A140
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Push only append-once A140 SHA journal without force
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only >/tmp/change
+          test "$(wc -l </tmp/change)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/change
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C70): append-once A140 source native3m first actual wick inside original15m six SHA no owner StrongHL'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
