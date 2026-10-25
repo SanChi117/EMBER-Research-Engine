@@ -1,0 +1,63 @@
+name: EMBER C77 A147 independent final 147-SHA x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c77-A147-final-independent-147sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check full journal, historical CI isolation and C77 source against SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a147
+          grep -Fq 'entries 147 tip_sha256 5808b76671e6280e65495820284f0723549a533fdecb99f0a54881fd38368527' /tmp/a147
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python tests/probe_c77_source_evidence.py
+          python tests/probe_c77_historical_ci_archives.py
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          rows=[json.loads(v) for v in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==147
+          prev,last=rows[-2:]
+          assert prev['seq']==146 and prev['record_sha256']=='c48534af9c167eee6465966b696e368764becdfb244c5e4382efcd9899d3ef40'
+          assert last['seq']==147 and last['action_id']=='A147' and last['cycle']=='B1/C77'
+          assert last['prev_sha256']==prev['record_sha256']
+          assert last['record_sha256']=='5808b76671e6280e65495820284f0723549a533fdecb99f0a54881fd38368527'
+          assert last['verdict']=='DONE' and last['cycle_result']=='PASSED'
+          expected={
+          'd05/c77_original_parent_source_first3m.py':'7cc4714418985d77998ff66690d6c047ee011b46c7dad1f755bcbc5d8b28f53d',
+          'd05/test_c77_original_parent_source_first3m.py':'05f9ddefa7d81212ee58e3c05f9e265a72840a0884a0906ddf034d78d82c8b26',
+          'tests/probe_c77_original45zip_1h_poi.py':'8067f7e175a52f09ae960670a3deb088a39ba6aab80709f107b5fb2c88f07403',
+          'tests/probe_c77_45zip_forensic_conflicts.py':'258d668a5922e465befa9b76d44d5b76e8af97df9ee43302353374233cfab763',
+          'tests/probe_c77_historical_ci_archives.py':'4ed978c5035710ec0a42b0496a94454fb3dbd32fc04e2b0ca2dd184f832e94a4',
+          'tests/probe_c77_source_evidence.py':'ef974bf9fa91b55946421daaf96b63d27d89da943a74caa8a494fc054ba273f4',
+          'evidence/c77/C77_FRESH_ORIGINAL45ZIP_BRANCH_AWARE_POI_REPLAY.json':'170ffad3d49af83324ea3da12d031c2f53842bf7e1604cee6b1bfb9f4f01e394',
+          'evidence/c77/C77_NAIVE_FORENSIC_COUNTEREXAMPLES.json':'2b8083f18e1dc730a4c60cd343f1bcd4c3e6b700173c91ae4561dd0a018e5842',
+          'evidence/c77/C77_HISTORICAL_CI_C59_C73_PROOF.json':'f61e0513b3200e5d8d77640a81ba503d1570521ebc6f053fc579f7ad2ae9db32',
+          'cycles/B1_C77_INDEPENDENT_PARENT_SOURCE_REPORT.md':'9a53b5693e48cac6bfe1a94f9deeae39a31bcb1190f8af7c85c7895b35e80034'}
+          assert set(expected)=={e['path'] for e in last['evidence']}
+          for e in last['evidence']:
+              b=Path(e['path']).read_bytes()
+              assert len(b)==e['bytes']
+              assert hashlib.sha256(b).hexdigest()==e['sha256']==expected[e['path']]
+          assert hashlib.sha256(Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()).hexdigest()=='c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b'
+          print('C77_A147_INDEPENDENT_TEN_SHA_AND_C73_PINNED_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c77_original_parent_source_first3m 2>&1 | tee /tmp/c77
+          grep -Fq 'Ran 34 tests' /tmp/c77
+          grep -qx 'OK' /tmp/c77
