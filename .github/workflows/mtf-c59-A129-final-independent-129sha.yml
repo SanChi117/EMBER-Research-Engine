@@ -1,0 +1,66 @@
+name: EMBER C59 final independently verified A129 all 129 SHA and StrongHL evidence
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c59-A129-final-independent-129sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  sha129:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify 129/129 records, 6 evidence source digest, previous frozen and 49 tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/sha129
+          grep -Fq 'entries 129 tip_sha256 dfca90b0f376ae36f8d50f5230ae19d9ed56dfc8dc435197fb1ead29f5e9dc86' /tmp/sha129
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,subprocess
+          log=[json.loads(line) for line in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(log)==129
+          prev,new=log[-2:]
+          assert prev['action_id']=='A128' and prev['record_sha256']=='dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b'
+          assert new['action_id']=='A129' and new['seq']==129 and new['prev_sha256']==prev['record_sha256']
+          assert new['record_sha256']=='dfca90b0f376ae36f8d50f5230ae19d9ed56dfc8dc435197fb1ead29f5e9dc86'
+          assert new['verdict']=='DONE' and new['cycle']=='B1/C59' and new['cycle_result']=='PASSED'
+          expected={"d05/c59_academic_stronghl_first_test_semantic_gate.py":"18819348548b8dac0eeb405e481487b1d161c767ebf26b20e1291b60f7f7cede","d05/test_c59_academic_stronghl_first_test_semantic_gate.py":"be95838c07eb4d7d1cab0f5a86a722e1d0447b5ede3128d6672a6a20106bf731","tests/probe_c59_frozen_original_course_stronghl_nesting_join.py":"4e73dbfc31243086ee655b644afa90e0b551ee1969a1018688a340b40eec9b4c","evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json":"31af44acd6a1060c4871a473ad916dd0cb7b139576e35789d5a29c1982b8409a","evidence/c59/C59_INDEPENDENT_AUTHOR_TEXT_AND_FROZEN_CRYPTO_SOURCE_WITNESS_20261025.json":"fc93cadf478017112603ffde3ac8b68f1b5b944ab039674683ae6fb60175809d","cycles/B1_C59_AUTHOR_STRONGHL_FIRST_TEST_NESTED_1H_IMB_SEMANTIC_REPORT.md":"0d53f2a7ecae4f8bdec6cda62584a7954758b4e6a53c2ee4abf7151e81c44b22"}
+          assert len(new['evidence'])==6 and {v['path'] for v in new['evidence']}==set(expected)
+          for item in new['evidence']:
+            raw=Path(item['path']).read_bytes()
+            assert len(raw)==item['bytes'] and hashlib.sha256(raw).hexdigest()==item['sha256']==expected[item['path']]
+          z=json.loads(Path('evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json').read_bytes())
+          assert z['source_status_totals']=={
+            'NO_4H_SOURCE_FIRST_CONTACT':21,
+            '4H_FIRST_CONTACT_NO_LATER_1H_SOURCE':2,
+            'LATER_1H_IMB_INSIDE_PARENT_4H_IMB_VETO':21,
+            'LATER_1H_IMB_PARTIALLY_OVERLAPS_PARENT_VETO':12,
+            'LATER_1H_IMB_OUTSIDE_PARENT_GEOMETRY_ONLY':97}
+          assert z['academic_author_StrongHL_goldens']==z['orders']==z['trades']==z['fills']==0
+          assert z['readiness']=='NOT_TRADE_READY'
+          old={
+            'evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json':'dc03c181912ffbb800bc191fbc16ec0d05c335e0',
+            'evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json':'b2727f081d8a73f522a97a54b4582507ee969244',
+            'evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json':'06f2ff7decd2aa9660381947d3cf43f6b722cd8e'}
+          for p,h in old.items():
+            blob=subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+p],text=True).strip()
+            assert blob==h
+          print('C59_FINAL_129_SHA_SIX_EVIDENCE_ORIGINAL_C46_C47_C58_PASSED')
+          PY
+          cd d05
+          python -m unittest -v test_c59_academic_stronghl_first_test_semantic_gate 2>&1 | tee /tmp/C59-49
+          grep -Fq 'Ran 49 tests' /tmp/C59-49
+          grep -qx 'OK' /tmp/C59-49
+          ! grep -q 'skipped=' /tmp/C59-49
