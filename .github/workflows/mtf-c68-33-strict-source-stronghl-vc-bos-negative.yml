@@ -1,0 +1,33 @@
+name: EMBER C68 StrongHL contact first ANY 15m VC or 1H BOS source 33 negative
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c68-33-strict-source-stronghl-vc-bos-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c68_stronghl_post_contact_vc_bos_source.py'
+      - 'research/mtf-element-audit-v1/d05/test_c68_stronghl_post_contact_vc_bos_source.py'
+permissions:
+  contents: read
+jobs:
+  c68:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify accepted A137 and 33 original15m no-lookahead StrongHL source restrictions
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A137
+          grep -Fq 'entries 137 tip_sha256 f54fc6edba0324df7dfd08e51bd1efa78b1674fb33d4cf21d3fc96ad83f9ccab' /tmp/A137
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c68_stronghl_post_contact_vc_bos_source 2>&1 | tee /tmp/C68
+          grep -Fq 'Ran 33 tests' /tmp/C68
+          grep -qx 'OK' /tmp/C68
