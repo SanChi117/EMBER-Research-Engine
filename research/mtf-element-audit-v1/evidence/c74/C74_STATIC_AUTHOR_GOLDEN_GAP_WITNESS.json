@@ -1,0 +1,43 @@
+{
+  "schema": "EMBER_C74_FAILCLOSED_AUTHOR_CRYPTO_GOLDEN_INTAKE_STATIC_V1",
+  "date_utc": "2026-10-26",
+  "source_C73_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+  "source_C73_size_bytes": 303327,
+  "source_C73_contexts": 153,
+  "source_C73_state_counts": {
+    "no_new1h_poi": 47,
+    "no_raw3m_touch": 71,
+    "touch_without_single15m": 23,
+    "single_continuous_visit": 9,
+    "separate_repeat_visit": 3
+  },
+  "original_market": "Binance USD-M Futures",
+  "original_period_utc": [
+    "2026-09-01",
+    "2026-10-02"
+  ],
+  "course_source_ids": [
+    "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+    "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+    "1lvPRbhfM6ZjfW7UP-30y9uND1R6VC13t",
+    "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+    "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs"
+  ],
+  "goldens_author_timestamped_crypto": 0,
+  "author_valid_first_tests": 0,
+  "author_15m_trigger": 0,
+  "author_15m_vc": 0,
+  "author_5m_vc": 0,
+  "author_stronghl": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "limits": [
+    "STATIC CONTRACT, not independent fresh download of 60 ZIP",
+    "A bare source SHA or unsigned author flag is insufficient",
+    "Synthetic test data are not Binance candles",
+    "Route B IDM and C 3m/5m BOS independent",
+    "No author-certified win rate or FTA/SL/TP"
+  ]
+}
