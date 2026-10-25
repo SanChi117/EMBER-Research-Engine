@@ -119,6 +119,8 @@ def inspect_original_source_protected_extreme(chain,original3m,hourly,*,as_of_ms
               for v in (z.open,z.high,z.low,z.close,z.volume))
             or not(0<z.low<=min(z.open,z.close)<=max(z.open,z.close)<=z.high)):
             raise ValueError("C64_FAKE_OR_FUTURE_1H_PREFIX")
+    if hourly[-1].known_at_ms!=as_of_ms:
+        raise ValueError("C64_ORIGINAL_1H_MUST_END_AT_ASOF")
     if chain.original_first3m_contact_id is None:
         if chain.status!="NO_4H_SOURCE_FIRST_CONTACT" or chain.first_any_source_events:
             raise ValueError("C64_FORGED_MISSING_SOURCE_CONTACT")
@@ -154,6 +156,12 @@ def inspect_original_source_protected_extreme(chain,original3m,hourly,*,as_of_ms
             or x.is_author_stronghl or x.is_author_vc or x.is_author_bos
             or x.orders or x.trades for x in events)):
         raise ValueError("C64_INVALID_1H_SOURCE_EVENT_OR_FUTURE")
+    known_hourly={h.start_ms:h for h in hourly}
+    for event in events:
+        parent=known_hourly.get(event.first_pattern_bar_start_ms)
+        if (parent is None or
+            event.raw_first_original15m_id!=parent.source_native_15m_rows[0]):
+            raise ValueError("C64_SOURCE_EVENT_NOT_AN_ORIGINAL_1H_ID")
     first_pattern=min(x.first_pattern_bar_start_ms for x in events)
     if first_pattern<chain.first3m_contact_closed_ms:
         return _none(chain,STATUS[3])
