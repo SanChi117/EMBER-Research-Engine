@@ -1,10 +1,10 @@
 name: EMBER C71 independent final 141 SHA six original crypto 45 ZIP Route A source x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c71-A141-final-independent-141sha.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: 7e0382c90d0ac58b87f1ab121d6cfeb363865217
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
