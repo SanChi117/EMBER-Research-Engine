@@ -110,3 +110,5 @@ jobs:
             sleep 2
           done
           exit 1
+
+# C66 replay uses precomputed strictly preknown native15m liquidity schedule for efficient 45 original ZIP source run.
