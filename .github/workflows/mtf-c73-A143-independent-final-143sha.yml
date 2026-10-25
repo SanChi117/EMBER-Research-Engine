@@ -1,0 +1,71 @@
+name: EMBER C73 final independent 143 SHA original60 new1h POI first3m episodes x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c73-A143-independent-final-143sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  independent143:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently verify 143/143 SHA six C73 evidence all original C46-C72 immutable Git blobs and 30 negative first POI tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A143
+          grep -Fq 'entries 143 tip_sha256 73dff2c95292c6f8f6dea5e6eb2bf56492d9537941fe8df2755d3cafb4e6b6e2' /tmp/A143
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib,subprocess
+          from pathlib import Path
+          rows=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==143
+          prev,current=rows[-2:]
+          assert prev['action_id']=='A142' and prev['record_sha256']=='347507f363d03a3bde2008a5690976ec3110925cc0ac514c1a6434299848059f'
+          assert current['action_id']=='A143' and current['seq']==143 and current['prev_sha256']==prev['record_sha256']
+          assert current['record_sha256']=='73dff2c95292c6f8f6dea5e6eb2bf56492d9537941fe8df2755d3cafb4e6b6e2'
+          assert current['cycle']=='B1/C73' and current['verdict']=='DONE' and current['cycle_result']=='PASSED'
+          expected={"d05/c73_new1h_poi_original3m_visit_episodes_route_split.py":"b62f380d745e1a99699821890cbce85962b863d395b18b2e111d8e56fe7314cd","d05/test_c73_new1h_poi_original3m_visit_episodes_route_split.py":"24964847efba47e4597c99f92d96f592a427a28c5443ab6ef957a7d5bf0fcc6a","tests/probe_c73_original60zip_new1h_poi_3m_visits_semantic_split.py":"08d9f390180b333e5395cf6ace4c747cecd43a40ba9f231626b239fba53009e6","evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json":"c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b","evidence/c73/C73_INDEPENDENT_ORIGINAL60ZIP_FIRST_NEW1H_POI_VISIT_WITNESS_20261025.json":"e1c52bfbdb17142ce7233e8b241df1063a1f1dd9a89e97abd16a224a2f657ba7","cycles/B1_C73_ORIGINAL60ZIP_NEW1H_POI_FIRST_3M_VISIT_EPISODES_ROUTE_SEMANTICS_REPORT.md":"affd17a33c109d17edd9f22d3a4b986bde8c18d651f35617b201f79f7f9742fa"}
+          assert len(current['evidence'])==6 and {e['path'] for e in current['evidence']}==set(expected)
+          for e in current['evidence']:
+            raw=Path(e['path']).read_bytes()
+            assert len(raw)==e['bytes'] and hashlib.sha256(raw).hexdigest()==e['sha256']==expected[e['path']]
+          frozen={"evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json":"dc03c181912ffbb800bc191fbc16ec0d05c335e0","evidence/c60/C60_ORIGINAL45ZIP_4H_IMB_FIRST_AND_RETURN_SOURCE_NATIVE3M_EPISODES.json":"899373e4a1dc1999d1485ac8c1f790d39071aebd","evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json":"8428bf7d6cd3bc26f617cfc32a34c91a27c813b2","evidence/c63/C63_ORIGINAL45ZIP_FIRST_ANY_CLOSED1H_SOURCE_AFTER_4H_FIRST_NATIVE3M_CONTACT.json":"fdc77c7ec942f03b4efae83b935d994c8435a24f","evidence/c66/C66_ORIGINAL45ZIP_4H1H_TO_NATIVE15M_SOURCE_FIRST_ANY_ROUTE_A.json":"c693058cdb28b0e118879d32ddcbbd0d2a66bfc6","evidence/c67/C67_ORIGINAL45ZIP_ROUTE_A_1H_TRIGGER_NEW_POI_15M_FIRST_RETEST_FORK.json":"87409101a6fad4897b32e13085c9a0cc13566594","evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json":"587779a7dd1736099e8270c8823c15822f0e77a0","evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json":"b22860dfa13e4b19d16e8dd892719a772485e847","evidence/c70/C70_ORIGINAL45ZIP_EXACT_FIRST_NATIVE3M_WICK_WITHIN_C69_15M_SOURCE.json":"e100ca8a70a32484fd311ae2dcf31a311d85865c","evidence/c71/C71_ORIGINAL45ZIP_3M_CONTACT_THEN_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json":"ef05ecdcfb31e59dec79d10eb5d3dc40b3c3af97","evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json":"19b7e0357600b70b3f26467339a417e0f99a1302","evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json":"65db9aeaddaa58612bb4c743227cc9d28894cc31"}
+          for path,blob in frozen.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+path],text=True).strip()==blob
+          p=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json')
+          assert p.stat().st_size==303327
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==60 and d['original_zip_counts']['new_native5m']==15
+          assert d['original_native3m_closed']==76800 and d['original_native5m_closed']==46080
+          assert d['original_native15m_closed']==d['native5m_to_native15m_original_decimal_equalities']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert d['original3m_new1h_poi_first_visit_source_state_totals']=={
+             'NOT_NEW_1H_POI_SOURCE_BRANCH':47,
+             'NEW_1H_POI_SOURCE_NO_ORIGINAL3M_FIRST_TOUCH':71,
+             'NEW_1H_POI_FIRST_ANY_RAW3M_TOUCH_NO_UNAMBIGUOUS_15M_CHAIN':23,
+             'NEW_1H_POI_FIRST_15M_PATTERN_SINGLE_SOURCE_VISIT_NOT_OWNER_VALID':9,
+             'NEW_1H_POI_FIRST_15M_PATTERN_REVISITED_SOURCE_POI_NOT_OWNER_VALID':3}
+          assert d['author_verified_original3m_first_valid_1h_poi_test']==0
+          assert d['author_verified_routeA_15m_trigger_or_15m_vc_split']==0
+          assert d['orders']==d['fills']==d['trades']==0
+          assert d['readiness']=='NOT_TRADE_READY'
+          print('C73_A143_INDEPENDENT_FINAL_143_SHA_SIX_C73_SHA_ALL_ORIGINAL_CRYPTO_PRIOR_BLOBS_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c73_new1h_poi_original3m_visit_episodes_route_split 2>&1 | tee /tmp/C73
+          grep -Fq 'Ran 30 tests' /tmp/C73
+          grep -qx 'OK' /tmp/C73
+          ! grep -q 'skipped=' /tmp/C73
