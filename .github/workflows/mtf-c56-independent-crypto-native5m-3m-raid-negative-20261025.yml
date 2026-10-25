@@ -1,0 +1,41 @@
+name: EMBER C56 native crypto5m and crypto3m SAME 1H wick raid causal source negatives
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c56-independent-crypto-native5m-3m-raid-negative-20261025.yml'
+      - 'research/mtf-element-audit-v1/d05/c56_crypto_native5m_1h_raid_bos_cross_tf.py'
+      - 'research/mtf-element-audit-v1/d05/test_c56_crypto_native5m_1h_raid_bos_cross_tf.py'
+permissions:
+  contents: read
+jobs:
+  genuine5m_vs3m:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify previous 124/124 independent crypto-only source evidence hash chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A124.txt
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/A124.txt
+          python tests/test_journal_integrity.py | tee /tmp/A124src.txt
+          grep -Fq '"validations_pass": true' /tmp/A124src.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json)" = '2b4f944ddbdff0871a7fd553de2ab9955d220b91'
+      - name: Independent original native5m 1H wick raid vs original3m strict BOS 26 source negative checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c56_crypto_native5m_1h_raid_bos_cross_tf 2>&1 | tee /tmp/C56.txt
+          grep -Fq 'Ran 26 tests' /tmp/C56.txt
+          grep -qx 'OK' /tmp/C56.txt
+          ! grep -q 'skipped=' /tmp/C56.txt
