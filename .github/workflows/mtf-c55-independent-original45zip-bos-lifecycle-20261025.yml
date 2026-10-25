@@ -1,0 +1,78 @@
+name: EMBER C55 independent complete 45 original crypto ZIP 1H liquidity->3M BOS source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c55-independent-original45zip-bos-lifecycle-20261025.yml'
+permissions:
+  contents: read
+jobs:
+  c55_negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independently repeat A123 full evidence chain and 43 no-lookahead checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123 tip_sha256 a608d1f739827b7c37f74297b9445567f3b2b6f7a83488746befc58282a2ee15' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/earlier.txt
+          grep -Fq '"validations_pass": true' /tmp/earlier.txt
+          cd d05
+          python -m unittest -v test_c55_crypto_1h_liquidity_raid_bos_lifecycle 2>&1 | tee /tmp/C55tests.txt
+          grep -Fq 'Ran 43 tests' /tmp/C55tests.txt
+          grep -qx 'OK' /tmp/C55tests.txt
+          ! grep -q 'skipped=' /tmp/C55tests.txt
+  fresh_independent_45zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Confirm frozen original C55 Git blob unchanged before fresh re-download
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json)" = 'f26ebde00fff15977e39b4b626fb8625c5fb7341'
+      - name: RE-DOWNLOAD all 45 ORIGINAL Binance USDM ZIP and fully byte-match entire 13MB C55 source state/event JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c55_original_crypto_1h_raid_3m_bos_45zip.py" /tmp/C55-FRESH-INDEPENDENT-ORIGINAL45ZIP.json > /tmp/C55-replay.txt 2>&1 || { tail -c 16000 /tmp/C55-replay.txt; exit 1; }
+          cmp -s /tmp/C55-FRESH-INDEPENDENT-ORIGINAL45ZIP.json "$R/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json"
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_1H_LIQUIDITY_FIRST_RAID_LATER_3M_BOS.json')
+          q=pathlib.Path('/tmp/C55-FRESH-INDEPENDENT-ORIGINAL45ZIP.json')
+          assert p.read_bytes()==q.read_bytes()
+          assert p.stat().st_size==13029668
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='63526354af9c450f0e659ab59c793987177a9b023ada69730726e6de10842411'
+          a=json.loads(p.read_text())
+          assert a['original_zip_count']==45 and a['original_closed_native3m']==76800
+          assert a['original_complete_1h']==3840 and a['first_confirmed_1h_wick_raids']==642
+          assert a['adapted_3m_price_breaks']==539
+          assert a['source_states']=={
+           'LEVEL_PREKNOWN_NO_FIRST_BREACH':131,
+           'FIRST_BREACH_BODY_NOT_WICK_RAID':772,
+           'FIRST_WICK_NONFRACTAL':328,
+           'CONFIRMED_1H_RAID_NO_CLOSED_3M_BREAK':103,
+           'CONFIRMED_1H_RAID_WITH_ADAPTED_3M_CLOSED_BREAK':539}
+          assert sum(a['source_states'].values())==1873
+          assert all(x['physically_cut_native3m_matches_original_source_asof'] is True for x in a['markets'])
+          assert sum(x['original_3m_closed_research_breaks'] for x in a['markets'])==539
+          assert a['academic_1h_liquidity_goldens']==a['academic_3m_BOS_goldens']==a['academic_entry_goldens']==a['fills']==a['orders']==a['trades']==0
+          assert a['route']=='C_1H_RAID_3M_BOS' and a['readiness']=='NOT_TRADE_READY'
+          print('C55_INDEPENDENT_FULL_45_ORIGINAL_ZIP_13029668_BYTES_EXACT',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
