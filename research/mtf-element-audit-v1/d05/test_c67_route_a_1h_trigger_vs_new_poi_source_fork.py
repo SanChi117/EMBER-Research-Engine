@@ -128,6 +128,14 @@ class C67Adversarial(unittest.TestCase):
         q=review(e15=(event15(kind="15M_SNR_LIQUIDITY_SOURCE_ONLY"),))
         self.assertEqual(q.state,"NEW_1H_VC_FIRST_SOURCE_TEST_15M_VC_NO_TRIGGER")
         self.assertFalse(q.author_15m_volume_confirmation)
+    def test_new_1h_poi_first_15m_opposite_not_ignored(self):
+        q=review(e15=(event15(side="SHORT"),event15(start=BASE+9*H)))
+        self.assertEqual(q.state,"NEW_1H_VC_FIRST_SOURCE_TEST_15M_OPPOSITE_SOURCE")
+        self.assertEqual(q.first_15m_after_gate_side,"SHORT")
+    def test_new_1h_poi_first_15m_opposite_and_same_tie_ambiguous(self):
+        q=review(e15=(event15(),event15(side="SHORT")))
+        self.assertEqual(q.state,"NEW_1H_VC_FIRST_SOURCE_TEST_15M_TWO_SIDES_AMBIGUOUS")
+        self.assertFalse(q.author_15m_volume_confirmation)
     def test_new_1h_poi_15m_event_pretouch_pattern_rejected(self):
         q=review(e15=(event15(start=BASE+7*H),))
         self.assertIsNone(q.first_15m_after_gate_kind)
