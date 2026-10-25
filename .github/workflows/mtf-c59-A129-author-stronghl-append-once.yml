@@ -1,0 +1,97 @@
+name: EMBER C59 append-once A129 original 3-source author StrongHL first-test evidence
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c59-A129-author-stronghl-append-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: c59-a129-append-only
+  cancel-in-progress: false
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Enforce prior 128/128 SHA and complete C59 original context frozen evidence
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/sha128
+          grep -Fq 'entries 128 tip_sha256 dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b' /tmp/sha128
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json')
+          w=Path('evidence/c59/C59_INDEPENDENT_AUTHOR_TEXT_AND_FROZEN_CRYPTO_SOURCE_WITNESS_20261025.json')
+          t=Path('cycles/B1_C59_AUTHOR_STRONGHL_FIRST_TEST_NESTED_1H_IMB_SEMANTIC_REPORT.md')
+          assert all(x.exists() and x.stat().st_size>0 for x in (p,w,t))
+          assert p.stat().st_size==202187
+          h=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert h=='31af44acd6a1060c4871a473ad916dd0cb7b139576e35789d5a29c1982b8409a'
+          doc=json.loads(p.read_bytes());w=json.loads(w.read_bytes())
+          assert doc['source_status_totals']=={'NO_4H_SOURCE_FIRST_CONTACT':21,
+            '4H_FIRST_CONTACT_NO_LATER_1H_SOURCE':2,
+            'LATER_1H_IMB_INSIDE_PARENT_4H_IMB_VETO':21,
+            'LATER_1H_IMB_PARTIALLY_OVERLAPS_PARENT_VETO':12,
+            'LATER_1H_IMB_OUTSIDE_PARENT_GEOMETRY_ONLY':97}
+          assert doc['academic_author_StrongHL_goldens']==doc['academic_author_first_valid_poi_test_verified']==0
+          assert doc['orders']==doc['trades']==doc['fills']==0 and doc['readiness']=='NOT_TRADE_READY'
+          assert w['independent_second_source_join_run']==40203051046 and w['independent_ci_jobs']=='SUCCESS_4_OF_4'
+          assert w['evidence_full_json_sha256']==h and w['negative_test_count_each']==49
+          print('C59_SIX_SHA_EVIDENCE_GATED')
+          PY
+          cd ../..
+          R=research/mtf-element-audit-v1
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = b2727f081d8a73f522a97a54b4582507ee969244
+          test "$(git rev-parse HEAD:$R/evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json)" = 06f2ff7decd2aa9660381947d3cf43f6b722cd8e
+          cd "$R/d05"
+          python -m unittest -v test_c59_academic_stronghl_first_test_semantic_gate 2>&1 | tee /tmp/c59unit
+          grep -Fq 'Ran 49 tests' /tmp/c59unit
+          grep -qx 'OK' /tmp/c59unit
+      - name: Record A129 with six SHA evidence files, no trade approval
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A129 \
+            --cycle B1/C59 \
+            --planned 'Restore actual owner academic Strong High/Low contact liquidity or inefficiency then later VC POI or BOS; true first valid POI test not bare original3m first wick touch; explicit if 4H POI is IMB then nested inside 1H IMB is not Route A trigger. Never treat 1H pivot as StrongHL or infer entry/SL/TP.' \
+            --executed 'Re-read authenticated owner Drive Strong High and Low, Fair Value Gap Imbalance and Entry by IMB SNR text lessons. Added separate fail-closed C59 text-only author StrongHL first POI test source gate and 49 anti-forgery negative tests x Python 3.10 3.11 3.12. Independently joined all 153 frozen original Binance crypto parents C46 4H C47 1H and C58 preknown inside liquidity using exact original row identifiers and source SHA. First source CI 40202934959 SUCCESS; independently derived second full 202187 byte source join CI 40203051046 SUCCESS 4/4, exact SHA256 31af44acd6a1060c4871a473ad916dd0cb7b139576e35789d5a29c1982b8409a, Git blob 46077ffb3495c14c906963156dd4a93c7acf9911. No NEW Binance archives downloaded in C59: original 45 ZIP source evidence reused immutably from earlier independently replayed C46 C47 C58.' \
+            --result 'Source 153 4H technical IMB contexts: 21 no first touch; 2 after touch no later 1H; 21 technical 1H IMB fully inside 4H IMB veto; 12 partially overlap unresolved veto; 97 outside source geometry only. Course text StrongHL and real POI first valid test predicates remain separately blocked without author-positive goldens. No author POI first-valid-test, StrongHL, 1H trigger, IDM or signals, no orders, trades or PnL. PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Preserve prior A128 128/128 SHA tip dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b. Immutable C46 Git blob dc03c181912ffbb800bc191fbc16ec0d05c335e0, C47 b2727f081d8a73f522a97a54b4582507ee969244, C58 06f2ff7decd2aa9660381947d3cf43f6b722cd8e unchanged. C59 text-consistent synthetic test may never approve author entry or strong stop, inside and overlapping 1H IMB veto is source-only not a trade result. 49 tests on three Python versions plus independent full C59 JSON source replay 40203051046 SUCCESS 4/4.' \
+            --evidence d05/c59_academic_stronghl_first_test_semantic_gate.py \
+            --evidence d05/test_c59_academic_stronghl_first_test_semantic_gate.py \
+            --evidence tests/probe_c59_frozen_original_course_stronghl_nesting_join.py \
+            --evidence evidence/c59/C59_FROZEN_3_ORIGINAL_CRYPTO_SOURCES_4H1H_NESTING_AND_STRONGHL_TEXT_AUDIT.json \
+            --evidence evidence/c59/C59_INDEPENDENT_AUTHOR_TEXT_AND_FROZEN_CRYPTO_SOURCE_WITNESS_20261025.json \
+            --evidence cycles/B1_C59_AUTHOR_STRONGHL_FIRST_TEST_NESTED_1H_IMB_SEMANTIC_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A129
+          grep -Fq 'entries 129' /tmp/A129
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Push only one appended journal entry
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/changes
+          test "$(wc -l < /tmp/changes)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changes
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C59): append-once A129 source-only academic StrongHL and 1H IMB veto six SHA'
+          for n in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
