@@ -1,0 +1,73 @@
+name: EMBER C58 independent 128 SHA 6 original45ZIP evidence 28 negative x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c58-A128-independent-final-128sha.yml'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+permissions:
+  contents: read
+jobs:
+  independent_128:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check all A001-A128 immutable chain, six evidence byte SHA, frozen previous originals, 28 negatives
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A128
+          grep -Fq 'entries 128 tip_sha256 dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b' /tmp/A128
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib,pathlib,subprocess
+          q=[json.loads(x) for x in pathlib.Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(q)==128
+          old,new=q[-2:]
+          assert old['action_id']=='A127' and old['record_sha256']=='f7f82c55dd87db0bc881ef977e9e9b0db1c91495f827d47f86701934e05c9005'
+          assert new['action_id']=='A128' and new['seq']==128 and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='dc43d7f503eae76a386d99b347bc46f4385b6c93c5adde49f2114f6ebe626e5b'
+          assert new['cycle']=='B1/C58' and new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          expect={
+            'd05/c58_route_b_preknown_original1h_liquidity_inside_4h_source.py':'c0f2b8dbea736170f80c709577edfb71b0854e7a47e2c57022bf0659b0e6ed6c',
+            'd05/test_c58_route_b_preknown_original1h_liquidity_inside_4h_source.py':'4dda031e1358be478cacf2ed4a48ccdecb24120c48b9a7257fb7e3bdd7fa6ed4',
+            'tests/probe_c58_original45zip_route_b_preknown_unswept_1h_inside_4h.py':'45a4eb69df4296850a7dba34ea79d24ad132cc3823d258efa880b9a35dad2657',
+            'evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json':'405a34b939845357412ab4ec2d055d71885e3f6a1b22f55bc25c87c60272808e',
+            'evidence/c58/C58_INDEPENDENT_ORIGINAL45ZIP_PREKNOWN_1H_INSIDE_WITNESS_20261025.json':'6248a8343aa9129b6b90805e31200ab1f198bd52c6ec110e7e9ccf3288d9b9dd',
+            'cycles/B1_C58_ROUTE_B_PREKNOWN_1H_LIQUIDITY_INSIDE_4H_ORIGINAL_SOURCE_REPORT.md':'ddb53282d0d04202a179c35ae43d51146ada9a58f18bf26618527d58ded04243'}
+          assert len(new['evidence'])==6 and {e['path'] for e in new['evidence']}==set(expect)
+          for e in new['evidence']:
+            data=pathlib.Path(e['path']).read_bytes()
+            assert len(data)==e['bytes'] and hashlib.sha256(data).hexdigest()==e['sha256']==expect[e['path']]
+          p=pathlib.Path('evidence/c58/C58_ORIGINAL_45ZIP_PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_FIRST_CONTACT.json')
+          assert len(p.read_bytes())==193355
+          j=json.loads(p.read_bytes())
+          assert j['original_BINANCE_USDM_ZIP']['total']==45 and j['original_native3m_closed']==76800
+          assert j['original_native15m_decimal_equalities']==15360
+          assert j['source_statuses']=={'NO_ORIGINAL_NATIVE3M_FIRST_4H_SOURCE_CONTACT':21,'NO_PREKNOWN_1H_FRACTAL_INSIDE_4H_SOURCE_GAP':103,'PREKNOWN_UNSWEPT_1H_FRACTAL_INSIDE_4H_GAP':29}
+          assert j['candidate_links']=={'BSL':18,'SSL':11,'unbroken':29}
+          assert j['author_verified_idm']==j['author_verified_strong_high_low']==j['orders']==j['trades']==j['fills']==0
+          assert j['readiness']=='NOT_TRADE_READY'
+          for file,sha in {
+            'evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json':'dc03c181912ffbb800bc191fbc16ec0d05c335e0',
+            'evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json':'b2727f081d8a73f522a97a54b4582507ee969244',
+            'evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json':'2b4f944ddbdff0871a7fd553de2ab9955d220b91',
+            'evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json':'98f087a731d30c2191dc443038c371751456f316',
+            'evidence/c57/C57_ORIGINAL_45ZIP_4H_FIRST_CONTACT_LATER_1H_THEN_FIRST_ANY_NATIVE15M_IMB.json':'08f24050d19bb390cf2985a901e2a8f2ea3c0ec3'
+          }.items():
+            got=subprocess.check_output(['git','rev-parse','HEAD:research/mtf-element-audit-v1/'+file],text=True).strip()
+            assert got==sha,(file,got,sha)
+          print('C58_A128_128_SHA_SIX_FROZEN_SOURCE_AND_OLDER_ORIGINAL_EVIDENCE_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c58_route_b_preknown_original1h_liquidity_inside_4h_source 2>&1 | tee /tmp/C58-tests
+          grep -Fq 'Ran 28 tests' /tmp/C58-tests
+          grep -qx 'OK' /tmp/C58-tests
+          ! grep -q 'skipped=' /tmp/C58-tests
