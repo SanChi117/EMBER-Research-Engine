@@ -1,0 +1,105 @@
+name: EMBER C62 append-once A132 original45ZIP SNR versus MB RB wick liquidity source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c62-A132-original45zip-append-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c62-a132-append-only
+  cancel-in-progress: false
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gate 131/131 predecessor SHA and full frozen 2498773byte C62 independent source proof
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A131
+          grep -Fq 'entries 131 tip_sha256 c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d' /tmp/A131
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import pathlib,json,hashlib
+          x=pathlib.Path('evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json')
+          y=pathlib.Path('evidence/c62/C62_INDEPENDENT_ORIGINAL45ZIP_SNR_RB_MB_WICK_SOURCE_WITNESS_20261025.json')
+          z=pathlib.Path('cycles/B1_C62_CRYPTO_ORIGINAL45ZIP_1H_SNR_RB_MB_IMB_SOURCE_SEPARATION_REPORT.md')
+          assert all(p.is_file() and p.stat().st_size>0 for p in (x,y,z))
+          assert x.stat().st_size==2498773
+          digest=hashlib.sha256(x.read_bytes()).hexdigest()
+          assert digest=='8ac92d6406845568a2e0178be81fc2fec529da2d26697b6f08b7fbaa4e5a0c80'
+          a=json.loads(x.read_bytes());w=json.loads(y.read_bytes())
+          assert a['original_signed_zip_counts']['total']==45
+          assert a['original_native3m_closed']==76800 and a['original_native1d_closed']==160
+          assert a['original_native15m_exact_decimal_equalities']==15360
+          assert a['source_derived_closed_1h_bars']==3840
+          assert a['original_c46_4h_source_parents_checked']==153
+          assert a['original_1h_source_category_totals']=={
+             'MB_WEAKER_SOURCE_ONLY_NO_RAID_OR_IMB_NOT_VOLUME_CONFIRMATION':62,
+             'RB_TWO_OPPOSITE_HOURLY_CANDLES_WITHOUT_VERIFIED_WICK_RAID':1039,
+             'RB_WICK_ONLY_IMB_SOURCE_PROXY':556,
+             'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY':394,
+             'SNR_ACCEPTED_CLOSE_WITH_SOURCE_IMB_PROXY':213,
+             'SNR_ACCEPTED_CLOSE_WITH_SOURCE_LIQUIDITY_PROXY':128,
+             'original_1h_technical_classic_gap':646}
+          assert a['author_snr_goldens']==a['author_rb_goldens']==a['author_imb_goldens']==0
+          assert a['orders']==a['trades']==a['fills']==0 and a['readiness']=='NOT_TRADE_READY'
+          assert w['original_source_replay_independent_second_CI']==40210402103
+          assert w['independent_jobs_passed']=='4_OF_4_SUCCESS'
+          assert w['full_original_source_sha256']==digest
+          assert w['adversarial_test_count_per_python']==22
+          print('C62_A132_FULL_FROZEN_SOURCE_INDEPENDENT_SECOND_45ZIP_SHA_PASS')
+          PY
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json)" = 305624e592f55bd699e94e45f4316e4efabdb726
+          cd "$R/d05"
+          python -m unittest -v test_c62_academic_snr_rb_imb_liquidity_source_separation 2>&1 | tee /tmp/C62-negative
+          grep -Fq 'Ran 22 tests' /tmp/C62-negative
+          grep -qx 'OK' /tmp/C62-negative
+      - name: Append immutable A132 C62 source classifications after independently verified original45ZIP
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A132 \
+            --cycle B1/C62 \
+            --planned 'Restore owner SNR/RB/IMB distinction: SNR opposite pair plus later body-close acceptance with preknown SSL/BSL liquidity or FVG, otherwise weaker MB not VC. Rejection Block opposite pair must use WICK only preknown liquidity raid or earlier IMB test with body acceptance; original 1H three-candle classic FVG after third fully closed bar. Separate Source proxy from author verified POI and never trade.' \
+            --executed 'Read real owner Support and Resistance, Rejection Block, Fair Value Gap Imbalance and Entry by IMB SNR text on Google Drive. Added C62 independent source classifier, 22 adversarial negative tests on Python 3.10 3.11 3.12, original derived closed 1H from native15m with full SHA native15m provenance and preknown unswept strict 1H 3bar fractal as non-author liquidity proxy. Independently redownloaded 45 signed original USD-M ZIP twice, 76800 original native3m, 160 native1d, 15360 native15m Decimal parities, 3840 fully closed original 1H derived, and rechecked unchanged C46 153 source parent contexts. Source full JSON 2498773 bytes SHA256 8ac92d6406845568a2e0178be81fc2fec529da2d26697b6f08b7fbaa4e5a0c80 blob 8428bf7d6cd3bc26f617cfc32a34c91a27c813b2. First full 45ZIP CI 40210255871 SUCCESS; independently complete second full byte exact 45ZIP CI 40210402103 SUCCESS 4/4 and 22 tests x3.' \
+            --result 'Closed original 1H source counts on five crypto symbols: 646 strict classic1H technical gap, 128 SNR proxy close after known1H pivot raid, 213 SNR proxy after preknown gap work, 62 weaker MB no source liquidity or FVG not VC, 394 RB wick only prior liquidity proxy, 556 RB wick only preknown FVG source proxy, 1039 opposing two candles without RB source prerequisite. Events may overlap, not independent trades. No author SNR, RB, FVG or StrongHL goldens, no author POI first valid test, no orders fills trades or PnL. PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Previous A131 131/131 tip c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d not changed. Frozen original source C46 git blob dc03c181912ffbb800bc191fbc16ec0d05c335e0, C61 blob 305624e592f55bd699e94e45f4316e4efabdb726 and all A001-A131 evidence untouched. Initial C62 negative CI 40209939146 failed due to malformed SYNTHETIC candle open88 low99; corrected only test low88 without weakening source price checks; tests 40210045297 and 40210099486 succeeded, 22 x3. First original45ZIP CI 40210255871 and independent second 40210402103 both SUCCESS, whole 2498773 byte identical SHA. 1H strict three-bar fractal is NOT author liquidity/StrongHL, SNR pair-extreme close is ADAPTED technical geometry not author level.' \
+            --evidence d05/c62_academic_snr_rb_imb_liquidity_source_separation.py \
+            --evidence d05/test_c62_academic_snr_rb_imb_liquidity_source_separation.py \
+            --evidence tests/probe_c62_original45zip_1h_snr_rb_imb_separate_source.py \
+            --evidence evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json \
+            --evidence evidence/c62/C62_INDEPENDENT_ORIGINAL45ZIP_SNR_RB_MB_WICK_SOURCE_WITNESS_20261025.json \
+            --evidence cycles/B1_C62_CRYPTO_ORIGINAL45ZIP_1H_SNR_RB_MB_IMB_SOURCE_SEPARATION_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A132
+          grep -Fq 'entries 132' /tmp/A132
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+      - name: Non-forcing append-only journal, no other file modified
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only > /tmp/modified
+          test "$(wc -l < /tmp/modified)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/modified
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C62): append-once A132 crypto native1h SNR RB MB source only six SHA'
+          for i in 1 2 3 4 5 6; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then exit 0; fi
+            sleep 2
+          done
+          exit 1
