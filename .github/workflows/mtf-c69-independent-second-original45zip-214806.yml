@@ -1,0 +1,76 @@
+name: EMBER C69 second fresh original45ZIP full 214806 byte first 15m raid
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c69-independent-second-original45zip-214806.yml'
+      - 'research/mtf-element-audit-v1/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json'
+permissions:
+  contents: read
+jobs:
+  independent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Second independent download of all 45 SHA-verified original Binance USD-M ZIP and full-byte exact original 214806 source JSON comparison
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/138
+          grep -Fq 'entries 138 tip_sha256 c2b93436d2e9990d64501ed4289cd19ebba265bde2ea8b8150e9069d11618d0a' /tmp/138
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c68/C68_ORIGINAL45ZIP_STRONGHL_POST_CONTACT_FIRST_ANY_15M_VC_OR_1H_BOS_SOURCE.json)" = 587779a7dd1736099e8270c8823c15822f0e77a0
+          test "$(git rev-parse HEAD:$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json)" = b22860dfa13e4b19d16e8dd892719a772485e847
+          python "$R/tests/probe_c69_original45zip_exact_first_native15m_raid_poi.py" /tmp/C69-second.json >/tmp/C69-second.log 2>&1 || { tail -c 18000 /tmp/C69-second.log; exit 1; }
+          cmp -s /tmp/C69-second.json "$R/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c69/C69_ORIGINAL45ZIP_FIRST_NATIVE15M_LIQUIDITY_RAID_OR_NEW1H_POI_SOURCE_TEST.json')
+          assert p.stat().st_size==214806
+          sha=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert sha=='ffe2568a1c8384630bed156d94e0dbd4cf89ce6d03ab79ce5946e31ec88fab1c'
+          d=json.loads(p.read_bytes())
+          assert d['original_zip_counts']['total']==45
+          assert d['original_native3m_closed']==76800 and d['original_native15m_closed']==15360
+          assert d['original_native1d_closed']==160 and d['derived_closed1h']==3840
+          assert d['source_4h_C46_parent_count']==153
+          assert d['source_first_exact_native15m_contact_state_totals']=={
+            '1H_IMB_TRIGGER_NOT_RAID_OR_POI_FIRST_TEST':0,
+            'AMBIGUOUS_MULTIPLE_PREKNOWN_LIQUIDITY_LEVELS_SAME_FIRST_BAR':3,
+            'MISSING_OR_FAKE_ORIGINAL15M_HOUR':0,
+            'NEW_1H_POI_NO_SOURCE_FIRST_TEST':0,
+            'NEW_1H_POI_SOURCE_FIRST15M_WICK_TEST_NOT_AUTHOR_VALID':35,
+            'NO_PREKNOWN_SOURCE_LIQUIDITY_LEVEL':0,
+            'NO_REAL_NATIVE15M_LIQUIDITY_CROSS':0,
+            'NO_UNAMBIGUOUS_C67_CONTEXT':92,
+            'RAID_FIRST_NATIVE15M_BAR_CLOSE_BEYOND_LEVEL_RECLAIM_LATER_1H':4,
+            'RAID_FIRST_NATIVE15M_BAR_WICK_ONLY_RECLAIM_1H':19}
+          assert d['author_verified_first_new1h_poi_valid_test']==0
+          assert d['orders']==d['fills']==d['trades']==0 and d['readiness']=='NOT_TRADE_READY'
+          print('C69_SECOND_45_SIGNED_ZIP_FULL_SOURCE_BYTE_EQUAL',p.stat().st_size,sha)
+          PY
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Thirty strict first liquidity wick as-of/parity tests per Python
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c69_exact_native15m_first_liquidity_raid_vs_poi_test 2>&1 | tee /tmp/c69
+          grep -Fq 'Ran 30 tests' /tmp/c69
+          grep -qx 'OK' /tmp/c69
