@@ -64,3 +64,4 @@ jobs:
           grep -Fq 'Ran 31 tests' /tmp/C65
           grep -qx 'OK' /tmp/C65
           ! grep -q 'skipped=' /tmp/C65
+# Re-run acceptance only after restoring immutable A135 report exact byte count.
