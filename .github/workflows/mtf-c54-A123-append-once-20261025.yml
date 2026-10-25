@@ -1,0 +1,93 @@
+name: EMBER C54 append-once A123 independent original CRYPTO 45ZIP academic route logic
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c54-A123-append-once-20261025.yml'
+permissions:
+  contents: write
+jobs:
+  append_a123:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify predecessor immutable 122/122 SHA all source files, original C46 C47 and full C54 202874-byte result
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A122.txt
+          grep -Fq 'entries 122 tip_sha256 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428' /tmp/A122.txt
+          python tests/test_journal_integrity.py | tee /tmp/A122evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A122evidence.txt
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = 'dc03c181912ffbb800bc191fbc16ec0d05c335e0'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c47/C47_ORIGINAL_4H_FIRST_CONTACT_TO_LATER_1H_IMB_45ZIP.json)" = 'b2727f081d8a73f522a97a54b4582507ee969244'
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json)" = 'f6870d0dcb2dbfbe821c29bb7489e2b51a551218'
+          python - <<'PY'
+          import pathlib,json,hashlib
+          p=pathlib.Path('evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json')
+          assert len(p.read_bytes())==202874
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='43c69fcfb3e64db82d98511e7c9036b5bf8ddd69dd4bc65a226b875af45e0353'
+          x=json.loads(p.read_text())
+          assert x['original_BINANCE_USDM_ZIP_lineage']==45
+          assert x['original_native3m_closed']==76800 and x['native15m_exact']==15360
+          assert x['source_4h_technical_IMBs']==153 and x['first_original3m_contacts']==132
+          assert x['later_1h_technical_IMBs']==130 and x['academic_route_model_count']==8
+          assert x['route_source_contexts_checked']==1224
+          assert x['source_states']=={
+            'CONTEXT_TF_NOT_EVIDENCED_FOR_COURSE_ROUTE':765,
+            'TECHNICAL_1H_IMB_AFTER_TOUCH_ONLY':390,
+            'TECHNICAL_FIRST_TOUCH_WITHOUT_1H_SOURCE':6,
+            'TECHNICAL_FIRST_TOUCH_UNKNOWN':63}
+          assert x['teacher_images_role']=='LOGIC_EXAMPLES_NOT_FX_RAW_CANDLES'
+          assert x['academic_PoI_verified']==x['academic_VC_verified']==x['academic_IDM_BOS_verified']==x['orders']==x['trades']==0
+          assert x['readiness']=='NOT_TRADE_READY'
+          PY
+          cd d05
+          python -m unittest -v test_c54_crypto_only_course_logic_source_bridge 2>&1 | tee /tmp/C54-49.txt
+          grep -Fq 'Ran 49 tests' /tmp/C54-49.txt
+          grep -qx 'OK' /tmp/C54-49.txt
+      - name: Append ONLY new action A123 / B1 C54 with six exact SHA original crypto scope evidence files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A123 \
+            --cycle B1/C54 \
+            --planned 'Honor explicit owner correction: EMBER is CRYPTO-ONLY; course illustrations are examples of POI/liquidity/IMB/SNR/IDM/BOS/VC logic, never FX market source or requirement for EURUSD OANDA/Saxo historical exact chart replay. Preserve independent A/B/C course routes, use only original closed Binance USD-M crypto source candles and no-lookahead.' \
+            --executed 'Archived previous FX C53 vendor candle matching as out of scope without accepting A123 for FX. Added crypto C54 course-only 8 independent C45 A/B/C route family overlays, source scope no FX picture-to-price transplant, exact original Binance USD-M 45ZIP C46 and C47 parent and first3m touch and subsequent1h technical source identity join over 153 contexts ×8 modes, 1224 source contexts. Explicit 1H-only five modes refused 4H context substitution. Corrected invalid same-source-ZIP-hash assumption across adjacent archived crypto bars, validated genuine segmented SHA IDs against two complete original frozen C46/C47 files; 49 negative tests ×3 Python, first full source CI 40192519412 PASS, independent RE-DOWNLOAD original 45 signed Binance ZIP C46 and C47 and byte exact complete C46, C47 and 202874-byte C54 JSON CI 40192657583 PASS 4/4.' \
+            --result 'Only CRYPTO Binance original 45ZIP source research: 76800 native3m closed, 153 technical 4H IMB parents, 132 first 3m touches, 130 later 1H technical IMB, all 8 course routes separated, 1224 overlays: 765 missing appropriate 1H context, 390 technical later1H candidates, 63 no original touch, 6 touch without 1H. Actual academically proven POI first valid test/VC/IDM/BOS remains ZERO, no author trade goldens, no orders/fills/PnL. Charts are illustrations only, no EURUSD FX data replay required; PAPER ONLY NOT_TRADE_READY.' \
+            --verdict DONE \
+            --cycle-result PASSED \
+            --countercheck 'Prior immutable A122 122/122 tip 5cd047c7ab3afff3b099766d77f4d11bd882c14d6a023361942048afcad4b428 unchanged; accepted C46 45ZIP Git blob dc03c181912ffbb800bc191fbc16ec0d05c335e0 and C47 b2727f081d8a73f522a97a54b4582507ee969244 unchanged. First C54 CI 40192114201 FAIL on wrong native3m original ZIP same-file SHA assumption; actual archive source IDs cross segment boundaries; corrected validator and fixture; later CI 40192519412 PASS, independent C54 CI 40192657583 PASS 4/4 with full fresh original 45ZIP re-download and three entire JSON byte exact. Frozen C54 full derived source Git blob f6870d0dcb2dbfbe821c29bb7489e2b51a551218 SHA256 43c69fcfb3e64db82d98511e7c9036b5bf8ddd69dd4bc65a226b875af45e0353, bytes 202874. This is not a backtest or author-certified trade readiness; retain initial failure in journal.' \
+            --evidence d05/c54_crypto_only_course_logic_source_bridge.py \
+            --evidence d05/test_c54_crypto_only_course_logic_source_bridge.py \
+            --evidence tests/probe_c54_original_crypto_45zip_course_route_scope.py \
+            --evidence evidence/c54/C54_CRYPTO_ONLY_ACADEMIC_LOGIC_45ZIP_SOURCE_OVERLAYS.json \
+            --evidence evidence/c54/C54_INDEPENDENT_ORIGINAL_CRYPTO_45ZIP_SCOPE_WITNESS_20261025.json \
+            --evidence cycles/B1_C54_CRYPTO_ONLY_ACADEMIC_LOGIC_SOURCE_BRIDGE_REPORT.md
+          python tools/auditlog.py verify | tee /tmp/A123.txt
+          grep -Fq 'entries 123' /tmp/A123.txt
+          python tests/test_journal_integrity.py | tee /tmp/A123evidence.txt
+          grep -Fq '"validations_pass": true' /tmp/A123evidence.txt
+      - name: Commit only one appended A123 JSONL without any historical source rewrites
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c core.quotePath=false diff --name-only | tee /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 1
+          grep -Fxq 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl' /tmp/changed.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'audit(C54): append-once A123 six original crypto 45ZIP course rule/logic only SHA evidence'
+          git fetch origin research/academic-engine-recovery-20261015
+          git rebase origin/research/academic-engine-recovery-20261015
+          git push origin HEAD:research/academic-engine-recovery-20261015
