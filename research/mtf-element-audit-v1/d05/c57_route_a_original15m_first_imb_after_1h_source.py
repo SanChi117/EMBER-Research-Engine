@@ -25,7 +25,8 @@ STATUS=("NO_ORIGINAL_3M_FIRST_CONTACT",
         "NO_POST_CONTACT_1H_IMB_SOURCE",
         "NO_NATIVE15M_CLASSIC_IMB_WITHIN_FIXED_6H",
         "FIRST_ANY_NATIVE15M_IMB_SAME_SIDE_AS_4H",
-        "FIRST_ANY_NATIVE15M_IMB_OPPOSITE_SIDE_TO_4H")
+        "FIRST_ANY_NATIVE15M_IMB_OPPOSITE_SIDE_TO_4H",
+        "RIGHT_CENSORED_NO_15M_IMB_BY_SOURCE_END")
 RAW=re.compile(r"[a-f0-9]{64}:[0-9]{13}\Z")
 BLOCKERS=("C46_CLASSIC_4H_IMB_NOT_AUTHOR_TYPED_POI",
           "C46_FIRST_NATIVE3M_CONTACT_NOT_AUTHOR_VALID_TEST",
@@ -57,6 +58,7 @@ class C57RouteAObservation:
     first_any_15m_imb:FifteenMinuteImb|None
     source_status:str
     upper_observation_boundary_ms:int|None
+    fixed_six_hour_window_fully_observed:bool|None
     route_mode:str=SOURCE_SCOPE
     course_author_POI_verified:bool=False
     course_author_first_valid_test_verified:bool=False
@@ -163,7 +165,7 @@ def first_any_after_parent(p,gaps,*,symbol,as_of_ms):
     if p.original4h_first_contact_closed_known_ms is None:
         if one is not None or p.post_contact_same_side_1h_candidate_count:
             raise ValueError("C57_1H_WITHOUT_4H_FIRST_CONTACT")
-        status=STATUS[0];bound=None;first=None
+        status=STATUS[0];bound=None;first=None;complete=None
     else:
         c=p.original4h_first_contact_closed_known_ms
         if (type(c) is not int or c<=p.original4h_zone_known_ms or
@@ -174,7 +176,7 @@ def first_any_after_parent(p,gaps,*,symbol,as_of_ms):
         if one is None:
             if p.post_contact_same_side_1h_candidate_count:
                 raise ValueError("C57_MISSING_FIRST_1H_CANDIDATE")
-            status=STATUS[1];bound=None;first=None
+            status=STATUS[1];bound=None;first=None;complete=None
         else:
             if (not isinstance(one,OneHourImbSource) or
                 one.side!=p.original4h_zone_side or
@@ -197,16 +199,17 @@ def first_any_after_parent(p,gaps,*,symbol,as_of_ms):
                 not (Decimal(one.top)>Decimal(one.bottom)>0)):
                 raise ValueError("C57_1H_C47_GEOMETRY_OR_KNOWN_TIME_FORGED")
             bound=min(as_of_ms,one.fully_known_ms+WINDOW)
+            complete=as_of_ms>=one.fully_known_ms+WINDOW
             first=next((v for v in gaps if
                 v.first_start_ms>=one.fully_known_ms and
                 v.fully_known_ms<=bound),None)
             status=(STATUS[3] if first.side==p.original4h_zone_side else STATUS[4]
-                    ) if first is not None else STATUS[2]
+                    ) if first is not None else STATUS[2] if complete else STATUS[5]
     return C57RouteAObservation(
         symbol,p.original4h_zone_side,p.original4h_zone_known_ms,
         p.original4h_first_contact_native3m_id,
         p.original4h_first_contact_closed_known_ms,
-        one.fully_known_ms if one else None,first,status,bound)
+        one.fully_known_ms if one else None,first,status,bound,complete)
 
 def scan_c57_original_route_a(c47,original15,*,as_of_ms):
     if (not isinstance(c47,C47SourceJoin) or
