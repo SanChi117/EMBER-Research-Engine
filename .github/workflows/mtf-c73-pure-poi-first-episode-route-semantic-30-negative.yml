@@ -1,0 +1,33 @@
+name: EMBER C73 first genuine 3m POI visit episodes owner 15m Trigger VC ambiguity 30 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c73-pure-poi-first-episode-route-semantic-30-negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c73_new1h_poi_original3m_visit_episodes_route_split.py'
+      - 'research/mtf-element-audit-v1/d05/test_c73_new1h_poi_original3m_visit_episodes_route_split.py'
+permissions:
+  contents: read
+jobs:
+  negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify previous 142/142 SHA and 30 negative strict first original3m source POI vs repeated visit episodes academic route selection
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A142
+          grep -Fq 'entries 142 tip_sha256 347507f363d03a3bde2008a5690976ec3110925cc0ac514c1a6434299848059f' /tmp/A142
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c73_new1h_poi_original3m_visit_episodes_route_split 2>&1 | tee /tmp/C73
+          grep -Fq 'Ran 30 tests' /tmp/C73
+          grep -qx 'OK' /tmp/C73
