@@ -1,0 +1,34 @@
+name: EMBER C62 original hourly SNR versus MB versus RB wick and IMB 22 negative x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c62-snr-rb-imb-separation-22negative.yml'
+      - 'research/mtf-element-audit-v1/d05/c62_academic_snr_rb_imb_liquidity_source_separation.py'
+      - 'research/mtf-element-audit-v1/d05/test_c62_academic_snr_rb_imb_liquidity_source_separation.py'
+permissions:
+  contents: read
+jobs:
+  negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify previous 131 SHA and 22 original 1h SNR RB MB academic distinctions
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a131
+          grep -Fq 'entries 131 tip_sha256 c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d' /tmp/a131
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c62_academic_snr_rb_imb_liquidity_source_separation 2>&1 | tee /tmp/c62
+          grep -Fq 'Ran 22 tests' /tmp/c62
+          grep -qx 'OK' /tmp/c62
+          ! grep -q 'skipped=' /tmp/c62
