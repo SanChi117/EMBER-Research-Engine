@@ -61,3 +61,13 @@
 Append-once **A135** только после двух независимых 45 original ZIP C65, 31×3 CI: ровно шесть SHA файлов (source module, negative tests, original45 ZIP replay probe, frozen 237284-byte JSON, independent witness, этот report). Старые A001–A134 и frozen C46–C64 SHA обязаны остаться идентичны; independent CI 135/135 SHA на Python 3.10/3.11/3.12, нет lookahead и приказов.
 
 **Результат:** `0 author_OF_links, 0 author_StrongHL, 0 orders/fills/trades/PnL`. Строго `PAPER ONLY / NOT_TRADE_READY`.
+
+
+## 7. Дополнительная независимая реализация полного 45ZIP source replay
+
+Кроме основного `tests/probe_c65_original45zip_of_last_link_target_invalidation.py` была отдельно реализована `tests/probe_c65_original45zip_of_last_link_target_first_invalidation.py`. Она самостоятельно заново пересчитывает все 153 C46 parents, оригинальные C60 contacts, все исходные C62 случаи, C63 first ANY, C64 native3m anchor и C65 1H-контекст, после чего сравнивает исходные frozen C46/C60/C62/C63/C64 price/ID и присваивает тот же строго fail-closed C65 status.
+
+- Первое независимое полное выполнение [CI 40215224187](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40215224187) **SUCCESS**. Второе повторное независимое скачивание всех 45 оригинальных подписанных ZIP и побайтное сравнение [CI 40215392901](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40215392901) **SUCCESS 4/4**; ещё **31×3** теста. `evidence/c65/C65_ORIGINAL45ZIP_LAST_STRUCTURAL_OF_LINK_FIRST_TARGET_INVALIDATION_SOURCE.json` — **222052 bytes**, SHA256 `a178de99d78cb5bbf1f75c5dfa61c7750705c9f7b500c9712a6bdab3f672ae08`, Git blob `be6052b0e94ba93c2575712d8873051af37a46e5`. Схема дополнительного JSON отличается от основного, но **все 153 C65 source states идентичны: 83/69/1/0**. Второй независимый witness `evidence/c65/C65_INDEPENDENT_ORIGINAL45ZIP_LAST_OF_LINK_NO_OVERPROMOTION_WITNESS_20261025.json`.
+- Сохранён промежуточный [CI 40215106379](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40215106379) FAIL из-за опечатки в функции подсчёта по всем символам (`tot` вместо `totals`). Исправлена именно опечатка без подгонки OHLCV или статусов. После этого оба полных replay **SUCCESS**.
+
+Таким образом принята не одна запущенная реализация, а **две независимо написанные последовательности сверки оригинальных исходников**. Нулевой подтверждённый OF по прежнему означает недостаточность технической source-модели на этих данных, не отсутствие авторской рыночной структуры.
