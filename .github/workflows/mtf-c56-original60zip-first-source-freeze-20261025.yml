@@ -1,0 +1,125 @@
+name: EMBER C56 first independently sourced original 60 ZIP native3m vs native5m exact 1H parent evidence
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c56-original60zip-first-source-freeze-20261025.yml'
+      - 'research/mtf-element-audit-v1/tests/probe_c56_original_crypto_native5m_3m_same_raid_60zip.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mtf-c56-original60zip-first-freeze
+  cancel-in-progress: false
+jobs:
+  source_negative_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent previous 124/124 SHA, 26 native5m vs native3m C56 negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A124.txt
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/A124.txt
+          python tests/test_journal_integrity.py >/tmp/A124full.json
+          grep -Fq '"validations_pass": true' /tmp/A124full.json
+          cd d05
+          python -m unittest -v test_c56_crypto_native5m_1h_raid_bos_cross_tf 2>&1 | tee /tmp/C56.txt
+          grep -Fq 'Ran 26 tests' /tmp/C56.txt
+          grep -qx 'OK' /tmp/C56.txt
+          ! grep -Fq 'skipped=' /tmp/C56.txt
+
+  fresh_original_60zip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve immutable A124 and original C37 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/A124.txt
+          grep -Fq 'entries 124 tip_sha256 90ff52f751ef4628288c78a64e350a307f1007206b8cbc465e930207e6b011fd' /tmp/A124.txt
+          cd ../..
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c37/C37_ORIGINAL_FOUR_ADAPTED_NATIVE3M_BOS_EVENTS.json)" = e4b702e8c6cdc34f1c2475df73ef44ae1631fe56
+          test "$(git rev-parse HEAD:research/mtf-element-audit-v1/evidence/c55/C55_ORIGINAL_45ZIP_ROUTE_C_1H_RAID_3M_BOS_4ADAPTED_SOURCE.json)" = 2b4f944ddbdff0871a7fd553de2ab9955d220b91
+      - name: Fresh original Binance USD-M all 60 checksummed ZIP and full 3m/5m parent row ID comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          python "$R/tests/probe_c56_original_crypto_native5m_3m_same_raid_60zip.py" /tmp/C56-full-source.json >/tmp/C56-replay.log 2>&1 || { tail -c 18000 /tmp/C56-replay.log; exit 1; }
+          tail -c 2000 /tmp/C56-replay.log
+          python - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('/tmp/C56-full-source.json')
+          doc=json.loads(p.read_bytes())
+          assert doc['source_closed_native3m']==76800
+          assert doc['source_closed_native5m']==46080
+          assert doc['source_3m_candidate_contexts']==539
+          assert doc['source_5m_candidate_contexts']==512
+          assert doc['source_shared_1h_parents']==509
+          assert doc['source_unique_1h_parents']==542
+          assert doc['readiness']=='NOT_TRADE_READY'
+          assert (doc['fills'],doc['orders'],doc['trades'])==(0,0,0)
+          print('C56_FULL_ORIGINAL_SOURCE_BYTES',len(p.read_bytes()))
+          print('C56_FULL_ORIGINAL_SOURCE_SHA256',hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c56-original-source
+          path: /tmp/C56-full-source.json
+          if-no-files-found: error
+
+  freeze_verified_source_once:
+    needs: [source_negative_matrix,fresh_original_60zip]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: c56-original-source
+          path: /tmp/c56-source
+      - name: Append immutable C56 source JSON only after 3x negative and independent original 60ZIP success
+        shell: bash
+        run: |
+          set -euo pipefail
+          p=research/mtf-element-audit-v1/evidence/c56/C56_ORIGINAL_60ZIP_SAME_1H_PARENT_3M_NATIVE5M_COMPLETE_SOURCE.json
+          source=/tmp/c56-source/C56-full-source.json
+          test -s "$source"
+          if test -e "$p"; then
+            cmp -s "$p" "$source"
+            echo C56_ALREADY_FROZEN_IDENTICAL
+            exit 0
+          fi
+          mkdir -p "$(dirname "$p")"
+          cp "$source" "$p"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$p"
+          git commit -m 'evidence(C56): freeze original60ZIP same 1H raid 3m/5m source, no trades'
+          for i in 1 2 3 4; do
+            git fetch origin research/academic-engine-recovery-20261015
+            git rebase origin/research/academic-engine-recovery-20261015
+            if git push origin HEAD:research/academic-engine-recovery-20261015; then
+              echo C56_FROZEN_NONFORCE_PUSH
+              exit 0
+            fi
+          done
+          echo C56_NONFORCE_PUSH_RETRIES_EXHAUSTED >&2
+          exit 1
