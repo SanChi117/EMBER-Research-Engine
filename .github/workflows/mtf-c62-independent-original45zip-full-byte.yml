@@ -1,0 +1,79 @@
+name: EMBER C62 independent second original45ZIP 1H SNR vs MB RB wick gap full bytes
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c62-independent-original45zip-full-byte.yml'
+      - 'research/mtf-element-audit-v1/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json'
+permissions:
+  contents: read
+jobs:
+  second_full45:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Re-download 45 original signed Binance ZIP and full JSON 2498773byte SHA equality
+        run: |
+          set -euo pipefail
+          R=research/mtf-element-audit-v1
+          cd "$R"
+          python tools/auditlog.py verify | tee /tmp/A131
+          grep -Fq 'entries 131 tip_sha256 c68b21ba65b97f2ef39441227a3dd18e32564bd05bc95e3bcdb05571106c785d' /tmp/A131
+          cd ../..
+          test "$(git rev-parse HEAD:$R/evidence/c46/C46_ORIGINAL_4H_CLASSIC_IMB_FIRST_NATIVE3M_CONTACT_45ZIP.json)" = dc03c181912ffbb800bc191fbc16ec0d05c335e0
+          test "$(git rev-parse HEAD:$R/evidence/c61/C61_ORIGINAL45ZIP_DAILY_PRIOR_POI_FIRST_VISIT_STRONGHL_SOURCE_AUDIT.json)" = 305624e592f55bd699e94e45f4316e4efabdb726
+          python "$R/tests/probe_c62_original45zip_1h_snr_rb_imb_separate_source.py" /tmp/C62-recheck.json >/tmp/C62-recheck.log 2>&1 || { tail -c 17000 /tmp/C62-recheck.log; exit 1; }
+          cmp -s /tmp/C62-recheck.json "$R/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json"
+          python - <<'PY'
+          import hashlib,json,pathlib
+          f=pathlib.Path('research/mtf-element-audit-v1/evidence/c62/C62_ORIGINAL_45ZIP_1H_SNR_RB_MB_IMB_LIQUIDITY_COMPLETE_SOURCE.json')
+          q=pathlib.Path('/tmp/C62-recheck.json')
+          assert f.read_bytes()==q.read_bytes()
+          assert f.stat().st_size==2498773
+          digest=hashlib.sha256(f.read_bytes()).hexdigest()
+          assert digest=='8ac92d6406845568a2e0178be81fc2fec529da2d26697b6f08b7fbaa4e5a0c80'
+          z=json.loads(f.read_bytes())
+          assert z['original_signed_zip_counts']['total']==45
+          assert z['original_native3m_closed']==76800
+          assert z['original_native1d_closed']==160
+          assert z['original_native15m_exact_decimal_equalities']==15360
+          assert z['source_derived_closed_1h_bars']==3840
+          assert z['original_c46_4h_source_parents_checked']==153
+          assert z['original_1h_source_category_totals']=={
+             'MB_WEAKER_SOURCE_ONLY_NO_RAID_OR_IMB_NOT_VOLUME_CONFIRMATION':62,
+             'RB_TWO_OPPOSITE_HOURLY_CANDLES_WITHOUT_VERIFIED_WICK_RAID':1039,
+             'RB_WICK_ONLY_IMB_SOURCE_PROXY':556,
+             'RB_WICK_ONLY_LIQUIDITY_SOURCE_PROXY':394,
+             'SNR_ACCEPTED_CLOSE_WITH_SOURCE_IMB_PROXY':213,
+             'SNR_ACCEPTED_CLOSE_WITH_SOURCE_LIQUIDITY_PROXY':128,
+             'original_1h_technical_classic_gap':646}
+          assert z['author_snr_goldens']==z['author_rb_goldens']==z['author_imb_goldens']==0
+          assert z['orders']==z['trades']==z['fills']==0 and z['readiness']=='NOT_TRADE_READY'
+          print('C62_INDEPENDENT_SECOND_FRESH_45_ZIP_FULL_BYTES_SHA',f.stat().st_size,digest)
+          PY
+  negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 22 fail-closed SNR MB RB tests and prior 131 SHA
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c62_academic_snr_rb_imb_liquidity_source_separation 2>&1 | tee /tmp/C62negative
+          grep -Fq 'Ran 22 tests' /tmp/C62negative
+          grep -qx 'OK' /tmp/C62negative
+          ! grep -q 'skipped=' /tmp/C62negative
