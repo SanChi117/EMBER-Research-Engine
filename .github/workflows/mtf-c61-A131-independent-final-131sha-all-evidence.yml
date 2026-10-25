@@ -1,10 +1,10 @@
 name: EMBER C61 final independent A131 131SHA complete academic source & 51 tests x3
 on:
+  workflow_dispatch:
   push:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c61-A131-independent-final-131sha-all-evidence.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
         python: ['3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ae0601d9aee84b0ca8b53b801cfdcde27d097e53
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
