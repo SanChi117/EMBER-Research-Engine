@@ -97,7 +97,7 @@ def build(c73,c72):
             five=q["first_any_5m_event_known_ms"]
             if state==NO:
                 group="NO_SELECTED_NEW_1H_POI";priority=3
-                if t is not None or at is not None or five is not None:raise C81Rejected("NO_PARENT_HAS_EVENT")
+                # 23 older C73 cases have a physical 3m source touch even\n                # though no *new* 1H POI was selected. Preserve the raw\n                # touch for provenance; never call it a 1H first valid test.\n                if at is not None or five is not None:raise C81Rejected("NO_PARENT_HAS_15M_OR_5M_EVENT")\n                if p["source_1h_poi_kind"] is not None:raise C81Rejected("NO_PARENT_BUT_HAS_1H_POI_KIND")
             elif state==UN:
                 group="UNSELECTED_OPPOSITE_OR_AMBIGUOUS";priority=2
                 if fork not in ALLOWED or t is not None or at is not None or five is not None:
