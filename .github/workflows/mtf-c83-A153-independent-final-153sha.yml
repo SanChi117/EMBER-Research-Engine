@@ -1,0 +1,59 @@
+name: EMBER C83 A153 final 153-SHA seven original-course proofs
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c83-A153-independent-final-153sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: All 153 journal SHA plus seven frozen C83 sources and strict media non-promotion
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a153
+          grep -Fq 'entries 153 tip_sha256 c0ebbcf36454d2677278bc00cef3cb9c4270d402be89cc5f9b9976d4d604ef11' /tmp/a153
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          x=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(x)==153
+          old,new=x[-2:]
+          assert old['seq']==152 and old['record_sha256']=='0cc716b5a7fb97cfd1f14808dbef9b3f2b8fdeefbf6ba88eec82495ec10f1c66'
+          assert new['seq']==153 and new['action_id']=='A153' and new['cycle']=='B1/C83'
+          assert new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='c0ebbcf36454d2677278bc00cef3cb9c4270d402be89cc5f9b9976d4d604ef11'
+          assert new['verdict']=='DONE' and new['cycle_result']=='PASSED'
+          expected={
+          'd05/c83_owner_course_text_crosswalk.py':'1567d8f785e3f520453c62e8f02467893ac7565290393f152f1ec6c510d86559',
+          'd05/test_c83_owner_course_text_crosswalk.py':'b64e4f271324c62d240ed82edba4e68a8ab86d304476d2161c37cb77320458b3',
+          'tests/probe_c83_owner_12_crosswalk_witness.py':'8b147db2e35cfaa8ac072edd22b39642f25ef5eeb77082514c3d199084ad127c',
+          'tests/probe_c83_pinned_owner12_witness.py':'e8e4808e8c6e122dafab293507b0ede5383a95c3b62580caa6652c06dcbb0250',
+          'evidence/c83/C83_ORIGINAL12_P0_OWNER_COURSE_TEXT_CROSSWALK.json':'038aa9ba074804c5d1fd05140316a27b9f0326dcfbe3bb97d2fd626cdde07dc8',
+          'evidence/c83/C83_OWNER_LESSON_RULE_LINEAGE.md':'283f55060f688e52e36376fab0d547b37088c7c75f16cd3061517fbe9afb6d9f',
+          'cycles/B1_C83_OWNER_COURSE_ORIGINAL12_SOURCE_CROSSWALK_REPORT.md':'e008c77633f4ca51eee8378a3553a7fe8253f1071656953185dfe8472bd35cd7',
+          }
+          assert set(expected)=={e['path'] for e in new['evidence']}
+          for e in new['evidence']:
+              binary=Path(e['path']).read_bytes()
+              assert len(binary)==e['bytes']
+              assert hashlib.sha256(binary).hexdigest()==e['sha256']==expected[e['path']]
+          print('C83_A153_FULL_153_SHA_7_EVIDENCES_ACCEPTED')
+          PY
+          python tests/probe_c83_pinned_owner12_witness.py
+          cd d05
+          python -m unittest -v test_c83_owner_course_text_crosswalk 2>&1 | tee /tmp/c83
+          grep -Fq 'Ran 35 tests' /tmp/c83
+          grep -qx 'OK' /tmp/c83
