@@ -1,0 +1,58 @@
+{
+  "schema": "EMBER_C80_ORIGINAL153_OWNER_GOLDEN_INTAKE_AND_PRE55_CI_AUDIT_V1",
+  "date": "2026-10-26",
+  "evidence_class": "SOURCE_ONLY_NOT_AUTHOR_VERIFIED",
+  "original_market_source": {
+    "pinned_C73_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+    "pinned_C72_git_blob_sha1": "19b7e0357600b70b3f26467339a417e0f99a1302",
+    "symbols": [
+      "BCHUSDT",
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "XRPUSDT"
+    ],
+    "frozen_crypto_contexts_checked": 153,
+    "synthetic_negative_claims_reviewed": 153,
+    "original_source_15m_positive_hypotheses_screened": 12,
+    "authentic_owner_positive_goldens": 0,
+    "authentic_owner_negative_goldens": 0,
+    "original_archive_zip_retrieval_this_cycle": false
+  },
+  "adversarial": {
+    "validation_cases_per_python": 48,
+    "python": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "all_green_ci_run": 40385108222,
+    "source_provenance_and_author_spoofing_fail_closed": true,
+    "authenticated_author_registry_empty": true,
+    "fake_author_attestation_or_hash_cannot_upgrade_to_verified": true,
+    "cross_route_B_C_disallowed": true
+  },
+  "CI_legacy_preC55": {
+    "historical_workflows_with_removed_journal_push_triggers": 26,
+    "current_workflow_files_inspected": 347,
+    "remaining_preC55_journal_push_triggers": 0,
+    "manual_and_own_workflow_triggers_preserved": true,
+    "historical_CI_source_test_commands_not_changed": true,
+    "independent_ci_audit_40385108222": "SUCCESS",
+    "every_old_CI_automatically_reexecuted": false
+  },
+  "still_missing": [
+    "Authenticated exact authored Binance crypto positive/negative labels",
+    "Independent manual attestation for author markup and timestamp",
+    "Author first valid POI test proof",
+    "Real author 15m Trigger / direct VC / 5m VC proof",
+    "Structural StrongHL / SL / FTA / TP owner rule labels"
+  ],
+  "author_authenticated": 0,
+  "trade_ready": false,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "PAPER_ONLY_NOT_TRADE_READY"
+}
