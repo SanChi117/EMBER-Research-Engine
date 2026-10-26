@@ -68,7 +68,8 @@ def source_matched_queue(c73_bytes,c72_bytes,c81_serialized):
         frozen=json.loads(c81_serialized)
     except (ValueError,TypeError) as e:
         raise C83Rejected("C81_JSON_CORRUPT") from e
-    if type(frozen) is not list or len(frozen)!=153 or frozen!=[asdict(q) for q in original]:
+    canonical_json_records=json.loads(json.dumps([asdict(q) for q in original],sort_keys=True))
+    if type(frozen) is not list or len(frozen)!=153 or frozen!=canonical_json_records:
         raise C83Rejected("C81_ORIGINAL153_SOURCE_DRIFT")
     return original
 
