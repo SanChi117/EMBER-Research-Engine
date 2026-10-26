@@ -60,5 +60,5 @@ def hypothetical_next_step(parent_tf,parent_poi,parent_raid,trigger_1h,
     if trigger_15m=="NONE":
         return CourseGate("REQUIRE_DIRECT_15M_VC_IMB_OR_SNR","1H_POI_NO_15M_TRIGGER")
     if trigger_15m=="ELIGIBLE_IMB" and parent_poi=="IMB":
-        raise C79Rejected("NESTED_15M_IMB_NOT_AUTHORIZED_INSIDE_1H_IMB")
+        return CourseGate("REQUIRE_AUTHOR_REVIEW_OF_NESTED_15M_IMB_ELIGIBILITY","1H_IMB_NESTED_ADAPTED_HYPOTHESIS")
     return CourseGate("REQUIRE_5M_VC_IMB_OR_SNR","1H_POI_WITH_15M_TRIGGER")
