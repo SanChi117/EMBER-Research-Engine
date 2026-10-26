@@ -8,6 +8,7 @@ on:
       - 'research/mtf-element-audit-v1/d05/test_c80_owner_golden_intake.py'
       - 'research/mtf-element-audit-v1/tests/probe_c80_frozen_153_owner_intake.py'
       - 'research/mtf-element-audit-v1/tests/probe_c80_pre55_legacy_ci_audit.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c80_final_frozen_receipts.py'
 permissions:
   contents: read
 jobs:
@@ -30,5 +31,6 @@ jobs:
           python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
           python tests/probe_c80_frozen_153_owner_intake.py
           python tests/probe_c80_pre55_legacy_ci_audit.py
+          python tests/probe_c80_final_frozen_receipts.py
           cd d05
           python -m unittest -v test_c80_owner_golden_intake
