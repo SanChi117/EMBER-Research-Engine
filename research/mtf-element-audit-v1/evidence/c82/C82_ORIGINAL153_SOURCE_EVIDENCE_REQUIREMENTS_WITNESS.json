@@ -1,0 +1,31 @@
+{
+  "schema": "EMBER_C82_INDEPENDENT_EVIDENCE_REQUESTS_SOURCE_ONLY_V1",
+  "date": "2026-10-26",
+  "original_source": "C73/C72 source SHA and C81 153 immutable review queue",
+  "original_market_ZIPs_redownloaded": false,
+  "categories": {
+    "P0_selected_15m_followed_by_5m": 12,
+    "P1_first_physical_3m_touch_only": 23,
+    "P2_opposite_ambiguous_unselected": 71,
+    "P3_no_selected_new_1h_poi": 47
+  },
+  "owner_authenticated_positive_goldens": 0,
+  "owner_authenticated_negative_goldens": 0,
+  "author_valid_first_test": 0,
+  "author_15m_trigger": 0,
+  "author_direct_15m_vc": 0,
+  "author_5m_vc": 0,
+  "trading_orders": 0,
+  "trading_fills": 0,
+  "trading_trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "test_ci_run": 40388294332,
+  "test_count_per_python": 31,
+  "test_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "conclusion": "success",
+  "notes": "Hypothetical author media requirements are not evidence that such authenticated media has been obtained."
+}
