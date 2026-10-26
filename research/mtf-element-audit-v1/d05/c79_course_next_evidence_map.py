@@ -26,7 +26,7 @@ class CourseGate:
 
 def hypothetical_next_step(parent_tf,parent_poi,parent_raid,trigger_1h,
                            first_1h_poi_test,trigger_15m,vc_kind,
-                           *, from_4h_reaction):
+                           *, from_4h_reaction, first_4h_poi_test="NOT_TESTED"):
     """Model the exact source course's event hierarchy, never assess market.
 
     parent_raid: 4H actual raid hypothesis, distinct from 4H POI test.
@@ -40,12 +40,16 @@ def hypothetical_next_step(parent_tf,parent_poi,parent_raid,trigger_1h,
         raise C79Rejected("INVALID_TRIGGER_OR_FIRST_TEST")
     if vc_kind not in ("NONE","IMB","SNR","RB","LIQUIDITY"):
         raise C79Rejected("INVALID_VC_TYPE")
+    if first_4h_poi_test not in ("NOT_TESTED","SOURCE_TOUCH_ONLY","HYPOTHETICAL_AUTHOR_VALID"):
+        raise C79Rejected("INVALID_4H_FIRST_POI_TEST")
     if parent_tf=="4H":
         if first_1h_poi_test!="NOT_TESTED" or trigger_15m!="NONE":
             raise C79Rejected("NO_1H_NEW_POI_CONTEXT")
         if parent_raid:
             if trigger_1h!="NONE":raise C79Rejected("4H_RAID_MEANS_NO_1H_TRIGGER")
             return CourseGate("REQUIRE_1H_VC_RB_SNR_IMB_NEW_POI","4H_RAID")
+        if first_4h_poi_test!="HYPOTHETICAL_AUTHOR_VALID":
+            return CourseGate("REQUIRE_AUTHOR_VALID_FIRST_4H_POI_TEST","4H_POI_UNVALIDATED")
         if trigger_1h=="NONE":
             return CourseGate("REQUIRE_1H_VC_RB_SNR_IMB_NEW_POI","4H_POI_NO_1H_TRIGGER")
         if trigger_1h=="ELIGIBLE_IMB" and parent_poi=="IMB":
