@@ -4,7 +4,6 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-a083-c17-htf-journal-proof.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
       - 'research/mtf-element-audit-v1/evidence/c17/C17_ORIGINAL_C08_1D_4H_CANDIDATE_RESULT.json'
       - 'research/mtf-element-audit-v1/cycles/B1_C17_ORIGINAL_HTF_GEOMETRY_SOURCE_DIAGNOSTICS.md'
   workflow_dispatch:
