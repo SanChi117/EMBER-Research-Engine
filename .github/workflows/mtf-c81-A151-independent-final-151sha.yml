@@ -1,0 +1,60 @@
+name: EMBER C81 A151 final full SHA + 153 review packets x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c81-A151-independent-final-151sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 151 historical linked SHA + seven immutable C81 evidences + full original-source review 43 adversarial tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a151
+          grep -Fq 'entries 151 tip_sha256 e6bcdf13d1006376132eae77f4d2b406a870ff0929c0ff63e08c6f5ae7d94bd5' /tmp/a151
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          rows=[json.loads(v) for v in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==151
+          prev,r=rows[-2:]
+          assert prev['action_id']=='A150' and prev['record_sha256']=='86d333648df9c96c55b932f0a430b349fd6b9ae0b1e5888fe4d4fbd5b4ae1e15'
+          assert r['action_id']=='A151' and r['seq']==151 and r['cycle']=='B1/C81'
+          assert r['prev_sha256']==prev['record_sha256']
+          assert r['record_sha256']=='e6bcdf13d1006376132eae77f4d2b406a870ff0929c0ff63e08c6f5ae7d94bd5'
+          assert r['cycle_result']=='PASSED' and r['verdict']=='DONE'
+          hashes={
+           'd05/c81_source_authenticated_review_queue.py':'6cd99feb2c2724b7ddb7a52d9e907f4cc80782f3c0505cbb8bf5dd544b878462',
+           'd05/test_c81_source_authenticated_review_queue.py':'8a49ef412428fedd0c6b924334eeefcf4e2e352666d3efd70a4895d3eff70268',
+           'tests/probe_c81_independent_153_queue.py':'7b62e74913cc1425372260bf8b2bd9ede4a6b61c9832274a5c5925d1ed34fc8e',
+           'tests/probe_c81_frozen_queue_witness.py':'32c9cd6da94a6bcdb30335cb8c087befaba21804855cd1bfbf6b7059c217aff6',
+           'evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json':'07d3fe70a4af5cdc6878b6645025606c0ff4549e70e5eb8305ef685544170df6',
+           'evidence/c81/C81_INDEPENDENT_SOURCE_QUEUE_WITNESS.json':'855213da4b50dddfece5b3b07a1e5683a731d751c21984ddfcb24f3fc7e272b2',
+           'cycles/B1_C81_SOURCE_QUEUE_INDEPENDENT_AUTHOR_REVIEW_REPORT.md':'29b21faa141204a7dd0bb56f00bbeef8352b77ff4100d3e62777a6700c7c7514'
+          }
+          assert len(r['evidence'])==7 and set(hashes)=={e['path'] for e in r['evidence']}
+          for e in r['evidence']:
+              data=Path(e['path']).read_bytes()
+              assert len(data)==e['bytes']
+              assert hashlib.sha256(data).hexdigest()==e['sha256']==hashes[e['path']]
+          print('C81_A151_151SHA_7_FROZEN_EVIDENCES_PASS')
+          PY
+          python tests/probe_c81_independent_153_queue.py
+          python tests/probe_c81_frozen_queue_witness.py
+          cd d05
+          python -m unittest -v test_c81_source_authenticated_review_queue 2>&1 | tee /tmp/c81
+          grep -Fq 'Ran 43 tests' /tmp/c81
+          grep -qx 'OK' /tmp/c81
