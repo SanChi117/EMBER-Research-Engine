@@ -7,6 +7,7 @@ on:
       - 'research/mtf-element-audit-v1/d05/c80_owner_golden_intake.py'
       - 'research/mtf-element-audit-v1/d05/test_c80_owner_golden_intake.py'
       - 'research/mtf-element-audit-v1/tests/probe_c80_frozen_153_owner_intake.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c80_pre55_legacy_ci_audit.py'
 permissions:
   contents: read
 jobs:
@@ -28,5 +29,6 @@ jobs:
           python tools/auditlog.py verify | grep -Fq 'entries 149 tip_sha256 7a2dee86d3d1c00cd9d38491f69ebdedc2d7ac91186e772f3c596d94dd31ae3a'
           python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
           python tests/probe_c80_frozen_153_owner_intake.py
+          python tests/probe_c80_pre55_legacy_ci_audit.py
           cd d05
           python -m unittest -v test_c80_owner_golden_intake
