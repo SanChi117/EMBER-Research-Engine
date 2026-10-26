@@ -1,0 +1,49 @@
+{
+  "schema": "EMBER_C81_153_ORIGINAL_CRYPTO_SOURCE_OWNER_REVIEW_QUEUE_WITNESS_V1",
+  "as_of_date": "2026-10-26",
+  "source_C73_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+  "source_C72_git_blob_sha1": "19b7e0357600b70b3f26467339a417e0f99a1302",
+  "queue_file": "evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json",
+  "queue_bytes": 148772,
+  "queue_sha256": "07d3fe70a4af5cdc6878b6645025606c0ff4549e70e5eb8305ef685544170df6",
+  "original_source_cases": 153,
+  "priority_counts": {
+    "0": 12,
+    "1": 23,
+    "2": 71,
+    "3": 47
+  },
+  "nuance": "Of 47 without selected new 1H POI, 23 have raw3m source physical touch, not 1H POI first valid test",
+  "first_review_batch": [
+    "BCHUSDT/3",
+    "BCHUSDT/6",
+    "BCHUSDT/7",
+    "BCHUSDT/16",
+    "BCHUSDT/21",
+    "BCHUSDT/30",
+    "BTCUSDT/2",
+    "BTCUSDT/7",
+    "BTCUSDT/24",
+    "ETHUSDT/8",
+    "SOLUSDT/1",
+    "XRPUSDT/20"
+  ],
+  "independent_ci_run": 40387188743,
+  "independent_ci_status": "SUCCESS",
+  "tests_per_interpreter": 43,
+  "interpreters": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "full_json_byte_identity_verified": true,
+  "owner_authenticated_positive_goldens": 0,
+  "owner_authenticated_negative_goldens": 0,
+  "untrusted_media_claims_quarantined": true,
+  "original_60_zip_archive_refetched_during_C81": false,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "pnl": null,
+  "readiness": "PAPER_ONLY_NOT_TRADE_READY"
+}
