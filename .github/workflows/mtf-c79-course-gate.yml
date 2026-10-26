@@ -1,0 +1,29 @@
+name: EMBER C79 course-only Route A hypothetical gate x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c79-course-gate.yml'
+      - 'research/mtf-element-audit-v1/d05/c79_course_next_evidence_map.py'
+      - 'research/mtf-element-audit-v1/d05/test_c79_course_next_evidence_map.py'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Existing SHA journal and original course route hypothesis negatives
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 148 tip_sha256 963cfc2859412405f184e8f9ce6755e58b4238a77fe8e9ceff8f94a61bea665b'
+          cd d05
+          python -m unittest -v test_c79_course_next_evidence_map
