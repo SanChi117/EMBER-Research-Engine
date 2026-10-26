@@ -4,7 +4,6 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-a084-c18-native15m-journal-proof.yml'
-      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
   workflow_dispatch:
 permissions:
   contents: read
