@@ -1,0 +1,58 @@
+{
+  "schema": "EMBER_C78_SOURCE_CAUSAL_WITNESS_V1",
+  "as_of_date": "2026-10-26",
+  "archive_provenance": "Previously SHA-pinned Binance USD-M original source data; original ZIPs not downloaded anew in C78",
+  "C73_original_SHA256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+  "C72_original_git_blob_SHA1": "19b7e0357600b70b3f26467339a417e0f99a1302",
+  "C77_original_SHA256": "170ffad3d49af83324ea3da12d031c2f53842bf7e1604cee6b1bfb9f4f01e394",
+  "source_contexts": 153,
+  "parent_source_states": {
+    "no_new_1H_POI": 47,
+    "unselected_1H_source": 71,
+    "selected_1H_source": 35
+  },
+  "physical_3m_source_states": {
+    "no_selected_contact": 118,
+    "first_wick_no_clear_15m": 23,
+    "one_visit": 9,
+    "multiple_visits": 3
+  },
+  "technical_15m": {
+    "IMB": 6,
+    "SNR": 6
+  },
+  "technical_5m_after_15m": {
+    "same_side": 4,
+    "opposite": 5,
+    "multiple_kinds_ambiguous": 3
+  },
+  "academic_proven": {
+    "first_valid_POI_test": 0,
+    "true_15m_trigger": 0,
+    "true_15m_VC": 0,
+    "true_5m_VC": 0
+  },
+  "routes_B_and_C_unchanged": true,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "PnL": null,
+  "status": "SOURCE_ONLY_ADAPTED_HYPOTHESIS_NOT_TRADE_READY",
+  "tests": {
+    "ci_id": 40244049908,
+    "python_versions": [
+      "3.10",
+      "3.11",
+      "3.12"
+    ],
+    "each_tests": 38,
+    "conclusion": "success"
+  },
+  "historical_final_ci": {
+    "C55_A126": 40244016107,
+    "C56_A125": 40244155309,
+    "C57_A127": 40357496198,
+    "C58_A128": 40357525655,
+    "all_conclusion": "success"
+  }
+}
