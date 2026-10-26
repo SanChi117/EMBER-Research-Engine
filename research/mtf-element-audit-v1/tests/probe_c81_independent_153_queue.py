@@ -18,7 +18,7 @@ checked=validate_queue(queue)
 target=(ROOT/"evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json").read_bytes()
 declared=json.loads(target)
 expected=[asdict(x) for x in queue]
-assert expected==declared, "C81_FROZEN_QUEUE_FIELD_BYTES_OR_AUTHOR_SPOOF_DRIFT"
+assert json.loads(json.dumps(expected))==declared, "C81_FROZEN_QUEUE_FIELD_BYTES_OR_AUTHOR_SPOOF_DRIFT"
 assert json.dumps(expected,sort_keys=True,indent=2,ensure_ascii=False).encode()+b"\n"==target
 assert checked["priority_counts"]=={0:12,1:23,2:71,3:47}
 assert len(declared)==153 and sum(x["priority"]==0 for x in declared)==12
