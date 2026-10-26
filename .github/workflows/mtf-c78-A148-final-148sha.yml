@@ -1,0 +1,56 @@
+name: EMBER C78 A148 final independent 148 SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c78-A148-final-148sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Audit linked journal, frozen five proofs and C78 original 153 source scenarios
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a148
+          grep -Fq 'entries 148 tip_sha256 963cfc2859412405f184e8f9ce6755e58b4238a77fe8e9ceff8f94a61bea665b' /tmp/a148
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          rows=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==148
+          p,r=rows[-2:]
+          assert p['action_id']=='A147' and p['record_sha256']=='5808b76671e6280e65495820284f0723549a533fdecb99f0a54881fd38368527'
+          assert r['action_id']=='A148' and r['seq']==148 and r['prev_sha256']==p['record_sha256']
+          assert r['record_sha256']=='963cfc2859412405f184e8f9ce6755e58b4238a77fe8e9ceff8f94a61bea665b'
+          assert r['verdict']=='DONE' and r['cycle_result']=='PASSED'
+          expected={
+          'd05/c78_academic_causal_gate.py':'820ddebeff28c5c4a2718bd6652e6aad252d6ee686f505d9d424cccc998600fb',
+          'd05/test_c78_academic_causal_gate.py':'1942e93cfc5a79ac55314cb9713e42179f76ac29afa53e82566bc39f137bfb47',
+          'tests/probe_c78_frozen_route_semantics.py':'8275c1008c31d335752ef0e96d5f2ab720d26ca2b9722a249c1067efcc74834a',
+          'evidence/c78/C78_SOURCE_CAUSAL_WITNESS.json':'7016891ade8e6ee7de96ba114d1ac0f8aa122cbd5cd10f1e655d8f58b4d1a332',
+          'cycles/B1_C78_ACADEMIC_PROOF_GATE_REPORT.md':'8cb4d9df10e1ee808ed78b1fd643a8c1b44c889856914163261e2ef0d09d0754',
+          }
+          assert set(expected)=={e['path'] for e in r['evidence']}
+          for e in r['evidence']:
+              b=Path(e['path']).read_bytes()
+              assert len(b)==e['bytes']
+              assert hashlib.sha256(b).hexdigest()==e['sha256']==expected[e['path']]
+          print('C78_A148_FULL_SHA_5_EVIDENCE_PASS')
+          PY
+          python tests/probe_c78_frozen_route_semantics.py
+          cd d05
+          python -m unittest -v test_c78_academic_causal_gate 2>&1 | tee /tmp/c78
+          grep -Fq 'Ran 38 tests' /tmp/c78
+          grep -qx 'OK' /tmp/c78
