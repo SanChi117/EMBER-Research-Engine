@@ -58,7 +58,11 @@ class C79Course(unittest.TestCase):
     def test_11_source_candidate_kind_not_vc_proof(self):
         x=scan(first_1h_poi_test="SOURCE_TOUCH_ONLY",vc_kind="IMB")
         self.assertEqual(x.next_evidence,"REQUIRE_AUTHOR_VALID_FIRST_1H_POI_TEST")
-    def test_12_immutable_public_response(self):
+    def test_12_nested_15m_imb_requires_separate_author_review(self):
+        x=scan(parent_poi="IMB",first_1h_poi_test="HYPOTHETICAL_AUTHOR_VALID",trigger_15m="ELIGIBLE_IMB")
+        self.assertEqual(x.next_evidence,"REQUIRE_AUTHOR_REVIEW_OF_NESTED_15M_IMB_ELIGIBILITY")
+        self.assertFalse(x.entry_allowed)
+    def test_13_immutable_public_response(self):
         from dataclasses import FrozenInstanceError
         o=scan()
         with self.assertRaises(FrozenInstanceError):o.entry_allowed=True
@@ -78,7 +82,6 @@ NEG={
 "unknown_touch":dict(first_1h_poi_test="AUTHOR_APPROVED"),
 "4h_raid_1h_trigger":dict(parent_tf="4H",parent_raid=True,from_4h_reaction=False,trigger_1h="SSL_RAID"),
 "4h_nested_imb":dict(parent_tf="4H",parent_poi="IMB",trigger_1h="ELIGIBLE_IMB",from_4h_reaction=False),
-"1h_nested_imb":dict(parent_tf="1H",parent_poi="IMB",first_1h_poi_test="HYPOTHETICAL_AUTHOR_VALID",trigger_15m="ELIGIBLE_IMB"),
 "4h_with_15m_trigger":dict(parent_tf="4H",from_4h_reaction=False,trigger_15m="BSL_RAID"),
 "4h_with_1h_test":dict(parent_tf="4H",from_4h_reaction=False,first_1h_poi_test="SOURCE_TOUCH_ONLY"),
 "1h_raid":dict(parent_tf="1H",parent_raid=True),
