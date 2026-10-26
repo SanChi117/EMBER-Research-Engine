@@ -1,0 +1,33 @@
+name: EMBER C81 frozen source review queue x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c81-owner-review-queue.yml'
+      - 'research/mtf-element-audit-v1/d05/c81_source_authenticated_review_queue.py'
+      - 'research/mtf-element-audit-v1/d05/test_c81_source_authenticated_review_queue.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c81_independent_153_queue.py'
+      - 'research/mtf-element-audit-v1/evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json'
+permissions:
+  contents: read
+jobs:
+  review-source:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A150/150SHA complete source 153 review queue and negative test matrix
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 150 tip_sha256 86d333648df9c96c55b932f0a430b349fd6b9ae0b1e5888fe4d4fbd5b4ae1e15'
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python tests/probe_c81_independent_153_queue.py
+          cd d05
+          python -m unittest -v test_c81_source_authenticated_review_queue
