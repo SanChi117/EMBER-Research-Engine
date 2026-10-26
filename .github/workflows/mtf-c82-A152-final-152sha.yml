@@ -1,0 +1,51 @@
+name: EMBER C82 A152 independent 152 SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c82-A152-final-152sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Complete original 152 SHA + four C82 files and 31 negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 152 tip_sha256 0cc716b5a7fb97cfd1f14808dbef9b3f2b8fdeefbf6ba88eec82495ec10f1c66'
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          j=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==152
+          old,last=j[-2:]
+          assert old['action_id']=='A151' and old['record_sha256']=='e6bcdf13d1006376132eae77f4d2b406a870ff0929c0ff63e08c6f5ae7d94bd5'
+          assert last['action_id']=='A152' and last['prev_sha256']==old['record_sha256']
+          assert last['record_sha256']=='0cc716b5a7fb97cfd1f14808dbef9b3f2b8fdeefbf6ba88eec82495ec10f1c66'
+          assert last['verdict']=='DONE' and last['cycle_result']=='PASSED'
+          refs={
+          'd05/c82_independent_owner_media_request.py':'2cdfc50c303fe8bdce02736ac7fee21b86504c8f5123ccb9947a05ff3d9944d3',
+          'd05/test_c82_independent_owner_media_request.py':'a5e0247de4c54747bbbdbd6f37c1700fb04b4e69f15f482b206ac1f41fec8f13',
+          'cycles/B1_C82_EVIDENCE_REQUESTS_C81_ORIGINAL153_REPORT.md':'c78df9b7c44be358b681319ac7aa3cad4f9a1855ad7be46b6f701972d077a122',
+          'evidence/c82/C82_ORIGINAL153_SOURCE_EVIDENCE_REQUIREMENTS_WITNESS.json':'7cc5461277cc98e674cb7804c05ac89e23968c80fc7b62e4f17d321c252cd699'}
+          assert set(refs)=={e['path'] for e in last['evidence']}
+          for e in last['evidence']:
+            content=Path(e['path']).read_bytes()
+            assert len(content)==e['bytes'] and hashlib.sha256(content).hexdigest()==e['sha256']==refs[e['path']]
+          print('C82_A152_FINAL_INDEPENDENT_SHA_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c82_independent_owner_media_request 2>&1 | tee /tmp/c82
+          grep -Fq 'Ran 31 tests' /tmp/c82
+          grep -qx 'OK' /tmp/c82
