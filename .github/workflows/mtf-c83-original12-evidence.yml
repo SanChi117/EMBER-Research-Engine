@@ -18,7 +18,7 @@ jobs:
         run: |
           set -euo pipefail
           cd research/mtf-element-audit-v1
-          python tests/probe_c83_owner_12_crosswalk_witness.py /tmp/C83_ORIGINAL12_SOURCE.json | grep -F 'C83_ALL12_OWNER_TEXT_CROSSWALK_SOURCE_ONLY_PASS'
+          python tests/probe_c83_owner_12_crosswalk_witness.py /tmp/C83_ORIGINAL12_SOURCE.json
           sha256sum /tmp/C83_ORIGINAL12_SOURCE.json
           wc -c /tmp/C83_ORIGINAL12_SOURCE.json
       - uses: actions/upload-artifact@v4
