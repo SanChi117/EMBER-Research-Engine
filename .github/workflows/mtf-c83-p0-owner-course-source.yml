@@ -1,0 +1,32 @@
+name: EMBER C83 original course 12 source review x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c83-p0-owner-course-source.yml'
+      - 'research/mtf-element-audit-v1/d05/c83_owner_course_text_crosswalk.py'
+      - 'research/mtf-element-audit-v1/d05/test_c83_owner_course_text_crosswalk.py'
+permissions:
+  contents: read
+jobs:
+  crosswalk:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: SHA 152 previous and strict C83 12 selected cryptographic source cases
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 152 tip_sha256 0cc716b5a7fb97cfd1f14808dbef9b3f2b8fdeefbf6ba88eec82495ec10f1c66'
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c83_owner_course_text_crosswalk 2>&1 | tee /tmp/c83
+          grep -Fq 'Ran 35 tests' /tmp/c83
+          grep -qx 'OK' /tmp/c83
