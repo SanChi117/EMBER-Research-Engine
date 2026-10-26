@@ -1,0 +1,29 @@
+name: EMBER C82 owner media source requests independent x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c82-owner-source-requests.yml'
+      - 'research/mtf-element-audit-v1/d05/c82_independent_owner_media_request.py'
+      - 'research/mtf-element-audit-v1/d05/test_c82_independent_owner_media_request.py'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify prior A151 and strictly quarantine 153 source packets
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 151 tip_sha256 e6bcdf13d1006376132eae77f4d2b406a870ff0929c0ff63e08c6f5ae7d94bd5'
+          cd d05
+          python -m unittest -v test_c82_independent_owner_media_request
