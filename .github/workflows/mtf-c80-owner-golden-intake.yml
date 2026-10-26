@@ -1,0 +1,32 @@
+name: EMBER C80 source-pinned owner golden intake failclosed x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c80-owner-golden-intake.yml'
+      - 'research/mtf-element-audit-v1/d05/c80_owner_golden_intake.py'
+      - 'research/mtf-element-audit-v1/d05/test_c80_owner_golden_intake.py'
+      - 'research/mtf-element-audit-v1/tests/probe_c80_frozen_153_owner_intake.py'
+permissions:
+  contents: read
+jobs:
+  source-and-negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: All prior 149 SHA, real source 153 candidates and source forgery test matrix
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | grep -Fq 'entries 149 tip_sha256 7a2dee86d3d1c00cd9d38491f69ebdedc2d7ac91186e772f3c596d94dd31ae3a'
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python tests/probe_c80_frozen_153_owner_intake.py
+          cd d05
+          python -m unittest -v test_c80_owner_golden_intake
