@@ -29,21 +29,21 @@ class C79Course(unittest.TestCase):
         x=scan(first_1h_poi_test="HYPOTHETICAL_AUTHOR_VALID",trigger_15m="SSL_RAID")
         self.assertEqual(x.next_evidence,"REQUIRE_5M_VC_IMB_OR_SNR")
     def test_06_4h_poi_1h_trigger_needs_15m_vc(self):
-        x=scan(parent_tf="4H",parent_poi="SNR",trigger_1h="BSL_RAID",from_4h_reaction=False)
+        x=scan(parent_tf="4H",parent_poi="SNR",trigger_1h="BSL_RAID",from_4h_reaction=False,first_4h_poi_test="HYPOTHETICAL_AUTHOR_VALID")
         self.assertEqual(x.next_evidence,"REQUIRE_15M_VC_IMB_OR_SNR")
     def test_07_4h_raid_no_1h_trigger_wait_1h_vc(self):
         x=scan(parent_tf="4H",parent_poi="LIQUIDITY",parent_raid=True,
                from_4h_reaction=False)
         self.assertEqual(x.next_evidence,"REQUIRE_1H_VC_RB_SNR_IMB_NEW_POI")
     def test_08_4h_poi_no_1h_trigger_wait_1h_vc(self):
-        x=scan(parent_tf="4H",parent_poi="RB",from_4h_reaction=False)
+        x=scan(parent_tf="4H",parent_poi="RB",from_4h_reaction=False,first_4h_poi_test="HYPOTHETICAL_AUTHOR_VALID")
         self.assertEqual(x.next_evidence,"REQUIRE_1H_VC_RB_SNR_IMB_NEW_POI")
     def test_09_all_hypothetical_decisions_not_trade_ready(self):
         for p in [
           case(),
           case(first_1h_poi_test="HYPOTHETICAL_AUTHOR_VALID"),
           case(first_1h_poi_test="HYPOTHETICAL_AUTHOR_VALID",trigger_15m="BSL_RAID"),
-          case(parent_tf="4H",from_4h_reaction=False,trigger_1h="SSL_RAID")
+          case(parent_tf="4H",from_4h_reaction=False,trigger_1h="SSL_RAID",first_4h_poi_test="HYPOTHETICAL_AUTHOR_VALID")
         ]:
             r=route(**p)
             self.assertFalse(r.author_authenticated)
@@ -58,11 +58,14 @@ class C79Course(unittest.TestCase):
     def test_11_source_candidate_kind_not_vc_proof(self):
         x=scan(first_1h_poi_test="SOURCE_TOUCH_ONLY",vc_kind="IMB")
         self.assertEqual(x.next_evidence,"REQUIRE_AUTHOR_VALID_FIRST_1H_POI_TEST")
-    def test_12_nested_15m_imb_requires_separate_author_review(self):
+    def test_12_4h_wick_touch_not_author_valid_test(self):
+        x=scan(parent_tf="4H",from_4h_reaction=False,first_4h_poi_test="SOURCE_TOUCH_ONLY",trigger_1h="SSL_RAID")
+        self.assertEqual(x.next_evidence,"REQUIRE_AUTHOR_VALID_FIRST_4H_POI_TEST")
+    def test_13_nested_15m_imb_requires_separate_author_review(self):
         x=scan(parent_poi="IMB",first_1h_poi_test="HYPOTHETICAL_AUTHOR_VALID",trigger_15m="ELIGIBLE_IMB")
         self.assertEqual(x.next_evidence,"REQUIRE_AUTHOR_REVIEW_OF_NESTED_15M_IMB_ELIGIBILITY")
         self.assertFalse(x.entry_allowed)
-    def test_13_immutable_public_response(self):
+    def test_14_immutable_public_response(self):
         from dataclasses import FrozenInstanceError
         o=scan()
         with self.assertRaises(FrozenInstanceError):o.entry_allowed=True
@@ -81,7 +84,7 @@ NEG={
 "bad_vc":dict(vc_kind="OB"),
 "unknown_touch":dict(first_1h_poi_test="AUTHOR_APPROVED"),
 "4h_raid_1h_trigger":dict(parent_tf="4H",parent_raid=True,from_4h_reaction=False,trigger_1h="SSL_RAID"),
-"4h_nested_imb":dict(parent_tf="4H",parent_poi="IMB",trigger_1h="ELIGIBLE_IMB",from_4h_reaction=False),
+"4h_nested_imb":dict(parent_tf="4H",parent_poi="IMB",trigger_1h="ELIGIBLE_IMB",from_4h_reaction=False,first_4h_poi_test="HYPOTHETICAL_AUTHOR_VALID"),
 "4h_with_15m_trigger":dict(parent_tf="4H",from_4h_reaction=False,trigger_15m="BSL_RAID"),
 "4h_with_1h_test":dict(parent_tf="4H",from_4h_reaction=False,first_1h_poi_test="SOURCE_TOUCH_ONLY"),
 "1h_raid":dict(parent_tf="1H",parent_raid=True),
@@ -89,6 +92,7 @@ NEG={
 "1h_no4h_context":dict(parent_tf="1H",from_4h_reaction=False),
 "1h_liquidity_not_new_poi":dict(parent_tf="1H",parent_poi="LIQUIDITY"),
 "not_bool_reaction":dict(from_4h_reaction=1),
+"fake_4h_validation":dict(first_4h_poi_test="AUTHOR_VERIFIED"),
 "not_bool_raid":dict(parent_raid=0)
 }
 for key,change in NEG.items():setattr(C79Course,"test_negative_"+key,fails(**change))
