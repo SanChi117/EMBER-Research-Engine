@@ -1,0 +1,60 @@
+name: EMBER C80 A150 final independent 150 SHA and owner intake x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c80-A150-independent-final-150sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Audit entire linked 150 SHA source bytes owner intake and 26 legacy CI repairs
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a150
+          grep -Fq 'entries 150 tip_sha256 86d333648df9c96c55b932f0a430b349fd6b9ae0b1e5888fe4d4fbd5b4ae1e15' /tmp/a150
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          rec=[json.loads(x) for x in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rec)==150
+          old,last=rec[-2:]
+          assert old['action_id']=='A149' and old['record_sha256']=='7a2dee86d3d1c00cd9d38491f69ebdedc2d7ac91186e772f3c596d94dd31ae3a'
+          assert last['action_id']=='A150' and last['seq']==150 and last['cycle']=='B1/C80'
+          assert last['prev_sha256']==old['record_sha256']
+          assert last['record_sha256']=='86d333648df9c96c55b932f0a430b349fd6b9ae0b1e5888fe4d4fbd5b4ae1e15'
+          assert last['verdict']=='DONE' and last['cycle_result']=='PASSED'
+          h={
+            'd05/c80_owner_golden_intake.py':'5b4546c483feb9af83556ef608fd484b66f33b8b3b8f781e93e2aec2531e8374',
+            'd05/test_c80_owner_golden_intake.py':'db6ce1f7b47009db77aa315df4bdf22859439ca0ca7df1dfde9a8134e84d3627',
+            'tests/probe_c80_frozen_153_owner_intake.py':'6eed75c65457c075e6b60f203fd3d372880bf291d8cba8ee94a477bf42db40e2',
+            'tests/probe_c80_pre55_legacy_ci_audit.py':'7885be11e98797690226f7bf2ecad12a00175a75249f2cd2132de0ac1c5bcf8d',
+            'tests/probe_c80_final_frozen_receipts.py':'59fd9322ca9bb1e29b4b5190eb90263976cc35a545ccf5086fd57a62a68fe69d',
+            'evidence/c80/C80_ORIGINAL153_OWNER_GOLDEN_INTAKE_ZERO_AND_PRE55_CI_AUDIT.json':'1b265aeb9a0cec3365aa75b86bca89396dcc31670704a5596abec719f3a6aca9',
+            'cycles/B1_C80_AUTHOR_GOLDEN_INTAKE_ORIGINAL153_PRE55_CI_REPORT.md':'961c160560f67d91dcf4873df10e766606f437a7e3c8fda6de82de972afd9de6'
+          }
+          assert len(last['evidence'])==7 and set(h)=={e['path'] for e in last['evidence']}
+          for e in last['evidence']:
+              p=Path(e['path']).read_bytes()
+              assert len(p)==e['bytes'] and hashlib.sha256(p).hexdigest()==e['sha256']==h[e['path']]
+          print('C80_A150_INDEPENDENT_150SHA_SEVEN_FROZEN_PROOFS_PASS')
+          PY
+          python tests/probe_c80_frozen_153_owner_intake.py
+          python tests/probe_c80_pre55_legacy_ci_audit.py
+          python tests/probe_c80_final_frozen_receipts.py
+          cd d05
+          python -m unittest -v test_c80_owner_golden_intake 2>&1 | tee /tmp/c80
+          grep -Fq 'Ran 48 tests' /tmp/c80
+          grep -qx 'OK' /tmp/c80
