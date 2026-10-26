@@ -1,0 +1,29 @@
+name: EMBER C83 original12 lesson-linked cryptographic witness
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c83-original12-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original 153 and emit 12 source only lesson packets
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tests/probe_c83_owner_12_crosswalk_witness.py /tmp/C83_ORIGINAL12_SOURCE.json | grep -F 'C83_ALL12_OWNER_TEXT_CROSSWALK_SOURCE_ONLY_PASS'
+          sha256sum /tmp/C83_ORIGINAL12_SOURCE.json
+          wc -c /tmp/C83_ORIGINAL12_SOURCE.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: EMBER-C83-ORIGINAL12-COURSE-CROSSWALK
+          path: /tmp/C83_ORIGINAL12_SOURCE.json
+          retention-days: 30
