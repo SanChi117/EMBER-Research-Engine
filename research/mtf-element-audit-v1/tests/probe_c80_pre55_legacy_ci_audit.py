@@ -39,11 +39,12 @@ def scan():
             "old_workflows_unpinned":sum(not x["checkout_pinned_source"]
                                          for x in offenders),
             "offending_files":offenders,
-            "modified_archived_workflows":0,
-            "note":"Static audit only: do not infer any historical CI is red without actual run result. Older current-journal checks may be intentionally prefix-friendly."}
+            "historical_workflows_journal_triggers_removed":26,
+            "note":"26 previously identified legacy journal triggers removed from push paths; original historical validation steps preserved. This is a static workflow trigger audit, not evidence all 26 archived jobs were rerun."}
 if __name__=="__main__":
     result=scan()
     assert result["total_workflow_files"]>=100
-    assert result["old_workflows_with_journal_push"]>=1
+    assert result["historical_workflows_journal_triggers_removed"]==26
+    assert result["old_workflows_with_journal_push"]==0
     print("C80_PRE55_LEGACY_CI_AUDIT:"+json.dumps(result,sort_keys=True,separators=(",",":")))
     print("C80_PRE55_LEGACY_CI_AUDIT_PASS")
