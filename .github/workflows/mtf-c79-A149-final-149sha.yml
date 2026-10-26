@@ -1,0 +1,53 @@
+name: EMBER C79 A149 final independent full SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c79-A149-final-149sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: All 149 SHA, four frozen C79 proof files, 32 course negative tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a149
+          grep -Fq 'entries 149 tip_sha256 7a2dee86d3d1c00cd9d38491f69ebdedc2d7ac91186e772f3c596d94dd31ae3a' /tmp/a149
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          z=[json.loads(v) for v in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(z)==149
+          old,new=z[-2:]
+          assert old['action_id']=='A148' and old['record_sha256']=='963cfc2859412405f184e8f9ce6755e58b4238a77fe8e9ceff8f94a61bea665b'
+          assert new['action_id']=='A149' and new['prev_sha256']==old['record_sha256']
+          assert new['record_sha256']=='7a2dee86d3d1c00cd9d38491f69ebdedc2d7ac91186e772f3c596d94dd31ae3a'
+          assert new['verdict']=='DONE' and new['cycle_result']=='PASSED' and len(new['evidence'])==4
+          digest={
+           'd05/c79_course_next_evidence_map.py':'d5d4df3590ecd9ae5e34381444d0ddeedef240e3df766f5839133c3f5717cac4',
+           'd05/test_c79_course_next_evidence_map.py':'ae7ecb56208085eeaadbe1e94f855117ec66779b6ec75ce25b38dd62ad8823de',
+           'cycles/B1_C79_COURSE_ROUTE_EVIDENCE_ORDER_REPORT.md':'fc588f646be24cde8c586dec2f164072067b6d741c7c42375e7f77ed548d837c',
+           'evidence/c79/C79_OWNER_COURSE_ROUTE_GATE_WITNESS.json':'ae98d4992a0b543a273f4c1b43bb4f31e87d2edb0f2ccc33b5f836d8b78ef0a6'}
+          assert set(digest)=={e['path'] for e in new['evidence']}
+          for e in new['evidence']:
+            b=Path(e['path']).read_bytes()
+            assert len(b)==e['bytes']
+            assert hashlib.sha256(b).hexdigest()==e['sha256']==digest[e['path']]
+          print('C79_A149_INDEPENDENT_149_SHA_4_FROZEN_PROOFS_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c79_course_next_evidence_map 2>&1 | tee /tmp/c79
+          grep -Fq 'Ran 32 tests' /tmp/c79
+          grep -qx 'OK' /tmp/c79
