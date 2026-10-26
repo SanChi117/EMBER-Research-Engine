@@ -1,0 +1,31 @@
+{
+  "schema": "EMBER_C79_ORIGINAL_ROUTE_A_HYPOTHETICAL_RULE_GATE_V1",
+  "date": "2026-10-26",
+  "course_origin": "Original owner academy Entry by IMB & SNR, Rejection Block, POI",
+  "rules": {
+    "4H_POI": "needs author-valid first test before 1H Trigger/VC route",
+    "4H_raid": "no 1H Trigger; require 1H VC RB/SNR/IMB",
+    "4H_POI_plus_1H_Trigger": "expect 15m VC IMB or SNR",
+    "4H_POI_without_1H_Trigger": "expect 1H VC RB/SNR/IMB and new 1H POI",
+    "new_1H_POI": "requires 4H reaction and genuine first valid test",
+    "new_1H_POI_plus_15m_Trigger": "expect later 5m VC IMB or SNR",
+    "new_1H_POI_without_15m_Trigger": "expect direct 15m VC IMB or SNR",
+    "4H_IMB_inner_1H_IMB": "forbidden by explicitly stated source nuance",
+    "1H_IMB_inner_15m_IMB": "not directly established; ADAPTED_HYPOTHESIS requires author review"
+  },
+  "tests": {
+    "CI": 40359161852,
+    "Python_310": 32,
+    "Python_311": 32,
+    "Python_312": 32,
+    "conclusion": "success"
+  },
+  "author_goldens_authenticated": 0,
+  "original_market_ZIPs_replayed_in_C79": 0,
+  "author_approved_entry": false,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "PnL": null,
+  "status": "PAPER_ONLY_NOT_TRADE_READY"
+}
