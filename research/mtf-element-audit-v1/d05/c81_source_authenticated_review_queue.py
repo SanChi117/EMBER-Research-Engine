@@ -129,7 +129,7 @@ def build(c73,c72):
                 first5m_kind=q["state"],first5m_known_ms=five,
                 visits_before_source15m=p["episodes_before_first_15m_pattern"],
                 parent_fork=fork))
-    if len(seen)!=len(items)!=153:
+    if len(seen)!=153 or len(items)!=153:
         raise C81Rejected("INCOMPLETE_SOURCE")
     result=tuple(sorted(items,key=lambda x:(x.priority,x.symbol,x.index)))
     totals=Counter(x.source_group for x in result)
