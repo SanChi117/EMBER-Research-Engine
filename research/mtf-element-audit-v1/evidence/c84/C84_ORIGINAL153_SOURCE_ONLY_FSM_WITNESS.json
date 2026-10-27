@@ -1,0 +1,41 @@
+{
+  "schema": "EMBER_C84_ORIGINAL153_ROUTE_A_SOURCE_ONLY_FSM_V1",
+  "checkpoint": "C83/A153",
+  "previous_sha_tip": "c0ebbcf36454d2677278bc00cef3cb9c4270d402be89cc5f9b9976d4d604ef11",
+  "c73_original_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+  "c72_git_blob": "19b7e0357600b70b3f26467339a417e0f99a1302",
+  "c81_original153_sha256": "07d3fe70a4af5cdc6878b6645025606c0ff4549e70e5eb8305ef685544170df6",
+  "crypto_original_source_only": true,
+  "source_groups": {
+    "P0": 12,
+    "P1": 23,
+    "P2": 71,
+    "P3": 47
+  },
+  "p0_geometry_5m": {
+    "same_side": 4,
+    "opposite": 5,
+    "ambiguous": 3
+  },
+  "p0_physical_visits": {
+    "one": 9,
+    "two": 2,
+    "four": 1
+  },
+  "independent_ci_run_id": 40584448507,
+  "independent_ci_conclusion": "SUCCESS",
+  "python_versions": [
+    "3.10",
+    "3.11",
+    "3.12"
+  ],
+  "tests_per_version": 40,
+  "owner_authenticated_positive_goldens": 0,
+  "owner_authenticated_negative_goldens": 0,
+  "author_semantic_transitions": 0,
+  "orders": 0,
+  "fills": 0,
+  "trades": 0,
+  "readiness": "NOT_TRADE_READY",
+  "disclaimer": "Research state grammar and technical source observations; no entry, no SL/TP, no author verified trading signal"
+}
