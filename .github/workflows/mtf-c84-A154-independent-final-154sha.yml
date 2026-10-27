@@ -1,0 +1,60 @@
+name: EMBER C84 A154 independent final full 154-SHA Route A acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c84-A154-independent-final-154sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Final C84 A154 independent 154SHA plus all frozen evidence and 40 adverse tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a154
+          grep -Fq 'entries 154 tip_sha256 d2d1389b583f30d7c33f58f0193ff7003dcafb59efb024826d11e8c22b72b593' /tmp/a154
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          arr=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf8').splitlines()]
+          assert len(arr)==154
+          old,record=arr[-2:]
+          assert old['seq']==153 and old['record_sha256']=='c0ebbcf36454d2677278bc00cef3cb9c4270d402be89cc5f9b9976d4d604ef11'
+          assert record['seq']==154 and record['action_id']=='A154' and record['cycle']=='B1/C84'
+          assert record['prev_sha256']==old['record_sha256']
+          assert record['record_sha256']=='d2d1389b583f30d7c33f58f0193ff7003dcafb59efb024826d11e8c22b72b593'
+          assert record['cycle_result']=='PASSED'
+          expected={
+           'd05/c84_route_a_paper_fsm.py':'f03a05b732438592b41198128bedfd7c76bd72068c98d83987f51a3d8619537d',
+           'd05/test_c84_route_a_paper_fsm.py':'2774d8a46f3df2bfb0da4de365f7d08c971bbbf44ee36904219b6e140d95595c',
+           'cycles/B1_C84_ROUTE_A_PAPER_FSM_SOURCE_AUDIT_REPORT.md':'51a140c39e214b42c0fd8fc117aa35c3a9c9ac912119011fc5845acaff2c306d',
+           'evidence/c84/C84_ORIGINAL153_SOURCE_ONLY_FSM_WITNESS.json':'619610b62aeebe0e46dbbc3ed68871ffd24171af393a4de039623ace50bf6555',
+          }
+          assert set(expected)=={x['path'] for x in record['evidence']}
+          for e in record['evidence']:
+              b=Path(e['path']).read_bytes()
+              assert len(b)==e['bytes']
+              assert hashlib.sha256(b).hexdigest()==e['sha256']==expected[e['path']]
+          witness=json.loads(Path('evidence/c84/C84_ORIGINAL153_SOURCE_ONLY_FSM_WITNESS.json').read_text())
+          assert witness['source_groups']=={'P0':12,'P1':23,'P2':71,'P3':47}
+          assert witness['orders']==witness['fills']==witness['trades']==0
+          assert witness['owner_authenticated_positive_goldens']==witness['owner_authenticated_negative_goldens']==0
+          print('C84_A154_FULL_LEDGER_EVIDENCE_ACCEPTED')
+          PY
+          cd d05
+          python -m unittest -v test_c84_route_a_paper_fsm 2>&1 | tee /tmp/c84-tests
+          grep -Fq 'Ran 40 tests' /tmp/c84-tests
+          grep -qx 'OK' /tmp/c84-tests
