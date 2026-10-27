@@ -1,0 +1,51 @@
+name: EMBER C84 original153 Route A source-only FSM QA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c84-source-only-fsm.yml'
+      - 'research/mtf-element-audit-v1/d05/c84_route_a_paper_fsm.py'
+      - 'research/mtf-element-audit-v1/d05/test_c84_route_a_paper_fsm.py'
+      - 'research/mtf-element-audit-v1/evidence/c84/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify complete prior journal and run 40 C84 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c84_route_a_paper_fsm 2>&1 | tee /tmp/c84-tests
+          grep -Fq 'Ran 40 tests' /tmp/c84-tests
+          grep -qx 'OK' /tmp/c84-tests
+          cd ..
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c84_route_a_paper_fsm import original153_projection,summarize
+          a=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          b=Path('evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json').read_bytes()
+          c=Path('evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json').read_bytes()
+          out=summarize(original153_projection(a,b,c))
+          assert out['priority']=={'0':12,'1':23,'2':71,'3':47}
+          assert out['observations']['SOURCE_5M_ALIGNED']==4
+          assert out['observations']['SOURCE_5M_OPPOSITE']==5
+          assert out['observations']['SOURCE_5M_AMBIGUOUS']==3
+          assert out['author_accepted_transitions']==0 and out['trades']==0
+          print('C84_PAPER_SOURCE_ONLY_153_PASS',out)
+          PY
