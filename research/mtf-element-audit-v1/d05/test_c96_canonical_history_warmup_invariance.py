@@ -18,7 +18,7 @@ class TestC96(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
   cls.pre=bars(CANONICAL_START,(PREFIX_CUTOFF-CANONICAL_START)//STEP)
-  cls.full=cls.pre+bars(PREFIX_CUTOFF,4)
+  cls.full=cls.pre+bars(PREFIX_CUTOFF,(stamp(2026,10,3)-PREFIX_CUTOFF)//STEP)
  def test_01_calendar_anchored_after_warmup(self):
   x=validate_calendar(self.pre,"BTCUSDT",minimum_end=PREFIX_CUTOFF)
   self.assertGreaterEqual(x["min_full_days_at_evaluation"],MIN_CLOSED_DAILY)
