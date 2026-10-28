@@ -1,0 +1,67 @@
+name: EMBER C96 C97 A161 independent final 161SHA and 472x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c96-c97-A161-final-source-stability.yml'
+permissions:
+  contents: read
+jobs:
+  independent-final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: A161 original full SHA chain, source immutable seven SHA and robustness nonapproval
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a161-ledger
+          grep -Fq 'entries 161 tip_sha256 a1ad0c7c77f75dab07656b39d08a6738e9f706d763f8ea15b4134cf16c25307f' /tmp/a161-ledger
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          all_rows=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf-8').splitlines()]
+          assert len(all_rows)==161
+          p,a=all_rows[-2:]
+          assert p['action_id']=='A160' and p['record_sha256']=='d810e5ff7641049568804fd13db62c3c2ff67e8422edfe07acc764d79c0b45d8'
+          assert a['action_id']=='A161' and a['prev_sha256']==p['record_sha256']
+          assert a['record_sha256']=='a1ad0c7c77f75dab07656b39d08a6738e9f706d763f8ea15b4134cf16c25307f'
+          assert len(a['evidence'])==7
+          for x in a['evidence']:
+              data=Path(x['path']).read_bytes()
+              assert len(data)==x['bytes'] and hashlib.sha256(data).hexdigest()==x['sha256'],x['path']
+          q96=json.loads(Path('evidence/c96/C96_REAL_HISTORY_ANCHOR_PREFIX_A_B.json').read_bytes())
+          q97=json.loads(Path('evidence/c97/C97_REAL_BTC_REGIME_FOLDS_COST_SENSITIVITY.json').read_bytes())
+          assert q96['original_full_native5m_bars']==266400
+          assert q96['route_A']['all_consistent'] and q96['route_B']['all_consistent']
+          assert sum(s['full'] for s in q96['route_A']['by_symbol'].values())==18
+          assert sum(s['full'] for s in q96['route_B']['by_symbol'].values())==12
+          assert q96['anchor_rejects_5_SEP_only']['standalone_sep_start_is_rejected']
+          assert q97['approved_routes']==[] and q97['live_approved'] is False
+          assert q97['no_fixed_rr_targets'] and q97['orders']==q97['fills']==q97['live_trades']==[]
+          assert q97['btc_closed_daily_bars']==185
+          assert q97['models']['A']['cost']['14']['sum_r']==5.855296
+          assert q97['models']['A']['cost']['25']['sum_r']==0.936813
+          assert q97['models']['A']['cost']['40']['sum_r']==-5.770213
+          assert q97['models']['C']['cost']['40']['sum_r']==-45.194699
+          assert all(not z['eligible_for_paper_forward_research'] for z in q97['models'].values())
+          print('A161_C96_C97_SOURCE_INVARIANCE_SHA_AND_NEGATIVE_ECONOMIC_GATE_PASS')
+          PY
+      - name: Full C84-C97 regression each Python version
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate 2>&1 | tee /tmp/a161-tests
+          grep -Fq 'Ran 472 tests' /tmp/a161-tests
+          grep -qx 'OK' /tmp/a161-tests
+          echo A161_C96_C97_472_REGRESSION_TESTS_PER_PYTHON_PASS_NO_MODEL_APPROVED
