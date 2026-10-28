@@ -1,0 +1,69 @@
+name: EMBER C85 A155 final 155 SHA owner narrative versus original crypto
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c85-A155-independent-final-155sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: All 155 SHA + four independent frozen proofs + real original153 narrative firewall
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a155
+          grep -Fq 'entries 155 tip_sha256 330468624d81e7bcb61a6aae0a79c1bba692ce5830bd6e37a3a485c90acb2d30' /tmp/a155
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          x=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf8').splitlines()]
+          assert len(x)==155
+          p,e=x[-2:]
+          assert p['seq']==154 and p['record_sha256']=='d2d1389b583f30d7c33f58f0193ff7003dcafb59efb024826d11e8c22b72b593'
+          assert e['seq']==155 and e['action_id']=='A155' and e['cycle']=='B1/C85'
+          assert e['prev_sha256']==p['record_sha256'] and e['cycle_result']=='PASSED'
+          assert e['record_sha256']=='330468624d81e7bcb61a6aae0a79c1bba692ce5830bd6e37a3a485c90acb2d30'
+          expected={
+            'd05/c85_owner_narrative_golden_firewall.py':'4b1e146853362aa905e39ec30471028a7534ae70960bf59e8e5c69f9b4e5eea1',
+            'd05/test_c85_owner_narrative_golden_firewall.py':'6d8db02fe5a40418a5f7fe6d7eaf356e3fd652317ffa80f79d7a02fdc89ae1b2',
+            'cycles/B1_C85_OWNER_COURSE_NARRATIVE_CRYPTO_GOLDEN_FIREWALL_REPORT.md':'d5f32a90dd0d5e1b6e1c7bd34fb0f3e84b3fe1488f77e3f11e45672d2f8c8cef',
+            'evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json':'23499857a882cb4203ca571d5387e1369b2d87443a97261c9496ae23acec709f',
+          }
+          assert {f['path'] for f in e['evidence']}==set(expected)
+          for f in e['evidence']:
+              b=Path(f['path']).read_bytes()
+              assert len(b)==f['bytes']
+              assert hashlib.sha256(b).hexdigest()==f['sha256']==expected[f['path']]
+          print('C85_A155_JOURNAL_EVIDENCE_BYTE_AUTHENTICATED')
+          PY
+          cd d05
+          python -m unittest -v test_c85_owner_narrative_golden_firewall 2>&1 | tee /tmp/c85
+          grep -Fq 'Ran 43 tests' /tmp/c85
+          grep -qx 'OK' /tmp/c85
+          cd ..
+          python - <<'PY'
+          import sys,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c85_owner_narrative_golden_firewall import serialize_witness
+          a=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          b=Path('evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json').read_bytes()
+          c=Path('evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json').read_bytes()
+          actual=serialize_witness(a,b,c)
+          assert actual==Path('evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json').read_bytes()
+          assert hashlib.sha256(actual).hexdigest()=='23499857a882cb4203ca571d5387e1369b2d87443a97261c9496ae23acec709f'
+          print('C85_A155_4_AUTHOR_TEXT_EXAMPLES_NOT_BINANCE_GOLDENS')
+          PY
