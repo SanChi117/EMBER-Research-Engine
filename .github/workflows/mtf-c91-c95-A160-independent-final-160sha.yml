@@ -1,0 +1,79 @@
+name: EMBER C91 C95 A160 final independent 160SHA and 434x3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c91-c95-A160-independent-final-160sha.yml'
+permissions:
+  contents: read
+jobs:
+  independent-final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Immutable 160 ledger SHA and 17 complete C91-C95 evidence-byte checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger-a160
+          grep -Fq 'entries 160 tip_sha256 d810e5ff7641049568804fd13db62c3c2ff67e8422edfe07acc764d79c0b45d8' /tmp/ledger-a160
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          rows=[json.loads(line) for line in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf-8').splitlines()]
+          assert len(rows)==160
+          p,a=rows[-2:]
+          assert p['record_sha256']=='45fac2d12ea04811e2441788c58ccc5b806c857be67617418fa94aadf302adb1'
+          assert a['prev_sha256']==p['record_sha256']
+          assert a['action_id']=='A160' and a['record_sha256']=='d810e5ff7641049568804fd13db62c3c2ff67e8422edfe07acc764d79c0b45d8'
+          assert len(a['evidence'])==17
+          for obj in a['evidence']:
+              raw=Path(obj['path']).read_bytes()
+              assert len(raw)==obj['bytes'],obj['path']+' SIZE_DRIFT'
+              assert hashlib.sha256(raw).hexdigest()==obj['sha256'],obj['path']+' HASH_DRIFT'
+          def witness(path,digest):
+              b=Path(path).read_bytes()
+              assert hashlib.sha256(b).hexdigest()==digest
+              return json.loads(b)
+          a1=witness('evidence/c92/C92_APR_OCT_5_SYMBOL_FULL_CAUSAL_STRATEGY_REPLAY.json',
+            '21b41cd9e1c54a25f28abbea08bc603a544bd07ea013703aaba1ce32f96a075d')
+          b1=witness('evidence/c94/C94_ORIGINAL_BINANCE_IDM_LIMIT_BOTH_MODELS_PAPER.json',
+            '1b0e0e5bc131a7a7f7d985cfaf32b09210aca723cb51a4853ca2775331cc7938')
+          c1=witness('evidence/c93/C93_ORIGINAL_NATIVE3M_ROUTE_C_BOS_PAPER_REPLAY.json',
+            'd71733a4f87d61e2bcd6dbc419b8d63f3a815bd0a14d1a440b143359695ba982')
+          all1=witness('evidence/c95/C95_INTEGRATED_ABC_SOURCE_FROZEN_PAPER_PORTFOLIO.json',
+            '403b254e893e740bf689fb38931a491b75ff8480347f97fa13ccdacf3d7b6baa')
+          assert a1['source_bars']==266400 and len(a1['archives'])==40
+          assert a1['all']['count']==34 and a1['all']['total_net_r']==5.855296
+          assert b1['original_bars']==266400 and b1['all']['count']==15
+          assert b1['all']['total_net_r']==-4.407697 and b1['limit_fill_mandatory'] is True
+          assert c1['full_native_3m_bars']==76800 and c1['all']['count']==58
+          assert c1['all']['total_net_r']==-19.783649
+          assert all1['all_common_window_candidate_metrics']['trades']==62
+          assert all1['portfolio_sensitivity']['ABC_risk_stops']['results']['trades']==35
+          assert all1['portfolio_sensitivity']['ABC_risk_stops']['results']['total_net_r']==-21.410719
+          assert len(all1['portfolio_sensitivity'])==12
+          assert not all1['ready_for_live'] and all1['nontradeable']
+          assert not a1['fixed_rr_targets'] and not b1['fixed_rr_target'] and not c1['fixed_rr_target']
+          for obj in (a1,b1,c1,all1):
+              assert obj['orders']==obj['fills']==obj['live_trades']==[]
+          print('C91_C95_A160_SHA17_ORIGINAL_BINANCE_RESEARCH_ONLY_VALIDATED')
+          PY
+      - name: Complete C84-C95 regression each Python version
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes 2>&1 | tee /tmp/all-ember-abc
+          grep -Fq 'Ran 434 tests' /tmp/all-ember-abc
+          grep -qx 'OK' /tmp/all-ember-abc
+          echo C91_C95_A160_INDEPENDENT_TESTS_PASS_PAPER_ONLY_NO_PROFIT_CLAIM
