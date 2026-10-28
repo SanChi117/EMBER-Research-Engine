@@ -1,0 +1,62 @@
+name: EMBER C88 final adaptation full-regression semantic-gated acceptance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c88-adaptation-exit-full-regression.yml'
+      - 'research/mtf-element-audit-v1/d05/c88_adaptation_test_exit_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c88_adaptation_test_exit_gate.py'
+      - 'research/mtf-element-audit-v1/evidence/c88/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-acceptance:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: SHA ledger + entire C84-C88 original crypto + hostile regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate 2>&1 | tee /tmp/full-regression
+          grep -Fq 'Ran 234 tests' /tmp/full-regression
+          grep -qx 'OK' /tmp/full-regression
+          cd ..
+          python - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c88_adaptation_test_exit_gate import serialize_acceptance,check_frozen_acceptance
+          paths=[
+          'evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json',
+          'evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json',
+          'evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json',
+          'evidence/c86/C86_ORIGINAL153_4H_1H_FIRST_TEST_SOURCE_RECEIPTS.json',
+          'evidence/c87/C87_ADAPTED_ROUTE_A_ORIGINAL153_SHADOW_WITNESS.json',
+          'evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json']
+          q=[Path(p).read_bytes() for p in paths]
+          data=serialize_acceptance(*q)
+          f=Path('evidence/c88/C88_ADAPTATION_FINAL_TEST_EXIT_GATE.json')
+          if f.exists():check_frozen_acceptance(*q,f.read_bytes())
+          o=json.loads(data)
+          assert o['exit_status']=='ENGINEERING_COMPLETE_ACADEMIC_SEMANTIC_UNVERIFIED'
+          assert o['original_source_summary']['source_contexts']==153
+          assert o['original_source_summary']['orders']==0 and o['original_source_summary']['trades']==0
+          assert o['contract']['allowed_to_autotrade'] is False
+          print('C88_ADAPTATION_EXIT_SHA256',hashlib.sha256(data).hexdigest(),'BYTES',len(data))
+          print('C88_JSON_BEGIN')
+          print(data.decode('utf8'),end='')
+          print('C88_JSON_END')
+          PY
