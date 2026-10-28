@@ -79,7 +79,7 @@ class TestC93(unittest.TestCase):
   self.assertEqual(t["target"],"96")
   self.assertNotEqual(t["derived_rr"],1.5)
  def test_16_low_rr_reject_without_moving_fta(self):
-  x,why=_paper_fill(R,30,"SHORT",D("112"),D("99"),pivot(),raid())
+  x,why=_paper_fill(R,30,"SHORT",D("102"),D("99"),pivot(),raid())
   self.assertIsNone(x);self.assertEqual(why,"DERIVED_RR_ONLY_FILTER")
  def test_17_structural_gap_invalid(self):
   m=list(R);m[30]=row(30,op="113",hi="114",lo="112",cl="113")
