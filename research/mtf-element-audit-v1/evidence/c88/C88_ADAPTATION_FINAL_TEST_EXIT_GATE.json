@@ -1,0 +1,86 @@
+{
+  "contract": {
+    "adapted_hypotheses_are_research_only": true,
+    "allowed_to_autotrade": false,
+    "allowed_to_choose_entry_sl_tp": false,
+    "allowed_to_construct_research_review_queue": true,
+    "allowed_to_emit_trade_signal": false,
+    "allowed_to_route_orders": false,
+    "operational_mode": "PAPER_SHADOW_NO_EXECUTION",
+    "owner_text_is_author_verified_market_case": false,
+    "profit_metrics_supported": false,
+    "release_class": "ENGINEERING_ADAPTATION_TEST_COMPLETE_SEMANTIC_GATED",
+    "requires_owner_positive_and_negative_media": true,
+    "requires_separate_out_of_sample_test_after_owner_validation": true,
+    "research_route": "A",
+    "source_of_academic_text": "USER_OWNED_GOOGLE_DRIVE_ORIGINAL",
+    "source_of_market_geometry": "HASH_PINNED_ARCHIVED_BINANCE_USDM"
+  },
+  "exit_status": "ENGINEERING_COMPLETE_ACADEMIC_SEMANTIC_UNVERIFIED",
+  "fills": [],
+  "gates": {
+    "ACADEMIC_TEXT_LINEAGE": "PASS",
+    "ADAPTED_ROUTE_A_FSM_AND_RESEARCH_CLASSIFICATION": "PASS_RESEARCH_ONLY",
+    "FIRST_VALID_4H_1H_OWNER_POI_TESTS": "BLOCKED_UNVERIFIED",
+    "LIVE_EXECUTION": "DISABLED_BY_DESIGN",
+    "LTF_15M_TRIGGER_OR_DIRECT_VC_AUTHOR_PROOF": "BLOCKED_UNVERIFIED",
+    "PINNED_ARCHIVED_CRYPTO_LINEAGE": "PASS",
+    "REAL_5M_OWNER_VC": "BLOCKED_UNVERIFIED",
+    "SIGNED_POSITIVE_AND_NEGATIVE_CRYPTO_GOLDENS": "BLOCKED_MISSING",
+    "SOURCE_FIRST_TEST_AND_REVISIT": "PASS_SOURCE_ONLY",
+    "TRADING_PNL_BACKTEST_VALIDITY": "BLOCKED_NO_AUTHOR_LABELS"
+  },
+  "orders": [],
+  "original_source_summary": {
+    "decisions": {
+      "PRIORITIZED_FOR_HUMAN_MEDIA_REVIEW_ONLY": 3,
+      "WITHHOLD_AMBIGUOUS_OR_OPPOSITE_GEOMETRY": 6,
+      "WITHHOLD_NO_CLOSED_15M_VC_OR_TRIGGER": 23,
+      "WITHHOLD_NO_SELECTED_NEW_1H_POI": 47,
+      "WITHHOLD_OPPOSITE_OR_AMBIGUOUS_1H_PARENT": 71,
+      "WITHHOLD_REVISIT_FIRST_VALID_UNPROVEN": 3
+    },
+    "entries": 0,
+    "fills": 0,
+    "negative_owner_goldens": 0,
+    "orders": 0,
+    "paper_profit_metrics_valid": false,
+    "positive_owner_goldens": 0,
+    "priority": {
+      "0": 12,
+      "1": 23,
+      "2": 71,
+      "3": 47
+    },
+    "readiness": "NOT_TRADE_READY",
+    "schema": "EMBER_C87_COMPLETED_ROUTE_A_ADAPTED_SHADOW_GATE",
+    "source_contexts": 153,
+    "source_coverage": {
+      "COVERAGE_EARLY": 69,
+      "COVERAGE_LATE": 60,
+      "UNRESOLVED_SOURCE_TIME": 24
+    },
+    "trades": 0
+  },
+  "pnl": null,
+  "readiness": "NOT_TRADE_READY",
+  "remaining_dependencies": [
+    "Independent author crypto charts with a positive AND negative timestamp-labelled case; otherwise no author-verified goldens",
+    "Original 4H parent POI valid first-test and 1H POI valid first-test source identification",
+    "Owner-distinguished 15m Trigger versus direct VC, and 5m post-Trigger VC with no future bars",
+    "Structural strong-high/low, invalidation, FTA and SL/TP source proof, never inferred from adapted patterns",
+    "Independent no-leakage OOS PAPER backtest with valid labelled semantics before integration"
+  ],
+  "schema": "C88_ROUTE_A_ADAPTATION_TEST_EXIT_V1",
+  "source_archive": {
+    "c72_git_blob_sha1": "19b7e0357600b70b3f26467339a417e0f99a1302",
+    "c73_sha256": "c79892079f00952030b778985b53c2cc11bd2e05bf1ea70555d4385bd7963f6b",
+    "c81_sha256": "07d3fe70a4af5cdc6878b6645025606c0ff4549e70e5eb8305ef685544170df6",
+    "c85_owner_course_text_witness_sha256": "23499857a882cb4203ca571d5387e1369b2d87443a97261c9496ae23acec709f",
+    "c86_first_test_receipt_sha256": "5d08655571410f4fc3cd726c5f398eed5c576dda2674565fa12f87395b2b535f",
+    "c87_adapted_shadow_sha256": "2e51a2d40f1efeafcff1568eb2391063be6b070e7100fa99e382e4f7655baa0c",
+    "source_contexts": 153
+  },
+  "trades": [],
+  "verification_note": "C87 split is timestamp COVERAGE only; not an OOS trading performance test."
+}
