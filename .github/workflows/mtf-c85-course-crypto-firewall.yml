@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: \${{ matrix.python }}
+          python-version: ${{ matrix.python }}
       - name: Full SHA ledger + original 153 + 43 source-negative tests
         shell: bash
         run: |
