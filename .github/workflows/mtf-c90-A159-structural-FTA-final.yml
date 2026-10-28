@@ -1,0 +1,67 @@
+name: EMBER C90 A159 FINAL structural FTA 159SHA and 302-regression
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c90-A159-structural-FTA-final.yml'
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Full journal 159, 4 frozen C90 SHA, 302 adversarial regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c90-ledger
+          grep -Fq 'entries 159 tip_sha256 45fac2d12ea04811e2441788c58ccc5b806c857be67617418fa94aadf302adb1' /tmp/c90-ledger
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          rows=[json.loads(line) for line in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf8').splitlines()]
+          assert len(rows)==159
+          prev,final=rows[-2:]
+          assert prev['action_id']=='A158' and prev['record_sha256']=='4e016181a26d6c6f9b9590ee12b7a1b855508cda4f1de6e19bbb1e519c3b536d'
+          assert final['action_id']=='A159' and final['prev_sha256']==prev['record_sha256']
+          assert final['record_sha256']=='45fac2d12ea04811e2441788c58ccc5b806c857be67617418fa94aadf302adb1'
+          sources={
+            'd05/c90_structural_fta_backtest.py':'06745be4fb51fc785db8663e79c1cb5bcb0ec4739f96295cdc29c13d55d787a9',
+            'd05/test_c90_structural_fta_backtest.py':'57d60e1eb896a3764463e2eb17c5e0072a8ecf27109dbd193db3e5af4dbd2697',
+            'evidence/c90/C90_STRUCTURAL_FTA_NATIVE_BINANCE_REPLAY.json':'92780e44c74debb71504073bc57349bc03057990299b039828e5f8f393a9a865',
+            'cycles/B1_C90_STRUCTURAL_FTA_REPLACES_C89_FIXED_RR_REPORT_RU.md':'fbfb0a4798cbda46903afecb2cec2a78d09faab6bb925b93eb5b259595b730f2'}
+          assert set(sources)=={r['path'] for r in final['evidence']}
+          for x in final['evidence']:
+              data=Path(x['path']).read_bytes()
+              assert len(data)==x['bytes']
+              assert hashlib.sha256(data).hexdigest()==x['sha256']==sources[x['path']]
+          w=json.loads(Path('evidence/c90/C90_STRUCTURAL_FTA_NATIVE_BINANCE_REPLAY.json').read_bytes())
+          assert w['never_fixed_rr_to_construct_target'] is True
+          assert w['derived_rr_is_filter_only'] is True
+          assert w['supersedes']=='C89_FIXED_RR_RESULTS_NOT_VALID_EMBER_STRATEGY_BACKTEST'
+          assert len(w['market_archive_manifest'])==15
+          for model in w['models'].values():
+              assert len(model['all_plans'])==12
+              assert model['rejections']=={'STRUCTURAL_RR_BELOW_MIN_FILTER':7}
+              x=model['results']['roundtrip_14bps']['all_preselected']
+              assert x['trades']==5 and x['win_rate_pct']==0.0
+              assert x['net_total_r']==-5.890334
+              assert x['derived_rr_distribution']==[1.962795,4.266681,2.273114,3.994452,2.087827]
+          assert w['orders']==w['fills']==w['live_trades']==[]
+          print('C90_A159_SOURCE_SHA_AND_STRUCTURAL_NO_FIXED_RR_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest 2>&1 | tee /tmp/c90-regression
+          grep -Fq 'Ran 302 tests' /tmp/c90-regression
+          grep -qx 'OK' /tmp/c90-regression
+          echo C90_A159_FINAL_ACCEPTED_PAPER_ONLY_NO_FIXED_RR
