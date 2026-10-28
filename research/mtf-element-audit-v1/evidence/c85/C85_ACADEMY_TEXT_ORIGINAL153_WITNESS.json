@@ -1,0 +1,170 @@
+{
+  "course_rule_text_anchor_count": 16,
+  "entries": 0,
+  "fills": 0,
+  "media_attestation": "NO_AUTHENTICATED_OWNER_BINANCE_TIMESTAMP_LABEL",
+  "orders": 0,
+  "original_crypto_contexts": 153,
+  "original_lesson_drive_file_ids": [
+    "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+    "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+    "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+    "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs"
+  ],
+  "original_rule_anchors": [
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "DAILY_CONTEXT",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "Daily POI or Liquidity → 4H VC [IMB, SNR, RB]"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "4H_VALID_TEST",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "Щоб ввійти в позицію у нас обовʼязково має бути **ТЕСТ** цього 4H POI"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "NO_1H_TRIGGER",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "При відсутності 1H Trigger → очікується на 1H VC [IMB, SNR, RB]"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "1H_CREATED_FROM_4H",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "1H POI завжди має бути створена в контексті тесту та реакції від 4H POI"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "1H_VALID_TEST",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "Щоб ввійти в позицію у нас обовʼязково має бути **ТЕСТ** цього 1H POI"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "15M_TRIGGER",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "З 15M Trigger SSL, BSL or IMB"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "DIRECT_15M_VC",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "При відсутності 15M Trigger → очікується на 15M VC [IMB, SNR]"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "ENTRY_VC_TYPES",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "для входу в позицію використовується ТІЛЬКИ ***[SNR or IMB]***"
+    },
+    {
+      "drive_id": "1hkKKwy60-VIoqEsVYAq12mnPZA7ySXFQ",
+      "id": "4H_IMB_1H_IMB_NEST",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "якщо на 4Н IMB, то всередині нього ми не роглядаємо 1H IMB"
+    },
+    {
+      "drive_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "id": "RB_TWO_CANDLES",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "дві свічки BUY+SELL or SELL+BUY"
+    },
+    {
+      "drive_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "id": "RB_RAID_OR_IMB",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "RB обоʼязково має знімати ліквідність, або перекривати POI у вигляді IMB"
+    },
+    {
+      "drive_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "id": "RB_WICK_ONLY",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "Raid або тест імбалансу має бути ***виключно*** тінню свічки"
+    },
+    {
+      "drive_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "id": "RB_IMB_BODY_CLOSE",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "головне, щоб був закріп RB тілом над чи під IMB"
+    },
+    {
+      "drive_id": "1bFjOPZdiHEAdM_QN58EWBDpgsYx_p0nT",
+      "id": "ONLY_FIRST_REAL_TEST",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "за істинний тест потрібно сприймати тільки ПЕРШИЙ"
+    },
+    {
+      "drive_id": "1C5sAzdOON4iMxLVdrBD5XMXUj3bVcZ-R",
+      "id": "POI_LIQUIDITY_OR_FVG",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "Сильна POI - це та, яка працювала з ліквідністю [SSL, BSL] або FVG"
+    },
+    {
+      "drive_id": "19SW5tv2CdeaYeP9jCO6WOCs5bpYSjVrs",
+      "id": "IDM_ROUTE_SEPARATE",
+      "label": "OWNER_TEXT_RULE",
+      "quote": "4H VC [POI] → 1H IDM Entry"
+    }
+  ],
+  "owner_authenticated_negative": 0,
+  "owner_authenticated_positive": 0,
+  "owner_text_examples": [
+    {
+      "id": "A1H_NO_TRIGGER_DIRECT_15M_VC",
+      "label": "OWNER_TEXT_SCHEMATIC",
+      "quote": "4H POI [SSL Raid] → 1H VC [RB - NEW POI] → 15M VC [IMB - Entry]",
+      "route": [
+        "4H_SSL_RAID",
+        "1H_RB_NEW_POI",
+        "1H_POI_TEST",
+        "15M_DIRECT_VC_IMB"
+      ]
+    },
+    {
+      "id": "A1H_TRIGGER_5M_VC",
+      "label": "OWNER_TEXT_SCHEMATIC",
+      "quote": "4H POI [IMB] → 1H VC [IMB - NEW POI] → 15M Trigger [BSL] → 5M VC [IMB & SNR - Entry]",
+      "route": [
+        "4H_IMB_TEST",
+        "1H_IMB_NEW_POI",
+        "1H_POI_TEST",
+        "15M_TRIGGER_BSL",
+        "5M_VC_IMB_SNR"
+      ]
+    },
+    {
+      "id": "A4H_RAID_1H_RB",
+      "label": "OWNER_TEXT_SCHEMATIC",
+      "quote": "4H Raid SSL in Daily POI [RB] → 1H VC [RB]",
+      "route": [
+        "DAILY_POI",
+        "4H_SSL_RAID",
+        "1H_VC_RB_NEW_POI"
+      ]
+    },
+    {
+      "id": "A4H_TRIGGER_15M_VC",
+      "label": "OWNER_TEXT_SCHEMATIC",
+      "quote": "4H POI [SNR] → 1H Trigger [BSL] → 15M VC [SNR & IMB - Entry]",
+      "route": [
+        "4H_POI_TEST",
+        "1H_TRIGGER_BSL",
+        "15M_VC_SNR_IMB"
+      ]
+    }
+  ],
+  "owner_text_schematic_example_count": 4,
+  "priority": {
+    "0": 12,
+    "1": 23,
+    "2": 71,
+    "3": 47
+  },
+  "proven_matched_original_crypto_examples": 0,
+  "readiness": "NOT_TRADE_READY",
+  "schema": "C85_OWNER_NARRATIVE_TO_ORIGINAL153_GOLDEN_FIREWALL",
+  "trades": 0
+}
