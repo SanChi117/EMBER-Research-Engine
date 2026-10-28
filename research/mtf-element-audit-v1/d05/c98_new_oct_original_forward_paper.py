@@ -115,10 +115,6 @@ def load_new_original(*,fetch=_safe_http):
     receipts=[]
     for (sym,tf,date),rows,meta in found:
         arr=outputs[(sym,tf)]
-        if arr and arr[-1].close_ms if False else False:
-            raise C98Rejected("UNEXPECTED_DEAD_BRANCH")
-        if arr and (arr[-1].close_ms if tf=="5m" else arr[-1].known_ms)!=rows[0].open_ms if tf=="5m" else False:
-            pass
         if arr:
             old_end=(arr[-1].close_ms if tf=="5m" else arr[-1].known_ms)
             new_start=(rows[0].open_ms if tf=="5m" else rows[0].start_ms)
