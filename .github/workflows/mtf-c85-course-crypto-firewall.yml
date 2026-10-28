@@ -1,0 +1,53 @@
+name: EMBER C85 source narratives anti-forgery / original153 independent QA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c85-course-crypto-firewall.yml'
+      - 'research/mtf-element-audit-v1/d05/c85_owner_narrative_golden_firewall.py'
+      - 'research/mtf-element-audit-v1/d05/test_c85_owner_narrative_golden_firewall.py'
+      - 'research/mtf-element-audit-v1/evidence/c85/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c85:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: \${{ matrix.python }}
+      - name: Full SHA ledger + original 153 + 43 source-negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c85_owner_narrative_golden_firewall 2>&1 | tee /tmp/c85-tests
+          grep -Fq 'Ran 43 tests' /tmp/c85-tests
+          grep -qx 'OK' /tmp/c85-tests
+          cd ..
+          python - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c85_owner_narrative_golden_firewall import witness,serialize_witness
+          a=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          b=Path('evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json').read_bytes()
+          c=Path('evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json').read_bytes()
+          w=witness(a,b,c)
+          assert w['priority']=={'0':12,'1':23,'2':71,'3':47}
+          assert w['owner_text_schematic_example_count']==4
+          assert w['owner_authenticated_positive']==w['owner_authenticated_negative']==w['trades']==0
+          s=serialize_witness(a,b,c)
+          if Path('evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json').exists():
+              assert s==Path('evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json').read_bytes()
+          print('C85_TEXT_IS_NOT_AUTH_CRYPTO_GOLDEN',len(s),hashlib.sha256(s).hexdigest())
+          PY
