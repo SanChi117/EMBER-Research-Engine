@@ -1,0 +1,82 @@
+name: EMBER C91 continuous causal full-candle Route A PAPER backtest
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c91-continuous-unselected-route-a.yml'
+      - 'research/mtf-element-audit-v1/d05/c91_continuous_causal_route_a_paper.py'
+      - 'research/mtf-element-audit-v1/d05/test_c91_continuous_causal_route_a_paper.py'
+      - 'research/mtf-element-audit-v1/evidence/c91/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit-negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: source SHA journal, 38 causal unit/regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c91_continuous_causal_route_a_paper 2>&1 | tee /tmp/c91
+          grep -Fq 'Ran 38 tests' /tmp/c91
+          grep -qx 'OK' /tmp/c91
+  all-original-native5m:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [unit-negatives]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: all 46080 original Binance USD-M candles, genuine unselected causal candidate search
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          import hashlib,json,sys
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c89_original_native5m_adaptation_backtest import load_original_native5m
+          from c91_continuous_causal_route_a_paper import analyze,dumps
+          source=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          markets,manifest=load_original_native5m(source)
+          result=analyze(markets,manifest)
+          raw=dumps(result)
+          frozen=Path('evidence/c91/C91_ALL_NATIVE5M_CAUSAL_ROUTE_A_HOLDOUT.json')
+          if frozen.exists():assert raw==frozen.read_bytes(), 'C91_REPLAY_BYTE_MISMATCH'
+          assert result['source_bars']==46080 and len(result['archives'])==15
+          assert result['fixed_rr_targets'] is False
+          assert result['source_selection']=='ALL_CONTINUOUS_NATIVE5M_NO_C73_P0_EVENT_SELECTION'
+          assert result['orders']==result['fills']==result['live_trades']==[]
+          assert result['all']['count']==sum(len(k['trades']) for k in result['by_symbol'].values())
+          for sym,k in result['by_symbol'].items():
+              assert k['native5m_bars']==9216
+              assert k['completed_tf_bars']['1h']>=700
+              for t in k['trades']:
+                  assert t['poi_created_ms']<t['poi_first_test_ms']<t['vc_close_ms']==t['entry_ms']
+                  assert t['fta_confirmed_ms']<=t['entry_ms']
+                  assert t['stronghl_confirmed_ms']<=t['entry_ms']
+                  assert t['evidence']=='ADAPTED_HYPOTHESIS'
+          print('C91_FULL_SOURCE_SHA',hashlib.sha256(raw).hexdigest(),'BYTES',len(raw))
+          print('C91_CAUSAL_SUMMARY',json.dumps({"all":result['all'],"train":result['baseline_train'],
+            "holdout":result['held_out_time'],"routes":result["route_counts"],
+            "by_symbol":{k:{"trades":len(v["trades"]),"states":v["zones"],
+              "rejections":v["rejections"]} for k,v in result['by_symbol'].items()}},sort_keys=True))
+          print('C91_JSON_BEGIN')
+          print(raw.decode('utf8'),end='')
+          print('C91_JSON_END')
+          PY
