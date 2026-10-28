@@ -8,7 +8,8 @@ PAPER ONLY; no order API; no C73 preselected event filtering.
 """
 from io import BytesIO
 from zipfile import ZipFile,BadZipFile
-from collections import Counter
+from calendar import monthrange
+from datetime import datetime,timezone
 from hashlib import sha256
 from c89_original_native5m_adaptation_backtest import (
  Bar,STEP,SOURCES,BASE,C89Rejected,_safe_http,parse_original5m_csv,
@@ -42,6 +43,12 @@ def _monthly_archive(symbol,month,*,fetch=_safe_http):
     except BadZipFile as e:
         raise C92Rejected("INVALID_ORIGINAL_BINANCE_ZIP") from e
     bars=parse_original5m_csv(csvdata,symbol)
+    year,mo=map(int,month.split("-"))
+    first=int(datetime(year,mo,1,tzinfo=timezone.utc).timestamp()*1000)
+    exact=monthrange(year,mo)[1]*24*12
+    if (len(bars)!=exact or bars[0].open_ms!=first
+            or bars[-1].close_ms!=first+exact*STEP):
+        raise C92Rejected("MONTHLY_ARCHIVE_NOT_FULL_CALENDAR_SOURCE")
     # Existing C89 original native type carries source price and time only.
     return bars,{"symbol":symbol,"period":month,"url":url,
         "zip_sha256":digest,"csv_sha256":sha256(csvdata).hexdigest(),
