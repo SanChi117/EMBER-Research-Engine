@@ -1,0 +1,75 @@
+name: EMBER C95 unified A B C independent-source PAPER portfolio release gate
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c95-abc-integrated-paper.yml'
+      - 'research/mtf-element-audit-v1/d05/c95_integrated_paper_three_routes.py'
+      - 'research/mtf-element-audit-v1/d05/test_c95_integrated_paper_three_routes.py'
+      - 'research/mtf-element-audit-v1/evidence/c95/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  hostile-source-and-portfolio-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: verify journal + 30 source-integrity and causal portfolio counterexamples
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c95_integrated_paper_three_routes 2>&1 | tee /tmp/c95
+          grep -Fq 'Ran 30 tests' /tmp/c95
+          grep -qx 'OK' /tmp/c95
+  frozen-real-abc:
+    runs-on: ubuntu-latest
+    needs: [hostile-source-and-portfolio-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: SHA-pinned A 266400 5m B 266400 5m C 76800 3m all-priority causal paper
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c95_integrated_paper_three_routes import from_frozen,dumps
+          result=from_frozen(Path('.'))
+          raw=dumps(result)
+          frozen=Path('evidence/c95/C95_INTEGRATED_ABC_SOURCE_FROZEN_PAPER_PORTFOLIO.json')
+          if frozen.exists():assert raw==frozen.read_bytes(),'C95_FROZEN_AB_C_DIVERGENCE'
+          assert not result['ready_for_live'] and result['nontradeable']
+          assert result['all_six_route_priority_orders_tested_not_optimized']
+          assert len(result['portfolio_sensitivity'])==12
+          assert result['orders']==result['fills']==result['live_trades']==[]
+          for case,x in result['portfolio_sensitivity'].items():
+              trades=x['trades']
+              assert x['results']['trades']==len(trades)
+              assert all(a['exit_ms']<=b['entry_ms'] for a,b in zip(trades,trades[1:]))
+              assert all(z['source_route'] in ('A','B','C') for z in trades)
+          print('C95_THREE_ROUTE_FULL_SHA256',hashlib.sha256(raw).hexdigest(),'BYTES',len(raw))
+          print('C95_REAL_ABC_SUMMARY',json.dumps({
+              "source_models":{k:v["samples"] for k,v in result['models'].items()},
+              "common_candidates":result['all_common_window_candidate_metrics'],
+              "permutations":{k:{"metrics":v["results"],
+                  "rejects":v["rejections"]} for k,v in result['portfolio_sensitivity'].items()}},sort_keys=True))
+          print('C95_REAL_JSON_BEGIN')
+          print(raw.decode('utf8'),end='')
+          print('C95_REAL_JSON_END')
+          PY
