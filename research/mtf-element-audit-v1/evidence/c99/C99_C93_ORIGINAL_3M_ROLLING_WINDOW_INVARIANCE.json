@@ -1,0 +1,1640 @@
+{
+  "by_market": {
+    "BCHUSDT": {
+      "2026-10-10_vs_2026-10-18": {
+        "common_trades": 1,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1792281600000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "ee98835e8e0f29e0585ec592298a9a8599e99f9f2b65c528ee11ab78697d3d13",
+        "sha_second": "ee98835e8e0f29e0585ec592298a9a8599e99f9f2b65c528ee11ab78697d3d13",
+        "sufficient_n": false,
+        "trades_first": 1,
+        "trades_second": 1,
+        "union_trades": 1
+      },
+      "2026-10-10_vs_2026-10-27": {
+        "common_trades": 1,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "ee98835e8e0f29e0585ec592298a9a8599e99f9f2b65c528ee11ab78697d3d13",
+        "sha_second": "ee98835e8e0f29e0585ec592298a9a8599e99f9f2b65c528ee11ab78697d3d13",
+        "sufficient_n": false,
+        "trades_first": 1,
+        "trades_second": 1,
+        "union_trades": 1
+      },
+      "2026-10-18_vs_2026-10-27": {
+        "common_trades": 2,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1792238400000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1792281600000,
+        "sha_first": "62ecea26c828cce286563d55776ce5505f4d667e431c12a6b3d0768a29c46470",
+        "sha_second": "62ecea26c828cce286563d55776ce5505f4d667e431c12a6b3d0768a29c46470",
+        "sufficient_n": false,
+        "trades_first": 2,
+        "trades_second": 2,
+        "union_trades": 2
+      }
+    },
+    "BTCUSDT": {
+      "2026-10-10_vs_2026-10-18": {
+        "common_trades": 0,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1792281600000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+        "sha_second": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+        "sufficient_n": false,
+        "trades_first": 0,
+        "trades_second": 0,
+        "union_trades": 0
+      },
+      "2026-10-10_vs_2026-10-27": {
+        "common_trades": 0,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+        "sha_second": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
+        "sufficient_n": false,
+        "trades_first": 0,
+        "trades_second": 0,
+        "union_trades": 0
+      },
+      "2026-10-18_vs_2026-10-27": {
+        "common_trades": 4,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1792238400000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1792281600000,
+        "sha_first": "d29b62112f3c1aa44bce534999a2f02c4a8a404bc002aaa870fda40e47e49a60",
+        "sha_second": "d29b62112f3c1aa44bce534999a2f02c4a8a404bc002aaa870fda40e47e49a60",
+        "sufficient_n": false,
+        "trades_first": 4,
+        "trades_second": 4,
+        "union_trades": 4
+      }
+    },
+    "ETHUSDT": {
+      "2026-10-10_vs_2026-10-18": {
+        "common_trades": 2,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1792281600000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "1ccc798957d253a0a4543ad94db915e68fb0c21f8f139f4beaeae1593c27f35b",
+        "sha_second": "1ccc798957d253a0a4543ad94db915e68fb0c21f8f139f4beaeae1593c27f35b",
+        "sufficient_n": false,
+        "trades_first": 2,
+        "trades_second": 2,
+        "union_trades": 2
+      },
+      "2026-10-10_vs_2026-10-27": {
+        "common_trades": 2,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "1ccc798957d253a0a4543ad94db915e68fb0c21f8f139f4beaeae1593c27f35b",
+        "sha_second": "1ccc798957d253a0a4543ad94db915e68fb0c21f8f139f4beaeae1593c27f35b",
+        "sufficient_n": false,
+        "trades_first": 2,
+        "trades_second": 2,
+        "union_trades": 2
+      },
+      "2026-10-18_vs_2026-10-27": {
+        "common_trades": 8,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1792238400000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1792281600000,
+        "sha_first": "76fc5bdfc3c9ba7478fc76e8c8dad4615db36ee71e8a28005b1f20b2f5780001",
+        "sha_second": "76fc5bdfc3c9ba7478fc76e8c8dad4615db36ee71e8a28005b1f20b2f5780001",
+        "sufficient_n": false,
+        "trades_first": 8,
+        "trades_second": 8,
+        "union_trades": 8
+      }
+    },
+    "SOLUSDT": {
+      "2026-10-10_vs_2026-10-18": {
+        "common_trades": 1,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1792281600000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "84225fbac4a4cf8ce11d37526062923b92b14929ac133622ed5adf237d90e0b6",
+        "sha_second": "84225fbac4a4cf8ce11d37526062923b92b14929ac133622ed5adf237d90e0b6",
+        "sufficient_n": false,
+        "trades_first": 1,
+        "trades_second": 1,
+        "union_trades": 1
+      },
+      "2026-10-10_vs_2026-10-27": {
+        "common_trades": 1,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "84225fbac4a4cf8ce11d37526062923b92b14929ac133622ed5adf237d90e0b6",
+        "sha_second": "84225fbac4a4cf8ce11d37526062923b92b14929ac133622ed5adf237d90e0b6",
+        "sufficient_n": false,
+        "trades_first": 1,
+        "trades_second": 1,
+        "union_trades": 1
+      },
+      "2026-10-18_vs_2026-10-27": {
+        "common_trades": 3,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1792238400000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1792281600000,
+        "sha_first": "c79478d8056b5e91e10b4f40fdc45352b9e428a1dd7c0fd9af12f84c8f6bd893",
+        "sha_second": "c79478d8056b5e91e10b4f40fdc45352b9e428a1dd7c0fd9af12f84c8f6bd893",
+        "sufficient_n": false,
+        "trades_first": 3,
+        "trades_second": 3,
+        "union_trades": 3
+      }
+    },
+    "XRPUSDT": {
+      "2026-10-10_vs_2026-10-18": {
+        "common_trades": 1,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1792281600000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "8890ee7b0a74995db101c9ea8582105f5b00f70aedf21484cbbb5b83538e28d2",
+        "sha_second": "8890ee7b0a74995db101c9ea8582105f5b00f70aedf21484cbbb5b83538e28d2",
+        "sufficient_n": false,
+        "trades_first": 1,
+        "trades_second": 1,
+        "union_trades": 1
+      },
+      "2026-10-10_vs_2026-10-27": {
+        "common_trades": 1,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1791547200000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1791590400000,
+        "sha_first": "8890ee7b0a74995db101c9ea8582105f5b00f70aedf21484cbbb5b83538e28d2",
+        "sha_second": "8890ee7b0a74995db101c9ea8582105f5b00f70aedf21484cbbb5b83538e28d2",
+        "sufficient_n": false,
+        "trades_first": 1,
+        "trades_second": 1,
+        "union_trades": 1
+      },
+      "2026-10-18_vs_2026-10-27": {
+        "common_trades": 7,
+        "compared_from_ms": 1790985600000,
+        "compared_until_exclusive_ms": 1792238400000,
+        "different_first_only": 0,
+        "different_second_only": 0,
+        "example_first_only": null,
+        "example_second_only": null,
+        "identical": true,
+        "newer_window_end_ms": 1793059200000,
+        "older_window_end_ms": 1792281600000,
+        "sha_first": "c93b3cbb723a3dd2187785c1019bfc85b214f724e3ae3a59a1dbdf4786db766c",
+        "sha_second": "c93b3cbb723a3dd2187785c1019bfc85b214f724e3ae3a59a1dbdf4786db766c",
+        "sufficient_n": false,
+        "trades_first": 7,
+        "trades_second": 7,
+        "union_trades": 7
+      }
+    }
+  },
+  "counts_by_window": {
+    "BCHUSDT": {
+      "2026-10-10": 8,
+      "2026-10-18": 6,
+      "2026-10-27": 4
+    },
+    "BTCUSDT": {
+      "2026-10-10": 7,
+      "2026-10-18": 10,
+      "2026-10-27": 10
+    },
+    "ETHUSDT": {
+      "2026-10-10": 11,
+      "2026-10-18": 15,
+      "2026-10-27": 13
+    },
+    "SOLUSDT": {
+      "2026-10-10": 8,
+      "2026-10-18": 6,
+      "2026-10-27": 8
+    },
+    "XRPUSDT": {
+      "2026-10-10": 15,
+      "2026-10-18": 19,
+      "2026-10-27": 11
+    }
+  },
+  "execution_embargo_hours": 12,
+  "fills": [],
+  "live_trades": [],
+  "may_claim_stable_economic_alpha": false,
+  "model": "C93_UNCHANGED_1H_RAID_THEN_3M_BOS",
+  "new_source_archives": [
+    {
+      "bars": 480,
+      "csv_sha256": "6e44b6d3473084c085946c00d2c007015d9d697fc825ca73e8fbdacddb0d85db",
+      "date": "2026-10-03",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-03.zip",
+      "zip_sha256": "ccc861a0f5d675cb7ab06332e776d626ca10c906f7592dfacb83acb6f7fe43cd"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "aa607c14fec2ebbab766e0dd4f097c8273e85348156157eead86a28204bd710f",
+      "date": "2026-10-04",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-04.zip",
+      "zip_sha256": "37aba4b68a141bf7e2be0baf2815f73cffb1f2f7140eb08f43a22e23495230ec"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "6734b7e29b033b9b0b0576b5f7379fabf2dd4fe3637f43aa460d88c56134dde4",
+      "date": "2026-10-05",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-05.zip",
+      "zip_sha256": "3239f7b172503bad2aa1f7684cb1ca42d827de7707ea6ef02b94967ca59ebd56"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "0b81ba8a07e7779fde157828bdb89cf696dcca5a6b37e7c315577da12e438d30",
+      "date": "2026-10-06",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-06.zip",
+      "zip_sha256": "41931018240802eba938db8759b4a7c2944faea426b90ae6f44e1faaa80b05ad"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c45068707fe90a25e7793667bdea10652da7e62b0e636bf425fdde90e5504b9c",
+      "date": "2026-10-07",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-07.zip",
+      "zip_sha256": "29c6ca3bb2fc5a980503e3e50bcc7c9a226b7dda4ded3a74621979ddcd010d02"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "7e1cec293286c84feccea1e22a247bc22f8b01b64a50f31dedba9790223f32a6",
+      "date": "2026-10-08",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-08.zip",
+      "zip_sha256": "258b949283a25b95bfa1e90a96025571455a8bddcda6c8e2c29f7bc2ea5ea6ec"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "eb533b4ebe05e4f37180400957bbac5edd9772d0610ef5ef2c2f3395a6b32886",
+      "date": "2026-10-09",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-09.zip",
+      "zip_sha256": "78104545754039e10678bc0ee821617611b507195ccfcb87c81bdd191d5ff37a"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "1ff4b16945b75f7fde3ea867066164789ddcd45dbea61d96f783da14cd7ad3ef",
+      "date": "2026-10-10",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-10.zip",
+      "zip_sha256": "fca3a585affdf39778c471e6fa57f752ece6d02cbbcd65e2319df7ae815f9e42"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "4452c4f9c385b0dbd147f9a076ac1747f0a8e20302a741c242dcf8df382cf08a",
+      "date": "2026-10-11",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-11.zip",
+      "zip_sha256": "f5e7a712d67fa76ef2df075512d73e56a3e51ba8a8255d9ecd02870f98297c8b"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "8649f21018f79fca1c50c2d177c7dfe088375347874c9af8d2207a89619f91c5",
+      "date": "2026-10-12",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-12.zip",
+      "zip_sha256": "4d3b64915f6b308b25aa14b3cfd794dffa37a50f9e8399bcb7be923d21e358c3"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "2f539e53158ce206094c6d22e31e2279c1e7c2a58151dd53b89374e83bda2372",
+      "date": "2026-10-13",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-13.zip",
+      "zip_sha256": "9bcac765c49c5ea5f979bff00063dc0531813059a4a9b230c14a31169c72a262"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "5601f85f6077bd6bca8c7d572dbc79b2852431dae4800cfe38cf090d1d65d5f4",
+      "date": "2026-10-14",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-14.zip",
+      "zip_sha256": "b6ea29f3dadc64ad235bd132cde8f72bbe72692a653cadfb3d8fa41784ffd9c6"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "9c463fffeb111205ceda813373b6a3759f6378766ed929dad586845c54215662",
+      "date": "2026-10-15",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-15.zip",
+      "zip_sha256": "99a87ab4f6cd9d033d4c5a724d0f12e4bb94ca08d9e857552d1c3fe9a79ce7c4"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "3a26ff74d7d4aef57a6a20eb4aff6c454d5511637ae4dc840f685453da3e786c",
+      "date": "2026-10-16",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-16.zip",
+      "zip_sha256": "caf99a01557d57fdecbffad85a6bafe0443c6a117a80c95ccace1e6b52415cdd"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "e161bc17538d2918816f9d87d5181eec95021fd66015afed02db7c5884ee8a39",
+      "date": "2026-10-17",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-17.zip",
+      "zip_sha256": "4aef43f6e609e8a29182f92688270dcd092fe9f39b7a0398335a56e216ec3fad"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "f4ae61e13be9c7e52f421cde307813a69ebef337c1f481e9d56a8eb3be94d9cf",
+      "date": "2026-10-18",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-18.zip",
+      "zip_sha256": "5ba918fd0217bb949d93837521cec5a6f516a5dd2e541a8f244a75e07c4cf785"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "882736a97bf8d699e0267945c2b287321c8444c6de6cb0c6b0f5deb64ac22674",
+      "date": "2026-10-19",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-19.zip",
+      "zip_sha256": "0496f9a1df0d25b4d1d254beb2d2b2c37f0a88aa12158c18775d32ffe57d6950"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "229ef2d5a83852434d28026538e2499ed43602ac93348d17160d642b562ff2d6",
+      "date": "2026-10-20",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-20.zip",
+      "zip_sha256": "921609ad6fe6489ca27602fb169ef93d637b24c4eb8c110464a5884873f19ad7"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "8123219eb4b7ca378d5368407f2c3bf5a2972dd388f18c2372b94ff73f9ef917",
+      "date": "2026-10-21",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-21.zip",
+      "zip_sha256": "f982068a6bad0d3390ef1014ae4ca8a90ce4e11163bf9e2efe5de3c19b6965fa"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "6e3071eeab350bc44b94c82e606f5e4f61c25823255f3200ed8cac46c52f45f3",
+      "date": "2026-10-22",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-22.zip",
+      "zip_sha256": "add91768755df61d5c8dd7544eac29891f5acf69584e06dc3982cd4dd0be905d"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "b71fa2e0315c63d4f85c52dcdf5848f4f106614daa0ae17acf97083bd1cb51a9",
+      "date": "2026-10-23",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-23.zip",
+      "zip_sha256": "5388716d7be739398725b0241cabbc9b86f725bb75286c0c15a717d191146689"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "56d0c0e708d57f8d03371ca4605f0e1ee0c5919d8780bb57f25a8a4a36880d2b",
+      "date": "2026-10-24",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-24.zip",
+      "zip_sha256": "cfb72869015e378125ed31c53bebc4cddce06f31202ab4481138aaaf563d5ce0"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "73574c40aa6b729404532acd4994087aa369678f2e8f0d2de241ab8dd5ceffe5",
+      "date": "2026-10-25",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-25.zip",
+      "zip_sha256": "0c2eb829139455abcd57b54b785b51458e8d3552aa4939796930eb8d319f8c2c"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "2f4ce9da548f67e9447804df0695431682686b5c1bf032af2d5842e3b572f840",
+      "date": "2026-10-26",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BCHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/3m/BCHUSDT-3m-2026-10-26.zip",
+      "zip_sha256": "fbe33fdc891fa6f9b1499b7eeca23e06073340d1f2225903f75a3d876c326137"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "a02c1ef0c1ca81e034bff7ef879a3f92d13f7d6122b28842c7fb1f6444228874",
+      "date": "2026-10-03",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-03.zip",
+      "zip_sha256": "9ac1ea2467d1fee09266aa5fb7ad2b46a6046edd099a908727c140615319fd94"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "6130c24c8c75e890478496fcb4249c7c9ae3cb60df40253c031101b847eb3ca7",
+      "date": "2026-10-04",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-04.zip",
+      "zip_sha256": "22fe3640b430c6e66ad0946c84715c6f92afaa689fa85b3d5ff901914721bf5b"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "23e6c3289eee5c528e3dd1737e5f999b03ac48bdec845db0a055ba8d63bd7385",
+      "date": "2026-10-05",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-05.zip",
+      "zip_sha256": "b54a201df40a6998ca196e596a948da776715cd40102cd48eff365ea061c1e31"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c46a45af94be0466e0c584dffcbcd141efeebd22ab198ad9def5c588fd06495f",
+      "date": "2026-10-06",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-06.zip",
+      "zip_sha256": "93d65ffeabcacb264f169eca77e0f463e81e1aa63ff1bc34cb9ddeface05abfc"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "a358a81cb7c617a3e8d80931510e52a992d382bc1c81382851a5746c36533b01",
+      "date": "2026-10-07",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-07.zip",
+      "zip_sha256": "e883545c09f8ffe1e3e845b837a150f569512bb904696e30740fe12cd98642c3"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "381b5abfa7b0a1c8cb9dba84e6b4805f5ac92ab4f00bf24195d1ddf990089922",
+      "date": "2026-10-08",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-08.zip",
+      "zip_sha256": "8530054124279e3533111b626284c312e4c10f248da9de0befead0d459788471"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c7b1e81fa9ff623161de7bb82fac77895a2a8bb4d6454fc6c3143dfadc8b8066",
+      "date": "2026-10-09",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-09.zip",
+      "zip_sha256": "b3442d7ffb6cedf2da7bd7d2eb1c12bfd9b886d460f69e18f2a316cb36bd6681"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "15ab2fcfc277a60b172a01cf9e0640ab6cc749567031d81091146e498976b978",
+      "date": "2026-10-10",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-10.zip",
+      "zip_sha256": "88299a68b6ef10c6c9b5d0e1eb17f6fe58800f494858bdc63dfdf4b375d26ea9"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "8b7c9717d60bc6b5c88bfa1bfa281b6ac4bd108fe30231b4448dc30780c2f084",
+      "date": "2026-10-11",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-11.zip",
+      "zip_sha256": "5265b705034c443bc8d290cae5e4f3b43f0f86c4b39fe404d5bc21c2b9a41283"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "3570bb7ccb39caa80d0a3ec8665e83a81b0d556149750a19f15d2df8d88c2a3c",
+      "date": "2026-10-12",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-12.zip",
+      "zip_sha256": "caf09cf965e99d0540d8c27fcf95ffd3b619de81ed6fd666c2d58da8dd04f660"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "1d5bb7beca4a8a2610d3d77eae9d9e40d40e7304a2096f0f86d5d84878b7fcf3",
+      "date": "2026-10-13",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-13.zip",
+      "zip_sha256": "3f7d7c8ef1e75d4eee426b8d3ab8ae6165deaea627c4cca724300f924b4f2c7b"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d33f3d801f8d1f236b492a4fda886de0b86f3a7d5e94fd056f5bc78577b26464",
+      "date": "2026-10-14",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-14.zip",
+      "zip_sha256": "a071882b755400057a2bf7fd81aa25965866fac433e8e56d3a7774ec5ea59673"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "66760cdd98124a426714f9f4ed0ee065776799192f6ac36d212694aa2d37eb52",
+      "date": "2026-10-15",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-15.zip",
+      "zip_sha256": "c0e216c08d159844c9af832ef8a40a82b3f296aa9efbeb924b86e1fa858c6286"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "3c6a62d1822e96c78779c99841ae5c687fcca9a72b7d811302ffbd2af5e99f36",
+      "date": "2026-10-16",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-16.zip",
+      "zip_sha256": "3f843fee2644e6844771d06d8cf71de15fbc1f476a47b5eeaa24bb4a3bfb7030"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "9f738d7c791f68fa6931ab42691396b84a5a3f65b4f65b13b663990e6303ddd0",
+      "date": "2026-10-17",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-17.zip",
+      "zip_sha256": "ec873279ffc1ad7229e7026267e7753f21a378e08d1eb08b1b31208b758e6e16"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "487ba257c860ca61d0d5a21f8c2f4320b22c76448667eef8c64fdce0dd8bd6f2",
+      "date": "2026-10-18",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-18.zip",
+      "zip_sha256": "c1efc935d0690812d6bbc347165396f3d264cc7272832bb6fbfe86532cd28289"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "84e2b4454544157c343d44387439b66ea4048a6611912d5a6672e31ed72582f7",
+      "date": "2026-10-19",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-19.zip",
+      "zip_sha256": "436bbcf9718bb4f8fb8e4c97f1f44895cea04a373338df3c3a7a636dd31a2e5f"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "968cadfe2ce52f2c96c9e4cac4395f03973110c99163b164444f64548aff89ac",
+      "date": "2026-10-20",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-20.zip",
+      "zip_sha256": "4de379c316307e6e559337e108c90fe790c153d9658fb8949e79e5149629294f"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "bd681f0ed56a59187d1cd9659abec968cdc18ee9d88b5eb454e9c509bb4d35d5",
+      "date": "2026-10-21",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-21.zip",
+      "zip_sha256": "5072aaf1eb5595b1c468b7d954df78d62823f183ca4698b9726e540023029c48"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "7c717902d472a8fae181bcb8849a1c2111f2f52832e9b321d8a77986edac35b6",
+      "date": "2026-10-22",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-22.zip",
+      "zip_sha256": "55a90062970491b12baa543e4bfa2a9a98b9595be899c293ae834053e1bb9b2d"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d102caaca47edd5e930f86d93d6110cd6ec647ac67da751db2d6f9214ee75fba",
+      "date": "2026-10-23",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-23.zip",
+      "zip_sha256": "a39ed5d8a733a25815a30b05563fe9a892cb1b8df36999dfaf3366591806b650"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "5a188734c14c8d52d6e81c6b6d93e863b8a440a32af1a1d1bbc5eb7ebafb43a7",
+      "date": "2026-10-24",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-24.zip",
+      "zip_sha256": "a0d22c57fc682fe250bf2a75cb03fd021f09b31fa07f98612ceef8349688c124"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "2b22444713b93772db0b36649e0f136e0557461f4f161a68aeb5911fe834d10f",
+      "date": "2026-10-25",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-25.zip",
+      "zip_sha256": "6e4df1779b729d28d4b06b6a658a079fecb29947fd3ed8f13be2f894fe2dd12b"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "01fe7c131278b12266cb4403111683a036d72b872f1576622bf9b963cf97ae7a",
+      "date": "2026-10-26",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "BTCUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/3m/BTCUSDT-3m-2026-10-26.zip",
+      "zip_sha256": "13bfc8e96ee684508d45c605077b5b2f6927d4286621f651118c4ee281a75f63"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "00f44e2d07bcd78cbb32b3952d87c1085c65653497fab3a09dfd2b289caae3cd",
+      "date": "2026-10-03",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-03.zip",
+      "zip_sha256": "fdda6857b4be7a27625dd28f2ea3fd55d277b721a4a19f43de6e7cc8c19f6539"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "32392068d6a5cfdc02f9d8b27118c3f844c0cd69f182ab2c4e52338d76bbb52e",
+      "date": "2026-10-04",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-04.zip",
+      "zip_sha256": "acd5b48190177ce7940cd4f0cdab19ff7be55950d0fe8412c07d17a547c52faa"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d879cafe273742652d2e7e4d6246446cb3aed8260cc20a80d48d40552f270227",
+      "date": "2026-10-05",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-05.zip",
+      "zip_sha256": "dac029b9fd582185721a0ed9d457c1754f3fd61308e142ebadffae8da15c388d"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "ac70954ca991ef1de857468ee39434e8822a3e2a44b8e0c667635747a9c8f607",
+      "date": "2026-10-06",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-06.zip",
+      "zip_sha256": "595f6edf28b531a2c2657da2b0f5a262ea2da0019113590f9bf2205101d32870"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "f8768e26caf97c8c8c17b52e25e6bb784a8121510a2170c5e384c20f6341199f",
+      "date": "2026-10-07",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-07.zip",
+      "zip_sha256": "72e7710a8fdf32e5e233f458a342777bdb79bf07be6d4d38a330c8ff28d8d832"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "021556844a40b8156e38c1f3107cebe981c56b982efb4577a36214a209caac57",
+      "date": "2026-10-08",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-08.zip",
+      "zip_sha256": "2893e0b9c36cc3ca60bbe1bd157fde5936207b5b6fabd2b036f54a88e0da6600"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "9b11f94f69ba5d8a4d0dc87179426838e891a147bb67698b82de475db1a69206",
+      "date": "2026-10-09",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-09.zip",
+      "zip_sha256": "fee671cc38645c2c3327630a254a1897a60e78536530728d3e306e76f7b6c2a2"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "6f558d6cfed56ee265672eb3583e5f3f4115c35c71791d0e825c28b4a3d36782",
+      "date": "2026-10-10",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-10.zip",
+      "zip_sha256": "7e400f683d0783a9801af98bbebfd96d11624433ea1bcc776d84061ab25f59b3"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "8c192de5e248c3ae8cad8c4351e02c35bdd2b316db10cf941694833445f6fe8b",
+      "date": "2026-10-11",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-11.zip",
+      "zip_sha256": "8f1e79ff4722f21d402bf1d3d9f1c2c67a147520c7d845f64ff97e1919edb684"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "7b2ddef09218c8c41622c01a1f521528d28a666356bd7c573ab7d00495cdcd04",
+      "date": "2026-10-12",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-12.zip",
+      "zip_sha256": "d4c4b01ed95f3518d6f60f31111d0118ea95d086e75168412a46312467aab6c2"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "a178e9811227c985526ca7f0d35f2f8aac1970973c787ec200192f62244c1c96",
+      "date": "2026-10-13",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-13.zip",
+      "zip_sha256": "62aa4135f2408b1cb3c378e59b35f6b181dfd88d5266dc0be760dc95434356ab"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "aef2ce9de11f7d0f4f2ff56a2ed24e374227816b039dabfe0f4c1139e9fcdc7d",
+      "date": "2026-10-14",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-14.zip",
+      "zip_sha256": "530e02072207fe31ac1ae258210332be3456b007f0a7b3aaf6a7cd109fcc0e92"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "29d41259643eadfffb55c9d76c1e8853de1de7456942b61cfd085da05f21af50",
+      "date": "2026-10-15",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-15.zip",
+      "zip_sha256": "b16804cf723538773edc0b0e745858ea95bfc559092dc01e63b044ff1c362ebf"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "a329193826df08b1cffdb7f892a9c73a8eda692c7263c3acd2598138aec14a60",
+      "date": "2026-10-16",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-16.zip",
+      "zip_sha256": "51b595658647036a2bcd20ff89669812c4c8cd616e559d6e2e3b267ffaf4d62d"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d5fd0ace7dfbea8146667c3ef2afed391d8f7c7760cb5896b626c7939e997ebc",
+      "date": "2026-10-17",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-17.zip",
+      "zip_sha256": "89b600b94c3ad6a155bdbfb75da7ce18e7d4cf213bcbd1bd956ac484e79903e7"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "e5336b9a9cef8cc497caecc2fb4849aa03c0ecb31d84e8055d03b90b8ad98837",
+      "date": "2026-10-18",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-18.zip",
+      "zip_sha256": "da5d7bc3bb9a0224cada6fbf371a021c509481d6bb4242f64850bd30ae98812e"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "70b1593b635cccbc18e6b9679ac10ac1526d8d70c34581d7fd880322eefb6eb0",
+      "date": "2026-10-19",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-19.zip",
+      "zip_sha256": "ec8d9c0d8c92c2d0eab77e1ddd137a53dbf60a356d28de795bd4acf6701e1f44"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "69ac69e93b78e921969f3f8da2594c88c3ddca64982375eda4e0bf2730ba1cd5",
+      "date": "2026-10-20",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-20.zip",
+      "zip_sha256": "8d0a61ec31a46a7b622d6ece3cc3a96005273fd5e655a0ad0ae3ad7589445d82"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "aee486295b72eabf5d61aea6fa66e97de3c9690a2cf4fdc18bea798d5f5f9a1a",
+      "date": "2026-10-21",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-21.zip",
+      "zip_sha256": "187c3cc51654c5dbc7f57cd793db9588c1b393f634fa2394932572ea791c48fc"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d54fea6d8648125fa388f83a5f270bf1b0574ea6f6f7309a4cf20ed092b95952",
+      "date": "2026-10-22",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-22.zip",
+      "zip_sha256": "6f8b3465b4b77aa7d2ebf3bcc4cd9b1069df8b3ded9ed22017148357bb76022b"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "dad241fcc7b94c9b90985b5bcbdb09807b1d8e537f3d2f71103c69ce7ddb8b20",
+      "date": "2026-10-23",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-23.zip",
+      "zip_sha256": "6804ca224af24cae324aaa7c195d7a1af62824829dc981633e23f54dd3916d8c"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "4dd86cd0bc7b3a1ca0451d0b6b7166b7d5b534cdbdded94656a1c94a4d9e2f58",
+      "date": "2026-10-24",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-24.zip",
+      "zip_sha256": "2f752e726225f26742d332b8a295bd1e4f136760c0a616d12020ee1536f0d78a"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "1128f1a940e1bfcb3686a01a6430eb4ce2b14bf0f57cd6199696e93513c28705",
+      "date": "2026-10-25",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-25.zip",
+      "zip_sha256": "6055d45f05194b401646491e0b22df595b1c395d39a60b393585316fe4aece0a"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c2f83797843ac8989bf84adbc2632680899bbc612999a915ad775dc4d05809b0",
+      "date": "2026-10-26",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "ETHUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/3m/ETHUSDT-3m-2026-10-26.zip",
+      "zip_sha256": "4b51c37b1486bfe42e5dd1f23022b572094699f2b2305eb426d371d87d2da975"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "5998edd9dde87b34674f56d219df2ef2e79934779dd32acf723f7364246c002a",
+      "date": "2026-10-03",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-03.zip",
+      "zip_sha256": "8a99ae004ac3d74b5567a38d62b720ca2d13e277f18b3a276703007c5f9e62e9"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "7dfbb73ec4846fe86d03102c0f1b131fbd9193ce2fac413f338b05b2f73c55c9",
+      "date": "2026-10-04",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-04.zip",
+      "zip_sha256": "a3ff39656261c4c3a2181ca328f6ede65eea23a5b5248297078ca50469c9a4d1"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "762fde519341802ae0e9d908d742fe284506922f31cf5ed15b50e207525f05d3",
+      "date": "2026-10-05",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-05.zip",
+      "zip_sha256": "5e7f14ccb3ab7fb627012f482496efde12dbd2d2c6dce06d351c7c1ba8eb834d"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "38fbad4bbf95aee3e6f832749c0b935cd1646f60d166959463fb1010df81ec09",
+      "date": "2026-10-06",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-06.zip",
+      "zip_sha256": "ab661d7f918aa0277315c8d525b0a9b0fd4b981c1774396986a607099053444c"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "ec98a53802efc666b12e84c152e3b61104f94b50d986675320c0e13e2d7499ad",
+      "date": "2026-10-07",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-07.zip",
+      "zip_sha256": "47139c056f12ee454be60d4f567ad87fd1e12b1d848227f1815cc2795a7292df"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "fe6d488757be3ab43826617f8bfa157c55a26cf4b975d7a87be7c359cfb81fdb",
+      "date": "2026-10-08",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-08.zip",
+      "zip_sha256": "ba2a59a55cc97e483388945b659a57f0cef39fafafc752f60e5518f0fe7a54fe"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "1607ac433da01fd30033f5850d07e8b062f997225fdea72adf1206ba51083cec",
+      "date": "2026-10-09",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-09.zip",
+      "zip_sha256": "a68a55e343361d2759538c184a24f285c18b42a41cbb172ccb8bd62b27efb164"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "02793fc261d12978f4f998d4af9882340e43909605f35d3a2da2b8bbc8ebe6ac",
+      "date": "2026-10-10",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-10.zip",
+      "zip_sha256": "a84c78bba3a1d35b1b74b94072d5bd5ebcd318a6dde61b709135c6662215ac87"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "fdbb07fdc94fb3a10cd943794f5116b674d839f8762f0ea046e54830790b3c30",
+      "date": "2026-10-11",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-11.zip",
+      "zip_sha256": "9cf02544d4f36fbb96d4cfbb8d02b413e769d88fadbc72f2a78e227a8c8b9d9f"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "079561f6bef378989e27672702e71dd012d21b037c1fb888d5d6564d4fa67ae8",
+      "date": "2026-10-12",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-12.zip",
+      "zip_sha256": "88f4ecd422b0c8faff5c30d3c24f1cca2e39a259c771d35111a0939a4f06b147"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "52b9ed65c6b958612783aef7ebdb6a456a91a56a7ed199e3b7d1401b8d03c8b8",
+      "date": "2026-10-13",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-13.zip",
+      "zip_sha256": "e28892ff5678b88ba863955c4fc19545e05c22f3fe34812875b0c6d3f5946e75"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "43ce19024bd98ed2e3a9acab6daf80ecadaa727379f175a8016f1631d6764322",
+      "date": "2026-10-14",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-14.zip",
+      "zip_sha256": "0badf925d6cf76ef1399cefc17a1202ed2320921a224a0bd43d15f9bdeed16d5"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "5abe584c85733cb05954de366243b895b15f52e38a0d57029f41da4e5735aec0",
+      "date": "2026-10-15",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-15.zip",
+      "zip_sha256": "554f6b2a08353e3940ba0af243052357fb90f0c37b41505d0013ca7be183af2e"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "432ac419ee1f5193b59f29572b328d8ab8e4bf7be4207fd9c1646fe6f2c25e04",
+      "date": "2026-10-16",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-16.zip",
+      "zip_sha256": "d27f82352b6eeeb82352a24b341130d83b69ad57a07caf3108a27d357a38b5fb"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d36040f1675bdc655a9b55209683a5a10b7fa08fe388a44fa469b6bcc51d6a10",
+      "date": "2026-10-17",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-17.zip",
+      "zip_sha256": "bc83a7f9e0367f9e0bfdc46362231041c7ee9adbe12ba198f879552041191100"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "8cafdd45b66a9e6db036ea8aa258f62a5cfb85806e87640460b4f18bbcefba05",
+      "date": "2026-10-18",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-18.zip",
+      "zip_sha256": "32564a458f68d77f0977a400899c4a0e6599ca73064ea4d9c396ef48d5473aab"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "adf140a5a09cb3ce04572edc0fea585f73f3202591bab81815dffb2cef93ed27",
+      "date": "2026-10-19",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-19.zip",
+      "zip_sha256": "cc93b659495ff99929a6d934d184c12d0c32e7a8476d795a2020dd25a26377fb"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "96da2b492f1908759afe2789dbb5be256912d6b504a59f007a83226f6f4adcc9",
+      "date": "2026-10-20",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-20.zip",
+      "zip_sha256": "f24f932e53cddee3227248257ee8574e024776c6bcacfa8b5e892f32df39b241"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "a26899588b6c8caad2f2f5ea663fcdaea30c180d651ea1b98d63d69c97406f67",
+      "date": "2026-10-21",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-21.zip",
+      "zip_sha256": "cf505b137b5631efab3c471c77b9c6688f69d3e4f9b88ef7e459bc768f98b6fa"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "812d29950ac704ee8880b5250aac9459744bf9a669048648a2b9fc675e9eb3e7",
+      "date": "2026-10-22",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-22.zip",
+      "zip_sha256": "a29d45d2afb0fedf038ec49060e06cc4cb7ef2c901b8eef3668bcec2d02e429a"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "4b0defb64422657cfe6cb3b9893b0d21bf86886cf4771e9535692ceb525d9da8",
+      "date": "2026-10-23",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-23.zip",
+      "zip_sha256": "29cf3e8b8f647d04dd49cc3414e0a755c2591eb9958554803665f29a86199087"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c5a020f6d7499c457338f9ebd3c1629fce64b0ad0c6c675236c33cbeee975df7",
+      "date": "2026-10-24",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-24.zip",
+      "zip_sha256": "3fe1dada884328db9c4dd4641be78b5a9f6e471f5dd934263a4bbb84ad0bc285"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "819ca0c233ef65152e331e19473ef21c97b00cd5a0553e851ca24894c2aa34ea",
+      "date": "2026-10-25",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-25.zip",
+      "zip_sha256": "66ce56013f5ee49bfe98d2dd91f1cb91350f99058b494aea4997799277467d73"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "03d6d1200565001aff542279dde36e3fc1512bd00fbf55e4d9fd48df3967646c",
+      "date": "2026-10-26",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "SOLUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/3m/SOLUSDT-3m-2026-10-26.zip",
+      "zip_sha256": "12a35347fc1d290f137cfa9f16c08ebc08d1a522d06e3445e81fd819ac5b0e92"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "6d142658b6ab7b15cd16a4297a24765eb14dbca1f6412d62df71df936f3d7106",
+      "date": "2026-10-03",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-03.zip",
+      "zip_sha256": "ee4ab26422871f8dc03fbaa0e4b9a4d190f21dae75b349f3dfbbe19c2cc3d954"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "f87ed2cb89cbf6de7dac880f1b40b44c87d53dbcea5294c98a68be2fbdd099fb",
+      "date": "2026-10-04",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-04.zip",
+      "zip_sha256": "618c7c40a5803ce8c415c74442b3cda1fd158f796bc38177500f24b595d4f9d4"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "27bd027fd9398ade36ea0cf968d280d1a29ef654e1f59f5ed92a5627ef7a0361",
+      "date": "2026-10-05",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-05.zip",
+      "zip_sha256": "35ea389f29b9957802f4819aa6cf57311f99dc233f62568c1b7cc3aaeb1f112e"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "192850d711ef65f3123ec0018badcf057e2fba5401acde5887114a94e5b92a7a",
+      "date": "2026-10-06",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-06.zip",
+      "zip_sha256": "e436065837575b71bb397bddaf06b9ec95483d546af10f1be7f805cbddc97643"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c21a90a5bb30ad9d3c52f8eef3d5f5d537f08462d8c3266f906b37aea287bbf9",
+      "date": "2026-10-07",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-07.zip",
+      "zip_sha256": "be7da618325482eb81c9b872b06da9093a73561585498db5a3ff991a5a974afb"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "0a3d47aa1db94a33f1fdc0e6bc6e1560cd6c8d7e8d0bf2795c3d32b94ed9f8b8",
+      "date": "2026-10-08",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-08.zip",
+      "zip_sha256": "327ef077149564ad61ab725558cf591e2c80eea88126e6faa9d3076fb7eb64df"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "73cffb15d6b2b6d4e56d80491267509ecf9a3492989128cbbcea509860ad340f",
+      "date": "2026-10-09",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-09.zip",
+      "zip_sha256": "9c74848d57ad057a2786594663001009a1f07a8981e27c18bf800406f3a458e8"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "36dbd9cfa07cf02edf8d2a17f000c100296daed602c182b32090698cd0ec14de",
+      "date": "2026-10-10",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-10.zip",
+      "zip_sha256": "98213b70c7f71f775507680cd22b2b5c50b69bed16667c0c21ba430982d104c7"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "8a13a2e90615255ebe8ce1bfa72e2bba057e1cf3b651d610f6413c2639f4875b",
+      "date": "2026-10-11",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-11.zip",
+      "zip_sha256": "0954f0179bada612b96f41130c7a39acd0dbb95618c82cf806c794490621108c"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c5a683ce47ebd7292e969c0bd56f623761321695a6587b6a8dc01c4b400fc69d",
+      "date": "2026-10-12",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-12.zip",
+      "zip_sha256": "812949d950e5ac328dbc4b5a66deae113fd69a2b17d690db6a5757ef3454bb94"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "f1f07dbbdd04ba1b9b162299816536c14d9b53579d29d97236f9f291c0c45a51",
+      "date": "2026-10-13",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-13.zip",
+      "zip_sha256": "3d1a1a9e12d6087cbf5431565171f62018ae2614cfef7927941042fe241ec372"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "0c3e39bd850cfd3e0b41b2dd9e442ebf85ed7cf3704b531121f0358d2af4a053",
+      "date": "2026-10-14",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-14.zip",
+      "zip_sha256": "402e06436c0e82d2621095b06585929ab2f4d679d521b6e9226b0f9f53ac1cc6"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "a231f288170f70eada10220459258603fa863a1fa0dd01df31f3299f5e6fa275",
+      "date": "2026-10-15",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-15.zip",
+      "zip_sha256": "edb1a8e35d9b7d255c208059f57f2df5c2ad70e33ccb509bd0597a929563c8ff"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "49a958f8715f8574e2b47e2a9c411b61b313b0cc8c632924e03ebd3e645171d4",
+      "date": "2026-10-16",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-16.zip",
+      "zip_sha256": "4c253aaada353b6a552e1028a7788d6953f69f631dfb5140169f666381793b5c"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "4a53a03d83aacf8be93f40c5b8ef7638139fd937960b2a0f81e1afb5174b0b09",
+      "date": "2026-10-17",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-17.zip",
+      "zip_sha256": "e79b1ac98c93212585bb9a4fc9647e588da319c3e35462e510f3c14f1d7823bd"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "114144ea64e1a4ee9ab53d8ca8bb8bff61d47749d577984bcf5702fe88f8c2b2",
+      "date": "2026-10-18",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-18.zip",
+      "zip_sha256": "f6182e5c6ed299f35d03a6f9d80e1342e11836a980df292a042d5f9ba7673986"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "85926f398ff4162ed195bb0ecb4ba5ef11e6652ec5f08621fef3026585b7c492",
+      "date": "2026-10-19",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-19.zip",
+      "zip_sha256": "b13b50765f5377efac091389ca4db40c43b748dda637f2d18bc5918ffbef362b"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "ee186ab52e5f4db29a0b4431c6399f0320550eee9f60ed58987e21be0f2fc25f",
+      "date": "2026-10-20",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-20.zip",
+      "zip_sha256": "ab23db4d8e03765cc1a216e9e62944d57369d784413f76023867cec4d77ee6f8"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "c98290af741ab1eb8e082271ba62deebfec11c4010baa08defc91cbec0221e2e",
+      "date": "2026-10-21",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-21.zip",
+      "zip_sha256": "0fa94736524b68dc498667b915241014372bdbb0a8d5b402709c2d40ba4b0590"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "ffd93956d0a99419d77495b726d4caf917851d5a117316e8decddd3c3c8579a0",
+      "date": "2026-10-22",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-22.zip",
+      "zip_sha256": "84c47d9c277bd2a966914b0fbdbda803079e44a6c7e9e12dfb9db8d7c546e181"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "32fd0e6b47029c5eef3d2c1f6fea8acc58df9c76640d0962c8e43dc13116b524",
+      "date": "2026-10-23",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-23.zip",
+      "zip_sha256": "6710d3c2313d32f9792a1a7d0097c6a5e837188d9fd1b809c2c0417977934104"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "97110c2222290137d2f88021b95774b4391b37e2be9a93126d6e9f4b77088165",
+      "date": "2026-10-24",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-24.zip",
+      "zip_sha256": "73fb75e9e8a4a7267162223bfd2f6583a22e4c8e1a0c6274d34b9c947d745fc8"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "6deaf20e7563ed59c1adb3da7f9b0c01adbfd18c967f81f37d31fc4574d39cd0",
+      "date": "2026-10-25",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-25.zip",
+      "zip_sha256": "e90c5cfb553f69b7a6c21d794013f683abd5396d1850d9c065898308261f3e8e"
+    },
+    {
+      "bars": 480,
+      "csv_sha256": "d3d37acb66273cd9f22469ec63f7f97626da6342a4beaf87c2e88b8861cbab74",
+      "date": "2026-10-26",
+      "readiness": "PAPER_ORIGINAL_ONLY",
+      "symbol": "XRPUSDT",
+      "timeframe": "3m",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/3m/XRPUSDT-3m-2026-10-26.zip",
+      "zip_sha256": "0857ed0fcee6aecc2e446449e1db6b3e1e945e0b31b399f250eea0643b6b7135"
+    }
+  ],
+  "orders": [],
+  "original_entry_tp_sl_modified": false,
+  "original_source_archives": [
+    {
+      "csv_sha256": "0223a6818bf668f2f7d6cf153fbd098ed79f40ecd58d8e6b1f128bb0558ada42",
+      "period": "2026-09",
+      "rows": 14400,
+      "symbol": "BCHUSDT",
+      "zip_sha256": "c3192a1d7cd70d5dc19c80514eea7c3add87931378b89c6f43c1a85ae944ea92"
+    },
+    {
+      "csv_sha256": "dc3fbf40368a0017786ae0e7ebf8cf8ac363ae4a040621ed04d0feb3be429fbb",
+      "period": "2026-10-01",
+      "rows": 480,
+      "symbol": "BCHUSDT",
+      "zip_sha256": "b60e17fa2c01a70f83dfd3f7658b4d4d63b2ec58dcb1fd6038de690ea97780f7"
+    },
+    {
+      "csv_sha256": "ab2e09c00d3af727f3bdb87b8568cddcee1047b6de289930b7c3d3ce7691f084",
+      "period": "2026-10-02",
+      "rows": 480,
+      "symbol": "BCHUSDT",
+      "zip_sha256": "65364acd9d3793e225805be8fc4f3edd7f44c0d3c501d5a931b53ef031763983"
+    },
+    {
+      "csv_sha256": "7e82bcb37ecbda1b01435acd4646da09779555380f64dded34bc4109ac1ef9b1",
+      "period": "2026-09",
+      "rows": 14400,
+      "symbol": "BTCUSDT",
+      "zip_sha256": "b099b745440c8dcae5d17965e9661ae90b8033354d0417036bf01f6b17a41fa7"
+    },
+    {
+      "csv_sha256": "a78df198505628389be56183b5a7f5ca93654da10be2239d3a0f3a12131fb824",
+      "period": "2026-10-01",
+      "rows": 480,
+      "symbol": "BTCUSDT",
+      "zip_sha256": "e83334ea360225d700f87f51f44a81e9c9c3b90924138ad76e868576ff68ba8c"
+    },
+    {
+      "csv_sha256": "acd251fc738a7f315c4e012f8538f742428301be0cdb187cfcd260d85e6c4b25",
+      "period": "2026-10-02",
+      "rows": 480,
+      "symbol": "BTCUSDT",
+      "zip_sha256": "44620e004fb1a950906b20fc08a5c7cbd136f34c4895d7bcddc9ffda5780c1f2"
+    },
+    {
+      "csv_sha256": "803d3857b0dbfac27554c3ed873f86eaeaa9c5d3bef2569bdb3622245a7ae426",
+      "period": "2026-09",
+      "rows": 14400,
+      "symbol": "ETHUSDT",
+      "zip_sha256": "0f853ec8284d95c00cb859937bb1c70950081d9e72126cc9ade028e39c3213c4"
+    },
+    {
+      "csv_sha256": "4f845cf031229fe446af5ce2d32c58d4377df52a39fe8b3367d6495ad3761843",
+      "period": "2026-10-01",
+      "rows": 480,
+      "symbol": "ETHUSDT",
+      "zip_sha256": "54e991bf8f483bfe684bb6192138b2723b06d931031704e75f1f8b522a59d781"
+    },
+    {
+      "csv_sha256": "4c9226541d096195754dc9890a229ff54e2cb6906cfe8403c974925d81803bc0",
+      "period": "2026-10-02",
+      "rows": 480,
+      "symbol": "ETHUSDT",
+      "zip_sha256": "fee42273ae6f94033de51aa7dcddcc969a68f76b6df4713a7ab7599c370fb7fa"
+    },
+    {
+      "csv_sha256": "0501bb5ce53f9708e947632d176839094483d149ee70c99e4abf9b873e3024f1",
+      "period": "2026-09",
+      "rows": 14400,
+      "symbol": "SOLUSDT",
+      "zip_sha256": "4e552f9957e414bee54bad3c430c911da18e70e1712659bed7ec6d754791cda7"
+    },
+    {
+      "csv_sha256": "051a36972c1249e4b77ad9f669958b66384be285ff43c75cda5db8c016374f35",
+      "period": "2026-10-01",
+      "rows": 480,
+      "symbol": "SOLUSDT",
+      "zip_sha256": "3f36c202959c9715099391ebb4c757957e3b00fce480e06dfd87d3f664f10d79"
+    },
+    {
+      "csv_sha256": "7258c80afdd58a1ceffa1d9804365199b82c33055ea81d5f69d41951b943617a",
+      "period": "2026-10-02",
+      "rows": 480,
+      "symbol": "SOLUSDT",
+      "zip_sha256": "9dc3928129a3de09518051e45b2de4a575a3b9d084e32022605d75c515cb866d"
+    },
+    {
+      "csv_sha256": "5a72e7fe8484e32cb4b8b1dbd2b4bf4f6a6637563a63fa5977797f4f7acd617d",
+      "period": "2026-09",
+      "rows": 14400,
+      "symbol": "XRPUSDT",
+      "zip_sha256": "7bbcf7e37b49f48020f533763fe29dc977fcb35a350e52d5c79f65c945485c77"
+    },
+    {
+      "csv_sha256": "a85a79be20b477613a53a9038ae125e3497f6a1d6546ad96d5f94b305bc33601",
+      "period": "2026-10-01",
+      "rows": 480,
+      "symbol": "XRPUSDT",
+      "zip_sha256": "b6c504a547b11e9bc040ef91b0e03c42911fa41e0c0cbdf83fea1f9aabe36c3d"
+    },
+    {
+      "csv_sha256": "398ab8661052712948d22388d61ae793772435a8ecc3ba6a466365bb09b646fc",
+      "period": "2026-10-02",
+      "rows": 480,
+      "symbol": "XRPUSDT",
+      "zip_sha256": "a2a14bb06482720761e2258f525baf77cd772c822c22d338f576d847ac834d87"
+    }
+  ],
+  "pairs_sufficient_n": 0,
+  "pairwise_source_comparisons": 15,
+  "schema": "EMBER_C99_UNCHANGED_C93_NATIVE3M_WINDOW_INVARIANCE",
+  "source": "C21_C73_PLUS_C98_120_SHA_PINNED_NATIVE3M_BINANCE_ZIP",
+  "status": "PAPER_ONLY_HISTORY_DEPTH_DIAGNOSTIC",
+  "total_window_inconsistencies": 0,
+  "verdict": "NO_POWER",
+  "warmup_days": 7,
+  "window_endings": [
+    "2026-10-10",
+    "2026-10-18",
+    "2026-10-27"
+  ]
+}
