@@ -1,0 +1,60 @@
+name: EMBER C86 first-test source-only original153 independent QA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c86-original153-first-test.yml'
+      - 'research/mtf-element-audit-v1/d05/c86_original153_first_test_receipts.py'
+      - 'research/mtf-element-audit-v1/d05/test_c86_original153_first_test_receipts.py'
+      - 'research/mtf-element-audit-v1/evidence/c86/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-negative:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Whole SHA ledger and 61 original source provenance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c86_original153_first_test_receipts 2>&1 | tee /tmp/c86-tests
+          grep -Fq 'Ran 61 tests' /tmp/c86-tests
+          grep -qx 'OK' /tmp/c86-tests
+          cd ..
+          python - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c86_original153_first_test_receipts import (
+            serialize_receipts,inspect_all,summarize,audit_stored_bytes)
+          a=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          b=Path('evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json').read_bytes()
+          c=Path('evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json').read_bytes()
+          data=serialize_receipts(a,b,c)
+          root=Path('evidence/c86/C86_ORIGINAL153_4H_1H_FIRST_TEST_SOURCE_RECEIPTS.json')
+          if root.exists():
+              audit_stored_bytes(a,b,c,root.read_bytes())
+          obj=json.loads(data)
+          s=obj['summary']
+          assert s['priority_counts']=={'0':12,'1':23,'2':71,'3':47}
+          assert s['4h_author_first_valid_test_count']==0 and s['1h_author_first_valid_test_count']==0
+          assert s['orders']==s['trades']==0
+          assert len(obj['receipts'])==153
+          print('C86_FULL_RECEIPTS_SHA256',hashlib.sha256(data).hexdigest(),'BYTES',len(data))
+          print('C86_FULL_RECEIPTS_BEGIN')
+          print(data.decode('utf8'),end='')
+          print('C86_FULL_RECEIPTS_END')
+          PY
