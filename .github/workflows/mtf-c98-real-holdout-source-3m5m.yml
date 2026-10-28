@@ -1,0 +1,85 @@
+name: EMBER C98 precommitted Oct3-Oct26 untouched Binance 3m 5m A B C source
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c98-real-holdout-source-3m5m.yml'
+      - 'research/mtf-element-audit-v1/d05/c98_new_oct_original_forward_paper.py'
+      - 'research/mtf-element-audit-v1/d05/test_c98_new_oct_original_forward_paper.py'
+      - 'research/mtf-element-audit-v1/evidence/c98/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-source-guard-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A161 journal and 20 original Binance 3m/5m source-falsification unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c98_new_oct_original_forward_paper 2>&1 | tee /tmp/c98
+          grep -Fq 'Ran 20 tests' /tmp/c98
+          grep -qx 'OK' /tmp/c98
+  new-original-daily-binance-a-b-c:
+    runs-on: ubuntu-latest
+    needs: [frozen-source-guard-tests]
+    timeout-minutes: 44
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Same frozen A/B/C on 24 previously unused complete UTC days 5 original crypto pairs
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python -u - <<'PY'
+          from functools import lru_cache
+          from hashlib import sha256
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c98_new_oct_original_forward_paper import run,dumps
+          from c89_original_native5m_adaptation_backtest import _safe_http
+          from c95_integrated_paper_three_routes import read_and_pin,A_SHA,B_SHA
+          p=Path('.')
+          a=read_and_pin(p/'evidence/c92/C92_APR_OCT_5_SYMBOL_FULL_CAUSAL_STRATEGY_REPLAY.json',A_SHA)
+          b=read_and_pin(p/'evidence/c94/C94_ORIGINAL_BINANCE_IDM_LIMIT_BOTH_MODELS_PAPER.json',B_SHA)
+          c73=(p/'evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          c21=(p/'evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json').read_bytes()
+          print('C98_SOURCE_DOWNLOAD_PRECOMMITTED_OCT03_OCT26_BEGIN',flush=True)
+          result=run(c73,c21,a,b,fetch=lru_cache(maxsize=800)(_safe_http))
+          content=dumps(result)
+          frozen=p/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json'
+          if frozen.exists():assert content==frozen.read_bytes(),'NEW_OCT_SOURCE_REPLAY_DRIFT'
+          assert result['new_archive_count']==240
+          assert all(v['native15m_3m5m_equalities']==2304 for v in result['verification'].values())
+          assert all(x['comparison_exact'] for z in result['old_A_B_exact_replay'].values() for x in z.values())
+          assert len(result['research_models'])==3
+          assert result['orders']==result['fills']==result['live_trades']==[]
+          assert not result['all_models_trade_approved'] and result['no_fixed_rr']
+          print('C98_OCT_REAL_SUMMARY',json.dumps({
+              'date':'2026-10-03--2026-10-26',
+              'new_zip_count':result['new_archive_count'],
+              'verification':result['verification'],
+              'model_results':{k:{'costs':v['cost_sensitivity'],
+                  'gate':v['gate'],'trades':len(v['trades'])}
+                 for k,v in result['research_models'].items()}},sort_keys=True),flush=True)
+          print('C98_OCT_REAL_SHA256',sha256(content).hexdigest(),'BYTES',len(content),flush=True)
+          print('C98_OCT_REAL_JSON_BEGIN')
+          print(content.decode('utf8'),end='')
+          print('C98_OCT_REAL_JSON_END')
+          PY
