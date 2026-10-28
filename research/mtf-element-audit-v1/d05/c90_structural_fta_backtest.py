@@ -130,7 +130,10 @@ def structure_at_signal(source,event,*,width=2):
     side=event["side"]
     if side not in ("LONG","SHORT"):
         raise C90Rejected("INVALID_SIDE")
-    lower=_decimal(event["poi_low"]);upper=_decimal(event["poi_high"])
+    try:
+        lower=_decimal(event["poi_low"]);upper=_decimal(event["poi_high"])
+    except C89Rejected as exc:
+        raise C90Rejected("NONFINITE_OR_INVALID_SOURCE_POI") from exc
     if not 0<lower<upper:
         raise C90Rejected("INVALID_1H_POI")
     h1=closed_tfs(past,signal,3600000)
