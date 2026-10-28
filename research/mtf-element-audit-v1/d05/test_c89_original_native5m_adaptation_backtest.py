@@ -44,7 +44,7 @@ class TestC89(unittest.TestCase):
  def test_05_long_stop_open_gap(self):
     b=list(B);b[20]=replace(b[20],o=D(96),h=D(97),l=D(95),c=D(96))
     # entry at 96, stop anchored below 96; no artificial existing stop fill
-    t=fake_outcome(tuple(b));self.assertEqual(t["entry"],"96")
+    t=fake_outcome(tuple(b),poi_low="94",poi_high="95");self.assertEqual(t["entry"],"96")
  def test_06_costs_reduce_net_result(self):
     a=_scenario_one(B,EVENT,rr=1.5,cost_bps=7)
     b=_scenario_one(B,EVENT,rr=1.5,cost_bps=25)
