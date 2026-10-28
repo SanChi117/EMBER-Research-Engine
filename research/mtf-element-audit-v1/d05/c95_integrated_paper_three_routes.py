@@ -97,29 +97,6 @@ def _play(candidate,*,priority=PRIORITY,global_one=True,limits=True):
     if sorted(priority)!=["A","B","C"]:raise C95Rejected("INVALID_ROUTE_PRIORITY")
     rank={k:i for i,k in enumerate(priority)}
     ordered=sorted(candidate,key=lambda x:(x["entry_ms"],rank[x["source_route"]],x["symbol"]))
-    chosen=[];busy_global=0;busy_by={}
-    dayloss=Counter();weekloss=Counter();rejects=Counter()
-    for t in ordered:
-        sym=t["symbol"];timestamp=t["entry_ms"];day,week=_period(timestamp)
-        if global_one and timestamp<busy_global:
-            rejects["GLOBAL_POSITION_OVERLAP"]+=1;continue
-        if timestamp<busy_by.get(sym,0):
-            rejects["PER_SYMBOL_POSITION_OVERLAP"]+=1;continue
-        # Maintain only REALIZED outcomes whose source positions would
-        # already be CLOSED when the next candidate arrives.
-        if limits and (dayloss[day]<=DAY_R_LIMIT or weekloss[week]<=WEEK_R_LIMIT):
-            rejects["PREDECLARED_DAILY_WEEKLY_STOP"]+=1;continue
-        chosen.append(t)
-        busy_by[sym]=t["exit_ms"]
-        if global_one:busy_global=t["exit_ms"]
-        # Realized credit will only be applied when trade exit was before
-        # subsequent candidate. Deferred chronological settlement below.
-        # For global_one this is safe; for per-symbol mode, schedule it.
-        pass
-    # Re-run to support correctly CAUSAL settlement across symbols, never
-    # credit exits in the future during decisions.
-    if not limits:return chosen,rejects
-    # Rebuild exact path with exit-based cash events.
     chosen=[];busy_global=0;busy_by={};rejects=Counter()
     active=[]
     dayloss=Counter();weekloss=Counter()
@@ -136,7 +113,7 @@ def _play(candidate,*,priority=PRIORITY,global_one=True,limits=True):
             rejects["GLOBAL_POSITION_OVERLAP"]+=1;continue
         if any(x["symbol"]==sym for x in active):
             rejects["PER_SYMBOL_POSITION_OVERLAP"]+=1;continue
-        if dayloss[day]<=DAY_R_LIMIT or weekloss[week]<=WEEK_R_LIMIT:
+        if limits and (dayloss[day]<=DAY_R_LIMIT or weekloss[week]<=WEEK_R_LIMIT):
             rejects["PREDECLARED_DAILY_WEEKLY_STOP"]+=1;continue
         active.append(t);chosen.append(t)
     return chosen,rejects
