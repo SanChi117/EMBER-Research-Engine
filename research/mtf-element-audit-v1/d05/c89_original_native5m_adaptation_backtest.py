@@ -56,7 +56,7 @@ def parse_original5m_csv(raw,symbol,*,allow_header=True):
         raise C89Rejected("CSV_SOURCE_BAD")
     out=[]
     try:
-        lines=raw.decode("utf8-sig").splitlines()
+        lines=raw.decode("utf-8-sig").splitlines()
         for n,r in enumerate(csv.reader(lines)):
             if not r:continue
             if n==0 and allow_header and r[0].lower().strip().startswith("open"):
