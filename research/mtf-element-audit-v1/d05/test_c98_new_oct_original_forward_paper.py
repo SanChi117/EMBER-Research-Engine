@@ -33,9 +33,9 @@ def fabricated_source(symbol="BTCUSDT",tf="5m",date="2026-10-03",*,bad_time=Fals
 def synthetic_prices():
     start=START_MS
     three=tuple(Original3mRow("BTCUSDT",start+i*THREE,start+(i+1)*THREE,
-             D(100),D(101),D(99),D(100),D(1),"f"*64,"f"*64)
+             D(100),D(101),D(99),D(100),D(3),"f"*64,"f"*64)
              for i in range((END_MS-START_MS)//THREE))
-    five=tuple(Bar(start+i*STEP,D(100),D(101),D(99),D(100),D(1))
+    five=tuple(Bar(start+i*STEP,D(100),D(101),D(99),D(100),D(5))
              for i in range((END_MS-START_MS)//STEP))
     return three,five
 def row(entry=START_MS+300000):
@@ -91,6 +91,7 @@ class TestC98(unittest.TestCase):
  def test_13_only_full_new_closed_scenarios(self):
     a=row()
     b=row(END_MS-STEP)
+    b["exit_ms"]=END_MS+STEP
     self.assertEqual(_only_forward([a,b]),[a])
  def test_14_unchanged_source_replay(self):
     a=row(START_MS-10*86400000)
@@ -115,9 +116,10 @@ class TestC98(unittest.TestCase):
     self.assertFalse(result["passes_new_oct_historical_screen"])
     self.assertIn("OOS_SAMPLE_BELOW_10",result["reasons"])
  def test_19_requires_25bps_positive_and_pf_over_1_2(self):
-    data=[{**row(entry=START_MS+i*10*STEP),"net_r":3 if i%2 else -2} for i in range(10)]
+    data=[{**row(entry=START_MS+i*10*STEP),"net_r":1 if i%2 else -2} for i in range(10)]
     r=_admission(_score_scenarios(data))
-    self.assertIn("OOS_PF_BELOW_1_2",r["reasons"]) if "OOS_PF_BELOW_1_2" in r["reasons"] else self.assertFalse(r["passes_new_oct_historical_screen"])
+    self.assertFalse(r["passes_new_oct_historical_screen"])
+    self.assertIn("OOS_PF_BELOW_1_2",r["reasons"])
  def test_20_deterministic_evidence_bytes(self):
     self.assertEqual(dumps({"b":2,"a":1}),dumps({"a":1,"b":2}))
 if __name__=="__main__":unittest.main()
