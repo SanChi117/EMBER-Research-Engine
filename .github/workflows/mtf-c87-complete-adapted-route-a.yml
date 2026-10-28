@@ -1,0 +1,61 @@
+name: EMBER C87 complete adapted Route A shadow gate independent QA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c87-complete-adapted-route-a.yml'
+      - 'research/mtf-element-audit-v1/d05/c87_adapted_route_a_shadow_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c87_adapted_route_a_shadow_gate.py'
+      - 'research/mtf-element-audit-v1/evidence/c87/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Full SHA ledger plus 60 original crypto/hostile shadow gate tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          cd d05
+          python -m unittest -v test_c87_adapted_route_a_shadow_gate 2>&1 | tee /tmp/c87
+          grep -Fq 'Ran 60 tests' /tmp/c87
+          grep -qx 'OK' /tmp/c87
+          cd ..
+          python - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c87_adapted_route_a_shadow_gate import serialize_witness,audit_witness
+          files=[
+          'evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json',
+          'evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json',
+          'evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json',
+          'evidence/c86/C86_ORIGINAL153_4H_1H_FIRST_TEST_SOURCE_RECEIPTS.json']
+          a,b,c,d=(Path(p).read_bytes() for p in files)
+          raw=serialize_witness(a,b,c,d)
+          f=Path('evidence/c87/C87_ADAPTED_ROUTE_A_ORIGINAL153_SHADOW_WITNESS.json')
+          if f.exists():
+              audit_witness(a,b,c,d,f.read_bytes())
+          x=json.loads(raw)
+          assert len(x['cases'])==153
+          assert x['summary']['priority']=={'0':12,'1':23,'2':71,'3':47}
+          assert x['summary']['orders']==x['summary']['trades']==0
+          assert x['policy']['evidence_class']=='ADAPTED_HYPOTHESIS'
+          print('C87_WITNESS_SHA256',hashlib.sha256(raw).hexdigest(),'BYTES',len(raw))
+          print('C87_WITNESS_BEGIN')
+          print(raw.decode('utf8'),end='')
+          print('C87_WITNESS_END')
+          PY
