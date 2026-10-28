@@ -50,4 +50,7 @@ jobs:
           if Path('evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json').exists():
               assert s==Path('evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json').read_bytes()
           print('C85_TEXT_IS_NOT_AUTH_CRYPTO_GOLDEN',len(s),hashlib.sha256(s).hexdigest())
+          print('C85_WITNESS_JSON_BEGIN')
+          print(s.decode('utf8'),end='')
+          print('C85_WITNESS_JSON_END')
           PY
