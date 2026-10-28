@@ -1,0 +1,63 @@
+name: EMBER C89 A158 independent final 158SHA real crypto adaptation backtest
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c89-A158-independent-final-158sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Full journal 158 SHA + 4 C89 evidence + full 266-suite C84-C89 regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ledger
+          grep -Fq 'entries 158 tip_sha256 4e016181a26d6c6f9b9590ee12b7a1b855508cda4f1de6e19bbb1e519c3b536d' /tmp/ledger
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          records=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf8').splitlines()]
+          assert len(records)==158
+          p,q=records[-2:]
+          assert p['seq']==157 and p['record_sha256']=='3f734ced81922a556a8f94bdfc87de29a161d89140e5370bb6e5ed1998154eb3'
+          assert q['action_id']=='A158' and q['prev_sha256']==p['record_sha256']
+          assert q['record_sha256']=='4e016181a26d6c6f9b9590ee12b7a1b855508cda4f1de6e19bbb1e519c3b536d'
+          assert q['cycle_result']=='PASSED_WITH_RESEARCH_EDGE_NOT_ESTABLISHED'
+          expected={
+            'd05/c89_original_native5m_adaptation_backtest.py':'c95c4b4d66fbeaf9f92d6cfa2f21fa75dc0fb8eb91e534b74372b5e52ff09d2c',
+            'd05/test_c89_original_native5m_adaptation_backtest.py':'a1f4178ca661858f7902222ea673b96e2f2365fc22c1f0aeee38384898e26825',
+            'evidence/c89/C89_REAL_ORIGINAL_NATIVE5M_EVENT_CONDITIONED_ADAPTATION_BACKTEST.json':'840549eabd1421107944be7b10b4c5c2166f1525115e1a04815fa60b08b31f74',
+            'cycles/B1_C89_ORIGINAL_BINANCE_ADAPTED_BACKTEST_AND_NEW_SOURCE_POLICY_REPORT_RU.md':'8957de1241fd7715cde663fde10d3d94a04a028322473fb828d26ec2e8c91dd1'}
+          assert set(expected)=={x['path'] for x in q['evidence']}
+          for x in q['evidence']:
+              b=Path(x['path']).read_bytes()
+              assert len(b)==x['bytes']
+              assert hashlib.sha256(b).hexdigest()==x['sha256']==expected[x['path']]
+          w=json.loads(Path('evidence/c89/C89_REAL_ORIGINAL_NATIVE5M_EVENT_CONDITIONED_ADAPTATION_BACKTEST.json').read_bytes())
+          assert len(w['verified_5m_archives'])==15
+          assert sum(x['bars'] for x in w['verified_5m_archives'])==46080
+          assert w['preselected_p0_events']==12
+          assert w['results']['rr1.5_roundtrip14bps']['all_source_preselected']['net_total_r']==-0.130259
+          assert w['results']['rr2.0_roundtrip14bps']['all_source_preselected']['net_total_r']==-4.390123
+          assert w['data_partition']['late_not_independent_OOS'] is True
+          assert w['no_realtime_orders'] is True
+          print('C89_A158_ORIGINAL_MARKET_REPRODUCIBLE_CONDITIONAL_BACKTEST_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest 2>&1 | tee /tmp/full
+          grep -Fq 'Ran 266 tests' /tmp/full
+          grep -qx 'OK' /tmp/full
+          echo C89_A158_FINAL_PASS_NO_PROFIT_EDGE_ASSERTED
