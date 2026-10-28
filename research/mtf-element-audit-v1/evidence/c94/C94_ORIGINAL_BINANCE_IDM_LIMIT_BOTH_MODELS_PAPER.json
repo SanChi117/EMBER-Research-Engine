@@ -1,0 +1,829 @@
+{
+  "all": {
+    "avg_net_r": -0.293846,
+    "baseline_equity_units": 100,
+    "count": 15,
+    "max_drawdown_units_for_1R_equals_1_equity_unit_pct": 4.4077,
+    "profit_factor": 0.48671,
+    "total_net_r": -4.407697,
+    "win_rate_pct": 33.333
+  },
+  "by_symbol": {
+    "BCHUSDT": {
+      "native5m_bars": 53280,
+      "rejections": {
+        "B1_IDM_DERIVED_RR_ONLY_FILTER": 1,
+        "B1_NO_FRESH_FRACTAL_IDM_LIMIT": 45,
+        "B1_NO_PREKNOWN_4H_FTA": 1,
+        "B2_4H_FIRST_TEST_ABSENT": 20,
+        "B2_NO_FRESH_FRACTAL_IDM_LIMIT": 8,
+        "CONTEXT_W1_D1_NOT_ALIGNED": 150,
+        "IDM_LIMIT_NOT_FILLED_TTL": 4
+      },
+      "states": {
+        "4H_VC_POI_CREATED": 53,
+        "B1_IDM_LIMIT_PLANNED": 6,
+        "B2_IDM_LIMIT_PLANNED": 2,
+        "B_IDM_LIMIT_FILLED_PAPER": 4
+      },
+      "symbol": "BCHUSDT",
+      "trades": [
+        {
+          "derived_rr": 3.157191,
+          "entry": "457.74",
+          "entry_ms": 1778466600000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1778509800000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "489.13",
+          "fta_confirmed_ms": 1778083200000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1778457600000,
+          "limit_filled": true,
+          "net_r": -0.916949,
+          "readiness": "PAPER_ONLY",
+          "route": "B_4H_IMB_POI_TO_1H_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1778457600000,
+          "source_tf": "NATIVE_5M",
+          "stop": "447.8366785714285714285714286",
+          "stronghl_confirmed_ms": 1778371200000,
+          "symbol": "BCHUSDT",
+          "target": "489.0066785714285714285714286"
+        },
+        {
+          "derived_rr": 1.860297,
+          "entry": "191.35",
+          "entry_ms": 1782427500000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1782470700000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "180.61",
+          "fta_confirmed_ms": 1782360000000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1782417600000,
+          "limit_filled": true,
+          "net_r": -0.649223,
+          "readiness": "PAPER_ONLY",
+          "route": "B_4H_IMB_POI_TO_1H_IDM_LIMIT",
+          "side": "SHORT",
+          "signal_ms": 1782417600000,
+          "source_tf": "NATIVE_5M",
+          "stop": "197.0766785714285714285714286",
+          "stronghl_confirmed_ms": 1782417600000,
+          "symbol": "BCHUSDT",
+          "target": "180.6966785714285714285714286"
+        },
+        {
+          "derived_rr": 2.017673,
+          "entry": "245.19",
+          "entry_ms": 1783825500000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1783868700000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "250.00",
+          "fta_confirmed_ms": 1783814400000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1783824300000,
+          "limit_filled": true,
+          "net_r": -0.176144,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1783825200000,
+          "source_tf": "NATIVE_5M",
+          "stop": "242.8438214285714285714285714",
+          "stronghl_confirmed_ms": 1783825200000,
+          "symbol": "BCHUSDT",
+          "target": "249.9238214285714285714285714"
+        },
+        {
+          "derived_rr": 2.732154,
+          "entry": "257.23",
+          "entry_ms": 1788819300000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1788862500000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "274.34",
+          "fta_confirmed_ms": 1787860800000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1788804000000,
+          "limit_filled": true,
+          "net_r": 0.057868,
+          "readiness": "PAPER_ONLY",
+          "route": "B_4H_IMB_POI_TO_1H_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1788811200000,
+          "source_tf": "NATIVE_5M",
+          "stop": "251.0110714285714285714285714",
+          "stronghl_confirmed_ms": 1788796800000,
+          "symbol": "BCHUSDT",
+          "target": "274.2210714285714285714285714"
+        }
+      ]
+    },
+    "BTCUSDT": {
+      "native5m_bars": 53280,
+      "rejections": {
+        "B1_IDM_DERIVED_RR_ONLY_FILTER": 5,
+        "B1_NO_FRESH_FRACTAL_IDM_LIMIT": 49,
+        "B1_NO_PREKNOWN_4H_FTA": 2,
+        "B2_4H_FIRST_TEST_ABSENT": 15,
+        "B2_NESTED_1H_IMB_INSIDE_4H_IMB": 3,
+        "B2_NO_FRESH_FRACTAL_IDM_LIMIT": 11,
+        "CONTEXT_W1_D1_NOT_ALIGNED": 142,
+        "IDM_LIMIT_NOT_FILLED_TTL": 3
+      },
+      "states": {
+        "4H_VC_POI_CREATED": 58,
+        "B1_IDM_LIMIT_PLANNED": 2,
+        "B2_IDM_LIMIT_PLANNED": 4,
+        "B_IDM_LIMIT_FILLED_PAPER": 3
+      },
+      "symbol": "BTCUSDT",
+      "trades": [
+        {
+          "derived_rr": 2.063007,
+          "entry": "64199.00",
+          "entry_ms": 1782019200000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1782062400000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "66419.20",
+          "fta_confirmed_ms": 1781755200000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1782014400000,
+          "limit_filled": true,
+          "net_r": -0.133304,
+          "readiness": "PAPER_ONLY",
+          "route": "B_4H_IMB_POI_TO_1H_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1782014400000,
+          "source_tf": "NATIVE_5M",
+          "stop": "63127.1775",
+          "stronghl_confirmed_ms": 1782000000000,
+          "symbol": "BTCUSDT",
+          "target": "66410.1775"
+        },
+        {
+          "derived_rr": 1.595662,
+          "entry": "59432.30",
+          "entry_ms": 1782444900000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1782456000000,
+          "exit_reason": "STOP_FIRST_AFTER_LIMIT_TOUCH",
+          "fta": "58030.00",
+          "fta_confirmed_ms": 1782432000000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1782441900000,
+          "limit_filled": true,
+          "net_r": -1.097505,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "SHORT",
+          "signal_ms": 1782442800000,
+          "source_tf": "NATIVE_5M",
+          "stop": "60285.64678571428571428571429",
+          "stronghl_confirmed_ms": 1782432000000,
+          "symbol": "BTCUSDT",
+          "target": "58070.64678571428571428571429"
+        },
+        {
+          "derived_rr": 2.142356,
+          "entry": "63953.90",
+          "entry_ms": 1783735200000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1783778400000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "64691.90",
+          "fta_confirmed_ms": 1783411200000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1783723500000,
+          "limit_filled": true,
+          "net_r": 0.499683,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1783724400000,
+          "source_tf": "NATIVE_5M",
+          "stop": "63612.75464285714285714285714",
+          "stronghl_confirmed_ms": 1783724400000,
+          "symbol": "BTCUSDT",
+          "target": "64684.75464285714285714285714"
+        }
+      ]
+    },
+    "ETHUSDT": {
+      "native5m_bars": 53280,
+      "rejections": {
+        "B1_IDM_DERIVED_RR_ONLY_FILTER": 3,
+        "B1_IDM_STOP_CRYPTO_BOUNDS": 3,
+        "B1_NO_FRESH_FRACTAL_IDM_LIMIT": 39,
+        "B1_NO_PREKNOWN_4H_FTA": 3,
+        "B2_4H_FIRST_TEST_ABSENT": 14,
+        "B2_NESTED_1H_IMB_INSIDE_4H_IMB": 2,
+        "B2_NO_FRESH_FRACTAL_IDM_LIMIT": 15,
+        "CONTEXT_W1_D1_NOT_ALIGNED": 133,
+        "IDM_LIMIT_NOT_FILLED_TTL": 2
+      },
+      "states": {
+        "4H_VC_POI_CREATED": 51,
+        "B1_IDM_LIMIT_PLANNED": 3,
+        "B_IDM_LIMIT_FILLED_PAPER": 1
+      },
+      "symbol": "ETHUSDT",
+      "trades": [
+        {
+          "derived_rr": 1.771268,
+          "entry": "1720.30",
+          "entry_ms": 1781961600000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1782004800000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "1795.58",
+          "fta_confirmed_ms": 1781755200000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1781953200000,
+          "limit_filled": true,
+          "net_r": 0.294607,
+          "readiness": "PAPER_ONLY",
+          "route": "B_4H_IMB_POI_TO_1H_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1781956800000,
+          "source_tf": "NATIVE_5M",
+          "stop": "1677.933107142857142857142857",
+          "stronghl_confirmed_ms": 1781913600000,
+          "symbol": "ETHUSDT",
+          "target": "1795.343107142857142857142857"
+        }
+      ]
+    },
+    "SOLUSDT": {
+      "native5m_bars": 53280,
+      "rejections": {
+        "B1_IDM_STOP_CRYPTO_BOUNDS": 2,
+        "B1_NO_FRESH_FRACTAL_IDM_LIMIT": 38,
+        "B1_NO_PREKNOWN_4H_FTA": 1,
+        "B2_4H_FIRST_TEST_ABSENT": 9,
+        "B2_NESTED_1H_IMB_INSIDE_4H_IMB": 2,
+        "B2_NO_FRESH_FRACTAL_IDM_LIMIT": 8,
+        "CONTEXT_W1_D1_NOT_ALIGNED": 148,
+        "IDM_LIMIT_NOT_FILLED_TTL": 2
+      },
+      "states": {
+        "4H_VC_POI_CREATED": 42,
+        "B1_IDM_LIMIT_PLANNED": 1,
+        "B2_IDM_LIMIT_PLANNED": 3,
+        "B_IDM_LIMIT_FILLED_PAPER": 2
+      },
+      "symbol": "SOLUSDT",
+      "trades": [
+        {
+          "derived_rr": 1.846316,
+          "entry": "75.9000",
+          "entry_ms": 1784230500000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1784273700000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "74.0600",
+          "fta_confirmed_ms": 1784016000000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1784228400000,
+          "limit_filled": true,
+          "net_r": 1.330056,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "SHORT",
+          "signal_ms": 1784228400000,
+          "source_tf": "NATIVE_5M",
+          "stop": "76.88021428571428571428571429",
+          "stronghl_confirmed_ms": 1784224800000,
+          "symbol": "SOLUSDT",
+          "target": "74.09021428571428571428571429"
+        },
+        {
+          "derived_rr": 1.72086,
+          "entry": "76.6200",
+          "entry_ms": 1786537800000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1786543500000,
+          "exit_reason": "STOP_FIRST_AFTER_LIMIT_TOUCH",
+          "fta": "77.8800",
+          "fta_confirmed_ms": 1786348800000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1786531500000,
+          "limit_filled": true,
+          "net_r": -1.148153,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1786532400000,
+          "source_tf": "NATIVE_5M",
+          "stop": "75.89596428571428571428571429",
+          "stronghl_confirmed_ms": 1786528800000,
+          "symbol": "SOLUSDT",
+          "target": "77.86596428571428571428571429"
+        }
+      ]
+    },
+    "XRPUSDT": {
+      "native5m_bars": 53280,
+      "rejections": {
+        "B1_IDM_DERIVED_RR_ONLY_FILTER": 2,
+        "B1_NO_FRESH_FRACTAL_IDM_LIMIT": 40,
+        "B1_NO_PREKNOWN_4H_FTA": 1,
+        "B2_4H_FIRST_TEST_ABSENT": 11,
+        "B2_NO_FRESH_FRACTAL_IDM_LIMIT": 10,
+        "CONTEXT_W1_D1_NOT_ALIGNED": 146
+      },
+      "states": {
+        "4H_VC_POI_CREATED": 44,
+        "B1_IDM_LIMIT_PLANNED": 1,
+        "B2_IDM_LIMIT_PLANNED": 4,
+        "B_IDM_LIMIT_FILLED_PAPER": 5
+      },
+      "symbol": "XRPUSDT",
+      "trades": [
+        {
+          "derived_rr": 3.845849,
+          "entry": "1.2294",
+          "entry_ms": 1781616300000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1781620200000,
+          "exit_reason": "STOP_FIRST_AFTER_LIMIT_TOUCH",
+          "fta": "1.2930",
+          "fta_confirmed_ms": 1781582400000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1781596800000,
+          "limit_filled": true,
+          "net_r": -1.10478,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1781596800000,
+          "source_tf": "NATIVE_5M",
+          "stop": "1.212973571428571428571428571",
+          "stronghl_confirmed_ms": 1781586000000,
+          "symbol": "XRPUSDT",
+          "target": "1.292573571428571428571428571"
+        },
+        {
+          "derived_rr": 2.188873,
+          "entry": "1.0825",
+          "entry_ms": 1785326400000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1785340800000,
+          "exit_reason": "STOP_FIRST_AFTER_LIMIT_TOUCH",
+          "fta": "1.1163",
+          "fta_confirmed_ms": 1785139200000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1785307500000,
+          "limit_filled": true,
+          "net_r": -1.099031,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1785308400000,
+          "source_tf": "NATIVE_5M",
+          "stop": "1.067196785714285714285714286",
+          "stronghl_confirmed_ms": 1785308400000,
+          "symbol": "XRPUSDT",
+          "target": "1.115996785714285714285714286"
+        },
+        {
+          "derived_rr": 5.928281,
+          "entry": "1.0216",
+          "entry_ms": 1786511400000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1786554600000,
+          "exit_reason": "TIME_LIMIT",
+          "fta": "0.9886",
+          "fta_confirmed_ms": 1786492800000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1786506300000,
+          "limit_filled": true,
+          "net_r": 1.99725,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "SHORT",
+          "signal_ms": 1786507200000,
+          "source_tf": "NATIVE_5M",
+          "stop": "1.0271425",
+          "stronghl_confirmed_ms": 1786492800000,
+          "symbol": "XRPUSDT",
+          "target": "0.9887425"
+        },
+        {
+          "derived_rr": 3.346352,
+          "entry": "1.3938",
+          "entry_ms": 1788122400000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1788132000000,
+          "exit_reason": "STOP_FIRST_AFTER_LIMIT_TOUCH",
+          "fta": "1.4401",
+          "fta_confirmed_ms": 1787961600000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1788112800000,
+          "limit_filled": true,
+          "net_r": -1.14254,
+          "readiness": "PAPER_ONLY",
+          "route": "B_4H_IMB_POI_TO_1H_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1788120000000,
+          "source_tf": "NATIVE_5M",
+          "stop": "1.380110357142857142857142857",
+          "stronghl_confirmed_ms": 1788120000000,
+          "symbol": "XRPUSDT",
+          "target": "1.439610357142857142857142857"
+        },
+        {
+          "derived_rr": 3.448078,
+          "entry": "1.5663",
+          "entry_ms": 1790380800000,
+          "evidence": "ADAPTED_HYPOTHESIS",
+          "exit_ms": 1790401200000,
+          "exit_reason": "STOP_FIRST_AFTER_LIMIT_TOUCH",
+          "fta": "1.6299",
+          "fta_confirmed_ms": 1790380800000,
+          "fta_tf": "4h",
+          "idm_confirmed_ms": 1790380800000,
+          "limit_filled": true,
+          "net_r": -1.119532,
+          "readiness": "PAPER_ONLY",
+          "route": "B_1H_NEW_VC_TO_15M_IDM_LIMIT",
+          "side": "LONG",
+          "signal_ms": 1790380800000,
+          "source_tf": "NATIVE_5M",
+          "stop": "1.547955",
+          "stronghl_confirmed_ms": 1790366400000,
+          "symbol": "XRPUSDT",
+          "target": "1.629555"
+        }
+      ]
+    }
+  },
+  "early": {
+    "avg_net_r": -0.234869,
+    "baseline_equity_units": 100,
+    "count": 14,
+    "max_drawdown_units_for_1R_equals_1_equity_unit_pct": 3.60715,
+    "profit_factor": 0.55968,
+    "total_net_r": -3.288165,
+    "win_rate_pct": 35.714
+  },
+  "fills": [],
+  "fixed_rr_target": false,
+  "late_time_not_pristine_OOS": {
+    "avg_net_r": -1.119532,
+    "baseline_equity_units": 100,
+    "count": 1,
+    "max_drawdown_units_for_1R_equals_1_equity_unit_pct": 1.11953,
+    "profit_factor": 0.0,
+    "total_net_r": -1.119532,
+    "win_rate_pct": 0.0
+  },
+  "limit_fill_mandatory": true,
+  "live_trades": [],
+  "orders": [],
+  "original_archive_manifest": [
+    {
+      "bars": 8640,
+      "csv_sha256": "65ce318c8098e51aa3ab2408cbe700042e3c9ae095b2248e2bb3f0563a1d48a9",
+      "period": "2026-04",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-04.zip",
+      "zip_sha256": "e2934467bdb6a000124948f4c8fef176e2066520a6b2e5a0522450fed51396f7"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "780e4e56138eeed3970e9d69a5feedbe7c52fe02322564ded858693fafc9ea1e",
+      "period": "2026-05",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-05.zip",
+      "zip_sha256": "b1a73378796bb62084c32ca5865903beeaf87d521d950d5e7776343f682dea93"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "401ef34309db28705a30b23576510ea248f6fa16384f8e27322e75fa5cd18928",
+      "period": "2026-06",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-06.zip",
+      "zip_sha256": "782c555963c852ca768335de21d5743147e5d50bff449600f8fceb9ebe5273de"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "565ed25f0e9a4274e93f22dcd22b5ef4095d4c01a382890127947833d646fe0f",
+      "period": "2026-07",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-07.zip",
+      "zip_sha256": "ec750f7aa69c8f842fa1464a90ad4aa92452cfa767df9e8d70dc484e466c8fc3"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "2d40e3cfcbcc7d0d4b5463606c1effa9700645044f13706f618684793a7bfbd2",
+      "period": "2026-08",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-08.zip",
+      "zip_sha256": "14fd408e5d2902665c66b701e861b173568b66399e3fa462b94c766d209567d1"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "b846cc2a70c9d17a3275925f71e64ca5324f3f2ba947b11f374a9dc90b532272",
+      "period": "2026-04",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-04.zip",
+      "zip_sha256": "94c890bf844ef6c289bcf6d126869a39bbc457aac139a5e0b8cebdf2bef2e078"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "53ccaf0c7196bf3b2dfeccfff956828ed034dc195079c7501bc9b400b5fd85e3",
+      "period": "2026-05",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-05.zip",
+      "zip_sha256": "3a642e9db105c9002210fc4d7f5a99a527d6b52d63823ae17076c1e2d2578eda"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "b238849627530f31687f4308a98852f3fcffa393683c8f74fe54581d87b98256",
+      "period": "2026-06",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-06.zip",
+      "zip_sha256": "f26819283e11870b0b206acea9e084bcd7e3c6a5fb2abb8800ac5a424959e49d"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "80044e4f8f15c31a7519b468e23c7d8b66e0248e2045216b7d2b2736c239fe51",
+      "period": "2026-07",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-07.zip",
+      "zip_sha256": "2e9ba157f21fbcb97f108dd263d572cd0b4d6cc1db7cd54446f762f4ce3e6dda"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "9c17f4a357326c7ff54abe9ddf0297c305f299d2ac6e93834d04df6b420d49c4",
+      "period": "2026-08",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-08.zip",
+      "zip_sha256": "c7ac44cb1ac58dd231b1a94c9d68907e2b3a8079dbf2dd8a5e744a6234766d47"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "2d88504e5e3b487447de19d3e32cae4d64c5b6ec1e9da2d3bfe231225aea5939",
+      "period": "2026-04",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-04.zip",
+      "zip_sha256": "99625c8b89405c017813f60929161ddecc097646cf1280d05dcbf3ab882b13cd"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "528f7f565c8d67376a45d76badc88890fc3098e09482446d02a4f686b539d117",
+      "period": "2026-05",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-05.zip",
+      "zip_sha256": "c878f5d988b90a6562259c9b98d709946c3c48b55b7e9c08affebe967238c3e6"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "2ee3ed1b8ec507bd56569e9bf4fe9f4cd6f28bdc8ae60b3800092faf006aa1dd",
+      "period": "2026-06",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-06.zip",
+      "zip_sha256": "b1586ec5b540eb38bde1b39d3033f6cff16bb7e62a86f4775401a6134133acc3"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "d076c41ed711c0ba3069eb7d1183271ebcb3f08fc3cf02c88567b3999f34e84c",
+      "period": "2026-07",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-07.zip",
+      "zip_sha256": "3e23ff1f6b8e99bfa5220b88b17d6397cec91d666a6bf50e5469080d4aedf11f"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "a55e6d3467b7953af014d19b9009d5452284c4a399b573c21cb30c8787b182f6",
+      "period": "2026-08",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-08.zip",
+      "zip_sha256": "45a0adfe5568c062a1f218b3e1761a9637f4d7801db70a6ec321dfb389b08d32"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "871eacab95494b495696393b42027a7c45388bb2dd159e812c6cdc262715c37b",
+      "period": "2026-04",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-04.zip",
+      "zip_sha256": "1536b6bba6d2f7f59485ccc8c54380cf171fa3b8052b92085931eed2251d6af9"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "146c0462ba48e14b15ba6b93b98dea62436a7e8df5b7c2b196d173ebb5a63fc2",
+      "period": "2026-05",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-05.zip",
+      "zip_sha256": "75468a31d9fefea81e8c1e324b12638363d4cbf119636d88ef8b03182edb1899"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "69dac3e90efb8bfaf856e31dcbe973f64ba6d9690f9fe7aee75ec98d682a99e6",
+      "period": "2026-06",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-06.zip",
+      "zip_sha256": "1947d7172e0b57b2a28cfe0ac764e9d6ab6bc66e4f19a2ce2295fd049f51660c"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "d1f4742d37fa331e464d7ad678a289a3db84efb96636a7df3bedc559dd6aae3d",
+      "period": "2026-07",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-07.zip",
+      "zip_sha256": "86d57a59df3c9b6bf5fc4dd58a43c2350bdbec6c2ee7d9612b041486c62b53b7"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "fb4c8fb52e7a302e22ab752ab5cce7bdb524d40d1eba1d06676cabdbbc9c1ae1",
+      "period": "2026-08",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-08.zip",
+      "zip_sha256": "30539f77458fa0214befcb739988ccf7c56acfcc3f561573a914315dd459f582"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "674fcd31fbca23b060fd2c04e39c5b4faf50e593a385b162cbe39fecd6197d6b",
+      "period": "2026-04",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-04.zip",
+      "zip_sha256": "db827ab0552fe335af5bc9bbd4845166eacfe4622813f8f1db85994883fda234"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "a43692af004dd23a86f500fc7cc9e18c2202547060424b4275f5ac47ffa4f803",
+      "period": "2026-05",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-05.zip",
+      "zip_sha256": "59db5aa78e4dd094de3cf0d589914a5179e284ddde3775e80306f4f500860e64"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "86dbd8555291fcb983ab2b79f9cc43b31af8ca3551b57cea7d80c5ae1e66d1ce",
+      "period": "2026-06",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-06.zip",
+      "zip_sha256": "1230589afeb6a74fd41c0b62bd5210b3cefc2a4cbd840fa19f06fde93c66c491"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "ab5123ce1a533d0c7f09c653ee122d0aa1132c0e051fe0007ca3d15a061be85f",
+      "period": "2026-07",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-07.zip",
+      "zip_sha256": "ec311e3705294099928d95da72c994cc4fc9fc9e6b9f281df7a2444355818390"
+    },
+    {
+      "bars": 8928,
+      "csv_sha256": "07b10882baff328ed45e0220ee9031cac41b3fc29458edfd8f84cdd633d6f6b8",
+      "period": "2026-08",
+      "source": "BINANCE_USDM_PROVIDER_CHECKSUM",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-08.zip",
+      "zip_sha256": "da70365c0c8fd99b737bcd0854fd53eff6faff6e6c95f7062f80859711dcf819"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "66054a58784bcefdf21b8956c4a4c8b21892102dae94b6192816031b7c2aad0b",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BCHUSDT/5m/BCHUSDT-5m-2026-09.zip",
+      "zip_sha256": "ef907f82e34e329d818ed16585835c283d72dcaea847a67d7eaeec7df59c6ec4"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "b8d98a4f08dab46cb199c9a2f8955eca627014107c687072899f16ae2033fae6",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/5m/BCHUSDT-5m-2026-10-01.zip",
+      "zip_sha256": "3792c72f18f5292a6e036380f4856213c3441884ad9ae7b0dd1aba8d20f02168"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "e09a883ca3f08c9e166cc76eecf07a1450a9446cbf237026007f967582e1c269",
+      "symbol": "BCHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BCHUSDT/5m/BCHUSDT-5m-2026-10-02.zip",
+      "zip_sha256": "3dac40988e662c5f7e008236150cd6288e5026f0ec30e2c851915e2fc68b0030"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "352ed47646f15de25b327958b7fc0ccc767b6fbf5586fe9041d947ca7844fb8c",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+      "zip_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "77f4af057831db20ac57bfc50fee3c73a63d0b474d21c89e08d51ec1f2588243",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2026-10-01.zip",
+      "zip_sha256": "10cd0734819af381d7cd032c84ba4a9a080a57bba1f97e8e71d45a16f27b067e"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "14dc88dd66d78f44b73daa9243d62e35d539ace64d26adb0ba4b32aefb599c73",
+      "symbol": "BTCUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/5m/BTCUSDT-5m-2026-10-02.zip",
+      "zip_sha256": "2a492563746eba6c3689b90c00a081bfce3ceab86a06493e80f22c4d55e8c7ea"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "b83b1a75024d51f8b34b1edc69e4d393e913224393fd29bd095879619af490d7",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-09.zip",
+      "zip_sha256": "143312487ffcc01c174156343fbf05ea48cbfa4e4602937caafb3e0ad3dbca9a"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "a8062ebf5849dd5773dc4490b0bd892084407a93d9a4354a6a257556150bef71",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/5m/ETHUSDT-5m-2026-10-01.zip",
+      "zip_sha256": "3dcf98cdbcf8e8a1d5bad7c454509b2e73dba82b34aad841b8c277cbe2be620b"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "fd31423b1efc2aa3dd5831168a2e34836b1154a2c1d25dbe01ba3a1e13c1827c",
+      "symbol": "ETHUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/ETHUSDT/5m/ETHUSDT-5m-2026-10-02.zip",
+      "zip_sha256": "531c33307bf9a355cc9f1f364c77d394940f0bca68b4e69f3e3dfac771dcc39b"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "83adfa31de378a36fdd3cbe7d420d689fceb1d8ce3e1d3c99988ae00888413a7",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-09.zip",
+      "zip_sha256": "9b71841a30ba4e98cab7c3591240dcfccba0efde6889785b586f9af1e84079fe"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "875f77cb4930c7cfc9c1dee575101d32c1a4aef58fe0f15ea7308dd08b2ad33d",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/5m/SOLUSDT-5m-2026-10-01.zip",
+      "zip_sha256": "58ec1fc806b22c2c7ceee394ca5737ab04d10f508c0197610bdba408868ee3b0"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "c915afde158d27eb2d5292e2d0c351d399c029011544b384f590ea478c9acdd3",
+      "symbol": "SOLUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/SOLUSDT/5m/SOLUSDT-5m-2026-10-02.zip",
+      "zip_sha256": "878c1d9ca3d244e63255fe70ce085c0907be6ec80c7caf98264052aca170fe81"
+    },
+    {
+      "bars": 8640,
+      "csv_sha256": "9ccc4e6f789d63f3f56f7edbf17cffaed2e0f58580e4f34c5e939aa5123f632b",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/XRPUSDT/5m/XRPUSDT-5m-2026-09.zip",
+      "zip_sha256": "0feab324d90dc5a88c58e2e3c443101b517849d6fcfcc11e341da9ca84a71ec9"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "e9bcdd098d1b6da222972a24587a7c2b51fc528b62e7ebccbb6b1fc1b34250c7",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/5m/XRPUSDT-5m-2026-10-01.zip",
+      "zip_sha256": "43ee37d87b1ae4881ccbd09a003505121259b7209c8be036e8bd3872d687aba3"
+    },
+    {
+      "bars": 288,
+      "csv_sha256": "39713a221c33e1c4ab9be8c62f26a03a602480085e8971c8b3f67b8ba4bea9d1",
+      "symbol": "XRPUSDT",
+      "url": "https://data.binance.vision/data/futures/um/daily/klines/XRPUSDT/5m/XRPUSDT-5m-2026-10-02.zip",
+      "zip_sha256": "dbad8bb5de24bb132dbc2b2c6883528b9e59c156100e8aeac785c6f4061d64ca"
+    }
+  ],
+  "original_bars": 266400,
+  "owner_rule": "4H VC ->1H IDM limit /1H new VC->15m IDM limit, protected StrongHL SL, 4H FTA",
+  "readiness": "PAPER_RESEARCH_NOT_TRADE_READY",
+  "route_counts": {
+    "B_1H_NEW_VC_TO_15M_IDM_LIMIT": 9,
+    "B_4H_IMB_POI_TO_1H_IDM_LIMIT": 6
+  },
+  "route_status": "ADAPTED_HYPOTHESIS_IDM_NO_LTF_FINAL_VC",
+  "schema": "C94_INDEPENDENT_ROUTE_B_IDM_5M_LIMIT_PAPER"
+}
