@@ -43,7 +43,7 @@ def validate_calendar(source,symbol,*,minimum_end=EVAL_END):
         raise C96Rejected("NON_NATIVE_CLOSED5M_SOURCE")
     if any(a.close_ms!=b.open_ms for a,b in zip(source,source[1:])):
         raise C96Rejected("ORIGINAL_MARKET_CALENDAR_GAP")
-    if source[-1].close_ms<minimum_end:
+    if source[-1].close_ms<max(minimum_end,EVAL_START):
         raise C96Rejected("INSUFFICIENT_CLOSED_SOURCE_HORIZON")
     # Explicit 8 fully-closed UTC/Monday weeks, 56 full days as-of eval.
     days=(EVAL_START-CANONICAL_START)//D1
@@ -71,7 +71,7 @@ def _complete(trades,cutoff,embargo,*,eval_start=EVAL_START):
          t["entry_ms"]+embargo<=cutoff and t["exit_ms"]<=cutoff),
       key=lambda x:(dict(x)["entry_ms"],dict(x)["symbol"],dict(x)["route"]))
 
-def prefix_test(full,prefix,model,cutoff=PREFIX_CUTOFF):
+def prefix_test(full,prefix,model,cutoff=PREFIX_CUTOFF,*,full_outputs=None):
     """Same immutable anchor, different future-suffix availability.
 
     Must compare complete trade signatures, not just counts or PnL.
@@ -88,7 +88,7 @@ def prefix_test(full,prefix,model,cutoff=PREFIX_CUTOFF):
         if prefix[sym][-1].close_ms!=cutoff:
             raise C96Rejected("PREFIX_NOT_CLOSED_AT_BOUNDARY")
         run=discover_a if model=="A" else discover_b
-        whole=run(full[sym],sym)
+        whole=run(full[sym],sym) if full_outputs is None else full_outputs[sym]
         partial=run(prefix[sym],sym)
         embargo=A_EMBARGO if model=="A" else B_EMBARGO
         left=_complete(whole["trades"],cutoff,embargo)
@@ -102,7 +102,8 @@ def prefix_test(full,prefix,model,cutoff=PREFIX_CUTOFF):
     return {"model":model,"boundary_ms":cutoff,
             "embargo_ms":A_EMBARGO if model=="A" else B_EMBARGO,
             "by_symbol":full_by_symbol,
-            "all_consistent":all(x["consistent"] for x in full_by_symbol.values())}
+            "all_consistent":all(x["consistent"] for x in full_by_symbol.values()),
+            "uses_source_pinned_full_results":full_outputs is not None}
 
 def anchor_comparison(full,source_only_sep):
     """Explain the actual 1-vs-2 difference WITHOUT pretending unchanged
