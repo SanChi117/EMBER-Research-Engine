@@ -41,7 +41,7 @@ class TestC99(unittest.TestCase):
    _window(self.source,when("2026-10-28"))
  def test_06_source_misalignment_rejected(self):
   from dataclasses import replace
-  x=list(self.source);x[17]=replace(x[17],known_ms=x[17].known_ms+THREE)
+  x=list(self.source);i=7*480+17;x[i]=replace(x[i],known_ms=x[i].known_ms+THREE)
   with self.assertRaises(C99Rejected):
    _window(tuple(x),when("2026-10-10"))
  def test_07_matching_preknown_trade_invariant(self):
