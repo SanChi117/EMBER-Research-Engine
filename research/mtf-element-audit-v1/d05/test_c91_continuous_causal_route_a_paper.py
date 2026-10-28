@@ -16,7 +16,7 @@ def h(start,op=100,high=101,low=99,close=100,tf=HOUR):
  return OHLC(start,start+tf,D(op),D(high),D(low),D(close),D(10))
 def p(side="LONG"):
  return {"stop":D("98") if side=="LONG" else D("102"),
- "target":D("104") if side=="LONG" else D("96"),"fta":D("104") if side=="LONG" else D("96")}
+ "target":D("104") if side=="LONG" else D("96"),"fta":D("104") if side=="LONG" else D("96"),"fta_tf":"1h"}
 class TestC91(unittest.TestCase):
  def test_01_continuous_15m_closed(self):
   q=_aggregate(B,3*STEP)
