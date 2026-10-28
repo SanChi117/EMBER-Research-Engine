@@ -1,0 +1,90 @@
+name: EMBER C90 structural FTA repair no fixed RR Binance replay
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c90-structural-FTA-repair.yml'
+      - 'research/mtf-element-audit-v1/d05/c90_structural_fta_backtest.py'
+      - 'research/mtf-element-audit-v1/d05/test_c90_structural_fta_backtest.py'
+      - 'research/mtf-element-audit-v1/evidence/c90/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  structural-negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 36 source-structural time-safe negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c90_structural_fta_backtest 2>&1 | tee /tmp/c90
+          grep -Fq 'Ran 36 tests' /tmp/c90
+          grep -qx 'OK' /tmp/c90
+  true-binance-structural-replay:
+    runs-on: ubuntu-latest
+    needs: [structural-negative-tests]
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source-pinned 15 Binance USD-M archives -> actual structural targets and derived RR
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,sys
+          sys.path.insert(0,'d05')
+          from c89_original_native5m_adaptation_backtest import load_original_native5m
+          from c90_structural_fta_backtest import diagnostic,dumps
+          p=lambda s:Path('evidence/'+s).read_bytes()
+          c73=p('c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json')
+          c72=p('c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json')
+          c81=p('c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json')
+          c86=p('c86/C86_ORIGINAL153_4H_1H_FIRST_TEST_SOURCE_RECEIPTS.json')
+          c87=p('c87/C87_ADAPTED_ROUTE_A_ORIGINAL153_SHADOW_WITNESS.json')
+          source,manifest=load_original_native5m(c73)
+          out=diagnostic(c73,c72,c81,c86,c87,source,manifest)
+          raw=dumps(out)
+          frozen=Path('evidence/c90/C90_STRUCTURAL_FTA_NATIVE_BINANCE_REPLAY.json')
+          if frozen.exists():assert frozen.read_bytes()==raw,'C90_FROZEN_STRUCTURE_MISMATCH'
+          assert out['never_fixed_rr_to_construct_target']
+          assert out['derived_rr_is_filter_only']
+          assert out['preselected_events']==12
+          assert len(out['market_archive_manifest'])==15
+          for model in out['models'].values():
+              assert len(model['all_plans'])==12
+              for p in model['all_plans']:
+                  if p['status']=='STRUCTURAL_PLAN_PAPER':
+                      assert p['fta_tf']=='1h' and p['stronghl_tf']=='15m'
+                      assert p['derived_rr']>=1.25
+              for entry in model['results'].values():
+                  for t in entry['hypothetical_trades']:
+                      assert t['entry_open_ms']==t['signal_ms']
+                      assert t['fta_confirmed_ms']<=t['signal_ms']
+                      assert t['stronghl_confirmed_ms']<=t['signal_ms']
+                      assert t['status']=='CLOSED_HYPOTHETICAL_PAPER'
+          print('C90_REAL_STRUCTURAL_SHA256',hashlib.sha256(raw).hexdigest(),'BYTES',len(raw))
+          print('C90_REAL_STRUCTURAL_SUMMARY',json.dumps({
+            name:{"rejects":value['rejections'],
+                  "14bps":{x:y for x,y in value['results']['roundtrip_14bps'].items() if x!='hypothetical_trades'}}
+            for name,value in out['models'].items()},sort_keys=True))
+          print('C90_REAL_JSON_BEGIN')
+          print(raw.decode('utf8'),end='')
+          print('C90_REAL_JSON_END')
+          PY
