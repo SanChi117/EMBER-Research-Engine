@@ -1,0 +1,76 @@
+name: EMBER C89 real Binance 5m adaptation conditional backtest
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c89-real-native5m-adaptation-backtest.yml'
+      - 'research/mtf-element-audit-v1/d05/c89_original_native5m_adaptation_backtest.py'
+      - 'research/mtf-element-audit-v1/d05/test_c89_original_native5m_adaptation_backtest.py'
+      - 'research/mtf-element-audit-v1/evidence/c89/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit-negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Ledger and 32 anti-lookahead/risk/integrity unit tests
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c89_original_native5m_adaptation_backtest 2>&1 | tee /tmp/c89tests
+          grep -Fq 'Ran 32 tests' /tmp/c89tests
+          grep -qx 'OK' /tmp/c89tests
+  real-source-conditional:
+    runs-on: ubuntu-latest
+    needs: [unit-negatives]
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download exact 15 SHA-pinned native Binance USD-M 5m ZIP + CHECKSUM then falsify
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          from pathlib import Path
+          import sys,json,hashlib
+          sys.path.insert(0,'d05')
+          from c89_original_native5m_adaptation_backtest import load_original_native5m,diagnostic,dump_result
+          a=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          b=Path('evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json').read_bytes()
+          c=Path('evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json').read_bytes()
+          d=Path('evidence/c86/C86_ORIGINAL153_4H_1H_FIRST_TEST_SOURCE_RECEIPTS.json').read_bytes()
+          e=Path('evidence/c87/C87_ADAPTED_ROUTE_A_ORIGINAL153_SHADOW_WITNESS.json').read_bytes()
+          markets,manifest=load_original_native5m(a)
+          w=diagnostic(a,b,c,d,e,markets,manifest)
+          out=dump_result(w)
+          frozen=Path('evidence/c89/C89_REAL_ORIGINAL_NATIVE5M_EVENT_CONDITIONED_ADAPTATION_BACKTEST.json')
+          if frozen.exists():
+              assert out==frozen.read_bytes(), 'FROZEN_C89_BACKTEST_DIFFERS'
+          assert w['preselected_p0_events']==12
+          assert len(w['verified_5m_archives'])==15
+          assert len(w['results'])==6
+          assert not w['owner_semantics_verified'] and w['no_realtime_orders']
+          print('C89_REAL_BACKTEST_SHA256',hashlib.sha256(out).hexdigest(),'BYTES',len(out))
+          print('C89_REAL_SUMMARY',json.dumps({
+             k:{"early":v["train"],"late":v["late_coverage"],"rejections":v["rejections"]}
+             for k,v in w["results"].items()
+          },sort_keys=True))
+          print('C89_REAL_JSON_BEGIN')
+          print(out.decode('utf8'),end='')
+          print('C89_REAL_JSON_END')
+          PY
