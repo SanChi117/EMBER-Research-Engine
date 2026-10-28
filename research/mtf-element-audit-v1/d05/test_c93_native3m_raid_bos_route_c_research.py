@@ -67,15 +67,15 @@ class TestC93(unittest.TestCase):
   self.assertIsNone(_atr3m(R,4))
  def test_13_structural_stop_first_even_when_fta_touched(self):
   m=list(R);m[30]=row(30,hi="113",lo="95")
-  t,reason=_paper_fill(tuple(m),30,"SHORT",D("112"),D("96"),pivot(),raid())
+  t,reason=_paper_fill(tuple(m),30,"SHORT",D("102"),D("96"),pivot(),raid())
   self.assertEqual(reason,"OK");self.assertEqual(t["exit_reason"],"STOP_FIRST_SAME_3M")
   self.assertLess(t["net_r"],0)
  def test_14_structural_fta_return(self):
   m=list(R);m[30]=row(30,hi="101",lo="95")
-  t,_=_paper_fill(tuple(m),30,"SHORT",D("112"),D("96"),pivot(),raid())
+  t,_=_paper_fill(tuple(m),30,"SHORT",D("102"),D("96"),pivot(),raid())
   self.assertEqual(t["exit_reason"],"1H_FTA")
  def test_15_target_not_fixed_rr(self):
-  t,_=_paper_fill(R,30,"SHORT",D("112"),D("96"),pivot(),raid())
+  t,_=_paper_fill(R,30,"SHORT",D("102"),D("96"),pivot(),raid())
   self.assertEqual(t["target"],"96")
   self.assertNotEqual(t["derived_rr"],1.5)
  def test_16_low_rr_reject_without_moving_fta(self):
@@ -83,14 +83,14 @@ class TestC93(unittest.TestCase):
   self.assertIsNone(x);self.assertEqual(why,"DERIVED_RR_ONLY_FILTER")
  def test_17_structural_gap_invalid(self):
   m=list(R);m[30]=row(30,op="113",hi="114",lo="112",cl="113")
-  x,why=_paper_fill(tuple(m),30,"SHORT",D("112"),D("96"),pivot(),raid())
+  x,why=_paper_fill(tuple(m),30,"SHORT",D("102"),D("96"),pivot(),raid())
   self.assertIsNone(x);self.assertEqual(why,"ENTRY_GAP_INVALID_STRUCTURE")
  def test_18_unverified_future_fta_rejected(self):
   s=replace(pivot(),confirmed_ms=R[31].known_ms)
   with self.assertRaises(C93Rejected):
-   _paper_fill(R,30,"SHORT",D("112"),D("96"),s,raid())
+   _paper_fill(R,30,"SHORT",D("102"),D("96"),s,raid())
  def test_19_fee_positive(self):
-  t,_=_paper_fill(R,30,"SHORT",D("112"),D("96"),pivot(),raid())
+  t,_=_paper_fill(R,30,"SHORT",D("102"),D("96"),pivot(),raid())
   self.assertLess(t["net_r"],0)
  def test_20_no_market_orders(self):
   self.assertEqual(EVIDENCE,"ADAPTED_HYPOTHESIS")
