@@ -1,0 +1,130 @@
+{
+  "anchor_rejects_5_SEP_only": {
+    "april_anchored_eval_begin": "2026-06-15",
+    "disclaimer": "Canonical April anchor is source-comparison contract, NOT an optimized trading parameter.",
+    "five_rejected": [
+      {
+        "reason": "CANONICAL_2026_04_01_ANCHOR_REQUIRED",
+        "symbol": "BCHUSDT"
+      },
+      {
+        "reason": "CANONICAL_2026_04_01_ANCHOR_REQUIRED",
+        "symbol": "BTCUSDT"
+      },
+      {
+        "reason": "CANONICAL_2026_04_01_ANCHOR_REQUIRED",
+        "symbol": "ETHUSDT"
+      },
+      {
+        "reason": "CANONICAL_2026_04_01_ANCHOR_REQUIRED",
+        "symbol": "SOLUSDT"
+      },
+      {
+        "reason": "CANONICAL_2026_04_01_ANCHOR_REQUIRED",
+        "symbol": "XRPUSDT"
+      }
+    ],
+    "standalone_sep_start_is_rejected": true
+  },
+  "original_full_native5m_bars": 266400,
+  "ready_for_live": false,
+  "route_A": {
+    "all_consistent": true,
+    "boundary_ms": 1788220800000,
+    "by_symbol": {
+      "BCHUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 5,
+        "full_trade_signatures_sha256": "1f4b18ec8669442f502ce5ff67823114b0d5745fe6e0297185bac2f70681adb4",
+        "prefix": 5,
+        "prefix_trade_signatures_sha256": "1f4b18ec8669442f502ce5ff67823114b0d5745fe6e0297185bac2f70681adb4"
+      },
+      "BTCUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 4,
+        "full_trade_signatures_sha256": "a0cbe0bf5964b0f116611f49d04e81dd4693f8b37f2ec08b42652f048b9a2ebd",
+        "prefix": 4,
+        "prefix_trade_signatures_sha256": "a0cbe0bf5964b0f116611f49d04e81dd4693f8b37f2ec08b42652f048b9a2ebd"
+      },
+      "ETHUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 1,
+        "full_trade_signatures_sha256": "89a1b1bbe578306b7fb08e373e41a57ae4ba102234ecda4f9cc6846abe6c1902",
+        "prefix": 1,
+        "prefix_trade_signatures_sha256": "89a1b1bbe578306b7fb08e373e41a57ae4ba102234ecda4f9cc6846abe6c1902"
+      },
+      "SOLUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 4,
+        "full_trade_signatures_sha256": "8c7b671230aad3446daaefb9274f86697edc29a4c8aa3b53b7e35295a84e978b",
+        "prefix": 4,
+        "prefix_trade_signatures_sha256": "8c7b671230aad3446daaefb9274f86697edc29a4c8aa3b53b7e35295a84e978b"
+      },
+      "XRPUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 4,
+        "full_trade_signatures_sha256": "a199218b9dfb01fa5e4173d8192b8df40f94f56a4057f18aa1d9054cd3093f74",
+        "prefix": 4,
+        "prefix_trade_signatures_sha256": "a199218b9dfb01fa5e4173d8192b8df40f94f56a4057f18aa1d9054cd3093f74"
+      }
+    },
+    "embargo_ms": 43200000,
+    "model": "A",
+    "uses_source_pinned_full_results": true
+  },
+  "route_B": {
+    "all_consistent": true,
+    "boundary_ms": 1788220800000,
+    "by_symbol": {
+      "BCHUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 2,
+        "full_trade_signatures_sha256": "7f57a732a18cdaf5036c334a67bcd64a6476646db70372e8f4c4835be8950904",
+        "prefix": 2,
+        "prefix_trade_signatures_sha256": "7f57a732a18cdaf5036c334a67bcd64a6476646db70372e8f4c4835be8950904"
+      },
+      "BTCUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 3,
+        "full_trade_signatures_sha256": "374ee560019b9416db4712940b09c4796e98860afba5a32f7293d235c3028ecf",
+        "prefix": 3,
+        "prefix_trade_signatures_sha256": "374ee560019b9416db4712940b09c4796e98860afba5a32f7293d235c3028ecf"
+      },
+      "ETHUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 1,
+        "full_trade_signatures_sha256": "e429ae107d17f6894c1f840cb31434e51c06002f78d68f03303c20cef8f99795",
+        "prefix": 1,
+        "prefix_trade_signatures_sha256": "e429ae107d17f6894c1f840cb31434e51c06002f78d68f03303c20cef8f99795"
+      },
+      "SOLUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 2,
+        "full_trade_signatures_sha256": "6c98973b582e75cc96568482305a977ecdbb524e6d23d8907b4f33e092f508e8",
+        "prefix": 2,
+        "prefix_trade_signatures_sha256": "6c98973b582e75cc96568482305a977ecdbb524e6d23d8907b4f33e092f508e8"
+      },
+      "XRPUSDT": {
+        "consistent": true,
+        "first_mismatched": null,
+        "full": 4,
+        "full_trade_signatures_sha256": "936e8c737954bdac9194a54862cee97055cdac132d7cd53cd7cba181297d720a",
+        "prefix": 4,
+        "prefix_trade_signatures_sha256": "936e8c737954bdac9194a54862cee97055cdac132d7cd53cd7cba181297d720a"
+      }
+    },
+    "embargo_ms": 72000000,
+    "model": "B",
+    "uses_source_pinned_full_results": true
+  },
+  "schema": "EMBER_C96_ORIGINAL_SOURCE_ANCHOR_AND_PREFIX_INVARIANCE"
+}
