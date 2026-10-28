@@ -1,0 +1,83 @@
+name: EMBER C87-C88 A157 independent final 157SHA complete adaptation test
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c87-c88-A157-independent-final-157sha.yml'
+permissions:
+  contents: read
+jobs:
+  final:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Canonical 157SHA chain, 7 immutable sources, 234 tests and source-to-exit parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/a157
+          grep -Fq 'entries 157 tip_sha256 3f734ced81922a556a8f94bdfc87de29a161d89140e5370bb6e5ed1998154eb3' /tmp/a157
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          journal=[json.loads(s) for s in Path('ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text(encoding='utf8').splitlines()]
+          assert len(journal)==157
+          prev,new=journal[-2:]
+          assert prev['seq']==156 and prev['record_sha256']=='c72f6f1f86b6f8d4e864c44ef20506549f795459d82764e617081510d768502a'
+          assert new['seq']==157 and new['action_id']=='A157' and new['cycle']=='B1/C87-C88'
+          assert new['prev_sha256']==prev['record_sha256']
+          assert new['record_sha256']=='3f734ced81922a556a8f94bdfc87de29a161d89140e5370bb6e5ed1998154eb3'
+          expected={
+          'd05/c87_adapted_route_a_shadow_gate.py':'72e2b2ad940666e505a9c594dae9f89b3450a10b01558c487ce7a78b101b2653',
+          'd05/test_c87_adapted_route_a_shadow_gate.py':'cb794bac8169a684678989c9066b854aa61f84616c1e9fc44a2db1393632f218',
+          'evidence/c87/C87_ADAPTED_ROUTE_A_ORIGINAL153_SHADOW_WITNESS.json':'2e51a2d40f1efeafcff1568eb2391063be6b070e7100fa99e382e4f7655baa0c',
+          'd05/c88_adaptation_test_exit_gate.py':'c18f89b24030eec24a9244ed90a6a57f59673218f9cbfcac451dc12f04b655a8',
+          'd05/test_c88_adaptation_test_exit_gate.py':'4dce67fefb049fab2206285d1d284ce5975f8d218444d104042cb362aecb5a7c',
+          'evidence/c88/C88_ADAPTATION_FINAL_TEST_EXIT_GATE.json':'6a24ef720bee3cf2ac5e412481f22afb8c76beda70f40e2bb30711b38515b95c',
+          'cycles/B1_C87_C88_ADAPTATION_TEST_FINAL_ACCEPTANCE_REPORT_RU.md':'d30565f1ac217bad25a9b23ff7072dda482f9d80278055ab76288782c3a161aa',
+          }
+          assert {x['path'] for x in new['evidence']}==set(expected)
+          for rec in new['evidence']:
+              content=Path(rec['path']).read_bytes()
+              assert len(content)==rec['bytes']
+              assert hashlib.sha256(content).hexdigest()==rec['sha256']==expected[rec['path']]
+          print('C87_C88_A157_FULL_SHA157_AND_7_EVIDENCE_PASS')
+          PY
+          cd d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate 2>&1 | tee /tmp/c87c88
+          grep -Fq 'Ran 234 tests' /tmp/c87c88
+          grep -qx 'OK' /tmp/c87c88
+          cd ..
+          python - <<'PY'
+          import sys,json
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c88_adaptation_test_exit_gate import check_frozen_acceptance
+          p=[
+          'evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json',
+          'evidence/c72/C72_ORIGINAL60ZIP_NATIVE5M_15M_PARITY_AFTER_C71_SOURCE_VC.json',
+          'evidence/c81/C81_FROZEN153_INDEPENDENT_REVIEW_QUEUE_SOURCE_ONLY.json',
+          'evidence/c86/C86_ORIGINAL153_4H_1H_FIRST_TEST_SOURCE_RECEIPTS.json',
+          'evidence/c87/C87_ADAPTED_ROUTE_A_ORIGINAL153_SHADOW_WITNESS.json',
+          'evidence/c85/C85_ACADEMY_TEXT_ORIGINAL153_WITNESS.json',
+          'evidence/c88/C88_ADAPTATION_FINAL_TEST_EXIT_GATE.json']
+          data=[Path(x).read_bytes() for x in p]
+          proof=check_frozen_acceptance(*data[:-1],data[-1])
+          z=json.loads(data[-1])
+          assert z['source_archive']['source_contexts']==153
+          assert z['original_source_summary']['decisions']['PRIORITIZED_FOR_HUMAN_MEDIA_REVIEW_ONLY']==3
+          assert z['gates']['LTF_15M_TRIGGER_OR_DIRECT_VC_AUTHOR_PROOF']=='BLOCKED_UNVERIFIED'
+          assert z['gates']['SIGNED_POSITIVE_AND_NEGATIVE_CRYPTO_GOLDENS']=='BLOCKED_MISSING'
+          assert z['contract']['allowed_to_autotrade'] is False
+          assert z['orders']==z['trades']==[] and z['pnl'] is None
+          print('C87_C88_ADAPTATION_ENGINEERING_DONE_NOT_TRADE_READY',proof)
+          PY
