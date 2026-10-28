@@ -359,8 +359,8 @@ def _metrics(rows):
        "baseline_equity_units":100}
 
 def analyze(markets,manifest):
-    if set(markets)!=SOURCES or len(manifest)!=15:
-        raise C91Rejected("ORIGINAL_5_SYMBOLS_15_ARCHIVES_REQUIRED")
+    if set(markets)!=SOURCES or len(manifest) not in (15,40):
+        raise C91Rejected("ORIGINAL_5_SYMBOLS_15_OR_40_ARCHIVES_REQUIRED")
     all_results={sym:discover_symbol(markets[sym],sym) for sym in sorted(markets)}
     flat=sorted((t for x in all_results.values() for t in x["trades"]),
                 key=lambda t:(t["entry_ms"],t["symbol"]))
@@ -372,7 +372,7 @@ def analyze(markets,manifest):
         "academic_scope":"Route A ONLY; isolated B IDM and C Raid-BOS NOT CLAIMED IMPLEMENTED",
         "rule_status":EVIDENCE,
         "source_selection":"ALL_CONTINUOUS_NATIVE5M_NO_C73_P0_EVENT_SELECTION",
-        "source_market":"BINANCE_USDM_15_SHA_FROZEN_ZIP",
+        "source_market":"BINANCE_USDM_ORIGINAL_FULL_CALENDAR_ARCHIVES_WITH_PROVENANCE",
         "archives":manifest,
         "source_bars":sum(len(x) for x in markets.values()),
         "fixed_rr_targets":False,
