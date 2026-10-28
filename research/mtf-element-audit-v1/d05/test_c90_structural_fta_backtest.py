@@ -92,11 +92,12 @@ class TestC90(unittest.TestCase):
     m=list(B);m[23*12]=replace(m[23*12],h=D("110.01"))
     self.assertEqual(plan(tuple(m))["status"],"NO_UNCONSUMED_1H_FTA")
  def test_18_low_rr_reject_never_widen_target(self):
-    x=plan(B,{**E,"poi_low":"90","poi_high":"99"})
-    self.assertEqual(x["status"],"STRUCTURAL_RR_BELOW_MIN_FILTER" if x["status"]=="STRUCTURAL_RR_BELOW_MIN_FILTER" else "STRUCTURAL_STOP_OUTSIDE_RISK_BOUNDS")
-    if x["status"]=="STRUCTURAL_RR_BELOW_MIN_FILTER":
-      self.assertLess(x["derived_rr"],1.25)
-      self.assertLess(D(x["target"]),D("110"))
+    m=list(B);m[13*12]=replace(m[13*12],h=D("103"))
+    x=plan(tuple(m))
+    self.assertEqual(x["status"],"STRUCTURAL_RR_BELOW_MIN_FILTER")
+    self.assertLess(x["derived_rr"],1.25)
+    self.assertEqual(D(x["fta"]),D("103"))
+    self.assertLess(D(x["target"]),D("103"))
  def test_19_no_trade_plan_rejected_by_execution(self):
     with self.assertRaises(C90Rejected):
       replay_plan(B,{"status":"NO_UNCONSUMED_1H_FTA"},cost_bps=14)
