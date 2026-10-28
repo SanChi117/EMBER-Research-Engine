@@ -1,0 +1,69 @@
+name: EMBER C98 C99 A163 source robust final SHA163 512x3 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c98-c99-A163-independent-final.yml'
+permissions:
+  contents: read
+jobs:
+  full-unbiased-source-audit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Original 163 chain, ten SHA verified immutable C98 C99 source and negative robustness
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ember163
+          grep -Fq 'entries 163 tip_sha256 7dda9d1b87218f07a2f7844ceb64528d65879372c6ae6197d82c198f1072da5b' /tmp/ember163
+          python tests/test_journal_integrity.py | grep -Fq '"validations_pass": true'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('.')
+          arr=[json.loads(s) for s in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(arr)==163
+          assert arr[-3]['record_sha256']=='a1ad0c7c77f75dab07656b39d08a6738e9f706d763f8ea15b4134cf16c25307f'
+          assert arr[-2]['action_id']=='A162' and arr[-2]['record_sha256']=='bf07ff085fd2c59cb8232f016a998e13788f90f353eefa8d485ccb87d02f279c'
+          assert arr[-1]['action_id']=='A163' and arr[-1]['record_sha256']=='7dda9d1b87218f07a2f7844ceb64528d65879372c6ae6197d82c198f1072da5b'
+          assert arr[-1]['prev_sha256']==arr[-2]['record_sha256']
+          assert len(arr[-2]['evidence'])==5 and len(arr[-1]['evidence'])==5
+          for a in arr[-2:]:
+              for v in a['evidence']:
+                  data=(root/v['path']).read_bytes()
+                  assert len(data)==v['bytes'] and hashlib.sha256(data).hexdigest()==v['sha256'],v['path']
+          c98=json.loads((root/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json').read_bytes())
+          c99=json.loads((root/'evidence/c99/C99_C93_ORIGINAL_3M_ROLLING_WINDOW_INVARIANCE.json').read_bytes())
+          assert c98['new_archive_count']==240 and len(c98['new_source_manifest'])==240
+          assert sum(x['native15m_3m5m_equalities'] for x in c98['verification'].values())==11520
+          assert c98['new_archive_count']==5*24*2
+          assert c98['no_fixed_rr'] and c98['orders']==c98['fills']==c98['live_trades']==[]
+          assert c98['research_models']['A']['cost_sensitivity']['25']['sum_r']==-2.996104
+          assert c98['research_models']['B']['cost_sensitivity']['25']['sum_r']==-4.214114
+          assert c98['research_models']['C']['cost_sensitivity']['25']['sum_r']==-17.471678
+          assert all(not v['gate']['passes_new_oct_historical_screen'] for v in c98['research_models'].values())
+          assert c99['pairwise_source_comparisons']==15 and c99['total_window_inconsistencies']==0
+          assert c99['pairs_sufficient_n']==0 and c99['verdict']=='NO_POWER'
+          assert len(c99['new_source_archives'])==120
+          assert not c99['original_entry_tp_sl_modified'] and not c99['may_claim_stable_economic_alpha']
+          assert c99['orders']==c99['fills']==c99['live_trades']==[]
+          print('A163_A_B_C_SOURCE_SHA163_C98_C99_HOLDOUT_NEGATIVE_GATE_VERIFIED')
+          PY
+      - name: Entire 512 regression tests C84-C99, every supported Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability 2>&1 | tee /tmp/a163-tests
+          grep -Fq 'Ran 512 tests' /tmp/a163-tests
+          grep -qx 'OK' /tmp/a163-tests
+          echo A163_512_REGRESSION_TESTS_PER_PYTHON_PASS_PAPER_ONLY_NO_MODEL_STABLE
