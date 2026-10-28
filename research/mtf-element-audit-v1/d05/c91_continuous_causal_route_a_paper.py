@@ -372,7 +372,7 @@ def analyze(markets,manifest):
         "academic_scope":"Route A ONLY; isolated B IDM and C Raid-BOS NOT CLAIMED IMPLEMENTED",
         "rule_status":EVIDENCE,
         "source_selection":"ALL_CONTINUOUS_NATIVE5M_NO_C73_P0_EVENT_SELECTION",
-        "source_market":"BINANCE_USDM_ORIGINAL_FULL_CALENDAR_ARCHIVES_WITH_PROVENANCE",
+        "source_market":("BINANCE_USDM_15_SHA_FROZEN_ZIP" if len(manifest)==15 else "BINANCE_USDM_ORIGINAL_FULL_CALENDAR_ARCHIVES_WITH_PROVENANCE"),
         "archives":manifest,
         "source_bars":sum(len(x) for x in markets.values()),
         "fixed_rr_targets":False,
