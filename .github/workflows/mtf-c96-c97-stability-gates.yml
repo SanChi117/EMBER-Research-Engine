@@ -1,0 +1,105 @@
+name: EMBER C96 C97 stable-history and predeclared robustness ORIGINAL Binance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c96-c97-stability-gates.yml'
+      - 'research/mtf-element-audit-v1/d05/c96_canonical_history_warmup_invariance.py'
+      - 'research/mtf-element-audit-v1/d05/test_c96_canonical_history_warmup_invariance.py'
+      - 'research/mtf-element-audit-v1/d05/c97_robustness_regime_cost_gate.py'
+      - 'research/mtf-element-audit-v1/d05/test_c97_robustness_regime_cost_gate.py'
+      - 'research/mtf-element-audit-v1/evidence/c96/**'
+      - 'research/mtf-element-audit-v1/evidence/c97/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  hostile-unit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Closed-calendar warmup and structural cost/regime negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate 2>&1 | tee /tmp/c96c97_tests
+          grep -Fq 'Ran 38 tests' /tmp/c96c97_tests
+          grep -qx 'OK' /tmp/c96c97_tests
+  real-original-binance:
+    runs-on: ubuntu-latest
+    needs: [hostile-unit]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Real provider-verified original monthly native5m, anchored-prefix A/B and BTC-regime C97
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c92_extended_original_native5m_full_continuous import load_extended_original
+          from c89_original_native5m_adaptation_backtest import load_original_native5m
+          from c96_canonical_history_warmup_invariance import (
+              prefix_test,anchor_comparison,PREFIX_CUTOFF,dumps as dump96)
+          from c97_robustness_regime_cost_gate import analyze,dumps as dump97
+          from c95_integrated_paper_three_routes import (
+              read_and_pin,A_SHA,B_SHA,C_SHA)
+          root=Path('.')
+          c73=(root/'evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          markets,metadata=load_extended_original(c73)
+          sep,_=load_original_native5m(c73)
+          prefix={sym:tuple(x for x in z if x.open_ms<PREFIX_CUTOFF) for sym,z in markets.items()}
+          a=read_and_pin(root/'evidence/c92/C92_APR_OCT_5_SYMBOL_FULL_CAUSAL_STRATEGY_REPLAY.json',A_SHA)
+          b=read_and_pin(root/'evidence/c94/C94_ORIGINAL_BINANCE_IDM_LIMIT_BOTH_MODELS_PAPER.json',B_SHA)
+          c=read_and_pin(root/'evidence/c93/C93_ORIGINAL_NATIVE3M_ROUTE_C_BOS_PAPER_REPLAY.json',C_SHA)
+          rA=prefix_test(markets,prefix,"A",full_outputs=a['by_symbol'])
+          rB=prefix_test(markets,prefix,"B",full_outputs=b['by_symbol'])
+          r0=anchor_comparison(markets,sep)
+          out96={'schema':'EMBER_C96_ORIGINAL_SOURCE_ANCHOR_AND_PREFIX_INVARIANCE',
+            'original_full_native5m_bars':sum(map(len,markets.values())),
+            'anchor_rejects_5_SEP_only':r0,'route_A':rA,'route_B':rB,
+            'ready_for_live':False}
+          bytes96=dump96(out96)
+          pinned96=root/'evidence/c96/C96_REAL_HISTORY_ANCHOR_PREFIX_A_B.json'
+          if pinned96.exists():assert pinned96.read_bytes()==bytes96,'C96_REPEAT_DRIFT'
+          assert out96['original_full_native5m_bars']==266400
+          assert rA['all_consistent'] and rB['all_consistent'],'C96_PREFIX_CAUSAL_DRIFT'
+          print('C96_STABLE_PREFIX_SUMMARY',json.dumps({
+             'A':{s:x['full'] for s,x in rA['by_symbol'].items()},
+             'B':{s:x['full'] for s,x in rB['by_symbol'].items()},
+             'A_equal':rA['all_consistent'],'B_equal':rB['all_consistent'],
+             'standalone_sep_rejected':r0['standalone_sep_start_is_rejected']},sort_keys=True))
+          print('C96_SHA256',hashlib.sha256(bytes96).hexdigest(),'BYTES',len(bytes96))
+          print('C96_REAL_JSON_BEGIN');print(bytes96.decode(),end='');print('C96_REAL_JSON_END')
+          out97=analyze(a,b,c,markets['BTCUSDT'])
+          bytes97=dump97(out97)
+          pinned97=root/'evidence/c97/C97_REAL_BTC_REGIME_FOLDS_COST_SENSITIVITY.json'
+          if pinned97.exists():assert pinned97.read_bytes()==bytes97,'C97_REPEAT_DRIFT'
+          assert not out97['live_approved'] and out97['no_fixed_rr_targets']
+          assert out97['orders']==out97['fills']==out97['live_trades']==[]
+          print('C97_ROBUSTNESS_SUMMARY',json.dumps({
+            route:{"approved":x['eligible_for_paper_forward_research'],
+                'reasons':x['rejection_reasons'],
+                'folds':x['folds'],
+                '25bps':x['cost']['25'],
+                'regimes':x['regimes']}
+                for route,x in out97['models'].items()},sort_keys=True))
+          print('C97_SHA256',hashlib.sha256(bytes97).hexdigest(),'BYTES',len(bytes97))
+          print('C97_REAL_JSON_BEGIN');print(bytes97.decode(),end='');print('C97_REAL_JSON_END')
+          PY
