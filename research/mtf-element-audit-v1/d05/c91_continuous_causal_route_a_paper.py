@@ -17,7 +17,7 @@ from c89_original_native5m_adaptation_backtest import (
     Bar,STEP,SPLIT,COST_BPS,MIN_RISK_PCT,MAX_RISK_PCT,
     SOURCES,load_original_native5m)
 from c90_structural_fta_backtest import (
-    ClosedBar,confirmed_swings,atr5m,ATR_PAD,MIN_RR_FILTER)
+    ClosedBar,Swing,atr5m,ATR_PAD,MIN_RR_FILTER)
 
 class C91Rejected(ValueError): pass
 HOUR=12*STEP
@@ -124,9 +124,9 @@ def _weekly_daily_context(days,weeks,side,signal_ms):
     """D1 and 1W known-at event, neither partial future day nor week."""
     d=[x for x in days if x.close_ms<=signal_ms]
     w=[x for x in weeks if x.close_ms<=signal_ms]
-    if len(d)<2 or len(w)<2:return False
-    bullish=d[-1].c>=d[-2].c and w[-1].c>=w[-2].c
-    bearish=d[-1].c<=d[-2].c and w[-1].c<=w[-2].c
+    if len(d)<2 or len(w)<1:return False
+    bullish=d[-1].c>=d[-2].c and w[-1].c>=w[-1].o
+    bearish=d[-1].c<=d[-2].c and w[-1].c<=w[-1].o
     return bullish if side=="LONG" else bearish
 
 def _structural(source,idx,zone,side,parent_tf,swings1,swings4,swings15):
@@ -226,8 +226,17 @@ def discover_symbol(source,symbol):
     weeks=_aggregate(source,WEEK,WEEK_ANCHOR)
     # Static detected extrema are hidden until fully confirmed in the live loop.
     def sw(arr,tf):
-        rows=tuple(ClosedBar(x.start_ms,x.close_ms,x.h,x.l,x.c) for x in arr)
-        return confirmed_swings(rows,tf,PIVOT_WIDTH,rows[-1].close_ms)
+        out=[]
+        for k in range(PIVOT_WIDTH,len(arr)-PIVOT_WIDTH):
+            mid=arr[k]
+            before=arr[k-PIVOT_WIDTH:k]
+            after=arr[k+1:k+PIVOT_WIDTH+1]
+            confirmed=after[-1].close_ms
+            if all(mid.h>x.h for x in before) and all(mid.h>=x.h for x in after):
+                out.append(Swing(tf,"HIGH",mid.h,mid.close_ms,confirmed,PIVOT_WIDTH))
+            if all(mid.l<x.l for x in before) and all(mid.l<=x.l for x in after):
+                out.append(Swing(tf,"LOW",mid.l,mid.close_ms,confirmed,PIVOT_WIDTH))
+        return tuple(out)
     s15=sw(fifteen,15*60*1000)
     s1=sw(hour,HOUR)
     s4=sw(four,H4)  # C90 confirms same proxy semantics
@@ -339,7 +348,7 @@ def _metrics(rows):
     # net R is not equity return; per-trade risk scaling required for DD.
     equity=D(100);peak=equity;dd=D(0)
     for x in rows:
-        equity+=D(str(x)) if False else D(str(x["net_r"]))
+        equity+=D(str(x["net_r"]))
         peak=max(peak,equity)
         if peak:dd=max(dd,(peak-equity)/peak*100)
     return {"count":len(v),"total_net_r":round(sum(v),6),
