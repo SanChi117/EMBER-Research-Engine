@@ -1,0 +1,79 @@
+name: EMBER C93 native3m BOS independent route C original crypto PAPER
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c93-independent-native3m-bos.yml'
+      - 'research/mtf-element-audit-v1/d05/c93_native3m_raid_bos_route_c_research.py'
+      - 'research/mtf-element-audit-v1/d05/test_c93_native3m_raid_bos_route_c_research.py'
+      - 'research/mtf-element-audit-v1/evidence/c93/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 24 native3m 1H raid and structural stop/FTA negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c93_native3m_raid_bos_route_c_research 2>&1 | tee /tmp/c93
+          grep -Fq 'Ran 24 tests' /tmp/c93
+          grep -qx 'OK' /tmp/c93
+  real-native3m-2026:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [negative-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 15 original Binance native3m pinned ZIP, cross-parity all native5m and causal 1h raid->3m BOS
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          import json,hashlib,sys
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c93_native3m_raid_bos_route_c_research import load_3m_source,analyze,dumps
+          c21=Path('evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json').read_bytes()
+          c73=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          src,manifest=load_3m_source(c21,c73)
+          result=analyze(src,manifest)
+          raw=dumps(result)
+          frozen=Path('evidence/c93/C93_ORIGINAL_NATIVE3M_ROUTE_C_BOS_PAPER_REPLAY.json')
+          if frozen.exists():assert raw==frozen.read_bytes(),'FROZEN_NATIVE3M_ROUTE_C_REPLAY_DRIFT'
+          assert result['full_native_3m_bars']==76800 and len(result['pinned_manifest'])==15
+          assert result['fixed_rr_target'] is False
+          assert result['orders']==result['fills']==result['live_trades']==[]
+          for sym,market in result['by_symbol'].items():
+              assert market['native3m_bars']==15360
+              for t in market['trades']:
+                  assert t['raid_fractal_known_ms']<t['raid_closed_ms']<t['bos_close_ms']==t['entry_ms']
+                  assert t['fta_confirmed_ms']<=t['entry_ms']
+                  assert t['source_tf']=='NATIVE_3M' and t['evidence']=='ADAPTED_HYPOTHESIS'
+          print('C93_ALL_NATIVE3M_SHA256',hashlib.sha256(raw).hexdigest(),'BYTES',len(raw))
+          print('C93_REAL_ROUTE_C_SUMMARY',json.dumps({
+            "all":result['all'],"early":result['early_preselected_none'],
+            "late":result['time_late'],"by_symbol":{
+              k:{"n":len(v['trades']),"events":v["events"],"rejects":v["rejects"]}
+              for k,v in result["by_symbol"].items()}},sort_keys=True))
+          print('C93_REAL_JSON_BEGIN')
+          print(raw.decode('utf8'),end='')
+          print('C93_REAL_JSON_END')
+          PY
