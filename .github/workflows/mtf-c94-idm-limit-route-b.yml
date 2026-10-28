@@ -1,0 +1,80 @@
+name: EMBER C94 Route B IDM distinct limit model Binance source PAPER
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c94-idm-limit-route-b.yml'
+      - 'research/mtf-element-audit-v1/d05/c94_idm_limit_route_b_research.py'
+      - 'research/mtf-element-audit-v1/d05/test_c94_idm_limit_route_b_research.py'
+      - 'research/mtf-element-audit-v1/evidence/c94/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 24 original structural IDM limit no-VC negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c94_idm_limit_route_b_research 2>&1 | tee /tmp/c94
+          grep -Fq 'Ran 24 tests' /tmp/c94
+          grep -qx 'OK' /tmp/c94
+  continuous-idm-binance:
+    runs-on: ubuntu-latest
+    needs: [negative-tests]
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Full 40 original Binance ZIP April-Oct, isolate all 4h VC->1h IDM and 1h VC->15m IDM
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python - <<'PY'
+          import hashlib,json,sys
+          from pathlib import Path
+          sys.path.insert(0,'d05')
+          from c92_extended_original_native5m_full_continuous import load_extended_original
+          from c94_idm_limit_route_b_research import analyze,dumps
+          c73=Path('evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          source,metadata=load_extended_original(c73)
+          fullmanifest=metadata['new_monthly_25']+metadata['original_sep_oct_15']
+          res=analyze(source,fullmanifest)
+          raw=dumps(res)
+          target=Path('evidence/c94/C94_ORIGINAL_BINANCE_IDM_LIMIT_BOTH_MODELS_PAPER.json')
+          if target.exists():assert raw==target.read_bytes(),'C94_FROZEN_ORIGINAL_BINANCE_LIMIT_DRIFT'
+          assert res['original_bars']==266400 and len(res['original_archive_manifest'])==40
+          assert not res['fixed_rr_target'] and res['limit_fill_mandatory']
+          assert res['orders']==res['fills']==res['live_trades']==[]
+          for sym,market in res['by_symbol'].items():
+              for t in market['trades']:
+                  assert t['idm_confirmed_ms']<=t['signal_ms']<=t['entry_ms']
+                  assert t['fta_confirmed_ms']<=t['signal_ms']
+                  assert t['stronghl_confirmed_ms']<=t['signal_ms']
+                  assert t['fta_tf']=='4h' and t['limit_filled']
+                  assert t['evidence']=='ADAPTED_HYPOTHESIS'
+          print('C94_SOURCE_SHA256',hashlib.sha256(raw).hexdigest(),'BYTES',len(raw))
+          print('C94_IDM_REAL_SUMMARY',json.dumps({"all":res["all"],"early":res["early"],
+             "late":res["late_time_not_pristine_OOS"],"routes":res["route_counts"],
+             "markets":{s:{"n":len(v["trades"]),"events":v["states"],
+             "rejects":v["rejections"]} for s,v in res["by_symbol"].items()}},sort_keys=True))
+          print('C94_JSON_BEGIN')
+          print(raw.decode('utf8'),end='')
+          print('C94_JSON_END')
+          PY
