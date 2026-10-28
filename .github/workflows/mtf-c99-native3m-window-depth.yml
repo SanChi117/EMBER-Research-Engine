@@ -1,0 +1,84 @@
+name: EMBER C99 C route original native3m 32day history-depth falsification
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c99-native3m-window-depth.yml'
+      - 'research/mtf-element-audit-v1/d05/c99_native3m_window_depth_stability.py'
+      - 'research/mtf-element-audit-v1/d05/test_c99_native3m_window_depth_stability.py'
+      - 'research/mtf-element-audit-v1/evidence/c99/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adversarial-20:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Journal A162 and source window negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c99_native3m_window_depth_stability 2>&1 | tee /tmp/c99
+          grep -Fq 'Ran 20 tests' /tmp/c99
+          grep -qx 'OK' /tmp/c99
+  real-original-c-source:
+    runs-on: ubuntu-latest
+    needs: [adversarial-20]
+    timeout-minutes: 36
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 3 precommitted times 5 symbols, independently SHA pinned old3m + Oct3m
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python -u - <<'PY'
+          import sys,json,hashlib
+          from pathlib import Path
+          from functools import lru_cache
+          sys.path.insert(0,'d05')
+          from c99_native3m_window_depth_stability import run,dumps
+          from c89_original_native5m_adaptation_backtest import _safe_http
+          from c95_integrated_paper_three_routes import read_and_pin
+          root=Path(".")
+          frozen98=read_and_pin(root/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json',
+             '9b95735407465c46b1a2fdb6e4e8875bfdd2c428588f6205bf1212d35c0b9e97')
+          c21=(root/'evidence/c21/C21A_NATIVE3M_C08_PARITY_RECEIPT.json').read_bytes()
+          c73=(root/'evidence/c73/C73_ORIGINAL60ZIP_FIRST_SOURCE_1H_POI_NATIVE3M_VISIT_EPISODES_ROUTE_SPLIT.json').read_bytes()
+          print('C99_SHA_RECHECK_120_ORIGINAL_NATIVE3M_SOURCE_BEGIN',flush=True)
+          result=run(c73,c21,frozen98,fetch=lru_cache(maxsize=600)(_safe_http))
+          blob=dumps(result)
+          saved=root/'evidence/c99/C99_C93_ORIGINAL_3M_ROLLING_WINDOW_INVARIANCE.json'
+          if saved.exists():assert blob==saved.read_bytes(),'C99_FROZEN_SOURCE_REPLAY_CHANGED'
+          assert len(result['new_source_archives'])==120
+          assert len(result['original_source_archives'])==15
+          assert result['pairwise_source_comparisons']==15
+          assert result['original_entry_tp_sl_modified'] is False
+          assert result['orders']==result['fills']==result['live_trades']==[]
+          assert not result['may_claim_stable_economic_alpha']
+          print('C99_REAL_SUMMARY',json.dumps({
+             'verdict':result['verdict'],'mismatch_pairs':result['total_window_inconsistencies'],
+             'sample_sufficient_pairs':result['pairs_sufficient_n'],
+             'by_symbol':{k:{pair:{'n_first':x['trades_first'],'n_second':x['trades_second'],
+                 'match':x['identical'],'missing_a':x['different_first_only'],
+                 'missing_b':x['different_second_only']}
+                 for pair,x in val.items()} for k,val in result['by_market'].items()}},sort_keys=True),flush=True)
+          print('C99_REAL_SHA256',hashlib.sha256(blob).hexdigest(),'BYTES',len(blob),flush=True)
+          print('C99_REAL_JSON_BEGIN')
+          print(blob.decode(),end='')
+          print('C99_REAL_JSON_END')
+          PY
