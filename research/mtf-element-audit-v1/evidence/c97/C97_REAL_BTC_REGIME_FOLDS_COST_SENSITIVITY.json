@@ -1,0 +1,426 @@
+{
+  "approved_routes": [],
+  "btc_closed_daily_bars": 185,
+  "evidence": "RESEARCH_ONLY_NO_PROFIT_GUARANTEES",
+  "fills": [],
+  "limitations": [
+    "2026 calendar history influenced research hypothesis design",
+    "no unseen future OOS",
+    "full route C original3m only Sep-Oct",
+    "PF/winrate small sample, time splits descriptive",
+    "stress 25/40bps illustrative, actual execution/liquidations excluded"
+  ],
+  "live_approved": false,
+  "live_trades": [],
+  "minimum_folds_trades": 10,
+  "models": {
+    "A": {
+      "comparably_covered_sep_oct": {
+        "dd_1pct_risk_pct": 1.838,
+        "n": 2,
+        "pf": 0.0,
+        "sum_r": -1.846349,
+        "win_rate_pct": 0.0
+      },
+      "cost": {
+        "14": {
+          "dd_1pct_risk_pct": 4.14691,
+          "n": 34,
+          "pf": 1.30294,
+          "sum_r": 5.855296,
+          "win_rate_pct": 44.118
+        },
+        "25": {
+          "dd_1pct_risk_pct": 5.76604,
+          "n": 34,
+          "pf": 1.04277,
+          "sum_r": 0.936813,
+          "win_rate_pct": 44.118
+        },
+        "40": {
+          "dd_1pct_risk_pct": 7.93545,
+          "n": 34,
+          "pf": 0.77526,
+          "sum_r": -5.770213,
+          "win_rate_pct": 41.176
+        }
+      },
+      "eligible_for_paper_forward_research": false,
+      "folds": {
+        "LATE_AUDIT": {
+          "dd_1pct_risk_pct": 0.79176,
+          "n": 1,
+          "pf": 0.0,
+          "sum_r": -0.791759,
+          "win_rate_pct": 0.0
+        },
+        "TRAIN_EARLY": {
+          "dd_1pct_risk_pct": 3.95603,
+          "n": 13,
+          "pf": 1.04358,
+          "sum_r": 0.341695,
+          "win_rate_pct": 46.154
+        },
+        "VALIDATE": {
+          "dd_1pct_risk_pct": 2.72317,
+          "n": 7,
+          "pf": 1.81378,
+          "sum_r": 3.198955,
+          "win_rate_pct": 28.571
+        }
+      },
+      "months": {
+        "2026-04": {
+          "dd_1pct_risk_pct": 1.13159,
+          "n": 3,
+          "pf": 0.90915,
+          "sum_r": -0.102801,
+          "win_rate_pct": 66.667
+        },
+        "2026-05": {
+          "dd_1pct_risk_pct": 4.03865,
+          "n": 7,
+          "pf": 0.27564,
+          "sum_r": -4.081124,
+          "win_rate_pct": 28.571
+        },
+        "2026-06": {
+          "dd_1pct_risk_pct": 1.09335,
+          "n": 7,
+          "pf": 11.6239,
+          "sum_r": 11.615655,
+          "win_rate_pct": 85.714
+        },
+        "2026-07": {
+          "dd_1pct_risk_pct": 3.95603,
+          "n": 9,
+          "pf": 0.40952,
+          "sum_r": -3.98363,
+          "win_rate_pct": 33.333
+        },
+        "2026-08": {
+          "dd_1pct_risk_pct": 1.68637,
+          "n": 6,
+          "pf": 2.47877,
+          "sum_r": 4.253545,
+          "win_rate_pct": 33.333
+        },
+        "2026-09": {
+          "dd_1pct_risk_pct": 1.838,
+          "n": 2,
+          "pf": 0.0,
+          "sum_r": -1.846349,
+          "win_rate_pct": 0.0
+        }
+      },
+      "qualified_for_live": false,
+      "regimes": {
+        "BTC_DOWN_7D": {
+          "dd_1pct_risk_pct": 2.41717,
+          "n": 8,
+          "pf": 2.16286,
+          "sum_r": 4.171483,
+          "win_rate_pct": 50.0
+        },
+        "BTC_RANGE_7D": {
+          "dd_1pct_risk_pct": 3.87458,
+          "n": 19,
+          "pf": 1.03712,
+          "sum_r": 0.472262,
+          "win_rate_pct": 36.842
+        },
+        "BTC_UP_7D": {
+          "dd_1pct_risk_pct": 1.20493,
+          "n": 7,
+          "pf": 1.40161,
+          "sum_r": 1.211551,
+          "win_rate_pct": 57.143
+        }
+      },
+      "rejection_reasons": [
+        "VALIDATION_SMALL",
+        "LATE_AUDIT_SMALL",
+        "LATE_AUDIT_PF",
+        "COST_STRESS_25BPS"
+      ],
+      "source_window": "2026-04-01--2026-10-02",
+      "total": {
+        "dd_1pct_risk_pct": 4.14691,
+        "n": 34,
+        "pf": 1.30294,
+        "sum_r": 5.855296,
+        "win_rate_pct": 44.118
+      }
+    },
+    "B": {
+      "comparably_covered_sep_oct": {
+        "dd_1pct_risk_pct": 1.11953,
+        "n": 2,
+        "pf": 0.05169,
+        "sum_r": -1.061664,
+        "win_rate_pct": 50.0
+      },
+      "cost": {
+        "14": {
+          "dd_1pct_risk_pct": 4.3833,
+          "n": 15,
+          "pf": 0.48671,
+          "sum_r": -4.407697,
+          "win_rate_pct": 33.333
+        },
+        "25": {
+          "dd_1pct_risk_pct": 5.72556,
+          "n": 15,
+          "pf": 0.38187,
+          "sum_r": -5.819514,
+          "win_rate_pct": 33.333
+        },
+        "40": {
+          "dd_1pct_risk_pct": 7.52813,
+          "n": 15,
+          "pf": 0.26887,
+          "sum_r": -7.744719,
+          "win_rate_pct": 26.667
+        }
+      },
+      "eligible_for_paper_forward_research": false,
+      "folds": {
+        "LATE_AUDIT": {
+          "dd_1pct_risk_pct": 1.11953,
+          "n": 1,
+          "pf": 0.0,
+          "sum_r": -1.119532,
+          "win_rate_pct": 0.0
+        },
+        "TRAIN_EARLY": {
+          "dd_1pct_risk_pct": 2.6688,
+          "n": 9,
+          "pf": 0.49867,
+          "sum_r": -2.135641,
+          "win_rate_pct": 33.333
+        },
+        "VALIDATE": {
+          "dd_1pct_risk_pct": 2.27757,
+          "n": 4,
+          "pf": 0.89716,
+          "sum_r": -0.235575,
+          "win_rate_pct": 50.0
+        }
+      },
+      "months": {
+        "2026-05": {
+          "dd_1pct_risk_pct": 0.91695,
+          "n": 1,
+          "pf": 0.0,
+          "sum_r": -0.916949,
+          "win_rate_pct": 0.0
+        },
+        "2026-06": {
+          "dd_1pct_risk_pct": 2.6688,
+          "n": 5,
+          "pf": 0.0987,
+          "sum_r": -2.690205,
+          "win_rate_pct": 20.0
+        },
+        "2026-07": {
+          "dd_1pct_risk_pct": 1.09903,
+          "n": 4,
+          "pf": 1.43489,
+          "sum_r": 0.554564,
+          "win_rate_pct": 50.0
+        },
+        "2026-08": {
+          "dd_1pct_risk_pct": 2.27757,
+          "n": 3,
+          "pf": 0.8719,
+          "sum_r": -0.293443,
+          "win_rate_pct": 33.333
+        },
+        "2026-09": {
+          "dd_1pct_risk_pct": 1.11953,
+          "n": 2,
+          "pf": 0.05169,
+          "sum_r": -1.061664,
+          "win_rate_pct": 50.0
+        }
+      },
+      "qualified_for_live": false,
+      "regimes": {
+        "BTC_DOWN_7D": {
+          "dd_1pct_risk_pct": 2.81951,
+          "n": 3,
+          "pf": 0.0,
+          "sum_r": -2.845759,
+          "win_rate_pct": 0.0
+        },
+        "BTC_RANGE_7D": {
+          "dd_1pct_risk_pct": 2.27757,
+          "n": 7,
+          "pf": 1.07361,
+          "sum_r": 0.191399,
+          "win_rate_pct": 42.857
+        },
+        "BTC_UP_7D": {
+          "dd_1pct_risk_pct": 2.0116,
+          "n": 5,
+          "pf": 0.44184,
+          "sum_r": -1.753337,
+          "win_rate_pct": 40.0
+        }
+      },
+      "rejection_reasons": [
+        "MIN_TOTAL_TRADES",
+        "VALIDATION_SMALL",
+        "LATE_AUDIT_SMALL",
+        "VALIDATION_PF",
+        "LATE_AUDIT_PF",
+        "COST_STRESS_25BPS"
+      ],
+      "source_window": "2026-04-01--2026-10-02",
+      "total": {
+        "dd_1pct_risk_pct": 4.3833,
+        "n": 15,
+        "pf": 0.48671,
+        "sum_r": -4.407697,
+        "win_rate_pct": 33.333
+      }
+    },
+    "C": {
+      "comparably_covered_sep_oct": {
+        "dd_1pct_risk_pct": 24.47899,
+        "n": 58,
+        "pf": 0.61777,
+        "sum_r": -19.783649,
+        "win_rate_pct": 27.586
+      },
+      "cost": {
+        "14": {
+          "dd_1pct_risk_pct": 24.47899,
+          "n": 58,
+          "pf": 0.61777,
+          "sum_r": -19.783649,
+          "win_rate_pct": 27.586
+        },
+        "25": {
+          "dd_1pct_risk_pct": 31.82868,
+          "n": 58,
+          "pf": 0.49176,
+          "sum_r": -30.534479,
+          "win_rate_pct": 25.862
+        },
+        "40": {
+          "dd_1pct_risk_pct": 40.73518,
+          "n": 58,
+          "pf": 0.36878,
+          "sum_r": -45.194699,
+          "win_rate_pct": 24.138
+        }
+      },
+      "eligible_for_paper_forward_research": false,
+      "folds": {
+        "LATE_AUDIT": {
+          "dd_1pct_risk_pct": 12.90375,
+          "n": 25,
+          "pf": 0.50676,
+          "sum_r": -10.931564,
+          "win_rate_pct": 28.0
+        },
+        "TRAIN_EARLY": {
+          "dd_1pct_risk_pct": 0.0,
+          "n": 0,
+          "pf": null,
+          "sum_r": 0.0,
+          "win_rate_pct": null
+        },
+        "VALIDATE": {
+          "dd_1pct_risk_pct": 14.22916,
+          "n": 31,
+          "pf": 0.77266,
+          "sum_r": -6.103246,
+          "win_rate_pct": 29.032
+        }
+      },
+      "months": {
+        "2026-09": {
+          "dd_1pct_risk_pct": 22.44554,
+          "n": 56,
+          "pf": 0.65097,
+          "sum_r": -17.144286,
+          "win_rate_pct": 28.571
+        },
+        "2026-10": {
+          "dd_1pct_risk_pct": 2.62195,
+          "n": 2,
+          "pf": 0.0,
+          "sum_r": -2.639363,
+          "win_rate_pct": 0.0
+        }
+      },
+      "qualified_for_live": false,
+      "regimes": {
+        "BTC_DOWN_7D": {
+          "dd_1pct_risk_pct": 2.56632,
+          "n": 7,
+          "pf": 2.21305,
+          "sum_r": 4.64744,
+          "win_rate_pct": 57.143
+        },
+        "BTC_RANGE_7D": {
+          "dd_1pct_risk_pct": 16.94642,
+          "n": 24,
+          "pf": 0.53241,
+          "sum_r": -10.771667,
+          "win_rate_pct": 20.833
+        },
+        "BTC_UP_7D": {
+          "dd_1pct_risk_pct": 13.26298,
+          "n": 27,
+          "pf": 0.45123,
+          "sum_r": -13.659422,
+          "win_rate_pct": 25.926
+        }
+      },
+      "rejection_reasons": [
+        "VALIDATION_PF",
+        "LATE_AUDIT_PF",
+        "COST_STRESS_25BPS",
+        "COST_STRESS_DD"
+      ],
+      "source_window": "2026-09-01--2026-10-02",
+      "total": {
+        "dd_1pct_risk_pct": 24.47899,
+        "n": 58,
+        "pf": 0.61777,
+        "sum_r": -19.783649,
+        "win_rate_pct": 27.586
+      }
+    }
+  },
+  "no_fixed_rr_targets": true,
+  "orders": [],
+  "predeclared_cost_bps": [
+    14,
+    25,
+    40
+  ],
+  "predeclared_folds": [
+    {
+      "end_exclusive": "2026-08-01",
+      "label": "TRAIN_EARLY",
+      "start": "2026-06-15"
+    },
+    {
+      "end_exclusive": "2026-09-20",
+      "label": "VALIDATE",
+      "start": "2026-08-01"
+    },
+    {
+      "end_exclusive": "2026-10-03",
+      "label": "LATE_AUDIT",
+      "start": "2026-09-20"
+    }
+  ],
+  "regime_rule": "7 FULLY CLOSED BTC days >=3% UP <=-3% DOWN else RANGE",
+  "schema": "EMBER_C97_PREDECLARED_ROBUSTNESS_NOT_TUNED",
+  "sources": "SHA_PINNED_C92_C94_C93_PLUS_BINANCE_BTC_FULL_CALENDAR"
+}
