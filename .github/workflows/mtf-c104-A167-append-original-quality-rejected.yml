@@ -1,0 +1,81 @@
+name: EMBER C104 A167 original crypto 4H FTA negative research immutable journal
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c104-A167-append-original-quality-rejected.yml'
+permissions:
+  contents: write
+jobs:
+  verify-and-freeze-A167:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent native320 SHA original and honest failed economic verdict
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/ember-c104-before
+          grep -Fq 'entries 166 tip_sha256 7d12c4d905281bafa5dde004eb1301338649d067da06ccf2d0bcefb2537d99cb' /tmp/ember-c104-before
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('.')
+          p=root/'evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json'
+          raw=p.read_bytes()
+          assert len(raw)==407421 and hashlib.sha256(raw).hexdigest()=='ab582ee221fe8b520df7428babdd3b3a33915a60f08d8ae3785000682c3637ce'
+          z=json.loads(raw)
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['source_manifest'])==320 and len(z['symbols'])==10
+          assert sum(v['original_n'] for v in z['exact_original_c93_trade_parity'].values())==82
+          assert all(v['matches'] for v in z['exact_original_c93_trade_parity'].values())
+          expected={'BASELINE_RAW':(82,-11.646351),
+                    'BASELINE_PORTFOLIO':(54,-4.108006),
+                    'QUALITY_RAW':(17,0.287952),
+                    'QUALITY_PORTFOLIO':(14,-0.786491)}
+          for key,(n,ret) in expected.items():
+              s=z['variants'][key]['scores']['25']
+              assert (s['n'],s['sum_r'])==(n,ret),key
+          assert z['primary_admission']['passes_historical_screen'] is False
+          assert z['primary_admission']['live_approved'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['rr_target_fixed'] is False and z['structural_original_sl_tp'] is True
+          assert hashlib.sha256((root/'d05/c93_native3m_raid_bos_route_c_research.py').read_bytes()).hexdigest()=='a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0'
+          assert hashlib.sha256((root/'d05/c102_c103_native3m_new_symbol_transfer.py').read_bytes()).hexdigest()=='853e5ee613e00cddbdf39b933c57bab6b6a6a695f1b549e69f29f52a97a01aed'
+          print('C104_NEW10_320_SOURCE_82_EXACT_C93_AND_PRIMARY_NEGATIVE_VERIFIED')
+          PY
+      - name: Append original evidence SHA A167 via canonical journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A167 --cycle B1/C104 --verdict DONE --cycle-result PASSED \
+            --planned "PRECOMMIT before new price source: use Kimi-supported structural weakness to test original C93 with causal confirmed 4H swing-slope direction and 12h preentry observed FTA-reachability, with one simultaneous same-side portfolio risk cap; ten previously untested Route C crypto pairs, 32 days native3m original Binance daily ZIP, 14/25/40bps, 1% illustrative risk; original Entry, raid ATR SL, nearest confirmed 1H FTA and derived RR unchanged; PAPER ONLY." \
+            --executed "Original precommit SHA recorded before source. Strict provider ZIP/CHECKSUM and CSV SHA on 320 original Binance USD-M native3m daily archives for AAVE APT ARB ATOM ETC FIL LTC NEAR TRX UNI Sep26-Oct27 2026 (153600 3m candles); 82/82 original C93 trade event and exit parity on 10 new coins. Tested 32 new adversarial invariants + 602 preceding original tests three Python versions = 1902 PASS; GitHub CI 40972169476 4/4 SUCCESS. Independently evaluated exactly the four preregistered displayed controls BASELINE_RAW, BASELINE_PORTFOLIO, QUALITY_RAW, QUALITY_PORTFOLIO, where PRIMARY is quality and equal same-side cap. Original C93 and C102 SHA unchanged." \
+            --result "All primary economic criteria rejected. 25bps BASELINE_RAW n82 -11.646351R PF .82816 DD20.08713pct; BASELINE_PORTFOLIO n54 -4.108006R PF .90296 DD11.15679pct; QUALITY_RAW n17 +0.287952R PF1.02259 DD6.22173pct (no power and 40bps negative); PRIMARY QUALITY_PORTFOLIO n14 -0.786491R PF .93224 DD5.13966pct, 40bps -3.013246R PF .77124. Primary temporal early n9 +2.541923R PF1.39671 versus late n5 -3.328414R PF.35994. Historic other-symbol transfer is NOT true prospective OOS. No profitable strategy accepted, no live orders." \
+            --countercheck "C104 initial CI red correctly detected wrong attribute of original OHLC volume in new 4H aggregation; repaired code vol only BEFORE all new price data source download, no threshold adaptation, final three Python versions pass. Full native 320 daily ZIP receipts sha and 82/82 original C93 signatures, no future 1H/4H or swing pivot. Same-direction one-slot cap reduces modeled DD but does not guarantee positive net R. New quality gate n14<30 and early/late unstable. Original C93/C102 and A166 SHA unchanged; research-only, never fixed RR." \
+            --evidence cycles/B1_C104_PRECOMMIT_4H_STRUCTURE_FTA_REACHABILITY_PORTFOLIO_RU.md \
+            --evidence d05/c104_native3m_source.py \
+            --evidence d05/c104_structural_quality_rules.py \
+            --evidence d05/c104_native3m_quality_research.py \
+            --evidence d05/test_c104_structural_quality_new10.py \
+            --evidence evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json \
+            --evidence cycles/B1_C104_CAUSAL_4H_FTA_10COIN_ECONOMIC_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/ember-c104-after
+          grep -Fq 'entries 167 tip_sha256 ' /tmp/ember-c104-after
+      - name: Git commit immutable A167 SHA chained evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A167: freeze C104 320 native3m source witness and economic false hypothesis"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
