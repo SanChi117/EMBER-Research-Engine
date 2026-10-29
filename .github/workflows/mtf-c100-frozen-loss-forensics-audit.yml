@@ -1,0 +1,84 @@
+name: EMBER C100 frozen forensic regression SHA and 25 x 3
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c100-frozen-loss-forensics-audit.yml'
+      - 'research/mtf-element-audit-v1/d05/c100_frozen_c98_loss_forensics.py'
+      - 'research/mtf-element-audit-v1/d05/test_c100_frozen_c98_loss_forensics.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C100*'
+      - 'research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl'
+      - 'ACADEMIC_ENGINE_CURRENT_MAP.md'
+      - 'EMBER_CROSS_CHAT_CONTROL_AND_HANDOFF.md'
+permissions:
+  contents: read
+jobs:
+  immutable-original-and-forensic-negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Audit chain 163+ SHA, frozen C98/C99 and C100 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('.')
+          rows=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines() if x.strip()]
+          assert len(rows) in (163,164),len(rows)
+          assert rows[162]['action_id']=='A163'
+          assert rows[162]['record_sha256']=='7dda9d1b87218f07a2f7844ceb64528d65879372c6ae6197d82c198f1072da5b'
+          if len(rows)==164:
+              assert rows[-1]['action_id']=='A164'
+              assert rows[-1]['prev_sha256']==rows[162]['record_sha256']
+          for row in rows[161:]:
+              for e in row['evidence']:
+                  blob=(root/e['path']).read_bytes()
+                  assert len(blob)==e['bytes'] and hashlib.sha256(blob).hexdigest()==e['sha256'],e['path']
+          x=json.loads((root/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json').read_text())
+          y=json.loads((root/'evidence/c99/C99_C93_ORIGINAL_3M_ROLLING_WINDOW_INVARIANCE.json').read_text())
+          assert x['new_archive_count']==240
+          assert all(not v['gate']['passes_new_oct_historical_screen'] for v in x['research_models'].values())
+          assert x['orders']==x['fills']==x['live_trades']==[]
+          assert y['pairwise_source_comparisons']==15 and y['total_window_inconsistencies']==0
+          assert y['pairs_sufficient_n']==0 and y['verdict']=='NO_POWER'
+          print('C100_ORIGINAL_SHA_AND_SOURCE_REJECT_GATE_PASS',len(rows))
+          PY
+      - name: Forensic post-hoc output on 48 frozen records
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c100_frozen_c98_loss_forensics.py | tee /tmp/ember-c100.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/ember-c100.json'))
+          assert x['real_orders']==0 and x['trade_rules_changed'] is False
+          assert [x['routes'][k]['n'] for k in ('A','B','C')]==[7,3,38]
+          assert x['routes']['C']['by_reason']['STOP_FIRST_SAME_3M']==21
+          assert x['routes']['C']['net_r']['25']==-17.471678
+          assert x['routes']['A']['net_r']['25']==-2.996104
+          assert x['routes']['B']['net_r']['25']==-4.214114
+          print('C100_FROZEN_48_ONLY_POST_HOC_DIAGNOSTICS_PASSED')
+          PY
+      - name: Negative tests 25 per Python and full 512 earlier regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c100_frozen_c98_loss_forensics 2>&1 | tee /tmp/c100-neg
+          grep -Fq 'Ran 25 tests' /tmp/c100-neg
+          grep -qx 'OK' /tmp/c100-neg
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability 2>&1 | tee /tmp/c100-reg
+          grep -Fq 'Ran 512 tests' /tmp/c100-reg
+          grep -qx 'OK' /tmp/c100-reg
+          echo C100_537_TESTS_PER_PYTHON_PAPER_ONLY_PASS
