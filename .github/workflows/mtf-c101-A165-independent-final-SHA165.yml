@@ -1,0 +1,68 @@
+name: EMBER C101 A165 independent final SHA165 and 1701 regressions
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c101-A165-independent-final-SHA165.yml'
+permissions:
+  contents: read
+jobs:
+  independent-sha165-and-regression:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify 165 append-only records and exact five frozen C101 hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/sha165
+          grep -Fq 'entries 165 tip_sha256 8f7f90513f84bf4d60fa8b7e317c2ce20500f6ed38ff414904249a846766896f' /tmp/sha165
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('.')
+          rows=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==165
+          assert rows[163]['action_id']=='A164'
+          assert rows[163]['record_sha256']=='5e481d187fc86c7b0be6cd93f14f94d54de63935e96d18cbbb2cc3dbfb6c1980'
+          assert rows[164]['action_id']=='A165' and rows[164]['prev_sha256']==rows[163]['record_sha256']
+          assert rows[164]['record_sha256']=='8f7f90513f84bf4d60fa8b7e317c2ce20500f6ed38ff414904249a846766896f'
+          assert len(rows[164]['evidence'])==5
+          for row in rows[161:]:
+              for v in row['evidence']:
+                  blob=(root/v['path']).read_bytes()
+                  assert len(blob)==v['bytes'] and hashlib.sha256(blob).hexdigest()==v['sha256'],v['path']
+          original=(root/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json').read_bytes()
+          assert hashlib.sha256(original).hexdigest()=='9b95735407465c46b1a2fdb6e4e8875bfdd2c428588f6205bf1212d35c0b9e97'
+          w=(root/'evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json').read_bytes()
+          assert len(w)==88075 and hashlib.sha256(w).hexdigest()=='f711d524989df63c100d537614fb314e2701e595d92d0942c9862f605358be31'
+          o=json.loads(original);z=json.loads(w)
+          assert len(o['new_source_manifest'])==240 and z['native_sha_verified_selected_zip_count']==85
+          assert z['by_route']=={'A':7,'B':3,'C':38} and z['exact_replayed_trades']==48
+          assert sum(z['dual_touch_trades_by_route'].values())==0
+          assert sum(t['asof_features']['raid_reconstructed_from_native3m']
+              for t in z['trade_evidence'] if t['route']=='C')==38
+          assert all(not x['gate']['passes_new_oct_historical_screen']
+              for x in o['research_models'].values())
+          assert z['strategy_changed'] is False
+          assert z['sl_tp_from_structure_not_fixed_rr'] is True
+          assert z['real_orders']==z['fills']==z['live_trades']==[]
+          print('C101_A165_FINAL_SOURCE_SHA165_48_REPLAY_PAPER_ONLY_VERIFIED')
+          PY
+      - name: Independently run 567 C84 to C101 negative regressions on each Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution 2>&1 | tee /tmp/c101final
+          grep -Fq 'Ran 567 tests' /tmp/c101final
+          grep -qx 'OK' /tmp/c101final
+          echo C101_FINAL_567_PER_PYTHON_PASS
