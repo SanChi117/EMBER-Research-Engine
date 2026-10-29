@@ -35,12 +35,15 @@ jobs:
           from pathlib import Path
           root=Path('.')
           rows=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines() if x.strip()]
-          assert len(rows) in (163,164),len(rows)
+          assert len(rows) in (163,164,165),len(rows)
           assert rows[162]['action_id']=='A163'
           assert rows[162]['record_sha256']=='7dda9d1b87218f07a2f7844ceb64528d65879372c6ae6197d82c198f1072da5b'
-          if len(rows)==164:
-              assert rows[-1]['action_id']=='A164'
-              assert rows[-1]['prev_sha256']==rows[162]['record_sha256']
+          if len(rows)>=164:
+              assert rows[163]['action_id']=='A164'
+              assert rows[163]['prev_sha256']==rows[162]['record_sha256']
+          if len(rows)==165:
+              assert rows[164]['action_id']=='A165'
+              assert rows[164]['prev_sha256']==rows[163]['record_sha256']
           for row in rows[161:]:
               for e in row['evidence']:
                   blob=(root/e['path']).read_bytes()
