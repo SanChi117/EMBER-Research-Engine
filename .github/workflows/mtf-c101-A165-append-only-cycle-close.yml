@@ -1,0 +1,70 @@
+name: EMBER C101 A165 append-only cycle close and frozen SHA
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c101-A165-append-only-cycle-close.yml'
+permissions:
+  contents: write
+jobs:
+  append-certified-c101:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify C100 baseline and all frozen C101 source and evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/beforeA165
+          grep -Fq 'entries 164 tip_sha256 5e481d187fc86c7b0be6cd93f14f94d54de63935e96d18cbbb2cc3dbfb6c1980' /tmp/beforeA165
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('.')
+          original=root/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json'
+          assert hashlib.sha256(original.read_bytes()).hexdigest()=='9b95735407465c46b1a2fdb6e4e8875bfdd2c428588f6205bf1212d35c0b9e97'
+          p=root/'evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json'
+          raw=p.read_bytes();v=json.loads(raw)
+          assert len(raw)==88075
+          assert hashlib.sha256(raw).hexdigest()=='f711d524989df63c100d537614fb314e2701e595d92d0942c9862f605358be31'
+          assert v['exact_replayed_trades']==48 and v['by_route']=={'A':7,'B':3,'C':38}
+          assert v['native_sha_verified_selected_zip_count']==85
+          assert sum(v['dual_touch_trades_by_route'].values())==0
+          assert sum(int(t['asof_features']['raid_reconstructed_from_native3m'])
+             for t in v['trade_evidence'] if t['route']=='C')==38
+          assert v['real_orders']==v['fills']==v['live_trades']==[]
+          print('C101_A165_SHA_WITNESS_NEGATIVE_ECONOMIC_GATE_SOURCE_VERIFIED')
+          PY
+      - name: Immutable A165 journal append ONLY after source and tests passed
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A165 --cycle B1/C101 --verdict DONE --cycle-result PASSED \
+            --planned "Verify C100 A164, preregister post-hoc C98 native source-only candle forensics; replay all original A7 B3 C38 using frozen 240-archive SHA manifest, inspect pre-entry raid BOS IDM POI and clarify dual SL TP without tweaking A B C or fixed RR." \
+            --executed "Reverified A164 SHA164 and preserved C98 original witness; C101 precommit before candle downloads; built strict native3m C and native5m A B original Binance daily SHA downloader with original 14bps bar-level replay, conservative same-bar stops and as-of feature classification. Independent original source workflow 40947992510 SUCCESS 4/4: 85 provider checksum SHA pinned ZIP and CSV, all 48 trade entry exit reason netR replay equal; 30 negatives plus 537 prior regressions x Python3.10 3.11 3.12 = 1701 PASS. Frozen real original witness and Russian post-hoc report, no live orders." \
+            --result "A 7 of 7, B 3 of 3, C 38 of 38 original native-bar trades exact; C raid wick reclaim and native3m BOS verified 38 of 38; same-bar both SL TP collision 0/48. All original model 25bps routes remain negative: A -2.996104R, B -4.214114R, C -17.471678R. For C stopped 21 BOS body/range median .666667 vs non-stop 17 median .396552; raid to BOS time stopped median 15m vs others 3m, post-hoc association NOT validation. C101 is descriptive, NOT new economic OOS." \
+            --countercheck "Audit C100 before append; rehash all new files using auditlog record, frozen prior journal unmodified. C101 source ZIP and CSV SHA signed by original C98 manifest, not third-party. Negative test first failed due to synthetic earlier causal guard: corrected only expected test exception, not source or strategy; successful independent 4/4 GitHub workflow with 1701 PASS, original ZIP evidence 88075 bytes SHA f711d524989df63c100d537614fb314e2701e595d92d0942c9862f605358be31. No synthetic source data included as empirical market observation, no filters tuned or trade orders." \
+            --evidence cycles/B1_C101_PRECOMMIT_FROZEN_C98_NATIVE_BAR_FORENSIC_RU.md \
+            --evidence d05/c101_original_native_bar_trade_attribution.py \
+            --evidence d05/test_c101_original_native_bar_trade_attribution.py \
+            --evidence evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json \
+            --evidence cycles/B1_C101_ORIGINAL_NATIVE_CANDLE_SHA48_FORENSIC_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/afterA165
+          grep -Fq 'entries 165 tip_sha256 ' /tmp/afterA165
+      - name: Commit original append-only A165 journal once
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A165: immutable C101 native 85 ZIP and 48 trade causal candle replay journal"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
