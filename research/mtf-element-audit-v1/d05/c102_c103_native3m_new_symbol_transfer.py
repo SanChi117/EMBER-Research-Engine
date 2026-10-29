@@ -87,6 +87,8 @@ def native_daily(sym,date,*,fetch=_safe_http):
             t0,t1,trades=int(row[0]),int(row[6]),int(row[8])
             o,h,l,c,v=[dec(row[j]) for j in (1,2,3,4,5)]
             quote,taker,taker_quote=[dec(row[j]) for j in (7,9,10)]
+        except C102Rejected:
+            raise
         except (ValueError,IndexError) as e:
             raise C102Rejected("BAD_NATIVE_TIMESTAMP_OR_CSV") from e
         if t0!=start or t1!=start+THREE-1 or trades<0:
