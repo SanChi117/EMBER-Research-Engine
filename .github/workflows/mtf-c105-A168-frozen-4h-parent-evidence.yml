@@ -1,0 +1,82 @@
+name: EMBER C105 A168 freeze 4H parent POI SL TP SHA and economic no-pass
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c105-A168-frozen-4h-parent-evidence.yml'
+permissions:
+  contents: write
+jobs:
+  independent-verify-then-append-A168:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck frozen A167 and entire source witness before A168
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c105-A167
+          grep -Fq 'entries 167 tip_sha256 b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de' /tmp/c105-A167
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json')
+          raw=p.read_bytes()
+          assert len(raw)==204933 and hashlib.sha256(raw).hexdigest()=='5cb01f8022fe5b1de7d19b853cad2ab478cab37fc69204268af911bc159abea4'
+          j=json.loads(raw)
+          assert j['source_zip_count']==320 and len(j['source_manifest'])==320
+          assert j['native3m_bars']==153600 and len(j['trades'])==25
+          assert j['only_parent_stop_and_target'] and not j['fixed_rr_target']
+          assert j['orders']==j['fills']==j['live_trades']==[]
+          assert j['scores']['25']['sum_r']==5.544304 and j['scores']['25']['pf']==1.29141
+          assert j['scores']['40']['pf']==1.08989
+          assert j['scores']['25']['dd_1pct_risk_pct']==10.02685
+          assert j['folds']['early']['25']['sum_r']==-6.186858
+          assert j['folds']['late']['25']['sum_r']==11.731162
+          assert j['admission']['passes_historical_screen'] is False
+          assert j['admission']['live_approved'] is False
+          for t in j['trades']:
+              assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+              assert t['pad_source']=='ATR_FULLY_CLOSED_4H'
+              assert t['zone_created_ms']<t['first_4h_poi_touch_ms']<t['one_hour_rejection_close_ms']<t['fifteen_minute_vc_close_ms']==t['entry_ms']
+              assert t['fta_confirmed_ms']<=t['entry_ms']
+              assert t['source_tf']=='NATIVE_3M'
+          assert sum(z['events'].get('CLOSED_4H_FVG_PARENT_CREATED',0) for z in j['per_symbol'].values())==108
+          assert sum(z['events'].get('P4_NATIVE3M_PAPER_CLOSED',0) for z in j['per_symbol'].values())==25
+          print('C105_FROZEN_320_NATIVE3M_SOURCE_25_4H_ONLY_TRADE_GEOMETRIES_AND_NEGATIVE_ECONOMIC_GATE_PASS')
+          PY
+      - name: Record immutable canonical SHA journal A168, full original evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A168 --cycle B1/C105 --verdict DONE --cycle-result PASSED \
+            --planned "Read previous genuine C91 and C93 mechanisms and correct primary strategy ownership: preregister D1/W1 -> 4H FVG parent -> physical first 4H test -> closed 1H rejection -> closed 15m VC -> next native3m open. 4H POI far edge plus fully closed 4H ATR STOP and nearest unconsumed confirmed 4H pivot minus/plus 4H ATR TP; 4H RR only derived, never fixed. Ten new Binance symbols 320 original 3m daily ZIP, full 32 closed days, PAPER ONLY." \
+            --executed "Frozen C105 Route P4 independent original provider verified 320 SHA/CHECKSUM native3m ZIP/CSV, 153600 3m candles Sep26-Oct27, BNB XLM HBAR INJ OP LDO DOT GALA SAND RUNE. All stop and target parents exactly 4H. Lifecycle: 108 original 4H parent zones, 81 physical first touches, 51 closed 1H reactions, 48 closed 15m confirmations, 25 paper fills. All 30 new adverse invariants and 634 earlier historical tests three Python versions 1992 PASS. Original BTC / C93 C102 C104 and A167 SHA unchanged. CI 40975858045 SUCCESS 4/4 with 320 independent source SHA receipts and zero live orders." \
+            --result "Engineering architecture now correct 4H stop and 4H target. Economic at 25bps n25 netR +5.544304 PF1.29141 modeled DD10.02685pct; 14bps +8.196799 PF1.47506; 40bps +1.92727 PF1.08989. Early n13 netR25 -6.186858 PF.52734 versus late n12 +11.731162 PF2.97618, not robust. Admission FAIL due n25 less than30, PF40 below1.1, modeled DD25 not below10; no stable prospective validation. No real execution." \
+            --countercheck "A prime technical risk was previous C93 1H-only exits and C91 mixed 15m stop: new C105 parent sources are independently asserted 4H only on each source-pinned trade, ATR 4H only. Frozen daily-weekly as-of close, H4 pivot fully confirmed at least two right candles, nearest untouched structural 4H FTA, original native3m gap and stop-first. Initial C105 red CI discovered unit-test tuple unpack bug in 2 fixtures before source download and was corrected without any trade rule change; final all 1992 pass. Although netR25 positive, stringent admission fails and two temporal folds contradict stability; reject live-readiness." \
+            --evidence cycles/B1_C105_PRECOMMIT_PARENT_4H_POI_SL_TP_NATIVE3M_RU.md \
+            --evidence d05/c105_parent4h_structural_geometry.py \
+            --evidence d05/c105_parent4h_native3m_source.py \
+            --evidence d05/c105_parent4h_native3m_research.py \
+            --evidence d05/test_c105_parent4h_only_geometry.py \
+            --evidence evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json \
+            --evidence cycles/B1_C105_MAIN_4H_PARENT_FULL_REBUILD_ECONOMIC_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c105-A168
+          grep -Fq 'entries 168 tip_sha256 ' /tmp/c105-A168
+      - name: Git push append-only A168 journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A168: frozen genuine 4H-only POI SL TP, 320 native3m source ZIP, 25 PAPER trades, economic screen FAIL"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
