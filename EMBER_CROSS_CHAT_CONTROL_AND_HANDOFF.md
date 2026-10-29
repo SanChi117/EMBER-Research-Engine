@@ -804,3 +804,28 @@ Owner academic source read directly from user's Google Drive `2. Entry by IMB & 
 Report research/mtf-element-audit-v1/cycles/B1_C104_CAUSAL_4H_FTA_10COIN_ECONOMIC_REPORT_RU.md. This is **historical new-symbol validation, not a true prospective/live OOS**, and 4 H / last12h features are developer adaptations, not certified original author semantics. No live orders or fills.
 
 **Next C105:** resist repeated threshold optimizations on these already-seen 10 coins. Research event-quality problems deeper in C93 BOS: distinguish unproductive raid+break from genuinely supported HTF follow-through; investigate counterfactual original partial path forensic and possible economic entry on BOS retest with real no-fill and 25/40bps stress on *new reserved* data. All new changes must be PRECOMMITTED, tested against independent untouched original sources, recorded in append-only A168 and both root docs. If insufficient data, report NO_POWER; if negative expected value, REJECT. Do not trade real money.
+
+---
+
+## ПЕРЕДАЧА 2026-10-30 — C105/A168, ВОССТАНОВЛЕНА ОСНОВНАЯ 4H АРХИТЕКТУРА
+
+Repo SanChi117/EMBER-Research-Engine branch `research/academic-engine-recovery-20261015`; project `research/mtf-element-audit-v1/`. FIRST verify **168/168 SHA journal A168 tip `9741dca935748241f47d6067285afe6a0fd3f7ed710054924f2cb5abd5a398f6`**, previous A167 `b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de`. Verify every one of seven A168 evidence SHA, original C91/C93/C102/C104 unchanged.
+
+User correctly challenged C93/C104 research: if parent strategy is 4H, SL must cancel parent 4H idea, TP should aim at parent/opposing 4H structure, not automatically 1H target or 3m stop. Audit proved C93 1H raid->3m BOS SL and TP 1H; C91 4H POI partial parent but 15m StrongHL and ATR5m stop. Both still kept as isolated exploratory academic-adapted mechanisms. **New independent research Route P4 C105 built and tested**, not legacy code alteration.
+
+**New files:**
+- `cycles/B1_C105_PRECOMMIT_PARENT_4H_POI_SL_TP_NATIVE3M_RU.md` registered before new market source.
+- `d05/c105_parent4h_structural_geometry.py`: native3m→15m/1H/4H/D1/W1 full closed aggregate; daily-weekly direction; 4H FVG POI first touch; closed1H rejection; closed15m VC; 4H FVG far boundary ±0.15ATR14(4H) SL; nearest fully confirmed 4H swing opposite and not yet hit since confirmation with 4H ATR buffer TP. RR DERIVED only >=1.25 gating, no fixed-RR target. Real native3m next-open entry, stop-first candle, gap, 48h horizon.
+- `d05/c105_parent4h_native3m_source.py` whitelisted ten newly chosen pairs, reuse immutable C104 strict provider ZIP checksums original CSV SHA.
+- `d05/c105_parent4h_native3m_research.py`: continuous historical 15m event clock; 4H parent lifecycle 48h expiry, 8h test TTL, one trade/zone, per-symbol busy, stop/TP 4H parent witness. Disallowed side substitutions or trade optimization.
+- `d05/test_c105_parent4h_only_geometry.py`: 30 adverse causal, no-future, source, 4H-only exit, stop-first tests.
+- `evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json`: **204933 bytes original 320 Binance USD-M SHA-pinned ZIP provider & CSV**, true 153600 3m bars, **SHA256 `5cb01f8022fe5b1de7d19b853cad2ab478cab37fc69204268af911bc159abea4`**. BNB XLM HBAR INJ OP LDO DOT GALA SAND RUNE USDT, 2026-09-26..2026-10-27 full UTC, 7d warmup, 48h final embargo. Source receipt per pair/day in JSON, 25 paper fills original native3m.
+- `cycles/B1_C105_MAIN_4H_PARENT_FULL_REBUILD_ECONOMIC_REPORT_RU.md` comprehensive source and economic falsification.
+
+**Verified lifecycle:** 108 4H zone created →81 4H first physical touches→51 closed1H rejection→48 closed15m VC→**25 full-parent 4H SL+4H TP paper trades**, 15 stop, 8 4H FTA target, 2 48h timeout. N by symbol BNB2 DOT3 GALA2 HBAR3 INJ1 LDO1 OP3 RUNE0 SAND3 XLM7. No live orders or actual fills.
+
+**Economics** 14bps **n25 +8.196799R PF1.47506**; 25bps **+5.544304R PF1.29141** modeled DD at 1% risk **10.02685%**; 40bps **+1.92727R PF1.08989**. 25bps early 13 trades **−6.186858R PF0.52734**, late 12 trades **+11.731162R PF2.97618**. **FAILED acceptance** n25<30, PF40<=1.1 and DD25>=10 plus extreme regime instability. Do NOT claim proven profitability. 11 long deals at 14bps -9.793783R, 14 short +17.990582R is POST-HOC; never pivot to shorts only on this sample and call it OOS.
+
+CI [40975858045](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40975858045) 4/4 SUCCESS, **30 new +634 prior tests x Python 3.10/3.11/3.12 = 1992 PASS**, all genuine 320 native source ZIP checked. First red CI was purely test fixture return tuple bug, fixed BEFORE original market download. Journal A168 168/168 new immutable tip above, append [40976225460](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40976225460) SUCCESS. C100 forensic CI updated to accept 168 with append-only predecessor hash proof, no rewriting A167.
+
+**Next research:** C106 no new filters without prereg; fully validate as-of POI zone lifecycle and confirmed 4H FTA; ideally first unseen different period (Oct28.. future fully closed) and diversified crypto regimes/new symbols. Consider source archive 32 days vs longer economic cycles, reserve holdout before scanning. If semantic issue discovered, fix by rule and negative test THEN honest new OOS; not backfit early/late. Short-only hindsight forbidden. PAPER ONLY until reproducible stable evidence and independent checks.
