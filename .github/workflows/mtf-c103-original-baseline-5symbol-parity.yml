@@ -1,0 +1,25 @@
+name: EMBER C103 original C93 five-symbol baseline exact event parity
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c103-original-baseline-5symbol-parity.yml'
+permissions:
+  contents: read
+jobs:
+  exact-native3m-c93-replay-vs-transfer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: independently redownload 160 SHA-pinned ZIP; original C93 exact baseline parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c103_exact_original_c93_baseline_parity.py | tee /tmp/c103-parity
+          grep -Fq '"all_equal": true' /tmp/c103-parity
+          grep -Fq '"total_original": 45' /tmp/c103-parity
+          grep -Fq '"total_transfer": 45' /tmp/c103-parity
+          echo C103_EXACT_45_45_NATIVE3M_SOURCE_PARITY_PASS
