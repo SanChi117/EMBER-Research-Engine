@@ -36,7 +36,7 @@ def dec(x):
 def inspect_trade(t, route):
     required = ("symbol", "route", "entry_ms", "exit_ms", "entry", "stop",
                 "target", "fta", "fta_confirmed_ms", "derived_rr", "net_r",
-                "exit_reason", "fee_slip_roundtrip_bps")
+                "exit_reason")
     if not isinstance(t, dict) or any(k not in t for k in required):
         raise DiagnosticError("INCOMPLETE_FROZEN_TRADE")
     if route not in EXPECTED:
@@ -59,8 +59,13 @@ def inspect_trade(t, route):
     if route == "B" and (t.get("source_tf") != "NATIVE_5M"
                           or t.get("limit_filled") is not True):
         raise DiagnosticError("B_UNFILLED_OR_WRONG_TIMEFRAME")
-    if t["fee_slip_roundtrip_bps"] != 14:
-        raise DiagnosticError("FROZEN_14BPS_BASIS_REQUIRED")
+    if "fee_slip_roundtrip_bps" in t:
+        if t["fee_slip_roundtrip_bps"] != 14:
+            raise DiagnosticError("FROZEN_14BPS_BASIS_REQUIRED")
+    elif route == "A":
+        raise DiagnosticError("MISSING_A_SOURCE_COST_BASIS")
+    # B/C original witnesses lack a per-trade fee field; frozen score
+    # and C97 cost replay, not an invented fee field, establish 14bps.
     e, s, target, fta = (dec(t[k]) for k in ("entry", "stop", "target", "fta"))
     if min(e, s, target, fta) <= 0 or e == s or e == target:
         raise DiagnosticError("INVALID_RISK_OR_TARGET")
