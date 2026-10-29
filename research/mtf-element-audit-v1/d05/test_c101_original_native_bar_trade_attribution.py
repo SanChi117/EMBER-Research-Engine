@@ -96,11 +96,15 @@ class C101NegativeTests(unittest.TestCase):
     def test_08_falsified_a_entry_open(self):
         t,rr=source_trade("A")
         t["entry"]="100.1"
+        t["derived_rr"]=float((D("102")-D("100.1"))/(D("100.1")-D("99")))
         self.assertReject(lambda:m.validate_historical_path(rr,t,"A"),"A_OR_C_ENTRY_NOT_NATIVE_OPEN")
 
     def test_09_falsified_b_limit_no_touch(self):
         t,rr=source_trade("B")
-        t["entry"]="98"
+        t["entry"]="102.5"
+        t["target"]="104"
+        t["fta"]="105"
+        t["derived_rr"]=float((D("104")-D("102.5"))/(D("102.5")-D("99")))
         self.assertReject(lambda:m.validate_historical_path(rr,t,"B"),"B_LIMIT_NOT_TOUCHED")
 
     def test_10_wrong_timeframe_for_entry(self):
