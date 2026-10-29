@@ -4,6 +4,8 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c102-c103-new-symbol-native3m-research.yml'
+      - 'research/mtf-element-audit-v1/d05/c102_c103_native3m_new_symbol_transfer.py'
+      - 'research/mtf-element-audit-v1/d05/test_c102_c103_native3m_new_symbol_transfer.py'
 permissions:
   contents: write
 jobs:
