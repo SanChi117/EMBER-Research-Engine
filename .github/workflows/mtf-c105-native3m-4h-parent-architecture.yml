@@ -1,0 +1,100 @@
+name: EMBER C105 4H owner parent POI SL TP original native3m PAPER falsification
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c105-native3m-4h-parent-architecture.yml'
+      - 'research/mtf-element-audit-v1/d05/c105_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c105_*.py'
+permissions:
+  contents: write
+jobs:
+  independent-4h-parent-adversarial:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Integrity SHA A167 previous and C105 frozen source library
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c105-sha
+          grep -Fq 'entries 167 tip_sha256 b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de' /tmp/c105-sha
+          cd d05
+          python - <<'PY'
+          import c105_parent4h_native3m_research as model
+          model.frozen_source_checks()
+          print('C105_4H_C93_C102_C104_ORIGINAL_SOURCES_UNCHANGED')
+          PY
+      - name: New 30 C105 causal tests + all original 634 prior tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c105_parent4h_only_geometry 2>&1 | tee /tmp/c105-new
+          grep -Fq 'Ran 30 tests' /tmp/c105-new
+          grep -qx 'OK' /tmp/c105-new
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 2>&1 | tee /tmp/c105-old
+          grep -Fq 'Ran 634 tests' /tmp/c105-old
+          grep -qx 'OK' /tmp/c105-old
+          echo 'C105_ADVERSARIAL_664_PYTHON_1992_TOTAL_PASS'
+  real-320-original-native3m-new-10-crypto:
+    needs: independent-4h-parent-adversarial
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original Binance USD-M full 320 ZIP sha receipts + 4H parent continuous replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c105_parent4h_native3m_research.py --output research/mtf-element-audit-v1/evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json | tee /tmp/c105-witness
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json')
+          raw=p.read_bytes();z=json.loads(raw)
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['source_manifest'])==320
+          assert len(z['symbols'])==10
+          assert z['only_parent_stop_and_target'] is True and z['fixed_rr_target'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['admission']['live_approved'] is False
+          assert z['scores']['25']['n']==len(z['trades'])
+          for sym,item in z['per_symbol'].items():
+              assert item['confirmed_tf_bars']['native3m']==15360
+              assert item['confirmed_tf_bars']['4h']==192
+              assert item['confirmed_tf_bars']['15m']==3072
+              for t in item['trades']:
+                  assert t['symbol']==sym
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['pad_source']=='ATR_FULLY_CLOSED_4H'
+                  assert t['stop_source']=='4H_FVG_FAR_EDGE'
+                  assert t['target_source']=='4H_UNCONSUMED_CONFIRMED_PIVOT'
+                  assert t['zone_created_ms']<t['first_4h_poi_touch_ms']<t['one_hour_rejection_close_ms']<t['fifteen_minute_vc_close_ms']==t['entry_ms']
+                  assert t['fta_confirmed_ms']<=t['entry_ms']
+                  assert t['source_tf']=='NATIVE_3M'
+                  assert t['derived_rr']>=1.25
+          print('C105_SHA',len(raw),hashlib.sha256(raw).hexdigest())
+          print('C105_4H_PARENT_STRUCTURAL_GEOMETRY_SOURCE_VERIFIED')
+          PY
+      - name: Commit independent source SHA and 4H parent research witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json
+          git commit -m "C105 original 320 Binance crypto native3m source SHA and 4H-parent POI SL TP paper results"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
