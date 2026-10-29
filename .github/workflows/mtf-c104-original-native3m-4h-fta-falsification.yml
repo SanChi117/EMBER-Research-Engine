@@ -1,0 +1,101 @@
+name: EMBER C104 10-symbol original native3m 4H FTA causal portfolio falsification
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c104-original-native3m-4h-fta-falsification.yml'
+permissions:
+  contents: write
+jobs:
+  independent-regression:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Immutable A166 audit and prior original C93/C102 source hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c104-sha
+          grep -Fq 'entries 166 tip_sha256 7d12c4d905281bafa5dde004eb1301338649d067da06ccf2d0bcefb2537d99cb' /tmp/c104-sha
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('.')
+          l=[json.loads(x) for x in (p/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert l[-1]['action_id']=='A166' and len(l)==166
+          for x in l[-2:]:
+              for f in x['evidence']:
+                  blob=(p/f['path']).read_bytes()
+                  assert len(blob)==f['bytes'] and hashlib.sha256(blob).hexdigest()==f['sha256']
+          import sys
+          sys.path.insert(0,str(p/'d05'))
+          import c104_native3m_quality_research
+          c104_native3m_quality_research.check_sha()
+          print('C104_166_SHA_AND_ORIGINAL_C93_C102_UNCHANGED')
+          PY
+      - name: C104 negatives plus all C84-C103 prior adversarial suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c104_structural_quality_new10 2>&1 | tee /tmp/c104-new
+          grep -Fq 'Ran 32 tests' /tmp/c104-new
+          grep -qx 'OK' /tmp/c104-new
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer 2>&1 | tee /tmp/c104-old
+          grep -Fq 'Ran 602 tests' /tmp/c104-old
+          grep -qx 'OK' /tmp/c104-old
+          echo C104_634_PER_PYTHON_1902_TOTAL_PASS
+  ten-new-crypto-pairs-original-native3m:
+    needs: independent-regression
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent original 320 ZIP checksum/CSV SHA then unchanged C93 10-coin exact parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c104_native3m_quality_research.py --output research/mtf-element-audit-v1/evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json | tee /tmp/c104-result
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json')
+          raw=p.read_bytes();z=json.loads(raw)
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['symbols'])==10 and len(z['source_manifest'])==320
+          assert set(z['variants'])=={'BASELINE_RAW','BASELINE_PORTFOLIO','QUALITY_RAW','QUALITY_PORTFOLIO'}
+          assert all(x['matches'] for x in z['exact_original_c93_trade_parity'].values())
+          assert z['structural_original_sl_tp'] and not z['rr_target_fixed']
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert not z['primary_admission']['live_approved']
+          for v in z['variants'].values():
+              assert len(v['trades'])==v['scores']['25']['n']
+              for t in v['trades']:
+                  assert t['source_tf']=='NATIVE_3M'
+                  assert t['raid_closed_ms']<t['bos_close_ms']==t['entry_ms']
+                  assert t['fta_confirmed_ms']<=t['entry_ms']
+                  assert t['preentry_quality']['last_closed_4h_ms']<=t['entry_ms']
+                  assert t['preentry_quality']['last_closed_1h_ms']<=t['entry_ms']
+          print('C104_FROZEN_SHA',len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Commit exact 320-original-daily-archive checksummed witness to research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json
+          git commit -m "C104 frozen historical results: 320 original provider-verified native3m ZIP, ten new crypto markets"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
