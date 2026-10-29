@@ -4,6 +4,8 @@ on:
     branches: [research/academic-engine-recovery-20261015]
     paths:
       - '.github/workflows/mtf-c104-original-native3m-4h-fta-falsification.yml'
+      - 'research/mtf-element-audit-v1/d05/c104_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c104_*.py'
 permissions:
   contents: write
 jobs:
