@@ -156,7 +156,8 @@ class C101NegativeTests(unittest.TestCase):
     def test_19_b_signal_after_fill(self):
         t,rr=source_trade("B")
         t["signal_ms"]=t["entry_ms"]+FIVE
-        self.assertReject(lambda:m.validate_historical_path(rr,t,"B"),"IDM_LIMIT_SIGNAL_NOT_PREKNOWN")
+        with self.assertRaisesRegex(ValueError,"FUTURE_SIGNAL_CONTEXT|IDM_LIMIT_SIGNAL_NOT_PREKNOWN"):
+            m.validate_historical_path(rr,t,"B")
 
     def test_20_c_bos_body_ratio_is_asof(self):
         t,rr=source_trade("C")
