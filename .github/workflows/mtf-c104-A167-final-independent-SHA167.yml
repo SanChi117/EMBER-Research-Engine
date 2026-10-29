@@ -1,0 +1,63 @@
+name: EMBER C104 A167 independent 10 crypto source original SHA167 final
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c104-A167-final-independent-SHA167.yml'
+permissions:
+  contents: read
+jobs:
+  final-independent-SHA167-1902-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check every prior SHA record plus seven C104 evidence artifact pin and negative economic gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/sha167
+          grep -Fq 'entries 167 tip_sha256 b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de' /tmp/sha167
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('.')
+          j=[json.loads(x) for x in (p/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==167 and j[-1]['action_id']=='A167'
+          assert j[-1]['prev_sha256']=='7d12c4d905281bafa5dde004eb1301338649d067da06ccf2d0bcefb2537d99cb'
+          assert j[-1]['record_sha256']=='b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de'
+          assert len(j[-1]['evidence'])==7
+          for event in j[-4:]:
+              for f in event['evidence']:
+                  raw=(p/f['path']).read_bytes()
+                  assert len(raw)==f['bytes'] and hashlib.sha256(raw).hexdigest()==f['sha256'],f['path']
+          assert hashlib.sha256((p/'d05/c93_native3m_raid_bos_route_c_research.py').read_bytes()).hexdigest()=='a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0'
+          assert hashlib.sha256((p/'d05/c102_c103_native3m_new_symbol_transfer.py').read_bytes()).hexdigest()=='853e5ee613e00cddbdf39b933c57bab6b6a695f1b549e69f29f52a97a01aed'
+          w=(p/'evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json').read_bytes()
+          assert len(w)==407421 and hashlib.sha256(w).hexdigest()=='ab582ee221fe8b520df7428babdd3b3a33915a60f08d8ae3785000682c3637ce'
+          z=json.loads(w)
+          assert len(z['source_manifest'])==320 and z['native3m_bars']==153600
+          assert sum(x['original_n'] for x in z['exact_original_c93_trade_parity'].values())==82
+          assert all(x['matches'] for x in z['exact_original_c93_trade_parity'].values())
+          assert z['variants']['QUALITY_PORTFOLIO']['scores']['25']['n']==14
+          assert z['variants']['QUALITY_PORTFOLIO']['scores']['25']['sum_r']==-0.786491
+          assert z['primary_admission']['passes_historical_screen'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          print('C104_A167_FINAL_SHA_AND_ORIGINAL_C93_PARITY_82_OF_82_AND_REJECT_VERIFIED')
+          PY
+      - name: All 634 tests each Python version for 1902 historical tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 2>&1 | tee /tmp/c104-reg
+          grep -Fq 'Ran 634 tests' /tmp/c104-reg
+          grep -qx 'OK' /tmp/c104-reg
+          echo C104_FINAL_634_X_3_1902_PASS
