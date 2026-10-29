@@ -13,7 +13,7 @@ from test_c102_c103_native3m_new_symbol_transfer import csv_fixture
 H=3600000
 START=old.BEGIN_MS
 
-def conditions(now=START+15*H,side="LONG",target="101",stop="99"):
+def conditions(now=START+12*24*H,side="LONG",target="101",stop="99"):
     hours=tuple(OHLC(START+i*H,START+(i+1)*H,D("100"),
        D("110"),D("90"),D("101"),D("1")) for i in range(768))
     fours=q.four_hour(hours)
