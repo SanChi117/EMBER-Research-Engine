@@ -1,0 +1,99 @@
+name: EMBER C101 native3m-5m original candle loss forensic
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c101-original-native3m5m-forensic-evidence.yml'
+      - 'research/mtf-element-audit-v1/d05/c101_original_native_bar_trade_attribution.py'
+      - 'research/mtf-element-audit-v1/d05/test_c101_original_native_bar_trade_attribution.py'
+permissions:
+  contents: write
+jobs:
+  adversarial-30-plus-512:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A164 append-only chain and 48 frozen C98 original evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c101-chain
+          grep -Fq 'entries 164 tip_sha256 5e481d187fc86c7b0be6cd93f14f94d54de63935e96d18cbbb2cc3dbfb6c1980' /tmp/c101-chain
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('.')
+          entries=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(entries)==164
+          for t in entries[161:]:
+            for f in t['evidence']:
+              raw=(root/f['path']).read_bytes()
+              assert len(raw)==f['bytes'] and hashlib.sha256(raw).hexdigest()==f['sha256'],f['path']
+          original=(root/'evidence/c98/C98_NEW_OCT_SOURCE_ABC_CLOSED_HOLDOUT.json').read_bytes()
+          assert hashlib.sha256(original).hexdigest()=='9b95735407465c46b1a2fdb6e4e8875bfdd2c428588f6205bf1212d35c0b9e97'
+          o=json.loads(original)
+          assert len(o['new_source_manifest'])==240
+          assert [len(o['research_models'][r]['trades']) for r in ('A','B','C')]==[7,3,38]
+          print('C101_BASE_A164_164_SOURCE_SHA_48_C98_PASS')
+          PY
+      - name: C101 30 adversarial regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c101_original_native_bar_trade_attribution 2>&1 | tee /tmp/c101-neg
+          grep -Fq 'Ran 30 tests' /tmp/c101-neg
+          grep -qx 'OK' /tmp/c101-neg
+      - name: 512 original regressions C84-C99 and 25 C100
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics 2>&1 | tee /tmp/c101-reg
+          grep -Fq 'Ran 537 tests' /tmp/c101-reg
+          grep -qx 'OK' /tmp/c101-reg
+          echo C101_567_TESTS_PER_PYTHON_PASS
+  original-native-archive-replay:
+    runs-on: ubuntu-latest
+    needs: adversarial-30-plus-512
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Re-download exact C98-pinned native3m / native5m source and replay 48 trade decisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c101_original_native_bar_trade_attribution.py --output research/mtf-element-audit-v1/evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('research/mtf-element-audit-v1/evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json')
+          raw=p.read_bytes();z=json.loads(raw)
+          assert z['source_c98_trades']==z['exact_replayed_trades']==len(z['trade_evidence'])==48
+          assert z['by_route']=={'A':7,'B':3,'C':38}
+          assert not z['strategy_changed'] and z['real_orders']==z['fills']==z['live_trades']==[]
+          assert z['native_sha_verified_selected_zip_count']==len(z['native_selected_sha_manifest'])
+          assert z['native_sha_verified_selected_zip_count']>0
+          print('C101_ORIGINAL_NATIVE_BAR_SHA48_48',len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Commit immutable C101 data evidence without editing original C98/C99 history
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json
+          git commit -m "C101: freeze original SHA-pinned 48 trade native candle replay evidence"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
