@@ -1,0 +1,96 @@
+name: EMBER C102-C103 precommitted native3m new symbol transfer
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c102-c103-new-symbol-native3m-research.yml'
+permissions:
+  contents: write
+jobs:
+  independent-negatives:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Integrity A165 and ORIGINAL unmodified route C93 SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c102-sha165
+          grep -Fq 'entries 165 tip_sha256 8f7f90513f84bf4d60fa8b7e317c2ce20500f6ed38ff414904249a846766896f' /tmp/c102-sha165
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('.')
+          rows=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines() if x.strip()]
+          assert len(rows)==165 and rows[-1]['action_id']=='A165'
+          assert hashlib.sha256((root/'d05/c93_native3m_raid_bos_route_c_research.py').read_bytes()).hexdigest()=='a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0'
+          for a in rows[-4:]:
+              for item in a['evidence']:
+                  raw=(root/item['path']).read_bytes()
+                  assert len(raw)==item['bytes'] and hashlib.sha256(raw).hexdigest()==item['sha256'],item['path']
+          w=json.loads((root/'evidence/c101/C101_C98_SHA_PINNED_NATIVE_BAR_CAUSAL_FORENSIC.json').read_text())
+          assert w['exact_replayed_trades']==48 and w['native_sha_verified_selected_zip_count']==85
+          print('C102_FROZEN_A165_C93_UNMODIFIED_AND_C101_SHA_PROOF')
+          PY
+      - name: 35 C102 negative tests plus 567 C84-C101 original tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c102_c103_native3m_new_symbol_transfer 2>&1 | tee /tmp/c102-neg
+          grep -Fq 'Ran 35 tests' /tmp/c102-neg
+          grep -qx 'OK' /tmp/c102-neg
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution 2>&1 | tee /tmp/c102-reg
+          grep -Fq 'Ran 567 tests' /tmp/c102-reg
+          grep -qx 'OK' /tmp/c102-reg
+  historical-intercoin-native3m-source:
+    runs-on: ubuntu-latest
+    needs: independent-negatives
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 160 original provider-checked 3m ZIP; compare four PREDECLARED models
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c102_c103_native3m_new_symbol_transfer.py --output research/mtf-element-audit-v1/evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json | tee /tmp/ember-c103-results
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('research/mtf-element-audit-v1/evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json')
+          raw=p.read_bytes();j=json.loads(raw)
+          assert j['source_zip_count']==160 and j['original_native3m_bars']==76800
+          assert len(j['source_manifest'])==160 and j['symbols']==['ADAUSDT','AVAXUSDT','DOGEUSDT','LINKUSDT','SUIUSDT']
+          assert set(j['variants'])=={'BASELINE','V_COST','V_CLOCK','V_BOTH'}
+          assert j['no_fixed_rr'] and not j['original_c93_modified']
+          assert j['orders']==j['fills']==j['live_trades']==[]
+          assert all(v['admission']['live_approved'] is False for v in j['variants'].values())
+          for v in j['variants'].values():
+              assert v['scores']['14']['n']==len(v['trades'])
+              for t in v['trades']:
+                  assert t['source_tf']=='NATIVE_3M' and t['bos_close_ms']==t['entry_ms']
+                  assert t['raid_closed_ms']<t['bos_close_ms']
+                  assert t['fta_confirmed_ms']<=t['entry_ms']
+          print('FROZEN_C103_SHA',len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Freeze exact C102/C103 original source witness in GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json
+          git commit -m "C103: freeze source-checked 160 original native3m ZIP research transfer and negative outcomes"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
