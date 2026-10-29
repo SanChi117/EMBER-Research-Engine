@@ -776,3 +776,31 @@ Owner academic source read directly from user's Google Drive `2. Entry by IMB & 
 **Архив и независимый контроль:** evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json, **198909 байт SHA256 e5df71e5f58c968c0d4e06cf61e56db6d3e80d1060d2cac2bf7f91b057909d92**. Основной CI [#40965377968](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40965377968) **SUCCESS 4/4**, 35 новых+567 прежних негативных тестов на каждой из Python 3.10/3.11/3.12 = **1806 PASS**, отдельно SHA-проверено 160 original ZIP. Более строгий [независимый CI #40965830296](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40965830296) заново скачал 160 оригинальных ZIP и временно расширил лишь whitelist для вызова точного НЕИЗМЕНЁННОГО c93.discover: **45/45 точных совпадений** trade signatures Entry/SL/FTA/TP, raid/BOS, direction, exit, netR, 0 различий; ADA9 AVAX8 DOGE8 LINK11 SUI9. A166 независимо записан успешным [CI #40966059555](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40966059555). Подробный русский отчёт cycles/B1_C102_C103_NEW_SYMBOL_3M_ECONOMIC_TRANSFER_REPORT_RU.md.
 
 **Следующее C104:** подтвердить неизменность А166/166, затем исследовать КАЧЕСТВЕННО НОВЫЙ гипотетический механизм событий, а не многократно подбирать цену SL или порог BOS на уже наблюдённых выигрышных/убыточных примерах. Минимум 30 независимых OOS сделок на маршрут и >=10 в двух temporal folds, netR25>0, PF25>1.2, PF40>1.1, DD<10% при 1% риска — до этого НЕЛЬЗЯ заявлять модель стабильной. Новые признаки фиксировать заранее, обосновывать по уже закрытым свечам, защищать от lookahead и будущего суффикса, только PAPER. Если нет новых данных — BLOCKED/NO_POWER, не придумывать успех. Обновлять обе корневые карты и SHA append-only, проверять отрицательные результаты независимым CI.
+
+---
+
+## Передача 2026-10-30: C104/A167 завершён; новая независимая проверка гипотезы дала FAIL
+
+**ОБЯЗАТЕЛЬНОЕ ПЕРВОЕ ДЕЙСТВИЕ:** перед новой работой перепроверь A167 SHA журнал и последние артефакты. Репозиторий SanChi117/EMBER-Research-Engine, ветка research/academic-engine-recovery-20261015, каталог research/mtf-element-audit-v1. SHA journal **167/167 tip b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de**; immutable A166 predecessor SHA **7d12c4d905281bafa5dde004eb1301338649d067da06ccf2d0bcefb2537d99cb**. A167 has 7 pin files: precommit, C104 original-source parser, structural quality module, backtest runner, 32 tests, frozen JSON, Russian report. Revalidate original C93 SHA a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0 and C102 SHA 853e5ee613e00cddbdf39b933c57bab6b6a6a695f1b549e69f29f52a97a01aed (no changes).
+
+### Замысел из внешнего анализа Kimi, ДО просмотра новых данных
+- 4H direction: 2 fully confirmed pivot lows rising for long / pivot highs falling for short; previous fully closed 4H close must agree with 6 closed 4H range midpoint.
+- FTA horizon: original unswept nearest 1H FTA remains unchanged but target distance cannot exceed empirical high-low range of *last 12 fully closed 1H candles*, as-of entry.
+- Portfolio risk: no more than 1 simultaneous PAPER trade per direction across ten new coins, same cap for benchmark and primary.
+- No modification original 1H wick Raid→native3m BOS, NEXT 3m OPEN, raid-ATR SL, nearest structural 1H FTA TP or derived RR; do not introduce fixed RR. Maker limit, widened SL are not yet tested or implemented.
+
+### Проверка source и результаты
+Заранее frozen ten coins: AAVEUSDT, APTUSDT, ARBUSDT, ATOMUSDT, ETCUSDT, FILUSDT, LTCUSDT, NEARUSDT, TRXUSDT, UNIUSDT. **320 original Binance USD-M 3m daily archives, 153600 genuine 3m candles** Sep26–Oct27 2026 UTC (all closed). Provider original same-host CHECKSUM, ZIP and CSV SHA; 7d warmup, 12h embargo, 12h horizon; **82/82 original C93 exact trade records and exits** on ten new symbols. TRX has 0 Route C trades (not replaced). Evidence research/mtf-element-audit-v1/evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json, **407421 bytes SHA256 ab582ee221fe8b520df7428babdd3b3a33915a60f08d8ae3785000682c3637ce**.
+
+**25 bps roundtrip net costs:**
+- BASELINE_RAW: N82 **-11.646351R, PF0.82816**, modeled DD20.09%.
+- BASELINE_PORTFOLIO: N54 **-4.108006R, PF0.90296**, DD11.16%.
+- QUALITY_RAW: N17 **+0.287952R, PF1.02259**, DD6.22% but underpowered and 40bps negative.
+- **PRIMARY QUALITY_PORTFOLIO N14 -0.786491R, PF0.93224**, DD5.14%, 40bps -3.013246R PF0.77124.
+- Primary two temporal blocks: **9 trades +2.541923R**, **5 trades -3.328414R**. **Failed** minimum N30/each fold10, netR25>0, PF25>1.2, PF40>1.1. No evidence of stable profitable advantage, only risk/model diagnostic.
+
+**Technical proof:** CI [#40972169476](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40972169476) successful 4/4: **32 new +602 prior × Python 3.10,3.11,3.12 = 1902 PASS**, fresh exact original archive provider check and 82/82 C93 parity. OHLC volume property error from original 4H aggregation detected by negative tests and corrected before full original source download; no hindsight thresholds. A167 append and independent source hashes CI [#40972552467](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40972552467) SUCCESS, canonical SHA chain 167.
+
+Report research/mtf-element-audit-v1/cycles/B1_C104_CAUSAL_4H_FTA_10COIN_ECONOMIC_REPORT_RU.md. This is **historical new-symbol validation, not a true prospective/live OOS**, and 4 H / last12h features are developer adaptations, not certified original author semantics. No live orders or fills.
+
+**Next C105:** resist repeated threshold optimizations on these already-seen 10 coins. Research event-quality problems deeper in C93 BOS: distinguish unproductive raid+break from genuinely supported HTF follow-through; investigate counterfactual original partial path forensic and possible economic entry on BOS retest with real no-fill and 25/40bps stress on *new reserved* data. All new changes must be PRECOMMITTED, tested against independent untouched original sources, recorded in append-only A168 and both root docs. If insufficient data, report NO_POWER; if negative expected value, REJECT. Do not trade real money.
