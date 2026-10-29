@@ -18,7 +18,7 @@ def four_hour(hour):
             raise C104QualityError("UNALIGNED_OR_GAP_4H")
         out.append(OHLC(w[0].start_ms,w[-1].close_ms,w[0].o,
             max(z.h for z in w),min(z.l for z in w),w[-1].c,
-            sum((z.volume for z in w),D(0))))
+            sum((z.vol for z in w),D(0))))
     return tuple(out)
 
 def context(rows):
