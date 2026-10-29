@@ -1,0 +1,78 @@
+name: EMBER C102 C103 A166 negative economic research append-only
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c102-c103-A166-economic-failure-source-lock.yml'
+permissions:
+  contents: write
+jobs:
+  immutable-crypto-loss-and-sha166:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently check A165 history, original C93, 160 source archive receipts and 4 negative economic screens
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c103-before
+          grep -Fq 'entries 165 tip_sha256 8f7f90513f84bf4d60fa8b7e317c2ce20500f6ed38ff414904249a846766896f' /tmp/c103-before
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('.')
+          original=root/'d05/c93_native3m_raid_bos_route_c_research.py'
+          assert hashlib.sha256(original.read_bytes()).hexdigest()=='a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0'
+          p=root/'evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json'
+          raw=p.read_bytes()
+          assert len(raw)==198909 and hashlib.sha256(raw).hexdigest()=='e5df71e5f58c968c0d4e06cf61e56db6d3e80d1060d2cac2bf7f91b057909d92'
+          z=json.loads(raw)
+          assert z['source_zip_count']==160 and z['original_native3m_bars']==76800
+          assert set(z['variants'])=={'BASELINE','V_COST','V_CLOCK','V_BOTH'}
+          expected={'BASELINE':(45,-16.508794),'V_COST':(33,-8.29011),
+                    'V_CLOCK':(29,-11.666924),'V_BOTH':(21,-0.271447)}
+          for k,(n,netr) in expected.items():
+              v=z['variants'][k]
+              assert v['scores']['25']['n']==n
+              assert v['scores']['25']['sum_r']==netr
+              assert not v['admission']['passes_historical_screen']
+              assert not v['admission']['live_approved']
+              assert v['scores']['40']['sum_r']<v['scores']['25']['sum_r']
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['no_fixed_rr'] and not z['original_c93_modified']
+          print('C103_A166_SOURCE_SHA160_NEGATIVE_ALL_FOUR_25BPS_VERIFIED')
+          PY
+      - name: Append SHA evidence A166 (not economic admission) and verify immutable chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A166 --cycle B1/C102-C103 --verdict DONE --cycle-result PASSED \
+            --planned "After verifying A165 SHA 165 and original unchanged C93, precommit exactly five new crypto symbols ADA AVAX DOGE LINK SUI 32 full UTC days and four source-only C93 native3m variants BASELINE V_COST>=0.5pct structural stop V_CLOCK<=15min native BOS V_BOTH; compare exact 14/25/40bps with strict no fixed RR and economic falsification criteria. PAPER ONLY." \
+            --executed "Registered hypotheses and controls BEFORE downloading, implemented original Binance Vision 3m strict CSV/ZIP/checksum SHA source 160 daily archives 76800 native3m, reused original C93 structural raid/BOS/FTA/stop/fill methods unchanged, evaluated four predeclared variants on five untouched symbols Sep26-Oct27 inclusive. Original provider source CI 40965377968 SUCCESS 4/4: 35 negative plus 567 prior regressions times Python 3.10 3.11 3.12 = 1806 PASS. Frozen actual 198909-byte JSON sha e5df71e5f58c968c0d4e06cf61e56db6d3e80d1060d2cac2bf7f91b057909d92. Ran independent second 160-original-ZIP SHA re-download and exact original C93.discover parity CI 40965830296 SUCCESS: 45/45 identical full trade signatures across five pairs. Original C93 source SHA unchanged." \
+            --result "Predeclared 25bps outcomes: BASELINE 45 trades -16.508794R PF .60410; V_COST 33 -8.290110R PF .69277; V_CLOCK 29 -11.666924R PF .53028; V_BOTH 21 -0.271447R PF .97981. At 14bps V_BOTH +2.792120R; at 40bps -4.449039R. V_BOTH fold 11/10 25bps -0.780239R / +0.508792R; n21<30. ALL FOUR FAIL economic gate. Not true prospective OOS, same-host checksums not independent signatures, no real orders, no proven profitable strategy." \
+            --countercheck "Original C93 SHA a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0 locked; initial CI red only because nonfinite negative test exception caught by generic ValueError, repaired typed error only, no strategy change. Full 160 original ZIP test and independent second same source SHA; exact original C93 base signal Entry SL FTA TP netR exit match 45/45 confirmed. Variants all selected from causal preentry conditions and no fixed-RR TP. Multiple arms and historical dates cannot count as proven alpha. Previous A165 and C98/C99/C101 source unchanged; no live trading." \
+            --evidence cycles/B1_C102_C103_PRECOMMIT_NEW_SYMBOL_NATIVE3M_TRANSFER_RU.md \
+            --evidence d05/c102_c103_native3m_new_symbol_transfer.py \
+            --evidence d05/test_c102_c103_native3m_new_symbol_transfer.py \
+            --evidence evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json \
+            --evidence d05/c103_exact_original_c93_baseline_parity.py \
+            --evidence cycles/B1_C102_C103_NEW_SYMBOL_3M_ECONOMIC_TRANSFER_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c103-after
+          grep -Fq 'entries 166 tip_sha256 ' /tmp/c103-after
+      - name: Commit A166 evidence chain without overwriting A001-A165
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A166: source-verified 160 native3m Binance ZIP and economic rejection C102-C103"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
