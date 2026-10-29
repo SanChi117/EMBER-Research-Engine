@@ -63,14 +63,14 @@ class C105Adversarial(unittest.TestCase):
     def test_07_reject_wrong_week_alignment(self):
         self.expect(lambda:m.aggregate(tuple([bar(0,m.THREE)]),m.W1,0),"BAD_UTC")
     def test_08_original_3m_to_15m_full(self):
-        a,_,_,_=fixtures()
+        a,_,_,_,_=fixtures()
         rows=tuple(Original3mRow("BNBUSDT",a+i*m.THREE,a+(i+1)*m.THREE,
           D("100"),D("101"),D("99"),D("100"),D("1"),"x","y") for i in range(10))
         xs=m.aggregate(rows,m.M15)
         self.assertEqual(len(xs),2)
         self.assertEqual(xs[0].close_ms,a+m.M15)
     def test_09_only_closed_3m_omit_partial_4h(self):
-        a,_,_,_=fixtures()
+        a,_,_,_,_=fixtures()
         rows=tuple(Original3mRow("BNBUSDT",a+i*m.THREE,a+(i+1)*m.THREE,
           D("100"),D("101"),D("99"),D("100"),D("1"),"x","y") for i in range(79))
         self.assertEqual(len(m.aggregate(rows,m.H4)),0)
