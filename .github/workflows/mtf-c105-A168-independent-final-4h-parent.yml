@@ -1,0 +1,69 @@
+name: EMBER C105 A168 FINAL 4H parent-only original crypto SHA168 1992 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c105-A168-independent-final-4h-parent.yml'
+permissions:
+  contents: read
+jobs:
+  verify-every-source-SHA-168-and-regressions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent original chain SHA168 and original 320 verified ZIP evidence replay metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c105-sha168
+          grep -Fq 'entries 168 tip_sha256 9741dca935748241f47d6067285afe6a0fd3f7ed710054924f2cb5abd5a398f6' /tmp/c105-sha168
+          python - <<'PY'
+          import json,hashlib,sys
+          from pathlib import Path
+          base=Path('.')
+          x=[json.loads(z) for z in (base/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(x)==168
+          assert x[-1]['action_id']=='A168'
+          assert x[-1]['prev_sha256']=='b3f0f3410c3ff688213b2f8d90ed9ec594a424928877c1054f1965f347bf45de'
+          assert x[-1]['record_sha256']=='9741dca935748241f47d6067285afe6a0fd3f7ed710054924f2cb5abd5a398f6'
+          assert len(x[-1]['evidence'])==7
+          for ev in x[-4:]:
+              for f in ev['evidence']:
+                  raw=(base/f['path']).read_bytes()
+                  assert len(raw)==f['bytes'] and hashlib.sha256(raw).hexdigest()==f['sha256'],f['path']
+          sys.path.insert(0,str(base/'d05'))
+          import c105_parent4h_native3m_research as r
+          r.frozen_source_checks()
+          raw=(base/'evidence/c105/C105_4H_PARENT_320_ORIGINAL_NATIVE3M_ZIPS.json').read_bytes()
+          assert len(raw)==204933 and hashlib.sha256(raw).hexdigest()=='5cb01f8022fe5b1de7d19b853cad2ab478cab37fc69204268af911bc159abea4'
+          z=json.loads(raw)
+          assert z['native3m_bars']==153600 and len(z['source_manifest'])==320 and len(z['trades'])==25
+          assert z['only_parent_stop_and_target'] and z['fixed_rr_target'] is False
+          assert z['admission']['passes_historical_screen'] is False
+          assert z['admission']['live_approved'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert all(t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H' for t in z['trades'])
+          assert all(t['zone_created_ms']<t['first_4h_poi_touch_ms']<t['one_hour_rejection_close_ms']<t['fifteen_minute_vc_close_ms']==t['entry_ms'] for t in z['trades'])
+          assert z['scores']['25']['n']==25
+          assert z['scores']['25']['sum_r']==5.544304
+          assert z['folds']['early']['25']['sum_r']==-6.186858
+          assert z['folds']['late']['25']['sum_r']==11.731162
+          print('C105_FINAL_SHA168_320_ORIGINAL_NATIVE3M_ZIPS_25_PARENT4H_15M_CAUSAL_NO_LIVE_VERIFIED')
+          PY
+      - name: All 664 test cases Python 3.10 3.11 3.12
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry 2>&1 | tee /tmp/c105-final-suite
+          grep -Fq 'Ran 664 tests' /tmp/c105-final-suite
+          grep -qx 'OK' /tmp/c105-final-suite
+          echo 'C105_FINAL_664_X_3_1992_PASS'
