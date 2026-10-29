@@ -39,7 +39,7 @@ jobs:
                   raw=(p/f['path']).read_bytes()
                   assert len(raw)==f['bytes'] and hashlib.sha256(raw).hexdigest()==f['sha256'],f['path']
           assert hashlib.sha256((p/'d05/c93_native3m_raid_bos_route_c_research.py').read_bytes()).hexdigest()=='a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0'
-          assert hashlib.sha256((p/'d05/c102_c103_native3m_new_symbol_transfer.py').read_bytes()).hexdigest()=='853e5ee613e00cddbdf39b933c57bab6b6a695f1b549e69f29f52a97a01aed'
+          assert hashlib.sha256((p/'d05/c102_c103_native3m_new_symbol_transfer.py').read_bytes()).hexdigest()=='853e5ee613e00cddbdf39b933c57bab6b6a6a695f1b549e69f29f52a97a01aed'
           w=(p/'evidence/c104/C104_10CRYPTO_ORIGINAL_NATIVE3M_CAUSAL_4H_FTA_320ZIP.json').read_bytes()
           assert len(w)==407421 and hashlib.sha256(w).hexdigest()=='ab582ee221fe8b520df7428babdd3b3a33915a60f08d8ae3785000682c3637ce'
           z=json.loads(w)
