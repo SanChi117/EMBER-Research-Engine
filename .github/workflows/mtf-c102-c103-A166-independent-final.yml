@@ -1,0 +1,61 @@
+name: EMBER A166 original five crypto negative economic final SHA166
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c102-c103-A166-independent-final.yml'
+permissions:
+  contents: read
+jobs:
+  independent-166-original-and-research:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify every A166 artifact SHA and immutable A165 chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/sha166
+          grep -Fq 'entries 166 tip_sha256 7d12c4d905281bafa5dde004eb1301338649d067da06ccf2d0bcefb2537d99cb' /tmp/sha166
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('.')
+          chain=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(chain)==166 and chain[-1]['action_id']=='A166'
+          assert chain[-1]['prev_sha256']=='8f7f90513f84bf4d60fa8b7e317c2ce20500f6ed38ff414904249a846766896f'
+          assert chain[-1]['record_sha256']=='7d12c4d905281bafa5dde004eb1301338649d067da06ccf2d0bcefb2537d99cb'
+          assert len(chain[-1]['evidence'])==6
+          for row in chain[-5:]:
+              for item in row['evidence']:
+                  blob=(root/item['path']).read_bytes()
+                  assert len(blob)==item['bytes'] and hashlib.sha256(blob).hexdigest()==item['sha256'],item['path']
+          assert hashlib.sha256((root/'d05/c93_native3m_raid_bos_route_c_research.py').read_bytes()).hexdigest()=='a241d8de2691bca6247afbfe5e92b0a6e7df25b10f8a4c71f340b815e515bda0'
+          w=(root/'evidence/c102/C102_C103_NEW5_SYMBOL_NATIVE3M_32DAY_ORIGINAL_TRANSFER.json').read_bytes()
+          assert len(w)==198909 and hashlib.sha256(w).hexdigest()=='e5df71e5f58c968c0d4e06cf61e56db6d3e80d1060d2cac2bf7f91b057909d92'
+          x=json.loads(w)
+          assert x['source_zip_count']==160 and x['original_native3m_bars']==76800
+          assert x['symbols']==['ADAUSDT','AVAXUSDT','DOGEUSDT','LINKUSDT','SUIUSDT']
+          assert [x['variants'][k]['scores']['25']['n'] for k in ('BASELINE','V_COST','V_CLOCK','V_BOTH')]==[45,33,29,21]
+          assert [x['variants'][k]['scores']['25']['sum_r'] for k in ('BASELINE','V_COST','V_CLOCK','V_BOTH')]==[-16.508794,-8.29011,-11.666924,-0.271447]
+          assert all(not z['admission']['passes_historical_screen'] for z in x['variants'].values())
+          assert x['orders']==x['fills']==x['live_trades']==[]
+          print('A166_SHA_ORIGINAL_NAT3M_FIVE_SYMBOL_ECONOMIC_REJECT_FINAL_PASS')
+          PY
+      - name: 35 C102 negatives and 567 prior C84-C101 full regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer 2>&1 | tee /tmp/c103-final-reg
+          grep -Fq 'Ran 602 tests' /tmp/c103-final-reg
+          grep -qx 'OK' /tmp/c103-final-reg
+          echo A166_FINAL_602_PER_PYTHON_1806_PASS
