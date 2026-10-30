@@ -56,7 +56,7 @@ def recompute(folder):
                 raise CorrectionError("RANDOM_CLOCK_POLICY_INCOMPLETE")
             if e["treatment"]=="C_NO_CHoCH" and e["t_trade"] is not None:
                 bugged_controls+=1
-            normalized=c117.t_policy_trade(e)
+            normalized=c117.t_policy_trade({"treatment":e["treatment"],"trade":e["t_trade"]})
             e["t_trade"]=normalized
             e["T_R25"]=c117.engine.net_r(normalized,25)
             e["T_R40"]=c117.engine.net_r(normalized,40)
