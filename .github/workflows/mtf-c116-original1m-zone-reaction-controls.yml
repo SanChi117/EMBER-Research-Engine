@@ -1,0 +1,91 @@
+name: EMBER C116 frozen original1m 4H zone first-touch native-derived5m CHoCH versus control PAPER
+on:
+  push:
+    branches: [research/c116-canonical-native1m-zone-reaction-20261030]
+    paths:
+      - '.github/workflows/mtf-c116-original1m-zone-reaction-controls.yml'
+      - 'research/mtf-element-audit-v1/d05/c116_canonical_original_native1m_source.py'
+      - 'research/mtf-element-audit-v1/d05/c116_single_source_controlled_4h_poi_replay.py'
+      - 'research/mtf-element-audit-v1/d05/test_c116_canonical_1m_zone_reaction.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C116_PRECOMMIT_NATIVE1M_4H_ZONE_REACTION_RANDOM_CONTROL_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  c116-original-source-adversarial:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Validate original frozen C114 economics SHA and 13 native1m source / random-label tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c116_canonical_1m_zone_reaction 2>&1 | tee /tmp/c116-new-tests
+          grep -Fq 'Ran 13 tests' /tmp/c116-new-tests
+          grep -Fxq 'OK' /tmp/c116-new-tests
+          python -m unittest -q test_c114_independent_4h_poi_native5m test_c115_price_only_source_contract
+  c116-two-original-2026-windows:
+    needs: c116-original-source-adversarial
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original Binance USD-M 1344 native1m provider SHA ZIP, derived3m/5m, frozen CHoCH and matched controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c116_single_source_controlled_4h_poi_replay.py \
+            --output-dir research/mtf-element-audit-v1/evidence/c116 | tee /tmp/c116-result
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path('research/mtf-element-audit-v1/evidence/c116')
+          summary=json.loads((root/'C116_SUMMARY.json').read_text())
+          assert summary['canonical_original_1m_zip_total']==1344
+          assert summary['canonical_original_1m_bar_total']==1935360
+          assert summary['derived_3m_bar_total']==645120
+          assert summary['derived_5m_bar_total']==387072
+          assert summary['original_c114_engine_sha256']=='36d677166f4091f2ce66084dfb75f2407c72cbf735483cb3ee584a687ba41e6f'
+          assert summary['paper_only'] and summary['live_approved'] is False
+          assert summary['real_orders']==summary['real_fills']==summary['live_trades']==[]
+          assert summary['random_market_entry_control_implemented'] is False
+          assert set(summary['window_receipts'])=={'WIN_A','WIN_B'}
+          for name,receipt in summary['window_receipts'].items():
+            blob=(root/receipt['filename']).read_bytes()
+            assert hashlib.sha256(blob).hexdigest()==receipt['sha256']
+            assert len(blob)==receipt['bytes']
+            data=json.loads(blob)
+            assert data['derived3m_bar_count']==322560
+            assert data['derived5m_bar_count']==193536
+            assert len(data['derived3m_receipts'])==len(data['derived5m_receipts'])==672
+            assert all(r['provider_checksum_verified'] and r['source_original_interval']=='1m'
+                       for r in data['derived3m_receipts']+data['derived5m_receipts'])
+            assert all(v['strict_ohlc_price_clock_parity'] for v in data['source_15m_cross_archive_parity'].values())
+            assert not data['c116_gate']['live_approved']
+            assert data['c116_diagnostic']['pair_label_placebo']['permutations']==2000 or data['c116_diagnostic']['pair_label_placebo']['matched_pairs']==0
+            assert len(data['per_symbol'])==12
+          print('C116_BOTH_PERIODS_CANONICAL_PROVIDER_PROVENANCE_T_C_SCORES_RECORDED_PAPER_ONLY')
+          PY
+      - name: Commit every resulting 2026 canonical source and falsification receipt, regardless of economic result
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c116
+          git commit -m "C116 original 1m 2026 two-window precommitted 4H FVG/5m reaction versus matched controls and label placebo"
+          git push origin HEAD:refs/heads/research/c116-canonical-native1m-zone-reaction-20261030
