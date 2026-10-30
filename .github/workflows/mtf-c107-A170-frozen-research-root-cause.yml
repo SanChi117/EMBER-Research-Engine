@@ -1,0 +1,73 @@
+name: EMBER C107 A170 freeze root cause original 640 crypto ZIP semantic discordance
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c107-A170-frozen-research-root-cause.yml'
+permissions:
+  contents: write
+jobs:
+  independently-pin-then-append-A170:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify old A169 and all new frozen 640 original source diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c107-sha169
+          grep -Fq 'entries 169 tip_sha256 b0a2080fb4a91b56876a485921508f8afbf322d45f964e4b1fc3a0f268fb4cd2' /tmp/c107-sha169
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          d=Path('evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json').read_bytes()
+          assert len(d)==308924 and hashlib.sha256(d).hexdigest()=='98adf5a7497f8a08feb7c035b12b9fb3a0ea23921cc7d0164b39fc8406bc4334'
+          x=json.loads(d)
+          assert x['source_zip_count']==640 and x['source_bars']==307200
+          assert len(x['source_manifest'])==640 and len({(z['symbol'],z['date']) for z in x['source_manifest']})==640
+          assert len(x['all_41_fixed_original_trade_diagnostics'])==41
+          assert x['new_trading_rules']==x['new_indicators']==0
+          assert x['orders']==x['fills']==x['live_trades']==[]
+          a=x['cohorts'];n=a['COMBINED']
+          assert a['C105']['n']==25 and a['C106']['n']==16 and n['n']==41
+          assert n['stops']==25 and n['4h_valid_at_stop_bar_close']==12 and n['4h_invalidated_at_stop_bar_close']==13
+          assert n['later_original_target_touched_after_real_stop']==8
+          assert n['VC_type']=={'SNR':36,'IMB':5}
+          assert n['h1_reaction_closed_inside_fvg']==15
+          assert n['entry_beyond_parent_near_edge']==26
+          assert n['wrong_direction_middle_4h_fvg']==0
+          print('C107_640_FULL_ORIGINAL_CHECKSUMS_307200_3M_BARS_41_STOP_4H_SOURCE_AUDIT_PIN_SUCCESS')
+          PY
+      - name: Append A170 immutable journal, NEVER edit older trade evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A170 --cycle B1/C107 --verdict DONE --cycle-result PASSED \
+            --planned "Deep broad first-party documentation, public GitHub code and trading-forum comparison against user-owned course crosswalk and actual C105/C106. Preregister full 640 source ZIP original 20 crypto x 32 days and 41 unchanged prior PAPER trades before reloading raw data. Hypotheses: 4H parent FVG lifecycle invalidation requires closed H4 beyond far edge while executable SL triggered by ANY native3m wick; weak 15m previous candle SNR mislabeled structural BOS; 1H reaction allowed inside 4H POI; next 3m chasing; FVG middle candle may be wrong direction. No new indicators or changed trade rules, no live execution." \
+            --executed "Read owner original course source crosswalk requiring strong 4H POI work with liquidity, H1 parent POI creation and first test and conditional trigger chronology; C105 lacks those full conditions. Independently inspected 640 genuine Binance native3m daily ZIP provider CHECKSUM, ZIP and CSV SHA, 307200 native3m candles covering previous C105 and C106 20 crypto instruments Sep26-Oct27 2026. Reconstructed each 41 prior paper trade 4H parent source, 1H closed reaction, 15m VC type and closed 4H candle after genuine native3m SL. 20 adversarial new tests +690 old x Python3.10/3.11/3.12 =2130 PASS and source CI 40979878731 SUCCESS 4/4. No changes to original C105/C106, A169 previous SHA unchanged." \
+            --result "Original 25 native3m stop hits: 12 had 4H parent FVG STILL VALID at the enclosing 4H close, 13 invalidated; 8 of 25 later hit ORIGINAL TP after stop inside the original 48h horizon (observational, NOT profitable counterfactual). 36 of 41 original 15m confirmations used SNR meaning only previous 15m candle high/low break not confirmed swing BOS; 15/41 1H reaction closed inside FVG; 26/41 entries beyond 4H near edge; 0/41 wrong-middle-direction FVG disconfirming that particular cause. Semantic substitution of real structural parent/child first-test by simple intersections is main architecture concern, stop-versus-zone lifecycle mismatch directly quantified. External sources do not prove any adjustment increases alpha. Economic C105+5.54R25bps C106+0.024R25bps and early-fold loss remains unstable. PAPER ONLY." \
+            --countercheck "Counterchecks use independent source checksum for all original 640 ZIP and 20/20 symbols without changes. Captured both corrected and rejected hypotheses; false-center FVG sign NOT observed among accepted 41. 4H stop touching while close still valid does NOT imply stop should move to H4 close because uncontrolled leverage/MAE/liquidation. Unrelated LuxAlgo modules explicitly prohibited by owner and not imported. Source referents first party TradingView docs, GitHub smc.py, open LuxAlgo and practitioner context; historical paper new-symbol vs same-period limitation preserved. No live trading readiness." \
+            --evidence cycles/B1_C107_PRECOMMIT_CAUSAL_ROOT_CAUSE_FORENSIC_RU.md \
+            --evidence d05/c107_original_p4_false_signal_forensics.py \
+            --evidence d05/test_c107_rootcause_original_source_semantics.py \
+            --evidence evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json \
+            --evidence cycles/B1_C107_PUBLIC_RESEARCH_AND_41_ORIGINAL_TRADE_CAUSAL_ROOT_CAUSE_RU.md
+          python tools/auditlog.py verify | tee /tmp/c107-sha170
+          grep -Fq 'entries 170 tip_sha256 ' /tmp/c107-sha170
+      - name: Commit A170 SHA append-only history
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A170: original 640 Binance 3m ZIP 41-trade evidence finds 12 stop 4H reclaim, 36 weak SNR and missing parent/child semantics; no trade change"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
