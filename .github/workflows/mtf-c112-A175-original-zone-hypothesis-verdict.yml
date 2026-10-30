@@ -1,0 +1,101 @@
+name: EMBER C112 A175 freeze original 2024 zone-to-zone falsification PAPER
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c112-A175-original-zone-hypothesis-verdict.yml'
+permissions:
+  contents: write
+jobs:
+  sha-pinned-2024-research-journal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: A174 old journal and 1536 original Binance ZIP + paired destination first passages 
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c112-a174
+          grep -Fq 'entries 174 tip_sha256 8d1499d3529781066b8c2201913a73d6c75426abce8f9dcec7f3a8c377c868cd' /tmp/c112-a174
+          python - <<'PY'
+          import json,hashlib,sys
+          from pathlib import Path
+          root=Path('evidence/c112')
+          data=(root/'C112_TWO_WINDOWS_SUMMARY.json').read_bytes()
+          assert len(data)==5225 and hashlib.sha256(data).hexdigest()=='37509564c0accdd2eaee1cbae912d07a4907377fa5d0b3f1231abdf19daa7a9a'
+          s=json.loads(data)
+          assert s['original_total_zip_count']==1536 and s['original_native3m_bars']==737280
+          assert not s['both_historical_windows_pass']
+          assert s['new_indicators']==0 and not s['fixed_rr_target']
+          assert s['orders']==s['fills']==s['live_trades']==[]
+          assert s['live_approved'] is False
+          assert s['C109_source_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          for window,oldn,avail,hit,valid,alterR,baseR in [
+            ('WIN_A',81,52,20,42,26.971843,15.86769),
+            ('WIN_B',45,15,8,10,-9.180549,2.2153)]:
+              receipt=s['original_window_receipts'][window]
+              raw=(root/receipt['filename']).read_bytes()
+              assert len(raw)==receipt['bytes']
+              assert hashlib.sha256(raw).hexdigest()==receipt['sha256']
+              z=json.loads(raw)
+              assert z['source_zip_count']==768 and z['original_native3m_bars']==368640
+              assert len({(m['symbol'],m['date']) for m in z['source_manifest']})==768
+              assert z['classifications']['all_original_core_paper_entries']==oldn
+              assert z['classifications']['has_known_fresh_opposing_4h_fvg']==avail
+              assert z['classifications']['raw_opposing_4h_zone_touched_in_original_48h']==hit
+              assert z['classifications']['admissible_same_4h_stop_fvg_target']==valid
+              eco=z['economic']
+              alt=eco['MATCHED_OPPOSING_FRESH_4H_FVG']
+              orig=eco['MATCHED_ORIGINAL_4H_PIVOT_FTA']
+              assert alt['scores']['25']['n']==orig['scores']['25']['n']==valid
+              assert alt['scores']['25']['sum_r']==alterR and orig['scores']['25']['sum_r']==baseR
+              assert not alt['admission']['passes_historical_screen']
+              assert not alt['admission']['live_approved']
+              for x in z['per_symbol'].values():
+                  for event in x['all_source_original_4h_zone_to_zone_diagnostics']:
+                      if event['alternate_paper']:
+                          p=event['alternate_paper']
+                          assert p['entry']==event['frozen_original_entry']
+                          assert p['stop']==event['frozen_original_stop']
+                          assert p['parent_tf']==p['target_source_tf']==p['stop_source_tf']=='4H'
+                          assert p['opposing_fvg_created_ms']<p['entry_ms']
+          sys.path.insert(0,'d05')
+          import c112_zone_to_zone_fvg_destination_audit as m
+          assert m.frozen()
+          print('C112_ORIGINAL_1536_BINANCE_ZIPS_126_BASELINE_67_OPPOSING_FVG_AND_52_MATCHED_TRADES_SOURCE_PIN_SUCCESS')
+          PY
+      - name: Append immutable truthful A175 source action; no new trading indicators
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A175 --cycle B1/C112 --verdict DONE --cycle-result PASSED \
+            --planned "Investigate explicit user hypothesis confirmed price reaction moves 4H zone-to-next zone rather than assume only 4H swing pivot target. Freeze before prices first-known untouched opposing 4H 3-closed-bar FVG supply/demand band as next target, actual entry same C109 B1 SHA frozen, 4H parent executable native3m stop unchanged, alternate target just before near edge using unchanged ATR4H*0.15, derived RR>=1.25 only. Count target before stop, include no-zone cases, target visit after stop observational only, never false economic fills. Two 2024 new 64d windows ×12 coins original 1536 Binance Vision 3m source ZIP checksums, 737280 source bars. No live trading." \
+            --executed "20 new adverse asof first zone tests plus 789 prior×3 Python3.10 3.11 3.12 =2427 PASS CI 41090551989 SUCCESS4/4; red earlier tests only synthetic future 4H candle at synthetic3m entry, corrected fixture before opening actual source. 1536 original Binance same-host provider CHECKSUM ZIP and CSV SHA verified from 2024 Jul-Sep and Oct-Dec, C109 B1 full event replay and asof preknown opposing unvisited 4H FVG; 126 original entries, 67 with fresh opposite zone, 28 raw 48h later visits, 52 valid 4H SL structural RR≥1.25 alternatives; all paper outcomes original 3m stop-first. Complete SHA source receipts, ledger and two period summary committed." \
+            --result "Positive one regime but negative replication: WIN_A 81 C109 entries, 52 prior untouched opposing H4 FVG, 20 source raw 48h touches, n42 matched eligible, original 4H pivot TP n42 +15.867690R25, alternative opposite FVG target n42 +26.971843R25 PF1.76554 but DD15.77426 and early n9 so historical gate FAIL. WIN_B 45 C109 entries, 15 prior opposing fresh FVG, 8 raw 48h touches, n10 matched eligible, pivot FTA +2.215300R25, opposite FVG target -9.180549R25 PF0.19292, economic gate FAIL. Only 9 genuine 3m alternate TP-first among 52 eligible, rest STOP/TIMEOUT. Raw visits after exit not winning fills. Same original 4H hard stop and original entry in both outcomes; no fixed RR TP. Both periods fail, do not integrate opposing-FVG target." \
+            --countercheck "Distinguish confirmed reaction, future raw nearest-zone visit, actual first stop/TP risk and profit after fees. 4H pivot target is level NOT necessarily zone; zone-to-zone hypothesis tested narrowly as earlier opposing FVG; this does not prove or falsify broader all-SNR/all-OB zone-to-zone claim or predictive incremental value vs no-reaction control. No retrospective best-target picking: same matched original entries paired. 14/25/40bps native3m protective stop, original source asof and verified checksum. No C109/C105 modification and no automatic live orders; new source historical not prospective." \
+            --evidence cycles/B1_C112_PRECOMMIT_ZONE_TO_ZONE_CORE_FVG_DESTINATION_HYPOTHESIS_RU.md \
+            --evidence d05/c112_zone_to_zone_fvg_destination_audit.py \
+            --evidence d05/test_c112_original_4h_zone_to_zone_first_passage.py \
+            --evidence evidence/c112/C112_WIN_A_ZONE_TO_ZONE_ORIGINAL_768_ZIPS.json \
+            --evidence evidence/c112/C112_WIN_B_ZONE_TO_ZONE_ORIGINAL_768_ZIPS.json \
+            --evidence evidence/c112/C112_TWO_WINDOWS_SUMMARY.json \
+            --evidence cycles/B1_C112_ZONE_TO_ZONE_2024_ORIGINAL_CRYPTO_HYPOTHESIS_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c112-a175
+          grep -Fq 'entries 175 tip_sha256 ' /tmp/c112-a175
+      - name: Append-only A175 journal to GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A175 C112 original 1536 Binance source: opposing H4 FVG zone target one regime plus 26.97R other minus 9.18R, no profitable stability"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
