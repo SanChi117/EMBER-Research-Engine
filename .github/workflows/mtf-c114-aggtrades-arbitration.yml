@@ -1,0 +1,70 @@
+name: EMBER C114-F original aggTrades 1m3m5m15m base-volume arbitration ONLY NO TRADE
+on:
+  push:
+    branches: [research/c114-independent-zone-reaction-value-20261030]
+    paths:
+      - '.github/workflows/mtf-c114-aggtrades-arbitration.yml'
+      - 'research/mtf-element-audit-v1/d05/c114_aggtrades_source_arbitration.py'
+      - 'research/mtf-element-audit-v1/d05/test_c114_aggtrades_source_arbitration.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  aggregate-trade-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: C114 aggregation market-source negative contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c114_aggtrades_source_arbitration 2>&1 | tee /tmp/agg-tests
+          grep -Fq 'Ran 4 tests' /tmp/agg-tests
+          grep -Fxq 'OK' /tmp/agg-tests
+  binance-aggtrade-source-arbiter:
+    needs: aggregate-trade-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Checksum verify 2025-Jan14 BNB original USD-M aggTrades and 4 native kline intervals
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c114_aggtrades_source_arbitration.py \
+            --output research/mtf-element-audit-v1/evidence/c114/C114_ORIGINAL_AGGTRADES_BNB_20250114_SOURCE_ARBITRATION.json \
+            | tee /tmp/agg-results
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          d=json.loads(Path('research/mtf-element-audit-v1/evidence/c114/C114_ORIGINAL_AGGTRADES_BNB_20250114_SOURCE_ARBITRATION.json').read_text())
+          assert d['original_aggtrades_receipt']['provider_checksum_verified']
+          assert all(v['provider_checksum_verified'] for v in d['original_kline_receipts'].values())
+          assert d['no_trade_simulation'] and d['live_approved'] is False
+          assert d['source_qualification']=='UNCHANGED_C114_SOURCE_BLOCKED'
+          assert d['original_aggtrades_receipt']['original_agg_trade_rows']>0
+          print("C114_AGGTRADES_ORIGINAL_DISAGREEMENT_ARBITRATION_DONE_NO_ECONOMIC_TRADES")
+          PY
+      - name: Commit original aggregate trade provider SHA source receipt only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c114/C114_ORIGINAL_AGGTRADES_BNB_20250114_SOURCE_ARBITRATION.json
+          git commit -m "C114 original Binance aggTrades market-source arbitration verified; paper research only"
+          git push origin HEAD:refs/heads/research/c114-independent-zone-reaction-value-20261030
