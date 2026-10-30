@@ -1,0 +1,38 @@
+{
+  "schema": "EMBER_A188_NATIVE_CAUSAL_CALLBACK_REPLAY_R01",
+  "upstream_sha": "40af5c7c1c44253766428cfb06babf22f9817aa4",
+  "upstream_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "freqtrade": "2026.4",
+  "window_utc": "[2026-05-13,2026-10-30)",
+  "source_CI_run": 41141158918,
+  "source_artifact_id": 13018923674,
+  "source_artifact_sha256": "027fa9eb5154edd5791af44ae0f1cd074d8508e8a98904208b362e70cf2d06f2",
+  "baseline_fee5bps": {
+    "n": 27,
+    "profit_usdt": 3986.421749,
+    "profit_pct": 39.864217,
+    "pf": 2.23859,
+    "dd_pct": 7.331655
+  },
+  "causal_fee5bps": {
+    "n": 27,
+    "profit_usdt": 3986.421749,
+    "profit_pct": 39.864217,
+    "pf": 2.23859,
+    "dd_pct": 7.331655
+  },
+  "causal_fee12p5bps": {
+    "n": 27,
+    "profit_usdt": 4337.971131,
+    "profit_pct": 43.379711,
+    "pf": 2.173474,
+    "dd_pct": 8.196907
+  },
+  "matched_entry_keys": 27,
+  "added_entries": 0,
+  "removed_entries": 0,
+  "changed_common_trade_exits": 0,
+  "changed_trade_examples": [],
+  "verdict": "CALLBACK_BOUNDARY_PNL_PARITY_PASS_27_OF_27_ECONOMIC_NO_POWER_NO_LIVE",
+  "qualification": "One line fix had NO effect on 27 live-native backtest trades; initial static allegation of inflated PnL due to this check is refuted by counterfactual; lookahead/recursive/intrabar remain unverified"
+}
