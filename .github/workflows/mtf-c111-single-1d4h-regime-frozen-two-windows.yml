@@ -1,0 +1,109 @@
+name: EMBER C111 price-only 1D H4 regime gate two independent original Binance windows
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c111-single-1d4h-regime-frozen-two-windows.yml'
+      - 'research/mtf-element-audit-v1/d05/c111_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c111_*.py'
+permissions:
+  contents: write
+jobs:
+  original-strategy-immutable-and-asof-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: SHA173 source freeze BEFORE novel price, C111 1D/4H gate as-of assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c111-previous
+          grep -Fq 'entries 173 tip_sha256 d5f212e95ce7cf2d1ea6361426c2eec4d6875087f364303a68d508449ac06643' /tmp/c111-previous
+          cd d05
+          python - <<'PY'
+          import c111_frozen_c109_1d4h_regime_gate as x
+          assert x.pins()
+          assert x.EXPECTED_TOTAL_ZIPS==1536
+          assert x.EXPECTED_TOTAL_BARS==737280
+          print('C111_ALL_SHA_PREVIOUS_173_UNTOUCHED_STRATEGY')
+          PY
+      - name: Twenty C111 adversarial tests and 769 prior frozen tests each Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c111_one_regime_gate_source_asof 2>&1 | tee /tmp/c111-new
+          grep -Fq 'Ran 20 tests' /tmp/c111-new
+          grep -qx 'OK' /tmp/c111-new
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics test_c108_minimal_owner_h4_h1_child_firsttest test_c109_simple_p4_complete_reclaim_real_bos test_c110_unchanged_c109_second_regime 2>&1 | tee /tmp/c111-old
+          grep -Fq 'Ran 769 tests' /tmp/c111-old
+          grep -qx 'OK' /tmp/c111-old
+          echo C111_789_X3_2367_TESTS_PASS
+  original-binance-1536-closed3m-two-asof-regime-windows:
+    needs: original-strategy-immutable-and-asof-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download 1536 original SHA ZIP+CSV native3m Binance daily plus chronological C109 control vs price-gated replays
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c111_frozen_c109_1d4h_regime_gate.py --output-dir research/mtf-element-audit-v1/evidence/c111 | tee /tmp/c111-performance
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('research/mtf-element-audit-v1/evidence/c111')
+          s=json.loads((root/'C111_REGIME_GATE_TWO_WINDOW_PINNED_SUMMARY.json').read_text())
+          assert s['original_source_total_zip_count']==1536
+          assert s['original_source_total_native3m_bars']==737280
+          assert s['source_strategy_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          assert not s['live_approved']
+          assert not s['historical_not_forward_prospective_OOS'] is False
+          assert s['orders']==s['fills']==s['live_trades']==[]
+          assert s['new_luxalgo_indicators'] if 'new_luxalgo_indicators' in s else True
+          assert len(s['window_evidence_pins'])==2
+          for window,pin in s['window_evidence_pins'].items():
+            raw=(root/pin['filename']).read_bytes()
+            assert len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256']
+            z=json.loads(raw)
+            assert z['source_zip_count']==768 and z['native3m_bars']==368640
+            assert len(z['source_manifest'])==768
+            assert len({(x['symbol'],x['date']) for x in z['source_manifest']})==768
+            assert len(z['per_symbol'])==12 and len(z['arms'])==2
+            for key,v in z['arms'].items():
+              assert v['scores']['25']['n']==len(v['trades'])
+              assert v['admission']['live_approved'] is False
+              for t in v['trades']:
+                assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                assert t['zone_created_ms']<t['first_4h_parent_touch_ms']<t['closed_1h_confirmation_ms']<t['confirmed_15m_vc_ms']==t['entry_ms']
+                if key.startswith('B2_'):
+                  a=t['regime_proof']
+                  assert a['4h_last_known_close_ms']<=t['closed_1h_confirmation_ms']
+                  assert a['1d_last_known_close_ms']<=t['closed_1h_confirmation_ms']
+                  assert a['asof_no_future'] is True
+                  assert a['regime_threshold']=='1/3'
+          print('C111_TWO_NEW_2025_MARKET_WINDOWS_AND_1536_ORIGINAL_PROVIDER_SHA_SOURCE_COMPLETE')
+          PY
+      - name: Commit 2x768 genuine Binance source evidence and compact economic gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c111
+          git commit -m "C111 fixed D1 H4 as-of trend gate, two 768 genuine Binance original ZIP periods, no retrospective cherry-picking"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
