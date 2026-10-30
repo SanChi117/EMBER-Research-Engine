@@ -1,0 +1,50 @@
+name: EMBER quick three public Freqtrade signal screening (NO LIVE)
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-quick-open-strategy-screen-20261031.yml'
+      - 'research/quick_open_strategy_screen_20261031/data/**'
+      - 'research/quick_open_strategy_screen_20261031/quick_screen.py'
+      - 'research/quick_open_strategy_screen_20261031/SCREEN_POLICY.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  frozen-source-screen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate source and run pre-registered 3 open signal strategy proxy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/quick_open_strategy_screen_20261031/quick_screen.py | tee /tmp/quick-screen-summary
+          grep -Fq 'ALL_RESULTS=ALWAYS_SAVED' /tmp/quick-screen-summary
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/quick_open_strategy_screen_20261031/result.json')
+          j=json.loads(p.read_text())
+          assert set(j['summary'])=={'AdxSmas','BbandRsi','FAdxSmaStrategy'}
+          assert all(set(v['windows'])=={'A','B'} for v in j['summary'].values())
+          assert len(j['raw_input_source'])==6
+          assert j['scope'].startswith('RESEARCH ONLY')
+          print('ALL_THREE_PUBLIC_STRATEGY_RESULTS_AND_FAILED_COHORTS_PRESERVED')
+          PY
+      - name: Append-only archive first-screen report, no algorithm modifications
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/quick_open_strategy_screen_20261031/result.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Screen three frozen open Freqtrade strategies on 5040 historical 1h candles, publish all folds including failed, no trading"
+            git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
+          fi
