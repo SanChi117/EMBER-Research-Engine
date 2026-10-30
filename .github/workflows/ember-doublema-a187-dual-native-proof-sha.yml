@@ -38,7 +38,7 @@ jobs:
           grep -Fq EXACT_NATIVE_REMOTE_AND_OFFLINE_27_OF_27_REPRODUCIBLE /tmp/a187-verifier.log
           python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a186
           grep -Fq 'INTEGRITY_PASS entries 186' /tmp/a186
-      - name: Append immutably A187: native reproducible POSITIVE but NO_POWER and unstable trailing threshold
+      - name: "Append immutably A187: native reproducible POSITIVE but NO_POWER and unstable trailing threshold"
         shell: bash
         run: |
           set -euo pipefail
