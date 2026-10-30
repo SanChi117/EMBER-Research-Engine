@@ -66,6 +66,36 @@ def klines(rows,sym,kind):
             out.append(vals)
     return out
 
+def repair_genuine_mark_gaps(rows,sym,receipt_shas):
+    """Only source-backed daily Binance markPriceKlines can fill missing monthly hours."""
+    existing={x[0]:x for x in rows}
+    assert len(existing)==len(rows),("MARK_MONTHLY_DUPLICATE",sym)
+    missing=sorted(set(START+i*H for i in range(EXPECTED))-set(existing))
+    print("A195_MONTHLY_MARK_MISSING",sym,len(missing),[datetime.fromtimestamp(t/1000,timezone.utc).isoformat() for t in missing[:8]],flush=True)
+    if not missing: return rows
+    days=sorted(set(datetime.fromtimestamp(t/1000,timezone.utc).strftime("%Y-%m-%d") for t in missing))
+    assert len(days)<=8,("TOO_MANY_MARK_GAPS",sym,days)
+    for day in days:
+        name=f"{sym}-1h-{day}.zip"
+        url=f"https://data.binance.vision/data/futures/um/daily/markPriceKlines/{sym}/1h/{name}"
+        req=urllib.request.Request(url,headers={"User-Agent":"EMBER-A195-DAILY-ORIGINAL-MARK-DATA"})
+        with urllib.request.urlopen(req,timeout=75) as response:
+            raw=response.read(5_000_000)
+            assert response.status==200 and 100<len(raw)<5_000_000
+        with ZipFile(io.BytesIO(raw)) as z:
+            filenames=[f for f in z.namelist() if f.endswith(".csv")]
+            assert len(filenames)==1,filenames
+            b=z.read(filenames[0])
+        recovered=klines(list(csv.reader(io.StringIO(b.decode("utf-8-sig")))),sym,"markPriceKlinesDaily")
+        receipt_shas[f"markDaily_{day}"]={"url":url,"zip_sha256":hashlib.sha256(raw).hexdigest(),"csv_sha256":hashlib.sha256(b).hexdigest(),"recovered_bars":len(recovered)}
+        for row in recovered:
+            if row[0] in existing:
+                assert existing[row[0]]==row,("MONTHLY_DAILY_MARK_CONFLICT",sym,day,row[0])
+            else:existing[row[0]]=row
+    assert set(existing)==set(START+i*H for i in range(EXPECTED)),("DAILY_MARK_REPAIR_INCOMPLETE",sym,days)
+    print("A195_MONTHLY_MARK_VERIFIED_DAILY_SOURCE_REPAIR",sym,len(missing),flush=True)
+    return [existing[t] for t in sorted(existing)]
+
 def assert_hourly(rows,sym,kind):
     assert len(rows)==EXPECTED,("MISSING_CONTIGUOUS_1H",sym,kind,len(rows),EXPECTED)
     for i,row in enumerate(rows):
@@ -143,6 +173,8 @@ def main():
                     combined.extend(parse_funding(csvrows,sym))
                 else:combined.extend(klines(csvrows,sym,kind))
             if kind!="fundingRate":
+                if kind=="markPriceKlines":
+                    combined=repair_genuine_mark_gaps(combined,sym,shas)
                 assert_hourly(combined,sym,kind)
                 data[kind]=combined
         native_1h=data["klines"]
