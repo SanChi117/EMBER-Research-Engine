@@ -38,6 +38,7 @@ jobs:
           git -C /tmp/a193-original fetch --quiet --depth 1 origin 39f7187ce21b021441fb4a55188b95831df7b5b1
           git -C /tmp/a193-original checkout --quiet 39f7187ce21b021441fb4a55188b95831df7b5b1
           test "$(git -C /tmp/a193-original rev-parse HEAD)" = "39f7187ce21b021441fb4a55188b95831df7b5b1"
+          echo "A193_UPSTREAM_PINNED_FULL_RSI_INDICATOR_HASH_CHECK_IS_REQUIRED"
       - name: Original author 5m RSI 20/80 5x, model v8 source unchanged, external ETH test 6bps/12.5bps each side
         shell: bash
         run: |
