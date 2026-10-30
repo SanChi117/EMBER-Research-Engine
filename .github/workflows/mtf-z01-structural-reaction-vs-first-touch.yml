@@ -1,0 +1,102 @@
+name: EMBER Z01 independent 4H swing-zone 5M reaction versus first-touch PAPER
+on:
+  push:
+    branches: [research/ember-z01-structural-reaction-20261030]
+    paths:
+      - '.github/workflows/mtf-z01-structural-reaction-vs-first-touch.yml'
+      - 'research/mtf-element-audit-v1/z01/**'
+      - 'research/mtf-element-audit-v1/cycles/Z01_PRECOMMIT_STRUCTURAL_4H_SWING_POI_5M_CONFIRM_FIRST_TOUCH_CONTROL_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  independent-source-causality-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: SHA chain, immutable C113 report, 26 new Z01 adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/z01-a176
+          grep -Fq 'entries 176' /tmp/z01-a176
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,sys
+          p=Path('research/mtf-element-audit-v1/d05/c109_simple_p4_core_vs_original_research.py')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          sys.path.insert(0,'research/mtf-element-audit-v1/z01')
+          import structural_reaction_source as z
+          assert z.validate_constants()
+          print('Z01_ORIGINAL_C109_SHA_PINNED_NEW_FAMILY_ONLY')
+          PY
+          cd research/mtf-element-audit-v1/z01
+          python -m unittest -v test_structural_reaction 2>&1 | tee /tmp/z01-new
+          grep -Fq 'Ran 26 tests' /tmp/z01-new
+          grep -qx 'OK' /tmp/z01-new
+  original-1m-paired-replay:
+    needs: independent-source-causality-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source 1452 official provider checksum 1m ZIP and causal 3m,5m,15m,4H,1D paired replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/z01/structural_reaction_source.py --output-dir research/mtf-element-audit-v1/evidence/z01 | tee /tmp/z01-result
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          p=Path('research/mtf-element-audit-v1/evidence/z01')
+          summary=json.loads((p/'Z01_SUMMARY.json').read_text())
+          assert summary['original_source_1m_zips']==1452
+          assert summary['original_source_1m_bars']==2090880
+          assert summary['paper_only'] is True and summary['live_allowed'] is False
+          assert summary['historical_not_forward_oos'] is True
+          assert summary['orders']==summary['fills']==[]
+          assert set(summary['period_receipts'])=={'WIN_A','WIN_B'}
+          for key,receipt in summary['period_receipts'].items():
+            raw=(p/receipt['filename']).read_bytes()
+            assert len(raw)==receipt['bytes']
+            assert sha256(raw).hexdigest()==receipt['sha256']
+            data=json.loads(raw)
+            assert data['source_count']==(57 if key=='WIN_A' else 64)*12
+            assert data['source_native1m_bars']==data['source_count']*1440
+            assert len({(m['symbol'],m['date']) for m in data['source_manifest']})==data['source_count']
+            assert set(data['by_symbol'])=={'BNBUSDT','XLMUSDT','HBARUSDT','INJUSDT','OPUSDT','ALGOUSDT','CHZUSDT','ICPUSDT','SEIUSDT','PENDLEUSDT','LINKUSDT','UNIUSDT'}
+            assert data['admission']['paper_only'] and not data['admission']['live_allowed']
+            a,b='A0_FIRST_TOUCH','B1_5M_CONFIRM_15M_EXEC'
+            assert data['scores'][a]['25']['opportunities']==data['scores'][b]['25']['opportunities']
+            for sym in data['by_symbol']:
+              obj=data['by_symbol'][sym]
+              assert len(obj['arms'][a]['ledger'])==len(obj['arms'][b]['ledger'])==obj['first_touch_opportunities']
+              for arm in (a,b):
+                assert obj['arms'][arm]['counts'].get('FILLED',0)==len(obj['arms'][arm]['trades'])
+                for t in obj['arms'][arm]['trades']:
+                  assert t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['origin_touch_ms']<=t['entry_ms']
+          print('Z01_ORIGINAL_SOURCE_CAUSAL_1M_REPLAY_WITH_NONFILL_ZERO_AUDIT_PASS')
+          PY
+      - name: Commit honest Z01 PAPER evidence and both regime outcomes even if negative
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/z01
+          git commit -m "Z01 original provider 1m H4 dealing-range first-touch versus 5m CHoCH paired economic evidence"
+          git push origin HEAD:refs/heads/research/ember-z01-structural-reaction-20261030
