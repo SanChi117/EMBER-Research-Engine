@@ -1,0 +1,80 @@
+name: EMBER C111 A174 FINAL 1536 original source ZIP both regimes failed 2367 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c111-A174-final-1536-original-gate-economic-rejection.yml'
+permissions:
+  contents: read
+jobs:
+  independent-sha174-and-causal-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent immutable A174, 7 SHA-pinned sources, both original Binance 768-ZIP windows failure
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c111-final-a174
+          grep -Fq 'entries 174 tip_sha256 8d1499d3529781066b8c2201913a73d6c75426abce8f9dcec7f3a8c377c868cd' /tmp/c111-final-a174
+          python - <<'PY'
+          import hashlib,json,sys
+          from pathlib import Path
+          root=Path('.')
+          rows=[json.loads(x) for x in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(rows)==174 and rows[-1]['action_id']=='A174'
+          assert rows[-1]['prev_sha256']=='d5f212e95ce7cf2d1ea6361426c2eec4d6875087f364303a68d508449ac06643'
+          assert rows[-1]['record_sha256']=='8d1499d3529781066b8c2201913a73d6c75426abce8f9dcec7f3a8c377c868cd'
+          assert len(rows[-1]['evidence'])==7
+          for item in rows[-4:]:
+              for ev in item['evidence']:
+                  raw=(root/ev['path']).read_bytes()
+                  assert len(raw)==ev['bytes'] and hashlib.sha256(raw).hexdigest()==ev['sha256'],ev['path']
+          p=root/'evidence/c111/C111_REGIME_GATE_TWO_WINDOW_PINNED_SUMMARY.json'
+          raw=p.read_bytes()
+          assert len(raw)==7289 and hashlib.sha256(raw).hexdigest()=='3a42ddded2b65ecc47dd4b6e89405d4538745d81a547d9c571244c7e4a4cd9f0'
+          z=json.loads(raw)
+          assert z['original_source_total_zip_count']==1536 and z['original_source_total_native3m_bars']==737280
+          assert z['both_historical_windows_pass'] is False
+          assert z['live_approved'] is False and z['orders']==z['fills']==z['live_trades']==[]
+          assert z['source_strategy_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          values=(('WIN_A',55,-20.008366,17,-6.642906),
+                  ('WIN_B',49,-7.617704,19,-13.995634))
+          for key,n0,r0,n1,r1 in values:
+              e=z['window_evidence_pins'][key]
+              raw=(root/'evidence/c111'/e['filename']).read_bytes()
+              assert len(raw)==e['bytes'] and hashlib.sha256(raw).hexdigest()==e['sha256']
+              a=json.loads(raw)
+              assert a['source_zip_count']==768 and a['native3m_bars']==368640
+              assert len({(x['symbol'],x['date']) for x in a['source_manifest']})==768
+              b1=a['arms']['B1_C109_UNCHANGED'];b2=a['arms']['B2_C111_1D_4H_REGIME']
+              assert (b1['scores']['25']['n'],b1['scores']['25']['sum_r'])==(n0,r0)
+              assert (b2['scores']['25']['n'],b2['scores']['25']['sum_r'])==(n1,r1)
+              assert not b2['admission']['passes_historical_screen']
+              assert not b2['admission']['live_approved']
+              for t in b2['trades']:
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['regime_proof']['4h_last_known_close_ms']<=t['closed_1h_confirmation_ms']
+                  assert t['regime_proof']['1d_last_known_close_ms']<=t['closed_1h_confirmation_ms']
+          sys.path.insert(0,str(root/'d05'))
+          import c111_frozen_c109_1d4h_regime_gate as frozen
+          assert frozen.pins()
+          print('C111_A174_FINAL_TWO_REGIMES_FAIL_1536_SOURCE_ZIP_SHA_VERIFIED_NO_LIVE')
+          PY
+      - name: C84-C111 independent 789 tests per Python 3.10 3.11 3.12
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics test_c108_minimal_owner_h4_h1_child_firsttest test_c109_simple_p4_complete_reclaim_real_bos test_c110_unchanged_c109_second_regime test_c111_one_regime_gate_source_asof 2>&1 | tee /tmp/c111-final-regression
+          grep -Fq 'Ran 789 tests' /tmp/c111-final-regression
+          grep -qx 'OK' /tmp/c111-final-regression
+          echo C111_A174_FINAL_789_X3_2367_PASS_WITH_ECONOMIC_NO_GO
