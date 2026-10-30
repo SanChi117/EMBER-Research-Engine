@@ -31,7 +31,7 @@ jobs:
           grep -Fq 'entries 178' /tmp/a178
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c116_original_native1m_canonical_source 2>&1 | tee /tmp/c116-test
-          grep -Fq 'Ran 9 tests' /tmp/c116-test
+          grep -Fq 'Ran 11 tests' /tmp/c116-test
           grep -qx 'OK' /tmp/c116-test
           python -m unittest -q test_c114_independent_4h_poi_native5m test_c105_parent4h_only_geometry test_c113_final_execution_geometry
   original-1344-native1m-backtest-canonical:
