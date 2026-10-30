@@ -1,0 +1,83 @@
+name: EMBER C116 A179 final canonical1m NO_POWER SHA witness
+on:
+  push:
+    branches: [research/c116-single-native1m-canonical-source-20261030]
+    paths:
+      - '.github/workflows/mtf-c116-A179-final-no-power-sha-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C116_FINAL_CANONICAL_1M_NO_POWER_20261030_RU.md'
+permissions:
+  contents: write
+jobs:
+  audited-source-and-economics-A179:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify previous A178 and final canonical original1m evidence with both prereg negative power outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a178
+          grep -Fq 'entries 178' /tmp/a178
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1')
+          summary=json.loads((root/'evidence/c116/C116_SUMMARY.json').read_text())
+          assert summary['source_count_original_native1m_zip']==1344
+          assert summary['source_raw_native1m_bars']==1935360
+          assert summary['derived_3m_bars_total']==645120 and summary['derived_5m_bars_total']==387072
+          assert summary['original_3m_zip_total']==summary['original_5m_zip_total']==0
+          assert not summary['source_3m_5m_independent_original_archives']
+          assert not summary['historical_screen_pass_both_windows']
+          assert summary['live_approved'] is False
+          assert summary['real_orders']==summary['real_fills']==summary['live_trades']==[]
+          for name in ('WIN_A','WIN_B'):
+            p=summary['window_receipts'][name]
+            assert p['admission']['state']=='NO_POWER'
+            assert 'NO_POWER_MATCHED_PAIRS_LT_40' in p['admission']['reasons']
+            assert p['scores']['T_ALL']['25']['net_total_r']<0
+            assert p['scores']['T_ALL']['25']['pf']<1
+            assert p['bootstrap']['low95']<=0
+            data=(root/'evidence/c116'/p['filename']).read_bytes()
+            assert len(data)==p['bytes'] and hashlib.sha256(data).hexdigest()==p['sha256']
+            obj=json.loads(data)
+            assert obj['cohort']['matched_pairs_n'] == len(obj['matched_pair_indices'])
+            assert len(obj['canonical_native1m_zip_receipts'])==672
+            assert all(t['source_original_native1m_zip_sha256'] for t in obj['derived_3m_provenance'])
+            assert all(t['source_original_native1m_zip_sha256'] for t in obj['derived_5m_provenance'])
+            assert all(x['price_and_volume_equal'] for x in obj['intra_canonical_1m_3m5m_parity'].values())
+          assert summary['window_receipts']['WIN_A']['cohort']['matched_pairs_n']==2
+          assert summary['window_receipts']['WIN_B']['cohort']['matched_pairs_n']==5
+          print('C116_FINAL_NO_POWER_BOTH_WINDOWS_INDEPENDENT_SHA_RECEIPTS_VERIFIED')
+          PY
+      - name: Append A179 paper-only NO_POWER receipt and source code snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A179 --cycle C116 \
+            --planned "Canonically source 1344 original Binance USD-M native1m daily ZIP; derive consistent 3m/5m; test frozen C114 structural CHoCH vs first-touch matched controls on two 56-day windows" \
+            --executed "Original native1m SHA receipts and exact UTC OHLCV parity, 11 adverse tests x Python3.10-3.12, fixed independent first-touch treatment/control ledger, prereg block bootstrap and modeled portfolio DD" \
+            --result "NO_POWER both: matched pairs WIN_A n2/40, WIN_B n5/40; all treated 25bps WIN_A 36 fills -12.699636R PF0.531206, WIN_B 24 fills -7.157520R PF0.618505; no proof of alpha" \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "Original C114 economic thresholds never weakened; all 1344 source ZIPs 1m only; prior original3m/5m C114,C115 SOURCE_BLOCKED preserved; all results historical, no real orders and LIVE BLOCKED" \
+            --evidence cycles/B1_C116_PRECOMMIT_SINGLE_ORIGINAL_1M_CANONICAL_SOURCE_RU.md \
+            --evidence cycles/B1_C116_FINAL_CANONICAL_1M_NO_POWER_20261030_RU.md \
+            --evidence d05/c116_original_1m_source_and_exact_resampler.py \
+            --evidence d05/c116_canonical_1m_4h_poi_5m_choch_replay.py \
+            --evidence d05/test_c116_original_native1m_canonical_source.py \
+            --evidence evidence/c116/C116_SUMMARY.json \
+            --evidence evidence/c116/C116_WIN_A_ORIGINAL_1M_CANONICAL_AND_MATCHED_EVENTS.json \
+            --evidence evidence/c116/C116_WIN_B_ORIGINAL_1M_CANONICAL_AND_MATCHED_EVENTS.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a179
+          grep -Fq 'entries 179' /tmp/a179
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C116 A179 verified source-only 1m canonical two-window NO_POWER SHA journal"
+          git push origin HEAD:refs/heads/research/c116-single-native1m-canonical-source-20261030
