@@ -1,0 +1,99 @@
+name: EMBER C115 original3m5m strict PRICE parity / inherited C114 hypothesis PAPER
+on:
+  push:
+    branches: [research/c115-price-only-source-reconciliation-20261030]
+    paths:
+      - '.github/workflows/mtf-c115-price-only-original-3m5m-replay.yml'
+      - 'research/mtf-element-audit-v1/d05/c115_price_only_provenance_reconciliation.py'
+      - 'research/mtf-element-audit-v1/d05/test_c115_price_only_source_reconciliation.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C115_PRECOMMIT_PRICE_ONLY_SOURCE_RECONCILIATION_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  provenance-contract-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verified A177, C115 8 negative provenance tests, prior C114 23 adverse tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a177
+          grep -Fq 'entries 177' /tmp/a177
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c115_price_only_source_reconciliation 2>&1 | tee /tmp/test-c115
+          grep -Fq 'Ran 8 tests' /tmp/test-c115
+          grep -qx OK /tmp/test-c115
+          python -m unittest -q test_c114_independent_4h_poi_native5m test_c105_parent4h_only_geometry test_c113_final_execution_geometry
+  original-source-price-invariant-economics:
+    needs: provenance-contract-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: C115 original Binance 2688 ZIP exact 15m OHLC and source volume diagnostics, frozen C114 economics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c115_price_only_provenance_reconciliation.py \
+             --output-dir research/mtf-element-audit-v1/evidence/c115 | tee /tmp/c115-replay
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1/evidence/c115')
+          z=json.loads((root/'C115_SUMMARY.json').read_text())
+          assert z['original_3m_zip_total']==1344 and z['original_5m_zip_total']==1344
+          assert z['original_3m_bar_total']==645120 and z['original_5m_bar_total']==387072
+          assert z['paper_only'] and not z['live_approved'] and not z['true_prospective_oos']
+          assert z['source_format_amendment_after_archive_volume_exposure']
+          assert not z['economic_parameters_changed']
+          assert z['real_orders']==z['real_fills']==z['live_trades']==[]
+          assert set(z['window_receipts'])=={'WIN_A','WIN_B'}
+          for k,r in z['window_receipts'].items():
+            raw=(root/r['filename']).read_bytes()
+            assert len(raw)==r['bytes'] and hashlib.sha256(raw).hexdigest()==r['sha256']
+            w=json.loads(raw)
+            assert len(w['source_receipts_3m'])==len(w['source_receipts_5m'])==672
+            assert len(w['per_symbol'])==12
+            assert w['original3m_bars']==322560 and w['original5m_bars']==193536
+            for symbol,q in w['source_15m_cross_archive_parity'].items():
+              assert q['strict_ohlc_price_clock_parity']
+              assert q['aligned15m']==56*96
+              assert q['volume_is_diagnostic_only']
+            for sym,p in w['per_symbol'].items():
+              assert p['source_bars_native3m']==26880 and p['source_bars_native5m']==16128
+              for e in p['events']:
+                assert e['landmark_ms']==e['t0_touch_known_ms']+6*3600000
+                if e['choch'] is not None:
+                  assert e['choch']['swing_confirmed_ms']<=e['t0_touch_known_ms']
+                  assert e['choch']['candle_5m_open_ms']>=e['t0_touch_known_ms']
+                  assert e['choch']['breach_known_ms']<=e['landmark_ms']
+                if e['trade']:
+                  assert e['trade']['entry_ms']==e['landmark_ms']
+                  assert e['trade']['parent_tf']==e['trade']['stop_source_tf']==e['trade']['target_source_tf']=='4H'
+            assert w['cohort']['matched_pairs_n']==len(w['matched_pair_indices'])
+            assert not w['admission']['live_approved'] and not w['admission']['causal_effect_identified']
+          print('C115_ORIGINAL_PRICE_ONLY_PROVIDER_SHA_15M_INTEGRITY_PASS_NO_LIVE')
+          PY
+      - name: Commit all source and economic witness even for null/no-power/negative results
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c115
+          git commit -m "C115 original independent 3m5m exact-price historical source and preserved matched structural CHoCH controls"
+          git push origin HEAD:refs/heads/research/c115-price-only-source-reconciliation-20261030
