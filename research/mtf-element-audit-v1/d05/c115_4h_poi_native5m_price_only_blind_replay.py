@@ -98,21 +98,48 @@ def price_only_causal_15m_parity(three,five):
         "volume_discrepancy_samples":examples,
     }
 
+
+def pure_trade_provenance_bridge(three,five,symbol,window):
+    """Repair C114 event->trade attribution only; preserve ALL trade economics.
+
+    The original C114 per_symbol emitted trades without symbol/parent_id;
+    C114.evaluate portfolio sort expects both and raises KeyError. Attach
+    the already stored event identifiers as metadata. Never add/remove events,
+    modify trade direction, price, exit time, costs, matching, or TP/SL.
+    """
+    result=_ORIGINAL_PER_SYMBOL(three,five,symbol,window)
+    for event in result["events"]:
+        trade=event.get("trade")
+        if trade is None:
+            continue
+        if "symbol" in trade and trade["symbol"]!=event["symbol"]:
+            raise C115Rejected("CONFLICTING_TRADE_SYMBOL_PROVENANCE")
+        if "parent_id" in trade and trade["parent_id"]!=event["parent_id"]:
+            raise C115Rejected("CONFLICTING_4H_PARENT_PROVENANCE")
+        trade["symbol"]=event["symbol"]
+        trade["parent_id"]=event["parent_id"]
+    return result
+
+_ORIGINAL_PER_SYMBOL=original.per_symbol
+
 @contextmanager
 def frozen_source_scope():
     frozen()
     old_windows=original.WINDOWS
     old_parity=original.independent_15m_parity
     old_precommit=original.PRECOMMIT
+    old_per_symbol=original.per_symbol
     original.WINDOWS=WINDOWS
     original.independent_15m_parity=price_only_causal_15m_parity
     original.PRECOMMIT=PRECOMMIT
+    original.per_symbol=pure_trade_provenance_bridge
     try:
         yield
     finally:
         original.WINDOWS=old_windows
         original.independent_15m_parity=old_parity
         original.PRECOMMIT=old_precommit
+        original.per_symbol=old_per_symbol
 
 def run():
     with frozen_source_scope():
@@ -123,6 +150,7 @@ def run():
     answer["source_gate_strict_price_only"]=True
     answer["precommit"]=PRECOMMIT
     answer["no_live_trades"]=True
+    answer["non_economic_event_attribution_bridge"]=True
     if (answer["original_3m_zip_total"]+answer["original_5m_zip_total"]!=EXPECTED_ZIPS or
         answer["original_3m_bar_total"]!=EXPECTED_3M or
         answer["original_5m_bar_total"]!=EXPECTED_5M):
