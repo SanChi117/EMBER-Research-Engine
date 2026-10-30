@@ -75,7 +75,7 @@ jobs:
                 --userdir /tmp/a195-original/user_data \
                 --datadir "$GITHUB_WORKSPACE/a195-native-reports/data" \
                 --strategy VideoDoubleMaFuturesStrategy --timeframe 1h \
-                --timerange 20260513-20261030 \
+                --timerange 20260513-20261001 \
                 --data-format-ohlcv json --fee "$RATE" \
                 --export trades --cache none 2>&1 | tee "a195-native-reports/native-$sym-fee$fee.log"
               z="$(find /tmp/a195-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
