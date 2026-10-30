@@ -1,0 +1,70 @@
+name: EMBER C114-F monthly versus daily ORIGINAL four TF checks NO ECONOMICS
+on:
+  push:
+    branches: [research/c114-independent-zone-reaction-value-20261030]
+    paths:
+      - '.github/workflows/mtf-c114-monthly-daily-source-forensic.yml'
+      - 'research/mtf-element-audit-v1/d05/c114_monthly_vs_daily_4tf_forensic.py'
+      - 'research/mtf-element-audit-v1/d05/test_c114_monthly_vs_daily_forensic.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  monthly-source-regressions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Strict monthly SHA and full calendar negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c114_monthly_vs_daily_forensic 2>&1 | tee /tmp/monthly-tests
+          grep -Fq 'Ran 4 tests' /tmp/monthly-tests
+          grep -Fxq 'OK' /tmp/monthly-tests
+  original-provider-monthly-daily-audit:
+    needs: monthly-source-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original Binance USD-M January 2025 four monthly and four daily SHA ZIPs, exposed incident only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c114_monthly_vs_daily_4tf_forensic.py \
+            --output research/mtf-element-audit-v1/evidence/c114/C114_MONTHLY_VS_DAILY_ORIGINAL_4TF_BNB_20250114.json \
+            | tee /tmp/c114-monthly-report
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/mtf-element-audit-v1/evidence/c114/C114_MONTHLY_VS_DAILY_ORIGINAL_4TF_BNB_20250114.json')
+          x=json.loads(p.read_text())
+          assert len(x['monthly_provider_receipts'])==len(x['daily_provider_receipts'])==4
+          assert all(y['provider_checksum_verified'] for y in x['monthly_provider_receipts'].values())
+          assert x['no_trade_outcomes'] and x['c114_original_source_gate_unmodified']
+          assert x['live_approved'] is False
+          print("ORIGINAL_MONTHLY_DAILY_SHA_FORENSIC_COMPLETE")
+          PY
+      - name: Commit auditable source receipt only; do not rerun economic gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c114/C114_MONTHLY_VS_DAILY_ORIGINAL_4TF_BNB_20250114.json
+          git commit -m "C114 monthly-versus-daily independent 4TF source SHA audit, no economic claims"
+          git push origin HEAD:refs/heads/research/c114-independent-zone-reaction-value-20261030
