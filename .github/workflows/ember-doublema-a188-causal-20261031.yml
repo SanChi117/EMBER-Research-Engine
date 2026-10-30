@@ -1,4 +1,4 @@
-name: EMBER A188 DoubleMA causal callback parity: genuine native Freqtrade only
+name: "EMBER A188 DoubleMA causal callback parity - genuine native Freqtrade only"
 on:
   push:
     branches: [research/a188-doublema-causal-audit-20261031]
