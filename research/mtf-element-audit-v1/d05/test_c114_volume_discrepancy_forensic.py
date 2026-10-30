@@ -24,7 +24,7 @@ def stub_fetch(volume_5m_extra=None,wrong_high_5m=None,corrupt_checksum=False,
             if tf=="5m" and i==54*3 and wrong_high_5m:
                 high+=D(wrong_high_5m)
             w.writerow([stamp,100,high,99,100,str(val),stamp+step-1,
-                        str(val*D(100)),1,str(val/D(2)),str(val*D(50)),0])
+                        str(val*D(100)),int(D(step)/D(60000)),str(val/D(2)),str(val*D(50)),0])
         csvbytes=csvout.getvalue().encode()
         b=io.BytesIO()
         with ZipFile(b,"w",compression=ZIP_DEFLATED) as archive:
