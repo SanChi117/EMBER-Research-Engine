@@ -1,0 +1,101 @@
+name: EMBER C113 frozen 4H limit geometry terminal two-regime original Binance PAPER research
+on:
+  push:
+    branches:
+      - research/c113-final-execution-geometry-20261030
+    paths:
+      - '.github/workflows/mtf-c113-final-execution-geometry.yml'
+      - 'research/mtf-element-audit-v1/d05/c113_final_execution_geometry_research.py'
+      - 'research/mtf-element-audit-v1/d05/test_c113_final_execution_geometry.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C113_PRECOMMIT_FINAL_EXECUTION_GEOMETRY_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  frozen-adversarial-regressions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verify canonical journal and original immutable C109 SHA; 21 C113 adversarial unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python - <<'PY'
+          import c113_final_execution_geometry_research as c
+          assert c.frozen()
+          assert c.ORIGINAL_C109_SHA == '39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          assert c.EXPECTED_ZIPS==1536 and c.EXPECTED_BARS==737280
+          print('C113_PRECOMMIT_2_HISTORICAL_2024_WINDOWS_SOURCE_FROZEN')
+          PY
+          python -m unittest -v test_c113_final_execution_geometry 2>&1 | tee /tmp/c113-tests
+          grep -Fq 'Ran 21 tests' /tmp/c113-tests
+          grep -qx 'OK' /tmp/c113-tests
+          python -m unittest -q test_c105_parent4h_only_geometry test_c109_simple_p4_complete_reclaim_real_bos test_c110_unchanged_c109_second_regime test_c111_one_regime_gate_source_asof test_c112_original_4h_zone_to_zone_first_passage
+  original-native3m-2024-two-regime-replay:
+    needs: frozen-adversarial-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and verify original 1536 Binance Vision 3m ZIP, run frozen C113 4H experiment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c113_final_execution_geometry_research.py \
+            --output-dir research/mtf-element-audit-v1/evidence/c113 | tee /tmp/c113-result
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          folder=Path('research/mtf-element-audit-v1/evidence/c113')
+          manifest=json.loads((folder/'C113_SUMMARY.json').read_text())
+          assert manifest['source_zip_count']==1536
+          assert manifest['original_native3m_bars']==737280
+          assert manifest['paper_only'] is True and manifest['live_approved'] is False
+          assert manifest['true_forward_oos'] is False
+          assert manifest['funding_missing'] is True
+          assert manifest['orders']==manifest['fills']==manifest['live_trades']==[]
+          assert set(manifest['window_receipts'])=={'WIN_A','WIN_B'}
+          for name,receipt in manifest['window_receipts'].items():
+            blob=(folder/receipt['filename']).read_bytes()
+            assert hashlib.sha256(blob).hexdigest()==receipt['sha256']
+            assert len(blob)==receipt['bytes']
+            z=json.loads(blob)
+            assert z['source_zip_count']==768 and z['original_native3m_bars']==368640
+            assert len(z['source_manifest'])==768
+            assert len({(m['symbol'],m['date']) for m in z['source_manifest']})==768
+            assert len(z['per_symbol'])==12
+            for sym,p in z['per_symbol'].items():
+              for arm, data in p['arms'].items():
+                assert len(data['ledger'])==len(p['baseline'])
+                assert data['status'].get('FILLED',0)==len(data['trades'])
+                for t in data['trades']:
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['source_signal_ms']<=t['entry_ms']
+                  assert t['limit_wait_hours']<=24
+            assert z['admission']['live_approved'] is False
+          print('C113_ORIGINAL_DATA_HISTORICAL_REPLAY_EVIDENCE_VERIFIED_NO_LIVE')
+          PY
+      - name: Commit immutable C113 two-regime report regardless of economic win or failure
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c113
+          git commit -m "C113 final frozen geometry original Binance two window raw source and negative-or-positive economic evidence"
+          git push origin HEAD:refs/heads/research/c113-final-execution-geometry-20261030
