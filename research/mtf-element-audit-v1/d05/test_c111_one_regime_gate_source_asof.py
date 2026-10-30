@@ -31,7 +31,7 @@ class Gate111(unittest.TestCase):
         self.assertEqual(f.WINDOWS[1][2].strftime("%Y-%m-%d"),"2025-09-03")
     def test_03_source_count_1536_original_zips_and_rows(self):
         self.assertEqual((f.EXPECTED_TOTAL_ZIPS,f.EXPECTED_TOTAL_BARS),(1536,737280))
-    def test_04_no new trading formations(self):
+    def test_04_no_new_trading_formations(self):
         src=(Path(__file__).parent/"c111_frozen_c109_1d4h_regime_gate.py").read_text()
         self.assertNotIn("request.security(",src)
         self.assertNotIn("lookahead_on",src)
