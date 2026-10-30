@@ -1,0 +1,329 @@
+{
+  "both_historical_windows_pass": false,
+  "c109_source_sha": "39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557",
+  "fills": [],
+  "funding_missing": true,
+  "live_approved": false,
+  "live_trades": [],
+  "orders": [],
+  "original_native3m_bars": 737280,
+  "paper_only": true,
+  "precommit": "cycles/B1_C113_PRECOMMIT_FINAL_EXECUTION_GEOMETRY_RU.md",
+  "schema": "EMBER_C113_TERMINAL_C109_EXECUTION_FALSIFICATION",
+  "source_zip_count": 1536,
+  "true_forward_oos": false,
+  "window_receipts": {
+    "WIN_A": {
+      "admission": {
+        "fail_reasons": [
+          "NONPOSITIVE_25BPS",
+          "PF25_LE_1_2",
+          "PF40_LE_1_1",
+          "NOT_BETTER_THAN_PAIRED_A0",
+          "PORTFOLIO_WICK_DD_GE_10"
+        ],
+        "funding_missing": true,
+        "live_approved": false,
+        "screen_pass": false
+      },
+      "bytes": 665242,
+      "filename": "C113_WIN_A_ORIGINAL_768_SOURCE_LEDGER.json",
+      "scores": {
+        "A0_UNMODIFIED_4H": {
+          "portfolio": {
+            "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+            "dd_adverse_wick_pct_upper_bound": 23.886621,
+            "dd_close_pct": 23.829017,
+            "initial_equity": 100,
+            "initial_equity_risk_per_fill_pct": 1,
+            "max_simultaneous_positions": 4
+          },
+          "scores": {
+            "14": {
+              "avg_r_per_signal": -0.232605,
+              "early_n": 28,
+              "filled_fraction": 1.0,
+              "fills": 58,
+              "late_n": 30,
+              "pf": 0.735064,
+              "signals": 58,
+              "sum_r": -13.491085
+            },
+            "25": {
+              "avg_r_per_signal": -0.322783,
+              "early_n": 28,
+              "filled_fraction": 1.0,
+              "fills": 58,
+              "late_n": 30,
+              "pf": 0.658303,
+              "signals": 58,
+              "sum_r": -18.721418
+            },
+            "40": {
+              "avg_r_per_signal": -0.445753,
+              "early_n": 28,
+              "filled_fraction": 1.0,
+              "fills": 58,
+              "late_n": 30,
+              "pf": 0.569559,
+              "signals": 58,
+              "sum_r": -25.85369
+            }
+          }
+        },
+        "B1_LIMIT_ORIGINAL_H4_STOP_48H": {
+          "portfolio": {
+            "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+            "dd_adverse_wick_pct_upper_bound": 37.929725,
+            "dd_close_pct": 37.753804,
+            "initial_equity": 100,
+            "initial_equity_risk_per_fill_pct": 1,
+            "max_simultaneous_positions": 4
+          },
+          "scores": {
+            "14": {
+              "avg_r_per_signal": -0.244778,
+              "early_n": 24,
+              "filled_fraction": 0.8793103448275862,
+              "fills": 51,
+              "late_n": 27,
+              "pf": 0.720913,
+              "signals": 58,
+              "sum_r": -14.197111
+            },
+            "25": {
+              "avg_r_per_signal": -0.373692,
+              "early_n": 24,
+              "filled_fraction": 0.8793103448275862,
+              "fills": 51,
+              "late_n": 27,
+              "pf": 0.620108,
+              "signals": 58,
+              "sum_r": -21.674115
+            },
+            "40": {
+              "avg_r_per_signal": -0.549483,
+              "early_n": 24,
+              "filled_fraction": 0.8793103448275862,
+              "fills": 51,
+              "late_n": 27,
+              "pf": 0.513327,
+              "signals": 58,
+              "sum_r": -31.870029
+            }
+          },
+          "status_counts": {
+            "FILLED": 51,
+            "STRUCTURE_RR_BELOW_1_25": 1,
+            "UNFILLED_EXPIRED": 6
+          }
+        },
+        "B2_LIMIT_WIDE_H4_STOP_7D": {
+          "portfolio": {
+            "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+            "dd_adverse_wick_pct_upper_bound": 37.084627,
+            "dd_close_pct": 36.974314,
+            "initial_equity": 100,
+            "initial_equity_risk_per_fill_pct": 1,
+            "max_simultaneous_positions": 4
+          },
+          "scores": {
+            "14": {
+              "avg_r_per_signal": -0.272947,
+              "early_n": 24,
+              "filled_fraction": 0.8620689655172413,
+              "fills": 50,
+              "late_n": 26,
+              "pf": 0.651127,
+              "signals": 58,
+              "sum_r": -15.830931
+            },
+            "25": {
+              "avg_r_per_signal": -0.345201,
+              "early_n": 24,
+              "filled_fraction": 0.8620689655172413,
+              "fills": 50,
+              "late_n": 26,
+              "pf": 0.58986,
+              "signals": 58,
+              "sum_r": -20.021642
+            },
+            "40": {
+              "avg_r_per_signal": -0.443728,
+              "early_n": 24,
+              "filled_fraction": 0.8620689655172413,
+              "fills": 50,
+              "late_n": 26,
+              "pf": 0.519008,
+              "signals": 58,
+              "sum_r": -25.736248
+            }
+          },
+          "status_counts": {
+            "CAPACITY_BLOCKED": 1,
+            "FILLED": 50,
+            "STRUCTURE_RR_BELOW_1_25": 1,
+            "UNFILLED_EXPIRED": 6
+          }
+        }
+      },
+      "sha256": "5eab65878bef82e3bf8107534f2154cd4ff99e8fd395ec125cc5766a7ebc1dfa"
+    },
+    "WIN_B": {
+      "admission": {
+        "fail_reasons": [
+          "NONPOSITIVE_25BPS",
+          "PF25_LE_1_2",
+          "PF40_LE_1_1",
+          "PORTFOLIO_WICK_DD_GE_10"
+        ],
+        "funding_missing": true,
+        "live_approved": false,
+        "screen_pass": false
+      },
+      "bytes": 681969,
+      "filename": "C113_WIN_B_ORIGINAL_768_SOURCE_LEDGER.json",
+      "scores": {
+        "A0_UNMODIFIED_4H": {
+          "portfolio": {
+            "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+            "dd_adverse_wick_pct_upper_bound": 25.454082,
+            "dd_close_pct": 25.435531,
+            "initial_equity": 100,
+            "initial_equity_risk_per_fill_pct": 1,
+            "max_simultaneous_positions": 4
+          },
+          "scores": {
+            "14": {
+              "avg_r_per_signal": -0.321232,
+              "early_n": 26,
+              "filled_fraction": 1.0,
+              "fills": 61,
+              "late_n": 35,
+              "pf": 0.598172,
+              "signals": 61,
+              "sum_r": -19.595171
+            },
+            "25": {
+              "avg_r_per_signal": -0.397864,
+              "early_n": 26,
+              "filled_fraction": 1.0,
+              "fills": 61,
+              "late_n": 35,
+              "pf": 0.538757,
+              "signals": 61,
+              "sum_r": -24.269704
+            },
+            "40": {
+              "avg_r_per_signal": -0.502362,
+              "early_n": 26,
+              "filled_fraction": 1.0,
+              "fills": 61,
+              "late_n": 35,
+              "pf": 0.470487,
+              "signals": 61,
+              "sum_r": -30.644066
+            }
+          }
+        },
+        "B1_LIMIT_ORIGINAL_H4_STOP_48H": {
+          "portfolio": {
+            "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+            "dd_adverse_wick_pct_upper_bound": 25.189734,
+            "dd_close_pct": 25.152657,
+            "initial_equity": 100,
+            "initial_equity_risk_per_fill_pct": 1,
+            "max_simultaneous_positions": 3
+          },
+          "scores": {
+            "14": {
+              "avg_r_per_signal": -0.217273,
+              "early_n": 22,
+              "filled_fraction": 0.8852459016393442,
+              "fills": 54,
+              "late_n": 32,
+              "pf": 0.731099,
+              "signals": 61,
+              "sum_r": -13.253664
+            },
+            "25": {
+              "avg_r_per_signal": -0.323217,
+              "early_n": 22,
+              "filled_fraction": 0.8852459016393442,
+              "fills": 54,
+              "late_n": 32,
+              "pf": 0.640356,
+              "signals": 61,
+              "sum_r": -19.716243
+            },
+            "40": {
+              "avg_r_per_signal": -0.467686,
+              "early_n": 22,
+              "filled_fraction": 0.8852459016393442,
+              "fills": 54,
+              "late_n": 32,
+              "pf": 0.542565,
+              "signals": 61,
+              "sum_r": -28.528849
+            }
+          },
+          "status_counts": {
+            "CAPACITY_BLOCKED": 1,
+            "FILLED": 54,
+            "STRUCTURE_RR_BELOW_1_25": 2,
+            "UNFILLED_EXPIRED": 4
+          }
+        },
+        "B2_LIMIT_WIDE_H4_STOP_7D": {
+          "portfolio": {
+            "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+            "dd_adverse_wick_pct_upper_bound": 21.481555,
+            "dd_close_pct": 21.445692,
+            "initial_equity": 100,
+            "initial_equity_risk_per_fill_pct": 1,
+            "max_simultaneous_positions": 4
+          },
+          "scores": {
+            "14": {
+              "avg_r_per_signal": -0.167567,
+              "early_n": 22,
+              "filled_fraction": 0.8524590163934426,
+              "fills": 52,
+              "late_n": 30,
+              "pf": 0.769603,
+              "signals": 61,
+              "sum_r": -10.221572
+            },
+            "25": {
+              "avg_r_per_signal": -0.229167,
+              "early_n": 22,
+              "filled_fraction": 0.8524590163934426,
+              "fills": 52,
+              "late_n": 30,
+              "pf": 0.705152,
+              "signals": 61,
+              "sum_r": -13.979178
+            },
+            "40": {
+              "avg_r_per_signal": -0.313167,
+              "early_n": 22,
+              "filled_fraction": 0.8524590163934426,
+              "fills": 52,
+              "late_n": 30,
+              "pf": 0.629538,
+              "signals": 61,
+              "sum_r": -19.103186
+            }
+          },
+          "status_counts": {
+            "CAPACITY_BLOCKED": 1,
+            "FILLED": 52,
+            "STRUCTURE_RR_BELOW_1_25": 4,
+            "UNFILLED_EXPIRED": 4
+          }
+        }
+      },
+      "sha256": "ffd40090445355ed660b75bb94525ab47c35f7a4e1a750b8ec2c8b4912ad07a3"
+    }
+  }
+}
