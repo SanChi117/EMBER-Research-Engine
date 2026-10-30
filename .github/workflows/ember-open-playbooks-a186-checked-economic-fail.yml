@@ -1,0 +1,66 @@
+name: EMBER A186 two published ETH playbooks negative outcome SHA witness
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-open-playbooks-a186-checked-economic-fail.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  a186-evidence-replay-and-source-sha:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact re-run from frozen Git source and compare all trading receipts byte-for-byte
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp research/open_playbook_validation_20261031/RESULTS.json /tmp/recorded-a186.json
+          python research/open_playbook_validation_20261031/run.py | tee /tmp/replay-a186
+          cmp /tmp/recorded-a186.json research/open_playbook_validation_20261031/RESULTS.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/recorded-a186.json').read_text())
+          assert not any(v['advance'] for v in d['candidates'].values())
+          assert set(d['candidates']) == {'ORB24','BREAKOUT24VOL'}
+          assert [d['frozen_data'][n]['bars'] for n in 'ABCD']==[840,840,2208,264]
+          assert len(d['trades_cost25'])==149
+          for k in d['candidates']:
+              assert set(d['candidates'][k]['windows'])==set('ABCD')
+              assert all(set(x)=={'14','25','40'} for x in d['candidates'][k]['windows'].values())
+          print('A186_ECONOMIC_FAIL_0_OF_2_SOURCE_REPLAY_RECORDED')
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/old-audit
+          grep -Fq 'INTEGRITY_PASS entries 185' /tmp/old-audit
+      - name: Commit immutable A186 outcome, no live
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A186 --cycle OPEN_PLAYBOOK_2_INDEPENDENT_CHECK \
+            --planned "User asks to keep searching for profitable ready strategies. Independently reproduce two published Oct2026 ETH 1h trading playbooks before fees/slippage inflation, with 2024 prepublication and 2026 postpublished dates, no optimization and stop if gate fails" \
+            --executed "Fetch contiguous 2208 ETHUSDT Binance USD-M original 1h candles May-Aug2024 plus 264 Oct19-Oct30 2026, reuse prior two 840h historical windows, totaling 4152h. Freeze public author rules and 14/25/40bps in policy prior to outcome. Run independent Python causal next-open one-trade-day 4h Opening Range + SMA24 and 24h trend-volume breakout SMA48/SMA168, max high/low 24h; save 149 receipts and all negative results" \
+            --result "ECONOMIC SCREEN FAIL 0/2. ORB24 25bps A 21 trades PF1.75249 +18.01pct compound, B21 PF0.74158 -4.80pct, independent C68 PF0.98385 -3.19pct, D2 -2.97pct. BREAKOUT24VOL A9 PF0.19260 -12.67pct, B5 PF0.48279 -3.25pct, C21 PF1.29813 +6.61pct, D2 -1.65pct. Author tested ETH-USDC; our market Binance ETHUSDT. Neither source rules includes exchange hard stop, no actionable quotes/funding; no alpha validated; no orders or changed existing terminal" \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Exact byte-replay of RESULTS.json, strict contiguous 4152 1h UTC source timestamps, 25/40bps reported separately, A/B known, C preauthor calibration period, D small n2, original implementation not provided, no mistaken claimed cross-venue equivalence; economics no pass despite positive pockets" \
+            --evidence ../../research/open_playbook_validation_20261031/POLICY_PRECOMMIT.md \
+            --evidence ../../research/open_playbook_validation_20261031/run.py \
+            --evidence ../../research/open_playbook_validation_20261031/RESULTS.json \
+            --evidence ../../research/open_playbook_validation_20261031/REPORT_RU.md \
+            --evidence ../../research/open_playbook_validation_20261031/NEXT_OPEN_SOURCE_CANDIDATES_RU.md \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/C_pre_2024_ETHUSDT.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/D_post_2026_ETHUSDT.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a186
+          grep -Fq 'INTEGRITY_PASS entries 186' /tmp/a186
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A186 immutable independent two ready ETH breakout published rules economic screen FAIL 0/2"
+          git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
