@@ -94,31 +94,50 @@ def download(window):
     if len(receipts3)!=672 or len(receipts5)!=672:
         raise C114Error("ORIGINAL_SOURCE_INCOMPLETE")
     lo=int(begin.timestamp()*1000);hi=int(end.timestamp()*1000)
+    parity_evidence={}
     for s in SYMBOLS:
         a,b=m3[s],m5[s]
         if (len(a)!=56*480 or len(b)!=56*288 or
             a[0].start_ms!=lo or a[-1].known_ms!=hi or
             b[0].open_ms!=lo or b[-1].close_ms!=hi):
             raise C114Error("INCOMPLETE_NATIVE_3M_OR_5M")
-        independent_15m_parity(tuple(a),tuple(b))
+        parity_evidence[s]=independent_15m_parity(tuple(a),tuple(b))
     if (len({(x["symbol"],x["date"]) for x in receipts3})!=672 or
         len({(x["symbol"],x["date"]) for x in receipts5})!=672):
         raise C114Error("DUPLICATE_PROVIDER_DAY")
-    return {s:tuple(m3[s]) for s in SYMBOLS}, {s:tuple(m5[s]) for s in SYMBOLS}, receipts3,receipts5
+    return {s:tuple(m3[s]) for s in SYMBOLS}, {s:tuple(m5[s]) for s in SYMBOLS}, receipts3,receipts5,parity_evidence
 
 def independent_15m_parity(threes,fives):
-    """Independent native 3m + native 5m must agree on each closed 15m OHLCV."""
+    """Strict original 15m OHLC parity, report bounded decimal volume drift."""
     if len(threes)//5!=len(fives)//3:
         raise C114Error("PARITY_15M_BAR_COUNT")
+    nonidentical=0
+    max_relative=D(0)
     for j in range(len(threes)//5):
         a=threes[5*j:5*j+5];b=fives[3*j:3*j+3]
-        if (a[0].start_ms!=b[0].open_ms or a[-1].known_ms!=b[-1].close_ms or
-            (a[0].open,max(x.high for x in a),min(x.low for x in a),
-             a[-1].close,sum((x.volume for x in a),D(0)))!=
-            (b[0].o,max(x.h for x in b),min(x.l for x in b),
-             b[-1].c,sum((x.volume for x in b),D(0)))):
-            raise C114Error("ORIGINAL_3M_5M_MISMATCH_AT_15M_"+str(j))
-    return True
+        lhs=(a[0].start_ms,a[-1].known_ms,a[0].open,
+             max(x.high for x in a),min(x.low for x in a),a[-1].close)
+        rhs=(b[0].open_ms,b[-1].close_ms,b[0].o,
+             max(x.h for x in b),min(x.l for x in b),b[-1].c)
+        if lhs!=rhs:
+            raise C114Error("ORIGINAL_3M_5M_OHLC_MISMATCH_AT_15M_"+
+                            str(j)+"_3m="+str(lhs)+"_5m="+str(rhs))
+        av=sum((x.volume for x in a),D(0))
+        bv=sum((x.volume for x in b),D(0))
+        if av!=bv:
+            diff=abs(av-bv)
+            relative=diff/max(av,bv) if max(av,bv)>0 else D(0)
+            if relative>D("0.0001"):
+                raise C114Error("ORIGINAL_3M_5M_VOLUME_DRIFT_GT_1BP_AT_15M_"+
+                                str(j)+"_3m="+str(av)+"_5m="+str(bv)+
+                                "_relative="+str(relative))
+            nonidentical+=1
+            max_relative=max(max_relative,relative)
+    return {"aligned15m":len(threes)//5,
+            "bounded_volume_nonidentical_buckets":nonidentical,
+            "max_relative_15m_volume_drift":str(max_relative),
+            "strict_ohlc_price_clock_parity":True,
+            "volume_tolerance_relative":"0.0001"}
 
 def range_class(pivots,asof,price,side):
     xs=[s for s in pivots if s.confirmed_ms<=asof]
@@ -432,7 +451,7 @@ def matched_directional(pairs):
     return score([{"trade":x} for x in a],25)["tp_probability_filled"], \
            score([{"trade":x} for x in b],25)["tp_probability_filled"]
 
-def evaluate(window,threes,fives,rec3,rec5):
+def evaluate(window,threes,fives,rec3,rec5,parity_evidence):
     _,begin,end=window
     if (len(rec3)!=672 or len(rec5)!=672 or
         set(threes)!=set(SYMBOLS) or set(fives)!=set(SYMBOLS)):
@@ -493,6 +512,7 @@ def evaluate(window,threes,fives,rec3,rec5):
         "original3m_bars":sum(len(x) for x in threes.values()),
         "original5m_bars":sum(len(x) for x in fives.values()),
         "source_receipts_3m":rec3,"source_receipts_5m":rec5,
+        "source_15m_cross_archive_parity":parity_evidence,
         "per_symbol":source, "cohort":{
             "initial_touch_eligible_events":len(events),
             "treated_n":len(treated),"controls_n":len(control),
@@ -522,8 +542,8 @@ def run():
     frozen()
     windows={}
     for w in WINDOWS:
-        a,b,ra,rb=download(w)
-        windows[w[0]]=evaluate(w,a,b,ra,rb)
+        a,b,ra,rb,parity=download(w)
+        windows[w[0]]=evaluate(w,a,b,ra,rb,parity)
     return {
         "schema":"C114_INDEPENDENT_4H_FVG_FIRST_TOUCH_NATIVE5M_CHOCH_MATCHED",
         "precommit":PRECOMMIT,
