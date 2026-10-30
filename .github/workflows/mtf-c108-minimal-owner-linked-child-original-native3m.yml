@@ -1,0 +1,94 @@
+name: EMBER C108 minimum source-linked 4H parent 1H first test 15m IMB 320 original ZIP
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c108-minimal-owner-linked-child-original-native3m.yml'
+      - 'research/mtf-element-audit-v1/d05/c108_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c108_*.py'
+permissions:
+  contents: write
+jobs:
+  semantic-linked-parent-and-all-regressions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Canonical SHA A170 and original 4H owner frozen
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c108-journal
+          grep -Fq 'entries 170 tip_sha256 994ada611359b4ae555dff7ee102bedb531e70a3660a67bab9eb8440706fed45' /tmp/c108-journal
+          cd d05
+          python - <<'PY'
+          import c108_owner_child_native3m_paper_research as r
+          r.check_freeze()
+          print('C108_ORIGINAL_4H_SL_TP_PROTECTIVE_STOP_SOURCE_IMMUTABLE')
+          PY
+      - name: C108 25 minimal semantics adverse tests + prior 710 Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c108_minimal_owner_h4_h1_child_firsttest 2>&1 | tee /tmp/c108-25
+          grep -Fq 'Ran 25 tests' /tmp/c108-25
+          grep -qx 'OK' /tmp/c108-25
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics 2>&1 | tee /tmp/c108-old
+          grep -Fq 'Ran 710 tests' /tmp/c108-old
+          grep -qx 'OK' /tmp/c108-old
+          echo C108_735_TESTS_PER_PYTHON_2205_TOTAL_PASS
+  original-320-precommitted-august-september-crypto-p4-child-paper:
+    needs: semantic-linked-parent-and-all-regressions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original Binance USD-M native3m full 320 provider ZIP and strict linked first-test replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c108_owner_child_native3m_paper_research.py --output research/mtf-element-audit-v1/evidence/c108/C108_OWNER_LINKED_4H_H1_CHILD_15M_IMB_ORIGINAL_320ZIP.json | tee /tmp/c108-replay
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('research/mtf-element-audit-v1/evidence/c108/C108_OWNER_LINKED_4H_H1_CHILD_15M_IMB_ORIGINAL_320ZIP.json')
+          raw=p.read_bytes();z=json.loads(raw)
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['symbols'])==10 and len(z['original_source_manifest'])==320
+          assert len({(m['symbol'],m['date']) for m in z['original_source_manifest']})==320
+          assert z['utc_start']=='2026-08-20' and z['utc_end_exclusive']=='2026-09-21'
+          assert z['historical_second_period_not_future_prospective_oos']
+          assert z['only_parent_stop_and_target'] and z['fixed_rr_target'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['new_luxalgo_indicators']==0 and not z['admission']['live_approved']
+          assert len(z['trades'])==z['scores']['25']['n']
+          for t in z['trades']:
+              assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+              assert t['zone_created_ms']<t['4h_parent_first_touch_ms']<t['1h_child_created_ms']<t['1h_child_first_test_ms']<t['15m_direct_imb_vc_ms']==t['entry_ms']
+              assert t['1h_child_id'].startswith(t['parent_id']+':H1:')
+              assert t['stop_policy']=='EXECUTABLE_NATIVE3M_PROTECTIVE_4H_ZONE_EDGE_ATR4H'
+              assert t['derived_rr']>=1.25
+          print('C108_ORIGINAL_320_BINANCE_SHA_4H_PARENT_H1_CHILD_FIRST_TEST_AND_15M_IMB_SOURCE_CHECK_SUCCESS')
+          print('C108_EVIDENCE_SHA256',len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Pin original 320 provider receipts and all PAPER event counts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c108/C108_OWNER_LINKED_4H_H1_CHILD_15M_IMB_ORIGINAL_320ZIP.json
+          git commit -m "C108 original 320 Binance native3m ZIP 4H parent H1 child first test 15m IMB paper evidence"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
