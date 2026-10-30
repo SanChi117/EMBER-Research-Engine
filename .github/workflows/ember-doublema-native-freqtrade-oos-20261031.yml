@@ -70,8 +70,8 @@ jobs:
           c['exchange']['ccxt_config']={}
           c['exchange']['ccxt_async_config']={}
           c['dry_run']=True
-          c['telegram']={'enabled':False}
-          c['api_server']={'enabled':False}
+          c['telegram']['enabled']=False
+          c['api_server']['enabled']=False
           Path('native-artifacts/author-config-safe.json').write_text(json.dumps(c,indent=2))
           print('AUTHOR_NATIVE_CONFIG_SAFE_NO_SECRET_NO_PROXY')
           PY
@@ -92,6 +92,10 @@ jobs:
             --export trades \
             --export-filename "$GITHUB_WORKSPACE/native-artifacts/doublema-native-fee5bps-side.zip" \
             --cache none 2>&1 | tee native-artifacts/native-fee5bps-side.log
+          native="$(find /tmp/doublema-public/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$native" && test -s "$native"
+          cp "$native" native-artifacts/doublema-native-fee5bps-side.zip
+          rm -f /tmp/doublema-public/user_data/backtest_results/backtest-result*.zip
       - name: Run same pinned class fees-stress 12.5bps/side (25bps roundtrip)
         shell: bash
         continue-on-error: true
@@ -109,6 +113,9 @@ jobs:
             --export trades \
             --export-filename "$GITHUB_WORKSPACE/native-artifacts/doublema-native-fee12p5bps-side.zip" \
             --cache none 2>&1 | tee native-artifacts/native-fee12p5bps-side.log
+          native="$(find /tmp/doublema-public/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$native" && test -s "$native"
+          cp "$native" native-artifacts/doublema-native-fee12p5bps-side.zip
       - name: Explicitly classify missing proof rather than fake native success
         shell: bash
         run: |
@@ -126,6 +133,21 @@ jobs:
               print(f'BACKTEST_OUTPUT:{n}:RESULT_EXPORT_PRESENT={bool(list(d.glob(n+"*zip*")))}')
               print(f'BACKTEST_SUMMARY_LAST_2500:{n}\n{s[-2500:]}')
           print('NOT_LIVE_NO_EXCHANGE_KEYS_NOT_A_PROFIT_CLAIM')
+          PY
+      - name: Validate TWO genuine native trade exports; never call empty logs a success
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s native-artifacts/doublema-native-fee5bps-side.zip
+          test -s native-artifacts/doublema-native-fee12p5bps-side.zip
+          python - <<'PY'
+          import zipfile
+          for name in ['doublema-native-fee5bps-side.zip','doublema-native-fee12p5bps-side.zip']:
+              p='native-artifacts/'+name
+              assert zipfile.is_zipfile(p),('NATIVE_EXPORT_NOT_ZIP',p)
+              with zipfile.ZipFile(p) as z:
+                  assert any(x.endswith('.json') for x in z.namelist()),('NATIVE_TRADES_JSON_MISSING',p)
+                  print('NATIVE_BACKTEST_VALIDATED_ARCHIVE',p,len(z.namelist()))
           PY
       - name: Upload source receipts and native result logs even if engine fails
         uses: actions/upload-artifact@v4
