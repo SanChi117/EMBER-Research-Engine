@@ -5,12 +5,12 @@ These tests verify the frozen source-index's internal consistency only.
 They do NOT imply CI for all 2,189 files, no economic PASS, no runtime access.
 """
 from __future__ import annotations
-from collections import Counter
 import copy
 import json
-from pathlib import Path
 import re
 import unittest
+from collections import Counter
+from pathlib import Path
 
 FILE=Path(__file__).resolve().parents[1]/"docs/PROJECT_RESET_20261030/00_MACHINE_INVENTORY_GIT_TREES.json"
 EXPECT={
@@ -31,7 +31,8 @@ def validate(document:dict):
     counts=Counter(e["repo"] for e in entries)
     for name,expected in EXPECT.items():
         n=expected[0]
-        if counts[name]!=n: raise AssertionError(f"BAD_{name}_COUNT")
+        if counts[name]!=n:
+            raise AssertionError(f"BAD_{name}_COUNT")
     for e in entries:
         if not isinstance(e["path"],str) or (
             not e["path"] or e["path"].startswith("/") or
@@ -42,7 +43,8 @@ def validate(document:dict):
         if not isinstance(e["bytes"],int) or e["bytes"]<0:
             raise AssertionError("INVALID_GIT_BLOB_LENGTH")
     keys={(e["repo"],e["ref"],e["path"]) for e in entries}
-    if len(keys)!=len(entries):raise AssertionError("DUPLICATE_GIT_FILE_RECORD")
+    if len(keys)!=len(entries):
+        raise AssertionError("DUPLICATE_GIT_FILE_RECORD")
     for s in summary:
         if s.get("tree_truncated") is not False:
             raise AssertionError("GITHUB_TREE_WAS_TRUNCATED")
@@ -75,7 +77,8 @@ class FrozenInventoryTest(unittest.TestCase):
         self.assertEqual(self.inventory["notes"][0].startswith(
             "Inventory is Git trees only"),True)
     def test_missing_file_rejected(self):
-        q=copy.deepcopy(self.inventory);q["all_code_and_file_paths"].pop()
+        q=copy.deepcopy(self.inventory)
+        q["all_code_and_file_paths"].pop()
         with self.assertRaisesRegex(AssertionError,"MISSING_OR_ADDED"):
             validate(q)
     def test_duplicate_original_repo_path_rejected(self):
@@ -86,15 +89,18 @@ class FrozenInventoryTest(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError,"DUPLICATE_GIT_FILE"):
             validate(q)
     def test_fake_blob_sha_rejected(self):
-        q=copy.deepcopy(self.inventory);q["all_code_and_file_paths"][0]["git_blob_sha"]="not-a-real-git-hash"
+        q=copy.deepcopy(self.inventory)
+        q["all_code_and_file_paths"][0]["git_blob_sha"]="not-a-real-git-hash"
         with self.assertRaisesRegex(AssertionError,"UNVERIFIED_GIT_BLOB"):
             validate(q)
     def test_changed_overlap_rejected(self):
-        q=copy.deepcopy(self.inventory);q["source_overlap"]["identical_sha"]+=1
+        q=copy.deepcopy(self.inventory)
+        q["source_overlap"]["identical_sha"]+=1
         with self.assertRaisesRegex(AssertionError,"DUPLICATION_SHA"):
             validate(q)
     def test_truncated_tree_must_abort(self):
-        q=copy.deepcopy(self.inventory);q["sources"][0]["tree_truncated"]=True
+        q=copy.deepcopy(self.inventory)
+        q["sources"][0]["tree_truncated"]=True
         with self.assertRaisesRegex(AssertionError,"GITHUB_TREE_WAS_TRUNCATED"):
             validate(q)
     def test_branch_registry_143_heads_unambiguous(self):
@@ -113,8 +119,10 @@ class FrozenInventoryTest(unittest.TestCase):
         z=json.loads((FILE.parent/"00B_MACHINE_BRANCH_HEADS.json").read_text(encoding="utf-8"))
         self.assertFalse(z["has_verified_every_branch_content"])
     def test_cannot_silently_change_frozen_c117_source(self):
-        q=copy.deepcopy(self.inventory);q["sources"][0]["ref"]="main"
+        q=copy.deepcopy(self.inventory)
+        q["sources"][0]["ref"]="main"
         with self.assertRaisesRegex(AssertionError,"C117_A181_SOURCE_REF_CHANGED"):
             validate(q)
 
-if __name__=="__main__":unittest.main(verbosity=2)
+if __name__=="__main__":
+    unittest.main(verbosity=2)
