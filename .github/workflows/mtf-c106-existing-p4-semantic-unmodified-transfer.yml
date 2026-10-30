@@ -1,0 +1,91 @@
+name: EMBER C106 existing 4H parent semantic proof no new LuxAlgo detectors
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c106-existing-p4-semantic-unmodified-transfer.yml'
+      - 'research/mtf-element-audit-v1/d05/c106_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c106_*.py'
+permissions:
+  contents: write
+jobs:
+  immutable-4h-p4-semantic-adverse:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify A168 immutable and unchanged original C105 SHA before new data
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c106-before
+          grep -Fq 'entries 168 tip_sha256 9741dca935748241f47d6067285afe6a0fd3f7ed710054924f2cb5abd5a398f6' /tmp/c106-before
+          cd d05
+          python - <<'PY'
+          import c106_parent4h_semantic_transfer as x
+          x.check_frozen()
+          print('C106_A168_AND_ORIGINAL_C105_25_TRADES_PINNED_SHA_UNCHANGED')
+          PY
+      - name: Exactly 26 scoped C106 negative tests and 664 earlier tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c106_only_existing_p4_semantics 2>&1 | tee /tmp/c106-new
+          grep -Fq 'Ran 26 tests' /tmp/c106-new
+          grep -qx 'OK' /tmp/c106-new
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry 2>&1 | tee /tmp/c106-prior
+          grep -Fq 'Ran 664 tests' /tmp/c106-prior
+          grep -qx 'OK' /tmp/c106-prior
+          echo C106_690_TESTS_PER_PYTHON_2070_TOTAL_PASS
+  frozen-ten-new-original-crypto-unmodified-C105-replay:
+    needs: immutable-4h-p4-semantic-adverse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download 320 original SHA verified native3m Binance Vision USD-M and rebuild C105 exactly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c106_parent4h_semantic_transfer.py --output research/mtf-element-audit-v1/evidence/c106/C106_P4_UNCHANGED_320_NATIVE3M_ZIP_H4_CAUSAL_AUDIT.json | tee /tmp/c106-output
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,collections
+          p=Path('research/mtf-element-audit-v1/evidence/c106/C106_P4_UNCHANGED_320_NATIVE3M_ZIP_H4_CAUSAL_AUDIT.json')
+          raw=p.read_bytes();z=json.loads(raw)
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['symbols'])==10 and len(z['source_manifest'])==320
+          assert len(z['trades'])==z['audited_trades_count']==len(z['semantic_reconstructions'])
+          assert z['new_trade_rules']==0 and z['new_luxalgo_indicators']==0
+          assert z['parent_tf']=='4H' and not z['fixed_rr_target']
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['live_approved'] is False and z['admission']['live_approved'] is False
+          assert all(v['all_existing_semantics_match'] for v in z['semantic_reconstructions'])
+          for t in z['trades']:
+              assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+              assert t['zone_created_ms']<t['first_4h_poi_touch_ms']<t['one_hour_rejection_close_ms']<t['fifteen_minute_vc_close_ms']==t['entry_ms']
+          assert len(set((m['symbol'],m['date']) for m in z['source_manifest']))==320
+          print('C106_ACTUAL_SHA',len(raw),hashlib.sha256(raw).hexdigest())
+          print('C106_UNCHANGED_P4_ORIGINAL_320_AND_COMPLETE_PARENT_CAUSAL_AUDIT_SUCCESS')
+          PY
+      - name: Commit full source SHA and reproducible previous engine 10 coin independent witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c106/C106_P4_UNCHANGED_320_NATIVE3M_ZIP_H4_CAUSAL_AUDIT.json
+          git commit -m "C106 source-only original 320 native3m ZIP P4 unchanged parent audit and new crypto transfer"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
