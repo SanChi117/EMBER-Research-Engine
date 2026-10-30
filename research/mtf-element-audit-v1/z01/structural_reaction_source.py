@@ -467,7 +467,7 @@ def run_symbol(source, symbol, window):
                     if execute_ms<=ms:
                         raise Z01Error("CONFIRMATION_BEFORE_4H_TOUCH")
                     # 4H stop / target already touched before entry: cancellation, not win
-                    interim=source[origin_i:bisect_left(minute_closes,execute_ms)]
+                    interim=source[origin_i:bisect_right(minute_closes,execute_ms)]
                     bad=any((z.l<=zone.stop if zone.side=="LONG" else z.h>=zone.stop)
                             for z in interim)
                     target_hit=any((z.h>=zone.target if zone.side=="LONG" else z.l<=zone.target)
