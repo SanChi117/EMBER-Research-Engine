@@ -1,0 +1,54 @@
+{
+  "schema": "EMBER_A191_SINGLEB_ETH_NATIVE_OOS_R01",
+  "source_run": 41142627798,
+  "source_artifact_id": 13020156070,
+  "source_artifact_sha256": "87966fbae1181f5b3d56ea21344c0eec8d48d5ec29b60744c2850f9127b01ca7",
+  "source_upstream_sha": "39e640bf304dfe1edceec74668d8beded39482d5",
+  "source_blob": "9544d6ea47c9905fed86e62c85cf6aca48c0c8c5",
+  "engine": "freqtrade==2026.4",
+  "window_utc": "[2026-08-01,2026-10-01)",
+  "market": "Binance USD-M ETHUSDT 5m",
+  "source_candles": {
+    "total_5m": 26496,
+    "settled_funding_events": 276,
+    "mark_1h": "A187 Binance USD-M archived"
+  },
+  "configuration": {
+    "wallet_usdt": 5000,
+    "stake_usdt": 500,
+    "max_open_trades": 3,
+    "leverage": 1,
+    "exchange_metadata": "offline fixture; actual Binance exchange/market data for 5m real"
+  },
+  "fee5bps_side": {
+    "n": 126,
+    "profit_usdt": 24.6363,
+    "profit_pct": 0.4927,
+    "profit_factor": 1.0524,
+    "max_drawdown_wallet_pct": 0.9273,
+    "win_pct": 53.175,
+    "long": 77,
+    "short": 49,
+    "top3_share_pct": 91.36,
+    "funding_fees_usdt": -0.21193
+  },
+  "fee12p5bps_side": {
+    "n": 115,
+    "profit_usdt": -20.8819,
+    "profit_pct": -0.4176,
+    "profit_factor": 0.9556,
+    "max_drawdown_wallet_pct": 1.1997,
+    "win_pct": 53.043,
+    "long": 69,
+    "short": 46,
+    "funding_fees_usdt": 0.21218
+  },
+  "verdict": "TECHNICAL_NATIVE_SUCCESS_ETH_SINGLE_PAIR_ECONOMIC_SCREEN_FAIL_NO_LIVE",
+  "limitations": [
+    "1 of original 10 coins and Binance instead of OKX",
+    "No minute-detail, market depth, slippage, maker queue",
+    "Offline exchange metadata fixture",
+    "Only one post-code OOS period, no lookahead analysis",
+    "Native trading decisions diverge under fee change"
+  ]
+}
