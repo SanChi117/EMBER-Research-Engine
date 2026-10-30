@@ -1,0 +1,92 @@
+name: EMBER C117 A181 corrected failing economic test immutable SHA journal
+on:
+  push:
+    branches: [research/c117-random-time-4h-zone-counterfactual-20261030]
+    paths:
+      - '.github/workflows/mtf-c117-A181-corrected-final-sha-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C117_A181_CORRECTED_FINAL_RANDOM_CLOCK_CHoCH_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-and-corrected-treatment-ledger-witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify old incorrect report is preserved, new same-source correction independently audited and both FAIL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('research/mtf-element-audit-v1')
+          core_sha=hashlib.sha256((root/'d05/c114_independent_poi_native5m_choch_research.py').read_bytes()).hexdigest()
+          d=root/'evidence/c117'
+          s=json.loads((d/'C117_A181_CORRECTED_SUMMARY.json').read_text())
+          o=(d/'C117_SUMMARY.json').read_bytes()
+          assert s['original_summary_sha256']==hashlib.sha256(o).hexdigest()
+          assert core_sha==s['original_c114_core_sha256']
+          assert s['source_original_1m_archives']==1344
+          assert s['random_8_branch_trades_unchanged'] is True
+          assert s['original_published_buggy_ledgers_preserved'] is True
+          assert s['new_provider_download'] is False and s['new_trading_hypothesis'] is False
+          assert s['both_windows_historical_screen_pass'] is False
+          assert not s['live_approved']
+          for name,touch,filled,t_net,wrong in (
+              ('WIN_A',514,38,-16.104518,100),
+              ('WIN_B',484,31,-5.864886,93)):
+            receipt=s['windows'][name]
+            payload=(d/receipt['file']).read_bytes()
+            assert hashlib.sha256(payload).hexdigest()==receipt['sha256']
+            j=json.loads(payload)
+            assert len(j['same_4h_parent_all_touches_ITT'])==touch
+            assert receipt['controls_misclassified_in_prior_t_policy']==wrong
+            assert receipt['gate']['state']=='FAIL'
+            assert receipt['gate']['T_policy_25bps']['fills']==filled
+            assert abs(receipt['gate']['T_policy_25bps']['net_total_r']-t_net)<1e-6
+            assert receipt['gate']['cluster']['bootstrap_low95']<0
+            assert receipt['gate']['T_portfolio_dd']['dd_adverse_wick_pct_upper_bound']>=10
+            assert all(x['t_trade'] is None for x in j['same_4h_parent_all_touches_ITT']
+                       if x['treatment']=='C_NO_CHoCH')
+            assert receipt['gate']['live_approved'] is False
+          print('C117_A181_TWO_WINDOW_CHoCH_ONLY_FAIL_SHA_SOURCE_AUDITED')
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a180
+          grep -Fq 'entries 180' /tmp/a180
+      - name: Append A181 negative economic result and original error provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A181 --cycle C117 \
+            --planned "True prereg random-clock eight independent policies within each original 4H zone first touch compared to CHoCH-only treatment with same 4H stop and FTA target; original 2025 and 2026 native1m provider SHA" \
+            --executed "1344 official native1m checksum ZIP; original source 2025/2026 windows full replay; discovered original C117 CHoCH economic accounting included non-CHoCH trades, kept incorrect originals; transparent A181 correction from original persisted event/random SHA files, 15 adverse Python tests x 3 versions" \
+            --result "ECONOMIC FAIL both with corrected T: WIN_A 514 touches 38 CHoCH fills net25 -16.104518R PF0.488377 random mean -56.723455R T-R +0.07902517R bootstrap low -0.00520660 DD19.085%; WIN_B 484 touches 31 CHoCH fills net25 -5.864886R PF0.731755 random mean -6.198431R T-R +0.00068914R bootstrap low -0.12055035 DD11.289%; both fail multiple frozen gates and LIVE BLOCKED" \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Original flawed ledgers and original summary remain visible and SHA-pinned; 100 and 93 control fills excluded from corrected CHoCH-only T; corrected T matches unmodified C114 observational T_ALL fills/netR; no random arm, price, 4H SL, TP or source modified; 15 tests x Python3.10/3.11/3.12 SUCCESS; correction workflow 41123876537 SUCCESS" \
+            --evidence cycles/B1_C117_PRECOMMIT_RANDOM_CLOCK_4H_PARENT_VS_CHOCH_RU.md \
+            --evidence cycles/B1_C117_A181_CORRECTED_FINAL_RANDOM_CLOCK_CHoCH_RU.md \
+            --evidence d05/c117_random_clock_4h_parent_canonical1m.py \
+            --evidence d05/c117_correct_choc_only_from_immutable_evidence.py \
+            --evidence d05/test_c117_random_clock_4h_parent.py \
+            --evidence evidence/c117/C117_SUMMARY.json \
+            --evidence evidence/c117/C117_A181_CORRECTED_SUMMARY.json \
+            --evidence evidence/c117/C117_WIN_A_CORRECTED_T_ONLY_VS_UNCHANGED_RANDOM_8.json \
+            --evidence evidence/c117/C117_WIN_B_CORRECTED_T_ONLY_VS_UNCHANGED_RANDOM_8.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a181
+          grep -Fq 'entries 181' /tmp/a181
+      - name: Commit tamper-evident SHA-linked A181 witness only, no trading
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C117 A181 independent corrected negative economic gate and original misclassification preservation"
+          git push origin HEAD:refs/heads/research/c117-random-time-4h-zone-counterfactual-20261030
