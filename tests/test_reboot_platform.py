@@ -4,6 +4,7 @@ import unittest
 from dataclasses import replace
 from decimal import Decimal as D
 from types import SimpleNamespace
+
 from research.platform import market_contract as m
 from research.platform import paper_execution as p
 from research.platform import sha_ledger as l
@@ -70,8 +71,10 @@ class ResetMarketTest(unittest.TestCase):
         with self.assertRaisesRegex(m.DataUntrusted,"SOURCE_SHA"):
             replace(bar(0),origin_sha256="INVALID")
     def test_nonfinite_or_broken_ohlc_rejected(self):
-        with self.assertRaises(m.DataUntrusted):replace(bar(0),close=D("NaN"))
-        with self.assertRaises(m.DataUntrusted):replace(bar(0),low=D("105"))
+        with self.assertRaises(m.DataUntrusted):
+            replace(bar(0),close=D("NaN"))
+        with self.assertRaises(m.DataUntrusted):
+            replace(bar(0),low=D("105"))
     def test_asof_observed_time_separate_from_close_time(self):
         delayed=bar(0,available=T+2*ONE)
         with self.assertRaisesRegex(m.DataUntrusted,"NO_CLOSED"):
