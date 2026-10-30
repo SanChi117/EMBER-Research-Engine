@@ -80,6 +80,23 @@ class C116OneMinuteContracts(unittest.TestCase):
         a,b=x.resample(rows(count=30))
         self.assertEqual(x.verify_joint_15m(a,b)["derived_15m_buckets"],2)
 
+    def test_trade_symbol_metadata_without_changing_prices_or_profit(self):
+        original={"entry":"100","stop":"98","target":"104","net_r":-0.4,
+                  "entry_ms":180000,"exit_ms":360000,"side":"LONG"}
+        event={"symbol":"BNBUSDT","trade":dict(original)}
+        def fake(three,five,symbol,window):
+            return {"symbol":symbol,"events":[event]}
+        result=wrapper.per_symbol_with_metadata(None,None,"BNBUSDT",None,fake)
+        trade=result["events"][0]["trade"]
+        self.assertEqual(trade["symbol"],"BNBUSDT")
+        self.assertEqual({k:trade[k] for k in original},original)
+
+    def test_preexisting_mismatched_symbol_is_rejected(self):
+        def fake(three,five,symbol,window):
+            return {"symbol":symbol,"events":[{"symbol":"BNBUSDT","trade":{"symbol":"XLMUSDT"}}]}
+        with self.assertRaises(wrapper.C116Error):
+            wrapper.per_symbol_with_metadata(None,None,"BNBUSDT",None,fake)
+
     def test_c114_execution_unchanged_and_paper_only(self):
         self.assertEqual(econ.BOOT_SEED,11420261030)
         self.assertEqual(econ.LANDMARK,6*econ.H)
