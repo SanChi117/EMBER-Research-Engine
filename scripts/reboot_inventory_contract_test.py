@@ -97,6 +97,21 @@ class FrozenInventoryTest(unittest.TestCase):
         q=copy.deepcopy(self.inventory);q["sources"][0]["tree_truncated"]=True
         with self.assertRaisesRegex(AssertionError,"GITHUB_TREE_WAS_TRUNCATED"):
             validate(q)
+    def test_branch_registry_143_heads_unambiguous(self):
+        p=FILE.parent/"00B_MACHINE_BRANCH_HEADS.json"
+        z=json.loads(p.read_text(encoding="utf-8"))
+        self.assertFalse(z["has_verified_every_branch_content"])
+        self.assertEqual(len(z["entries"]),143)
+        self.assertEqual(Counter(x["repository"] for x in z["entries"]),
+                         {"SanChi117/EMBER-Research-Engine":31,
+                          "SanChi117/Smoke-strategy":20,
+                          "SanChi117/smoke-trading-terminal":91,
+                          "SanChi117/telegram-signal-bot":1})
+        self.assertEqual(len(set((x["repository"],x["branch"]) for x in z["entries"])),143)
+        self.assertTrue(all(SHA40.fullmatch(x["head_commit_sha"]) for x in z["entries"]))
+    def test_branch_count_cannot_claim_exhaustive_code_review(self):
+        z=json.loads((FILE.parent/"00B_MACHINE_BRANCH_HEADS.json").read_text(encoding="utf-8"))
+        self.assertFalse(z["has_verified_every_branch_content"])
     def test_cannot_silently_change_frozen_c117_source(self):
         q=copy.deepcopy(self.inventory);q["sources"][0]["ref"]="main"
         with self.assertRaisesRegex(AssertionError,"C117_A181_SOURCE_REF_CHANGED"):
