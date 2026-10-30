@@ -1,0 +1,87 @@
+name: EMBER C108 A171 freeze linked owner H1 first test original 320 source negative economic result
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c108-A171-minimal-owner-linked-research.yml'
+permissions:
+  contents: write
+jobs:
+  independent-negative-result-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify A170 SHA and 320 provider SHA precommit result, cannot claim success
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c108-pre-a171
+          grep -Fq 'entries 170 tip_sha256 994ada611359b4ae555dff7ee102bedb531e70a3660a67bab9eb8440706fed45' /tmp/c108-pre-a171
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,sys
+          path=Path('evidence/c108/C108_OWNER_LINKED_4H_H1_CHILD_15M_IMB_ORIGINAL_320ZIP.json')
+          raw=path.read_bytes()
+          assert len(raw)==146773 and hashlib.sha256(raw).hexdigest()=='4e11402dcc1a5746601f7cd3efcba4d1bbced6e5044135e158913506b6567eb3'
+          z=json.loads(raw)
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['symbols'])==10 and len(z['original_source_manifest'])==320
+          assert len({(t['symbol'],t['date']) for t in z['original_source_manifest']})==320
+          assert z['only_parent_stop_and_target'] and z['fixed_rr_target'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert len(z['trades'])==2 and z['scores']['25']['n']==2
+          assert z['scores']['25']['sum_r']==-2.17608 and z['scores']['25']['pf']==0
+          assert z['scores']['40']['sum_r']==-2.281729
+          assert z['admission']['passes_historical_screen'] is False and z['admission']['live_approved'] is False
+          events={}
+          for x in z['per_symbol'].values():
+              for k,n in x['events'].items():events[k]=events.get(k,0)+n
+          assert events=={'PARENT_4H_FVG_CREATED':47,
+             'PARENT_4H_FIRST_PHYSICAL_TEST':33,'1H_CHILD_FVG_CREATED':14,
+             '1H_CHILD_FIRST_PHYSICAL_TEST':9,
+             '15M_DIRECT_CLOSED_IMB_AFTER_CHILD_FIRST_TEST':5,
+             'PAPER_TRADE_4H_STOP_AND_TP':2}
+          for t in z['trades']:
+              assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+              assert t['zone_created_ms']<t['4h_parent_first_touch_ms']<t['1h_child_created_ms']<t['1h_child_first_test_ms']<t['15m_direct_imb_vc_ms']==t['entry_ms']
+              assert t['exit_reason']=='STOP_FIRST_SAME_3M'
+              assert t['stop_policy']=='EXECUTABLE_NATIVE3M_PROTECTIVE_4H_ZONE_EDGE_ATR4H'
+          sys.path.insert(0,'d05')
+          import c108_owner_child_native3m_paper_research as frozen
+          frozen.check_freeze()
+          print('C108_SOURCE_SHA_ORIGINAL_FVG_CHILD_FIRST_TEST_2_STOP_LOSSES_ECONOMIC_FAIL_PIN_PASS')
+          PY
+      - name: Append only A171 with both successes and failures, evidence SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A171 --cycle B1/C108 --verdict DONE --cycle-result PASSED \
+            --planned "Before novel market source, freeze owner-led semantic repair: 4H parent first test, new linked fully closed 1H FVG child created AFTER parent test, its own first physical 15m test, subsequent 15m DIRECT IMB (not previous-bar SNR masquerading as BOS), original next native3m OPEN. Preserve original C105 4H FVG-edge plus ATR4H hard protective STOP and nearest unswept confirmed 4H FTA TP, derived RR only; separate H4 close validity narrative from executable 3m SL; no LuxAlgo new detectors. New fixed Aug20-Sep21 historical period 10 crypto symbols, 320 Binance provider verified daily 3m ZIP, 7 day warmup, 48h embargo." \
+            --executed "Created independent c108 linked child geometry and original native3m event-time 4H parent H1 child 15m first-test paper research. Source complete: 320 original Binance same-host CHECKSUM and ZIP/CSV SHA daily native3m ZIP across BNB XLM HBAR INJ OP ALGO CHZ ICP SEI PENDLE, 153600 actual 3m candles. All 25 new adverse tests +710 prior x Python3.10/3.11/3.12 = 2205 PASS CI 40981601983 SUCCESS4/4. Initial red CI 40981524856 was only wrong Sep26 synthetic provider filename vs Aug20 fixture; corrected before market downloads; no trade rule change. C105 source pinned original SHA, original 41 C105+C106 prior trades and 640 C107 forensics unchanged." \
+            --result "Engineering 4H parent linked H1 IMB child first test route PASS, BUT economic viability FAIL: 47 H4 parent zones ->33 4H first tests ->14 H1 child FVG ->9 child first tests ->5 direct 15m IMB ->2 PAPER fills. At 25bps n2 netR -2.176080 PF0 winrate0 with both native3m STOP_FIRST_SAME_3M (ALGO LONG and HBAR SHORT), 14bps -2.098605R, 40bps -2.281729R. N2<30, no early time-fold trades, no statistically meaningful positive edge. This narrowly implemented C108 branch is NOT all academic Route A, no live orders or trade approvals." \
+            --countercheck "C107 36/41 weak SNR proxy no longer qualifies as true direct VC; C108 uses only already-known 1H child IMB and completed 15m IMB, no additional unrelated BOS/OB/EQH/PD. Original 4H SL and 4H TP untouched and no after-loss stop widening; executable stop may fire before H4 parent invalidation, explicitly distinct risk policy. New period Aug20-Sep20 is earlier HISTORICAL unseen window, NOT prospective forward OOS. Did not change TTL, minimum RR, fixed 4H exit geometry, or choose profitable side after source. All negative results disclosed." \
+            --evidence cycles/B1_C108_PRECOMMIT_MINIMAL_OWNER_CHILD_FIRST_TEST_NATIVE3M_RU.md \
+            --evidence d05/c108_parent_h1_child_first_test_geometry.py \
+            --evidence d05/c108_owner_child_native3m_paper_research.py \
+            --evidence d05/test_c108_minimal_owner_h4_h1_child_firsttest.py \
+            --evidence evidence/c108/C108_OWNER_LINKED_4H_H1_CHILD_15M_IMB_ORIGINAL_320ZIP.json \
+            --evidence cycles/B1_C108_MINIMAL_OWNER_LINKED_4H_H1_FIRST_TEST_ECONOMIC_RESULT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c108-post-a171
+          grep -Fq 'entries 171 tip_sha256 ' /tmp/c108-post-a171
+      - name: Git immutable history append-only commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A171 C108 minimal 4H parent 1H child first-test causal, 320 original native3m ZIP: 2 PAPER stops n too low economic FAIL"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
