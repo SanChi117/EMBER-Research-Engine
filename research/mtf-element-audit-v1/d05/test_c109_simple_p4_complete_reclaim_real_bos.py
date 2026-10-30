@@ -101,7 +101,7 @@ class C109Audit(unittest.TestCase):
     def test_18_nonconsecutive_15m_protection(self):
         tf=h4.M15;arr=four15(12*tf)
         with self.assertRaisesRegex(m.C109Error,"NONCONSECUTIVE"):
-            m.new_signal_type("LONG",(),(arr[0],arr[1],arr[2],bar(25*tf,tf)))
+            m.new_signal_type("LONG",(),(arr[0],arr[1],arr[2],bar(25*tf,tf)),())
     def test_19_4h_stop_and_4h_target_exact_unmodified_plan(self):
         now,f,s,rows,starts=fixtures()
         plan,why=h4.parent_plan(parent(),now,D("100"),f,s,rows,starts)
