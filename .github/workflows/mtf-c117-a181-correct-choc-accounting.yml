@@ -1,0 +1,88 @@
+name: EMBER C117-A181 transparent CHoCH-only correction from sealed original 2025-26 historical evidence
+on:
+  push:
+    branches: [research/c117-random-time-4h-zone-counterfactual-20261030]
+    paths:
+      - '.github/workflows/mtf-c117-a181-correct-choc-accounting.yml'
+      - 'research/mtf-element-audit-v1/d05/c117_correct_choc_only_from_immutable_evidence.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  a181-choc-accounting-adversarial:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Frozen SHA chain and explicit CHoCH-only accounting negative tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c117_random_clock_4h_parent 2>&1 | tee /tmp/c117-negative
+          grep -Fq 'Ran 15 tests' /tmp/c117-negative
+          grep -Fxq 'OK' /tmp/c117-negative
+  a181-recompute-only-existing-original-ledgers:
+    needs: a181-choc-accounting-adversarial
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recompute T policy accounting using already SHA-pinned original source/event/random files ONLY
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c117_correct_choc_only_from_immutable_evidence.py \
+            --folder research/mtf-element-audit-v1/evidence/c117 | tee /tmp/c117-a181-corrected-result.json
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1/evidence/c117')
+          s=json.loads((root/'C117_A181_CORRECTED_SUMMARY.json').read_text())
+          assert s['source_original_1m_archives']==1344
+          assert s['historical_native1m_original_bars']==1935360
+          assert not s['new_provider_download'] and not s['new_trading_hypothesis']
+          assert s['random_8_branch_trades_unchanged']
+          assert not s['live_approved'] and s['paper_only']
+          assert s['original_summary_sha256']==hashlib.sha256((root/'C117_SUMMARY.json').read_bytes()).hexdigest()
+          for name,receipt in s['windows'].items():
+              original_s=json.loads((root/'C117_SUMMARY.json').read_text())['window_receipts'][name]
+              before=json.loads((root/original_s['filename']).read_text())
+              payload=(root/receipt['file']).read_bytes()
+              assert hashlib.sha256(payload).hexdigest()==receipt['sha256']
+              after=json.loads(payload)
+              a=before['same_4h_parent_all_touches_ITT']
+              b=after['same_4h_parent_all_touches_ITT']
+              assert len(a)==len(b)==after['cohort']['initial_touch_eligible_events']
+              assert any(z['treatment']=='C_NO_CHoCH' and z['t_trade'] is not None for z in a)
+              assert all(z['t_trade'] is None for z in b if z['treatment']=='C_NO_CHoCH')
+              assert all(z0['random']==z1['random'] and z0['parent_id']==z1['parent_id']
+                         and z0['t0_touch_known_ms']==z1['t0_touch_known_ms']
+                         for z0,z1 in zip(a,b))
+              assert receipt['gate']['T_policy_25bps']['fills']==after['C114_observational_original_scores']['T_ALL']['25']['fills']
+              assert abs(receipt['gate']['T_policy_25bps']['net_total_r']-after['C114_observational_original_scores']['T_ALL']['25']['net_total_r'])<.00005
+          print('C117_A181_ACCOUNTING_REPAIRED_ON_ALL_SAME_PARENTS_BOTH_WINDOWS_RANDOM_ARMS_UNCHANGED')
+          PY
+      - name: Commit explicitly versioned correction WITHOUT modifying old economic ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c117/C117_A181_CORRECTED_SUMMARY.json
+          git add research/mtf-element-audit-v1/evidence/c117/C117_WIN_A_CORRECTED_T_ONLY_VS_UNCHANGED_RANDOM_8.json
+          git add research/mtf-element-audit-v1/evidence/c117/C117_WIN_B_CORRECTED_T_ONLY_VS_UNCHANGED_RANDOM_8.json
+          git commit -m "C117 A181 correct CHoCH-only T policy accounting, retain original flawed artifact and unchanged random controls"
+          git push origin HEAD:refs/heads/research/c117-random-time-4h-zone-counterfactual-20261030
