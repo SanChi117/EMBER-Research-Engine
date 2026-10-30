@@ -21,19 +21,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python }}'
-      - name: Source catalog 8 negative tests + previous append-only journal intact
+      - name: Source catalog 10 negative tests + previous append-only journal intact
         shell: bash
         run: |
           set -euo pipefail
           python scripts/reboot_inventory_contract_test.py 2>&1 | tee /tmp/reset-tests
-          grep -Fq 'Ran 8 tests' /tmp/reset-tests
+          grep -Fq 'Ran 10 tests' /tmp/reset-tests
           grep -Fxq 'OK' /tmp/reset-tests
           python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/reset-journal
           grep -Eq 'INTEGRITY_PASS entries 18[12]' /tmp/reset-journal
           python - <<'PY'
           from pathlib import Path
           p=Path('docs/PROJECT_RESET_20261030')
-          for f in ['00_MACHINE_INVENTORY_GIT_TREES.json','01_TECHNICAL_AUDIT_AND_REUSE_MATRIX_RU.md',
+          for f in ['00_MACHINE_INVENTORY_GIT_TREES.json','00B_MACHINE_BRANCH_HEADS.json','01_TECHNICAL_AUDIT_AND_REUSE_MATRIX_RU.md',
                     '02_EXTERNAL_RESEARCH_HYPOTHESES_AND_DATA_FEASIBILITY_RU.md',
                     '03_DECISION_AND_NEXT_CYCLES_RU.md']:
               assert (p/f).stat().st_size>500
