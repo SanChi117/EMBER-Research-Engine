@@ -1,0 +1,127 @@
+name: EMBER original Freqtrade DoubleMA offline metadata OOS, REAL exchange data (NO LIVE)
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-doublema-native-offline-immutable-20261031.yml'
+      - 'research/doublema_native_oos_20261031/native_offline_adapter.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-freqtrade-engine-static-exchange-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate 5496 original 1h + 4h + 1d + mark + settled funding
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p native-offline-reports
+          python research/doublema_native_oos_20261031/prepare_native.py --datadir "$GITHUB_WORKSPACE/native-offline-reports/data" | tee native-offline-reports/data-check.log
+      - name: Install pinned actual Freqtrade engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python - <<'PY'
+          from importlib.metadata import version
+          assert version('freqtrade')=='2026.4'
+          print('NATIVE_FREQTRADE_ENGINE_2026_4_CONFIRMED')
+          PY
+      - name: Clone author EXACT May12 SHA and create credential-free original config copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/dma-pin
+          test "$(git -C /tmp/dma-pin rev-parse HEAD)" = '40af5c7c1c44253766428cfb06babf22f9817aa4'
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root=Path('/tmp/dma-pin')
+          b=(root/'user_data/strategies/VideoDoubleMaFuturesStrategy.py').read_bytes()
+          h=hashlib.sha1(('blob '+str(len(b))+'\0').encode()+b).hexdigest()
+          assert h=='22ca6588bbd056e671783f676f1a4010cbfc1bb6'
+          c=json.loads((root/'config/config_okx_futures_eth_only_binance_data.json').read_text())
+          assert c['exchange']['name']=='okx' and c['exchange']['pair_whitelist']==['ETH/USDT:USDT']
+          c['exchange']['ccxt_config']={}
+          c['exchange']['ccxt_async_config']={}
+          c['dry_run']=True
+          c['telegram']['enabled']=False
+          c['api_server']['enabled']=False
+          Path('native-offline-reports/safe-original-config.json').write_text(json.dumps(c,indent=2))
+          print('PINNED_ORIGINAL_DOUBLEMA_GIT_BLOB_OK_NO_SECRETS')
+          PY
+      - name: Run UNMODIFIED source through Freqtrade 2026.4 on local 1h candles, fixed fee 5bps/side
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          timeout 240s python research/doublema_native_oos_20261031/native_offline_adapter.py \
+            -c native-offline-reports/safe-original-config.json \
+            --userdir /tmp/dma-pin/user_data \
+            --datadir "$GITHUB_WORKSPACE/native-offline-reports/data" \
+            --strategy VideoDoubleMaFuturesStrategy \
+            --timeframe 1h \
+            --timerange 20260513-20261030 \
+            --data-format-ohlcv json \
+            --fee 0.0005 \
+            --export trades \
+            --cache none 2>&1 | tee native-offline-reports/native-offline-5bps-side.log
+          zip="$(find /tmp/dma-pin/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$zip" && test -s "$zip"
+          cp "$zip" native-offline-reports/dma-fee5bps-side.zip
+          rm -f /tmp/dma-pin/user_data/backtest_results/backtest-result*.zip
+      - name: Run SAME source and exchange metadata with 12.5bps/side
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          timeout 240s python research/doublema_native_oos_20261031/native_offline_adapter.py \
+            -c native-offline-reports/safe-original-config.json \
+            --userdir /tmp/dma-pin/user_data \
+            --datadir "$GITHUB_WORKSPACE/native-offline-reports/data" \
+            --strategy VideoDoubleMaFuturesStrategy \
+            --timeframe 1h \
+            --timerange 20260513-20261030 \
+            --data-format-ohlcv json \
+            --fee 0.00125 \
+            --export trades \
+            --cache none 2>&1 | tee native-offline-reports/native-offline-12p5bps-side.log
+          zip="$(find /tmp/dma-pin/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$zip" && test -s "$zip"
+          cp "$zip" native-offline-reports/dma-fee12p5bps-side.zip
+      - name: Prove BOTH native simulations created genuine result ZIP; no false GREEN
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+          d=Path('native-offline-reports')
+          for n in ('dma-fee5bps-side.zip','dma-fee12p5bps-side.zip'):
+              p=d/n
+              if not p.exists():raise RuntimeError('NATIVE_EXPORT_MISSING:'+n)
+              if not zipfile.is_zipfile(p):raise RuntimeError('NATIVE_EXPORT_NOT_ZIP:'+n)
+              with zipfile.ZipFile(p) as z:
+                  print(n,'ARCHIVED_RESULTS',z.namelist()[:12])
+                  assert any(x.endswith('.json') for x in z.namelist())
+          print('DOUBLEMA_TWO_NATIVE_FREQTRADE_SIMULATIONS_PASS_WITH_OFFLINE_EXCHANGE_METADATA_PROXY')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-doublema-Freqtrade-native-offline-metadata-reports
+          path: |
+            native-offline-reports/data-check.log
+            native-offline-reports/data/native_source_manifest.json
+            native-offline-reports/native-offline-*.log
+            native-offline-reports/*.zip
+          retention-days: 30
