@@ -6,6 +6,7 @@ on:
       - '.github/workflows/ember-reset-platform-contracts.yml'
       - 'research/platform/**'
       - 'tests/test_reboot_platform.py'
+      - 'tests/test_reboot_basis_source.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,8 +26,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m unittest discover -v -s tests -p test_reboot_platform.py 2>&1 | tee /tmp/reboot-r01
-          grep -Fq 'Ran 22 tests' /tmp/reboot-r01
+          python -m unittest discover -v -s tests -p 'test_reboot_*.py' 2>&1 | tee /tmp/reboot-r01
+          grep -Fq 'Ran 31 tests' /tmp/reboot-r01
           grep -Fxq 'OK' /tmp/reboot-r01
           python research/mtf-element-audit-v1/tools/auditlog.py verify
           echo 'R01_PURE_PAPER_NO_LIVE_GATE_TECHNICAL_CHECKS_ONLY'
