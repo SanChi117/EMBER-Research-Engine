@@ -1,0 +1,54 @@
+name: "EMBER A189 pinned market structure receipts and backup candidates evidence"
+on:
+  push:
+    branches: [research/a189-backup-strategy-shortlist-20261031]
+    paths:
+      - '.github/workflows/ember-a189-backup-strategy-receipts-and-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sha-pinned-readonly-audit-and-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify A188 journal and pinned source 15 receipts arithmetic, fail closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a188
+          grep -Fq 'INTEGRITY_PASS entries 188' /tmp/a188
+          python research/backup_candidates_20261031/a189_verify_market_structure_receipts.py \
+            research/backup_candidates_20261031/A189_MARKET_STRUCTURE_RECEIPT_EVIDENCE.json | tee /tmp/a189
+          grep -Fq A189_PUBLIC_15_RECEIPT_SHA_PIN_ARITHMETIC_PASS /tmp/a189
+      - name: Append A189 with explicitly limited validation claim
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A189 --cycle OPEN_SOURCE_BACKUP_STRATEGY_DISCOVERY \
+            --planned "User requests several reserve strategies besides Double MA. Research independent open source logic across 5m/4h and funding, review true source files, negative live/paper evidence, check 15 public receipts at pinned SHA for 3 market structure strategies. Do NOT optimize or trade live." \
+            --executed "Reviewed original GitHub source/README of zevrichards BinHV45 5m long, liu SingleB_FixedRR 5m perpetual long/short, aayanvatsa funding OU, Kureshi TrendFutures, GIGA UltimateAlphaV16, ceyhanmolla GeneticEngine, billybraith17 stat arb, fortunato market structure with 3 strategies. SHA-pinned 15 public market-structure receipt JSON independently downloaded, hashed and recomputed sum PnL, N, win, PF, top3 concentration. MsSupportResistanceV1 404 trades +703.15 USDT PF1.376 top3 35.3pct five pairs positive; MsFilterV6 164 +398.52 PF1.504 top3 96.2pct; control 208 +225.94 PF1.214 top3 169.7pct. Full independent native replay not performed and original trading class for MsSupportResistanceV1 absent from repo tree." \
+            --result "SHORTLIST ONLY NOT ECONOMIC_PASS: A MsSupportResistanceV1 source class missing, B SingleB_FixedRR code present but author 14k-trade claim not independently replayed, C BinHV45 source code but paper performance degraded and spot-only, D funding carry very low frequency tiny sample and margin/capital constraints. Reject remaining misaligned or nonrobust examples. Next A190 recover original code then A191 native Freqtrade 5m OOS. No real orders or SMOKE changes." \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Arithmetically verify 15 immutable public receipt JSON files (3 strategy variants x 5 coins) with independent SHA256 checks, no doubles, source timeframe and pair checks. No claim that original source, real fees, order fills, funding or risk edge are validated. Negatives included (MsFilter top3 dependence, poor BinHV PAPER, Futures full negative). 188 previous journal entries pass before append, 189 after." \
+            --evidence ../../research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md \
+            --evidence ../../research/backup_candidates_20261031/a189_verify_market_structure_receipts.py \
+            --evidence ../../research/backup_candidates_20261031/A189_MARKET_STRUCTURE_RECEIPT_EVIDENCE.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a189_verified
+          grep -Fq 'INTEGRITY_PASS entries 189' /tmp/a189_verified
+      - name: Anchor report and journal to review branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/backup_candidates_20261031/A189_MARKET_STRUCTURE_RECEIPT_EVIDENCE.json research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A189 source pinned 15 receipt checks and reserve candidates journal"
+          git push origin HEAD:refs/heads/research/a189-backup-strategy-shortlist-20261031
