@@ -1,0 +1,568 @@
+{
+  "causal_effect_proven": false,
+  "derived_3m_bars_total": 645120,
+  "derived_5m_bars_total": 387072,
+  "economic_parameters_changed": false,
+  "funding_missing": true,
+  "historical_screen_pass_both_windows": false,
+  "inherited_c114_economic_precommit": "cycles/B1_C114_PRECOMMIT_INDEPENDENT_4H_POI_5M_REACTION_PREDICTIVE_VALUE_RU.md",
+  "live_approved": false,
+  "live_trades": [],
+  "original_3m_zip_total": 0,
+  "original_5m_zip_total": 0,
+  "paper_only": true,
+  "precommit": "cycles/B1_C116_PRECOMMIT_SINGLE_ORIGINAL_1M_CANONICAL_SOURCE_RU.md",
+  "real_fills": [],
+  "real_orders": [],
+  "revisits_source_exposed_C114_C115_windows": true,
+  "schema": "EMBER_C116_CANONICAL_ORIGINAL_NATIVE1M_DERIVED3M5M_STRUCTURAL_REACTION_TEST",
+  "source_3m_5m_independent_original_archives": false,
+  "source_3m_kind": "DERIVED_FROM_ORIGINAL_NATIVE_1M",
+  "source_5m_kind": "DERIVED_FROM_ORIGINAL_NATIVE_1M",
+  "source_count_original_native1m_zip": 1344,
+  "source_original_native1m_minutes_replay": true,
+  "source_raw_native1m_bars": 1935360,
+  "true_prospective_oos": false,
+  "window_receipts": {
+    "WIN_A": {
+      "admission": {
+        "causal_effect_identified": false,
+        "funding_missing": true,
+        "historical_only": true,
+        "live_approved": false,
+        "reasons": [
+          "NO_POWER_MATCHED_PAIRS_LT_40",
+          "NO_POWER_TEMPORAL_MATCHED_FOLD",
+          "T_NET_25_NONPOSITIVE",
+          "T_PF25_LOW",
+          "T_PF40_LOW",
+          "BOOTSTRAP_DELTA_NOT_POSITIVE",
+          "MATCHED_TP_FIRST_PASSAGE_NOT_SUPERIOR",
+          "EARLY_MATCHED_TP_NOT_SUPERIOR",
+          "LATE_MATCHED_TP_NOT_SUPERIOR",
+          "DD_UPPERBOUND_GE_10"
+        ],
+        "state": "NO_POWER"
+      },
+      "bootstrap": {
+        "bootstrap_reps": 2000,
+        "high95": 2.137475,
+        "low95": -0.026528,
+        "n_blocks": 2,
+        "observed_delta": 1.055473,
+        "seed": 11420261030
+      },
+      "bytes": 2040120,
+      "cohort": {
+        "control_early_competing": 281,
+        "control_unused_n": 426,
+        "controls_n": 428,
+        "events_without_5m_structural_source": 281,
+        "initial_touch_eligible_events": 555,
+        "matched_early_fold_n": 1,
+        "matched_late_fold_n": 1,
+        "matched_pairs_n": 2,
+        "treated_early_competing": 58,
+        "treated_n": 127,
+        "treated_unmatched_n": 125
+      },
+      "filename": "C116_WIN_A_ORIGINAL_1M_CANONICAL_AND_MATCHED_EVENTS.json",
+      "intra_canonical_parity": {
+        "ALGOUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "BNBUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "CHZUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "HBARUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "ICPUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "INJUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "LINKUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "OPUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "PENDLEUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "SEIUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "UNIUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "XLMUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        }
+      },
+      "portfolio": {
+        "capacity_blocked_treated": 1,
+        "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+        "dd_adverse_wick_pct_upper_bound": 15.077779,
+        "dd_close_pct": 15.024686,
+        "initial_equity": 100,
+        "initial_equity_risk_per_fill_pct": 1,
+        "max_simultaneous_positions": 4
+      },
+      "scores": {
+        "C_ALL": {
+          "14": {
+            "fills": 99,
+            "mean_r_per_fill": -0.187099,
+            "mean_r_per_itt_event": -0.043278,
+            "net_total_r": -18.522813,
+            "pf": 0.755242,
+            "signals": 428,
+            "sl_first_n": 69,
+            "tp_before_sl_n": 13,
+            "tp_probability_filled": 0.131313
+          },
+          "25": {
+            "fills": 99,
+            "mean_r_per_fill": -0.253729,
+            "mean_r_per_itt_event": -0.05869,
+            "net_total_r": -25.119183,
+            "pf": 0.689247,
+            "signals": 428,
+            "sl_first_n": 69,
+            "tp_before_sl_n": 13,
+            "tp_probability_filled": 0.131313
+          },
+          "40": {
+            "fills": 99,
+            "mean_r_per_fill": -0.344588,
+            "mean_r_per_itt_event": -0.079706,
+            "net_total_r": -34.114233,
+            "pf": 0.611902,
+            "signals": 428,
+            "sl_first_n": 69,
+            "tp_before_sl_n": 13,
+            "tp_probability_filled": 0.131313
+          }
+        },
+        "C_MATCHED": {
+          "14": {
+            "fills": 2,
+            "mean_r_per_fill": -1.071682,
+            "mean_r_per_itt_event": -1.071682,
+            "net_total_r": -2.143364,
+            "pf": 0.0,
+            "signals": 2,
+            "sl_first_n": 2,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "25": {
+            "fills": 2,
+            "mean_r_per_fill": -1.128004,
+            "mean_r_per_itt_event": -1.128004,
+            "net_total_r": -2.256007,
+            "pf": 0.0,
+            "signals": 2,
+            "sl_first_n": 2,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "40": {
+            "fills": 2,
+            "mean_r_per_fill": -1.204806,
+            "mean_r_per_itt_event": -1.204806,
+            "net_total_r": -2.409612,
+            "pf": 0.0,
+            "signals": 2,
+            "sl_first_n": 2,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          }
+        },
+        "T_ALL": {
+          "14": {
+            "fills": 36,
+            "mean_r_per_fill": -0.29616,
+            "mean_r_per_itt_event": -0.083951,
+            "net_total_r": -10.661761,
+            "pf": 0.579117,
+            "signals": 127,
+            "sl_first_n": 23,
+            "tp_before_sl_n": 7,
+            "tp_probability_filled": 0.194444
+          },
+          "25": {
+            "fills": 36,
+            "mean_r_per_fill": -0.352768,
+            "mean_r_per_itt_event": -0.099997,
+            "net_total_r": -12.699636,
+            "pf": 0.531206,
+            "signals": 127,
+            "sl_first_n": 23,
+            "tp_before_sl_n": 7,
+            "tp_probability_filled": 0.194444
+          },
+          "40": {
+            "fills": 36,
+            "mean_r_per_fill": -0.42996,
+            "mean_r_per_itt_event": -0.121878,
+            "net_total_r": -15.478557,
+            "pf": 0.47508,
+            "signals": 127,
+            "sl_first_n": 23,
+            "tp_before_sl_n": 7,
+            "tp_probability_filled": 0.194444
+          }
+        },
+        "T_MATCHED": {
+          "14": {
+            "fills": 2,
+            "mean_r_per_fill": -0.01895,
+            "mean_r_per_itt_event": -0.01895,
+            "net_total_r": -0.037901,
+            "pf": 0.965979,
+            "signals": 2,
+            "sl_first_n": 1,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "25": {
+            "fills": 2,
+            "mean_r_per_fill": -0.07253,
+            "mean_r_per_itt_event": -0.07253,
+            "net_total_r": -0.145061,
+            "pf": 0.879481,
+            "signals": 2,
+            "sl_first_n": 1,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "40": {
+            "fills": 2,
+            "mean_r_per_fill": -0.145594,
+            "mean_r_per_itt_event": -0.145594,
+            "net_total_r": -0.291187,
+            "pf": 0.780369,
+            "signals": 2,
+            "sl_first_n": 1,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          }
+        }
+      },
+      "sha256": "13c1dce59224cd9cb3f38d865c772bf76628662fb9516e8957db4455a9c7d42b",
+      "source_original_native1m_zip_count": 672
+    },
+    "WIN_B": {
+      "admission": {
+        "causal_effect_identified": false,
+        "funding_missing": true,
+        "historical_only": true,
+        "live_approved": false,
+        "reasons": [
+          "NO_POWER_MATCHED_PAIRS_LT_40",
+          "NO_POWER_TEMPORAL_MATCHED_FOLD",
+          "T_NET_25_NONPOSITIVE",
+          "T_PF25_LOW",
+          "T_PF40_LOW",
+          "BOOTSTRAP_DELTA_NOT_POSITIVE",
+          "LATE_MATCHED_TP_NOT_SUPERIOR",
+          "DD_UPPERBOUND_GE_10"
+        ],
+        "state": "NO_POWER"
+      },
+      "bootstrap": {
+        "bootstrap_reps": 2000,
+        "high95": 1.794474,
+        "low95": -0.018518,
+        "n_blocks": 5,
+        "observed_delta": 0.7967,
+        "seed": 11420261030
+      },
+      "bytes": 1908236,
+      "cohort": {
+        "control_early_competing": 237,
+        "control_unused_n": 374,
+        "controls_n": 379,
+        "events_without_5m_structural_source": 265,
+        "initial_touch_eligible_events": 483,
+        "matched_early_fold_n": 1,
+        "matched_late_fold_n": 4,
+        "matched_pairs_n": 5,
+        "treated_early_competing": 51,
+        "treated_n": 104,
+        "treated_unmatched_n": 99
+      },
+      "filename": "C116_WIN_B_ORIGINAL_1M_CANONICAL_AND_MATCHED_EVENTS.json",
+      "intra_canonical_parity": {
+        "ALGOUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "BNBUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "CHZUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "HBARUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "ICPUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "INJUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "LINKUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "OPUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "PENDLEUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "SEIUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "UNIUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        },
+        "XLMUSDT": {
+          "derived_15m_buckets": 5376,
+          "independent_original_3m_or_5m_consumed": false,
+          "price_and_volume_equal": true,
+          "source": "ONE_ORIGINAL_NATIVE_1M_PROVIDER"
+        }
+      },
+      "portfolio": {
+        "capacity_blocked_treated": 0,
+        "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+        "dd_adverse_wick_pct_upper_bound": 10.432321,
+        "dd_close_pct": 10.40939,
+        "initial_equity": 100,
+        "initial_equity_risk_per_fill_pct": 1,
+        "max_simultaneous_positions": 2
+      },
+      "scores": {
+        "C_ALL": {
+          "14": {
+            "fills": 85,
+            "mean_r_per_fill": -0.153589,
+            "mean_r_per_itt_event": -0.034446,
+            "net_total_r": -13.055088,
+            "pf": 0.798466,
+            "signals": 379,
+            "sl_first_n": 56,
+            "tp_before_sl_n": 16,
+            "tp_probability_filled": 0.188235
+          },
+          "25": {
+            "fills": 85,
+            "mean_r_per_fill": -0.236644,
+            "mean_r_per_itt_event": -0.053073,
+            "net_total_r": -20.114709,
+            "pf": 0.713565,
+            "signals": 379,
+            "sl_first_n": 56,
+            "tp_before_sl_n": 16,
+            "tp_probability_filled": 0.188235
+          },
+          "40": {
+            "fills": 85,
+            "mean_r_per_fill": -0.3499,
+            "mean_r_per_itt_event": -0.078474,
+            "net_total_r": -29.741464,
+            "pf": 0.616983,
+            "signals": 379,
+            "sl_first_n": 56,
+            "tp_before_sl_n": 16,
+            "tp_probability_filled": 0.188235
+          }
+        },
+        "C_MATCHED": {
+          "14": {
+            "fills": 5,
+            "mean_r_per_fill": -1.106684,
+            "mean_r_per_itt_event": -1.106684,
+            "net_total_r": -5.533422,
+            "pf": 0.0,
+            "signals": 5,
+            "sl_first_n": 5,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "25": {
+            "fills": 5,
+            "mean_r_per_fill": -1.190508,
+            "mean_r_per_itt_event": -1.190508,
+            "net_total_r": -5.95254,
+            "pf": 0.0,
+            "signals": 5,
+            "sl_first_n": 5,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "40": {
+            "fills": 5,
+            "mean_r_per_fill": -1.304813,
+            "mean_r_per_itt_event": -1.304813,
+            "net_total_r": -6.524064,
+            "pf": 0.0,
+            "signals": 5,
+            "sl_first_n": 5,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          }
+        },
+        "T_ALL": {
+          "14": {
+            "fills": 24,
+            "mean_r_per_fill": -0.231182,
+            "mean_r_per_itt_event": -0.05335,
+            "net_total_r": -5.548362,
+            "pf": 0.681362,
+            "signals": 104,
+            "sl_first_n": 15,
+            "tp_before_sl_n": 5,
+            "tp_probability_filled": 0.208333
+          },
+          "25": {
+            "fills": 24,
+            "mean_r_per_fill": -0.29823,
+            "mean_r_per_itt_event": -0.068822,
+            "net_total_r": -7.15752,
+            "pf": 0.618505,
+            "signals": 104,
+            "sl_first_n": 15,
+            "tp_before_sl_n": 5,
+            "tp_probability_filled": 0.208333
+          },
+          "40": {
+            "fills": 24,
+            "mean_r_per_fill": -0.389659,
+            "mean_r_per_itt_event": -0.089921,
+            "net_total_r": -9.351826,
+            "pf": 0.546056,
+            "signals": 104,
+            "sl_first_n": 15,
+            "tp_before_sl_n": 5,
+            "tp_probability_filled": 0.208333
+          }
+        },
+        "T_MATCHED": {
+          "14": {
+            "fills": 5,
+            "mean_r_per_fill": -0.310989,
+            "mean_r_per_itt_event": -0.310989,
+            "net_total_r": -1.554943,
+            "pf": 0.553562,
+            "signals": 5,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 0.2
+          },
+          "25": {
+            "fills": 5,
+            "mean_r_per_fill": -0.393808,
+            "mean_r_per_itt_event": -0.393808,
+            "net_total_r": -1.969039,
+            "pf": 0.490426,
+            "signals": 5,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 0.2
+          },
+          "40": {
+            "fills": 5,
+            "mean_r_per_fill": -0.506743,
+            "mean_r_per_itt_event": -0.506743,
+            "net_total_r": -2.533715,
+            "pf": 0.422022,
+            "signals": 5,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 0.2
+          }
+        }
+      },
+      "sha256": "030a1637ca0fd81cb2769035c9efa59e8a606db778c3880fd31cca7d61896f2c",
+      "source_original_native1m_zip_count": 672
+    }
+  }
+}
