@@ -1,0 +1,72 @@
+name: EMBER QUICK OPEN STRATEGIES A185 EconomicScreenFail SHA witness
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-quick-open-strategy-screen-a185-sha.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  a185-quick-screen-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Re-run frozen economic screen and byte-compare result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/quick_open_strategy_screen_20261031/quick_screen.py --output /tmp/screen-replayed.json | tee /tmp/screen-output
+          cmp research/quick_open_strategy_screen_20261031/result.json /tmp/screen-replayed.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/screen-replayed.json').read_text())
+          assert len(d['trades'])==85
+          assert len(d['raw_input_source'])==6
+          assert not any(s['advance_to_exact_freqtrade'] for s in d['summary'].values())
+          for x in d['summary'].values():
+              assert set(x['windows'])=={'A','B'}
+              for window in x['windows'].values():
+                  assert set(window)=={'14','25','40'}
+          print('A185_REPLAY_SOURCE_FIXED_NO_3_CANDIDATES_ECONOMIC_PASS')
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/ledger_before
+          grep -Fq 'INTEGRITY_PASS entries 184' /tmp/ledger_before
+      - name: Append cryptographic economic fail record not tradable
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A185 --cycle OPEN_STRATEGIES_QUICK_SCREEN \
+            --planned "User asks rapid verification of existing open strategy profitability. Select 3 Freqtrade public source signals, frozen source blob SHA, fixed BTC/ETH/SOL 1h futures data in two 35d windows and 14/25/40bps costs; gate no tuning/positive economic value only on both windows" \
+            --executed "6 Binance USD-M 1h data series 840 candles each no gaps, 5040 total; source strategies AdxSmas, BbandRsi, FAdxSmaStrategy; independent causal close->next open stop-first proxy screen in pure Python, 85 full trade receipts at25bps; deterministic exact result replay cmp PASS" \
+            --result "ECONOMIC SCREEN FAIL 0 of 3. AdxSmas A PF0.18007 23 fills B PF0.54533 32 fills; BbandRsi A PF1.06653 11 fills B PF4.83042 12 fills, insufficient n and A robustness; FAdxSmaStrategy A PF0.55836 6 fills B PF0 1 fill. Cost40 weakens A BbandRsi PF to1.01346. This is not native Freqtrade or TA-Lib parity, no real quotes/funding/1m exit detail and no portfolio equity claim; no alpha or live orders" \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Predeclared screening policy exists prior to calculated results. Script 5040 timestamps strict, no missing bar, replay result identical; all three fail precommitted thresholds. Samples A/B seen; do not optimize from them. Original strategy and proxy ROI differed for FAdxSmaStrategy; full native replication needed for any promotion" \
+            --evidence ../../research/quick_open_strategy_screen_20261031/SCREEN_POLICY.md \
+            --evidence ../../research/quick_open_strategy_screen_20261031/quick_screen.py \
+            --evidence ../../research/quick_open_strategy_screen_20261031/result.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/RESULTS_RU.md \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/A_BTCUSDT.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/A_ETHUSDT.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/A_SOLUSDT.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/B_BTCUSDT.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/B_ETHUSDT.json \
+            --evidence ../../research/quick_open_strategy_screen_20261031/data/B_SOLUSDT.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/ledger_after
+          grep -Fq 'INTEGRITY_PASS entries 185' /tmp/ledger_after
+      - name: Commit A185 without altering previous experiments
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A185 quick 3 public Freqtrade economic screening 0/3 FAIL, all market records and outcomes SHA anchored"
+          git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
