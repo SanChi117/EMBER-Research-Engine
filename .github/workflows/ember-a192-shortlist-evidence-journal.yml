@@ -1,0 +1,64 @@
+name: "EMBER A192 prospective reserve shortlist and native FTR no-power evidence journal"
+on:
+  push:
+    branches: [research/a192-reserve-code-audit-and-ftr-oos-20261031]
+    paths:
+      - '.github/workflows/ember-a192-shortlist-evidence-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  append-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify previous journal through A191 and external evidence machine shape
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/previous.log
+          grep -Fq 'INTEGRITY_PASS entries 191' /tmp/previous.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('research/backup_candidates_20261031')
+          a=json.loads((base/'A192_SOURCE_SCREEN_MACHINE.json').read_text())
+          assert a['no_new_economic_pass'] is True
+          assert a['source_checks'][0]['author_results']['ETH_48mo']['N']==30
+          assert a['source_checks'][1]['author_results']['grid']['positive_P2_expectancy']==27
+          assert a['source_checks'][2]['fee5bps_side']['trades']==0
+          assert a['source_checks'][2]['fee12p5bps_side']['trades']==0
+          assert (base/'A192_RESERVE_CANDIDATES_RU.md').stat().st_size>2000
+          print('A192_EXTERNAL_EVIDENCE_SHAPE_CONFIRMED')
+          PY
+      - name: Record A192 actual native FTR no-power and source pinned future reserve research
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A192 --cycle OPEN_SOURCE_RESERVE_DISCOVERY_HERMES_SUPERTREND_APEX_AND_FTR_NATIVE \
+            --planned "Following failed A191 SingleB and proprietary A190 Market Structure original search, audit many public open-source strategies, prefer complete source and evidence of genuine walk-forward, run immutable FTR 1h ETH Binance native OOS to screen actual opportunity, record pitfalls and cost assumptions; no production/PAPER mutations." \
+            --executed "Reviewed original public source and archived receipts for Hermes SuperTrend(10,3) long-only 4h BTC/ETH, Apex no-pyramid 180day breakout 4h eight coins, Quattro pyramid, FTR, Divergence scipy future pivot, Mandelbrot Fibonacci future shift, big spot systems and private redacted AKzar1el. Validated public Hermes CSV author BTC N35 return38.66 PF2.24 DD9.63 and ETH N30 return37.86 PF2.92 DD5.30; BTC+ETH parallel author N65 return39.72 PF2.50 DD5.54. Parsed 27 rows of author Apex grid: 27 positive P2 expectancy, 26 positive P2 APY; author fixed Apex P2 47 trades 5.986pct APY DD14.1; author P2 trade CSV 47 rows. Ran actual Freqtrade 2026.4 original hrodrig FailureToReturn source pinned blob 6e80c0b on actual historical ETH Binance 1h 2026Aug-Sep, with 10/25bps roundtrip; both native runs returned exactly zero trades (GitHub Actions #41143948231 success and zipped receipts artifact 13020268202 sha256 c5c596390a5d425401dd396011949ea74e9467259cad5ddb45e96ed4bb4da5f5)." \
+            --result "SHORTLIST RESEARCH ONLY: Hermes SuperTrend top rank but author backtest same-close fill and stop line same-bar concerns; no independent replay or live proof. Apex no-pyramid second but slow +6pct APY author P2 and funding omitted. FTR native economic edge NOT ASSESSABLE zero trades; reject for ETH study period. Divergence and Mandelbrot potential explicit future-candle pivot leaks excluded. Exotic Quattro with 37.5pct DD not fit safe reserve. No independent economic PASS and no live executions." \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Use original author GitHub CSV as author evidence only, not claim own native outcome for SuperTrend or Apex. Apex 27/27 cells overlap; 30 trades SuperTrend thin; suspect Hermes same-bar fill ordering and stop recalculation. Exact FTR price engine genuinely ran and found 0 trades, not negative profit. Contrast spot/futures and causal availability. All prior 191 journal entries verified before appending." \
+            --evidence ../../research/backup_candidates_20261031/A192_RESERVE_CANDIDATES_RU.md \
+            --evidence ../../research/backup_candidates_20261031/A192_SOURCE_SCREEN_MACHINE.json \
+            --evidence ../../.github/workflows/ember-a192-ftr-native-eth-oos.yml
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/current.log
+          grep -Fq 'INTEGRITY_PASS entries 192' /tmp/current.log
+      - name: Commit A192 journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'A192 source-pinned reserve shortlist SuperTrend/Apex and native FTR no-trade audit'
+          git push origin HEAD:refs/heads/research/a192-reserve-code-audit-and-ftr-oos-20261031
