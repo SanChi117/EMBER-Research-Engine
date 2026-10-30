@@ -1,0 +1,70 @@
+name: EMBER C115 2023 November original 3m5m 4H-source price mismatch forensic
+on:
+  push:
+    branches: [research/c115-price-only-4h-zone-reaction-20261030]
+    paths:
+      - '.github/workflows/mtf-c115-nov14-price-source-forensic.yml'
+      - 'research/mtf-element-audit-v1/d05/c115_20231114_original_3m5m_price_mismatch_forensic.py'
+      - 'research/mtf-element-audit-v1/d05/test_c115_20231114_original_price_forensic.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  c115-native-price-negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Source SHA chain and three independent price mismatch contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c115_20231114_original_price_forensic 2>&1 | tee /tmp/c115-source
+          grep -Fq 'Ran 3 tests' /tmp/c115-source
+          grep -Fxq 'OK' /tmp/c115-source
+  original-24-binance-zip-source-only:
+    needs: c115-native-price-negative-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download original Binance 12 pair 3m/5m files Nov 14 2023 with provider SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c115_20231114_original_3m5m_price_mismatch_forensic.py \
+             --output research/mtf-element-audit-v1/evidence/c115/C115_ORIGINAL_20231114_12SYMBOL_NATIVE3M5M_PRICE_MISMATCH.json | tee /tmp/c115-forensic
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/mtf-element-audit-v1/evidence/c115/C115_ORIGINAL_20231114_12SYMBOL_NATIVE3M5M_PRICE_MISMATCH.json')
+          j=json.loads(p.read_text())
+          assert len(j['sources']['3m'])==len(j['sources']['5m'])==12
+          assert all(x['zip_sha256'] and x['csv_sha256'] for arr in j['sources'].values() for x in arr)
+          assert j['source_only_block_not_economic_retest'] is True
+          assert j['economic_trades_computed'] is False and j['live_approved'] is False
+          assert j['exact_1699961400000_original_price_incident']
+          print("C115_ORIGINAL_PRICE_MISMATCH_FOR_BOTH_NATIVE_SOURCE_INTERVALS_INDEPENDENTLY_ATTESTED")
+          PY
+      - name: Commit source-only SHA proof, no economic outcome
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c115/C115_ORIGINAL_20231114_12SYMBOL_NATIVE3M5M_PRICE_MISMATCH.json
+          git commit -m "C115 original 24 provider-verified Binance ZIP proof of 3m/5m price mismatch; SOURCE_BLOCKED"
+          git push origin HEAD:refs/heads/research/c115-price-only-4h-zone-reaction-20261030
