@@ -245,7 +245,7 @@ def main():
     overview={}
     for key,period in out["windows"].items():
         name="C111_"+key+"_768_ORIGINAL_NATIVE3M_SOURCE_AND_TRADES.json"
-        raw=(json.dumps(period,ensure_ascii=False,sort_keys=True,indent=2)+"\\n").encode()
+        raw=(json.dumps(period,ensure_ascii=False,sort_keys=True,indent=2)+"\n").encode()
         (args.output_dir/name).write_bytes(raw)
         receipts[key]={"filename":name,"bytes":len(raw),
                  "sha256":hashlib.sha256(raw).hexdigest()}
@@ -269,7 +269,7 @@ def main():
     summary={k:v for k,v in out.items() if k!="windows"}
     summary["window_evidence_pins"]=receipts
     summary["per_window_metrics"]=overview
-    overview_bytes=(json.dumps(summary,ensure_ascii=False,sort_keys=True,indent=2)+"\\n").encode()
+    overview_bytes=(json.dumps(summary,ensure_ascii=False,sort_keys=True,indent=2)+"\n").encode()
     fname="C111_REGIME_GATE_TWO_WINDOW_PINNED_SUMMARY.json"
     (args.output_dir/fname).write_bytes(overview_bytes)
     print(json.dumps({"total_zips":out["original_source_total_zip_count"],
