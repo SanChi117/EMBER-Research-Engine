@@ -1,0 +1,101 @@
+name: EMBER C111 A174 immutable genuine two-window regime filter economic rejection
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c111-A174-freeze-negative-trend-regime.yml'
+permissions:
+  contents: write
+jobs:
+  freeze-original-source-and-failed-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: A173 previous tip and C111 original 1536 provider ZIP proofs + failed economics
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c111-a173
+          grep -Fq 'entries 173 tip_sha256 d5f212e95ce7cf2d1ea6361426c2eec4d6875087f364303a68d508449ac06643' /tmp/c111-a173
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,sys
+          root=Path('evidence/c111')
+          summary=(root/'C111_REGIME_GATE_TWO_WINDOW_PINNED_SUMMARY.json').read_bytes()
+          assert len(summary)==7289 and hashlib.sha256(summary).hexdigest()=='3a42ddded2b65ecc47dd4b6e89405d4538745d81a547d9c571244c7e4a4cd9f0'
+          s=json.loads(summary)
+          assert s['source_strategy_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          assert s['original_source_total_zip_count']==1536
+          assert s['original_source_total_native3m_bars']==737280
+          assert s['both_historical_windows_pass'] is False
+          assert s['live_approved'] is False
+          assert s['orders']==s['fills']==s['live_trades']==[]
+          assert set(s['window_evidence_pins'])=={'WIN_A','WIN_B'}
+          expected={'WIN_A':(614380,'87e9eec8482a4749ecc1d73758968c1f3446d5a6917918d1595ebb3c53a60a73',
+                             55,-20.008366,17,-6.642906,0.52556,10.0871),
+                    'WIN_B':(600587,'47946bc53d23884a19bf3c6bb5734236c0c9d929f8fb4d2dfc1894fb28dd74c1',
+                             49,-7.617704,19,-13.995634,0.27572,13.37617)}
+          for key,(nbytes,sha,n0,r0,n1,r1,pf1,dd1) in expected.items():
+              meta=s['window_evidence_pins'][key]
+              raw=(root/meta['filename']).read_bytes()
+              assert len(raw)==meta['bytes']==nbytes
+              assert hashlib.sha256(raw).hexdigest()==meta['sha256']==sha
+              z=json.loads(raw)
+              assert z['source_zip_count']==768 and z['native3m_bars']==368640
+              assert len(z['source_manifest'])==768
+              assert len({(m['symbol'],m['date']) for m in z['source_manifest']})==768
+              old=z['arms']['B1_C109_UNCHANGED']
+              new=z['arms']['B2_C111_1D_4H_REGIME']
+              assert old['scores']['25']['n']==n0 and old['scores']['25']['sum_r']==r0
+              assert new['scores']['25']['n']==n1 and new['scores']['25']['sum_r']==r1
+              assert new['scores']['25']['pf']==pf1
+              assert new['scores']['25']['dd_1pct_risk_pct']==dd1
+              assert not old['admission']['passes_historical_screen']
+              assert not new['admission']['passes_historical_screen']
+              assert new['admission']['live_approved'] is False
+              for t in new['trades']:
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['zone_created_ms']<t['first_4h_parent_touch_ms']<t['closed_1h_confirmation_ms']<t['confirmed_15m_vc_ms']==t['entry_ms']
+                  assert t['regime_proof']['asof_no_future']
+                  assert t['regime_proof']['1d_last_known_close_ms']<=t['closed_1h_confirmation_ms']
+                  assert t['regime_proof']['4h_last_known_close_ms']<=t['closed_1h_confirmation_ms']
+          sys.path.insert(0,'d05')
+          import c111_frozen_c109_1d4h_regime_gate as model
+          assert model.pins()
+          print('C111_1536_ORIGINAL_BINANCE_737280_NATIVE3M_TWO_REGIMES_FAIL_ECONOMICS_REPRODUCED')
+          PY
+      - name: Append-only A174 with truthful blocked gate result
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A174 --cycle B1/C111 --verdict DONE --cycle-result PASSED \
+            --planned "Research exactly ONE as-of price-only D1 3-close plus H4 6-close sign and H4 directional efficiency >=1/3 regime eligibility at completed H1 reaction of frozen C109 B1 core. No new indicators or altered trade SL TP or RR. Precommit before original source, 2 previously unused 64d 2025 March-May and July-Sept windows 12 fixed Binance USD-M pairs, 1536 original daily 3m ZIP with checksum and CSV SHA 737280 candles. Independently replay full original C109 B1 vs gated B2 so busy effects not post-exit cherry picking. Same 14/25/40bps and DD25<10 risk 1% gate each window." \
+            --executed "SHA-frozen C109 trading-code 39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557 reused without edits. New strictly fully closed H4/D1 asof at completed H1 reaction; only scoped calendar and C109 full_reclaim eligibility hook, restored on error. 20 new negative+769 old x Python3.10/3.11/3.12=2367 PASS; independent CI 41031495139 SUCCESS4/4. Downloaded SHA verified 1536 genuine provider Binance Vision native3m ZIP, full CSV original SHA and 737280 candles. Produced separately pinned complete 768 ZIP source manifests and complete trade ledgers for both windows, plus combined compact frozen summary. Initial syntax error in new test identifier fixed before source downloads, no trading policy modifications." \
+            --result "B2 FILTER ECONOMIC FAIL BOTH NEW WINDOWS: March-May2025 B1 control n55 netR25 -20.008366R PF0.55804 DD24.88168%; gated B2 n17 netR25 -6.642906R PF0.52556 DD10.08710%, power insufficient and losses. July-Sept2025 B1 control n49 netR25 -7.617704R PF0.81358 DD15.11299%; gated B2 n19 netR25 -13.995634R PF0.27572 DD13.37617%, worse results. Gated n36 both windows sum netR25 -20.63854R and R40 -25.425075R, not portfolio PnL. Both predeclared economic screens FAILED and new gate must NOT integrate or trade live." \
+            --countercheck "C109 original trading logic SHA immutable, original 4H SL and TP sources identical, D1+4H source values only fully closed at 1H reaction BEFORE entry; both original 12-coin source windows completed checksums 768+768, no posthoc winner filter because entire event state machine replays per arm. 1/3 directional efficiency unretuned after results; fail both windows, July gate markedly worsens PF. Prior C109-C110 historical outcomes and A173 sha untouched. PAPER ONLY, no real orders or risk stop relaxation." \
+            --evidence cycles/B1_C111_PRECOMMIT_SINGLE_REGIME_GATE_TWO_UNSEEN_CRYPTO_WINDOWS_RU.md \
+            --evidence d05/c111_frozen_c109_1d4h_regime_gate.py \
+            --evidence d05/test_c111_one_regime_gate_source_asof.py \
+            --evidence evidence/c111/C111_WIN_A_768_ORIGINAL_NATIVE3M_SOURCE_AND_TRADES.json \
+            --evidence evidence/c111/C111_WIN_B_768_ORIGINAL_NATIVE3M_SOURCE_AND_TRADES.json \
+            --evidence evidence/c111/C111_REGIME_GATE_TWO_WINDOW_PINNED_SUMMARY.json \
+            --evidence cycles/B1_C111_REGIME_GATE_TWO_UNSEEN_WINDOWS_NEGATIVE_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c111-a174
+          grep -Fq 'entries 174 tip_sha256 ' /tmp/c111-a174
+      - name: Commit A174 immutable negative gate journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A174 C111 1536 original Binance ZIP two independent periods: D1 H4 regime filter negative and not enabled"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
