@@ -125,9 +125,9 @@ class C113ExecutionTests(unittest.TestCase):
         self.assertEqual(z["status"],"FILLED")
         self.assertEqual(z["trade"]["exit_reason"],"STOP_FIRST_NATIVE3M")
 
-    def test_nonfinite_source_rejected_by_geometry(self):
+    def test_wrong_side_target_rejected_by_geometry(self):
         t=parent()
-        t["zone_upper"]="99"
+        t["target"]="98"
         self.assertEqual(c113.basis(t,c113.ARM_LIMIT_ORIG)[1],"STRUCTURE_WRONG_SIDE")
 
     def test_original_market_cost_stress_uses_14bps(self):
