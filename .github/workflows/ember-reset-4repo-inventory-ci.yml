@@ -1,0 +1,41 @@
+name: EMBER RESET 20261030 four-repo source inventory and negative controls
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-reset-4repo-inventory-ci.yml'
+      - 'docs/PROJECT_RESET_20261030/**'
+      - 'scripts/reboot_inventory_contract_test.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  four-repo-inventory-negative-controls:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Source catalog 8 negative tests + previous append-only journal intact
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/reboot_inventory_contract_test.py 2>&1 | tee /tmp/reset-tests
+          grep -Fq 'Ran 8 tests' /tmp/reset-tests
+          grep -Fxq 'OK' /tmp/reset-tests
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/reset-journal
+          grep -Eq 'INTEGRITY_PASS entries 18[12]' /tmp/reset-journal
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/PROJECT_RESET_20261030')
+          for f in ['00_MACHINE_INVENTORY_GIT_TREES.json','01_TECHNICAL_AUDIT_AND_REUSE_MATRIX_RU.md',
+                    '02_EXTERNAL_RESEARCH_HYPOTHESES_AND_DATA_FEASIBILITY_RU.md',
+                    '03_DECISION_AND_NEXT_CYCLES_RU.md']:
+              assert (p/f).stat().st_size>500
+          print('RESET_SCOPE_DOCUMENTS_PRESENT_SOURCE_READ_ONLY_LIVE_BLOCKED')
+          PY
