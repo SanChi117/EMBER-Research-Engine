@@ -1,0 +1,67 @@
+name: EMBER RESET A182 append-only source inventory and research evidence journal
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-reset-a182-source-inventory-sha-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  a182-source-inventory-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify all 10 inventory+branch controls, external reports, previous A181 journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/reboot_inventory_contract_test.py 2>&1 | tee /tmp/ember-reset-negative
+          grep -Fq 'Ran 10 tests' /tmp/ember-reset-negative
+          grep -Fxq 'OK' /tmp/ember-reset-negative
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a181
+          grep -Fq 'INTEGRITY_PASS entries 181' /tmp/a181
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/PROJECT_RESET_20261030')
+          for x in ['00_MACHINE_INVENTORY_GIT_TREES.json','00B_MACHINE_BRANCH_HEADS.json',
+              '01_TECHNICAL_AUDIT_AND_REUSE_MATRIX_RU.md',
+              '02_EXTERNAL_RESEARCH_HYPOTHESES_AND_DATA_FEASIBILITY_RU.md',
+              '03_DECISION_AND_NEXT_CYCLES_RU.md','README.md']:
+              assert (p/x).stat().st_size>500
+          print('REBOOT_REVIEW_SOURCE_AND_RESEARCH_EVIDENCE_PRESENT')
+          PY
+      - name: Append actual initial scope only, not claim full 143-branch or Drive review
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A182 --cycle RESET20261030 \
+            --planned "User-directed rebuild from experience: collect four existing GitHub project trees and all branch heads, classify reusable and broken modules, compare duplicate source SHA, read real AppDeploy status, Google Drive atlas, scholarly and official data sources, choose conditional next hypothesis without live orders" \
+            --executed "Complete 4 repo recursive nontruncated Git tree census 2189 blobs with exact Git SHA and 143 branch heads; 121 identical of 126 overlapping Smoke-strategy/terminal paths; read AppDeploy ready plus Binance 451 and abort errors; read project docs and Drive atlas, rank 7 new economic hypotheses; source and branch census 10 negative checks x Python3.10,3.11,3.12" \
+            --result "DONE scoped initial Git inventory/curated technical audit/literature shortlist/roadmap. Reuse canonical 1m source and causal WFO/test/cost engine, preserve nonprofitable C93-C117 historical; H1 funding/basis proposed research first, H2 forced OI+liquidation research conditional SOURCE_FEASIBILITY_HOLD. No full audit all 2189 contents or 143 branch sources, no complete fresh Drive index, no deployed AppDeploy source diff, no new alpha; live trading BLOCKED" \
+            --verdict DONE --cycle-result NOT_APPLICABLE \
+            --countercheck "Machine Git source records independently attest exact 4 repo tree path count and 121 identical SHA duplicate inventory, 143 Git branches counted only not code reviewed; official Binance limits historical OI to 1 month and liquidation stream snapshots to one per 1000ms; no copy of live deployed source, no regression economic performance claimed; archive old research intact" \
+            --evidence ../../docs/PROJECT_RESET_20261030/00_MACHINE_INVENTORY_GIT_TREES.json \
+            --evidence ../../docs/PROJECT_RESET_20261030/00B_MACHINE_BRANCH_HEADS.json \
+            --evidence ../../docs/PROJECT_RESET_20261030/01_TECHNICAL_AUDIT_AND_REUSE_MATRIX_RU.md \
+            --evidence ../../docs/PROJECT_RESET_20261030/02_EXTERNAL_RESEARCH_HYPOTHESES_AND_DATA_FEASIBILITY_RU.md \
+            --evidence ../../docs/PROJECT_RESET_20261030/03_DECISION_AND_NEXT_CYCLES_RU.md \
+            --evidence ../../docs/PROJECT_RESET_20261030/README.md \
+            --evidence ../../scripts/reboot_inventory_contract_test.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a182
+          grep -Fq 'INTEGRITY_PASS entries 182' /tmp/a182
+      - name: Git commit SHA-pinned append-only A182 witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "RESET A182 traceable 4-repo SHA inventory, evidence-first reuse matrix and ranked hypotheses; no trading"
+          git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
