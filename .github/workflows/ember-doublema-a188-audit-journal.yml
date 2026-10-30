@@ -1,0 +1,52 @@
+name: "EMBER A188 append-only integrity journal after 27/27 native causal parity"
+on:
+  push:
+    branches: [research/a188-doublema-causal-audit-20261031]
+    paths:
+      - '.github/workflows/ember-doublema-a188-audit-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  append-a188-after-completed-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify journal A187 is intact
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/verify_before
+          grep -Fq 'INTEGRITY_PASS entries 187' /tmp/verify_before
+      - name: Record completed A188 source risk, counterfactual refutation and no live
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A188 --cycle DOUBLEMA_ORIGINAL_VS_CAUSAL_CALLBACK_NATIVE_REPLAY \
+            --planned "Independently falsify suspected A187 callback time lookahead: pin original Freqtrade 2026.4 and upstream source/blob, unchanged ETH OOS data and market/funding; compare original vs one-line strict last-closed 1h candle callback boundary using genuine native engine, two fees, immutable receipts. Do not tune or trade live." \
+            --executed "GitHub Actions run 41141158918 successful. Standalone synthetic test demonstrated full dataframe could select current candle, but actual native Freqtrade resolved distinct strategy source files and produced identical ALL 27 entries, exits and PnL for original vs strict causal callback at 5bps/side. Original +3986.421749 USD +39.864217pct PF2.238590 DD7.331655pct, corrected same to 6 decimals and 0 changed exits. Corrected 12.5bps/side +4337.971131 USD PF2.173474 DD8.196907pct, confirming A187 fee-sensitive endogenous exit. Recorded source artifact 13018923674 SHA256 027fa9eb5154edd5791af44ae0f1cd074d8508e8a98904208b362e70cf2d06f2." \
+            --result "A188 suspected financial lookahead effect from <= current candle refuted for 27 native OOS trades. Source-level potential caution remains synthetic only, not source of A187 model profit. Economic result still UNPROVEN_NO_POWER (27 sample, top3 91pct of model gain, no lookahead-analysis/recursive-analysis/real fills). NO LIVE; no SMOKE deployment." \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "True Freqtrade 2026.4 loaded author source and separately corrected one-line test copy, 27/27 key matches, 0 added/removed entries, 0 changed exits or PnL, baseline exactly matched immutable A187. A188-03 static alarming conclusion explicitly superseded by A188-04/05 empirical refutation. Do not extrapolate this to full strategy validation." \
+            --evidence ../../research/doublema_native_oos_20261031/03_A188_CAUSAL_TIME_BOUNDARY_AUDIT_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/04_A188_NATIVE_CAUSAL_RESULT_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/05_A188_MACHINE_NATIVE_CAUSAL_DELTA.json \
+            --evidence ../../research/doublema_native_oos_20261031/a188_causal_patch_and_sanity.py \
+            --evidence ../../.github/workflows/ember-doublema-a188-causal-20261031.yml
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/verify_after
+          grep -Fq 'INTEGRITY_PASS entries 188' /tmp/verify_after
+      - name: Anchor signed integrity journal in branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A188 append-only SHA journal native 27of27 causal time parity and economic NO_POWER"
+          git push origin HEAD:refs/heads/research/a188-doublema-causal-audit-20261031
