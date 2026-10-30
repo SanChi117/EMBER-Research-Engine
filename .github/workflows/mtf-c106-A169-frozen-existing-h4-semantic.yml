@@ -1,0 +1,78 @@
+name: EMBER C106 A169 existing P4 semantic verification and negative transfer journal
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c106-A169-frozen-existing-h4-semantic.yml'
+permissions:
+  contents: write
+jobs:
+  independently-freeze-A169:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original SHA168 check and new source evidence provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c106-pre
+          grep -Fq 'entries 168 tip_sha256 9741dca935748241f47d6067285afe6a0fd3f7ed710054924f2cb5abd5a398f6' /tmp/c106-pre
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('evidence/c106/C106_P4_UNCHANGED_320_NATIVE3M_ZIP_H4_CAUSAL_AUDIT.json')
+          data=p.read_bytes()
+          assert len(data)==192465 and hashlib.sha256(data).hexdigest()=='148cd6cd75960730df1bba5c4ca13511e8398e0de2c4f224415a79bf6e33daa8'
+          z=json.loads(data)
+          assert len(z['symbols'])==10 and z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['source_manifest'])==320 and len({(m['symbol'],m['date']) for m in z['source_manifest']})==320
+          assert z['new_trade_rules']==0 and z['new_luxalgo_indicators']==0
+          assert z['audited_trades_count']==len(z['trades'])==16
+          assert len(z['semantic_reconstructions'])==16
+          assert all(x['all_existing_semantics_match'] for x in z['semantic_reconstructions'])
+          assert z['scores']['25']['n']==16 and z['scores']['25']['sum_r']==0.024034
+          assert z['scores']['25']['pf']==1.00201 and z['scores']['40']['pf']==0.86587
+          assert z['folds']['early']['25']['sum_r']==-6.77985
+          assert z['folds']['late']['25']['sum_r']==6.803884
+          assert z['admission']['live_approved'] is False
+          assert z['admission']['passes_historical_screen'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          for t in z['trades']:
+              assert t['stop_source_tf']==t['target_source_tf']==t['parent_tf']=='4H'
+              assert t['zone_created_ms']<t['first_4h_poi_touch_ms']<t['one_hour_rejection_close_ms']<t['fifteen_minute_vc_close_ms']==t['entry_ms']
+          print('C106_PREVIOUS_A168_SHA_AND_CURRENT_ORIGINAL_320_NATIVE3M_16_EXACT_CAUSAL_P4_VERIFIED')
+          PY
+      - name: Audit append-only action A169 no algorithm changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A169 --cycle B1/C106B --verdict DONE --cycle-result PASSED \
+            --planned "User disallowed irrelevant LuxAlgo feature creep. Frozen before new prices: audit ONLY unchanged existing C105 P4 original native3m 4H FVG parent, 1H reaction, 15m VC and 4H-only ATR SL/confirmed 4H FTA TP. Compare independent time-availability, event chain, raw original Binance OHLC and preserved C105 25-trade evidence. No trading rule changes; ten new predeclared ALGO CHZ CRV EGLD ENS ICP MANA PENDLE SEI TIA USD-M pairs and 32 original full UTC days Sep26-Oct27, 320 ZIP/153600 native3m." \
+            --executed "Read LuxAlgo uploaded 848-line Pine only as conceptual reference; imported ZERO detectors. Original C105 three source files SHA unchanged and original previous 25-paper-trade JSON SHA unchanged. New C106 independent candidate timestamp and 4H stop/target reconstructions exactly match 16/16 original unchanged C105 trades. All Binance Vision original 320 ZIP provider checksum, ZIP SHA and CSV SHA verified. New 26 negative tests plus existing 664 x Python 3.10/3.11/3.12 = 2070 PASS. CI 40978283935 SUCCESS 4/4. No live fills or orders." \
+            --result "Fresh new-symbol C106 historical transfer n16 netR25 +0.024034R PF1.00201, netR14 +1.334313R PF1.12021, netR40 -1.762707R PF0.86587. 6/16 4H targets and 10/16 structural stops. Early 6 deals all 6 losers -6.77985R PF0, late 10 +6.803884R PF2.31248. Economic admission REJECT: sample less than30, first fold less than10, PF25 less than1.2, PF40 less than1.1. Existing causal 4H source path consistent but not evidence of author-semantic identity or stable market edge. PAPER ONLY." \
+            --countercheck "Original 25 C105 trades unchanged, A168 prior SHA pinned; original 4H POI first touch checked against earliest completed 15m, 4H FVG third closed candle, 4H pivot confirmed only after two right bars, 4H ATR SL+TP recomputed from raw Binance history strictly known before entry, 1H rejection and 15m VC clocks matched. No copied LuxAlgo Pine licensed code, no added OB/CHoCH/EQH. Same SepOct2026 period on different symbols is NOT truly prospective time OOS. No hindsight short-only or late-only tuning." \
+            --evidence cycles/B1_C106_LUXALGO_SMC_SOURCE_TO_EMBER_SEMANTIC_AUDIT_RU.md \
+            --evidence cycles/B1_C106_PRECOMMIT_EXISTING_P4_SEMANTICS_UNCHANGED_TRANSFER_RU.md \
+            --evidence d05/c106_parent4h_semantic_transfer.py \
+            --evidence d05/test_c106_only_existing_p4_semantics.py \
+            --evidence evidence/c106/C106_P4_UNCHANGED_320_NATIVE3M_ZIP_H4_CAUSAL_AUDIT.json \
+            --evidence cycles/B1_C106B_EXISTING_PARENT_P4_SEMANTIC_TRANSFER_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c106-post
+          grep -Fq 'entries 169 tip_sha256 ' /tmp/c106-post
+      - name: Commit immutable A169 chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A169: prove existing C105 4H POI SL TP and 16 new-symbol native3m unchanged paper events, economic no-pass"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
