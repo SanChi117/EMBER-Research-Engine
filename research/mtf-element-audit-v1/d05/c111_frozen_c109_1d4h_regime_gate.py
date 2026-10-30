@@ -82,6 +82,9 @@ def regime_from_completed(side,asof,four,days,close4=None,closeday=None):
     f=four[h-7:h]; daily=days[d-4:d]
     if len(f)!=7 or len(daily)!=4 or f[-1].close_ms>asof or daily[-1].close_ms>asof:
         raise C111Rejected("HTF_FUTURE_PRICE_AVAILABLE")
+    if (asof-f[-1].close_ms>=h4.H4 or
+        asof-daily[-1].close_ms>=h4.D1):
+        raise C111Rejected("STALE_HTF_SOURCE_GAP")
     for chain,tf in ((f,h4.H4),(daily,h4.D1)):
         if any(b.close_ms!=a.close_ms+tf for a,b in zip(chain,chain[1:])):
             raise C111Rejected("GAP_IN_CLOSED_HTF_PRICE_SOURCE")
