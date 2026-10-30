@@ -15,7 +15,7 @@ import pandas as pd
 
 UPSTREAM_COMMIT="39f7187ce21b021441fb4a55188b95831df7b5b1"
 STRATEGY_BLOB="d4e5ed465c0c520a0f1496c984f020259904969c"
-INDICATORS_BLOB="b9e93d1ef6c8b6c493d1dd87a03827d4533b4832"  # will be checked against source and corrected if needed
+INDICATORS_BLOB="28c6a8cd437384565ffc8b9586f27b535207a1cf"
 MONTH_START="2026-08-01"
 MONTH_END="2026-10-01"
 TEMPLATE=dict(sl_pct=.015,tp_pct=.030,leverage=5,rsi_buy=20,rsi_sell=80,
@@ -41,7 +41,7 @@ def main():
     file=root/"scripts"/"sweep_timeframe.py"
     ind=root/"gridtrader"/"quant"/"indicators.py"
     assert gitblob(file)==STRATEGY_BLOB,("BAD_UPSTREAM_STRATEGY_BLOB",gitblob(file))
-    assert ind.is_file() and ind.stat().st_size>3000
+    assert gitblob(ind)==INDICATORS_BLOB,("BAD_UPSTREAM_INDICATOR_BLOB",gitblob(ind))
     sys.path.insert(0,str(root))
     from scripts.sweep_timeframe import simulate as original
     src=file.read_text()
