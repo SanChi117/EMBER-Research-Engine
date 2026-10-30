@@ -67,6 +67,13 @@ def recompute(folder):
         baseline={
             "scores":ledger["C114_observational_original_scores"],
             "portfolio":ledger["C117_precommitted_random_clock_gate"]["T_portfolio_dd"]}
+        before_check=c117.engine.score([{"trade":e["t_trade"]} for e in events],25)
+        print(json.dumps({"reconciliation_window":name,
+            "corrected_CHoCH_count":sum(e["treatment"]=="T_CHoCH" for e in events),
+            "corrected_CHoCH_fills":sum(e["t_trade"] is not None for e in events),
+            "prior_non_CHOCH_misclassified":bugged_controls,
+            "recomputed_score":before_check,
+            "frozen_C114_score":baseline["scores"]["T_ALL"]["25"]},sort_keys=True))
         gate=c117.summary_scores(events,window,baseline)
         if gate["T_policy_25bps"]["fills"]!=baseline["scores"]["T_ALL"]["25"]["fills"]:
             raise CorrectionError("FROZEN_C114_TREATMENT_FILLS_DIFFER")
