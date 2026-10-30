@@ -1,0 +1,32 @@
+name: EMBER RESET R01 verified data and PAPER execution contracts
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-reset-platform-contracts.yml'
+      - 'research/platform/**'
+      - 'tests/test_reboot_platform.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  causal-source-paper-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Pure-data and PAPER adversarial contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -v -s tests -p test_reboot_platform.py 2>&1 | tee /tmp/reboot-r01
+          grep -Fq 'Ran 22 tests' /tmp/reboot-r01
+          grep -Fxq 'OK' /tmp/reboot-r01
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          echo 'R01_PURE_PAPER_NO_LIVE_GATE_TECHNICAL_CHECKS_ONLY'
