@@ -1,0 +1,67 @@
+name: EMBER RESET A184 post-A183 lint-only source SHA reconciliation
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-reset-a184-ci-lint-reconciliation.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  a184-new-commit-source-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Current source 31 tests and old A183 chain plus proof no new alpha
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a183
+          grep -Fq 'INTEGRITY_PASS entries 183' /tmp/a183
+          python -m unittest discover -v -s tests -p 'test_reboot_*.py' 2>&1 | tee /tmp/r01-current
+          grep -Fq 'Ran 31 tests' /tmp/r01-current
+          grep -Fxq 'OK' /tmp/r01-current
+          python scripts/reboot_inventory_contract_test.py 2>&1 | tee /tmp/frozen-registry
+          grep -Fq 'Ran 10 tests' /tmp/frozen-registry
+          grep -Fxq 'OK' /tmp/frozen-registry
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('research/platform')
+          assert set(['market_contract.py','paper_execution.py',
+               'sha_ledger.py','basis_source.py']).issubset(set(x.name for x in s.iterdir()))
+          assert not Path('research/reboot_platform/__init__.py').exists()
+          print('R01_CORRECTED_TEST_IMPORT_WHITESPACE_REUSED_ENGINEERING_SOURCE_ONLY')
+          PY
+      - name: Append correction action with CURRENT test hash, preserve previous witness
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A184 --cycle RESET_R01_CI \
+            --planned "Independently reconcile full-repo Python pytest/Ruff after pure R01 contracts; preserve original A183 and actual evidence revisions" \
+            --executed "A183 source tests originally 31x3 passed, then later fixed import whitespace in test_reboot_basis_source.py after GitHub research-matrix Ruff failed, without changing test assertions or model; reran 31 pure negative tests plus 10 inventory checks; fixed general CI namespace using python -m pytest on local checkouts" \
+            --result "Current source SHA witness after latest lint-only test edit. Source/PAPER technical contracts verified. Does NOT claim any live data, exchange fill, profitable alpha, executable carry or complete AppDeploy snapshot reconciliation" \
+            --verdict DONE --cycle-result NOT_APPLICABLE \
+            --countercheck "A183 original source/test SHA remains anchored in previous Git commit, A184 records the current source; source stage is pure PAPER and cannot trade, 31 tests all PASS, no new strategy. Complete full repo matrix check is tracked separately by Actions run 41132900907 and must not be claimed PASS until actually successful" \
+            --evidence ../../tests/test_reboot_basis_source.py \
+            --evidence ../../tests/test_reboot_platform.py \
+            --evidence ../../research/platform/basis_source.py \
+            --evidence ../../research/platform/paper_execution.py \
+            --evidence ../../research/platform/market_contract.py \
+            --evidence ../../docs/PROJECT_RESET_20261030/05_H1_SOURCE_FEASIBILITY_RU.md
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a184
+          grep -Fq 'INTEGRITY_PASS entries 184' /tmp/a184
+      - name: Anchor updated evidence SHAs to Git
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "RESET A184 preserve original A183 SHA and anchor post-lint current Python source hash"
+          git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
