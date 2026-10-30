@@ -137,9 +137,15 @@ def funding_rate_1h(parts):
     for t,r in sorted(parts):
         # Binance Vision monthly fundingRate calc_time ordinarily EXACT h UTC.
         # Fail closed if unavailable / malformed settlements.
-        assert t%H==0,("non_h_funding_timestamp",t)
-        assert t not in seen,("duplicate_funding_across_months",t)
-        seen.add(t);data.append((t,r))
+        # Binance settled fundingTime often records +10 or +13 milliseconds AFTER
+        # the scheduled hour, as the original A187 source did. Map only tiny
+        # post-hour settlement offsets to that hour for native accounting;
+        # never forward-fill a future funding rate into earlier bars.
+        offset=t%H
+        assert 0<=offset<=1000,("non_h_funding_timestamp_exceeds_1sec",t)
+        hour=t-offset
+        assert hour not in seen,("duplicate_funding_across_months",hour)
+        seen.add(hour);data.append((hour,r))
     assert len(data)>300,("missing_settled_funding_events",len(data))
     # One 1h row per candle; ZERO between actual settlement hours, not a proxy for future rates.
     rates={t:r for t,r in data}
