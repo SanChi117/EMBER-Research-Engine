@@ -67,6 +67,14 @@ Common execution diagnostic for both T/C: next original 3m open at landmark (т�
 - t0 before first-week warmup excluded only by frozen time gate. Common landmark must leave a full 48h future horizon before window end. No market data may be used to reduce these windows.
 - C114 trial will be marked **NOT_GENUINE_UNSEEN** if period overlap with any earlier accessed C109–C113 test inputs is established, even though period dates were fixed before this cycle.
 
+## Source-integrity amendment до получения каких-либо экономических outcome C114
+
+Первый CI полного оригинального source-replay завершился **до signal/trade расчёта** на проверке 15m cross-archive exact OHLCV parity (BNB 15m bucket index 1302). Сами Binance original 3m и original 5m SHA/CHECKSUM оба подлинны. Для диагностики различий исходника без подгонки торговли заранее разделена проверка:
+(1) OHLC обеих независимых 15m агрегаций должны совпасть **строго, без числовой погрешности**;
+(2) объём, не используемый ни одним сигналом/stop/target, может отличаться из-за decimal aggregation не более чем на 0.0001 (одна сотая процента) от большего агрегированного объёма; такие расхождения ОБЯЗАТЕЛЬНО отражаются в evidence счетчиком и maximum relative drift;
+(3) любое большее расхождение или OHLC price mismatch — **SOURCE_BLOCKED**, не допускать backtest.
+Поправка сделана **до получения любого C114 результата сделки**, не меняет даты, CHoCH, stop/target, entry, thresholds or sampling. Первый failed workflow хранится как свидетельство.
+
 ## Очередь реализации
 
 1. C114-A: source-contract tests: native5m cannot be derived from native3m, fully closed H4/P5 pivots, negative lookahead, timestamp alignment, no false CHoCH and no immortal-time/postselection.
