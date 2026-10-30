@@ -1,0 +1,99 @@
+name: EMBER C109 one simple causal 4H system vs frozen baseline new May-Jul 768 Binance ZIP
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c109-simple-core-vs-original-768-crypto.yml'
+      - 'research/mtf-element-audit-v1/d05/c109_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c109_*.py'
+permissions:
+  contents: write
+jobs:
+  preprice-negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify prior A171 and all original source SHA immutability
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c109-journal
+          grep -Fq 'entries 171 tip_sha256 908f96d82a47c06331e44d9a0d53913d58fb0fcc381137f0c03801ebe98fbff8' /tmp/c109-journal
+          cd d05
+          python - <<'PY'
+          import c109_simple_p4_core_vs_original_research as x
+          assert x.frozen()
+          print('C109_USER_PRIOR_4H_PARENT_IMMUTABLE_BPS_14_25_40_RESEARCH_ONLY')
+          PY
+      - name: 24 pre-price C109 negative tests plus 735 pre-C109 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c109_simple_p4_complete_reclaim_real_bos 2>&1 | tee /tmp/c109-new24
+          grep -Fq 'Ran 24 tests' /tmp/c109-new24
+          grep -qx 'OK' /tmp/c109-new24
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics test_c108_minimal_owner_h4_h1_child_firsttest 2>&1 | tee /tmp/c109-old735
+          grep -Fq 'Ran 735 tests' /tmp/c109-old735
+          grep -qx 'OK' /tmp/c109-old735
+          echo 'C109_759_PER_PYTHON_2277_TOTAL_PASS'
+  new-period-768-binance-native3m-comparative:
+    needs: preprice-negative-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch 768 original provider CHECKSUM 3m ZIP May 01-Jul 03 (12 crypto)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c109_simple_p4_core_vs_original_research.py --output research/mtf-element-audit-v1/evidence/c109/C109_CORE_VS_ORIGINAL_768_3M_PROVIDER_ZIPS.json | tee /tmp/c109-real
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c109/C109_CORE_VS_ORIGINAL_768_3M_PROVIDER_ZIPS.json')
+          blob=p.read_bytes();z=json.loads(blob)
+          assert z['source_zip_count']==768 and z['native3m_bars']==368640
+          assert len(z['symbols'])==12 and len(z['source_manifest'])==768
+          assert len({(r['symbol'],r['date']) for r in z['source_manifest']})==768
+          assert z['begin_utc']=='2026-05-01' and z['end_exclusive_utc']=='2026-07-04'
+          assert z['only_4h_parent_stop_and_tp'] and not z['fixed_rr_target']
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['new_luxalgo_indicators']==0
+          for arm in z['arms']:
+              a=z['arms'][arm]
+              assert len(a['trades'])==a['scores']['25']['n']
+              assert a['admission']['live_approved'] is False
+              for t in a['trades']:
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['zone_created_ms']<t['first_4h_parent_touch_ms']<t['closed_1h_confirmation_ms']<t['confirmed_15m_vc_ms']==t['entry_ms']
+                  assert t['risk_stop_policy']=='PHYSICAL_NATIVE3M_H4_FVG_EDGE_ATR4H_DO_NOT_WIDEN'
+                  assert t['derived_rr']>=1.25
+                  if arm.startswith('B1_'):
+                      assert t['confirmed_15m_vc_kind'] in ('IMB','CONFIRMED_15M_PIVOT_CLOSE_BREAK')
+                      if t['confirmed_15m_vc_kind']=='CONFIRMED_15M_PIVOT_CLOSE_BREAK':
+                          assert t['15m_pivot_confirmed_ms']<=t['entry_ms']-900000
+          print('C109_PROVIDER_768_UNCHANGED_4H_PARENT_A_B_SOURCE_PARITY_PASS')
+          print('C109_PIN',len(blob),hashlib.sha256(blob).hexdigest())
+          PY
+      - name: Commit original CSV+ZIP SHA receipts and entire PAPER trace, no claims of alpha
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c109/C109_CORE_VS_ORIGINAL_768_3M_PROVIDER_ZIPS.json
+          git commit -m "C109 768 genuine Binance native3m ZIP B0 vs linked 4H-reclaim true 15m BOS/IMB B1 PAPER baseline"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
