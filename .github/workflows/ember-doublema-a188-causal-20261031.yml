@@ -1,0 +1,165 @@
+name: EMBER A188 DoubleMA causal callback parity: genuine native Freqtrade only
+on:
+  push:
+    branches: [research/a188-doublema-causal-audit-20261031]
+    paths:
+      - '.github/workflows/ember-doublema-a188-causal-20261031.yml'
+      - 'research/doublema_native_oos_20261031/a188_causal_patch_and_sanity.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  causal-native-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact original native engine and check version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+      - name: Rebuild source candles from IMMUTABLE Binance data
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a188-native-reports
+          python research/doublema_native_oos_20261031/prepare_native.py --datadir "$GITHUB_WORKSPACE/a188-native-reports/data" | tee a188-native-reports/data-check.log
+      - name: Verify upstream blob, demonstrate breach and patch a TEST COPY only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/dma-pin
+          test "$(git -C /tmp/dma-pin rev-parse HEAD)" = '40af5c7c1c44253766428cfb06babf22f9817aa4'
+          python research/doublema_native_oos_20261031/a188_causal_patch_and_sanity.py \
+            /tmp/dma-pin/user_data/strategies/VideoDoubleMaFuturesStrategy.py \
+            /tmp/dma-causal/user_data/strategies/VideoDoubleMaFuturesStrategy.py | tee a188-native-reports/causal-sanity.log
+          grep -Fq A188_CAUSALITY_BREACH_REPRODUCED_AND_ONE_LINE_BOUNDARY_FIX_SANITY_PASS a188-native-reports/causal-sanity.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('/tmp/dma-pin/config/config_okx_futures_eth_only_binance_data.json').read_text())
+          assert c['exchange']['name']=='okx'
+          c['exchange']['ccxt_config']={}
+          c['exchange']['ccxt_async_config']={}
+          c['exchange']['key']=''
+          c['exchange']['secret']=''
+          c['exchange']['password']=''
+          c['dry_run']=True
+          c['telegram']['enabled']=False
+          c['api_server']['enabled']=False
+          Path('a188-native-reports/safe-original-config.json').write_text(json.dumps(c,indent=2))
+          PY
+      - name: True Freqtrade engine, baseline author code at fee 0.05pct per side
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s python research/doublema_native_oos_20261031/native_offline_adapter.py \
+            -c a188-native-reports/safe-original-config.json \
+            --userdir /tmp/dma-pin/user_data \
+            --datadir "$GITHUB_WORKSPACE/a188-native-reports/data" \
+            --strategy VideoDoubleMaFuturesStrategy --timeframe 1h \
+            --timerange 20260513-20261030 --data-format-ohlcv json \
+            --fee 0.0005 --export trades --cache none 2>&1 | tee a188-native-reports/baseline.log
+          zip="$(find /tmp/dma-pin/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$zip" && test -s "$zip"
+          cp "$zip" a188-native-reports/original-fee5bps.zip
+      - name: True Freqtrade engine, corrected callback only, same inputs and fee 0.05pct
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s python research/doublema_native_oos_20261031/native_offline_adapter.py \
+            -c a188-native-reports/safe-original-config.json \
+            --userdir /tmp/dma-causal/user_data \
+            --datadir "$GITHUB_WORKSPACE/a188-native-reports/data" \
+            --strategy VideoDoubleMaFuturesStrategy --timeframe 1h \
+            --timerange 20260513-20261030 --data-format-ohlcv json \
+            --fee 0.0005 --export trades --cache none 2>&1 | tee a188-native-reports/causal-fee5bps.log
+          zip="$(find /tmp/dma-causal/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$zip" && test -s "$zip"
+          cp "$zip" a188-native-reports/causal-fee5bps.zip
+          rm -f /tmp/dma-causal/user_data/backtest_results/backtest-result*.zip
+      - name: Fee robustness at 0.125pct per side (no parameter tuning)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s python research/doublema_native_oos_20261031/native_offline_adapter.py \
+            -c a188-native-reports/safe-original-config.json \
+            --userdir /tmp/dma-causal/user_data \
+            --datadir "$GITHUB_WORKSPACE/a188-native-reports/data" \
+            --strategy VideoDoubleMaFuturesStrategy --timeframe 1h \
+            --timerange 20260513-20261030 --data-format-ohlcv json \
+            --fee 0.00125 --export trades --cache none 2>&1 | tee a188-native-reports/causal-fee12p5bps.log
+          zip="$(find /tmp/dma-causal/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$zip" && test -s "$zip"
+          cp "$zip" a188-native-reports/causal-fee12p5bps.zip
+      - name: Independently parse all receipts; compute actual native economic delta; FAIL if outputs missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,zipfile
+          from pathlib import Path
+          d=Path('a188-native-reports')
+          def load(name):
+              p=d/name
+              assert zipfile.is_zipfile(p),f'MISSING_NATIVE_ZIP:{p}'
+              with zipfile.ZipFile(p) as z:
+                  files=[x for x in z.namelist() if x.endswith('.json') and '_config' not in x]
+                  assert len(files)==1,files
+                  body=json.loads(z.read(files[0]))
+              x=body['strategy']['VideoDoubleMaFuturesStrategy']
+              return {'trades':x['trades'],
+                      'n':x['total_trades'],
+                      'profit_usdt':round(x['profit_total_abs'],6),
+                      'profit_pct':round(x['profit_total']*100,6),
+                      'pf':round(x['profit_factor'],6),
+                      'dd_pct':round(x['max_drawdown_account']*100,6)}
+          original=load('original-fee5bps.zip')
+          causal5=load('causal-fee5bps.zip')
+          causal12=load('causal-fee12p5bps.zip')
+          # Baseline must equal A187. A changed baseline indicates non-parity; stop reporting.
+          assert original['n']==27 and abs(original['profit_usdt']-3986.42174889)<0.01,original
+          def trades_as_key(x):
+              return {(t['open_timestamp'],t['is_short']):t for t in x['trades']}
+          b=trades_as_key(original)
+          f=trades_as_key(causal5)
+          common=set(b)&set(f)
+          changed=[{'entry_timestamp':k[0],'short':k[1],
+                    'old_exit':b[k]['close_date'],'new_exit':f[k]['close_date'],
+                    'old_profit':round(b[k]['profit_abs'],2),'new_profit':round(f[k]['profit_abs'],2)}
+                   for k in sorted(common) if b[k]['close_timestamp']!=f[k]['close_timestamp']
+                   or abs(b[k]['profit_abs']-f[k]['profit_abs'])>0.001]
+          out={'schema':'EMBER_A188_NATIVE_CAUSAL_CALLBACK_REPLAY_R01',
+               'upstream_sha':'40af5c7c1c44253766428cfb06babf22f9817aa4',
+               'freqtrade':'2026.4',
+               'window_utc':'[2026-05-13,2026-10-30)',
+               'baseline_fee5bps':{k:v for k,v in original.items() if k!='trades'},
+               'causal_fee5bps':{k:v for k,v in causal5.items() if k!='trades'},
+               'causal_fee12p5bps':{k:v for k,v in causal12.items() if k!='trades'},
+               'matched_entry_keys':len(common),
+               'added_entries':len(set(f)-set(b)),
+               'removed_entries':len(set(b)-set(f)),
+               'changed_common_trade_exits':len(changed),
+               'changed_trade_examples':changed[:25],
+               'verdict':'NEEDS_REVIEW_NO_LIVE'}
+          (d/'A188_NATIVE_CAUSAL_DELTA.json').write_text(json.dumps(out,indent=2,ensure_ascii=False))
+          print('A188_TRUE_NATIVE_THREE_RUNS_COMPLETE')
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A188-doublema-immutable-original-vs-causal-native-results
+          path: |
+            a188-native-reports/*.log
+            a188-native-reports/*.zip
+            a188-native-reports/A188_NATIVE_CAUSAL_DELTA.json
+            a188-native-reports/data/native_source_manifest.json
+          retention-days: 30
