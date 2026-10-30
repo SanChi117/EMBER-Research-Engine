@@ -12,6 +12,14 @@
 6. [../../scripts/reboot_inventory_contract_test.py](../../scripts/reboot_inventory_contract_test.py) — 10 тестов источников инвентаризации (не тестов торговых правил), Python3.10/3.11/3.12.
 7. [../../.github/workflows/ember-reset-4repo-inventory-ci.yml](../../.github/workflows/ember-reset-4repo-inventory-ci.yml) — автоматическая проверка источников реестра, неизменности A181 audit chain, тестов и наличия отчётов.
 
+## Продолжение RESET R01 (30.10.2026)
+
+- [04_BRANCH_DEPLOY_DRIVE_RECONCILIATION_RU.md](04_BRANCH_DEPLOY_DRIVE_RECONCILIATION_RU.md) — сравнение Terminal main/fix (318 identical + 8 changes + 60 new), Smoke candidate2, **94** файлов AppDeploy v52 (3 точно совпавших модуля, 1 отличающийся network transport и 1 AppDeploy-only), обновлённый Drive поиск **100 объектов** без утверждения полноты.
+- [05_H1_SOURCE_FEASIBILITY_RU.md](05_H1_SOURCE_FEASIBILITY_RU.md) — **13** исторических spot/perp 4H candles у Binance в идентичной временной сетке (двухдневное окно полуоткрытое: 12), **6** realized funding settlement (из них один +13ms), попытка исторического OI вернула HTTP400 / -1130. Это source availability, **не** прибыльность.
+- [../../research/platform/market_contract.py](../../research/platform/market_contract.py), [../../research/platform/paper_execution.py](../../research/platform/paper_execution.py), [../../research/platform/sha_ledger.py](../../research/platform/sha_ledger.py), [../../research/platform/basis_source.py](../../research/platform/basis_source.py) — отдельное пассивное ядро: as-of market, PAPER, SHA и исторический funding/two-leg source contract. **No live trading adapter.**
+- [../../tests/test_reboot_platform.py](../../tests/test_reboot_platform.py), [../../tests/test_reboot_basis_source.py](../../tests/test_reboot_basis_source.py) — в сумме **31** тест на 3 версиях Python, включая стоп первым, разрыв, no-lookahead, stage funding и half-open end.
+- Следующий полноценный этап — сопоставить Python/TS симуляторы по общим golden fixtures и доказать реалистичную двуногую историю quotes; H1/H2 `ECONOMIC_NOT_TESTED`.
+
 ## Откуда брали факты
 
 - Точный GitHub деревьев на 2026-10-30, branch/commit SHA закреплены в машинном JSON, включая альтернативные ветки в отдельном JSON.
