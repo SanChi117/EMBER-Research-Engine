@@ -1,0 +1,71 @@
+name: EMBER C107 A170 FINAL 640 original source 41 trades 2130 adversarial tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c107-A170-final-original-640-rootcauses.yml'
+permissions:
+  contents: read
+jobs:
+  independent-A170-cause-provenance-710-regressions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check 170 immutable records + entire original original 640 ZIP SHA 41 P4 fixed event results
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c107-final-a170
+          grep -Fq 'entries 170 tip_sha256 994ada611359b4ae555dff7ee102bedb531e70a3660a67bab9eb8440706fed45' /tmp/c107-final-a170
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,sys
+          base=Path('.')
+          journal=[json.loads(line) for line in (base/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(journal)==170
+          assert journal[-1]['record_sha256']=='994ada611359b4ae555dff7ee102bedb531e70a3660a67bab9eb8440706fed45'
+          assert journal[-1]['prev_sha256']=='b0a2080fb4a91b56876a485921508f8afbf322d45f964e4b1fc3a0f268fb4cd2'
+          assert journal[-1]['action_id']=='A170' and len(journal[-1]['evidence'])==5
+          for entry in journal[-4:]:
+            for ev in entry['evidence']:
+              raw=(base/ev['path']).read_bytes()
+              assert len(raw)==ev['bytes'] and hashlib.sha256(raw).hexdigest()==ev['sha256'],ev['path']
+          sys.path.insert(0,str(base/'d05'))
+          import c107_original_p4_false_signal_forensics as f
+          f.frozen()
+          raw=(base/'evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json').read_bytes()
+          assert len(raw)==308924 and hashlib.sha256(raw).hexdigest()=='98adf5a7497f8a08feb7c035b12b9fb3a0ea23921cc7d0164b39fc8406bc4334'
+          j=json.loads(raw)
+          assert j['source_zip_count']==640 and j['source_bars']==307200
+          assert len(j['all_41_fixed_original_trade_diagnostics'])==41
+          assert len({(x['symbol'],x['date']) for x in j['source_manifest']})==640
+          assert j['orders']==j['fills']==j['live_trades']==[]
+          assert j['new_trading_rules']==j['new_indicators']==0
+          z=j['cohorts']['COMBINED']
+          assert z['n']==41 and z['stops']==25
+          assert z['4h_valid_at_stop_bar_close']==12
+          assert z['4h_invalidated_at_stop_bar_close']==13
+          assert z['later_original_target_touched_after_real_stop']==8
+          assert z['VC_type']=={'SNR':36,'IMB':5}
+          assert z['h1_reaction_closed_inside_fvg']==15
+          assert z['entry_beyond_parent_near_edge']==26
+          assert z['wrong_direction_middle_4h_fvg']==0
+          print('C107_FINAL_640_SHA_SOURCE_MANIFEST_A170_41_EXACT_4H_STOP_SEMANTIC_ANOMALIES_PROVEN')
+          PY
+      - name: All 710 C84-C107 tests each three Python versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics 2>&1 | tee /tmp/c107-final-710
+          grep -Fq 'Ran 710 tests' /tmp/c107-final-710
+          grep -qx 'OK' /tmp/c107-final-710
+          echo 'C107_FINAL_A170_710_X3_2130_TESTS_PASS'
