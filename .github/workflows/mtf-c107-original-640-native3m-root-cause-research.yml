@@ -1,0 +1,95 @@
+name: EMBER C107 root cause 4H FVG stop mismatch original 640 Binance ZIP PAPER
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c107-original-640-native3m-root-cause-research.yml'
+      - 'research/mtf-element-audit-v1/d05/c107_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c107_*.py'
+permissions:
+  contents: write
+jobs:
+  twenty-probes-and-690-original-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Previous journal A169 and 41 trades source SHA unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c107-before
+          grep -Fq 'entries 169 tip_sha256 b0a2080fb4a91b56876a485921508f8afbf322d45f964e4b1fc3a0f268fb4cd2' /tmp/c107-before
+          cd d05
+          python - <<'PY'
+          import c107_original_p4_false_signal_forensics as f
+          z=f.frozen()
+          assert len(z['C105']['trades'])==25 and len(z['C106']['trades'])==16
+          print('C107_A169_41_FROZEN_SOURCE_TRADES_SHA_VERIFIED')
+          PY
+      - name: Prove original 4H SL conflict plus 690 unchanged older tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c107_rootcause_original_source_semantics 2>&1 | tee /tmp/c107-20
+          grep -Fq 'Ran 20 tests' /tmp/c107-20
+          grep -qx 'OK' /tmp/c107-20
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics 2>&1 | tee /tmp/c107-old
+          grep -Fq 'Ran 690 tests' /tmp/c107-old
+          grep -qx 'OK' /tmp/c107-old
+          echo 'C107_710_X_3_2130_ENGINEERING_PASS'
+  full-640-original-20-crypto-stop-candle-4h-diagnostic:
+    needs: twenty-probes-and-690-original-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch all original Binance USD-M 3m ZIP SHA+CHECKSUM for BOTH FROZEN cohorts, inspect 41 original stop-candle closes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c107_original_p4_false_signal_forensics.py --output research/mtf-element-audit-v1/evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json | tee /tmp/c107-research-output
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json')
+          data=p.read_bytes();j=json.loads(data)
+          assert j['source_zip_count']==640 and j['source_bars']==307200
+          assert len(j['original_20_crypto_symbols'])==20 and len(j['source_manifest'])==640
+          assert len({(r['symbol'],r['date']) for r in j['source_manifest']})==640
+          assert len(j['all_41_fixed_original_trade_diagnostics'])==41
+          assert j['new_trading_rules']==j['new_indicators']==0
+          assert j['orders']==j['fills']==j['live_trades']==[]
+          assert j['cohorts']['C105']['n']==25 and j['cohorts']['C106']['n']==16
+          assert j['cohorts']['COMBINED']['n']==41
+          assert j['cohorts']['COMBINED']['stops']==25
+          assert j['cohorts']['COMBINED']['4h_valid_at_stop_bar_close']+j['cohorts']['COMBINED']['4h_invalidated_at_stop_bar_close']==25
+          for t in j['all_41_fixed_original_trade_diagnostics']:
+              assert t['exit_reason'] in ('STOP_FIRST_SAME_3M','STOP_GAP','4H_STRUCTURAL_FTA','TIME_OUT_48H','FTA_AT_OPEN')
+              assert t['zone_born']<t['entry_ms']
+              assert t['existing_15m_vc_type'] in ('SNR','IMB')
+              assert t['parent_id']
+          print('C107_FULL ORIGINAL_SOURCE_SHA',len(data),hashlib.sha256(data).hexdigest())
+          print('C107_PRIOR41_STATIC_SOURCE_RECLAIM_FORENSICS_ALL_MANIFEST_SHA_VERIFIED')
+          PY
+      - name: Commit source complete chronological diagnostics immutable
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json
+          git commit -m "C107 640 original Binance 3m ZIP 20 crypto: 41 frozen trades 4H stop wick/close structural diagnostics"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
