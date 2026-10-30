@@ -1,0 +1,53 @@
+name: EMBER C115 A178 exact-OHLC source-block journal
+on:
+  push:
+    branches: [research/c115-price-only-source-reconciliation-20261030]
+    paths:
+      - '.github/workflows/mtf-c115-A178-price-blocked-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C115_SOURCE_BLOCKED_PRICE_CONFLICT_20261030_RU.md'
+permissions:
+  contents: write
+jobs:
+  append-A178:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify A177 and independent C115 unit tests
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a177
+          grep -Fq 'entries 177' /tmp/a177
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c115_price_only_source_reconciliation
+          python - <<'PY'
+          from pathlib import Path
+          x=Path('../cycles/B1_C115_SOURCE_BLOCKED_PRICE_CONFLICT_20261030_RU.md').read_text()
+          assert '0.39478' in x and '0.39467' in x and 'SOURCE_BLOCKED' in x
+          print('C115_STRICT_ORIGINAL_3M_5M_PRICE_CONFLICT_ECONOMIC_NOT_RUN')
+          PY
+      - name: Append A178 with source block, not fake economic failure
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A178 --cycle C115 \
+            --planned "Exact source 15m native3m/native5m OHLC reconciliation and replay unchanged C114 trading hypothesis" \
+            --executed "Verified Binance original3m and 5m checksums, 8 negative contract tests Python3.10-3.12, attempted strict full source parity" \
+            --result "SOURCE_BLOCKED: XLM 2025-Jan29 01:30 15m low 0.39478 (3m) vs 0.39467 (5m); exact price requirement fails before signal or PnL" \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "Both native archives independently SHA-valid but OHLC cannot be treated equal; no after-data relaxation or signal outcome computed" \
+            --evidence cycles/B1_C115_PRECOMMIT_PRICE_ONLY_SOURCE_RECONCILIATION_RU.md \
+            --evidence cycles/B1_C115_SOURCE_BLOCKED_PRICE_CONFLICT_20261030_RU.md \
+            --evidence d05/c115_price_only_provenance_reconciliation.py \
+            --evidence d05/test_c115_price_only_source_reconciliation.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a178
+          grep -Fq 'entries 178' /tmp/a178
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C115 A178 source-block immutable original3m5m OHLC price discrepancy"
+          git push origin HEAD:refs/heads/research/c115-price-only-source-reconciliation-20261030
