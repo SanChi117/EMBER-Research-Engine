@@ -1,0 +1,169 @@
+{
+  "C109_source_sha256": "39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557",
+  "both_historical_windows_pass": false,
+  "fills": [],
+  "fixed_rr_target": false,
+  "interpretation": "conditional_on_C109_entry, not an isolated causal proof of the reaction itself",
+  "live_approved": false,
+  "live_trades": [],
+  "market_claim": "HYPOTHESIS_NOT_AXIOM",
+  "new_indicators": 0,
+  "only_existing_4h_zone_structure": true,
+  "orders": [],
+  "original_native3m_bars": 737280,
+  "original_total_zip_count": 1536,
+  "original_window_receipts": {
+    "WIN_A": {
+      "bytes": 741249,
+      "filename": "C112_WIN_A_ZONE_TO_ZONE_ORIGINAL_768_ZIPS.json",
+      "sha256": "9d6a82a878dda72ee248c260398c7140771014930119ad6600cc9c3a4469e67f"
+    },
+    "WIN_B": {
+      "bytes": 491791,
+      "filename": "C112_WIN_B_ZONE_TO_ZONE_ORIGINAL_768_ZIPS.json",
+      "sha256": "8df88f6335f09d7725353d3276c31fdb67a593beb303cab7e038b43c3a978184"
+    }
+  },
+  "period_metrics": {
+    "WIN_A": {
+      "counts": {
+        "admissible_same_4h_stop_fvg_target": 42,
+        "all_original_core_paper_entries": 81,
+        "has_known_fresh_opposing_4h_fvg": 52,
+        "raw_opposing_4h_zone_touched_in_original_48h": 20
+      },
+      "economics": {
+        "ALL_ORIGINAL_4H_PIVOT_FTA": {
+          "DD25": 12.22786,
+          "PF25": 1.58203,
+          "PF40": 1.37453,
+          "R40": 22.78354,
+          "admission": {
+            "live_approved": false,
+            "passes_historical_screen": false,
+            "reasons": [
+              "MODELED_DD25_NOT_LT_10PCT"
+            ],
+            "status": "PAPER_ONLY_HISTORICAL_NOT_PROSPECTIVE_OOS"
+          },
+          "earlyN": 29,
+          "lateN": 52,
+          "n": 81,
+          "netR25": 31.893675
+        },
+        "MATCHED_OPPOSING_FRESH_4H_FVG": {
+          "DD25": 15.77426,
+          "PF25": 1.76554,
+          "PF40": 1.52693,
+          "R40": 20.934272,
+          "admission": {
+            "live_approved": false,
+            "passes_historical_screen": false,
+            "reasons": [
+              "NO_POWER_TEMPORAL_FOLD",
+              "MODELED_DD25_NOT_LT_10PCT"
+            ],
+            "status": "PAPER_ONLY_HISTORICAL_NOT_PROSPECTIVE_OOS"
+          },
+          "earlyN": 9,
+          "lateN": 33,
+          "n": 42,
+          "netR25": 26.971843
+        },
+        "MATCHED_ORIGINAL_4H_PIVOT_FTA": {
+          "DD25": 10.26263,
+          "PF25": 1.48078,
+          "PF40": 1.26309,
+          "R40": 9.830119,
+          "admission": {
+            "live_approved": false,
+            "passes_historical_screen": false,
+            "reasons": [
+              "NO_POWER_TEMPORAL_FOLD",
+              "MODELED_DD25_NOT_LT_10PCT"
+            ],
+            "status": "PAPER_ONLY_HISTORICAL_NOT_PROSPECTIVE_OOS"
+          },
+          "earlyN": 9,
+          "lateN": 33,
+          "n": 42,
+          "netR25": 15.86769
+        }
+      }
+    },
+    "WIN_B": {
+      "counts": {
+        "admissible_same_4h_stop_fvg_target": 10,
+        "all_original_core_paper_entries": 45,
+        "has_known_fresh_opposing_4h_fvg": 15,
+        "raw_opposing_4h_zone_touched_in_original_48h": 8
+      },
+      "economics": {
+        "ALL_ORIGINAL_4H_PIVOT_FTA": {
+          "DD25": 8.48262,
+          "PF25": 1.2099,
+          "PF40": 1.07133,
+          "R40": 2.450801,
+          "admission": {
+            "live_approved": false,
+            "passes_historical_screen": false,
+            "reasons": [
+              "PF40_NOT_GT_1_1"
+            ],
+            "status": "PAPER_ONLY_HISTORICAL_NOT_PROSPECTIVE_OOS"
+          },
+          "earlyN": 14,
+          "lateN": 31,
+          "n": 45,
+          "netR25": 6.630285
+        },
+        "MATCHED_OPPOSING_FRESH_4H_FVG": {
+          "DD25": 9.20359,
+          "PF25": 0.19292,
+          "PF40": 0.16635,
+          "R40": -10.670783,
+          "admission": {
+            "live_approved": false,
+            "passes_historical_screen": false,
+            "reasons": [
+              "NO_POWER_N_LT_30",
+              "NO_POWER_TEMPORAL_FOLD",
+              "NONPOSITIVE_NETR25",
+              "PF25_NOT_GT_1_2",
+              "PF40_NOT_GT_1_1"
+            ],
+            "status": "PAPER_ONLY_HISTORICAL_NOT_PROSPECTIVE_OOS"
+          },
+          "earlyN": 3,
+          "lateN": 7,
+          "n": 10,
+          "netR25": -9.180549
+        },
+        "MATCHED_ORIGINAL_4H_PIVOT_FTA": {
+          "DD25": 6.70805,
+          "PF25": 1.2219,
+          "PF40": 1.06489,
+          "R40": 0.725066,
+          "admission": {
+            "live_approved": false,
+            "passes_historical_screen": false,
+            "reasons": [
+              "NO_POWER_N_LT_30",
+              "NO_POWER_TEMPORAL_FOLD",
+              "PF40_NOT_GT_1_1"
+            ],
+            "status": "PAPER_ONLY_HISTORICAL_NOT_PROSPECTIVE_OOS"
+          },
+          "earlyN": 3,
+          "lateN": 7,
+          "n": 10,
+          "netR25": 2.2153
+        }
+      }
+    }
+  },
+  "precommit": "cycles/B1_C112_PRECOMMIT_ZONE_TO_ZONE_CORE_FVG_DESTINATION_HYPOTHESIS_RU.md",
+  "same_unchanged_original_entry_and_4h_protective_stop": true,
+  "schema": "C112_P4_FVG_TO_NEXT_FRESH_OPPOSING_P4_FVG_ZONE_FIRST_PASSAGE",
+  "true_future_prospective_oos": false
+}
