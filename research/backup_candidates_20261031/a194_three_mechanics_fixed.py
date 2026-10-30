@@ -172,6 +172,21 @@ def execution(df,orders,fee,slip):
     trades=[];equity_closed=[cash]
     for t,v in df.iterrows():
         if t<TEST or t>=END:continue
+        if pos is None and t in orders and cash>0:
+            side,stop=orders[t]
+            raw_entry=float(v.open)
+            fill=raw_entry*(1+side*slip)
+            risk=(fill-stop)*side/fill
+            if not(MIN_STOP_PCT<=risk<=MAX_STOP_PCT):continue
+            notional=min(cash*MAX_NOTIONAL_TO_EQUITY,cash*RISK_FRACTION/risk)
+            if notional<=0:continue
+            qty=notional/fill
+            tp=fill+side*(TARGET_R*abs(fill-stop))
+            pos={"side":side,"entry_time":t,"entry_fill":fill,
+                 "stop":stop,"tp":tp,"qty":qty,
+                 "gross_stop_dollar":qty*abs(fill-stop)}
+            # Entry order fills at 5m open; check its entire SAME candle high/low
+            # for a possible stop/TP. Both triggered => STOP before TP.
         if pos is not None:
             side=pos["side"];stop=pos["stop"];tp=pos["tp"]
             # Stop first if OHLC permits both (pessimistic intrabar order).
@@ -205,22 +220,6 @@ def execution(df,orders,fee,slip):
                 equity_closed.append(cash)
                 pos=None
             else: continue
-        if pos is None and t in orders and cash>0:
-            side,stop=orders[t]
-            raw_entry=float(v.open)
-            fill=raw_entry*(1+side*slip)
-            risk=(fill-stop)*side/fill
-            if not(MIN_STOP_PCT<=risk<=MAX_STOP_PCT):continue
-            notional=min(cash*MAX_NOTIONAL_TO_EQUITY,cash*RISK_FRACTION/risk)
-            if notional<=0:continue
-            qty=notional/fill
-            tp=fill+side*(TARGET_R*abs(fill-stop))
-            pos={"side":side,"entry_time":t,"entry_fill":fill,
-                 "stop":stop,"tp":tp,"qty":qty,
-                 "gross_stop_dollar":qty*abs(fill-stop)}
-            # Entry at 5m open; bracket can immediately hit on same
-            # 5m candle, but execution checks begin on next loop iteration.
-            # This is deliberately pessimistic for reversals; no liquidation simulated.
     if pos is not None:
         t=df.index[-1];p=float(df.close.iloc[-1])*(1-pos["side"]*slip)
         pnl=pos["side"]*(p-pos["entry_fill"])*pos["qty"]-fee*pos["qty"]*(p+pos["entry_fill"])
