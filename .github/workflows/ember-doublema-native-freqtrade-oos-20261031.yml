@@ -1,0 +1,142 @@
+name: EMBER native Freqtrade DoubleMA May13-Oct30 2026 immutable OOS (NO LIVE)
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-doublema-native-freqtrade-oos-20261031.yml'
+      - 'research/doublema_native_oos_20261031/prepare_native.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-freqtrade-no-write-no-trading:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      FREQTRADE__DRY_RUN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare source and price data offline; freeze source receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p native-artifacts
+          python research/doublema_native_oos_20261031/prepare_native.py --datadir "$GITHUB_WORKSPACE/native-artifacts/ftdata" | tee native-artifacts/data-qa.log
+          grep -Fq NATIVE_SOURCE_CHECK_COMPLETE native-artifacts/data-qa.log
+          cp research/doublema_native_oos_20261031/00_PROTOCOL_RU.md native-artifacts/PROTOCOL_RU.md
+      - name: Install EXACT original native engine 2026.4; never install exchange keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install 'freqtrade==2026.4'
+          freqtrade --version | tee native-artifacts/freqtrade-version.txt
+          python - <<'PY'
+          import importlib.metadata as metadata
+          v=metadata.version('freqtrade')
+          assert v=='2026.4',f'UNVERIFIED_FREQTRADE_ENGINE_{v}'
+          print('EXACT_NATIVE_ENGINE_VERSION',v)
+          PY
+      - name: Fetch ORIGINAL third-party class at PINNED Git SHA read only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/doublema-public
+          test "$(git -C /tmp/doublema-public rev-parse HEAD)" = "40af5c7c1c44253766428cfb06babf22f9817aa4"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          p=Path('/tmp/doublema-public/user_data/strategies/VideoDoubleMaFuturesStrategy.py')
+          data=p.read_bytes()
+          # Git blob SHA is not equal to raw SHA256.
+          blob=hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest()
+          assert blob=='22ca6588bbd056e671783f676f1a4010cbfc1bb6',f'SOURCE_MUTATED_{blob}'
+          print('ORIGINAL_THIRD_PARTY_CLASS_EXACT_GIT_BLOB_PASS',blob)
+          PY
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          origin=Path('/tmp/doublema-public/config/config_okx_futures_eth_only_binance_data.json')
+          c=json.loads(origin.read_text())
+          # Keep original OKX futures adapter used by author on Binance source, but no local proxy.
+          assert c['exchange']['name']=='okx'
+          assert c['exchange']['pair_whitelist']==['ETH/USDT:USDT']
+          c['exchange']['ccxt_config']={}
+          c['exchange']['ccxt_async_config']={}
+          c['dry_run']=True
+          c['telegram']={'enabled':False}
+          c['api_server']={'enabled':False}
+          Path('native-artifacts/author-config-safe.json').write_text(json.dumps(c,indent=2))
+          print('AUTHOR_NATIVE_CONFIG_SAFE_NO_SECRET_NO_PROXY')
+          PY
+      - name: Run original Freqtrade baseline with normal taker fees; no live
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          freqtrade backtesting \
+            -c native-artifacts/author-config-safe.json \
+            --userdir /tmp/doublema-public/user_data \
+            --datadir "$GITHUB_WORKSPACE/native-artifacts/ftdata" \
+            --strategy VideoDoubleMaFuturesStrategy \
+            --timeframe 1h \
+            --timerange 20260513-20261030 \
+            --data-format-ohlcv json \
+            --fee 0.0005 \
+            --export trades \
+            --export-filename "$GITHUB_WORKSPACE/native-artifacts/doublema-native-fee5bps-side.zip" \
+            --cache none 2>&1 | tee native-artifacts/native-fee5bps-side.log
+      - name: Run same pinned class fees-stress 12.5bps/side (25bps roundtrip)
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          freqtrade backtesting \
+            -c native-artifacts/author-config-safe.json \
+            --userdir /tmp/doublema-public/user_data \
+            --datadir "$GITHUB_WORKSPACE/native-artifacts/ftdata" \
+            --strategy VideoDoubleMaFuturesStrategy \
+            --timeframe 1h \
+            --timerange 20260513-20261030 \
+            --data-format-ohlcv json \
+            --fee 0.00125 \
+            --export trades \
+            --export-filename "$GITHUB_WORKSPACE/native-artifacts/doublema-native-fee12p5bps-side.zip" \
+            --cache none 2>&1 | tee native-artifacts/native-fee12p5bps-side.log
+      - name: Explicitly classify missing proof rather than fake native success
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          d=Path('native-artifacts')
+          names=['native-fee5bps-side','native-fee12p5bps-side']
+          for n in names:
+              log=d/(n+'.log')
+              if not log.exists() or not log.read_text().strip():
+                  print(f'BACKTEST_BLOCKED:{n}:NO_LOG')
+                  continue
+              s=log.read_text(errors='replace')
+              print(f'BACKTEST_OUTPUT:{n}:RESULT_EXPORT_PRESENT={bool(list(d.glob(n+"*zip*")))}')
+              print(f'BACKTEST_SUMMARY_LAST_2500:{n}\n{s[-2500:]}')
+          print('NOT_LIVE_NO_EXCHANGE_KEYS_NOT_A_PROFIT_CLAIM')
+          PY
+      - name: Upload source receipts and native result logs even if engine fails
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-doublema-freqtrade2026-4-immutable-oos
+          path: |
+            native-artifacts/data-qa.log
+            native-artifacts/ftdata/native_source_manifest.json
+            native-artifacts/freqtrade-version.txt
+            native-artifacts/PROTOCOL_RU.md
+            native-artifacts/native-*.log
+            native-artifacts/*.zip
+          retention-days: 30
