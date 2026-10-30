@@ -99,7 +99,7 @@ class C112(unittest.TestCase):
               "parent_id":"parent","symbol":"BNBUSDT",
               "stop_source":"4H_FVG_FAR_EDGE",
               "pad_source":"ATR_FULLY_CLOSED_4H","target":"119.4",
-              "exit_reason":"TIME_OUT_48H","derived_rr":7.4}
+              "exit_reason":"TIME_OUT_48H","derived_rr":7.4,"fta":"120"}
         zone={"near":"110","id":"opposite","created_ms":at-h4.H4,
               "low":"110","high":"112"}
         alt,why=f.zone_alt_trade(base,zone,rows,starts,four)
