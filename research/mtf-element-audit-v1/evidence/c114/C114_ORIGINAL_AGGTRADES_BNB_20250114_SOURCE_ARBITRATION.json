@@ -1,0 +1,688 @@
+{
+  "15m_base_volume_agg_vs_native_mismatch_count": 96,
+  "day": "2025-01-14",
+  "focus_1330": {
+    "agg_base_qty": "35790.57",
+    "agg_matched_trade_count_approx": 31654,
+    "agg_rows": 9389,
+    "comparison_native_base": {
+      "15m": "31675.04",
+      "1m": "24700.27",
+      "3m": "24700.27",
+      "5m": "31675.04"
+    },
+    "utc": "2025-01-14T13:30:00+00:00"
+  },
+  "live_approved": false,
+  "mismatch_examples": [
+    {
+      "agg_row_count": 3262,
+      "agg_trade_base_qty": "7367.28",
+      "aggregated_matched_trade_count": 10256,
+      "bucket": 0,
+      "native_bases": {
+        "15m": "7367.84",
+        "1m": "7367.84",
+        "3m": "7367.84",
+        "5m": "7367.84"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "-0.56",
+        "1m": "-0.56",
+        "3m": "-0.56",
+        "5m": "-0.56"
+      },
+      "utc": "2025-01-14T00:00:00+00:00"
+    },
+    {
+      "agg_row_count": 2918,
+      "agg_trade_base_qty": "5476.45",
+      "aggregated_matched_trade_count": 8946,
+      "bucket": 1,
+      "native_bases": {
+        "15m": "5476.45",
+        "1m": "5476.45",
+        "3m": "5476.45",
+        "5m": "5476.45"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T00:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2621,
+      "agg_trade_base_qty": "3798.21",
+      "aggregated_matched_trade_count": 8352,
+      "bucket": 2,
+      "native_bases": {
+        "15m": "3798.21",
+        "1m": "3798.21",
+        "3m": "3798.21",
+        "5m": "3798.21"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T00:30:00+00:00"
+    },
+    {
+      "agg_row_count": 2349,
+      "agg_trade_base_qty": "4903.62",
+      "aggregated_matched_trade_count": 6759,
+      "bucket": 3,
+      "native_bases": {
+        "15m": "4903.62",
+        "1m": "4903.62",
+        "3m": "4903.62",
+        "5m": "4903.62"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T00:45:00+00:00"
+    },
+    {
+      "agg_row_count": 3577,
+      "agg_trade_base_qty": "11391.80",
+      "aggregated_matched_trade_count": 12369,
+      "bucket": 4,
+      "native_bases": {
+        "15m": "11391.80",
+        "1m": "11391.80",
+        "3m": "11391.80",
+        "5m": "11391.80"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T01:00:00+00:00"
+    },
+    {
+      "agg_row_count": 3028,
+      "agg_trade_base_qty": "7401.89",
+      "aggregated_matched_trade_count": 9200,
+      "bucket": 5,
+      "native_bases": {
+        "15m": "7401.89",
+        "1m": "7401.89",
+        "3m": "7401.89",
+        "5m": "7401.89"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T01:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2652,
+      "agg_trade_base_qty": "6333.68",
+      "aggregated_matched_trade_count": 9389,
+      "bucket": 6,
+      "native_bases": {
+        "15m": "6333.68",
+        "1m": "6333.68",
+        "3m": "6333.68",
+        "5m": "6333.68"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T01:30:00+00:00"
+    },
+    {
+      "agg_row_count": 2353,
+      "agg_trade_base_qty": "4483.32",
+      "aggregated_matched_trade_count": 7260,
+      "bucket": 7,
+      "native_bases": {
+        "15m": "4483.32",
+        "1m": "4483.32",
+        "3m": "4483.32",
+        "5m": "4483.32"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T01:45:00+00:00"
+    },
+    {
+      "agg_row_count": 2517,
+      "agg_trade_base_qty": "3352.12",
+      "aggregated_matched_trade_count": 8542,
+      "bucket": 8,
+      "native_bases": {
+        "15m": "3352.12",
+        "1m": "3352.12",
+        "3m": "3352.12",
+        "5m": "3352.12"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T02:00:00+00:00"
+    },
+    {
+      "agg_row_count": 3160,
+      "agg_trade_base_qty": "6580.00",
+      "aggregated_matched_trade_count": 9788,
+      "bucket": 9,
+      "native_bases": {
+        "15m": "6580.00",
+        "1m": "6580.00",
+        "3m": "6580.00",
+        "5m": "6580.00"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T02:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2851,
+      "agg_trade_base_qty": "4618.17",
+      "aggregated_matched_trade_count": 8440,
+      "bucket": 10,
+      "native_bases": {
+        "15m": "4618.17",
+        "1m": "4618.17",
+        "3m": "4618.17",
+        "5m": "4618.17"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T02:30:00+00:00"
+    },
+    {
+      "agg_row_count": 2244,
+      "agg_trade_base_qty": "4155.37",
+      "aggregated_matched_trade_count": 6941,
+      "bucket": 11,
+      "native_bases": {
+        "15m": "4155.37",
+        "1m": "4155.37",
+        "3m": "4155.37",
+        "5m": "4155.37"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T02:45:00+00:00"
+    },
+    {
+      "agg_row_count": 2297,
+      "agg_trade_base_qty": "2788.97",
+      "aggregated_matched_trade_count": 6620,
+      "bucket": 12,
+      "native_bases": {
+        "15m": "2788.97",
+        "1m": "2788.97",
+        "3m": "2788.97",
+        "5m": "2788.97"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T03:00:00+00:00"
+    },
+    {
+      "agg_row_count": 2209,
+      "agg_trade_base_qty": "2720.97",
+      "aggregated_matched_trade_count": 6058,
+      "bucket": 13,
+      "native_bases": {
+        "15m": "2720.97",
+        "1m": "2720.97",
+        "3m": "2720.97",
+        "5m": "2720.97"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T03:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2188,
+      "agg_trade_base_qty": "3214.74",
+      "aggregated_matched_trade_count": 6800,
+      "bucket": 14,
+      "native_bases": {
+        "15m": "3214.74",
+        "1m": "3214.74",
+        "3m": "3214.74",
+        "5m": "3214.74"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T03:30:00+00:00"
+    },
+    {
+      "agg_row_count": 2097,
+      "agg_trade_base_qty": "2093.44",
+      "aggregated_matched_trade_count": 5413,
+      "bucket": 15,
+      "native_bases": {
+        "15m": "2093.44",
+        "1m": "2093.44",
+        "3m": "2093.44",
+        "5m": "2093.44"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T03:45:00+00:00"
+    },
+    {
+      "agg_row_count": 2442,
+      "agg_trade_base_qty": "4168.32",
+      "aggregated_matched_trade_count": 8162,
+      "bucket": 16,
+      "native_bases": {
+        "15m": "4168.32",
+        "1m": "4168.32",
+        "3m": "4168.32",
+        "5m": "4168.32"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T04:00:00+00:00"
+    },
+    {
+      "agg_row_count": 2204,
+      "agg_trade_base_qty": "4288.12",
+      "aggregated_matched_trade_count": 8119,
+      "bucket": 17,
+      "native_bases": {
+        "15m": "4288.12",
+        "1m": "4288.12",
+        "3m": "4288.12",
+        "5m": "4288.12"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T04:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2404,
+      "agg_trade_base_qty": "4860.64",
+      "aggregated_matched_trade_count": 8406,
+      "bucket": 18,
+      "native_bases": {
+        "15m": "4860.64",
+        "1m": "4860.64",
+        "3m": "4860.64",
+        "5m": "4860.64"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T04:30:00+00:00"
+    },
+    {
+      "agg_row_count": 2162,
+      "agg_trade_base_qty": "5707.94",
+      "aggregated_matched_trade_count": 6928,
+      "bucket": 19,
+      "native_bases": {
+        "15m": "5707.94",
+        "1m": "5707.94",
+        "3m": "5707.94",
+        "5m": "5707.94"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T04:45:00+00:00"
+    },
+    {
+      "agg_row_count": 2671,
+      "agg_trade_base_qty": "5245.61",
+      "aggregated_matched_trade_count": 7983,
+      "bucket": 20,
+      "native_bases": {
+        "15m": "5245.61",
+        "1m": "5245.61",
+        "3m": "5245.61",
+        "5m": "5245.61"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T05:00:00+00:00"
+    },
+    {
+      "agg_row_count": 2442,
+      "agg_trade_base_qty": "3343.66",
+      "aggregated_matched_trade_count": 6676,
+      "bucket": 21,
+      "native_bases": {
+        "15m": "3343.66",
+        "1m": "3343.66",
+        "3m": "3343.66",
+        "5m": "3343.66"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T05:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2020,
+      "agg_trade_base_qty": "2694.88",
+      "aggregated_matched_trade_count": 6508,
+      "bucket": 22,
+      "native_bases": {
+        "15m": "2694.88",
+        "1m": "2694.88",
+        "3m": "2694.88",
+        "5m": "2694.88"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T05:30:00+00:00"
+    },
+    {
+      "agg_row_count": 1810,
+      "agg_trade_base_qty": "4207.18",
+      "aggregated_matched_trade_count": 6244,
+      "bucket": 23,
+      "native_bases": {
+        "15m": "4207.18",
+        "1m": "4207.18",
+        "3m": "4207.18",
+        "5m": "4207.18"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T05:45:00+00:00"
+    },
+    {
+      "agg_row_count": 2341,
+      "agg_trade_base_qty": "5391.19",
+      "aggregated_matched_trade_count": 7254,
+      "bucket": 24,
+      "native_bases": {
+        "15m": "5391.19",
+        "1m": "5391.19",
+        "3m": "5391.19",
+        "5m": "5391.19"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T06:00:00+00:00"
+    },
+    {
+      "agg_row_count": 2270,
+      "agg_trade_base_qty": "4725.24",
+      "aggregated_matched_trade_count": 6849,
+      "bucket": 25,
+      "native_bases": {
+        "15m": "4725.24",
+        "1m": "4725.24",
+        "3m": "4725.24",
+        "5m": "4725.24"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T06:15:00+00:00"
+    },
+    {
+      "agg_row_count": 2067,
+      "agg_trade_base_qty": "3016.28",
+      "aggregated_matched_trade_count": 6146,
+      "bucket": 26,
+      "native_bases": {
+        "15m": "3016.28",
+        "1m": "3016.28",
+        "3m": "3016.28",
+        "5m": "3016.28"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T06:30:00+00:00"
+    },
+    {
+      "agg_row_count": 1898,
+      "agg_trade_base_qty": "2571.37",
+      "aggregated_matched_trade_count": 4956,
+      "bucket": 27,
+      "native_bases": {
+        "15m": "2571.37",
+        "1m": "2571.37",
+        "3m": "2571.37",
+        "5m": "2571.37"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T06:45:00+00:00"
+    },
+    {
+      "agg_row_count": 2660,
+      "agg_trade_base_qty": "2774.61",
+      "aggregated_matched_trade_count": 7128,
+      "bucket": 28,
+      "native_bases": {
+        "15m": "2774.61",
+        "1m": "2774.61",
+        "3m": "2774.61",
+        "5m": "2774.61"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T07:00:00+00:00"
+    },
+    {
+      "agg_row_count": 2034,
+      "agg_trade_base_qty": "2198.93",
+      "aggregated_matched_trade_count": 5506,
+      "bucket": 29,
+      "native_bases": {
+        "15m": "2198.93",
+        "1m": "2198.93",
+        "3m": "2198.93",
+        "5m": "2198.93"
+      },
+      "signed_agg_minus_interval": {
+        "15m": "0.00",
+        "1m": "0.00",
+        "3m": "0.00",
+        "5m": "0.00"
+      },
+      "utc": "2025-01-14T07:15:00+00:00"
+    }
+  ],
+  "no_trade_simulation": true,
+  "original_aggtrades_receipt": {
+    "csv_sha256": "59e539dd7f7112bc746106367f5b9ff0cccb4965a565a71e22b6d00bb62b1abd",
+    "first_timestamp_ms": 1736812800000,
+    "last_timestamp_ms": 1736899199528,
+    "original_agg_trade_rows": 247107,
+    "provider_checksum_verified": true,
+    "sample_rows_in_focus_first_five": [
+      {
+        "base_qty": "13.38",
+        "first_trade_id": 1548501485,
+        "id": 648453119,
+        "last_trade_id": 1548501519,
+        "ms": 1736861400185,
+        "price": "693.28"
+      },
+      {
+        "base_qty": "0.72",
+        "first_trade_id": 1548501520,
+        "id": 648453120,
+        "last_trade_id": 1548501520,
+        "ms": 1736861400186,
+        "price": "693.29"
+      },
+      {
+        "base_qty": "3.67",
+        "first_trade_id": 1548501521,
+        "id": 648453121,
+        "last_trade_id": 1548501528,
+        "ms": 1736861400186,
+        "price": "693.3"
+      },
+      {
+        "base_qty": "1.53",
+        "first_trade_id": 1548501529,
+        "id": 648453122,
+        "last_trade_id": 1548501529,
+        "ms": 1736861400292,
+        "price": "693.3"
+      },
+      {
+        "base_qty": "0.04",
+        "first_trade_id": 1548501530,
+        "id": 648453123,
+        "last_trade_id": 1548501530,
+        "ms": 1736861400511,
+        "price": "693.31"
+      }
+    ],
+    "source_url": "https://data.binance.vision/data/futures/um/daily/aggTrades/BNBUSDT/BNBUSDT-aggTrades-2025-01-14.zip",
+    "zip_sha256": "724cbbd3bb2cfc04c7252b58fb72812ac4ac527c432e521bcd6df5cdf0f7ed7e"
+  },
+  "original_aggtrades_total_base_qty": "484824.26",
+  "original_kline_receipts": {
+    "15m": {
+      "csv_sha256": "1fd3b65346fa8fd0703b63ca85dae0a5064157378e00c7bfef359e38db99df74",
+      "date": "2025-01-14",
+      "interval": "15m",
+      "native_rows": 96,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/15m/BNBUSDT-15m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "8fa0b0657a74304d56d3aeed11f43d77b7b2d12eccdb7ee8edf0c603d2f0869c"
+    },
+    "1m": {
+      "csv_sha256": "f4102df2b41f1c52b18ecabf7a1032ba2f72d64b31c10f1a5ecf9f274cf092b7",
+      "date": "2025-01-14",
+      "interval": "1m",
+      "native_rows": 1440,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/1m/BNBUSDT-1m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "146a4db6d2c580004239b5b688f7952088e3c641981d2c71aed30a631bfb5130"
+    },
+    "3m": {
+      "csv_sha256": "98954448f59106541cb520c656697fe725347a4e54b54cf6467166f522a2f6d9",
+      "date": "2025-01-14",
+      "interval": "3m",
+      "native_rows": 480,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/3m/BNBUSDT-3m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "703e331eb1a366401eeb25f98276328bf74872fd909f6d38e49927f3af7394e3"
+    },
+    "5m": {
+      "csv_sha256": "309fbee28bbefd01ca4f328819f23182ceb7c744b8f19cabe4124a3b4ae884d4",
+      "date": "2025-01-14",
+      "interval": "5m",
+      "native_rows": 288,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/5m/BNBUSDT-5m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "53b1b1df97f560e3033bd8f17c2201496ce155c88a485ba4adf6d81864265c63"
+    }
+  },
+  "price_only_hypothesis_unchanged": true,
+  "source_qualification": "UNCHANGED_C114_SOURCE_BLOCKED",
+  "symbol": "BNBUSDT",
+  "type": "C114_FORENSIC_AGGTRADES_INDEPENDENT_TRADE_ARCHIVE_ARBITRATION"
+}
