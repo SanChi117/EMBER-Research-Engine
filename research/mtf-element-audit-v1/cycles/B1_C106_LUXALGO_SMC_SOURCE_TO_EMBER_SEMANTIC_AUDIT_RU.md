@@ -52,3 +52,8 @@ Sources: пользовательский файл, SHA выше, строки �
 - https://www.tradingview.com/pine-script-docs/v5/concepts/repainting/
 - https://www.tradingview.com/pine-script-docs/v5/concepts/other-timeframes-and-data/
 - https://www.luxalgo.com/library/indicator/smart-money-concepts-smc/
+
+
+## Решение владельца 2026-10-30: минимальный перенос, только необходимые элементы
+
+Прямое указание: «если в этом скрипте не те части которые нам нужны не нужно их добавлять». **Итог C106 текущей фазы: audit only; NO NEW LUXALGO DETECTORS.** Для защиты объёма/сложности два временных C106 прототипа общего BOS/CHoCH/FVG event API и его тестов были удалены из исследовательского каталога до принятия решения об интеграции. C105 и его 4H FVG/1H reaction/15m confirmation/4H-only SL/TP не менялись. Не добавлять unrelated premium/discount, OB, EQH/EQL, internal/swing state machine и алерты «просто потому, что они есть в LuxAlgo». На следующем этапе сначала по одному проверять явную потребность уже имеющегося C105 элемента: (а) точная причинная регистрация существующего 4H FVG, (б) время подтверждения 4H pivot для TP, (в) корректность текущих 1H reaction и 15m VC. Только при воспроизводимо доказанной ошибке и согласовании с целевой MTF-последовательностью вносить минимальное изменение с adversarial тестами и новым неподсмотренным PAPER OOS. Индикатор Pine — референс, не подменяет академический контракт и не даёт разрешения на копирование лицензированного кода.
