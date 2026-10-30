@@ -1,0 +1,93 @@
+name: EMBER C116 A180 canonical original1m NO_POWER independent SHA journal
+on:
+  push:
+    branches: [research/c116-canonical-native1m-zone-reaction-20261030]
+    paths:
+      - '.github/workflows/mtf-c116-A180-source-scores-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C116_FINAL_CANONICAL_NATIVE1M_CONTROLS_VERDICT_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  independent-economic-evidence-a180:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: independently attest original1m ZIP SHA lineage, NO_POWER, cannot approve live
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          base=Path('research/mtf-element-audit-v1')
+          s=json.loads((base/'evidence/c116/C116_SUMMARY.json').read_text())
+          assert s['canonical_original_1m_zip_total']==1344
+          assert s['canonical_original_1m_bar_total']==1935360
+          assert s['derived_3m_bar_total']==645120
+          assert s['derived_5m_bar_total']==387072
+          assert s['c116_windows_gate']=={'WIN_A':'NO_POWER','WIN_B':'NO_POWER'}
+          assert s['paper_only'] and not s['live_approved']
+          assert s['true_prospective_oos'] is False
+          assert s['no_orders_executed'] is True
+          assert s['random_market_entry_control_implemented'] is False
+          assert s['real_orders']==s['real_fills']==s['live_trades']==[]
+          original_sha=hashlib.sha256((base/'d05/c114_independent_poi_native5m_choch_research.py').read_bytes()).hexdigest()
+          assert original_sha==s['original_c114_engine_sha256']
+          for name,expectpairs in (('WIN_A',4),('WIN_B',1)):
+            receipt=s['window_receipts'][name]
+            blob=(base/'evidence/c116'/receipt['filename']).read_bytes()
+            assert hashlib.sha256(blob).hexdigest()==receipt['sha256']
+            w=json.loads(blob)
+            assert len(w['derived3m_receipts'])==len(w['derived5m_receipts'])==672
+            assert len({(r['symbol'],r['date']) for r in w['derived3m_receipts']})==672
+            assert all(r['provider_checksum_verified'] and r['source_original_interval']=='1m' for r in w['derived3m_receipts'])
+            assert all(r['provider_checksum_verified'] and r['source_original_interval']=='1m' for r in w['derived5m_receipts'])
+            assert sum(x['source_bars_native3m'] for x in w['per_symbol'].values())==322560
+            assert sum(x['source_bars_native5m'] for x in w['per_symbol'].values())==193536
+            assert w['cohort']['matched_pairs_n']==expectpairs
+            assert w['c116_gate']['state']=='NO_POWER'
+            assert not w['admission']['live_approved']
+            assert not w['c116_gate']['live_approved']
+            assert w['c116_diagnostic']['random_market_entry_control_implemented'] is False
+            assert w['c116_diagnostic']['original_c114_source_scoring_untouched']
+            assert w['scores']['T_ALL']['25']['fills']>0
+          print('C116_SOURCE_AND_NO_POWER_BOTH_WINDOWS_VERIFIED_NOT_A_LIVE_SIGNAL')
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a179
+          grep -Fq 'entries 179' /tmp/a179
+      - name: SHA-chain record A180 no power, not a positive economic result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A180 --cycle C116 \
+            --planned "Independent original native1m canonical 2026 two 56day windows: 4H FVG first touch 5m CHoCH vs matched controls, label placebo, no source mixing" \
+            --executed "1344 original Binance provider checksum ZIP, 1935360 native1m bars, 645120 derived3m and 387072 derived5m, 13 negative tests x Python 3.10-3.12 plus original C114/C115 regressions; both hist 2026 windows and controls calculated" \
+            --result "ECONOMIC NO_POWER both: 2026 Apr-May 533 touch 117 CHoCH 26 fills net25 -13.741980R PF0.405456 matched N4; 2026 Jul-Aug 458 touch 103 CHoCH 20 fills net25 +6.426595R PF1.508007 matched N1; placebo p0.64717641/1.0; historical not live" \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "Precommit before 2026 original source; 672 original provider 1m ZIP each window; T/C source/price 4H unchanged with original C114 SHA pinned; random-market-entry not implemented; placebos and long-short disclosed; matched 4/1 far below >=40, original 3m5m independent truth not proven, funding missing, live blocked" \
+            --evidence cycles/B1_C116_PRECOMMIT_NATIVE1M_4H_ZONE_REACTION_RANDOM_CONTROL_RU.md \
+            --evidence cycles/B1_C116_FINAL_CANONICAL_NATIVE1M_CONTROLS_VERDICT_RU.md \
+            --evidence d05/c116_canonical_original_native1m_source.py \
+            --evidence d05/c116_single_source_controlled_4h_poi_replay.py \
+            --evidence d05/test_c116_canonical_1m_zone_reaction.py \
+            --evidence evidence/c116/C116_SUMMARY.json \
+            --evidence evidence/c116/C116_WIN_A_CANONICAL_NATIVE1M_EVENT_PAIR_LEDGER.json \
+            --evidence evidence/c116/C116_WIN_B_CANONICAL_NATIVE1M_EVENT_PAIR_LEDGER.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a180
+          grep -Fq 'entries 180' /tmp/a180
+      - name: Commit immutable A180 SHA witness, no live orders
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C116 A180 canonical 2026 original native1m CHoCH matched-control insufficient-power SHA audit"
+          git push origin HEAD:refs/heads/research/c116-canonical-native1m-zone-reaction-20261030
