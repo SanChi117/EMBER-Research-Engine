@@ -1,0 +1,96 @@
+name: EMBER C110 blind second-regime unchanged C109 768 genuine Binance crypto ZIP
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c110-blind-second-regime-unchanged-768.yml'
+      - 'research/mtf-element-audit-v1/d05/c110_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c110_*.py'
+permissions:
+  contents: write
+jobs:
+  sha-locked-unmodified-engine-preprice-regressions:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Prior C109 A172 immutable journal, original strategy SHA, no trade code changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c110-a172
+          grep -Fq 'entries 172 tip_sha256 2b8dd417f47d339bfed0976f81f2a0926c18c18f9640af6bf3fcd7f917191206' /tmp/c110-a172
+          cd d05
+          python - <<'PY'
+          import c110_blind_unchanged_c109_second_regime as x
+          assert x.source_code_verified()
+          print('C110_PRIOR_C109_ENGINE_SHA_PINNED_NO_SIDE_FILTER_OR_ATR_TUNING')
+          PY
+      - name: 10 new C110 source change negative guards and 759 prior tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c110_unchanged_c109_second_regime 2>&1 | tee /tmp/c110-new
+          grep -Fq 'Ran 10 tests' /tmp/c110-new
+          grep -qx 'OK' /tmp/c110-new
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics test_c108_minimal_owner_h4_h1_child_firsttest test_c109_simple_p4_complete_reclaim_real_bos 2>&1 | tee /tmp/c110-759
+          grep -Fq 'Ran 759 tests' /tmp/c110-759
+          grep -qx 'OK' /tmp/c110-759
+          echo C110_769_X3_2307_REGRESSION_PASS
+  verify-original-768-different-months-unchanged-B0-B1:
+    needs: sha-locked-unmodified-engine-preprice-regressions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original same-host SHA ZIP+CSV 2025 Nov to 2026 Jan, 12 crypto 3m, immutable algorithm
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c110_blind_unchanged_c109_second_regime.py --output research/mtf-element-audit-v1/evidence/c110/C110_UNCHANGED_C109_SECOND_REGIME_768_ORIGINAL_3M_ZIPS.json | tee /tmp/c110-evidence
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('research/mtf-element-audit-v1/evidence/c110/C110_UNCHANGED_C109_SECOND_REGIME_768_ORIGINAL_3M_ZIPS.json')
+          raw=p.read_bytes();z=json.loads(raw)
+          assert z['source_zip_count']==768 and z['native3m_bars']==368640
+          assert len(z['source_manifest'])==768 and len(z['symbols'])==12
+          assert len({(v['symbol'],v['date']) for v in z['source_manifest']})==768
+          assert z['begin_utc']=='2025-11-01' and z['end_exclusive_utc']=='2026-01-04'
+          assert z['c109_original_strategy_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          assert z['second_regime_unchanged_strategy'] is True
+          assert z['can_approve_live'] is False
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          assert z['only_4h_parent_stop_and_tp'] and z['fixed_rr_target'] is False
+          assert len(z['arms'])==2
+          for a in z['arms'].values():
+              assert not a['admission']['live_approved']
+              assert a['scores']['25']['n']==len(a['trades'])
+              for t in a['trades']:
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+                  assert t['zone_created_ms']<t['first_4h_parent_touch_ms']<t['closed_1h_confirmation_ms']<t['confirmed_15m_vc_ms']==t['entry_ms']
+                  assert t['risk_stop_policy']=='PHYSICAL_NATIVE3M_H4_FVG_EDGE_ATR4H_DO_NOT_WIDEN'
+          print('C110_UNMODIFIED_ORIGINAL_C109_CODE_AND_SECOND_REGIME_SOURCE_COMPLETE')
+          print('C110_EVIDENCE_SHA256',len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Commit original new-period source and B0 B1 full PAPER trades
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c110/C110_UNCHANGED_C109_SECOND_REGIME_768_ORIGINAL_3M_ZIPS.json
+          git commit -m "C110 unchanged C109 engine original 2025 Nov-Jan 768 Binance ZIP and independent PAPER second regime"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
