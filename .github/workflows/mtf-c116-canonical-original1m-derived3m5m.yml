@@ -1,0 +1,106 @@
+name: EMBER C116 original 1m canonical 3m5m structural CHoCH same-rule PAPER
+on:
+  push:
+    branches: [research/c116-single-native1m-canonical-source-20261030]
+    paths:
+      - '.github/workflows/mtf-c116-canonical-original1m-derived3m5m.yml'
+      - 'research/mtf-element-audit-v1/d05/c116_original_1m_source_and_exact_resampler.py'
+      - 'research/mtf-element-audit-v1/d05/c116_canonical_1m_4h_poi_5m_choch_replay.py'
+      - 'research/mtf-element-audit-v1/d05/test_c116_original_native1m_canonical_source.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C116_PRECOMMIT_SINGLE_ORIGINAL_1M_CANONICAL_SOURCE_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  frozen-canonical-source-negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: A178 SHA and canonical original1m 9 tests and inherited C114 23
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a178
+          grep -Fq 'entries 178' /tmp/a178
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c116_original_native1m_canonical_source 2>&1 | tee /tmp/c116-test
+          grep -Fq 'Ran 9 tests' /tmp/c116-test
+          grep -qx 'OK' /tmp/c116-test
+          python -m unittest -q test_c114_independent_4h_poi_native5m test_c105_parent4h_only_geometry test_c113_final_execution_geometry
+  original-1344-native1m-backtest-canonical:
+    needs: frozen-canonical-source-negative-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original 1344 Binance native1m daily SHA zip exact resample and C114 inherited economic tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c116_canonical_1m_4h_poi_5m_choch_replay.py \
+            --output-dir research/mtf-element-audit-v1/evidence/c116 | tee /tmp/c116-result
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1/evidence/c116')
+          z=json.loads((root/'C116_SUMMARY.json').read_text())
+          assert z['source_count_original_native1m_zip']==1344
+          assert z['source_raw_native1m_bars']==1935360
+          assert z['original_3m_zip_total']==z['original_5m_zip_total']==0
+          assert z['derived_3m_bars_total']==645120 and z['derived_5m_bars_total']==387072
+          assert z['source_3m_kind']==z['source_5m_kind']=='DERIVED_FROM_ORIGINAL_NATIVE_1M'
+          assert not z['source_3m_5m_independent_original_archives']
+          assert not z['live_approved'] and z['paper_only']
+          assert not z['true_prospective_oos'] and not z['economic_parameters_changed']
+          assert z['real_orders']==z['real_fills']==z['live_trades']==[]
+          assert set(z['window_receipts'])=={'WIN_A','WIN_B'}
+          for name,receipt in z['window_receipts'].items():
+            blob=(root/receipt['filename']).read_bytes()
+            assert len(blob)==receipt['bytes']
+            assert hashlib.sha256(blob).hexdigest()==receipt['sha256']
+            w=json.loads(blob)
+            assert len(w['canonical_native1m_zip_receipts'])==672
+            assert len({(p['symbol'],p['date']) for p in w['canonical_native1m_zip_receipts']})==672
+            assert w['derived_3m_bars']==322560 and w['derived_5m_bars']==193536
+            assert len(w['per_symbol'])==12
+            assert len(w['derived_3m_provenance'])==len(w['derived_5m_provenance'])==672
+            for sym,p in w['per_symbol'].items():
+              assert p['derived_3m_bars']==26880 and p['derived_5m_bars']==16128
+              for e in p['events']:
+                assert e['landmark_ms']==e['t0_touch_known_ms']+6*3600000
+                assert e['source_tf_5m']=='DERIVED_FROM_ORIGINAL_NATIVE_1M'
+                if e['choch'] is not None:
+                  assert e['choch']['swing_confirmed_ms']<=e['t0_touch_known_ms']
+                  assert e['choch']['candle_5m_open_ms']>=e['t0_touch_known_ms']
+                  assert e['choch']['breach_known_ms']<=e['landmark_ms']
+                if e['trade'] is not None:
+                  assert e['trade']['source_tf']=='DERIVED_3M_FROM_ORIGINAL_NATIVE_1M'
+                  assert e['trade']['entry_ms']==e['landmark_ms']
+                  assert e['trade']['parent_tf']==e['trade']['stop_source_tf']==e['trade']['target_source_tf']=='4H'
+            for q in w['intra_canonical_1m_3m5m_parity'].values():
+              assert q['price_and_volume_equal'] and not q['independent_original_3m_or_5m_consumed']
+            assert w['cohort']['matched_pairs_n']==len(w['matched_pair_indices'])
+            assert not w['admission']['live_approved'] and not w['admission']['causal_effect_identified']
+          print('C116_CANONICAL_ORIGINAL1M_DERIVED3M5M_SHA_SOURCE_COHORT_ECONOMIC_EVIDENCE_VERIFIED')
+          PY
+      - name: Preserve positive, null, negative and source-only evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c116
+          git commit -m "C116 original Binance 1344 native1m ZIP canonical price source matched C114 signal economics historical PAPER witness"
+          git push origin HEAD:refs/heads/research/c116-single-native1m-canonical-source-20261030
