@@ -102,7 +102,7 @@ class C112(unittest.TestCase):
               "exit_reason":"TIME_OUT_48H","derived_rr":7.4,"fta":"120"}
         zone={"near":"110","id":"opposite","created_ms":at-h4.H4,
               "low":"110","high":"112"}
-        alt,why=f.zone_alt_trade(base,zone,rows,starts,four)
+        alt,why=f.zone_alt_trade(base,zone,rows,starts,four[:-1])
         self.assertEqual(why,"OK")
         self.assertEqual(alt["target"],"109.40")
         self.assertEqual(alt["stop"],base["stop"])
