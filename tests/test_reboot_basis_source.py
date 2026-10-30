@@ -6,7 +6,6 @@ from types import SimpleNamespace
 from research.platform import basis_source as b
 from research.platform.market_contract import DataUntrusted
 
-
 SETTLE=1759392000013
 T=1760000040000
 H4=14400000
