@@ -1,0 +1,105 @@
+name: EMBER C112 structural zone-to-zone 2x768 original Binance 3m source first-passage evidence
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c112-zone-to-zone-original-two-regimes.yml'
+      - 'research/mtf-element-audit-v1/d05/c112_*.py'
+      - 'research/mtf-element-audit-v1/d05/test_c112_*.py'
+permissions:
+  contents: write
+jobs:
+  source-frozen-first-passage-test-proof:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify no mutation of C109 and canonical journal A174 before quotes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c112-a174
+          grep -Fq 'entries 174 tip_sha256 8d1499d3529781066b8c2201913a73d6c75426abce8f9dcec7f3a8c377c868cd' /tmp/c112-a174
+          cd d05
+          python - <<'PY'
+          import c112_zone_to_zone_fvg_destination_audit as f
+          assert f.frozen() and f.ZIPS==1536
+          print('C112_NEW_2024_MARKET_UNSEEN_NO_LUXALGO_4H_SOURCE_FROZEN')
+          PY
+      - name: New 20 adverse 4H destination source tests and prior 789 frozen causal tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c112_original_4h_zone_to_zone_first_passage 2>&1 | tee /tmp/c112-new
+          grep -Fq 'Ran 20 tests' /tmp/c112-new
+          grep -qx 'OK' /tmp/c112-new
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics test_c108_minimal_owner_h4_h1_child_firsttest test_c109_simple_p4_complete_reclaim_real_bos test_c110_unchanged_c109_second_regime test_c111_one_regime_gate_source_asof 2>&1 | tee /tmp/c112-old
+          grep -Fq 'Ran 789 tests' /tmp/c112-old
+          grep -qx 'OK' /tmp/c112-old
+          echo 'C112_809_X3_2427_REGRESSION_PASS'
+  source-2024-1536-original-zip-zone-to-zone-compare:
+    needs: source-frozen-first-passage-test-proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original Binance 1536 provider .CHECKSUM SHA + 3m source FVG first passage against original pivot 4H baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c112_zone_to_zone_fvg_destination_audit.py --output-dir research/mtf-element-audit-v1/evidence/c112 | tee /tmp/c112-results
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1/evidence/c112')
+          a=json.loads((root/'C112_TWO_WINDOWS_SUMMARY.json').read_text())
+          assert a['C109_source_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          assert a['original_total_zip_count']==1536 and a['original_native3m_bars']==737280
+          assert a['market_claim']=='HYPOTHESIS_NOT_AXIOM'
+          assert a['same_unchanged_original_entry_and_4h_protective_stop']
+          assert a['new_indicators']==0 and a['fixed_rr_target'] is False
+          assert a['orders']==a['fills']==a['live_trades']==[]
+          assert a['live_approved'] is False and not a['true_future_prospective_oos']
+          for key,receipt in a['original_window_receipts'].items():
+            blob=(root/receipt['filename']).read_bytes()
+            assert len(blob)==receipt['bytes'] and hashlib.sha256(blob).hexdigest()==receipt['sha256']
+            z=json.loads(blob)
+            assert z['source_zip_count']==768 and z['original_native3m_bars']==368640
+            assert len({(m['symbol'],m['date']) for m in z['source_manifest']})==768
+            assert len(z['per_symbol'])==12
+            for sym,by in z['per_symbol'].items():
+              raw=by['all_source_original_4h_zone_to_zone_diagnostics']
+              assert len(raw)==len(by['original_4h_fta_paper_trades'])
+              for t in raw:
+                assert t['entry_ms']>0 and t['frozen_original_stop']
+                if t['alternate_paper']:
+                  alt=t['alternate_paper']
+                  assert alt['stop']==t['frozen_original_stop']
+                  assert alt['entry']==t['frozen_original_entry']
+                  assert alt['target_source_tf']==alt['stop_source_tf']=='4H'
+                  assert alt['opposing_fvg_created_ms']<alt['entry_ms']
+                  assert alt['derived_rr']>=1.25
+          print('C112_ALL_ORIGINAL_ZIPS_PROVEN_AND_NATIVE3M_COUNTERFACTUAL_ONLY_4H_TARGETS_PAPER')
+          PY
+      - name: Commit both original 768 ZIP source manifests and 4H fresh FVG target comparison negative/positive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c112
+          git commit -m "C112 genuine Binance 2024 two 768 ZIP periods: FVG zone-to-zone source-closed first passage vs same entry original pivot FTA"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
