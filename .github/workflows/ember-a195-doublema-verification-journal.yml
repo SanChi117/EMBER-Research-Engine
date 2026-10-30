@@ -1,0 +1,128 @@
+name: "EMBER A195 verify 8 genuine native ZIP receipts and append SHA audit entry A195"
+on:
+  push:
+    branches: [research/a195-doublema-original-crosspair-native-20261031]
+    paths:
+      - ".github/workflows/ember-a195-doublema-verification-journal.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  independent-native-archive-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: A195-Original-DoubleMA-4Pairs-8-Freqtrade-native-fees-real-Binance
+          run-id: 41147367668
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a195-original-proof
+      - name: Validate machine receipt against all actual 8 Freqtrade ZIPs and source manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,zipfile,math,hashlib
+          from pathlib import Path
+          d=Path('/tmp/a195-original-proof')
+          f=list(d.rglob('A195_ORIGINAL_NATIVE_CROSSPAIR_RESULTS.json'))
+          assert len(f)==1,f
+          machine=json.loads(f[0].read_text())
+          assert machine['original_commit']=='40af5c7c1c44253766428cfb06babf22f9817aa4'
+          assert machine['original_blob']=='22ca6588bbd056e671783f676f1a4010cbfc1bb6'
+          assert machine['engine']=='freqtrade==2026.4'
+          assert machine['window']=='[2026-05-13,2026-10-01)'
+          assert machine['total_new_coins_passing']==0
+          assert machine['mechanical_gate_pass'] is False
+          assert machine['ETH_A187_control_noncomparable_October_not_yet_monthly_published'] is True
+          expected={'BTC':(18,-20.704),'ETH':(23,34.8285),'SOL':(21,17.2843),'LINK':(22,36.5246)}
+          pairs=machine['outcomes']
+          assert set(pairs)==set(expected)
+          assert sum(pairs[s]['5']['n'] for s in pairs)==84
+          assert sum(pairs[s]['12p5']['n'] for s in pairs)==83
+          checked={}
+          for symbol,(n,pct) in expected.items():
+              assert pairs[symbol]['5']['n']==n
+              assert abs(pairs[symbol]['5']['return_pct']-pct)<0.0001
+              for fee in ('5','12p5'):
+                  z=list(d.rglob(f'native-{symbol}-fee{fee}.zip'))
+                  assert len(z)==1,(symbol,fee,z)
+                  raw=z[0].read_bytes()
+                  with zipfile.ZipFile(z[0]) as archive:
+                      names=[s for s in archive.namelist() if s.endswith('.json') and '_config' not in s]
+                      assert len(names)==1,names
+                      t=json.loads(archive.read(names[0]))['strategy']['VideoDoubleMaFuturesStrategy']
+                  expected_summary=pairs[symbol][fee]
+                  assert t['total_trades']==expected_summary['n']==len(t['trades'])
+                  assert abs(t['profit_total']*100-expected_summary['return_pct'])<0.0001
+                  assert abs(t['profit_total_abs']-expected_summary['profit_usd'])<0.001
+                  assert abs(sum(x['profit_abs'] for x in t['trades'])-t['profit_total_abs'])<0.001
+                  assert all('2026-05-13'<=x['open_date'][:10]<'2026-10-01' for x in t['trades'])
+                  checked[f'{symbol}-fee{fee}']=hashlib.sha256(raw).hexdigest()
+          p=list(d.rglob('A195_DATA_SHA_MANIFEST.json'))
+          assert len(p)==1,p
+          sources=json.loads(p[0].read_text())
+          assert len(sources['data'])==4
+          for symbol in ('BTCUSDT','ETHUSDT','SOLUSDT','LINKUSDT'):
+              entry=sources['data'][symbol]
+              assert entry['hours']==4800 and entry['mark_hours']==4800
+              assert entry['h4']==1200 and entry['daily']==200
+              assert entry['funding_settlements']==600
+              shas=sources['source_shas'][symbol]
+              assert len(shas)==22 # 7*3 monthly + one recovered day
+              assert 'markDaily_2026-06-29' in shas
+              assert all(len(x['zip_sha256'])==64 for x in shas.values())
+          out=Path('research/doublema_native_oos_20261031')
+          out.joinpath('06_A195_ORIGINAL_NATIVE_MACHINE_VERIFIED.json').write_text(json.dumps(machine,indent=2,ensure_ascii=False)+'\n')
+          out.joinpath('07_A195_SOURCE_SHA_MANIFEST_VERIFIED.json').write_text(json.dumps(sources,indent=2)+'\n')
+          out.joinpath('08_A195_EIGHT_NATIVE_ZIP_SHA256.json').write_text(json.dumps({
+             'schema':'EMBER_A195_EIGHT_NATIVE_FREQUENCY_PROOF','source_run':41147367668,
+             'artifact_id':13021503205,
+             'artifact_sha256':'3730359a4f9f7634ea483db82473f84cebdc2fbc0512419899a9268fe63aa5b9',
+             'native_zip_sha256':checked},indent=2)+'\n')
+          print('A195_VERIFY_8_EXACT_FREQTRADE_ORIGINAL_NATIVE_ZIPS_84_TRADE_RESULTS_PASSED')
+          print('A195_NATIVE_FEE_PATH_DIFFERENCES',json.dumps(machine['fee_path_parity']))
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a194-integrity
+          grep -Fq 'INTEGRITY_PASS entries 194' /tmp/a194-integrity
+      - name: Append auditable A195 result (technically reproducible, economic gate FAIL)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A195 --cycle DOUBLEMA_UNCHANGED_ORIGINAL_CROSS_PAIR_NATIVE_FAIL_CONCENTRATION_GATE \
+            --planned "User approved test original profitable MirrorNew DoubleMA before any adaptation. Original pinned May12 git blob, Freqtrade2026.4 native, BTC ETH SOL LINK crosspair same [2026-05-13,2026-10-01) on genuine Binance USD-M 1h OHLCV/mark/funding, source start 2026-03-15. Original 1h+4h long/short, fixed wallet10k near-full margin at2x, fees 5 and12.5bps per fill, no strategy retune, published pretest gates: 2 out of 3 new coins must exceed 20 trades PF1.25 both costs and top3 less than60pct all winners, DD below15pct, otherwise economic FAIL; no orders." \
+            --executed "Author exact commit40af5c7 blob22ca6588 pinned, source 84 genuine Binance Vision monthly ZIP and 4 authentic daily markPrice ZIP repairing common June29 24h publisher gap; complete continuity4800 actual Binance 1h/4800 mark/1200 4h/200 daily/600 funding each coin, real +10ms funding settlement timestamps floored to hour. Initial Oct month unavailable October31, cutoff Oct01 before first trade run. True Freqtrade2026.4 native CI #41147367668 SUCCESS artifact13021503205 sha256 3730359a4f9f7634ea483db82473f84cebdc2fbc0512419899a9268fe63aa5b9; 8 original trades ZIP independently parsed. Fees5bps/side outcomes BTC18 trades -20.7040pct PF0.4029 DD26.2339; ETH23 +34.8285pct PF2.2639 DD7.3317; SOL21 +17.2843pct PF1.5469 DD10.5766; LINK22 +36.5246pct PF3.1609 DD7.8946. Fees12.5bps outcomes BTC18 -24.9668pct, ETH23 +39.5362pct, SOL20 +16.0928pct, LINK22 +38.6808pct. 84 baseline and83 stressed actual trades, original class unmodified; two higher-cost increased PnL due changed conditional exit paths." \
+            --result "NATIVE_CROSSPAIR_SOURCE_AND_TRADE_VERIFICATION_PASS. ECONOMIC_GATE_FAIL: BTC loses PF below1 and DD >26pct; profitable new SOL+LINK BOTH fail frozen concentration top3 winners share SOL64.87pct LINK65.20pct versus limit60pct and low trade counts 20-22; top3 constitute ETH104.24pct, SOL183.50pct, LINK95.38pct of net profit. Frequency84 /141days=0.60 per day across4 assets, not 3-5/day. Positive one-market-window original strategy potential merits research but not profitable scalable small-deposit evidence. No 15m adaptation, no live, no changes to active PAPER automations or SMOKE." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Source pinned exact author Git blob and Freqtrade engine; independently unpacked all eight native ZIPs, checked true trade sums/return/entry boundaries, source daily mark gap real Binance original, verified all funding event counts and SHA. Frozen long+short pre-test, shorts especially weak BTC/SOL/LINK; no after-result symbol exclusion or parameter tuning. A187 +39.864pct 27 trades ETH longer through Oct29 and OKX static metadata, NOT directly comparable to A195 shorter BTC/ETH/SOL/LINK crosspair. Fees12.5bps gives changed exit paths and cannot be claimed a higher fee causes benefit. Original simulated limit fills lack real orderbook/slippage and full lookahead analysis; original near-full-stake 2x risk not suitable small account. Negative gate despite 3 green coins." \
+            --evidence ../../research/doublema_native_oos_20261031/A195_SOURCE_PINNED_CROSSPAIR_PROTOCOL_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/A195_CROSSPAIR_NATIVE_RESULTS_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/06_A195_ORIGINAL_NATIVE_MACHINE_VERIFIED.json \
+            --evidence ../../research/doublema_native_oos_20261031/07_A195_SOURCE_SHA_MANIFEST_VERIFIED.json \
+            --evidence ../../research/doublema_native_oos_20261031/08_A195_EIGHT_NATIVE_ZIP_SHA256.json \
+            --evidence ../../research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+            --evidence ../../research/doublema_native_oos_20261031/a195_native_binance_offline.py \
+            --evidence ../../research/doublema_native_oos_20261031/a195_parse_original_native.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a195-integrity
+          grep -Fq 'INTEGRITY_PASS entries 195' /tmp/a195-integrity
+      - name: Commit exact machine original receipts and append A195 permanent audit journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/doublema_native_oos_20261031/06_A195_ORIGINAL_NATIVE_MACHINE_VERIFIED.json \
+                  research/doublema_native_oos_20261031/07_A195_SOURCE_SHA_MANIFEST_VERIFIED.json \
+                  research/doublema_native_oos_20261031/08_A195_EIGHT_NATIVE_ZIP_SHA256.json \
+                  research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A195 original DoubleMA native BTC ETH SOL LINK: 8 receipts, positives fragile, BTC losses, economic gate fail"
+          git push origin HEAD:refs/heads/research/a195-doublema-original-crosspair-native-20261031
