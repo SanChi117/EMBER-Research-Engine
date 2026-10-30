@@ -1,0 +1,74 @@
+name: EMBER C114 volume 1m 3m 5m 15m original Binance source forensic NO TRADING
+on:
+  push:
+    branches:
+      - research/c114-independent-zone-reaction-value-20261030
+    paths:
+      - '.github/workflows/mtf-c114-volume-source-forensic.yml'
+      - 'research/mtf-element-audit-v1/d05/c114_volume_discrepancy_forensic.py'
+      - 'research/mtf-element-audit-v1/d05/test_c114_volume_discrepancy_forensic.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  negative-contracts:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: SHA chain and six synthetic forensic negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c114_volume_discrepancy_forensic 2>&1 | tee /tmp/forensic-tests
+          grep -Fq 'Ran 6 tests' /tmp/forensic-tests
+          grep -Fxq 'OK' /tmp/forensic-tests
+  one-day-original-market-forensic:
+    needs: negative-contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Four independent provider SHA archives, previously exposed BNB date only; no replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c114_volume_discrepancy_forensic.py \
+            --output research/mtf-element-audit-v1/evidence/c114/C114_FOUR_INTERVALS_SOURCE_FORENSIC_BNB_20250114.json \
+            | tee /tmp/c114-source-report.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('research/mtf-element-audit-v1/evidence/c114/C114_FOUR_INTERVALS_SOURCE_FORENSIC_BNB_20250114.json').read_text())
+          assert set(d['receipts'])=={'1m','3m','5m','15m'}
+          assert all(v['provider_checksum_verified'] for v in d['receipts'].values())
+          assert all(v['zip_sha256'] and v['csv_sha256'] for v in d['receipts'].values())
+          assert d['computed_strategy_trades']==0 and d['live_approved'] is False
+          assert d['can_authorize_modified_c114_gate'] is False
+          assert d['source_qualification']=='UNCHANGED_PRECOMMIT_SOURCE_BLOCKED'
+          assert d['diagnostics']['total_15m_buckets']==96
+          assert d['known_1330']['1m']['utc']=='2025-01-14T13:30:00+00:00'
+          print("C114_FOUR_NATIVE_INTERVALS_FORENSIC_VERIFIED_NO_TRADING")
+          PY
+      - name: Commit only original-source anomaly forensic JSON (never relax C114 gate)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c114/C114_FOUR_INTERVALS_SOURCE_FORENSIC_BNB_20250114.json
+          git commit -m "C114-F original Binance four-interval 2025-01-14 volume/quote/trades forensic; no economic results"
+          git push origin HEAD:refs/heads/research/c114-independent-zone-reaction-value-20261030
