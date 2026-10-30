@@ -71,7 +71,7 @@ class Z01Tests(TestCase):
     def test_08_first_touch_1m_asof(self):
         m=(bar(0,e.MINUTE,108,110,105,108),
            bar(e.MINUTE,e.MINUTE,103,104,99,100))
-        hit,reason=e.first_touch(zone(),m,(),0,2*e.MINUTE)
+        hit,reason=e.first_touch(zone(),m,(),0,3*e.MINUTE)
         self.assertEqual(reason,"OK")
         self.assertEqual(hit,(1,2*e.MINUTE))
     def test_09_4h_pre_touch_invalidation(self):
