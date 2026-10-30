@@ -87,5 +87,5 @@
 ## 6. Артефакты аудита
 - Precommit `cycles/B1_C107_PRECOMMIT_CAUSAL_ROOT_CAUSE_FORENSIC_RU.md`
 - Source-only script `d05/c107_original_p4_false_signal_forensics.py` и 20 independent negative tests `d05/test_c107_rootcause_original_source_semantics.py`
-- **640 provider SHA+CSV archive evidence** `evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json` (**308924 bytes, SHA256 to be pinned after final source verification**)
+- **640 provider SHA+CSV archive evidence** `evidence/c107/C107_ORIGINAL_NATIVE3M_20COIN_STRUCTURE_RECLAIM_DIAGNOSTIC.json` (**308924 bytes, SHA256 98adf5a7497f8a08feb7c035b12b9fb3a0ea23921cc7d0164b39fc8406bc4334**)
 - Independent original 640 sources and 20 new +690 prior ×3 Python =2130 PASS [GitHub CI 40979878731](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/40979878731) SUCCESS4/4. Technical workflow covers 25/41 stop1st, exact 4H-reclaim source and no new trade rules.
