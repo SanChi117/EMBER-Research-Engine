@@ -1,0 +1,67 @@
+{
+  "schema": "EMBER_A193_SMALL_BANKROLL_ETH_5M_SOURCE_NATIVE_PYTHON_V1",
+  "study_type": "exact pinned author's Python original simulate() cross-pair replay plus identical cash return field",
+  "source_git_commit": "39f7187ce21b021441fb4a55188b95831df7b5b1",
+  "source_strategy_blob": "d4e5ed465c0c520a0f1496c984f020259904969c",
+  "source_indicators_blob": "28c6a8cd437384565ffc8b9586f27b535207a1cf",
+  "market": "Binance USD-M ETHUSDT real Binance Vision candles 5m",
+  "dates_utc": "[2026-08-01,2026-10-01)",
+  "candles": 17568,
+  "author_original_settings": {
+    "rsi_period": 7,
+    "rsi_oversold": 20,
+    "rsi_overbought": 80,
+    "adx_threshold": 25,
+    "sl_pct": 0.015,
+    "tp_pct": 0.03,
+    "leverage": 5,
+    "cooldown_bars": 12,
+    "isolated_model_capital_usdt": 16
+  },
+  "baseline_fee6bps_side": {
+    "trades": 43,
+    "win_rate_pct": 27.907,
+    "author_replayed_profit_factor": 0.53967,
+    "author_excluding_entry_fee_reported_pnl_usdt": -9.543757,
+    "account_net_pnl_including_entry_fees_usdt": -10.57843,
+    "entry_fees_omitted_by_author_return_usdt": 1.034673,
+    "ending_cash_usdt": 5.42157,
+    "max_drawdown_pct": -72.77339
+  },
+  "stress_fee12p5bps_side": {
+    "trades": 43,
+    "win_rate_pct": 27.907,
+    "author_replayed_profit_factor": 0.48553,
+    "author_excluding_entry_fee_reported_pnl_usdt": -10.016553,
+    "account_net_pnl_including_entry_fees_usdt": -11.939526,
+    "entry_fees_omitted_by_author_return_usdt": 1.922973,
+    "ending_cash_usdt": 4.060474,
+    "max_drawdown_pct": -77.37258
+  },
+  "git_actions_run": 41144927577,
+  "git_actions_artifact_id": 13020399145,
+  "artifact_sha256": "468b5798021e7ae72f962203710878788bbd8ebc8a12095fdd592994ecddde79",
+  "code_comparison": "original results n/pnl/wr/pf/dd exactly match receipt-instrumented copy; inserted only ending_cash field",
+  "limitations": [
+    "author performance 3 tested BTC calendar windows overlap",
+    "ETH test crosspair and earlier than final frozen source commit, cannot claim truly untouched OOS",
+    "same signal candle close order execution; no entry/exit slippage, order book nor realistic liquidation modelling",
+    "author reported pnl omitted entry fees; corrected using cash difference",
+    "loss of 66-75pct refers to model allocated capital 16 USDT, NOT entire separately held capital"
+  ],
+  "verdict": "REJECT_5M_RSI_SMALL_BANKROLL_ETH_CROSSPAIR_NO_EDGE_NO_LIVE",
+  "other_open_candidates": [
+    {
+      "name": "SOL Pullback V9",
+      "repo": "kboranyldz/sol-trading-research",
+      "pros": "complete long/short 1h+4h signal source, author development evidence",
+      "cons": "historical proof partly incomplete, default 6% account risk too high, low opportunity frequency",
+      "next": "source immutable independent validation at 1% risk cap before PAPER"
+    },
+    {
+      "name": "NN gbb 15m",
+      "repo": "nateemma/strategies",
+      "cons": "illiquid ZEC concentration / unsuitable small account low slippage"
+    }
+  ]
+}
