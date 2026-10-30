@@ -2,7 +2,7 @@
 """A195: original frozen DoubleMA cross-market source preparation, public Binance Vision.
 Use native 1h trade and mark klines, real monthly fundingRate, 4h+1d exactly
 resampled from *complete* native 1h bars. Validate all continuity. No keys, no trading.
-All symbols are from SAME 2026-03-15..2026-10-30 UTC window as A187 ETH proof.
+All symbols are from SAME 2026-03-15..2026-10-01 UTC window as A187 ETH proof.
 """
 from __future__ import annotations
 import argparse,csv,hashlib,io,json,urllib.request
@@ -12,7 +12,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 SYMBOLS=("BTCUSDT","ETHUSDT","SOLUSDT","LINKUSDT")
-MONTHS=tuple(range(3,11))
+MONTHS=tuple(range(3,10))
 START=int(datetime(2026,3,15,tzinfo=timezone.utc).timestamp()*1000)
 END=int(datetime(2026,10,30,tzinfo=timezone.utc).timestamp()*1000)
 H=3_600_000
