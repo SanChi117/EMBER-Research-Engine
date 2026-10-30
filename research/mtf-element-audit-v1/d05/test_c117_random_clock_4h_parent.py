@@ -111,6 +111,20 @@ class C117RandomAdversarial(unittest.TestCase):
         x=c.cluster_test([])
         self.assertEqual(x["state"],"NO_POWER")
         self.assertIsNone(x["bootstrap_low95"])
+    def test_frozen_policy_excludes_non_choch_trade(self):
+        bogus={"treatment":"C_NO_CHoCH","trade":fauxtrade()}
+        self.assertIsNone(c.t_policy_trade(bogus))
+        self.assertIs(c.t_policy_trade({"treatment":"T_CHoCH",
+                                         "trade":bogus["trade"],
+                                         "choch":{"kind":"CONFIRMED"}}),
+                      bogus["trade"])
+    def test_no_future_confirmed_source_cannot_count_treatment(self):
+        with self.assertRaisesRegex(c.C117Error,"CONFIRMED_SOURCE"):
+            c.t_policy_trade({"treatment":"T_CHoCH","trade":fauxtrade(),
+                              "choch":None})
+    def test_wrong_treatment_label_fails_hard(self):
+        with self.assertRaisesRegex(c.C117Error,"UNREGISTERED"):
+            c.t_policy_trade({"treatment":"UNKNOWN","trade":fauxtrade()})
     def test_scope_restores_unmodified_original_engine(self):
         old=(c.engine.WINDOWS,c.engine.download,c.engine.per_symbol,c.engine.PRECOMMIT)
         with c.c117_scope():
