@@ -319,11 +319,9 @@ def evaluate(window, market, manifest):
     n = len(baseline)
     summary = {"A0_UNMODIFIED_4H": {}, ARM_LIMIT_ORIG: {}, ARM_LIMIT_WIDE: {}}
     fold_ms = core.FOLD_MS
+    base_for_score = [{**t, "source_signal_ms": t["entry_ms"]} for t in baseline]
     summary["A0_UNMODIFIED_4H"]["scores"] = {
-        str(b): report_score([{**t, "gross_r": float(
-            D(t["net_r"]) + D(14)/D(10000)*D(t["entry"])/abs(D(t["entry"])-D(t["stop"])))},
-            "source_signal_ms": t["entry_ms"]} for t in baseline], b, n, fold_ms)
-        for b in (14, 25, 40)}
+        str(b): report_score(base_for_score, b, n, fold_ms) for b in (14, 25, 40)}
     summary["A0_UNMODIFIED_4H"]["portfolio"] = portfolio_dd(
         baseline, market, 25)
     for arm in ARMS:
