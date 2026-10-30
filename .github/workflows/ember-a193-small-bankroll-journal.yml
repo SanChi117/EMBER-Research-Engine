@@ -1,0 +1,68 @@
+name: "EMBER A193 small deposit strategy research and real ETH 5m cost-correct source audit journal"
+on:
+  push:
+    branches: [research/a193-small-bankroll-scalper-screen-20261031]
+    paths:
+      - ".github/workflows/ember-a193-small-bankroll-journal.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify A192 and actual A193 account difference receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/before
+          grep -Fq 'INTEGRITY_PASS entries 192' /tmp/before
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          b=Path("research/backup_candidates_20261031")
+          s=json.loads((b/"A193_ETH_5M_VERIFIED_SOURCE_RECEIPTS.json").read_text())
+          for k in ("baseline_fee6bps_side","stress_fee12p5bps_side"):
+              q=s[k]
+              assert q["trades"]==43
+              assert abs(q["ending_cash_usdt"] - (16+q["account_net_pnl_including_entry_fees_usdt"]))<.000001
+              assert abs(q["author_excluding_entry_fee_reported_pnl_usdt"] - q["account_net_pnl_including_entry_fees_usdt"] - q["entry_fees_omitted_by_author_return_usdt"]) < .000002
+              assert q["account_net_pnl_including_entry_fees_usdt"]<0 and q["author_replayed_profit_factor"]<1
+          assert s["git_actions_run"]==41144927577 and s["git_actions_artifact_id"]==13020399145
+          assert s["source_indicators_blob"]=="28c6a8cd437384565ffc8b9586f27b535207a1cf"
+          assert (b/"A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md").stat().st_size>3000
+          print("A193_ORIGINAL_AND_CASH_PARITY_EVIDENCE_VALIDATED")
+          PY
+      - name: Record A193 transparent candidate failure rather than optimizing OOS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A193 --cycle SMALL_BANKROLL_HIGH_FREQUENCY_SCALPER_SOURCE_SCREEN \
+            --planned "User wants adequate strategy biased to aggressively grow a small crypto deposit. Search author full-source 5m-15m long-short with repeated trades, costs and realistic drawdown. Evaluate one author-claimed profitable 5m small-account RSI setup on external Binance ETH 5m at author and stress fees, independently verify account true PnL without retuning. Identify followup research candidates and falsify misleading promotion." \
+            --executed "Searched original sources Gotodataru 5m taker pressure and 15m OI, Nateemma 15m NN, jiangkaili RSI v8 5m, kboranyldz SOL 1h/4h pullback, Superior Bollinger4h, Grinay breakout2h and capitulation, 2026 negative scalper postmortems. Pinned jiangkaili commit 39f7187ce and exact strategy blob d4e5ed and RSI/ADX indicator blob 28c6a8; executed original Python simulate() on genuine continuous Binance ETHUSDT 17568 5m candles Aug-Sep2026 with 5x, 16USDT allocated margin, RSI20/80, ADX<25, TP3pct SL1.5pct and 12 bar cooldown. Original source result and instrumented copy identical trade outputs. Both scenarios 43 trades 27.907pct win. Fee 6bps/side: author reported minus9.543757 USDT but account cash true minus10.578430 USDT (PFnative author0.53967, drawdown72.77pct). Fee12.5bps/side: author reported minus10.016553 USDT but cash true minus11.939526 USDT (PF0.48553, drawdown77.37pct). The author result omitted entry fees from summed trade PnL. GitHub Actions #41144927577 SUCCESS, artifact13020399145 sha256 468b5798021e7ae72f962203710878788bbd8ebc8a12095fdd592994ecddde79." \
+            --result "REJECT RSI 5m as bankroll pumper after external ETH cost-correct economic fail. Author BTC 3 windows overlap, ETH not truly post-code-release untouched OOS. No ready off-the-shelf proven high-frequency 3-5/day strategy found; strongest candidate for next independent 1h/4h source audit is kboranyldz SOL Pullback V9, but original 6pct account stop risk too high, must cap to 1pct and independently verify + possible incomplete backtest dependencies. High-frequency taker momentum and OI sources also lack durable edge or extreme DD. No LIVE or SMOKE changes." \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Exact genuine original Python code and numerical parity of all returned fields vs receipt-only ending_cash return field, candle continuity checks, same fee scenario with true cash vs summed PnL; detect author undercounted entry fees. Note 16USDT simulated sub-account and not entire 100USDT wallet, lookahead via same-bar close fills and lack of slippage/funding are limitations. No retuning BTC author source on ETH window, no unverified profitability promises. All prior 192 append-only entries verified before record." \
+            --evidence ../../research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md \
+            --evidence ../../research/backup_candidates_20261031/A193_ETH_5M_VERIFIED_SOURCE_RECEIPTS.json \
+            --evidence ../../research/backup_candidates_20261031/a193_rsi_small_deposit_offpair.py \
+            --evidence ../../.github/workflows/ember-a193-small-bankroll-scalper-screen.yml
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/after
+          grep -Fq 'INTEGRITY_PASS entries 193' /tmp/after
+      - name: Commit A193 journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'A193 independent small deposit RSI 5m ETH negative account-correct audit'
+          git push origin HEAD:refs/heads/research/a193-small-bankroll-scalper-screen-20261031
