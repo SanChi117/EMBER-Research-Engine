@@ -158,7 +158,9 @@ def simulate_limit(t, rows, starts, closed4_by_ms, arm, last_fill_ms):
     if fill_i is None:
         return {"status": "UNFILLED_EXPIRED",
                 "source_entry_ms": orig_ms, "trade": None}
-    if not p["stop"] < p["limit"] < p["target"] if p["side"] == "LONG" else not p["target"] < p["limit"] < p["stop"]:
+    geometry_valid = (p["stop"] < p["limit"] < p["target"] if p["side"] == "LONG"
+                      else p["target"] < p["limit"] < p["stop"])
+    if not geometry_valid:
         raise C113Error("BROKEN_FILL_STRUCTURE")
     fillrow = rows[fill_i]
     expiry = fillrow.start_ms + HOLD[arm]
@@ -203,7 +205,11 @@ def simulate_limit(t, rows, starts, closed4_by_ms, arm, last_fill_ms):
 
 def costs(t, bps):
     e, stop = D(t["entry"]), D(t["stop"])
-    return D(t["gross_r"]) - D(bps)/D(10000)*e/abs(e-stop)
+    if "gross_r" in t:
+        return D(str(t["gross_r"])) - D(bps)/D(10000)*e/abs(e-stop)
+    # Baseline C109 stores net14 only; reconstruct higher costs without
+    # modifying original trades or manufacturing gross-price metadata.
+    return D(str(t["net_r"])) - D(bps-14)/D(10000)*e/abs(e-stop)
 
 def report_score(trades, bps, n_signals, fold_ms):
     by = [float(costs(t, bps)) for t in trades]
