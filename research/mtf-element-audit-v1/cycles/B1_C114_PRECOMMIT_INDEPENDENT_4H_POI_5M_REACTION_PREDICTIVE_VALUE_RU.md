@@ -55,6 +55,16 @@ Common execution diagnostic for both T/C: next original 3m open at landmark (т�
 
 Если мало matched pair => NO_POWER, **не ослаблять** CHoCH, не переходить на любой 5m wick ради n. При отрицательном эффекте/провале условия => FAIL, не допускать к PAPER автоматизированному отбору. Даже при полном историческом PASS — только независимый prospective forward PAPER и отдельно проверка 15m execution, LIVE по умолчанию запрещён.
 
+## Неизменяемые технические решения до начала чтения C114-источников
+
+- Block bootstrap: 2000 replicates, deterministic RNG seed 11420261030, whole matched-pair symbol+ISO-week blocks, 2.5% percentile lower bound; one resample unit is all paired observations grouped by the treatment pair's symbol-week, not an individual trade.
+- t0 is close/known_ms of the first native3m candle whose wick first intersects the previously fully closed 4H FVG. It is UTC 3m aligned, and t0+6h is also exact 3m open. Native5m is read only at close_ms <= t0+6h. No 5m construction from 3m.
+- Treatment's local pre-touch bearish/bullish regime requires the two most recently **confirmed** 5m highs and lows (2L2R each) as of t0, strictly descending for LONG or ascending for SHORT. Freeze the most recent confirmed opposite swing price as the breach level at t0; do not relabel mid-window. CHoCH must occur after t0 and be a first directional close crossing that frozen swing.
+- early competing geometry is a frozen stop and nearest preconfirmed 4H FTA calculated from the first touch **at t0**, not future geometry. A lacking t0 preconfirmed FTA is marked EARLY_TARGET_UNKNOWN (not a fabricated hit).
+- Matching risk bins and price relative to stop/target are computed on post-landmark known 3m opening price, while matching and evaluation use zero future outcomes.
+- t0 before first-week warmup excluded only by frozen time gate. Common landmark must leave a full 48h future horizon before window end. No market data may be used to reduce these windows.
+- C114 trial will be marked **NOT_GENUINE_UNSEEN** if period overlap with any earlier accessed C109–C113 test inputs is established, even though period dates were fixed before this cycle.
+
 ## Очередь реализации
 
 1. C114-A: source-contract tests: native5m cannot be derived from native3m, fully closed H4/P5 pivots, negative lookahead, timestamp alignment, no false CHoCH and no immortal-time/postselection.
