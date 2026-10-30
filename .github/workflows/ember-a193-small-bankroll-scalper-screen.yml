@@ -1,0 +1,59 @@
+name: "EMBER A193 original 5m small-bankroll RSI scalper off-pair source-pin fee/cash screen"
+on:
+  push:
+    branches: [research/a193-small-bankroll-scalper-screen-20261031]
+    paths:
+      - ".github/workflows/ember-a193-small-bankroll-scalper-screen.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rsi5m-real-binance-offpair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install only numpy and pandas for author-original model
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+      - name: Download actual Binance Vision 5m ETH continuous source and reusable settled funding
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a193-reports
+          python research/backup_candidates_20261031/a191_prepare_singleb_eth_binance_5m.py --datadir "$GITHUB_WORKSPACE/a193-reports/data" | tee a193-reports/source.log
+          grep -Fq A191_REAL_BINANCE_MONTHLY_5M_CONTINUITY_PASS a193-reports/source.log
+      - name: Pin exact original small-deposit strategy and source code
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/jiangkaili/binance-trader-bot.git /tmp/a193-original
+          git -C /tmp/a193-original fetch --quiet --depth 1 origin 39f7187ce21b021441fb4a55188b95831df7b5b1
+          git -C /tmp/a193-original checkout --quiet 39f7187ce21b021441fb4a55188b95831df7b5b1
+          test "$(git -C /tmp/a193-original rev-parse HEAD)" = "39f7187ce21b021441fb4a55188b95831df7b5b1"
+      - name: Original author 5m RSI 20/80 5x, model v8 source unchanged, external ETH test 6bps/12.5bps each side
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/backup_candidates_20261031/a193_rsi_small_deposit_offpair.py \
+            --repo /tmp/a193-original \
+            --datadir "$GITHUB_WORKSPACE/a193-reports/data" \
+            --out a193-reports/A193_SMALL_DEPOSIT_REAL_ETH_5M.json | tee a193-reports/small-bankroll-screen.log
+          grep -Fq A193_ORIGINAL_SOURCE_AND_ACCOUNTING_PARITY_OK a193-reports/small-bankroll-screen.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A193-Small-Deposit-RSI-5m-Binance-ETH-Source-and-Fee-Receipts
+          path: |
+            a193-reports/*.json
+            a193-reports/*.log
+            a193-reports/data/A191_SOURCE_MANIFEST.json
+            a193-reports/a193_instrumented_readonly_report.py
+          retention-days: 30
