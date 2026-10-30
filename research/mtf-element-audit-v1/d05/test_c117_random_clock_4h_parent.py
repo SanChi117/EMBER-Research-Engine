@@ -59,7 +59,7 @@ class C117RandomAdversarial(unittest.TestCase):
         self.assertEqual(trade["symbol"],"BNBUSDT")
         self.assertEqual(trade["parent_id"],parent()["parent_id"])
         self.assertEqual(plan.call_args.args[1],START+THREE)
-        self.assertLessEqual(plan.call_args.args[4][-1].close_ms,START+THREE)
+        self.assertLessEqual(plan.call_args.args[3][-1].close_ms,START+THREE)
     def test_preentry_stop_is_not_omitted_as_winning_random(self):
         rows,starts,four,closed=price_source()
         with patch.object(c.engine,"early_competing",return_value={"status":"EARLY_COMPETING_STOP"}),\
@@ -68,19 +68,13 @@ class C117RandomAdversarial(unittest.TestCase):
         self.assertIsNone(trade)
         self.assertEqual(why,"EARLY_COMPETING_STOP")
         plan.assert_not_called()
-    def test_parent_4h_invalidation_on_entry_time_rejected(self):
+    def test_parent_4h_invalidation_before_random_open_rejected(self):
         rows,starts,four,closed=price_source()
-        e=parent()
-        e["t0_touch_known_ms"]=START-THREE
-        e["landmark_ms"]=e["t0_touch_known_ms"]+6*c.engine.H
-        e["parent_created_ms"]=START-12*c.h4.H4
-        idx=0
-        four2=[NS(close_ms=t,c=D(80) if t==START else D(100))
+        four2=[NS(close_ms=t,c=D(80) if t==START+c.h4.H4 else D(100))
                for t in closed]
         with patch.object(c.engine,"early_competing",return_value={"status":"SURVIVED_6H_LANDMARK"}),\
              patch.object(c.h4,"parent_plan") as plan:
-            # Offset 1 opens at START; source has bar at START.
-            trade,why=c.random_on_same_parent(e,rows,starts,tuple(four2),closed,[],1)
+            trade,why=c.random_on_same_parent(parent(),rows,starts,tuple(four2),closed,[],120)
         self.assertIsNone(trade)
         self.assertEqual(why,"PARENT_4H_INVALIDATED_BEFORE_RANDOM_OPEN")
         plan.assert_not_called()
