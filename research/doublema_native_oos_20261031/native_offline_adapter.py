@@ -36,7 +36,7 @@ STATIC_MARKET={
 
 STATIC_TIER={
     "tier":1,"symbol":PAIR,"minNotional":0.0,"maxNotional":1e10,
-    "maintenanceMarginRate":0.005,"maxLeverage":50.0,"info":{}
+    "maintenanceMarginRate":0.005,"maxLeverage":50.0,"maintAmt":0.0,"info":{}
 }
 
 
