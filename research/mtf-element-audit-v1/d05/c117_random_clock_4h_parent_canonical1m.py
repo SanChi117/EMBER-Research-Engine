@@ -22,7 +22,7 @@ import c93_native3m_raid_bos_route_c_research as swings
 class C117Error(ValueError):pass
 
 PRECOMMIT="cycles/B1_C117_PRECOMMIT_RANDOM_CLOCK_4H_PARENT_VS_CHOCH_RU.md"
-FROZEN_C114="36d677166f4091f2ce66084dfb75f2407c72cbf3ee584a687ba41e6f"
+FROZEN_C114="36d677166f4091f2ce66084dfb75f2407c72cbf735483cb3ee584a687ba41e6f"
 WINDOWS=(
     ("WIN_A",datetime(2025,5,5,tzinfo=timezone.utc),
               datetime(2025,6,30,tzinfo=timezone.utc)),
