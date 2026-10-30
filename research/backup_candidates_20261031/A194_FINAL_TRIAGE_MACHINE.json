@@ -1,0 +1,162 @@
+{
+  "schema": "EMBER_A194_FIXED_THREE_MECHANICS_SUMMARY",
+  "date": "2026-10-31",
+  "study_type": "single retrospectively frozen test, zero tuning, not future prospective OOS",
+  "run_id": 41145988911,
+  "run_conclusion": "success",
+  "artifact_id": 13020429070,
+  "artifact_sha256": "1e93249f8598906a5f4279958e8795873ab59f090b7245ea5c598266a4ffc225",
+  "original_CI_zip_has": "all 18 detailed JSON per-trade results, 9 Binance Vision monthly CSV ZIP SHA256 entries; source manifests",
+  "candles_per_symbol_5m": 26496,
+  "candles_total_5m": 79488,
+  "source": "Binance Vision USD-M BTC ETH SOL July to September 2026",
+  "test_window": "2026-08-01..2026-10-01 exclusive UTC",
+  "fees_slippage_each_side": {
+    "base": {
+      "fee_pct": 0.06,
+      "slip_pct": 0.02
+    },
+    "stress": {
+      "fee_pct": 0.125,
+      "slip_pct": 0.05
+    }
+  },
+  "risk": {
+    "planned_gross_stop_risk_account_pct": 1,
+    "max_notional_multiple": 3,
+    "independent_accounts_per_mechanism": 3,
+    "independent_account_size_usd": 1000,
+    "SL": "last 3 15m candles / sweep wick +0.15 ATR",
+    "TP_research_control_R": 1.75
+  },
+  "outcomes": [
+    {
+      "mode": "A_TREND_PULLBACK",
+      "base": {
+        "trades": 191,
+        "net_pct": -17.8345,
+        "PF": 0.5891,
+        "winners": 0,
+        "worst_closed_DD_pct": -20.463,
+        "mean_net_R": -0.31,
+        "win_pct": 35.602
+      },
+      "stress": {
+        "trades": 195,
+        "net_pct": -35.2859,
+        "PF": 0.3184,
+        "winners": 0,
+        "worst_closed_DD_pct": -40.5444,
+        "mean_net_R": -0.6898,
+        "win_pct": 31.282
+      }
+    },
+    {
+      "mode": "B_BREAK_RETEST",
+      "base": {
+        "trades": 72,
+        "net_pct": -3.2512,
+        "PF": 0.7951,
+        "winners": 2,
+        "worst_closed_DD_pct": -14.6349,
+        "mean_net_R": -0.1292,
+        "win_pct": 38.889
+      },
+      "stress": {
+        "trades": 73,
+        "net_pct": -11.4424,
+        "PF": 0.4344,
+        "winners": 0,
+        "worst_closed_DD_pct": -23.089,
+        "mean_net_R": -0.527,
+        "win_pct": 32.877
+      }
+    },
+    {
+      "mode": "C_LIQUIDITY_SWEEP",
+      "base": {
+        "trades": 310,
+        "net_pct": -17.2881,
+        "PF": 0.7321,
+        "winners": 0,
+        "worst_closed_DD_pct": -31.8653,
+        "mean_net_R": -0.1999,
+        "win_pct": 41.935
+      },
+      "stress": {
+        "trades": 331,
+        "net_pct": -47.2085,
+        "PF": 0.3731,
+        "winners": 0,
+        "worst_closed_DD_pct": -60.7215,
+        "mean_net_R": -0.619,
+        "win_pct": 37.16
+      }
+    }
+  ],
+  "by_symbol_base": [
+    {
+      "mode": "A_TREND_PULLBACK",
+      "BTC": {
+        "N": 49,
+        "net_pct": -18.7421,
+        "PF": 0.478
+      },
+      "ETH": {
+        "N": 72,
+        "net_pct": -20.463,
+        "PF": 0.5607
+      },
+      "SOL": {
+        "N": 70,
+        "net_pct": -14.2984,
+        "PF": 0.7004
+      }
+    },
+    {
+      "mode": "B_BREAK_RETEST",
+      "BTC": {
+        "N": 17,
+        "net_pct": 1.7333,
+        "PF": 1.1841
+      },
+      "ETH": {
+        "N": 26,
+        "net_pct": -13.3761,
+        "PF": 0.3805
+      },
+      "SOL": {
+        "N": 29,
+        "net_pct": 1.8891,
+        "PF": 1.1139
+      }
+    },
+    {
+      "mode": "C_LIQUIDITY_SWEEP",
+      "BTC": {
+        "N": 104,
+        "net_pct": -27.191,
+        "PF": 0.5769
+      },
+      "ETH": {
+        "N": 105,
+        "net_pct": -6.2176,
+        "PF": 0.9034
+      },
+      "SOL": {
+        "N": 101,
+        "net_pct": -18.4557,
+        "PF": 0.7158
+      }
+    }
+  ],
+  "limitations": [
+    "not new independent post-publication 2026 future",
+    "5m execution path with stop-first, not tick/1m",
+    "no funding nor live bid/ask, limit fills",
+    "closed-trade DD not intra-trade wallet DD",
+    "new independent hypotheses not original published strategies",
+    "one 61-day sample, correlation BTC ETH SOL"
+  ],
+  "decision": "REJECT_ALL_AS_PROFITABLE_BANKROLL_PUMPS_DO_NOT_RETUNE_ON_SAME_TEST"
+}
