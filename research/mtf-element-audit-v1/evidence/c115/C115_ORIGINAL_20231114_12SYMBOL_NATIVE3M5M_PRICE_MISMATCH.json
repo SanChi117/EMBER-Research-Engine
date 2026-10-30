@@ -1,0 +1,411 @@
+{
+  "all_price_mismatches": [
+    {
+      "index": 46,
+      "original_3m_15m_OHLC": [
+        "0.11892",
+        "0.11935",
+        "0.11851",
+        "0.11898"
+      ],
+      "original_5m_15m_OHLC": [
+        "0.11892",
+        "0.11940",
+        "0.11851",
+        "0.11898"
+      ],
+      "price_3m_5m_max_abs_difference": "0.00005",
+      "symbol": "XLMUSDT",
+      "timestamp_ms": 1699961400000,
+      "utc": "2023-11-14T11:30:00+00:00",
+      "volume_3m": "6383589",
+      "volume_5m": "6729013"
+    }
+  ],
+  "date": "2023-11-14",
+  "economic_trades_computed": false,
+  "exact_1699961400000_original_price_incident": [
+    {
+      "index": 46,
+      "original_3m_15m_OHLC": [
+        "0.11892",
+        "0.11935",
+        "0.11851",
+        "0.11898"
+      ],
+      "original_5m_15m_OHLC": [
+        "0.11892",
+        "0.11940",
+        "0.11851",
+        "0.11898"
+      ],
+      "price_3m_5m_max_abs_difference": "0.00005",
+      "symbol": "XLMUSDT",
+      "timestamp_ms": 1699961400000,
+      "utc": "2023-11-14T11:30:00+00:00",
+      "volume_3m": "6383589",
+      "volume_5m": "6729013"
+    }
+  ],
+  "live_approved": false,
+  "paper_only": true,
+  "per_symbol": {
+    "ALGOUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "ALGOUSDT"
+    },
+    "BNBUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "BNBUSDT"
+    },
+    "CHZUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "CHZUSDT"
+    },
+    "HBARUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "HBARUSDT"
+    },
+    "ICPUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "ICPUSDT"
+    },
+    "INJUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "INJUSDT"
+    },
+    "LINKUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "LINKUSDT"
+    },
+    "OPUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "OPUSDT"
+    },
+    "PENDLEUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "PENDLEUSDT"
+    },
+    "SEIUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "SEIUSDT"
+    },
+    "UNIUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [],
+      "price_mismatch_count": 0,
+      "symbol": "UNIUSDT"
+    },
+    "XLMUSDT": {
+      "15m_count": 96,
+      "original_15m_price_mismatches": [
+        {
+          "index": 46,
+          "original_3m_15m_OHLC": [
+            "0.11892",
+            "0.11935",
+            "0.11851",
+            "0.11898"
+          ],
+          "original_5m_15m_OHLC": [
+            "0.11892",
+            "0.11940",
+            "0.11851",
+            "0.11898"
+          ],
+          "price_3m_5m_max_abs_difference": "0.00005",
+          "symbol": "XLMUSDT",
+          "timestamp_ms": 1699961400000,
+          "utc": "2023-11-14T11:30:00+00:00",
+          "volume_3m": "6383589",
+          "volume_5m": "6729013"
+        }
+      ],
+      "price_mismatch_count": 1,
+      "symbol": "XLMUSDT"
+    }
+  },
+  "source_only_block_not_economic_retest": true,
+  "sources": {
+    "3m": [
+      {
+        "bars": 480,
+        "csv_sha256": "e27bad6135baf184ac43935aad229cab32cd5308f08606c5c402d8f4e010b9ee",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/3m/BNBUSDT-3m-2023-11-14.zip",
+        "symbol": "BNBUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "d23bebf5ab432c53be682e8d2609492197cdc6301e76bc548269b218ad277470"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "a6c1dd7f536d1e609f79fac9990ab081f5cbb6aaeb2da6eb65ee384bbcb3436c",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/XLMUSDT/3m/XLMUSDT-3m-2023-11-14.zip",
+        "symbol": "XLMUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "5d3fea7955af1d4756a314a66d7e43cb72e35dd8a131b6d63767c19565806b2d"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "ffe722b23acc0d6c795d876dd4796aebba1872960d605a11133008a4b714a714",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/HBARUSDT/3m/HBARUSDT-3m-2023-11-14.zip",
+        "symbol": "HBARUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "23016bdc1d9d4fb6e6cc7ce663ff70f4adf4d78a023bbb5d735ed2c7f7b73b78"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "3303bd17e19c7b99d4fa6b0c06562ae9057977d95819344910020527468cee6b",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/INJUSDT/3m/INJUSDT-3m-2023-11-14.zip",
+        "symbol": "INJUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "a32f1dac99b5d886c7114adb3022e78121d7124f104b9a76a8ecb01089292ccb"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "a1a0421ed7e3b1e33c60f2f0984c107a418604567e9516fef34cfe6ed4692cea",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/OPUSDT/3m/OPUSDT-3m-2023-11-14.zip",
+        "symbol": "OPUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "95ec14ebb2d7bc31ca698baf8a76036376a4f02687e6344499dcb404fd905713"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "a0987ec24659bce760f946e2bb2e47fe3a50bbbda49f75eafb254c31a113a476",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/ALGOUSDT/3m/ALGOUSDT-3m-2023-11-14.zip",
+        "symbol": "ALGOUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "f2915b132c977b7a956c4afb7049e345aca1895166d59114aa267eb9c2980fe1"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "9fba266487544fddd643189388bdffdd8a1614cddd6a904400e741003fd0a3aa",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/CHZUSDT/3m/CHZUSDT-3m-2023-11-14.zip",
+        "symbol": "CHZUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "7f7c828c0192fc0322b1f1deeeb0f9e7f7d81bb020c1b3ce84c5569f325654e7"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "ed7d4f5561c81c8f683e4bb7b7a97ac54ae6c0d34c7627181b6c3ce65ec816a2",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/ICPUSDT/3m/ICPUSDT-3m-2023-11-14.zip",
+        "symbol": "ICPUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "9ba10c938b01b4e1c5342d997cfb7b5abc1334fc41db7ccb5d9524a5b4614c7e"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "62cb5eaa3b895f8e49310ade1495955c22f46343a08f2ff3485cdd4687575f85",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/SEIUSDT/3m/SEIUSDT-3m-2023-11-14.zip",
+        "symbol": "SEIUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "e17b8b39b84eb1a17aa850b804d8057409c10e0a46a8af2964f094324dcc89b0"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "dc9de4be2d4225cacb5c7a8f4525c57c25960dc2d502c2fb8c9f0f76b5ecd1e9",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/PENDLEUSDT/3m/PENDLEUSDT-3m-2023-11-14.zip",
+        "symbol": "PENDLEUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "a0c3402ba0e22b2039d7a849c564f2c4e2f1a0b6b28e5d7d99ed7bc36ab4dee5"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "3e50ffbfd1ff03e5c088b55abf0798fe8757e142ea46eae295499d27cb3d4706",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/LINKUSDT/3m/LINKUSDT-3m-2023-11-14.zip",
+        "symbol": "LINKUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "b0a0e861ce4dc5aa210e1284859605be529665c71ca6d23d133213808a1de3cd"
+      },
+      {
+        "bars": 480,
+        "csv_sha256": "cf0c63d1c226af7df928e687f2dec421380a19423639ee8b1fa1570152279add",
+        "date": "2023-11-14",
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/UNIUSDT/3m/UNIUSDT-3m-2023-11-14.zip",
+        "symbol": "UNIUSDT",
+        "timeframe": "NATIVE_3M",
+        "zip_sha256": "bbd53f9fcd1f6bc4bc73c05a0da0aed9bb5b3d61e3c7365c1428ef5ad7cd9867"
+      }
+    ],
+    "5m": [
+      {
+        "bars": 288,
+        "csv_sha256": "488aad776ee488b69261bbf36421e64ffad1b45cfd9d84e3d9a6156172f56cc3",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/5m/BNBUSDT-5m-2023-11-14.zip",
+        "symbol": "BNBUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "c1d11614a3f5a1131dffb8d737dd47448acc41537717fa11bb1a125e49280346"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "d7a088b309ddd16ec1d87a3f114f63331ffd649c7cefaae761793ec6acec3474",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/XLMUSDT/5m/XLMUSDT-5m-2023-11-14.zip",
+        "symbol": "XLMUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "01f0877dc349a67ca2a9c46721edf4b9b9c8813cd36ef5317fbf5eec25ba94ba"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "437b95c52eb5b53ebe98615e63a3311e839fd752278e7afa8a1a907630373720",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/HBARUSDT/5m/HBARUSDT-5m-2023-11-14.zip",
+        "symbol": "HBARUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "ff69c3ea8e3e53b776750ddbb53cc8efe3a070647256b9f949d5730c649fca54"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "d248e486bd7c3075166d2a13c30fe019434cce99d9d23d2ac0cbdc5c69989f75",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/INJUSDT/5m/INJUSDT-5m-2023-11-14.zip",
+        "symbol": "INJUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "d53991e49c5754ad35fbedb3a4fec2fd199cbb18be5dff0632cf418053d77574"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "a5f225ef0c7b27ed0cb63cdc4d26924f27c1e1b08b9dc5c331a5fd24ac87c2d6",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/OPUSDT/5m/OPUSDT-5m-2023-11-14.zip",
+        "symbol": "OPUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "1cacd1dfcd6b7c59583ee7d9991b8297b01ae86741a32c0654652e6b19ee77ab"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "0a97a26277719dec7413980de19aaf51b1117bbf27a57912e4f32778f4cfa7b4",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/ALGOUSDT/5m/ALGOUSDT-5m-2023-11-14.zip",
+        "symbol": "ALGOUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "661f5649d6c12cb4e020eddf5ddf28f4170b348614d6528c4631ad94a54f5b89"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "3cff47da3c8f28b89a9dd54ee349fdd976d9ffda3401ea6ce8c7ad83d587a317",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/CHZUSDT/5m/CHZUSDT-5m-2023-11-14.zip",
+        "symbol": "CHZUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "6861157051ea2c57653234ed6cea0c35e0a531f90d5c4b1a475653e42ffef9ef"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "6572611fe2a6c8ef390b422a9aa9c10ec58e7ea5f56161e59bfb9ce3f4247d98",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/ICPUSDT/5m/ICPUSDT-5m-2023-11-14.zip",
+        "symbol": "ICPUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "508c1e2cb9cd7f1423d4728e052da2ed143cfcc2c39919e32694dc30414e1e7d"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "9edf5f4a51193f813ac5bd427ab234ff432580febd20e8085e26aa0ca037b650",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/SEIUSDT/5m/SEIUSDT-5m-2023-11-14.zip",
+        "symbol": "SEIUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "151d77fc6c484b0c6a76b162a3ab4557d3d02d8acc9ae6c8b4a4ae96ac66427e"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "34e0a7274938de595f310d065685135ca532a86a066fc1b7f309b348d3fd4c33",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/PENDLEUSDT/5m/PENDLEUSDT-5m-2023-11-14.zip",
+        "symbol": "PENDLEUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "576a5ee7725835d682dcaf745b6014925f6d2ebcfe84dbbe4262449a2adc526a"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "fe3a848e424bc299925e903a571113c362ecaf8acac3839edae729857af556ea",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/LINKUSDT/5m/LINKUSDT-5m-2023-11-14.zip",
+        "symbol": "LINKUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "19029ae47d496f46bd6b782ae90db63240e3957f1905df8ee8631057849aea7a"
+      },
+      {
+        "bars": 288,
+        "csv_sha256": "1dd429462a4008eeb32c5337a8c2e2047ee68cbfe5c95ba54d7fc5dda72185dc",
+        "date": "2023-11-14",
+        "independent_5m_zip": true,
+        "provider_checksum_verified": true,
+        "source": "https://data.binance.vision/data/futures/um/daily/klines/UNIUSDT/5m/UNIUSDT-5m-2023-11-14.zip",
+        "symbol": "UNIUSDT",
+        "timeframe": "NATIVE_5M",
+        "zip_sha256": "0612aa3f7526060bd7eb6e2793db7d76bd90e9cdf4f3b56a3b1d119d4e47a31a"
+      }
+    ]
+  },
+  "symbols": [
+    "BNBUSDT",
+    "XLMUSDT",
+    "HBARUSDT",
+    "INJUSDT",
+    "OPUSDT",
+    "ALGOUSDT",
+    "CHZUSDT",
+    "ICPUSDT",
+    "SEIUSDT",
+    "PENDLEUSDT",
+    "LINKUSDT",
+    "UNIUSDT"
+  ],
+  "total_mismatched_15m": 1,
+  "type": "C115_ORIGINAL_BINANCE_USDM_FROZEN_DATE_3M5M_CROSS_OHLC_FORENSIC"
+}
