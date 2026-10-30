@@ -74,14 +74,34 @@ def canonical_original_1m(window):
             {s:tuple(markets5[s]) for s in symbols},
             pseudo3,pseudo5,parities)
 
+def per_symbol_with_metadata(three,five,symbol,window,upstream):
+    """Attach immutable symbol identity; never alter trade prices or outcomes."""
+    report=upstream(three,five,symbol,window)
+    if report["symbol"]!=symbol:
+        raise C116Error("SYMBOL_IDENTITY_MISMATCH")
+    for e in report["events"]:
+        if e["symbol"]!=symbol:
+            raise C116Error("EVENT_SOURCE_SYMBOL_DRIFT")
+        t=e["trade"]
+        if t is not None:
+            if "symbol" in t and t["symbol"]!=symbol:
+                raise C116Error("TRADE_SYMBOL_MISMATCH")
+            t["symbol"]=symbol
+    return report
+
 def run():
     economic.frozen()
     callback=economic.download
+    original_per_symbol=economic.per_symbol
+    def complete_per_symbol(three,five,symbol,window):
+        return per_symbol_with_metadata(three,five,symbol,window,original_per_symbol)
     try:
         economic.download=canonical_original_1m
+        economic.per_symbol=complete_per_symbol
         obj=economic.run()
     finally:
         economic.download=callback
+        economic.per_symbol=original_per_symbol
     obj["schema"]="EMBER_C116_CANONICAL_ORIGINAL_NATIVE1M_DERIVED3M5M_STRUCTURAL_REACTION_TEST"
     obj["precommit"]=PRECOMMIT
     obj["inherited_c114_economic_precommit"]=economic.PRECOMMIT
