@@ -1,0 +1,75 @@
+name: EMBER C113 A176 final economic rejection SHA journal attest
+on:
+  push:
+    branches: [research/c113-final-execution-geometry-20261030]
+    paths:
+      - 'research/mtf-element-audit-v1/cycles/B1_C113_FINAL_GEOMETRY_REPORT_RU.md'
+permissions:
+  contents: write
+jobs:
+  record-verified-economic-failure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently check source receipt and historical gate was rejected
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1')
+          summary=json.loads((root/'evidence/c113/C113_SUMMARY.json').read_text())
+          assert summary['source_zip_count']==1536
+          assert summary['original_native3m_bars']==737280
+          assert summary['both_historical_windows_pass'] is False
+          assert summary['live_approved'] is False
+          assert summary['c109_source_sha']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          for key in ('WIN_A','WIN_B'):
+            receipt=summary['window_receipts'][key]
+            assert receipt['admission']['screen_pass'] is False
+            file=root/'evidence/c113'/receipt['filename']
+            raw=file.read_bytes()
+            assert hashlib.sha256(raw).hexdigest()==receipt['sha256']
+            assert len(raw)==receipt['bytes']
+            base=receipt['scores']['A0_UNMODIFIED_4H']['scores']['25']
+            b2=receipt['scores']['B2_LIMIT_WIDE_H4_STOP_7D']['scores']['25']
+            assert base['sum_r']<0 and b2['sum_r']<0 and b2['pf']<1
+            print(key,base['sum_r'],b2['sum_r'],b2['fills'])
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a175
+          grep -Fq 'entries 175' /tmp/a175
+      - name: Append verified A176 SHA chain entry with all actual original C113 files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A176 --cycle C113 \
+            --planned "Frozen final C109 execution geometry and two unseen 2024 original Binance windows; no code retuning" \
+            --executed "C113 21 adverse tests x Python 3.10,3.11,3.12 plus historical native3m limit B1/B2 replay, 1536 provider ZIP" \
+            --result "Economic FAIL in both: B2 25bps WIN_A n50 -20.021642R PF0.589860; WIN_B n52 -13.979178R PF0.705152; live blocked" \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "A0 frozen original C109 and new B1 control compared on 119 signal opportunities; original SHA pinned; loss remains on 14,25,40 bps; prospective OOS and funding absent" \
+            --evidence cycles/B1_C113_PRECOMMIT_FINAL_EXECUTION_GEOMETRY_RU.md \
+            --evidence cycles/B1_C113_FINAL_GEOMETRY_REPORT_RU.md \
+            --evidence d05/c113_final_execution_geometry_research.py \
+            --evidence d05/test_c113_final_execution_geometry.py \
+            --evidence evidence/c113/C113_SUMMARY.json \
+            --evidence evidence/c113/C113_WIN_A_ORIGINAL_768_SOURCE_LEDGER.json \
+            --evidence evidence/c113/C113_WIN_B_ORIGINAL_768_SOURCE_LEDGER.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a176
+          grep -Fq 'entries 176' /tmp/a176
+      - name: Commit exactly journal verification outcome
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C113 A176 immutable SHA journal: original 1536 ZIP execution geometry economic rejection"
+          git push origin HEAD:refs/heads/research/c113-final-execution-geometry-20261030
