@@ -11,12 +11,12 @@ import c109_simple_p4_core_vs_original_research as core
 import c105_parent4h_structural_geometry as h4
 from test_c105_parent4h_only_geometry import parent,fixtures
 
-def series(prices,tf):
-    return tuple(OHLC(i*tf,(i+1)*tf,D(str(x)),
+def series(prices,tf,start=0):
+    return tuple(OHLC(start+i*tf,start+(i+1)*tf,D(str(x)),
         D(str(x))+D("1"),D(str(x))-D("1"),D(str(x)),D("1"))
         for i,x in enumerate(prices))
-UP4=series([100,101,102,103,104,105,106],h4.H4)
-DOWN4=series([106,105,104,103,102,101,100],h4.H4)
+UP4=series([100,101,102,103,104,105,106],h4.H4,17*h4.H4)
+DOWN4=series([106,105,104,103,102,101,100],h4.H4,17*h4.H4)
 UP1=series([100,101,102,103],h4.D1)
 DOWN1=series([103,102,101,100],h4.D1)
 CLOCK=4*h4.D1
@@ -55,12 +55,12 @@ class Gate111(unittest.TestCase):
         self.assertEqual(f.regime_from_completed("SHORT",CLOCK,DOWN4,UP1)[1],
                          "1D_DIRECTION_OPPOSES_SETUP")
     def test_11_4h_low_directional_efficiency_chop_rejected(self):
-        chop=series([100,104,99,105,98,106,101],h4.H4)
+        chop=series([100,104,99,105,98,106,101],h4.H4,17*h4.H4)
         ok,why,p=f.regime_from_completed("LONG",CLOCK,chop,UP1)
         self.assertFalse(ok);self.assertEqual(why,"4H_PRICE_PATH_CHOPPY")
         self.assertLess(D(p["4h_6_step_efficiency"]),D(1)/D(3))
     def test_12_all_4h_closes_flat_rejected_fail_closed(self):
-        still=series([100]*7,h4.H4)
+        still=series([100]*7,h4.H4,17*h4.H4)
         self.assertEqual(f.regime_from_completed("LONG",CLOCK,still,UP1)[1],
                          "FLAT_OR_ZERO_MOVEMENT")
     def test_13_insufficient_completed_d1_rejected(self):
@@ -76,12 +76,11 @@ class Gate111(unittest.TestCase):
         # Deliberately use a synthetic 1D history already fully closed: 4H
         # future-close candle may never be observed before it is completed.
         h_future=tuple(OHLC(x.start_ms+10*h4.D1,x.close_ms+10*h4.D1,
-               x.o,x.h,x.l,x.c,x.v) for x in UP4)
+               x.o,x.h,x.l,x.c,x.vol) for x in UP4)
         self.assertFalse(f.regime_from_completed("LONG",CLOCK,h_future,UP1)[0])
     def test_17_1h_4h_closed_bar_boundary_allowed(self):
         asof=UP4[-1].close_ms
-        self.assertEqual(f.regime_from_completed("LONG",asof,UP4,UP1)[1],
-                        "UNAVAILABLE_FULLY_CLOSED_H4_D1_HISTORY")
+        self.assertTrue(f.regime_from_completed("LONG",asof,UP4,UP1)[0])
     def test_18_calendar_scope_restores_original_even_on_error(self):
         saved={p:getattr(core,p) for p in f.CAL_FIELDS}
         with self.assertRaisesRegex(RuntimeError,"test"):
