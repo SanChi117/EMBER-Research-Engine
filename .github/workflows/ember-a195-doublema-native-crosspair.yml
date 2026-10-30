@@ -1,0 +1,104 @@
+name: "EMBER A195 exact original DoubleMA on BTC ETH SOL LINK with genuine native Freqtrade"
+on:
+  push:
+    branches: [research/a195-doublema-original-crosspair-native-20261031]
+    paths:
+      - ".github/workflows/ember-a195-doublema-native-crosspair.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  eight-genuine-native-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 58
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original native Freqtrade engine pinned 2026.4
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install "freqtrade==2026.4"
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+      - name: Pin author strategy byte-identical to May 12 and create offline dry Binance configs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/a195-original
+          test "$(git -C /tmp/a195-original rev-parse HEAD)" = "40af5c7c1c44253766428cfb06babf22f9817aa4"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/a195-original')
+          data=(root/'user_data/strategies/VideoDoubleMaFuturesStrategy.py').read_bytes()
+          blob=hashlib.sha1(b'blob '+str(len(data)).encode()+bytes([0])+data).hexdigest()
+          assert blob=='22ca6588bbd056e671783f676f1a4010cbfc1bb6',blob
+          p=Path('a195-native-reports');p.mkdir(exist_ok=True)
+          c=json.loads((root/'config/config_okx_futures_eth_only_binance_data.json').read_text())
+          assert c['max_open_trades']==1 and c['stake_amount']=='unlimited'
+          assert c['trading_mode']=='futures' and c['margin_mode']=='isolated'
+          assert c['dry_run_wallet']==10000
+          for sym in ('BTC','ETH','SOL','LINK'):
+              d=json.loads(json.dumps(c))
+              d['exchange']['name']='binance'
+              d['exchange']['pair_whitelist']=[f'{sym}/USDT:USDT']
+              for key in ('key','secret','password'):d['exchange'][key]=''
+              d['exchange']['ccxt_config']={}
+              d['exchange']['ccxt_async_config']={}
+              d['dry_run']=True
+              d['telegram']['enabled']=False;d['api_server']['enabled']=False
+              d['bot_name']=f'A195_{sym}_INERT_PAPER'
+              (p/f'config-{sym}.json').write_text(json.dumps(d,indent=2))
+          (p/'upstream-source-sha.txt').write_text(blob+'\n')
+          print('A195_ORIGINAL_BYTE_FOR_BYTE_PIN_CONFIRMED_20260512')
+          PY
+      - name: Download genuine Binance Vision native klines mark funding across four symbols, verify full original control period
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py --datadir a195-native-reports/data 2>&1 | tee a195-native-reports/source-check.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a195-native-reports/source-check.log
+      - name: Run true unchanged original Freqtrade for BTC ETH SOL LINK, two fee models each
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in BTC ETH SOL LINK; do
+            for fee in 5 12p5; do
+              if [ "$fee" = 5 ]; then RATE=0.0005; else RATE=0.00125; fi
+              echo "A195_BEGIN_NATIVE_ORIGINAL $sym $fee"
+              timeout 390s python research/doublema_native_oos_20261031/a195_native_binance_offline.py \
+                -c "a195-native-reports/config-$sym.json" \
+                --userdir /tmp/a195-original/user_data \
+                --datadir "$GITHUB_WORKSPACE/a195-native-reports/data" \
+                --strategy VideoDoubleMaFuturesStrategy --timeframe 1h \
+                --timerange 20260513-20261030 \
+                --data-format-ohlcv json --fee "$RATE" \
+                --export trades --cache none 2>&1 | tee "a195-native-reports/native-$sym-fee$fee.log"
+              z="$(find /tmp/a195-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              test -n "$z" && test -s "$z"
+              cp "$z" "a195-native-reports/native-$sym-fee$fee.zip"
+              rm -f /tmp/a195-original/user_data/backtest_results/backtest-result*.zip
+              echo "A195_COMPLETED_NATIVE_ORIGINAL $sym $fee"
+            done
+          done
+      - name: Extract native original receipts and verify PnL, cost routes, cross-market gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_parse_original_native.py --report-dir a195-native-reports 2>&1 | tee a195-native-reports/native-receipt-parser.log
+          grep -Fq A195_ALL_EIGHT_GENUINE_NATIVE_ORIGINAL_TESTS_COMPLETED a195-native-reports/native-receipt-parser.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A195-Original-DoubleMA-4Pairs-8-Freqtrade-native-fees-real-Binance
+          path: |
+            a195-native-reports/*.log
+            a195-native-reports/*.zip
+            a195-native-reports/*.txt
+            a195-native-reports/A195_ORIGINAL_NATIVE_CROSSPAIR_RESULTS.json
+            a195-native-reports/data/A195_DATA_SHA_MANIFEST.json
+          retention-days: 30
