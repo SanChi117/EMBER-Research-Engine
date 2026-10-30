@@ -105,7 +105,7 @@ def validate_raw(rows):
 
 def resample(rows):
     validate_raw(rows)
-    if len(rows)%15!=0 or rows[0].start_ms%15//15: # source at UTC minute boundary
+    if len(rows)%15!=0:
         raise C116SourceError("UNALIGNED_1M_SOURCE_WINDOW")
     if rows[0].start_ms%(15*MINUTE):
         raise C116SourceError("ORIGINAL_1M_WINDOW_NOT_15M_ALIGNED")
@@ -122,9 +122,9 @@ def resample(rows):
             o=z[0].open;h=max(t.high for t in z);l=min(t.low for t in z)
             c=z[-1].close;volume=sum((t.volume for t in z),D(0))
             if size==3:
-                ident=f"CANONICAL_ORIGINAL_1M:{symbol}:{start}"
+                ident=f"CANONICAL_ORIGINAL_1M:{z[0].zip_sha256}:{symbol}:{start}"
                 result.append(Original3mRow(symbol,start,start+span,o,h,l,c,volume,ident,
-                                           "ORIGINAL_1M_ZIP_SEQUENCE"))
+                                           z[0].zip_sha256))
             else:
                 result.append(Bar(start,o,h,l,c,volume))
     return tuple(x3),tuple(x5)
