@@ -1,0 +1,101 @@
+name: EMBER C117 4H zone CHoCH vs fixed seeded truly random 3m CLOCK 8-counterfactuals PAPER
+on:
+  push:
+    branches: [research/c117-random-time-4h-zone-counterfactual-20261030]
+    paths:
+      - '.github/workflows/mtf-c117-4h-random-time-controls.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C117_PRECOMMIT_RANDOM_CLOCK_4H_PARENT_VS_CHOCH_RU.md'
+      - 'research/mtf-element-audit-v1/d05/c117_random_clock_4h_parent_canonical1m.py'
+      - 'research/mtf-element-audit-v1/d05/test_c117_random_clock_4h_parent.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  c117-random-source-asof-negative-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: SHA journal and 12 random-clock adverse tests plus unchanged C114/C116 economics regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c117_random_clock_4h_parent 2>&1 | tee /tmp/c117-tests
+          grep -Fq 'Ran 12 tests' /tmp/c117-tests
+          grep -Fxq 'OK' /tmp/c117-tests
+          python -m unittest -q test_c116_canonical_1m_zone_reaction test_c114_independent_4h_poi_native5m
+  c117-two-new-56day-original1m-blind-regimes:
+    needs: c117-random-source-asof-negative-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 1344 original Binance 1m ZIP, frozen CHoCH and 8 random-clock policies on every 4H first touch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c117_random_clock_4h_parent_canonical1m.py \
+            --output-dir research/mtf-element-audit-v1/evidence/c117 | tee /tmp/c117-economic-run
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('research/mtf-element-audit-v1/evidence/c117')
+          s=json.loads((root/'C117_SUMMARY.json').read_text())
+          assert s['original_1m_zip_total']==1344
+          assert s['original_1m_bar_total']==1935360
+          assert s['derived3m_bars_total']==645120
+          assert s['derived5m_bars_total']==387072
+          assert s['frozen_c114_trade_core_sha256']==hashlib.sha256(
+              Path('research/mtf-element-audit-v1/d05/c114_independent_poi_native5m_choch_research.py').read_bytes()).hexdigest()
+          assert s['paper_only'] and s['live_approved'] is False
+          assert s['real_orders']==s['real_fills']==s['live_trades']==[]
+          assert s['random_controls_per_4h_first_touch']==8
+          assert set(s['window_receipts'])=={'WIN_A','WIN_B'}
+          for name,receipt in s['window_receipts'].items():
+              raw=(root/receipt['filename']).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==receipt['sha256']
+              assert len(raw)==receipt['bytes']
+              z=json.loads(raw)
+              assert z['original_1m_zip_count']==672
+              assert z['derived3m_bars']==322560 and z['derived5m_bars']==193536
+              assert len(z['original_1m_provider_zip_receipts'])==672
+              assert all(r['provider_checksum_verified'] and r['source_original_interval']=='1m'
+                         for r in z['original_1m_provider_zip_receipts'])
+              assert all(p['strict_ohlc_price_clock_parity'] for p in z['one_source_derived_15m_parity'].values())
+              events=z['same_4h_parent_all_touches_ITT']
+              assert len(events)==z['C117_precommitted_random_clock_gate']['all_touch_n']
+              assert len(events)==z['cohort']['initial_touch_eligible_events']
+              for e in events:
+                  assert len(e['random']['choices'])==8
+                  assert len(set(e['random']['offsets']))==8
+                  for choice in e['random']['choices']:
+                      t=choice['trade']
+                      if t:
+                          assert t['parent_id']==e['parent_id']
+                          assert t['stop_source_tf']==t['target_source_tf']==t['parent_tf']=='4H'
+                          assert e['t0_touch_known_ms']<t['entry_ms']<=e['t_landmark_ms']
+              assert z['C117_precommitted_random_clock_gate']['live_approved'] is False
+          print('C117_ORIGINAL_PROVIDER_SHA_RANDOM_POLICY_ALL_ITT_AND_4H_RISK_PROVENANCE_VERIFIED')
+          PY
+      - name: Always commit complete source evidence regardless of win fail or no power
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c117
+          git commit -m "C117 frozen 2025 and 2026 original1m same-parent random timing 8-policy ITT treatment-control verdict"
+          git push origin HEAD:refs/heads/research/c117-random-time-4h-zone-counterfactual-20261030
