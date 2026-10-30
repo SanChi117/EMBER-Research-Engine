@@ -48,8 +48,8 @@ jobs:
             obj=json.loads(data)
             assert obj['cohort']['matched_pairs_n'] == len(obj['matched_pair_indices'])
             assert len(obj['canonical_native1m_zip_receipts'])==672
-            assert all(t['source_original_native1m_zip_sha256'] for t in obj['derived_3m_provenance'])
-            assert all(t['source_original_native1m_zip_sha256'] for t in obj['derived_5m_provenance'])
+            assert all(t['source_original_native_1m_zip_sha256'] for t in obj['derived_3m_provenance'])
+            assert all(t['source_original_native_1m_zip_sha256'] for t in obj['derived_5m_provenance'])
             assert all(x['price_and_volume_equal'] for x in obj['intra_canonical_1m_3m5m_parity'].values())
           assert summary['window_receipts']['WIN_A']['cohort']['matched_pairs_n']==2
           assert summary['window_receipts']['WIN_B']['cohort']['matched_pairs_n']==5
