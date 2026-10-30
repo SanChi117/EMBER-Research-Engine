@@ -1,0 +1,78 @@
+name: EMBER C109 A172 freeze 768 original source improved core BUT risk gate fails
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c109-A172-original-768-negative-DD.yml'
+permissions:
+  contents: write
+jobs:
+  independent-source-admit-A172:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify A171 chain + 768 source exact frozen B0 and B1 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c109-a171
+          grep -Fq 'entries 171 tip_sha256 908f96d82a47c06331e44d9a0d53913d58fb0fcc381137f0c03801ebe98fbff8' /tmp/c109-a171
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('evidence/c109/C109_CORE_VS_ORIGINAL_768_3M_PROVIDER_ZIPS.json')
+          raw=p.read_bytes()
+          assert len(raw)==737881 and hashlib.sha256(raw).hexdigest()=='d8e4a39b5de6176227cd5e8fd6103278d6e032335341f8f098f930bdad305134'
+          x=json.loads(raw)
+          assert x['source_zip_count']==768 and x['native3m_bars']==368640
+          assert len({(y['symbol'],y['date']) for y in x['source_manifest']})==768
+          assert x['new_luxalgo_indicators']==0 and x['orders']==x['fills']==x['live_trades']==[]
+          a=list(x['arms'].values())
+          assert len(a)==2
+          old=next(y for name,y in x['arms'].items() if name.startswith('B0_'))
+          core=next(y for name,y in x['arms'].items() if name.startswith('B1_'))
+          assert old['scores']['25']['n']==54 and old['scores']['25']['sum_r']==-0.546001
+          assert core['scores']['25']['n']==55 and core['scores']['25']['sum_r']==10.749521
+          assert core['scores']['25']['pf']==1.30903 and core['scores']['40']['sum_r']==5.683805
+          assert core['scores']['25']['dd_1pct_risk_pct']==10.51646
+          assert core['folds']['early']['25']['sum_r']==-4.559101
+          assert core['folds']['late']['25']['sum_r']==15.308622
+          assert not old['admission']['passes_historical_screen']
+          assert not core['admission']['passes_historical_screen']
+          assert core['admission']['reasons']==['MODELED_DD25_NOT_LT_10PCT']
+          assert all(t['stop_source_tf']==t['target_source_tf']=='4H' for t in core['trades'])
+          print('C109_FROZEN_B0_B1_PROVIDER_768_TRUE_NEGATIVE_DD_GATE_SHA_SUCCESS')
+          PY
+      - name: Record A172 no hindsight strategy changes no false trade ready
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A172 --cycle B1/C109 --verdict DONE --cycle-result PASSED \
+            --planned "After C107 semantic substitutions and C108 sparse linked H1 child negative n2, user asks make working system and stop architecture inflation. Frozen pre-price C109 two-arm 4H parent source study: old C105 B0 midpoint and weak 15m prior high SNR vs one coherent B1 full closed 1H reclaim above full H4 FVG near edge + 15m fully confirmed 2L2R prior swing close break or 3-bar completed FVG; both genuine next native3m open; unmodified H4 FVG far edge protective stop and nearest confirmed H4 unswept FTA TP, derived RR only. New 64 days May1-Jul3 2026 12 coins 768 original provider SHA ZIP, 368640 native3m, costs14/25/40bps, DD1% risk under10 and full admission gate. No live." \
+            --executed "Committed precommit before source, created separate original c109 source-only B0/B1 event-time and 24 independent adverse tests, ran prior 735x3 Python 3.10/3.11/3.12 plus 24x3 equals 2277 PASS (CI 40984772427 4/4 SUCCESS). Original 768 Binance Vision USD-M daily native3m ZIP, all provider same-host CHECKSUM, ZIP SHA and original CSV SHA verified, 368640 native3m bars, all 109 historical trade records and original H4 SL/TP source in source evidence immutable JSON. First red CI 40984722421 caused only test calling new_signal_type without empty swings arg, corrected BEFORE original price source download; no trade code changed." \
+            --result "C109 B0 ORIGINAL 54 paper trades netR25 -0.546001 PF0.98561 DD25 11.96448%, R40 -6.296692, economic gate FAILED. B1 simple core 55 paper trades netR25 +10.749521R PF1.30903 DD25 10.51646%, R14 +14.464380, R40 +5.683805 PF40 1.15166. B1 26 early trades -4.559101R, 29 late +15.308622R, modeled DD25 10.51646% FAILS PREDECLARED strictly less than10 gate. Thus no achieved full historical screen and not live ready despite better performance. 40 15m preconfirmed pivot BOS and 15 15m IMB final trades, no fake prior single bar SNR." \
+            --countercheck "No tweaking based on old 41 forensic trades or new 55 outcomes, no post-hoc reduced risk budget or DD gate relaxation, no fabricated profitable confidence. Original 4H C105 source SHA and old A171 chain unchanged. All original data source receipts for full 768 ZIP frozen with SHA. B0 and B1 evaluated same exact May-Jul months, target/stop strictly 4H with native3m protective executions, cost stress 25 and 40 bps; early half still losing, true prospective OOS NOT achieved." \
+            --evidence cycles/B1_C109_PRECOMMIT_SINGLE_P4_CORE_VS_FROZEN_BASELINE_RU.md \
+            --evidence d05/c109_simple_p4_core_vs_original_research.py \
+            --evidence d05/test_c109_simple_p4_complete_reclaim_real_bos.py \
+            --evidence evidence/c109/C109_CORE_VS_ORIGINAL_768_3M_PROVIDER_ZIPS.json \
+            --evidence cycles/B1_C109_SIMPLE_CORE_ORIGINAL_768_NATIVE3M_ECONOMIC_REPORT_RU.md
+          python tools/auditlog.py verify | tee /tmp/c109-a172
+          grep -Fq 'entries 172 tip_sha256 ' /tmp/c109-a172
+      - name: Commit A172 append-only control journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A172 C109 simple 4H swing BOS core +10.75R but DD10.52% historical gate FAIL, 768 original Binance ZIP"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
