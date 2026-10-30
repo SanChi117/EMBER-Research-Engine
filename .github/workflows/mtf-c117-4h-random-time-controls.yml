@@ -22,14 +22,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python }}'
-      - name: SHA journal and 12 random-clock adverse tests plus unchanged C114/C116 economics regression
+      - name: SHA journal and 15 random-clock adverse tests plus unchanged C114/C116 economics regression
         shell: bash
         run: |
           set -euo pipefail
           python research/mtf-element-audit-v1/tools/auditlog.py verify
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c117_random_clock_4h_parent 2>&1 | tee /tmp/c117-tests
-          grep -Fq 'Ran 12 tests' /tmp/c117-tests
+          grep -Fq 'Ran 15 tests' /tmp/c117-tests
           grep -Fxq 'OK' /tmp/c117-tests
           python -m unittest -q test_c116_canonical_1m_zone_reaction test_c114_independent_4h_poi_native5m
   c117-two-new-56day-original1m-blind-regimes:
@@ -47,6 +47,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ -f research/mtf-element-audit-v1/evidence/c117/C117_SUMMARY.json ]; then
+            echo "Published C117 original source and event ledger is immutable; see separate C117-A181 corrected economic report."
+            exit 0
+          fi
           python research/mtf-element-audit-v1/d05/c117_random_clock_4h_parent_canonical1m.py \
             --output-dir research/mtf-element-audit-v1/evidence/c117 | tee /tmp/c117-economic-run
           python - <<'PY'
@@ -97,5 +101,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add research/mtf-element-audit-v1/evidence/c117
+          if git diff --cached --quiet; then
+            echo "Source evidence already committed, no duplicate commit"
+            exit 0
+          fi
           git commit -m "C117 frozen 2025 and 2026 original1m same-parent random timing 8-policy ITT treatment-control verdict"
           git push origin HEAD:refs/heads/research/c117-random-time-4h-zone-counterfactual-20261030
