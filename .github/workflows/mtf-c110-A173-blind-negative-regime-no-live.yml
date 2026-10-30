@@ -1,0 +1,83 @@
+name: EMBER C110 A173 freeze blind negative second regime live BLOCKED
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c110-A173-blind-negative-regime-no-live.yml'
+permissions:
+  contents: write
+jobs:
+  independent-768sha-two-period-negatives:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: A172 sha frozen source and 768 second regime archive economic FAILED
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c110-a172
+          grep -Fq 'entries 172 tip_sha256 2b8dd417f47d339bfed0976f81f2a0926c18c18f9640af6bf3fcd7f917191206' /tmp/c110-a172
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,sys
+          p=Path('evidence/c110/C110_UNCHANGED_C109_SECOND_REGIME_768_ORIGINAL_3M_ZIPS.json')
+          raw=p.read_bytes()
+          assert len(raw)==758206 and hashlib.sha256(raw).hexdigest()=='3da9d82e4a87281a525164f1f07bb1b2cff9fd04eaaf8525e783aa5856378f30'
+          x=json.loads(raw)
+          assert x['source_zip_count']==768 and x['native3m_bars']==368640
+          assert len(x['source_manifest'])==768
+          assert len({(r['symbol'],r['date']) for r in x['source_manifest']})==768
+          assert x['begin_utc']=='2025-11-01' and x['end_exclusive_utc']=='2026-01-04'
+          assert x['second_regime_unchanged_strategy']
+          assert x['c109_original_strategy_sha256']=='39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557'
+          assert x['orders']==x['fills']==x['live_trades']==[]
+          old=next(a for name,a in x['arms'].items() if name.startswith('B0_'))
+          new=next(a for name,a in x['arms'].items() if name.startswith('B1_'))
+          assert old['scores']['25']['n']==63 and old['scores']['25']['sum_r']==-13.542937
+          assert new['scores']['25']['n']==51 and new['scores']['25']['sum_r']==-9.695331
+          assert new['scores']['25']['pf']==0.76501
+          assert new['scores']['25']['dd_1pct_risk_pct']==19.05754
+          assert new['scores']['40']['sum_r']==-15.534517
+          assert new['folds']['early']['25']['sum_r']==-9.252251
+          assert new['folds']['late']['25']['sum_r']==-0.44308
+          assert not old['admission']['passes_historical_screen']
+          assert not new['admission']['passes_historical_screen']
+          assert new['admission']['live_approved'] is False
+          sys.path.insert(0,'d05')
+          import c110_blind_unchanged_c109_second_regime as c110
+          assert c110.source_code_verified()
+          print('C110_BLIND_NO_EDGE_51_TRADES_DD19PF076_A172_PINS_PASS')
+          PY
+      - name: Record A173 append only explicitly FAIL economic
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py record \
+            --action-id A173 --cycle B1/C110 --verdict DONE --cycle-result PASSED \
+            --planned "No optimization after C109 first 55 trades netR25 +10.749521R but risk DD25 10.51646% FAILED original <10% gate. Frozen C109 source code SHA exactly 39bf28a44cec0356b256853514c532b8f37be48f3da3477a365bd19c4add5557; for second historical regime change only local source clock to Nov1 2025 Jan4 2026 exclusive, same 12 crypto/64 days/768 full official 3m daily ZIP provider checksum and original CSV SHA, n368640 bars, prior C109 B0 vs C109 simple B1 code identical, fees14/25/40, strict unchanged economic admission and no live." \
+            --executed "10 new negative tests plus all previous 759 x Python3.10/3.11/3.12 =2307 PASS, independent CI 40985414859 SUCCESS4/4, original second time-period 768 complete Binance native3m provider-checksum ZIP, 368640 candles, every trade original source event, original C109 algorithm hash byte unchanged and local calendar bindings restored. 2025-11-01 through 2026-01-03 complete UTC days with 7d warmup and 48h final embargo. No order transport." \
+            --result "Negative replication: C110 B0 n63 netR25 -13.542937 PF0.73304 DD25 21.78863%; B1 n51 netR25 -9.695331R PF0.76501 DD25 19.05754%; 40bps B1 -15.534517R; early n22 -9.252251R, late n29 -0.443080R, full economic admission FAILED. Earlier C109 B1 n55 +10.749521R but DD10.51646% also FAIL. Combined across two periods C109 B1 n106 +1.054190R25bps but -9.850712R40bps and regime dependent, no durable edge; do not claim overall profitable. Live permanently blocked pending new prereg independent source regime gates and future proof." \
+            --countercheck "Original C109 strategy source SHA identical despite changed data year; no hindsight tuning 15m pivot B0/B1, stop, TP, RR, side selection, fees, modeled risk, risk policy; adverse lost second historical period preserved unaltered. Every original 768 ZIP same-host provider SHA + CSV SHA, 4H SL and 4H TP exact source, 3m protective stops always actionable, zero live/paper real fills. No guarantees, PAPER only." \
+            --evidence cycles/B1_C110_PRECOMMIT_BLIND_SECOND_REGIME_UNCHANGED_C109_CORE_RU.md \
+            --evidence d05/c110_blind_unchanged_c109_second_regime.py \
+            --evidence d05/test_c110_unchanged_c109_second_regime.py \
+            --evidence evidence/c110/C110_UNCHANGED_C109_SECOND_REGIME_768_ORIGINAL_3M_ZIPS.json \
+            --evidence cycles/B1_C110_SECOND_REGIME_UNCHANGED_C109_CORE_NEGATIVE_REPLICATION_RU.md
+          python tools/auditlog.py verify | tee /tmp/c110-a173
+          grep -Fq 'entries 173 tip_sha256 ' /tmp/c110-a173
+      - name: Git commit A173 truthful negative freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A173 C110 unchanged B1 51 PAPER trades -9.70R PF0.765 DD19% confirmed unstable market regimes, live BLOCKED"
+          git push origin HEAD:refs/heads/research/academic-engine-recovery-20261015
