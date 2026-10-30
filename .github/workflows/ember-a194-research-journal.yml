@@ -1,0 +1,69 @@
+name: "EMBER A194 real 3x3x2 research experiment immutable appendix and journal"
+on:
+  push:
+    branches: [research/a194-three-mechanics-preregistered-oos-20261031]
+    paths:
+      - ".github/workflows/ember-a194-research-journal.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  append-a194:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate 193 existing audit entries and freeze 6 tested outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a193check
+          grep -Fq 'INTEGRITY_PASS entries 193' /tmp/a193check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('research/backup_candidates_20261031')
+          d=json.loads((base/'A194_FINAL_TRIAGE_MACHINE.json').read_text())
+          assert d['run_id']==41145988911 and d['run_conclusion']=='success'
+          assert len(d['outcomes'])==3 and len(d['by_symbol_base'])==3
+          assert d['candles_total_5m']==79488
+          assert all(x['base']['net_pct']<0 and x['stress']['net_pct']<0 for x in d['outcomes'])
+          assert sum(x['base']['trades'] for x in d['outcomes'])==573
+          assert d['artifact_id']==13020429070
+          assert d['decision'].startswith('REJECT_ALL')
+          assert (base/'A194_FINAL_TRIAGE_RESULTS_RU.md').stat().st_size>3000
+          assert (base/'A194_PREREGISTERED_LAST_SCREEN_RU.md').stat().st_size>2500
+          print('A194_FROZEN_ALL_18_TEST_RESULTS_AND_CRITERIA_CHECKED')
+          PY
+      - name: Record A194 experiment completed, three mechanisms economic FAIL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A194 --cycle PREREGISTERED_SMALL_DEPOSIT_THREE_MECHANICS_CROSS_PAIR_AUG_SEP2026 \
+            --planned "User approved one final targeted source search: 15m-1h trend pullback, breakout+retest and liquidity-sweep reversal. Reject non-executable or dangerous leverage/DCA sources. Preregister three distinct simple non-tuned causal research hypotheses and compare on real Binance Vision BTC ETH SOL 5m with 15m close signal and 1h closed context, enter next 5m open, stop-first intrabar 5m, account risk1pct with 3x nominal cap, fixed common research target1.75R, fee/slippage stress. Deny LIVE orders and note third-party source-vs-ours difference." \
+            --executed "Inspected sources from Kureshi25, kboranyldz, Davidzr, Lewsiafat, Fortunato and legacy libraries. Committed prereg code & acceptance gates BEFORE CI test. Actual CI run #41145988911 SUCCESS artifact13020429070 sha256 1e93249f8598906a5f4279958e8795873ab59f090b7245ea5c598266a4ffc225. Real 79488 contiguous Binance USDM BTC ETH SOL 5m July-Sep, July warmup, Aug-Sep 61d test. Six aggregates (18 detailed runs, 3 symbols x 3 mechanisms x 2 fee scenarios): A pullback BASE191 N -17.8345pct PF0.5891 STRESS195 N -35.2859pct PF0.3184. B breakout/retest BASE72 N -3.2512pct PF0.7951 STRESS73 N -11.4424pct PF0.4344. C sweep BASE310 N -17.2881pct PF0.7321 STRESS331 N -47.2085pct PF0.3731. B BASE BTC17 trades +1.7333pct SOL29 +1.8891pct ETH26 -13.3761pct; B stress all 3 coins loss. Exact source SHA receipts and full trade histories zipped in GitHub artifact." \
+            --result "All three preregistered fast-mechanics reject as independently profitable templates on this fixed 61d test: losses at both cost scenarios, pooled PF all below1.0, none met predeclared 100-trade, PF1.30 base+PF1.15 stress+positive 2pair acceptance gate. B is least bad but fails sharply on ETH and higher expenses. Research families may show regime-edge elsewhere, not disproven universally. Do not call this 4h zone EMBER: fixed 1.75R for experimental comparability not production zone TP. Recommend stop generic strategy search and require different future OOS dataset for any revised academic system; no retune this test. NO live, PAPER automation or SMOKE modifications." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Preregistered markdown and frozen execution source git commit predates the independent CI run. Actual Binance Vision monthly ZIP 9 files with SHA and 5m continuity verified, outputs 18 per-asset cases and 6 pooled cases. 5m first entry candle SL checked and stop-first, real fee and adverse slip both fills. Unlike true future untouched OOS, study is retrospective (written 2026-10-31 after Aug-Sep market), 5m not 1m tick, funding and live order fills omitted, closed-trade DD understates intraposition DD. Even if 2 positive B base pairs, stress all 3 negative and pooled BASE negative. Existing 193 entries verified." \
+            --evidence ../../research/backup_candidates_20261031/A194_FINAL_TRIAGE_RESULTS_RU.md \
+            --evidence ../../research/backup_candidates_20261031/A194_FINAL_TRIAGE_MACHINE.json \
+            --evidence ../../research/backup_candidates_20261031/A194_PREREGISTERED_LAST_SCREEN_RU.md \
+            --evidence ../../research/backup_candidates_20261031/a194_three_mechanics_fixed.py \
+            --evidence ../../.github/workflows/ember-a194-three-mechanics.yml
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a194check
+          grep -Fq 'INTEGRITY_PASS entries 194' /tmp/a194check
+      - name: Commit audit journal append-only row A194
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m 'A194 close targeted research: 3 causal hypotheses x3 coins fail both fee regimes'
+          git push origin HEAD:refs/heads/research/a194-three-mechanics-preregistered-oos-20261031
