@@ -12,7 +12,7 @@
 
 ## AppDeploy: snapshot не равен GitHub branch
 
-Прочитаны AppDeploy `get_apps`, `get_app_versions`, `src_glob`, `src_read`, `get_app_status`. Проект `smoke-trading-terminal-0kl792`, deployed Vite snapshot **v52 `1792085859614`**, 15.10.2026, в каталоге **52 сохранённые версии v1-v52**. `src_glob` последнего snapshot отдал **90 файлов** (содержимое пока прочитано выборочно), включая frontend `src/App.tsx`, backend `backend/index.ts` и `services/orchestrator/observe-cycle.ts`, отдельный runtime от GitHub Next/Vinext.
+Прочитаны AppDeploy `get_apps`, `get_app_versions`, `src_glob`, `src_read`, `get_app_status`. Проект `smoke-trading-terminal-0kl792`, deployed Vite snapshot **v52 `1792085859614`**, 15.10.2026, в каталоге **52 сохранённые версии v1-v52**. `src_glob` последнего snapshot отдал **94 файла** (содержимое пока прочитано выборочно), включая frontend `src/App.tsx`, backend `backend/index.ts` и `services/orchestrator/observe-cycle.ts`, отдельный runtime от GitHub Next/Vinext.
 
 **Побайтовая сверка `src_read` v52 versus GitHub Terminal fix** (нет ссылок на секреты):
 - `core/paper/paper-lifecycle.ts` — EXACT, 9582 символа; Git blob `ba922dafef4524957ccd50418374da535b151ad2`.
