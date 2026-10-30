@@ -219,25 +219,59 @@ def touch_candidate(z,bar,prev4,now):
         return False
     return bar.high>=z.lower and bar.low<=z.upper
 
+def t0_preknown_fta(z,t0,entry,atr,sw4,rows,starts3):
+    """Physical 4H FTA exists independently of the later RR entry gate.
+
+    Crucial: early target must not disappear simply because a later-entry RR
+    filter would reject. Only pivots confirmed by t0 can be targets.
+    """
+    required="HIGH" if z.side=="LONG" else "LOW"
+    good=[]
+    last=bisect_left(starts3,t0)
+    for swing in sw4:
+        if (swing.tf_ms!=p4.H4 or swing.kind!=required or
+            swing.confirmed_ms>t0 or
+            (swing.price<=entry if z.side=="LONG" else swing.price>=entry)):
+            continue
+        first=bisect_left(starts3,swing.confirmed_ms)
+        if any((x.high>=swing.price if z.side=="LONG" else x.low<=swing.price)
+               for x in rows[first:last]):
+            continue
+        good.append(swing)
+    if not good:return None
+    pivot=(min(good,key=lambda x:x.price) if z.side=="LONG"
+           else max(good,key=lambda x:x.price))
+    return pivot.price-p4.PAD*atr if z.side=="LONG" else pivot.price+p4.PAD*atr
+
 def early_competing(t0,landmark,bar0,rows,starts3,z,closed4,sw4,all_four):
-    """ITTs retain early hits and do not condition treatment eligibility on survival."""
+    """Pre-landmark hit of a frozen t0 4H barrier, retaining ITT failures."""
     atr=p4.four_atr(closed4)
     stop=(z.lower-p4.PAD*atr if z.side=="LONG" else z.upper+p4.PAD*atr)
-    candidate,_=p4.parent_plan(z,t0,bar0.close,closed4,sw4,rows,starts3)
-    target=D(candidate["target"]) if candidate is not None else None
+    target=t0_preknown_fta(z,t0,bar0.close,atr,sw4,rows,starts3)
     i=bisect_left(starts3,t0)
     j=bisect_left(starts3,landmark)
+    invalidations={b.close_ms for b in all_four
+                   if t0<b.close_ms<landmark and
+                   (b.c<z.lower if z.side=="LONG" else b.c>z.upper)}
     for row in rows[i:j]:
+        # H4 known only at its close. A 3m bar ending on that close may
+        # contain a stop or TP; treat physical barrier first on tie.
         if z.side=="LONG":
-            if row.low<=stop:return {"status":"EARLY_COMPETING_STOP","known_ms":row.known_ms}
-            if target is not None and row.high>=target:return {"status":"EARLY_COMPETING_TP","known_ms":row.known_ms}
+            hitstop=row.low<=stop
+            hittarget=target is not None and row.high>=target
         else:
-            if row.high>=stop:return {"status":"EARLY_COMPETING_STOP","known_ms":row.known_ms}
-            if target is not None and row.low<=target:return {"status":"EARLY_COMPETING_TP","known_ms":row.known_ms}
-    if any((b.c<z.lower if z.side=="LONG" else b.c>z.upper)
-           for b in all_four if t0<b.close_ms<=landmark):
-        return {"status":"EARLY_COMPETING_PARENT_4H_INVALIDATION",
-                "known_ms":landmark}
+            hitstop=row.high>=stop
+            hittarget=target is not None and row.low<=target
+        if hitstop:return {"status":"EARLY_COMPETING_STOP",
+                           "known_ms":row.known_ms,
+                           "early_frozen_target_available":target is not None}
+        if hittarget:return {"status":"EARLY_COMPETING_TP",
+                             "known_ms":row.known_ms,
+                             "early_frozen_target_available":True}
+        if row.known_ms in invalidations:
+            return {"status":"EARLY_COMPETING_PARENT_4H_INVALIDATION",
+                    "known_ms":row.known_ms,
+                    "early_frozen_target_available":target is not None}
     return {"status":"SURVIVED_6H_LANDMARK",
             "known_ms":landmark,
             "early_frozen_target_available":target is not None}
