@@ -1,0 +1,658 @@
+{
+  "c114_original_source_gate_unmodified": true,
+  "daily_4tf_diagnostics": {
+    "anomalous_bucket_count": 1,
+    "first_anomalies": [
+      {
+        "bucket": 54,
+        "fields": {
+          "base_volume": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "31675.04",
+              "1m": "24700.27",
+              "3m": "24700.27",
+              "5m": "31675.04"
+            },
+            "spread_pct": "22.01976698371967328218054342"
+          },
+          "quote_volume": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "22058181.80660",
+              "1m": "17199468.85800",
+              "3m": "17199468.85800",
+              "5m": "22058181.80660"
+            },
+            "spread_pct": "22.02680615836719050682484368"
+          },
+          "taker_buy_base": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "16447.61",
+              "1m": "14407.02",
+              "3m": "14407.02",
+              "5m": "16447.61"
+            },
+            "spread_pct": "12.40660497178617440467034420"
+          },
+          "taker_buy_quote": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "11451930.43500",
+              "1m": "10030664.99320",
+              "3m": "10030664.99320",
+              "5m": "11451930.43500"
+            },
+            "spread_pct": "12.41070621121005787877020055"
+          },
+          "trades": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "28381",
+              "1m": "24413",
+              "3m": "24413",
+              "5m": "28381"
+            },
+            "spread_pct": "13.98118459532786018815404672"
+          }
+        },
+        "utc": "2025-01-14T13:30:00+00:00"
+      }
+    ],
+    "known_incident_bucket_1330": {
+      "bucket": 54,
+      "fields": {
+        "base_volume": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "31675.04",
+            "1m": "24700.27",
+            "3m": "24700.27",
+            "5m": "31675.04"
+          },
+          "spread_pct": "22.01976698371967328218054342"
+        },
+        "quote_volume": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "22058181.80660",
+            "1m": "17199468.85800",
+            "3m": "17199468.85800",
+            "5m": "22058181.80660"
+          },
+          "spread_pct": "22.02680615836719050682484368"
+        },
+        "taker_buy_base": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "16447.61",
+            "1m": "14407.02",
+            "3m": "14407.02",
+            "5m": "16447.61"
+          },
+          "spread_pct": "12.40660497178617440467034420"
+        },
+        "taker_buy_quote": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "11451930.43500",
+            "1m": "10030664.99320",
+            "3m": "10030664.99320",
+            "5m": "11451930.43500"
+          },
+          "spread_pct": "12.41070621121005787877020055"
+        },
+        "trades": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "28381",
+            "1m": "24413",
+            "3m": "24413",
+            "5m": "28381"
+          },
+          "spread_pct": "13.98118459532786018815404672"
+        }
+      },
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "max_relative_metric_spreads": {
+      "base_volume": {
+        "bucket": 54,
+        "pct": "22.01976698371967328218054342"
+      },
+      "quote_volume": {
+        "bucket": 54,
+        "pct": "22.02680615836719050682484368"
+      },
+      "taker_buy_base": {
+        "bucket": 54,
+        "pct": "12.40660497178617440467034420"
+      },
+      "taker_buy_quote": {
+        "bucket": 54,
+        "pct": "12.41070621121005787877020055"
+      },
+      "trades": {
+        "bucket": 54,
+        "pct": "13.98118459532786018815404672"
+      }
+    },
+    "metric_mismatch_bucket_counts": {
+      "base_volume": 1,
+      "quote_volume": 1,
+      "taker_buy_base": 1,
+      "taker_buy_quote": 1,
+      "trades": 1
+    },
+    "ohlc_mismatch_count": 0,
+    "ohlc_mismatches": [],
+    "strict_ohlc_equal_all_four": true,
+    "total_15m_buckets": 96
+  },
+  "daily_provider_receipts": {
+    "15m": {
+      "csv_sha256": "1fd3b65346fa8fd0703b63ca85dae0a5064157378e00c7bfef359e38db99df74",
+      "date": "2025-01-14",
+      "interval": "15m",
+      "native_rows": 96,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/15m/BNBUSDT-15m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "8fa0b0657a74304d56d3aeed11f43d77b7b2d12eccdb7ee8edf0c603d2f0869c"
+    },
+    "1m": {
+      "csv_sha256": "f4102df2b41f1c52b18ecabf7a1032ba2f72d64b31c10f1a5ecf9f274cf092b7",
+      "date": "2025-01-14",
+      "interval": "1m",
+      "native_rows": 1440,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/1m/BNBUSDT-1m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "146a4db6d2c580004239b5b688f7952088e3c641981d2c71aed30a631bfb5130"
+    },
+    "3m": {
+      "csv_sha256": "98954448f59106541cb520c656697fe725347a4e54b54cf6467166f522a2f6d9",
+      "date": "2025-01-14",
+      "interval": "3m",
+      "native_rows": 480,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/3m/BNBUSDT-3m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "703e331eb1a366401eeb25f98276328bf74872fd909f6d38e49927f3af7394e3"
+    },
+    "5m": {
+      "csv_sha256": "309fbee28bbefd01ca4f328819f23182ceb7c744b8f19cabe4124a3b4ae884d4",
+      "date": "2025-01-14",
+      "interval": "5m",
+      "native_rows": 288,
+      "provider_checksum_verified": true,
+      "source_url": "https://data.binance.vision/data/futures/um/daily/klines/BNBUSDT/5m/BNBUSDT-5m-2025-01-14.zip",
+      "symbol": "BNBUSDT",
+      "zip_sha256": "53b1b1df97f560e3033bd8f17c2201496ce155c88a485ba4adf6d81864265c63"
+    }
+  },
+  "daily_vs_monthly_15m_diff_by_source": {
+    "15m": {
+      "base_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "ohlc": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "quote_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_base": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_quote": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "trades": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      }
+    },
+    "1m": {
+      "base_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "ohlc": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "quote_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_base": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_quote": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "trades": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      }
+    },
+    "3m": {
+      "base_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "ohlc": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "quote_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_base": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_quote": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "trades": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      }
+    },
+    "5m": {
+      "base_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "ohlc": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "quote_volume": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_base": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "taker_buy_quote": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      },
+      "trades": {
+        "different_15m_buckets": 0,
+        "first_mismatch": []
+      }
+    }
+  },
+  "date": "2025-01-14",
+  "known_1330_daily": {
+    "15m": {
+      "base_volume": "31675.04",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "22058181.80660",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "16447.61",
+      "taker_buy_quote": "11451930.43500",
+      "trades": "28381",
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "1m": {
+      "base_volume": "24700.27",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "17199468.85800",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "14407.02",
+      "taker_buy_quote": "10030664.99320",
+      "trades": "24413",
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "3m": {
+      "base_volume": "24700.27",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "17199468.85800",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "14407.02",
+      "taker_buy_quote": "10030664.99320",
+      "trades": "24413",
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "5m": {
+      "base_volume": "31675.04",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "22058181.80660",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "16447.61",
+      "taker_buy_quote": "11451930.43500",
+      "trades": "28381",
+      "utc": "2025-01-14T13:30:00+00:00"
+    }
+  },
+  "known_1330_monthly": {
+    "15m": {
+      "base_volume": "31675.04",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "22058181.80660",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "16447.61",
+      "taker_buy_quote": "11451930.43500",
+      "trades": "28381",
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "1m": {
+      "base_volume": "24700.27",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "17199468.85800",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "14407.02",
+      "taker_buy_quote": "10030664.99320",
+      "trades": "24413",
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "3m": {
+      "base_volume": "24700.27",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "17199468.85800",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "14407.02",
+      "taker_buy_quote": "10030664.99320",
+      "trades": "24413",
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "5m": {
+      "base_volume": "31675.04",
+      "ohlc": [
+        "693.280",
+        "697.670",
+        "693.280",
+        "696.350"
+      ],
+      "quote_volume": "22058181.80660",
+      "start_ms": 1736861400000,
+      "taker_buy_base": "16447.61",
+      "taker_buy_quote": "11451930.43500",
+      "trades": "28381",
+      "utc": "2025-01-14T13:30:00+00:00"
+    }
+  },
+  "live_approved": false,
+  "monthly_4tf_diagnostics": {
+    "anomalous_bucket_count": 1,
+    "first_anomalies": [
+      {
+        "bucket": 54,
+        "fields": {
+          "base_volume": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "31675.04",
+              "1m": "24700.27",
+              "3m": "24700.27",
+              "5m": "31675.04"
+            },
+            "spread_pct": "22.01976698371967328218054342"
+          },
+          "quote_volume": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "22058181.80660",
+              "1m": "17199468.85800",
+              "3m": "17199468.85800",
+              "5m": "22058181.80660"
+            },
+            "spread_pct": "22.02680615836719050682484368"
+          },
+          "taker_buy_base": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "16447.61",
+              "1m": "14407.02",
+              "3m": "14407.02",
+              "5m": "16447.61"
+            },
+            "spread_pct": "12.40660497178617440467034420"
+          },
+          "taker_buy_quote": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "11451930.43500",
+              "1m": "10030664.99320",
+              "3m": "10030664.99320",
+              "5m": "11451930.43500"
+            },
+            "spread_pct": "12.41070621121005787877020055"
+          },
+          "trades": {
+            "one_minute_agrees_with": [
+              "3m"
+            ],
+            "raw": {
+              "15m": "28381",
+              "1m": "24413",
+              "3m": "24413",
+              "5m": "28381"
+            },
+            "spread_pct": "13.98118459532786018815404672"
+          }
+        },
+        "utc": "2025-01-14T13:30:00+00:00"
+      }
+    ],
+    "known_incident_bucket_1330": {
+      "bucket": 54,
+      "fields": {
+        "base_volume": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "31675.04",
+            "1m": "24700.27",
+            "3m": "24700.27",
+            "5m": "31675.04"
+          },
+          "spread_pct": "22.01976698371967328218054342"
+        },
+        "quote_volume": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "22058181.80660",
+            "1m": "17199468.85800",
+            "3m": "17199468.85800",
+            "5m": "22058181.80660"
+          },
+          "spread_pct": "22.02680615836719050682484368"
+        },
+        "taker_buy_base": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "16447.61",
+            "1m": "14407.02",
+            "3m": "14407.02",
+            "5m": "16447.61"
+          },
+          "spread_pct": "12.40660497178617440467034420"
+        },
+        "taker_buy_quote": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "11451930.43500",
+            "1m": "10030664.99320",
+            "3m": "10030664.99320",
+            "5m": "11451930.43500"
+          },
+          "spread_pct": "12.41070621121005787877020055"
+        },
+        "trades": {
+          "one_minute_agrees_with": [
+            "3m"
+          ],
+          "raw": {
+            "15m": "28381",
+            "1m": "24413",
+            "3m": "24413",
+            "5m": "28381"
+          },
+          "spread_pct": "13.98118459532786018815404672"
+        }
+      },
+      "utc": "2025-01-14T13:30:00+00:00"
+    },
+    "max_relative_metric_spreads": {
+      "base_volume": {
+        "bucket": 54,
+        "pct": "22.01976698371967328218054342"
+      },
+      "quote_volume": {
+        "bucket": 54,
+        "pct": "22.02680615836719050682484368"
+      },
+      "taker_buy_base": {
+        "bucket": 54,
+        "pct": "12.40660497178617440467034420"
+      },
+      "taker_buy_quote": {
+        "bucket": 54,
+        "pct": "12.41070621121005787877020055"
+      },
+      "trades": {
+        "bucket": 54,
+        "pct": "13.98118459532786018815404672"
+      }
+    },
+    "metric_mismatch_bucket_counts": {
+      "base_volume": 1,
+      "quote_volume": 1,
+      "taker_buy_base": 1,
+      "taker_buy_quote": 1,
+      "trades": 1
+    },
+    "ohlc_mismatch_count": 0,
+    "ohlc_mismatches": [],
+    "strict_ohlc_equal_all_four": true,
+    "total_15m_buckets": 96
+  },
+  "monthly_provider_receipts": {
+    "15m": {
+      "csv_sha256": "3381c1566f0d35674e492cc301aad4acdad1f88f2d881f661ffb3f4725fa2425",
+      "month_rows": 2976,
+      "provider_checksum_verified": true,
+      "selected_day_rows": 96,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BNBUSDT/15m/BNBUSDT-15m-2025-01.zip",
+      "timeframe": "15m",
+      "zip_sha256": "7a9c38e1f06ef095d03e010d64aaa96e0dad8a796c5110c5454962f6a2a7ad46"
+    },
+    "1m": {
+      "csv_sha256": "87f05c93ca440529d7e50d6523eb2968d38139e37de93854923bab7ed4d0a2f4",
+      "month_rows": 44640,
+      "provider_checksum_verified": true,
+      "selected_day_rows": 1440,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BNBUSDT/1m/BNBUSDT-1m-2025-01.zip",
+      "timeframe": "1m",
+      "zip_sha256": "ac1dca1d605bd4922c6d7368442228202514eeee95312afc72c730114ccabda1"
+    },
+    "3m": {
+      "csv_sha256": "bc9499accaf98d21fca841c68612eaaf199862cf9fade3ffb5cfa224c7852482",
+      "month_rows": 14880,
+      "provider_checksum_verified": true,
+      "selected_day_rows": 480,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BNBUSDT/3m/BNBUSDT-3m-2025-01.zip",
+      "timeframe": "3m",
+      "zip_sha256": "df48cabe5fdc5eb78838eb2ceba7d16207785c2021fbc4d7260f0f730e8576a3"
+    },
+    "5m": {
+      "csv_sha256": "ab3a56ededca65285943a2b8b4dbe7908f5c12e0d46c7708aa23aca764e81727",
+      "month_rows": 8928,
+      "provider_checksum_verified": true,
+      "selected_day_rows": 288,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BNBUSDT/5m/BNBUSDT-5m-2025-01.zip",
+      "timeframe": "5m",
+      "zip_sha256": "b74f33eb86c083f7304d03635479502af5ca0f96eb3fc2ebb67b295e20b75b6e"
+    }
+  },
+  "no_trade_outcomes": true,
+  "symbol": "BNBUSDT",
+  "type": "C114_MONTHLY_VS_DAILY_NATIVE_4TF_FORENSIC_NO_STRATEGY"
+}
