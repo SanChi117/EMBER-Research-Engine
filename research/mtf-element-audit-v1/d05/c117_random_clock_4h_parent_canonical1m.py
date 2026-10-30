@@ -236,7 +236,7 @@ def summary_scores(rows,window,baseline):
         expected=observed_original[bps]
         if actual["fills"]!=expected["fills"] or abs(
             actual["net_total_r"]-expected["net_total_r"])>0.00005:
-            raise C117Error("T_ACCOUNTING_NOT_IDENTICAL_TO_FROZEN_C114_CHOCH_ONLY")
+            raise C117Error("T_ACCOUNTING_NOT_IDENTICAL_TO_FROZEN_C114_CHOCH_ONLY bps="+str(bps)+" actual="+str((actual["fills"],actual["net_total_r"]))+" expected="+str((expected["fills"],expected["net_total_r"])))
     if any(x["t_trade"] is not None for x in rows if x["treatment"]!="T_CHoCH"):
         raise C117Error("NON_CHOCH_TRADE_IN_TREATMENT_POLICY")
     random_events=[]
