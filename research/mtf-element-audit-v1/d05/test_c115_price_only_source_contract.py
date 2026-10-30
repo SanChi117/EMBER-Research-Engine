@@ -1,5 +1,6 @@
 """C115 frozen price-source negative controls. NO derived backtest successes."""
 import unittest
+from unittest.mock import patch
 from dataclasses import replace
 from decimal import Decimal as D
 from types import SimpleNamespace as NS
@@ -56,6 +57,24 @@ class C115PriceOnlyContracts(unittest.TestCase):
         self.assertEqual(original.WINDOWS,prev_windows)
         self.assertIs(original.independent_15m_parity,prev_parity)
         self.assertEqual(original.PRECOMMIT,prev_precommit)
+    def test_event_trade_attribution_bridge_only_adds_metadata(self):
+        original_trade={"entry":"100","stop":"90","target":"120","net_r":1.4,
+                        "entry_ms":10,"exit_ms":30}
+        event={"symbol":"BNBUSDT","parent_id":"4H-CLOSED","trade":original_trade}
+        with patch.object(c115,"_ORIGINAL_PER_SYMBOL",return_value={"events":[event]}) as mock:
+            z=c115.pure_trade_provenance_bridge((),(),"BNBUSDT",c115.WINDOWS[0])
+        self.assertEqual(z["events"][0]["trade"]["symbol"],"BNBUSDT")
+        self.assertEqual(z["events"][0]["trade"]["parent_id"],"4H-CLOSED")
+        self.assertEqual({k:z["events"][0]["trade"][k] for k in
+                          ("entry","stop","target","net_r","entry_ms","exit_ms")},
+                         {"entry":"100","stop":"90","target":"120",
+                          "net_r":1.4,"entry_ms":10,"exit_ms":30})
+    def test_event_trade_attribution_bridge_rejects_symbol_conflict(self):
+        z={"events":[{"symbol":"BNBUSDT","parent_id":"4H","trade":
+                      {"symbol":"BTCUSDT","entry":"100","net_r":0}}]}
+        with patch.object(c115,"_ORIGINAL_PER_SYMBOL",return_value=z):
+            with self.assertRaises(c115.C115Rejected):
+                c115.pure_trade_provenance_bridge((),(),"BNBUSDT",c115.WINDOWS[0])
     def test_all_original_economic_parameters_untouched(self):
         x=c115.original
         self.assertEqual(x.BPS,(14,25,40))
