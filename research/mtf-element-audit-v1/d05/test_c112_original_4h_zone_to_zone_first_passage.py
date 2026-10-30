@@ -115,7 +115,7 @@ class C112(unittest.TestCase):
               "entry_ms":rows[0].start_ms}
         zone={"near":"101","id":"too-close","created_ms":at-h4.H4,
               "low":"101","high":"103"}
-        z,reason=f.zone_alt_trade(base,zone,rows,starts,four)
+        z,reason=f.zone_alt_trade(base,zone,rows,starts,four[:-1])
         self.assertIsNone(z)
         self.assertEqual(reason,"FRESH_FVG_DESTINATION_DERIVED_RR_LT_1_25")
     def test_17_unmodified_4h_exit_boundaries(self):
