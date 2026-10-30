@@ -1,0 +1,57 @@
+name: EMBER C114 A177 source integrity block SHA journal
+on:
+  push:
+    branches: [research/c114-independent-zone-reaction-value-20261030]
+    paths:
+      - '.github/workflows/mtf-c114-A177-source-blocked-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C114_SOURCE_BLOCKED_INCIDENT_20261030_RU.md'
+permissions:
+  contents: write
+jobs:
+  record-C114-SOURCE-BLOCKED:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate A176 source chain and C114 negative 23 tests only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a176
+          grep -Fq 'entries 176' /tmp/a176
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c114_independent_4h_poi_native5m
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('../cycles/B1_C114_SOURCE_BLOCKED_INCIDENT_20261030_RU.md').read_text()
+          assert '24700.27' in s and '31675.04' in s
+          assert 'SOURCE_BLOCKED' in s
+          print('C114_3M5M_VOLUME_DISAGREEMENT_ECONOMIC_RESULTS_UNAVAILABLE')
+          PY
+      - name: Append A177 for SOURCE_BLOCKED without manufacturing strategy result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A177 --cycle C114 \
+            --planned "New 4H POI first touch versus native5m structural CHoCH, two historic windows and paired controls" \
+            --executed "Implemented and tested exact original native5m reader, C114 negative tests, attempted Binance original 3m/5m cross-source parity prior to any economic replay" \
+            --result "SOURCE_BLOCKED: 2025-Jan BNB 15m bucket 1302 volume 24700.27 3m vs 31675.04 5m, 22.01977 percent divergence; original OHLC identical; NO strategy PnL or PF computed" \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "23 negative source/matching tests pass x Python 3.10-3.12; original archive provider checksums pass; economic gates never run; strict 1bp volume divergence threshold not retroactively relaxed" \
+            --evidence cycles/B1_C114_PRECOMMIT_INDEPENDENT_4H_POI_5M_REACTION_PREDICTIVE_VALUE_RU.md \
+            --evidence cycles/B1_C114_SOURCE_BLOCKED_INCIDENT_20261030_RU.md \
+            --evidence d05/c114_original_native5m_daily_source.py \
+            --evidence d05/c114_independent_poi_native5m_choch_research.py \
+            --evidence d05/test_c114_independent_4h_poi_native5m.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a177
+          grep -Fq 'entries 177' /tmp/a177
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C114 A177 source anomaly SHA journal, blocked without economic outcome"
+          git push origin HEAD:refs/heads/research/c114-independent-zone-reaction-value-20261030
