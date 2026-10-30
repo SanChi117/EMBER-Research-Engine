@@ -1,0 +1,78 @@
+name: "EMBER A190 A191 evidence journal: proprietary MS source and native SingleB cost fail"
+on:
+  push:
+    branches: [research/a190-a191-singleb-and-ms-source-20261031]
+    paths:
+      - '.github/workflows/ember-a190-a191-evidence-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  append-evidence-with-sha-journal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify previous A189 log and required source documents
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/prev
+          grep -Fq 'INTEGRITY_PASS entries 189' /tmp/prev
+          test -s research/backup_candidates_20261031/A190_MS_SOURCE_PROVENANCE_RU.md
+          test -s research/backup_candidates_20261031/A191_NATIVE_ETH_OOS_RESULT_RU.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('research/backup_candidates_20261031/A191_NATIVE_ETH_RECEIPTS_VERIFIED.json').read_text())
+          assert j['source_run']==41142627798
+          assert j['fee5bps_side']['n']==126 and j['fee12p5bps_side']['n']==115
+          assert j['fee5bps_side']['profit_factor']<1.2
+          assert j['fee12p5bps_side']['profit_usdt']<0
+          assert j['fee5bps_side']['top3_share_pct']>90
+          print('A191_NATIVE_SOURCE_METRICS_CRITERION_FAIL_CLOSED_VALIDATED')
+          PY
+      - name: Record A190 confirmed source unavailable
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A190 --cycle MARKET_STRUCTURE_STRATEGY_CODE_FORENSICS \
+            --planned "User asked for reserve alternatives; find exact complete original MsSupportResistanceV1 to independently replay 404 historical trades. Verify GitHub main tree and prior commit trees and establish source provenance and publication rights." \
+            --executed "Read author fortunato/pymarket-structure 82abf74f2338 commit Remove strategy source code from public repository; Strategy implementations are proprietary. Checked main and removal parent 50ddc745, including strategy paths and README diffs, found public library and 15 historical trade JSON but no complete original IStrategy class. A189 404 trade receipt arithmetic remains valid, cannot infer causal trading rules." \
+            --result "ORIGINAL_NATIVE_REPLAY_BLOCKED: proprietary source explicitly withheld; do not misrepresent reconstructed version as author original. Public library can be used only as material for a new independent strategy with separate tests. No orders." \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "Distinguish accessible LGPL/MIT library and historical trade receipts from unpublished Freqtrade class. Removal commit merely deleted README strategy details; earlier tree also lacks full class. Do not claim that original strategy class was previously publicly accessible." \
+            --evidence ../../research/backup_candidates_20261031/A190_MS_SOURCE_PROVENANCE_RU.md
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a190
+          grep -Fq 'INTEGRITY_PASS entries 190' /tmp/a190
+      - name: Record A191 true Freqtrade OOS and economic fail at higher fee
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A191 --cycle SINGLEB_FIXED_RR_BINANCE_ETH_NATIVE_POSTCODE_OOS \
+            --planned "Source-pin liu57liu456/backtest-autopsy SingleB_FixedRR native Freqtrade 2026.4; real Binance ETH 5m candles, mark and settled funding in August-September 2026 post-source July11; test 5 bps and 12.5 bps per side, no entry/SL/TP retune, no live orders. FAIL if missing source candles or native results." \
+            --executed "Successful immutable GitHub Actions #41142627798, SHA-pinned author commit 39e640bf and strategy blob 9544d6ea; 26496 Binance Vision continuous ETH5m candles July-Sep (July warmup), 276 actual settled funding events and archival Binance mark1h. Freqtrade 2026.4 original strategy isolated 5000 USDT wallet, 500 stake, 1x and max3 but only ETH pair; realistic source OHLCV with offline Binance static exchange metadata. Native 5 bps side: 126 trades +24.6363 USD +0.4927pct PF1.0524 DD0.9273pct, top3 91.36pct of profit. Native 12.5 bps side: 115 trades minus20.8819 USD minus0.4176pct PF0.9556 DD1.1997pct. All original zip receipts and logs artifact 13020156070 sha256 87966fbae1181f5b3d56ea21344c0eec8d48d5ec29b60744c2850f9127b01ca7." \
+            --result "SINGLEB_ETH_OOS_ECONOMIC_FAIL_SCREEN: small near-zero profitability, cost sensitivity turns negative at 25bps round trip; no intrabar, bid/ask, order queue, other symbols or full lookahead checks. Not generalized claim of 10-coin failure; no live, do not promote to reserve paper execution." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Two actual native Freqtrade ZIPs checked source pinned, 2026.4 engine and real Binance kline continuity; model wallet fees separate, note endogenous 126 versus 115 trades. Public author 14008 trades claim NOT reproduced here. Top3 concentration >90 percent. One post-publication OOS ETH only, no model tuning. Proprietary market-structure strategy remains blocked separately." \
+            --evidence ../../research/backup_candidates_20261031/A191_NATIVE_ETH_OOS_RESULT_RU.md \
+            --evidence ../../research/backup_candidates_20261031/A191_NATIVE_ETH_RECEIPTS_VERIFIED.json \
+            --evidence ../../research/backup_candidates_20261031/a191_prepare_singleb_eth_binance_5m.py \
+            --evidence ../../research/backup_candidates_20261031/a191_binance_offline_native.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a191
+          grep -Fq 'INTEGRITY_PASS entries 191' /tmp/a191
+      - name: Commit A190 A191 SHA append-only journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A190 proprietary market structure source blocked; A191 SingleB native Binance ETH economic screen failed"
+          git push origin HEAD:refs/heads/research/a190-a191-singleb-and-ms-source-20261031
