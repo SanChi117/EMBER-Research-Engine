@@ -143,6 +143,20 @@ def event_controls(event,rows,starts,four,closed4ms,sw4):
         "per_event_avg_random_R25":sum(engine.net_r(x,25) for x in values)/8,
         "per_event_avg_random_R40":sum(engine.net_r(x,40) for x in values)/8}
 
+def t_policy_trade(event):
+    """Exact preregistered CHoCH treatment: no confirmation => 0R (no trade).
+
+    C114 computes both arms for observational evaluation; C117 must NOT
+    count any C_NO_CHoCH trade in the CHoCH-only T policy. Repair is an
+    accounting bug fix, not changing price/stop/target/entry of any trade.
+    """
+    label=event.get("treatment")
+    if label=="C_NO_CHoCH":return None
+    if label!="T_CHoCH":raise C117Error("UNREGISTERED_TREATMENT_LABEL")
+    if "choch" in event and event["choch"] is None:
+        raise C117Error("CLAIMED_CHOCH_WITHOUT_CONFIRMED_SOURCE")
+    return event.get("trade")
+
 def build_random_evidence(payload,market,window):
     by_symbol=defaultdict(list)
     for symbol in engine.SYMBOLS:
@@ -157,7 +171,7 @@ def build_random_evidence(payload,market,window):
         sw4=swings._confirmed(four,h4.H4,int(window[2].timestamp()*1000))
         for e in by_symbol[symbol]:
             random_evidence=event_controls(e,rows,starts,four,close4,sw4)
-            t=e["trade"]
+            t=t_policy_trade(e)
             t25=engine.net_r(t,25)
             t40=engine.net_r(t,40)
             rand25=random_evidence["per_event_avg_random_R25"]
@@ -217,6 +231,14 @@ def summary_scores(rows,window,baseline):
     treated=[{"trade":r["t_trade"]} for r in rows]
     t25=engine.score(treated,25)
     t40=engine.score(treated,40)
+    observed_original=baseline["scores"]["T_ALL"]
+    for bps,actual in (("25",t25),("40",t40)):
+        expected=observed_original[bps]
+        if actual["fills"]!=expected["fills"] or abs(
+            actual["net_total_r"]-expected["net_total_r"])>0.00005:
+            raise C117Error("T_ACCOUNTING_NOT_IDENTICAL_TO_FROZEN_C114_CHOCH_ONLY")
+    if any(x["t_trade"] is not None for x in rows if x["treatment"]!="T_CHoCH"):
+        raise C117Error("NON_CHOCH_TRADE_IN_TREATMENT_POLICY")
     random_events=[]
     # Each of eight random branch policies is a separate virtual alternative:
     for arm in range(8):
