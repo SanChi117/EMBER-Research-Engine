@@ -1,0 +1,135 @@
+name: "EMBER A192 FTR original 1h price-action ETH native 2-fee source-pin audit"
+on:
+  push:
+    branches: [research/a192-reserve-code-audit-and-ftr-oos-20261031]
+    paths:
+      - '.github/workflows/ember-a192-ftr-native-eth-oos.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-ftr-eth-1h:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Freqtrade genuine 2026.4
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+      - name: Reconstruct ETH 1h,4h,1d OHLCV plus real mark funding with A187 immutable source manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a192-reports
+          python research/doublema_native_oos_20261031/prepare_native.py --datadir "$GITHUB_WORKSPACE/a192-reports/data" | tee a192-reports/market-source-check.log
+          grep -Fq NATIVE_SOURCE_CHECK_COMPLETE a192-reports/market-source-check.log
+      - name: Pin original source from upstream GitHub SHA and inspect long-only feature flags
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet https://github.com/hrodrig/freqhub-strategies.git /tmp/ftr-upstream
+          git -C /tmp/ftr-upstream checkout --quiet 210952246ae457a5f6d5e089ddea8b4960a71775
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          src=Path('/tmp/ftr-upstream/strategies/FreqHub.Strategy.FailureToReturn/FailureToReturnStrategy.py')
+          b=src.read_bytes()
+          gitsha=hashlib.sha1(b'blob '+str(len(b)).encode()+bytes([0])+b).hexdigest()
+          assert gitsha=='6e80c0b96754c21744726120b6904f940621ec01',gitsha
+          assert b'can_short = False' in b and b'timeframe = "1h"' in b
+          assert b'.rolling(lookback).max().shift(1)' in b
+          assert b'.rolling(lookback).min().shift(1)' in b
+          p=Path('/tmp/a192-ftr/user_data/strategies')
+          p.mkdir(parents=True,exist_ok=True)
+          (p/src.name).write_bytes(b)
+          (Path('a192-reports')/'upstream-git-blob.sha').write_text(gitsha+'\n')
+          c={'trading_mode':'futures','margin_mode':'isolated','max_open_trades':1,
+             'stake_currency':'USDT','stake_amount':500,'tradable_balance_ratio':0.99,
+             'dry_run':True,'dry_run_wallet':5000,
+             'exchange':{'name':'binance','key':'','secret':'','pair_whitelist':['ETH/USDT:USDT'],
+                         'pair_blacklist':[]},
+             'pairlists':[{'method':'StaticPairList'}],
+             'entry_pricing':{'price_side':'other','use_order_book':False},
+             'exit_pricing':{'price_side':'other','use_order_book':False},
+             'unfilledtimeout':{'entry':10,'exit':10,'unit':'minutes'}}
+          Path('a192-reports/paper-config.json').write_text(json.dumps(c,indent=2))
+          print('A192_ORIGINAL_SOURCE_GIT_BLOB_PASSED',gitsha)
+          PY
+      - name: Native original FailureToReturn ETH futures long only, 5bps per side
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 400s python research/backup_candidates_20261031/a191_binance_offline_native.py \
+             -c a192-reports/paper-config.json --userdir /tmp/a192-ftr/user_data \
+             --datadir "$GITHUB_WORKSPACE/a192-reports/data" \
+             --strategy FailureToReturnStrategy --timeframe 1h \
+             --timerange 20260801-20261001 --data-format-ohlcv json \
+             --fee 0.0005 --export trades --cache none 2>&1 | tee a192-reports/fee5bps.log
+          z="$(find /tmp/a192-ftr/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -s "$z"
+          cp "$z" a192-reports/ftr-eth1h-5bps-side.zip
+          rm -f /tmp/a192-ftr/user_data/backtest_results/backtest-result*.zip
+      - name: Native original, higher fee 12.5bps per side, no retune
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 400s python research/backup_candidates_20261031/a191_binance_offline_native.py \
+             -c a192-reports/paper-config.json --userdir /tmp/a192-ftr/user_data \
+             --datadir "$GITHUB_WORKSPACE/a192-reports/data" \
+             --strategy FailureToReturnStrategy --timeframe 1h \
+             --timerange 20260801-20261001 --data-format-ohlcv json \
+             --fee 0.00125 --export trades --cache none 2>&1 | tee a192-reports/fee12p5bps.log
+          z="$(find /tmp/a192-ftr/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -s "$z"
+          cp "$z" a192-reports/ftr-eth1h-12p5bps-side.zip
+      - name: Summarize two real result ZIPs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,zipfile
+          from pathlib import Path
+          root=Path('a192-reports')
+          def scan(f):
+              with zipfile.ZipFile(root/f) as z:
+                  m=[x for x in z.namelist() if x.endswith('.json') and '_config' not in x]
+                  assert len(m)==1,m
+                  d=json.loads(z.read(m[0]))['strategy']['FailureToReturnStrategy']
+              t=d['trades'];good=sorted((x['profit_abs'] for x in t),reverse=True)
+              p=float(d['profit_total_abs'])
+              return {'trades':len(t),'profit_usdt':round(p,4),
+                'return_pct':round(100*float(d['profit_total']),4),
+                'PF':round(float(d['profit_factor']),4),
+                'maxDD_pct':round(float(d['max_drawdown_account'])*100,4),
+                'win_pct':round(100*sum(x['profit_abs']>0 for x in t)/max(1,len(t)),3),
+                'top3_pct':round(100*sum(good[:3])/p,3) if abs(p)>1e-8 else None,
+                'long':sum(not x['is_short'] for x in t),
+                'short':sum(x['is_short'] for x in t)}
+          r={'schema':'EMBER_A192_FTR_SINGLE_ETH_NATIVE','code_blob':'6e80c0b96754c21744726120b6904f940621ec01',
+            'market':'Binance USD-M ETHUSDT actual 1h/4h/1d and funding+mark, offline metadata fixture',
+            'period':'2026-08-01..2026-10-01 exclusive',
+            'note':'Original FTR source intended primarily for Forex; can_short=False despite short signal code',
+            'low_fee_side5bps':scan('ftr-eth1h-5bps-side.zip'),
+            'high_fee_side12p5bps':scan('ftr-eth1h-12p5bps-side.zip')}
+          (root/'A192_MACHINE_ETH_FTR.json').write_text(json.dumps(r,indent=2))
+          print('A192_NATIVE_FTR_MACHINE_RESULTS')
+          print(json.dumps(r,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A192-Original-FTR-Ethereum-1h-Binance-native-receipts
+          path: |
+            a192-reports/*.log
+            a192-reports/*.zip
+            a192-reports/*.sha
+            a192-reports/*.json
+            a192-reports/data/native_source_manifest.json
+          retention-days: 30
