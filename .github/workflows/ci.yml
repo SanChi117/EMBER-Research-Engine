@@ -30,6 +30,6 @@ jobs:
       - name: Ruff
         run: ruff check ember/ tests/ scripts/
       - name: Tests
-        run: pytest tests/ -v
+        run: python -m pytest tests/ -v
       - name: Leakage gate
-        run: pytest tests/test_no_leakage.py -v
+        run: python -m pytest tests/test_no_leakage.py -v
