@@ -1,0 +1,69 @@
+name: EMBER A187 dual native Freqtrade proof, 27 trade receipts and SHA audit
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-doublema-a187-dual-native-proof-sha.yml'
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  original-vs-offline-100-percent-trade-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: original-doublema-freqtrade2026-4-immutable-oos
+          run-id: 41138713727
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/remote-original
+      - uses: actions/download-artifact@v4
+        with:
+          name: original-doublema-Freqtrade-native-offline-metadata-reports
+          run-id: 41139485118
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/offline-metadata
+      - name: Validate 27 matching source trades per cost scenario, inspect ONE fee-dependent exit, prove fail-closed economics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/verify_two_native_artifacts.py /tmp/remote-original /tmp/offline-metadata research/doublema_native_oos_20261031/02_MACHINE_VERIFIED_SUMMARY.json | tee /tmp/a187-verifier.log
+          grep -Fq EXACT_NATIVE_REMOTE_AND_OFFLINE_27_OF_27_REPRODUCIBLE /tmp/a187-verifier.log
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a186
+          grep -Fq 'INTEGRITY_PASS entries 186' /tmp/a186
+      - name: Append immutably A187: native reproducible POSITIVE but NO_POWER and unstable trailing threshold
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A187 --cycle DOUBLEMA_NATIVE_POSTPUBLICATION_OOS \
+            --planned "User asks to test publicly claimed Freqtrade DoubleMA profit. Pin author May12 commit and EXACT original Freqtrade 2026.4 source and May13-Oct30 unseen 2026 ETHUSDT USD-M source; use 1h/4h/1d mark price and settled funding; two cost sensitivities, no strategy changes, compare execution engines and reject false PASS" \
+            --executed "Saved 5496 original continuous Binance ETH1h, 1374 4h, 229 1d, 5496 1h mark and 687 funding events, all source gaps checked. Original May12 code blob 22ca6588... confirmed at Git SHA 40af5c7c. Two genuine Freqtrade 2026.4 native runs with OKX author config and fee per side 5/12.5bps; independent offline-market-metadata run using SAME Freqtrade, original code and data reproduces all 27 trade open-close times and PnL EXACTLY for both fee models. One endogenous exit changed across fees; 26/27 exit times matched. Fixed exit price commission overlay verified 25bps +31.77pct PF1.859 and 40bps +23.68pct PF1.567" \
+            --result "TECHNICAL NATIVE REPRODUCIBILITY PASS; LIMITED POSTCODE OOS POSITIVE BUT ECONOMIC UNPROVEN due 27 trades less than prereg 30, high 2x exposure and virtually full 10k USD margin each entry, no real order book or limit fill guarantee and fee sensitive trailing. 5bps/side net+3986.42 USD PF2.239 DD7.33pct, 12.5bps/side net+4337.97 USD PF2.173 DD8.20pct; higher fee gain arises only due July10 long trailing early exit omitted and July15 target, NOT cost advantage. No live order or changes to SMOKE deployed." \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "Machine compares 27/27 trade PnL and timestamps between fully network OKX and offline static market metadata Freqtrade 2026.4, cross-fee 27/27 entries and exactly one exit mismatch, no cherry-pick. 27 trades is statistically too sparse and actual execution/source venue mismatch explicitly labeled. Only technical reproducibility passed, not economic profitability, no leverage amplification authorized." \
+            --evidence ../../research/doublema_native_oos_20261031/00_PROTOCOL_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/01_NATIVE_FREQUENCY_FEES_AND_RISK_AUDIT_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/02_MACHINE_VERIFIED_SUMMARY.json \
+            --evidence ../../research/doublema_native_oos_20261031/prepare_native.py \
+            --evidence ../../research/doublema_native_oos_20261031/verify_two_native_artifacts.py \
+            --evidence ../../research/doublema_native_oos_20261031/data/ETHUSDT_funding_history.json \
+            --evidence ../../research/doublema_native_oos_20261031/data/ETHUSDT_mark_1h_part0.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a187
+          grep -Fq 'INTEGRITY_PASS entries 187' /tmp/a187
+      - name: Git anchor verified machine report and SHA audit entry A187
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/doublema_native_oos_20261031/02_MACHINE_VERIFIED_SUMMARY.json research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A187 true DoubleMA Freqtrade source postpublication reproducibility 27/27 receipts POSITIVE_NO_POWER no live"
+          git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
