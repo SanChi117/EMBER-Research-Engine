@@ -23,7 +23,7 @@ def load_class(path: Path, module_name: str):
 
 def main(original: Path, patched: Path):
     data=original.read_bytes()
-    sha=hashlib.sha1(b"blob "+str(len(data)).encode()+b"\\0"+data).hexdigest()
+    sha=hashlib.sha1(b"blob "+str(len(data)).encode()+bytes([0])+data).hexdigest()
     assert sha==SOURCE_BLOB, f"UPSTREAM_BLOB_CHANGED:{sha}"
     code=data.decode("utf-8")
     assert code.count(OLD)==1, "EXPECTED_EXACTLY_ONE_CALLBACK_BOUNDARY"
