@@ -1,0 +1,67 @@
+name: EMBER C106 A169 FINAL original 4H native3m semantic SHA169 and 2070 tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c106-A169-independent-final-4h-semantic.yml'
+permissions:
+  contents: read
+jobs:
+  independent-A169-2070-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent prior 169 SHA chain + six C106 semantic evidence receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c106-final
+          grep -Fq 'entries 169 tip_sha256 b0a2080fb4a91b56876a485921508f8afbf322d45f964e4b1fc3a0f268fb4cd2' /tmp/c106-final
+          python - <<'PY'
+          from pathlib import Path
+          import sys,json,hashlib
+          p=Path('.')
+          j=[json.loads(y) for y in (p/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(j)==169
+          assert j[-1]['action_id']=='A169'
+          assert j[-1]['record_sha256']=='b0a2080fb4a91b56876a485921508f8afbf322d45f964e4b1fc3a0f268fb4cd2'
+          assert j[-1]['prev_sha256']=='9741dca935748241f47d6067285afe6a0fd3f7ed710054924f2cb5abd5a398f6'
+          assert len(j[-1]['evidence'])==6
+          for e in j[-4:]:
+              for pin in e['evidence']:
+                  raw=(p/pin['path']).read_bytes()
+                  assert len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256'],pin['path']
+          sys.path.insert(0,str(p/'d05'))
+          import c106_parent4h_semantic_transfer as t
+          t.check_frozen()
+          raw=(p/'evidence/c106/C106_P4_UNCHANGED_320_NATIVE3M_ZIP_H4_CAUSAL_AUDIT.json').read_bytes()
+          assert len(raw)==192465 and hashlib.sha256(raw).hexdigest()=='148cd6cd75960730df1bba5c4ca13511e8398e0de2c4f224415a79bf6e33daa8'
+          z=json.loads(raw)
+          assert z['new_trade_rules']==0 and z['new_luxalgo_indicators']==0
+          assert z['source_zip_count']==320 and z['native3m_bars']==153600
+          assert len(z['trades'])==len(z['semantic_reconstructions'])==16
+          assert all(x['all_existing_semantics_match'] for x in z['semantic_reconstructions'])
+          assert z['scores']['25']['sum_r']==0.024034 and z['scores']['25']['pf']==1.00201
+          assert z['scores']['40']['sum_r']==-1.762707
+          assert z['folds']['early']['25']['sum_r']==-6.77985
+          assert not z['admission']['passes_historical_screen']
+          assert z['orders']==z['fills']==z['live_trades']==[]
+          print('C106_A169_ALL_PINNED_4H_SOURCE_16_CAUSAL_EVENTS_AND_ECONOMIC_REJECT_VERIFIED')
+          PY
+      - name: All 690 original+new crypto research adverse tests per Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics 2>&1 | tee /tmp/c106-final-tests
+          grep -Fq 'Ran 690 tests' /tmp/c106-final-tests
+          grep -qx 'OK' /tmp/c106-final-tests
+          echo C106_FINAL_690_X_3_2070_PASS
