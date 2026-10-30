@@ -172,7 +172,9 @@ def choch_after_t0(fives,starts5,sw5,t0,side):
     for i in range(lastclosed_idx+1,len(fives)):
         bar=fives[i]
         if bar.close_ms>boundary:break
-        if bar.close_ms<=t0:
+        if bar.open_ms<t0:
+            # An original 5m bar that straddles the 3m first touch cannot
+            # establish a fully post-touch structure break.
             prev=bar
             continue
         bullish=(side=="LONG" and prev.c<=level.price<bar.c and bar.c>bar.o)
@@ -198,7 +200,7 @@ def touch_candidate(z,bar,prev4,now):
         return False
     return bar.high>=z.lower and bar.low<=z.upper
 
-def early_competing(t0,landmark,bar0,rows,starts3,z,closed4,sw4):
+def early_competing(t0,landmark,bar0,rows,starts3,z,closed4,sw4,all_four):
     """ITTs retain early hits and do not condition treatment eligibility on survival."""
     atr=p4.four_atr(closed4)
     stop=(z.lower-p4.PAD*atr if z.side=="LONG" else z.upper+p4.PAD*atr)
@@ -214,7 +216,7 @@ def early_competing(t0,landmark,bar0,rows,starts3,z,closed4,sw4):
             if row.high>=stop:return {"status":"EARLY_COMPETING_STOP","known_ms":row.known_ms}
             if target is not None and row.low<=target:return {"status":"EARLY_COMPETING_TP","known_ms":row.known_ms}
     if any((b.c<z.lower if z.side=="LONG" else b.c>z.upper)
-           for b in closed4 if t0<b.close_ms<=landmark):
+           for b in all_four if t0<b.close_ms<=landmark):
         return {"status":"EARLY_COMPETING_PARENT_4H_INVALIDATION",
                 "known_ms":landmark}
     return {"status":"SURVIVED_6H_LANDMARK",
@@ -325,7 +327,7 @@ def per_symbol(three,five,symbol,window):
         rc,range_info=range_class(sw4,t0,bar.close,z.side)
         dd=day_direction(sw1d,t0)
         confirm,status=choch_after_t0(five,starts5,sw5,t0,z.side)
-        early=early_competing(t0,landmark,bar,three,starts3,z,prior4,sw4)
+        early=early_competing(t0,landmark,bar,three,starts3,z,prior4,sw4,four)
         trade,why=(execution(z,t0,landmark,three,starts3,four,closed4ms,sw4)
                    if early["status"]=="SURVIVED_6H_LANDMARK"
                    else (None,"EARLY_COMPETING_EVENT"))
