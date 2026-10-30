@@ -99,7 +99,7 @@ class C114NegativeContracts(unittest.TestCase):
         three=[NS(start_ms=i*180000,known_ms=(i+1)*180000,
                   open=D(100),high=D(103),low=D(98),close=D(100),volume=D(1)) for i in range(5)]
         five=[candle(i*F,100,103,98,100) for i in range(3)]
-        five=[Bar(b.open_ms,b.o,b.h,b.l,b.c,D(5)/D(3)) for b in five]
+        five=[Bar(b.open_ms,b.o,b.h,b.l,b.c,D(v)) for b,v in zip(five,(1,2,2))]
         self.assertTrue(x.independent_15m_parity(tuple(three),tuple(five)))
 
     def test_matching_without_replacement(self):
