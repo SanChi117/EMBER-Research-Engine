@@ -42,7 +42,7 @@ class C108Minimal(unittest.TestCase):
         try:
             orig.SYMBOLS=r.UNIVERSE;orig.DAYS=r.DAYS
             # csv_fixture returns deterministic original-provider-formatted complete rows
-            rows,meta=orig.daily("BNBUSDT","2026-08-20",fetch=csv_fixture("BNBUSDT"))
+            rows,meta=orig.daily("BNBUSDT","2026-08-20",fetch=csv_fixture("BNBUSDT","2026-08-20"))
             self.assertEqual((len(rows),meta["bars"]),(480,480))
         finally:
             orig.SYMBOLS,orig.DAYS=prev_s,prev_d
