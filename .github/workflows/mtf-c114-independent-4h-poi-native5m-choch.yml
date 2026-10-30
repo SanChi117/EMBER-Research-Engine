@@ -1,0 +1,112 @@
+name: EMBER C114 independent 4H POI + original5m CHoCH controlled first-passage PAPER
+on:
+  push:
+    branches: [research/c114-independent-zone-reaction-value-20261030]
+    paths:
+      - '.github/workflows/mtf-c114-independent-4h-poi-native5m-choch.yml'
+      - 'research/mtf-element-audit-v1/d05/c114_original_native5m_daily_source.py'
+      - 'research/mtf-element-audit-v1/d05/c114_independent_poi_native5m_choch_research.py'
+      - 'research/mtf-element-audit-v1/d05/test_c114_independent_4h_poi_native5m.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C114_PRECOMMIT_INDEPENDENT_4H_POI_5M_REACTION_PREDICTIVE_VALUE_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: c114-original-source-frozen-replay
+  cancel-in-progress: false
+jobs:
+  source-contract-and-adversarial-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verify A176 auditlog and 23 source-structure/matching adverse tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/c114-audit
+          grep -Fq 'entries 176' /tmp/c114-audit
+          cd research/mtf-element-audit-v1/d05
+          python - <<'PY'
+          import c114_independent_poi_native5m_choch_research as x
+          assert x.frozen()
+          assert x.EXPECTED_3M_ZIPS==1344 and x.EXPECTED_5M_ZIPS==1344
+          assert x.EXPECTED_3M_BARS==645120 and x.EXPECTED_5M_BARS==387072
+          print("FROZEN_INDEPENDENT_ORIGINAL_NATIVE_3M_AND_5M_C114")
+          PY
+          python -m unittest -v test_c114_independent_4h_poi_native5m 2>&1 | tee /tmp/c114-test-log
+          grep -Fq 'Ran 23 tests' /tmp/c114-test-log
+          grep -qx 'OK' /tmp/c114-test-log
+          python -m unittest -q test_c105_parent4h_only_geometry test_c109_simple_p4_complete_reclaim_real_bos test_c113_final_execution_geometry
+  source-original-2688-zip-frozen-two-window-replay:
+    needs: source-contract-and-adversarial-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original Binance 3m and independent native5m source loader; fixed C114 two-window
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c114_independent_poi_native5m_choch_research.py \
+            --output-dir research/mtf-element-audit-v1/evidence/c114 | tee /tmp/c114-stdout
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('research/mtf-element-audit-v1/evidence/c114')
+          z=json.loads((root/'C114_SUMMARY.json').read_text())
+          assert z['original_3m_zip_total']==1344 and z['original_5m_zip_total']==1344
+          assert z['original_3m_bar_total']==645120 and z['original_5m_bar_total']==387072
+          assert z['paper_only'] and not z['live_approved']
+          assert not z['true_prospective_oos'] and not z['causal_effect_proven']
+          assert z['real_orders']==z['real_fills']==z['live_trades']==[]
+          assert set(z['window_receipts'])=={'WIN_A','WIN_B'}
+          for name,rec in z['window_receipts'].items():
+            raw=(root/rec['filename']).read_bytes()
+            assert hashlib.sha256(raw).hexdigest()==rec['sha256']
+            assert len(raw)==rec['bytes']
+            w=json.loads(raw)
+            assert w['source_3m_zips']==w['source_5m_zips']==672
+            assert w['original3m_bars']==322560 and w['original5m_bars']==193536
+            assert len(w['source_receipts_3m'])==len(w['source_receipts_5m'])==672
+            assert len({(a['symbol'],a['date']) for a in w['source_receipts_3m']})==672
+            assert len({(a['symbol'],a['date']) for a in w['source_receipts_5m']})==672
+            for s,p in w['per_symbol'].items():
+              assert p['source_bars_native3m']==26880
+              assert p['source_bars_native5m']==16128
+              for e in p['events']:
+                assert e['t0_touch_known_ms']>e['parent_created_ms']
+                assert e['landmark_ms']==e['t0_touch_known_ms']+6*3600000
+                if e['choch'] is not None:
+                  assert e['choch']['breach_known_ms']<=e['landmark_ms']
+                  assert e['choch']['swing_confirmed_ms']<=e['t0_touch_known_ms']
+                  assert e['choch']['candle_5m_open_ms']>=e['t0_touch_known_ms']
+                t=e['trade']
+                if t is not None:
+                  assert t['entry_ms']==e['landmark_ms']
+                  assert t['parent_tf']==t['stop_source_tf']==t['target_source_tf']=='4H'
+            assert w['admission']['live_approved'] is False
+            assert w['admission']['causal_effect_identified'] is False
+            assert w['cohort']['matched_pairs_n']==len(w['matched_pair_indices'])
+          print('C114_ORIGINAL_INDEPENDENT_3M_5M_SHA_SOURCE_LEDGER_VERIFIED')
+          PY
+      - name: Commit witness evidence even when C114 economic hypothesis fails
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c114
+          git commit -m "C114 preserve independent original native3m and native5m SHA receipts, CHoCH versus touch controls"
+          git push origin HEAD:refs/heads/research/c114-independent-zone-reaction-value-20261030
