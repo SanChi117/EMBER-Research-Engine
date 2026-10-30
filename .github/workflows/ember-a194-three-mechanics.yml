@@ -1,0 +1,81 @@
+name: "EMBER A194 prereg 3 mechanics x 3 Binance USD-M markets x 2 costs"
+on:
+  push:
+    branches: [research/a194-three-mechanics-preregistered-oos-20261031]
+    paths:
+      - ".github/workflows/ember-a194-three-mechanics.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Exact versioned data analysis dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'numpy==2.2.6' 'pandas==2.2.3'
+      - name: Verify frozen preregistration and no trading API clients
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/backup_candidates_20261031/A194_PREREGISTERED_LAST_SCREEN_RU.md
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('research/backup_candidates_20261031/a194_three_mechanics_fixed.py')
+          t=p.read_text()
+          assert 'on_exchange' not in t
+          assert 'RISK_FRACTION=0.01' in t and 'MAX_NOTIONAL_TO_EQUITY=3.0' in t
+          assert 'TARGET_R=1.75' in t and 'MAX_HOURS=8' in t
+          assert 'TEST=pd.Timestamp("2026-08-01"' in t
+          assert 'if v.low<=stop' in t and 'elif v.high>=tp' in t
+          print('A194_PRE_RUN_PREREG_LOCKED',p.stat().st_size)
+          PY
+          python -m py_compile research/backup_candidates_20261031/a194_three_mechanics_fixed.py
+      - name: Compare three frozen mechanics on 9 real Binance Vision monthly futures CSV ZIPs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a194-reports/data
+          python research/backup_candidates_20261031/a194_three_mechanics_fixed.py \
+             --output a194-reports/A194_FROZEN_THREE_MECHANICS_RESULTS.json \
+             --data-dir a194-reports/data 2>&1 | tee a194-reports/A194_CI_PROVENANCE.log
+          grep -Fq A194_THREE_MODELS_ORIGINAL_FROZEN_HYPOTHESES_FINISHED a194-reports/A194_CI_PROVENANCE.log
+      - name: Validate receipt count, funding limitation, time boundaries and all 18 tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('a194-reports/A194_FROZEN_THREE_MECHANICS_RESULTS.json')
+          r=json.loads(p.read_text())
+          assert len(r['per_pair_and_all_trades'])==18
+          assert len(r['summary'])==6
+          assert len(r['sources'])==3
+          for sym,sources in r['sources'].items():
+              assert len(sources)==3
+              assert sum(x['bars'] for x in sources)==26496
+          for mode,details in r['per_pair_and_all_trades'].items():
+              for t in details['trades']:
+                  assert '2026-08-01'<=t['entry'][:10]<'2026-10-01'
+                  assert t['reason'] in {'stop','gap_stop','tp','gap_tp','time','end'}
+              assert details['N']==len(details['trades'])
+          print('A194_18_RESEARCH_RUNS_SOURCE_AND_TRADE_RECEIPTS_VALIDATED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A194-Three-Preregistered-Mechanics-Binance-3Pairs-2Costs
+          path: |
+            a194-reports/*.json
+            a194-reports/*.log
+          retention-days: 30
