@@ -14,7 +14,7 @@ from zipfile import ZipFile
 SYMBOLS=("BTCUSDT","ETHUSDT","SOLUSDT","LINKUSDT")
 MONTHS=tuple(range(3,10))
 START=int(datetime(2026,3,15,tzinfo=timezone.utc).timestamp()*1000)
-END=int(datetime(2026,10,30,tzinfo=timezone.utc).timestamp()*1000)
+END=int(datetime(2026,10,1,tzinfo=timezone.utc).timestamp()*1000)
 H=3_600_000
 EXPECTED=(END-START)//H
 BASE="https://data.binance.vision/data/futures/um/monthly"
