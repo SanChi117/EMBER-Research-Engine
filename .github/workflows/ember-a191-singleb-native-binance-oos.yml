@@ -1,0 +1,151 @@
+name: "EMBER A191 SingleB FixedRR real Binance ETH 5m OOS, 2 Freqtrade native fee models"
+on:
+  push:
+    branches: [research/a190-a191-singleb-and-ms-source-20261031]
+    paths:
+      - '.github/workflows/ember-a191-singleb-native-binance-oos.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  singleb-exact-native-eth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install real pinned Freqtrade engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+      - name: Download three genuine Binance Vision monthly 5m ZIPs, QA and reuse SHA referenced ETH mark plus settled funding
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a191-reports
+          python research/backup_candidates_20261031/a191_prepare_singleb_eth_binance_5m.py --datadir "$GITHUB_WORKSPACE/a191-reports/data" | tee a191-reports/data-check.log
+          grep -Fq A191_REAL_BINANCE_MONTHLY_5M_CONTINUITY_PASS a191-reports/data-check.log
+      - name: Pin original strategy blob and original config, switch only to Binance for same source market
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/liu57liu456/backtest-autopsy.git /tmp/singleb-pin
+          test "$(git -C /tmp/singleb-pin rev-parse HEAD)" = '39e640bf304dfe1edceec74668d8beded39482d5'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          r=Path('/tmp/singleb-pin')
+          p=r/'strategy/SingleB_FixedRR.py'
+          b=p.read_bytes()
+          sha=hashlib.sha1(b'blob '+str(len(b)).encode()+bytes([0])+b).hexdigest()
+          assert sha=='9544d6ea47c9905fed86e62c85cf6aca48c0c8c5',sha
+          assert b'class SingleB_FixedRR(IStrategy)' in b
+          assert b'can_short = True' in b and b'timeframe = "5m"' in b
+          u=Path('/tmp/a191-source/user_data/strategies');u.mkdir(parents=True,exist_ok=True)
+          (u/p.name).write_bytes(b)
+          c=json.loads((r/'config.json').read_text())
+          assert c['trading_mode']=='futures' and c['margin_mode']=='isolated'
+          assert c['stake_amount']==500 and c['dry_run_wallet']==5000
+          assert c['max_open_trades']==3
+          c['exchange']['name']='binance'
+          c['exchange']['pair_whitelist']=['ETH/USDT:USDT']
+          c['exchange']['ccxt_config']={}
+          c['exchange']['ccxt_async_config']={}
+          c['exchange']['key']=''
+          c['exchange']['secret']=''
+          c['exchange']['password']=''
+          c['dry_run']=True
+          c['bot_name']='A191-ETH-paper-only'
+          Path('a191-reports/safe-original-binance-config.json').write_text(json.dumps(c,indent=2))
+          Path('a191-reports/original-source-blob.sha').write_text(sha+'\n')
+          print('A191_UPSTREAM_SOURCE_PINNED_BLOB_AND_ORIGINAL_CONFIG_STAKE_CONFIRMED')
+          PY
+      - name: Genuine native Freqtrade original code, fee 0.05pct per side, isolated 1x default
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s python research/backup_candidates_20261031/a191_binance_offline_native.py \
+            -c a191-reports/safe-original-binance-config.json \
+            --userdir /tmp/a191-source/user_data \
+            --datadir "$GITHUB_WORKSPACE/a191-reports/data" \
+            --strategy SingleB_FixedRR --timeframe 5m \
+            --timerange 20260801-20261001 --data-format-ohlcv json \
+            --fee 0.0005 --export trades --cache none 2>&1 | tee a191-reports/fee5bps.log
+          z="$(find /tmp/a191-source/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$z" && test -s "$z"
+          cp "$z" a191-reports/singleb-eth-fee5bps-side.zip
+          rm -f /tmp/a191-source/user_data/backtest_results/backtest-result*.zip
+      - name: Native original strategy, higher costs fee 0.125pct per side, NO RETUNE
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s python research/backup_candidates_20261031/a191_binance_offline_native.py \
+            -c a191-reports/safe-original-binance-config.json \
+            --userdir /tmp/a191-source/user_data \
+            --datadir "$GITHUB_WORKSPACE/a191-reports/data" \
+            --strategy SingleB_FixedRR --timeframe 5m \
+            --timerange 20260801-20261001 --data-format-ohlcv json \
+            --fee 0.00125 --export trades --cache none 2>&1 | tee a191-reports/fee12p5bps.log
+          z="$(find /tmp/a191-source/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+          test -n "$z" && test -s "$z"
+          cp "$z" a191-reports/singleb-eth-fee12p5bps-side.zip
+      - name: Parse real trades and cost sensitivity from two native JSON receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,zipfile,statistics
+          from pathlib import Path
+          root=Path('a191-reports')
+          def read(filename):
+              p=root/filename
+              assert zipfile.is_zipfile(p),('NO_GENUINE_RESULT_ZIP',p)
+              with zipfile.ZipFile(p) as z:
+                  m=[x for x in z.namelist() if x.endswith('.json') and '_config' not in x]
+                  assert len(m)==1,m
+                  d=json.loads(z.read(m[0]))['strategy']['SingleB_FixedRR']
+              t=d['trades']
+              assert d['total_trades']==len(t)
+              good=sorted([x['profit_abs'] for x in t],reverse=True)
+              total=float(d['profit_total_abs'])
+              return {'n':len(t),'profit_usdt':round(total,4),'profit_pct':round(float(d['profit_total'])*100,4),
+                'profit_factor':round(float(d['profit_factor']),4),
+                'dd_pct':round(float(d['max_drawdown_account'])*100,4),
+                'win_rate_pct':round(100*sum(x['profit_abs']>0 for x in t)/max(1,len(t)),3),
+                'long':sum(not x['is_short'] for x in t),'short':sum(x['is_short'] for x in t),
+                'top3_share_pct':round(100*sum(good[:3])/total,3) if abs(total)>1e-8 else None,
+                'sum_funding_fees':round(sum(float(x.get('funding_fees',0) or 0) for x in t),5),
+                'worst_trade_usdt':round(min((x['profit_abs'] for x in t),default=0),2),
+                'trades':t}
+          low=read('singleb-eth-fee5bps-side.zip');hi=read('singleb-eth-fee12p5bps-side.zip')
+          def metrics(x):return {k:v for k,v in x.items() if k!='trades'}
+          report={'schema':'EMBER_A191_SINGLEB_ETH_NATIVE_OOS_R01','window':'[2026-08-01,2026-10-01) UTC',
+            'upstream_sha':'39e640bf304dfe1edceec74668d8beded39482d5',
+            'upstream_blob':'9544d6ea47c9905fed86e62c85cf6aca48c0c8c5',
+            'engine':'freqtrade==2026.4','market':'Binance USD-M ETHUSDT real 5m plus real mark and settled funding',
+            'constraint':'synthetic offline Binance market metadata, OHLCV simulated fills, no 1m detail / bid-ask',
+            'author_original_config_subset':'5000 wallet, 500 stake, max3 concurrent, isolated; single ETH pair, Binance venue, 1x Freqtrade default',
+            'fee5bps_side':metrics(low),'fee12p5bps_side':metrics(hi),
+            'source_manifest':'data/A191_SOURCE_MANIFEST.json',
+            'verdict':'NO_LIVE; determine economic evidence from native metrics, 1m execution and extra symbols still mandatory'}
+          (root/'A191_MACHINE_NATIVE_RESULT.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))
+          print('A191_TWO_NATIVE_RESULTS_VERIFIED')
+          print(json.dumps(report,indent=2,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A191-SingleB-ETH-real-Binance-5m-native-OOS
+          path: |
+            a191-reports/*.log
+            a191-reports/*.zip
+            a191-reports/*.sha
+            a191-reports/*.json
+            a191-reports/data/A191_SOURCE_MANIFEST.json
+          retention-days: 30
