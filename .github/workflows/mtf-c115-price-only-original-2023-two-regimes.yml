@@ -29,7 +29,7 @@ jobs:
           python research/mtf-element-audit-v1/tools/auditlog.py verify
           cd research/mtf-element-audit-v1/d05
           python -m unittest -v test_c115_price_only_source_contract 2>&1 | tee /tmp/c115-tests
-          grep -Fq 'Ran 9 tests' /tmp/c115-tests
+          grep -Fq 'Ran 11 tests' /tmp/c115-tests
           grep -Fxq 'OK' /tmp/c115-tests
           python -m unittest -q test_c114_independent_4h_poi_native5m test_c113_final_execution_geometry
   two_predeclared_2023_windows_original_source_paper:
