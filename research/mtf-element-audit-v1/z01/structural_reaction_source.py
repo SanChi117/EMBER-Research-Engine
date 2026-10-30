@@ -15,7 +15,9 @@ from zipfile import ZipFile, BadZipFile
 import argparse
 import csv
 import json
+import sys
 
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'d05'))
 from c89_original_native5m_adaptation_backtest import BASE, _safe_http
 
 MINUTE = 60000
@@ -276,8 +278,6 @@ def first_touch(zone, minute, four_closes, begin_ms, end_ms):
             if (zone.side=="LONG" and v.c<zone.stop) or (
                 zone.side=="SHORT" and v.c>zone.stop):
                 return None,"PRE_TOUCH_4H_INVALIDATED"
-        if b.high>=zone.low and b.low<=zone.high if False else False:
-            pass
         if b.h>=zone.low and b.l<=zone.high:
             if not begin_ms<=b.close_ms<end_ms:
                 return None,"FIRST_TOUCH_OUTSIDE_EVALUABLE_CLOCK"
@@ -347,6 +347,26 @@ def simulate(zone,three,entry_pos,reason,source_ms,fold_ms):
     b=three[entry_pos]
     p,why=plan(zone,b.o)
     if p is None:
+        # A0 market-at-next-open cannot retroactively vanish after a gap
+        # through the preknown H4 stop; conservatively count immediate loss.
+        gap_cross=(b.o<=zone.stop if zone.side=="LONG" else b.o>=zone.stop)
+        if reason=="A0_FIRST_TOUCH" and gap_cross:
+            reference=zone.high if zone.side=="LONG" else zone.low
+            original_risk=abs(reference-zone.stop)
+            if original_risk<=0:raise Z01Error("BAD_H4_STOP_FOR_GAP")
+            sign=D(1) if zone.side=="LONG" else D(-1)
+            gross=min(D(-1),sign*(b.o-reference)/original_risk)
+            return {"parent_zone_id":zone.id,"side":zone.side,
+                "entry_ms":b.start_ms,"exit_ms":b.close_ms,
+                "origin_touch_ms":source_ms,
+                "fold":"EARLY" if source_ms<fold_ms else "LATE",
+                "entry":str(reference),"stop":str(zone.stop),"target":str(zone.target),
+                "exit_price":str(b.o),"exit_reason":"PREENTRY_STOP_GAP_LOSS",
+                "gross_r":round(float(gross),7),
+                "risk_percent":round(float(100*original_risk/reference),6),
+                "derived_rr":0.0,"stop_source_tf":"4H","target_source_tf":"4H",
+                "entry_model":reason,"d1_context":zone.d1_context,
+                "funding_included":False}, "OK"
         return None,why
     e,sl,tp,r=p["entry"],p["stop"],p["target"],p["risk"]
     finish=min(len(three),entry_pos+HOLD//THREE)
@@ -410,9 +430,9 @@ def run_symbol(source, symbol, window):
         else:
             rejections[status]=rejections.get(status,0)+1
     opportunities.sort(key=lambda x:(x[0],x[1].id))
-    close3=[b.close_ms for b in three]
     start3=[b.start_ms for b in three]
     close15=[b.close_ms for b in fifteen]
+    minute_closes=[b.close_ms for b in source]
     arm_data={k:[] for k in ("A0_FIRST_TOUCH","B1_5M_CONFIRM_15M_EXEC")}
     busy={k:0 for k in arm_data}
     for ms,zone,origin_i in opportunities:
@@ -447,7 +467,7 @@ def run_symbol(source, symbol, window):
                     if execute_ms<=ms:
                         raise Z01Error("CONFIRMATION_BEFORE_4H_TOUCH")
                     # 4H stop / target already touched before entry: cancellation, not win
-                    interim=source[origin_i:bisect_left([x.close_ms for x in source],execute_ms)]
+                    interim=source[origin_i:bisect_left(minute_closes,execute_ms)]
                     bad=any((z.l<=zone.stop if zone.side=="LONG" else z.h>=zone.stop)
                             for z in interim)
                     target_hit=any((z.h>=zone.target if zone.side=="LONG" else z.l<=zone.target)
