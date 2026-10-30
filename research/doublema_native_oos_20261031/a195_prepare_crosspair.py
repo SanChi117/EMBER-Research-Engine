@@ -177,6 +177,8 @@ def main():
                     combined=repair_genuine_mark_gaps(combined,sym,shas)
                 assert_hourly(combined,sym,kind)
                 data[kind]=combined
+            else:
+                rates=combined
         native_1h=data["klines"]
         mark_1h=data["markPriceKlines"]
         funding,nfund=funding_rate_1h(rates)
