@@ -286,7 +286,7 @@ def per_symbol(rows, symbol):
     baseline = old["by_arm"][core.ARM_CORE]["trades"]
     starts = [x.start_ms for x in rows]
     four = h4.aggregate(rows, h4.H4)
-    closed4_by_ms = {x.close_ms: x.close for x in four}
+    closed4_by_ms = {x.close_ms: x.c for x in four}
     arms = {}
     for arm in ARMS:
         ledger, accepted, status = [], [], Counter()
