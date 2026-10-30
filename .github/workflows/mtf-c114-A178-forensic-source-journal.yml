@@ -1,0 +1,81 @@
+name: EMBER C114 A178 original source forensic blocked SHA journal witness
+on:
+  push:
+    branches: [research/c114-independent-zone-reaction-value-20261030]
+    paths:
+      - '.github/workflows/mtf-c114-A178-forensic-source-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C114_FOUR_INTERVAL_AND_AGGTRADES_FORENSIC_REPORT_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  journal-exact-source-diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify three source receipts, daily monthly 4tf and original aggTrades
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('research/mtf-element-audit-v1/evidence/c114')
+          a=json.loads((base/'C114_FOUR_INTERVALS_SOURCE_FORENSIC_BNB_20250114.json').read_text())
+          b=json.loads((base/'C114_MONTHLY_VS_DAILY_ORIGINAL_4TF_BNB_20250114.json').read_text())
+          c=json.loads((base/'C114_ORIGINAL_AGGTRADES_BNB_20250114_SOURCE_ARBITRATION.json').read_text())
+          assert a['diagnostics']['ohlc_mismatch_count']==0
+          assert a['diagnostics']['metric_mismatch_bucket_counts']['base_volume']==1
+          assert a['known_1330']['1m']['base_volume']==a['known_1330']['3m']['base_volume']=='24700.27'
+          assert a['known_1330']['5m']['base_volume']==a['known_1330']['15m']['base_volume']=='31675.04'
+          assert all(v['provider_checksum_verified'] for v in a['receipts'].values())
+          assert b['monthly_4tf_diagnostics']['ohlc_mismatch_count']==0
+          assert all(v['provider_checksum_verified'] for v in b['monthly_provider_receipts'].values())
+          assert all(all(info['different_15m_buckets']==0 for info in tf.values())
+                     for tf in b['daily_vs_monthly_15m_diff_by_source'].values())
+          assert c['focus_1330']['agg_base_qty']=='35790.57'
+          assert c['original_aggtrades_receipt']['provider_checksum_verified']
+          assert c['original_aggtrades_receipt']['original_agg_trade_rows']==247107
+          assert a['live_approved'] is b['live_approved'] is c['live_approved'] is False
+          assert c['no_trade_simulation'] and b['no_trade_outcomes']
+          print("C114_THREE_INDEPENDENT_SOURCE_WITNESSES_VERIFIED_NO_TRADE")
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a177
+          grep -Fq 'entries 177' /tmp/a177
+      - name: Append A178 and verify SHA-chain without economic result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A178 --cycle C114 \
+            --planned "Independently arbitrate original 3m5m volume mismatch against Binance original 1m,15m, monthly 4tf, and daily aggTrades without changing C114 economics" \
+            --executed "Original eight provider SHA-verified daily/monthly OHLCV ZIP, original aggTrades daily 247107 records, 14 negative tests across Python 3.10/3.11/3.12, source receipts committed" \
+            --result "SOURCE_BLOCKED confirmed: BNB 2025-01-14T13:30 1m3m 24700.27 vs 5m15m 31675.04 vs original aggTrades 35790.57 BNB; daily equals monthly, OHLC all equal; no economic execution" \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "96 of 96 original daily 15m OHLC buckets 4tf identical, one volume divergence, checksum verified; monthly exact per-interval daily copy; aggTrades independently third quantity; no loosening C114 gates" \
+            --evidence cycles/B1_C114_FOUR_INTERVAL_AND_AGGTRADES_FORENSIC_REPORT_RU.md \
+            --evidence d05/c114_volume_discrepancy_forensic.py \
+            --evidence d05/test_c114_volume_discrepancy_forensic.py \
+            --evidence d05/c114_monthly_vs_daily_4tf_forensic.py \
+            --evidence d05/test_c114_monthly_vs_daily_forensic.py \
+            --evidence d05/c114_aggtrades_source_arbitration.py \
+            --evidence d05/test_c114_aggtrades_source_arbitration.py \
+            --evidence evidence/c114/C114_FOUR_INTERVALS_SOURCE_FORENSIC_BNB_20250114.json \
+            --evidence evidence/c114/C114_MONTHLY_VS_DAILY_ORIGINAL_4TF_BNB_20250114.json \
+            --evidence evidence/c114/C114_ORIGINAL_AGGTRADES_BNB_20250114_SOURCE_ARBITRATION.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a178
+          grep -Fq 'entries 178' /tmp/a178
+      - name: Commit immutable SHA record A178 without changing C114 source contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C114 A178 SHA-chain original Binance inter-interval source anomaly independently verified and still blocked"
+          git push origin HEAD:refs/heads/research/c114-independent-zone-reaction-value-20261030
