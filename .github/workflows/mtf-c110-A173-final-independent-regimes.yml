@@ -1,0 +1,78 @@
+name: EMBER C110 A173 FINAL original 1536 ZIP two regimes and 2307 immutable causal tests
+on:
+  push:
+    branches: [research/academic-engine-recovery-20261015]
+    paths:
+      - '.github/workflows/mtf-c110-A173-final-independent-regimes.yml'
+permissions:
+  contents: read
+jobs:
+  sha173-economy-gate-regression:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Independent SHA verify A173 and both 768 Binance provider ZIP economic receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify | tee /tmp/c110-final-173
+          grep -Fq 'entries 173 tip_sha256 d5f212e95ce7cf2d1ea6361426c2eec4d6875087f364303a68d508449ac06643' /tmp/c110-final-173
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,sys
+          root=Path('.')
+          entries=[json.loads(l) for l in (root/'ЖУРНАЛ_ДЕЙСТВИЙ.jsonl').read_text().splitlines()]
+          assert len(entries)==173
+          assert entries[-1]['action_id']=='A173'
+          assert entries[-1]['record_sha256']=='d5f212e95ce7cf2d1ea6361426c2eec4d6875087f364303a68d508449ac06643'
+          assert entries[-1]['prev_sha256']=='2b8dd417f47d339bfed0976f81f2a0926c18c18f9640af6bf3fcd7f917191206'
+          assert len(entries[-1]['evidence'])==5
+          for action in entries[-4:]:
+              for ev in action['evidence']:
+                  raw=(root/ev['path']).read_bytes()
+                  assert len(raw)==ev['bytes'] and hashlib.sha256(raw).hexdigest()==ev['sha256'],ev['path']
+          sys.path.insert(0,str(root/'d05'))
+          import c110_blind_unchanged_c109_second_regime as c110
+          assert c110.source_code_verified()
+          proof=[
+            ('c109/C109_CORE_VS_ORIGINAL_768_3M_PROVIDER_ZIPS.json',737881,
+             'd8e4a39b5de6176227cd5e8fd6103278d6e032335341f8f098f930bdad305134'),
+            ('c110/C110_UNCHANGED_C109_SECOND_REGIME_768_ORIGINAL_3M_ZIPS.json',758206,
+             '3da9d82e4a87281a525164f1f07bb1b2cff9fd04eaaf8525e783aa5856378f30')]
+          vals=[]
+          for name,sz,sha in proof:
+              raw=(root/'evidence'/name).read_bytes()
+              assert len(raw)==sz and hashlib.sha256(raw).hexdigest()==sha
+              z=json.loads(raw)
+              assert z['source_zip_count']==768 and z['native3m_bars']==368640
+              assert len({(m['symbol'],m['date']) for m in z['source_manifest']})==768
+              assert z['orders']==z['fills']==z['live_trades']==[]
+              vals.append(z)
+          p,q=vals
+          a=next(v for k,v in p['arms'].items() if k.startswith('B1_'))
+          b=next(v for k,v in q['arms'].items() if k.startswith('B1_'))
+          assert a['scores']['25']['n']==55 and a['scores']['25']['sum_r']==10.749521
+          assert a['scores']['25']['dd_1pct_risk_pct']==10.51646 and not a['admission']['passes_historical_screen']
+          assert b['scores']['25']['n']==51 and b['scores']['25']['sum_r']==-9.695331
+          assert b['scores']['25']['dd_1pct_risk_pct']==19.05754 and not b['admission']['passes_historical_screen']
+          assert b['scores']['40']['sum_r']==-15.534517
+          assert not a['admission']['live_approved'] and not b['admission']['live_approved']
+          print('C110_A173_TWO_INDEPENDENT_HISTORICAL_PERIODS_1536_PROVIDER_ZIP_NO_PROFIT_PROMOTION_VERIFIED')
+          PY
+      - name: All 769 source and 4H causal tests × three interpreter versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -q test_c84_route_a_paper_fsm test_c85_owner_narrative_golden_firewall test_c86_original153_first_test_receipts test_c87_adapted_route_a_shadow_gate test_c88_adaptation_test_exit_gate test_c89_original_native5m_adaptation_backtest test_c90_structural_fta_backtest test_c91_continuous_causal_route_a_paper test_c92_extended_original_native5m_full_continuous test_c93_native3m_raid_bos_route_c_research test_c94_idm_limit_route_b_research test_c95_integrated_paper_three_routes test_c96_canonical_history_warmup_invariance test_c97_robustness_regime_cost_gate test_c98_new_oct_original_forward_paper test_c99_native3m_window_depth_stability test_c100_frozen_c98_loss_forensics test_c101_original_native_bar_trade_attribution test_c102_c103_native3m_new_symbol_transfer test_c104_structural_quality_new10 test_c105_parent4h_only_geometry test_c106_only_existing_p4_semantics test_c107_rootcause_original_source_semantics test_c108_minimal_owner_h4_h1_child_firsttest test_c109_simple_p4_complete_reclaim_real_bos test_c110_unchanged_c109_second_regime 2>&1 | tee /tmp/c110-full-tests
+          grep -Fq 'Ran 769 tests' /tmp/c110-full-tests
+          grep -qx 'OK' /tmp/c110-full-tests
+          echo 'C110_FINAL_A173_769x3_2307_TESTS_SUCCESS_PAPER_ONLY'
