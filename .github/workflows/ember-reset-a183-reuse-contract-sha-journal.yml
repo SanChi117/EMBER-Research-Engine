@@ -1,0 +1,65 @@
+name: EMBER RESET A183 R01 platform source and PAPER contracts SHA witness
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-reset-a183-reuse-contract-sha-journal.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  a183-source-replay-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify 31 pure-market and PAPER tests and original append-only audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -v -s tests -p 'test_reboot_*.py' 2>&1 | tee /tmp/reboot-r01-a183
+          grep -Fq 'Ran 31 tests' /tmp/reboot-r01-a183
+          grep -Fxq 'OK' /tmp/reboot-r01-a183
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/reboot-a182
+          grep -Fq 'INTEGRITY_PASS entries 182' /tmp/reboot-a182
+          python scripts/reboot_inventory_contract_test.py 2>&1 | tee /tmp/reboot-inventory
+          grep -Fq 'Ran 10 tests' /tmp/reboot-inventory
+          grep -Fxq 'OK' /tmp/reboot-inventory
+      - name: Append only new PASS *engineering* contract and partial H1-source QA, not economic performance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A183 --cycle RESET_R01 \
+            --planned "After user acceptance to continue, inspect historical vs latest branches and AppDeploy stored v52 source; identify best proven reusable market/PAPER contracts; isolate strategy-neutral source, execution and SHA event chain; test funding as-of and source feasibility without assuming alpha" \
+            --executed "Compared main vs fix terminal Git blob hashes 318 equal 8 different 60 added, inspected Candidate2 research FAIL; read 94 AppDeploy v52 paths and exact 3 identical, 1 divergent, 1 AppDeploy-only source; sampled Google Drive 100 metadata; implemented pure original1m market adapter, quote PAPER simulation, SHA journal and funding/two-leg quote source; Binance BTC spot+perp 13 synced 4H kline and 6 settled funding historical records, OI 2025 endpoint returned -1130; 31 negative regression tests x Python3.10/3.11/3.12 SUCCESS" \
+            --result "PASS engineering contracts only. H1 SPOT/PERP/FUNDING partial historical source feasible, but executable two-leg historical quotes absent and no funding prediction; H2 old OI Binance REST SOURCE_BLOCKED; old CHoCH alpha remains FAIL. Full 143 branch code review, AppDeploy byte-for-byte full backup and exact TS↔Python numeric PAPER parity still OPEN. NO TRADE/NO LIVE" \
+            --verdict DONE --cycle-result PASSED \
+            --countercheck "31 x 3 prior R01 CI #41132649092 success, explicit asof stale/future/replay rejection, stop-first and gaps, 13 records inclusive edge trimmed to 12 two-day bars, funding timestamp +13ms accepted, no fabricated source ZIP checksum or PnL, preserved original deployed AppDeploy v52 and user journals" \
+            --evidence ../../docs/PROJECT_RESET_20261030/00_MACHINE_INVENTORY_GIT_TREES.json \
+            --evidence ../../docs/PROJECT_RESET_20261030/00B_MACHINE_BRANCH_HEADS.json \
+            --evidence ../../docs/PROJECT_RESET_20261030/04_BRANCH_DEPLOY_DRIVE_RECONCILIATION_RU.md \
+            --evidence ../../docs/PROJECT_RESET_20261030/05_H1_SOURCE_FEASIBILITY_RU.md \
+            --evidence ../../docs/PROJECT_RESET_20261030/README.md \
+            --evidence ../../research/platform/market_contract.py \
+            --evidence ../../research/platform/paper_execution.py \
+            --evidence ../../research/platform/sha_ledger.py \
+            --evidence ../../research/platform/basis_source.py \
+            --evidence ../../tests/test_reboot_platform.py \
+            --evidence ../../tests/test_reboot_basis_source.py \
+            --evidence ../../scripts/reboot_inventory_contract_test.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/reboot-a183
+          grep -Fq 'INTEGRITY_PASS entries 183' /tmp/reboot-a183
+      - name: Anchor A183 to Git, never alter historical trading evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "RESET A183 engineering-only 31x3 causal source/PAPER regressions and H1 historical source feasibility, live blocked"
+          git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
