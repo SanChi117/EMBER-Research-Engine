@@ -1,0 +1,88 @@
+name: EMBER C115 frozen original C114 economics with price-only source qualification new 2023 two-regimes PAPER
+on:
+  push:
+    branches: [research/c115-price-only-4h-zone-reaction-20261030]
+    paths:
+      - '.github/workflows/mtf-c115-price-only-original-2023-two-regimes.yml'
+      - 'research/mtf-element-audit-v1/d05/c115_4h_poi_native5m_price_only_blind_replay.py'
+      - 'research/mtf-element-audit-v1/d05/test_c115_price_only_source_contract.py'
+      - 'research/mtf-element-audit-v1/cycles/B1_C115_PRECOMMIT_FROZEN_4H_POI_5M_CHOCH_PRICE_ONLY_SOURCE_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  frozen-source-causal-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Validate immutable C114 original economic engine and C115 exact OHLC price-source without posthoc filters
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py verify
+          cd research/mtf-element-audit-v1/d05
+          python -m unittest -v test_c115_price_only_source_contract 2>&1 | tee /tmp/c115-tests
+          grep -Fq 'Ran 9 tests' /tmp/c115-tests
+          grep -Fxq 'OK' /tmp/c115-tests
+          python -m unittest -q test_c114_independent_4h_poi_native5m test_c113_final_execution_geometry
+  two_predeclared_2023_windows_original_source_paper:
+    needs: frozen-source-causal-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Full 2688 independent original Binance Vision 3m/5m daily ZIP; price OHLC strict as-of gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/d05/c115_4h_poi_native5m_price_only_blind_replay.py \
+            --output-dir research/mtf-element-audit-v1/evidence/c115 | tee /tmp/c115-economics
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          folder=Path('research/mtf-element-audit-v1/evidence/c115')
+          manifest=json.loads((folder/'C115_SUMMARY.json').read_text())
+          assert manifest['original_3m_zip_total']==1344
+          assert manifest['original_5m_zip_total']==1344
+          assert manifest['original_3m_bar_total']==645120
+          assert manifest['original_5m_bar_total']==387072
+          assert manifest['original_c114_hypothesis_parameters_unmodified'] is True
+          assert manifest['source_gate_strict_price_only'] is True
+          assert manifest['paper_only'] and manifest['live_approved'] is False
+          assert manifest['real_orders']==manifest['real_fills']==manifest['live_trades']==[]
+          for name,rcpt in manifest['window_receipts'].items():
+            data=(folder/rcpt['filename']).read_bytes()
+            assert hashlib.sha256(data).hexdigest()==rcpt['sha256']
+            assert len(data)==rcpt['bytes']
+            item=json.loads(data)
+            assert item['original3m_bars']==322560
+            assert item['original5m_bars']==193536
+            assert item['source_3m_zips']==672 and item['source_5m_zips']==672
+            for val in item['source_15m_cross_archive_parity'].values():
+              assert val['strict_ohlc_price_clock_parity'] is True
+              assert val['volume_is_signal'] is False
+              assert val['volume_is_source_gate'] is False
+            assert item['admission']['live_approved'] is False
+          print("C115_FROZEN_ORIGINAL_2023_TWO_WINDOWS_ECONOMIC_EVIDENCE_OR_SOURCE_REJECTION_VERIFIED")
+          PY
+      - name: Commit reproducible raw original ZIP hash ledger and negative-or-positive economic report
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/evidence/c115
+          git commit -m "C115 blind original 2023 two-regime 3m5m matched 4H POI versus native5m CHoCH PAPER economics"
+          git push origin HEAD:refs/heads/research/c115-price-only-4h-zone-reaction-20261030
