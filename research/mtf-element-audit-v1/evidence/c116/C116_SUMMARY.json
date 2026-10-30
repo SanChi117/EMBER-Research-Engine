@@ -1,0 +1,652 @@
+{
+  "c116_windows_gate": {
+    "WIN_A": "NO_POWER",
+    "WIN_B": "NO_POWER"
+  },
+  "canonical_1m_not_trade_ground_truth": true,
+  "canonical_original_1m_bar_total": 1935360,
+  "canonical_original_1m_zip_total": 1344,
+  "causal_effect_proven": false,
+  "derived_3m_bar_total": 645120,
+  "derived_3m_daily_sets": 1344,
+  "derived_5m_bar_total": 387072,
+  "derived_5m_daily_sets": 1344,
+  "funding_missing": true,
+  "historical_screen_pass_both_windows": false,
+  "live_approved": false,
+  "live_trades": [],
+  "no_orders_executed": true,
+  "original_c114_engine_sha256": "36d677166f4091f2ce66084dfb75f2407c72cbf735483cb3ee584a687ba41e6f",
+  "paper_only": true,
+  "precommit": "cycles/B1_C116_PRECOMMIT_NATIVE1M_4H_ZONE_REACTION_RANDOM_CONTROL_RU.md",
+  "random_label_control": "SYMBOL_WEEK_PAIRED_SIGN_FLIP",
+  "random_market_entry_control_implemented": false,
+  "real_fills": [],
+  "real_orders": [],
+  "schema": "C116_ORIGINAL_NATIVE1M_CANONICAL_TREATMENT_CONTROL_H4_5M",
+  "true_prospective_oos": false,
+  "window_receipts": {
+    "WIN_A": {
+      "bytes": 1503558,
+      "cohort": {
+        "control_early_competing": 254,
+        "control_unused_n": 412,
+        "controls_n": 416,
+        "events_without_5m_structural_source": 291,
+        "initial_touch_eligible_events": 533,
+        "matched_early_fold_n": 2,
+        "matched_late_fold_n": 2,
+        "matched_pairs_n": 4,
+        "treated_early_competing": 44,
+        "treated_n": 117,
+        "treated_unmatched_n": 113
+      },
+      "directional": {
+        "C_NO_CHoCH_LONG": {
+          "all_itt_event_n": 214,
+          "filled_n": 49,
+          "score_25bps": {
+            "fills": 49,
+            "mean_r_per_fill": -0.313466,
+            "mean_r_per_itt_event": -0.071775,
+            "net_total_r": -15.359847,
+            "pf": 0.669816,
+            "signals": 214,
+            "sl_first_n": 38,
+            "tp_before_sl_n": 10,
+            "tp_probability_filled": 0.204082
+          },
+          "score_40bps": {
+            "fills": 49,
+            "mean_r_per_fill": -0.439675,
+            "mean_r_per_itt_event": -0.100673,
+            "net_total_r": -21.544093,
+            "pf": 0.581325,
+            "signals": 214,
+            "sl_first_n": 38,
+            "tp_before_sl_n": 10,
+            "tp_probability_filled": 0.204082
+          },
+          "stop_exit_n": 38,
+          "time_exit_n": 0
+        },
+        "C_NO_CHoCH_SHORT": {
+          "all_itt_event_n": 202,
+          "filled_n": 35,
+          "score_25bps": {
+            "fills": 35,
+            "mean_r_per_fill": -0.351804,
+            "mean_r_per_itt_event": -0.060956,
+            "net_total_r": -12.31313,
+            "pf": 0.606815,
+            "signals": 202,
+            "sl_first_n": 24,
+            "tp_before_sl_n": 6,
+            "tp_probability_filled": 0.171429
+          },
+          "score_40bps": {
+            "fills": 35,
+            "mean_r_per_fill": -0.505958,
+            "mean_r_per_itt_event": -0.087666,
+            "net_total_r": -17.708541,
+            "pf": 0.504114,
+            "signals": 202,
+            "sl_first_n": 24,
+            "tp_before_sl_n": 6,
+            "tp_probability_filled": 0.171429
+          },
+          "stop_exit_n": 24,
+          "time_exit_n": 0
+        },
+        "T_CHoCH_LONG": {
+          "all_itt_event_n": 54,
+          "filled_n": 15,
+          "score_25bps": {
+            "fills": 15,
+            "mean_r_per_fill": -0.686312,
+            "mean_r_per_itt_event": -0.190642,
+            "net_total_r": -10.294687,
+            "pf": 0.296073,
+            "signals": 54,
+            "sl_first_n": 11,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.2
+          },
+          "score_40bps": {
+            "fills": 15,
+            "mean_r_per_fill": -0.838687,
+            "mean_r_per_itt_event": -0.232969,
+            "net_total_r": -12.58031,
+            "pf": 0.236792,
+            "signals": 54,
+            "sl_first_n": 11,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.2
+          },
+          "stop_exit_n": 11,
+          "time_exit_n": 0
+        },
+        "T_CHoCH_SHORT": {
+          "all_itt_event_n": 63,
+          "filled_n": 11,
+          "score_25bps": {
+            "fills": 11,
+            "mean_r_per_fill": -0.31339,
+            "mean_r_per_itt_event": -0.054719,
+            "net_total_r": -3.447293,
+            "pf": 0.593902,
+            "signals": 63,
+            "sl_first_n": 7,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "score_40bps": {
+            "fills": 11,
+            "mean_r_per_fill": -0.416396,
+            "mean_r_per_itt_event": -0.072704,
+            "net_total_r": -4.580353,
+            "pf": 0.5118,
+            "signals": 63,
+            "sl_first_n": 7,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "stop_exit_n": 7,
+          "time_exit_n": 0
+        }
+      },
+      "filename": "C116_WIN_A_CANONICAL_NATIVE1M_EVENT_PAIR_LEDGER.json",
+      "gate": {
+        "historical_only": true,
+        "live_approved": false,
+        "original_c114_fail_reasons": [
+          "NO_POWER_MATCHED_PAIRS_LT_40",
+          "NO_POWER_TEMPORAL_MATCHED_FOLD",
+          "T_NET_25_NONPOSITIVE",
+          "T_PF25_LOW",
+          "T_PF40_LOW",
+          "BOOTSTRAP_DELTA_NOT_POSITIVE",
+          "MATCHED_TP_FIRST_PASSAGE_NOT_SUPERIOR",
+          "EARLY_MATCHED_TP_NOT_SUPERIOR",
+          "LATE_MATCHED_TP_NOT_SUPERIOR",
+          "DD_UPPERBOUND_GE_10"
+        ],
+        "original_c114_state": "NO_POWER",
+        "placebo_p_one_sided": 0.64717641,
+        "state": "NO_POWER"
+      },
+      "placebo": {
+        "matched_pairs": 4,
+        "n_symbol_week_blocks": 3,
+        "observed_mean_delta_net25": -0.53693607,
+        "p_one_sided": 0.64717641,
+        "permutations": 2000,
+        "placebo_exceeds_observed": 1294,
+        "seed": 11620261030,
+        "validity": "CONDITIONAL_PAIRED_LABEL_PLACEBO_NOT_RANDOM_MARKET_ENTRY"
+      },
+      "portfolio": {
+        "capacity_blocked_treated": 1,
+        "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+        "dd_adverse_wick_pct_upper_bound": 14.299206,
+        "dd_close_pct": 14.16234,
+        "initial_equity": 100,
+        "initial_equity_risk_per_fill_pct": 1,
+        "max_simultaneous_positions": 2
+      },
+      "scores": {
+        "C_ALL": {
+          "14": {
+            "fills": 84,
+            "mean_r_per_fill": -0.228348,
+            "mean_r_per_itt_event": -0.046109,
+            "net_total_r": -19.181229,
+            "pf": 0.729808,
+            "signals": 416,
+            "sl_first_n": 62,
+            "tp_before_sl_n": 16,
+            "tp_probability_filled": 0.190476
+          },
+          "25": {
+            "fills": 84,
+            "mean_r_per_fill": -0.32944,
+            "mean_r_per_itt_event": -0.066522,
+            "net_total_r": -27.672977,
+            "pf": 0.644468,
+            "signals": 416,
+            "sl_first_n": 62,
+            "tp_before_sl_n": 16,
+            "tp_probability_filled": 0.190476
+          },
+          "40": {
+            "fills": 84,
+            "mean_r_per_fill": -0.467293,
+            "mean_r_per_itt_event": -0.094357,
+            "net_total_r": -39.252634,
+            "pf": 0.549693,
+            "signals": 416,
+            "sl_first_n": 62,
+            "tp_before_sl_n": 16,
+            "tp_probability_filled": 0.190476
+          }
+        },
+        "C_MATCHED": {
+          "14": {
+            "fills": 4,
+            "mean_r_per_fill": -0.148423,
+            "mean_r_per_itt_event": -0.148423,
+            "net_total_r": -0.593693,
+            "pf": 0.818501,
+            "signals": 4,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 0.25
+          },
+          "25": {
+            "fills": 4,
+            "mean_r_per_fill": -0.219712,
+            "mean_r_per_itt_event": -0.219712,
+            "net_total_r": -0.878846,
+            "pf": 0.74775,
+            "signals": 4,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 0.25
+          },
+          "40": {
+            "fills": 4,
+            "mean_r_per_fill": -0.316923,
+            "mean_r_per_itt_event": -0.316923,
+            "net_total_r": -1.267692,
+            "pf": 0.664138,
+            "signals": 4,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 0.25
+          }
+        },
+        "T_ALL": {
+          "14": {
+            "fills": 26,
+            "mean_r_per_fill": -0.432113,
+            "mean_r_per_itt_event": -0.096025,
+            "net_total_r": -11.234945,
+            "pf": 0.467418,
+            "signals": 117,
+            "sl_first_n": 18,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.115385
+          },
+          "25": {
+            "fills": 26,
+            "mean_r_per_fill": -0.528538,
+            "mean_r_per_itt_event": -0.117453,
+            "net_total_r": -13.74198,
+            "pf": 0.405456,
+            "signals": 117,
+            "sl_first_n": 18,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.115385
+          },
+          "40": {
+            "fills": 26,
+            "mean_r_per_fill": -0.660025,
+            "mean_r_per_itt_event": -0.146672,
+            "net_total_r": -17.160663,
+            "pf": 0.336544,
+            "signals": 117,
+            "sl_first_n": 18,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.115385
+          }
+        },
+        "T_MATCHED": {
+          "14": {
+            "fills": 4,
+            "mean_r_per_fill": -0.682488,
+            "mean_r_per_itt_event": -0.682488,
+            "net_total_r": -2.729953,
+            "pf": 0.177366,
+            "signals": 4,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "25": {
+            "fills": 4,
+            "mean_r_per_fill": -0.756648,
+            "mean_r_per_itt_event": -0.756648,
+            "net_total_r": -3.026591,
+            "pf": 0.151941,
+            "signals": 4,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          },
+          "40": {
+            "fills": 4,
+            "mean_r_per_fill": -0.857774,
+            "mean_r_per_itt_event": -0.857774,
+            "net_total_r": -3.431097,
+            "pf": 0.122515,
+            "signals": 4,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 0,
+            "tp_probability_filled": 0.0
+          }
+        }
+      },
+      "sha256": "97c07f491463ae18c3b2d6640f5ab84bd7872b26ee9ed01301bb4194b6b73b7c"
+    },
+    "WIN_B": {
+      "bytes": 1396421,
+      "cohort": {
+        "control_early_competing": 202,
+        "control_unused_n": 354,
+        "controls_n": 355,
+        "events_without_5m_structural_source": 251,
+        "initial_touch_eligible_events": 458,
+        "matched_early_fold_n": 1,
+        "matched_late_fold_n": 0,
+        "matched_pairs_n": 1,
+        "treated_early_competing": 40,
+        "treated_n": 103,
+        "treated_unmatched_n": 102
+      },
+      "directional": {
+        "C_NO_CHoCH_LONG": {
+          "all_itt_event_n": 182,
+          "filled_n": 37,
+          "score_25bps": {
+            "fills": 37,
+            "mean_r_per_fill": -0.429753,
+            "mean_r_per_itt_event": -0.087367,
+            "net_total_r": -15.900864,
+            "pf": 0.518632,
+            "signals": 182,
+            "sl_first_n": 25,
+            "tp_before_sl_n": 6,
+            "tp_probability_filled": 0.162162
+          },
+          "score_40bps": {
+            "fills": 37,
+            "mean_r_per_fill": -0.600164,
+            "mean_r_per_itt_event": -0.122011,
+            "net_total_r": -22.206058,
+            "pf": 0.414406,
+            "signals": 182,
+            "sl_first_n": 25,
+            "tp_before_sl_n": 6,
+            "tp_probability_filled": 0.162162
+          },
+          "stop_exit_n": 25,
+          "time_exit_n": 0
+        },
+        "C_NO_CHoCH_SHORT": {
+          "all_itt_event_n": 173,
+          "filled_n": 42,
+          "score_25bps": {
+            "fills": 42,
+            "mean_r_per_fill": -0.35757,
+            "mean_r_per_itt_event": -0.086809,
+            "net_total_r": -15.017949,
+            "pf": 0.591441,
+            "signals": 173,
+            "sl_first_n": 27,
+            "tp_before_sl_n": 11,
+            "tp_probability_filled": 0.261905
+          },
+          "score_40bps": {
+            "fills": 42,
+            "mean_r_per_fill": -0.52719,
+            "mean_r_per_itt_event": -0.127988,
+            "net_total_r": -22.141982,
+            "pf": 0.476946,
+            "signals": 173,
+            "sl_first_n": 27,
+            "tp_before_sl_n": 11,
+            "tp_probability_filled": 0.261905
+          },
+          "stop_exit_n": 27,
+          "time_exit_n": 0
+        },
+        "T_CHoCH_LONG": {
+          "all_itt_event_n": 47,
+          "filled_n": 12,
+          "score_25bps": {
+            "fills": 12,
+            "mean_r_per_fill": 0.257572,
+            "mean_r_per_itt_event": 0.065763,
+            "net_total_r": 3.090861,
+            "pf": 1.4069,
+            "signals": 47,
+            "sl_first_n": 6,
+            "tp_before_sl_n": 5,
+            "tp_probability_filled": 0.416667
+          },
+          "score_40bps": {
+            "fills": 12,
+            "mean_r_per_fill": 0.104855,
+            "mean_r_per_itt_event": 0.026771,
+            "net_total_r": 1.258255,
+            "pf": 1.147099,
+            "signals": 47,
+            "sl_first_n": 6,
+            "tp_before_sl_n": 5,
+            "tp_probability_filled": 0.416667
+          },
+          "stop_exit_n": 6,
+          "time_exit_n": 0
+        },
+        "T_CHoCH_SHORT": {
+          "all_itt_event_n": 56,
+          "filled_n": 8,
+          "score_25bps": {
+            "fills": 8,
+            "mean_r_per_fill": 0.416967,
+            "mean_r_per_itt_event": 0.059567,
+            "net_total_r": 3.335734,
+            "pf": 1.659955,
+            "signals": 56,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.375
+          },
+          "score_40bps": {
+            "fills": 8,
+            "mean_r_per_fill": 0.163681,
+            "mean_r_per_itt_event": 0.023383,
+            "net_total_r": 1.309448,
+            "pf": 1.208273,
+            "signals": 56,
+            "sl_first_n": 3,
+            "tp_before_sl_n": 3,
+            "tp_probability_filled": 0.375
+          },
+          "stop_exit_n": 3,
+          "time_exit_n": 0
+        }
+      },
+      "filename": "C116_WIN_B_CANONICAL_NATIVE1M_EVENT_PAIR_LEDGER.json",
+      "gate": {
+        "historical_only": true,
+        "live_approved": false,
+        "original_c114_fail_reasons": [
+          "NO_POWER_MATCHED_PAIRS_LT_40",
+          "NO_POWER_TEMPORAL_MATCHED_FOLD",
+          "T_PF25_LOW",
+          "T_PF40_LOW",
+          "BOOTSTRAP_DELTA_NOT_POSITIVE",
+          "MATCHED_TP_FIRST_PASSAGE_NOT_SUPERIOR",
+          "EARLY_MATCHED_TP_NOT_SUPERIOR",
+          "LATE_MATCHED_TP_NOT_SUPERIOR"
+        ],
+        "original_c114_state": "NO_POWER",
+        "placebo_p_one_sided": 1.0,
+        "state": "NO_POWER"
+      },
+      "placebo": {
+        "matched_pairs": 1,
+        "n_symbol_week_blocks": 1,
+        "observed_mean_delta_net25": -0.47023697,
+        "p_one_sided": 1.0,
+        "permutations": 2000,
+        "placebo_exceeds_observed": 2000,
+        "seed": 11620261030,
+        "validity": "CONDITIONAL_PAIRED_LABEL_PLACEBO_NOT_RANDOM_MARKET_ENTRY"
+      },
+      "portfolio": {
+        "capacity_blocked_treated": 0,
+        "capital_model": "STATIC_INITIAL_EQUITY_1PCT_PER_FILL_NO_LEVERAGE_FUNDING",
+        "dd_adverse_wick_pct_upper_bound": 6.322442,
+        "dd_close_pct": 5.788138,
+        "initial_equity": 100,
+        "initial_equity_risk_per_fill_pct": 1,
+        "max_simultaneous_positions": 3
+      },
+      "scores": {
+        "C_ALL": {
+          "14": {
+            "fills": 79,
+            "mean_r_per_fill": -0.266718,
+            "mean_r_per_itt_event": -0.059354,
+            "net_total_r": -21.070715,
+            "pf": 0.660944,
+            "signals": 355,
+            "sl_first_n": 52,
+            "tp_before_sl_n": 17,
+            "tp_probability_filled": 0.21519
+          },
+          "25": {
+            "fills": 79,
+            "mean_r_per_fill": -0.391377,
+            "mean_r_per_itt_event": -0.087095,
+            "net_total_r": -30.918814,
+            "pf": 0.55698,
+            "signals": 355,
+            "sl_first_n": 52,
+            "tp_before_sl_n": 17,
+            "tp_probability_filled": 0.21519
+          },
+          "40": {
+            "fills": 79,
+            "mean_r_per_fill": -0.561368,
+            "mean_r_per_itt_event": -0.124924,
+            "net_total_r": -44.34804,
+            "pf": 0.447395,
+            "signals": 355,
+            "sl_first_n": 52,
+            "tp_before_sl_n": 17,
+            "tp_probability_filled": 0.21519
+          }
+        },
+        "C_MATCHED": {
+          "14": {
+            "fills": 1,
+            "mean_r_per_fill": 1.94266,
+            "mean_r_per_itt_event": 1.94266,
+            "net_total_r": 1.94266,
+            "pf": null,
+            "signals": 1,
+            "sl_first_n": 0,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 1.0
+          },
+          "25": {
+            "fills": 1,
+            "mean_r_per_fill": 1.901462,
+            "mean_r_per_itt_event": 1.901462,
+            "net_total_r": 1.901462,
+            "pf": null,
+            "signals": 1,
+            "sl_first_n": 0,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 1.0
+          },
+          "40": {
+            "fills": 1,
+            "mean_r_per_fill": 1.845284,
+            "mean_r_per_itt_event": 1.845284,
+            "net_total_r": 1.845284,
+            "pf": null,
+            "signals": 1,
+            "sl_first_n": 0,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 1.0
+          }
+        },
+        "T_ALL": {
+          "14": {
+            "fills": 20,
+            "mean_r_per_fill": 0.462822,
+            "mean_r_per_itt_event": 0.089868,
+            "net_total_r": 9.256449,
+            "pf": 1.838117,
+            "signals": 103,
+            "sl_first_n": 9,
+            "tp_before_sl_n": 8,
+            "tp_probability_filled": 0.4
+          },
+          "25": {
+            "fills": 20,
+            "mean_r_per_fill": 0.32133,
+            "mean_r_per_itt_event": 0.062394,
+            "net_total_r": 6.426595,
+            "pf": 1.508007,
+            "signals": 103,
+            "sl_first_n": 9,
+            "tp_before_sl_n": 8,
+            "tp_probability_filled": 0.4
+          },
+          "40": {
+            "fills": 20,
+            "mean_r_per_fill": 0.128385,
+            "mean_r_per_itt_event": 0.024929,
+            "net_total_r": 2.567703,
+            "pf": 1.173014,
+            "signals": 103,
+            "sl_first_n": 9,
+            "tp_before_sl_n": 8,
+            "tp_probability_filled": 0.4
+          }
+        },
+        "T_MATCHED": {
+          "14": {
+            "fills": 1,
+            "mean_r_per_fill": 1.483021,
+            "mean_r_per_itt_event": 1.483021,
+            "net_total_r": 1.483021,
+            "pf": null,
+            "signals": 1,
+            "sl_first_n": 0,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 1.0
+          },
+          "25": {
+            "fills": 1,
+            "mean_r_per_fill": 1.431225,
+            "mean_r_per_itt_event": 1.431225,
+            "net_total_r": 1.431225,
+            "pf": null,
+            "signals": 1,
+            "sl_first_n": 0,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 1.0
+          },
+          "40": {
+            "fills": 1,
+            "mean_r_per_fill": 1.360595,
+            "mean_r_per_itt_event": 1.360595,
+            "net_total_r": 1.360595,
+            "pf": null,
+            "signals": 1,
+            "sl_first_n": 0,
+            "tp_before_sl_n": 1,
+            "tp_probability_filled": 1.0
+          }
+        }
+      },
+      "sha256": "3742e29477959f39bbd1239a3a6fdd94cf668323be30910a1e1e0f8cd00a7b10"
+    }
+  }
+}
