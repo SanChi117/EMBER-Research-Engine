@@ -5,6 +5,7 @@ These tests verify the frozen source-index's internal consistency only.
 They do NOT imply CI for all 2,189 files, no economic PASS, no runtime access.
 """
 from __future__ import annotations
+
 import copy
 import json
 import re
