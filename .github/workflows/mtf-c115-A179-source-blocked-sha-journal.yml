@@ -1,0 +1,71 @@
+name: EMBER C115 A179 2023 original XLM 3m5m price-source blocked SHA journal
+on:
+  push:
+    branches: [research/c115-price-only-4h-zone-reaction-20261030]
+    paths:
+      - '.github/workflows/mtf-c115-A179-source-blocked-sha-journal.yml'
+      - 'research/mtf-element-audit-v1/cycles/B1_C115_FINAL_SOURCE_BLOCKED_ORIGINAL_2023_RU.md'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-only-economic-unknown-A179:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent strict original XLM provider source receipt and frozen hypothesis verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          b=Path('research/mtf-element-audit-v1')
+          c114=b/'d05/c114_independent_poi_native5m_choch_research.py'
+          assert hashlib.sha256(c114.read_bytes()).hexdigest()=='36d677166f4091f2ce66084dfb75f2407c72cbf735483cb3ee584a687ba41e6f'
+          d=json.loads((b/'evidence/c115/C115_ORIGINAL_20231114_12SYMBOL_NATIVE3M5M_PRICE_MISMATCH.json').read_text())
+          assert d['total_mismatched_15m']==1
+          e=d['exact_1699961400000_original_price_incident']
+          assert len(e)==1 and e[0]['symbol']=='XLMUSDT'
+          assert e[0]['original_3m_15m_OHLC'][1]=='0.11935'
+          assert e[0]['original_5m_15m_OHLC'][1]=='0.11940'
+          assert len(d['sources']['3m'])==len(d['sources']['5m'])==12
+          assert d['economic_trades_computed'] is False and d['live_approved'] is False
+          print("C115_SOURCE_BLOCKED_ECONOMICS_NOT_APPROVED")
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a178
+          grep -Fq 'entries 178' /tmp/a178
+      - name: Append A179 independent negative evidence to tamper-evident audit journal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A179 --cycle C115 \
+            --planned "C115 frozen C114 economic hypothesis with independently original 3m5m price-only source qualification on two previously unused 2023 windows" \
+            --executed "11 C115 negative source and provenance tests x Python3.10-3.12; 2023 full native3m5m attempted, original C114 source unchanged, 24 archive XLM price-anomaly forensic with 3 tests x three Python versions" \
+            --result "SOURCE_BLOCKED: 2023-11-14 11:30 UTC original XLMUSDT high native3m 0.11935 vs native5m 0.11940, exactly one 15m price mismatch over 1152 original 12 pair-day buckets; no C115 two-window economic result" \
+            --verdict DONE --cycle-result BLOCKED \
+            --countercheck "Binance ZIP provider verified 24 original 3m5m daily sources, engine C114 raw SHA frozen; stopped before full economic report, price tolerance not relaxed, no symbol/date retune, LIVE BLOCKED" \
+            --evidence cycles/B1_C115_PRECOMMIT_FROZEN_4H_POI_5M_CHOCH_PRICE_ONLY_SOURCE_RU.md \
+            --evidence cycles/B1_C115_FINAL_SOURCE_BLOCKED_ORIGINAL_2023_RU.md \
+            --evidence d05/c115_4h_poi_native5m_price_only_blind_replay.py \
+            --evidence d05/test_c115_price_only_source_contract.py \
+            --evidence d05/c115_20231114_original_3m5m_price_mismatch_forensic.py \
+            --evidence d05/test_c115_20231114_original_price_forensic.py \
+            --evidence evidence/c115/C115_ORIGINAL_20231114_12SYMBOL_NATIVE3M5M_PRICE_MISMATCH.json
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a179
+          grep -Fq 'entries 179' /tmp/a179
+      - name: Git witness A179 source-blocked no live
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "C115 A179 verified original XLM 2023 3m5m OHLC source inconsistency, economic source blocked"
+          git push origin HEAD:refs/heads/research/c115-price-only-4h-zone-reaction-20261030
