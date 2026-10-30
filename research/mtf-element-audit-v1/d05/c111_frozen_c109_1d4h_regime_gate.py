@@ -237,26 +237,46 @@ def run():
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument("--output",type=Path,required=True)
+    parser.add_argument("--output-dir",type=Path,required=True)
     args=parser.parse_args()
     out=run()
-    raw=(json.dumps(out,ensure_ascii=False,sort_keys=True,indent=2)+"\n").encode()
-    args.output.parent.mkdir(parents=True,exist_ok=True)
-    args.output.write_bytes(raw)
+    args.output_dir.mkdir(parents=True,exist_ok=True)
+    receipts={}
+    overview={}
+    for key,period in out["windows"].items():
+        name="C111_"+key+"_768_ORIGINAL_NATIVE3M_SOURCE_AND_TRADES.json"
+        raw=(json.dumps(period,ensure_ascii=False,sort_keys=True,indent=2)+"\\n").encode()
+        (args.output_dir/name).write_bytes(raw)
+        receipts[key]={"filename":name,"bytes":len(raw),
+                 "sha256":hashlib.sha256(raw).hexdigest()}
+        overview[key]={}
+        for arm,a in period["arms"].items():
+            overview[key][arm]={
+              "n":a["scores"]["25"]["n"],
+              "netR25":a["scores"]["25"]["sum_r"],
+              "pf25":a["scores"]["25"]["pf"],
+              "netR40":a["scores"]["40"]["sum_r"],
+              "pf40":a["scores"]["40"]["pf"],
+              "dd25":a["scores"]["25"]["dd_1pct_risk_pct"],
+              "early_n":a["scores"]["fold_early_n"],
+              "late_n":a["scores"]["fold_late_n"],
+              "earlyR25":a["folds"]["early"]["25"]["sum_r"],
+              "lateR25":a["folds"]["late"]["25"]["sum_r"],
+              "screen":a["admission"],
+              "gate_checks":a["gate_checks"],
+              "event_counts":a["events"]
+            }
+    summary={k:v for k,v in out.items() if k!="windows"}
+    summary["window_evidence_pins"]=receipts
+    summary["per_window_metrics"]=overview
+    overview_bytes=(json.dumps(summary,ensure_ascii=False,sort_keys=True,indent=2)+"\\n").encode()
+    fname="C111_REGIME_GATE_TWO_WINDOW_PINNED_SUMMARY.json"
+    (args.output_dir/fname).write_bytes(overview_bytes)
     print(json.dumps({"total_zips":out["original_source_total_zip_count"],
        "bars":out["original_source_total_native3m_bars"],
-       "summary":{p:{k:{"n":v["scores"]["25"]["n"],
-               "netR25":v["scores"]["25"]["sum_r"],
-               "pf25":v["scores"]["25"]["pf"],
-               "netR40":v["scores"]["40"]["sum_r"],
-               "pf40":v["scores"]["40"]["pf"],
-               "dd25":v["scores"]["25"]["dd_1pct_risk_pct"],
-               "reasons":v["admission"]["reasons"],
-               "gate_checks":v["gate_checks"],
-               "earlyR25":v["folds"]["early"]["25"]["sum_r"],
-               "lateR25":v["folds"]["late"]["25"]["sum_r"]}
-             for k,v in x["arms"].items()} for p,x in out["windows"].items()},
+       "overview":overview,
        "both_windows_pass":out["both_historical_windows_pass"],
-       "bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest()},
-       ensure_ascii=False,sort_keys=True))
+       "sha_summary":hashlib.sha256(overview_bytes).hexdigest(),
+       "bytes_summary":len(overview_bytes),
+       "window_files":receipts},ensure_ascii=False,sort_keys=True))
 if __name__=="__main__":main()
