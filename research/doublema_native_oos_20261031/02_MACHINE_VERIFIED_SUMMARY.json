@@ -1,0 +1,73 @@
+{
+  "cost_policy_fixed_exits_overlay_bps_roundtrip": {
+    "10": {
+      "profit_factor": 2.23859,
+      "return_pct_initial_10k": 39.864217,
+      "winning_trades": 11
+    },
+    "25": {
+      "profit_factor": 1.859349,
+      "return_pct_initial_10k": 31.772152,
+      "winning_trades": 11
+    },
+    "40": {
+      "profit_factor": 1.567059,
+      "return_pct_initial_10k": 23.680086,
+      "winning_trades": 11
+    },
+    "60": {
+      "profit_factor": 1.266174,
+      "return_pct_initial_10k": 12.890665,
+      "winning_trades": 10
+    }
+  },
+  "engine": "Freqtrade==2026.4",
+  "entry_times_same_across_fee_runs": 27,
+  "exit_path_difference": [
+    {
+      "high_fee_close": "2026-07-15 00:00:00+00:00",
+      "high_fee_exit": "long_rr_structure_take_profit",
+      "high_fee_profit": 1209.7,
+      "low_fee_close": "2026-07-12 00:00:00+00:00",
+      "low_fee_exit": "large_profit_50pct_giveback",
+      "low_fee_profit": 71.52,
+      "open": "2026-07-10 06:00:00+00:00"
+    }
+  ],
+  "exit_times_same_across_fee_runs": 26,
+  "higher_fee": {
+    "exactly_reproduced_trade_count": 27,
+    "fees_per_side": 0.00125,
+    "max_account_dd_pct": 8.196907,
+    "n": 27,
+    "offline_native_zip_sha256": "de9ac28299f678a130f84a7f66a1fe83f79cba4577d2203ac47909e7220dc324",
+    "profit_factor": 2.173474,
+    "profit_pct": 43.379711,
+    "remote_native_zip_sha256": "4b3943cca24d027878f632cdfcdac7465a68c9414cd9a0aac10ca64c3f956342"
+  },
+  "limitations": [
+    "Only 27 trades, less than prereg 30 threshold",
+    "Known source posted May12 and tested May13-Oct29; not lookahead/recursive-analysis certified",
+    "Historical Binance candles and funding with OKX metadata used; not executable bid/ask proof",
+    "No maker limit order queue / gap fill independent verification",
+    "No causal claim that higher fees improve returns; one exit diverged"
+  ],
+  "market": "Binance USD-M ETHUSDT original historical prices via OKX data adapter",
+  "offline_metadata_CI_run": 41139485118,
+  "outcome": "PRELIMINARY_POSITIVE_NO_POWER_AND_EXIT_SENSITIVITY_NOT_APPROVED_FOR_LIVE",
+  "primary": {
+    "exactly_reproduced_trade_count": 27,
+    "fees_per_side": 0.0005,
+    "max_account_dd_pct": 7.331655,
+    "n": 27,
+    "offline_native_zip_sha256": "8cb3b31d25fda79f14734c1c8ef1414d9e6eb08c3f10873af5301ba5978829a0",
+    "profit_factor": 2.23859,
+    "profit_pct": 39.864217,
+    "remote_native_zip_sha256": "ab911e3712f3fa80374ea188eda7e8715d2cf79832a96298592370cf031017b3"
+  },
+  "remote_CI_run": 41138713727,
+  "schema": "EMBER_DOUBLEMA_EXACT_NATIVE_VALIDATION_R01",
+  "source_strategy_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "source_upstream_commit": "40af5c7c1c44253766428cfb06babf22f9817aa4",
+  "validation_window": "[2026-05-13,2026-10-30) UTC"
+}
