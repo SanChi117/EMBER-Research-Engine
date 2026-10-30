@@ -1,0 +1,51 @@
+name: EMBER ETH published playbooks independent price-source stress (PAPER ONLY)
+on:
+  push:
+    branches: [research/reboot-inventory-evidence-first-20261030]
+    paths:
+      - '.github/workflows/ember-public-playbook-eth-independent-source-screen.yml'
+      - 'research/open_playbook_validation_20261031/**'
+      - 'research/quick_open_strategy_screen_20261031/data/C_pre_2024_ETHUSDT.json'
+      - 'research/quick_open_strategy_screen_20261031/data/D_post_2026_ETHUSDT.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  causal-eth-open-playbook-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fixed 2024/2025/2026 ETH public rule tests, all source and results kept
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/open_playbook_validation_20261031/run.py | tee /tmp/eth-screen
+          grep -Fq 'REPRODUCIBLE_COMPLETE' /tmp/eth-screen
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/open_playbook_validation_20261031/RESULTS.json')
+          j=json.loads(p.read_text())
+          assert set(j['candidates'])=={'ORB24','BREAKOUT24VOL'}
+          assert [j['frozen_data'][x]['bars'] for x in 'ABCD']==[840,840,2208,264]
+          assert all(set(x['windows'])==set('ABCD') for x in j['candidates'].values())
+          assert j['costs_roundtrip_bps']==[14,25,40]
+          assert j['trades_cost25']
+          print('PUBLISHED_RULES_FROZEN_SOURCE_VERIFIED_NO_SUCCESS_FABRICATION')
+          PY
+      - name: Commit outcomes append-only in separate report, never edit source prices
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/open_playbook_validation_20261031/RESULTS.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Independent published ETH 2024/2025/2026 breakout and ORB 14/25/40bps outcomes; no source tuning or real orders"
+            git push origin HEAD:refs/heads/research/reboot-inventory-evidence-first-20261030
+          fi
