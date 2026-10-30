@@ -1,0 +1,33 @@
+name: EMBER C114-A independent native5m and 4H causal source contracts PAPER
+on:
+  push:
+    branches: [research/c114-independent-zone-reaction-value-20261030]
+    paths:
+      - '.github/workflows/mtf-c114-causal-contracts.yml'
+      - 'research/mtf-element-audit-v1/d05/c114_causal_4h_poi_native5m_contract.py'
+      - 'research/mtf-element-audit-v1/d05/test_c114_causal_4h_poi_native5m_contract.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  c114-causal-adversarial:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Frozen journal verification and adversarial native5m source contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd research/mtf-element-audit-v1
+          python tools/auditlog.py verify
+          cd d05
+          python -m unittest -v test_c114_causal_4h_poi_native5m_contract 2>&1 | tee /tmp/c114-contract-tests
+          grep -Fq 'Ran 17 tests' /tmp/c114-contract-tests
+          grep -Fxq 'OK' /tmp/c114-contract-tests
