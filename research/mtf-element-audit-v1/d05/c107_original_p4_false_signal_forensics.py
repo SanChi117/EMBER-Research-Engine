@@ -36,6 +36,20 @@ def ceil_closed4(t):
     if type(t) is not int or t<=0:raise C107Error("INVALID_SOURCE_TIMESTAMP")
     return ((t+p4.H4-1)//p4.H4)*p4.H4
 
+def parent_invalidated_by_closed4(side,close4,low,high):
+    """Exactly the same strict 4H close-based invalidation condition as C105."""
+    if side not in ("LONG","SHORT"):
+        raise C107Error("UNREGISTERED_4H_PARENT_SIDE")
+    if not all(type(v) is D for v in (close4,low,high)) or not D(0)<low<high:
+        raise C107Error("INVALID_4H_ZONE_DECIMAL")
+    return (close4<low if side=="LONG" else close4>high)
+
+def fvg_middle_momentum(side,middle):
+    """Descriptive independent comparison to external displacement definition."""
+    if side not in ("LONG","SHORT"):
+        raise C107Error("UNREGISTERED_FVG_SIDE")
+    return middle.c>middle.o if side=="LONG" else middle.c<middle.o
+
 def diagnostic(t,rows):
     """Fixed existing trade event; source-only features at pre-entry and post-exit."""
     if not t["parent_tf"]==t["stop_source_tf"]==t["target_source_tf"]=="4H":
@@ -79,7 +93,7 @@ def diagnostic(t,rows):
                else D(t["zone_lower"])-D(t["entry"]))
     atr=D(t["atr4h"])
     if atr<=0:raise C107Error("ORIGINAL_4H_ATR_INVALID")
-    middle_momentum=(middle.c>middle.o if t["side"]=="LONG" else middle.c<middle.o)
+    middle_momentum=fvg_middle_momentum(t["side"],middle)
     midpoint_depth= ((original_reject.c-zone_mid) if t["side"]=="LONG"
                     else (zone_mid-original_reject.c))
     exittype=t["exit_reason"]
@@ -91,8 +105,8 @@ def diagnostic(t,rows):
         if stop_i is None:raise C107Error("STOP_4H_CANDLE_MISSING")
         close4=fours[stop_i]
         closed4_at_stop=str(close4.c)
-        invalidated=(close4.c<D(t["zone_lower"]) if t["side"]=="LONG" else
-                     close4.c>D(t["zone_upper"]))
+        invalidated=parent_invalidated_by_closed4(t["side"],close4.c,
+                               D(t["zone_lower"]),D(t["zone_upper"]))
         reclaimed=not invalidated
         # Pure post-stop observation, never a hypothetical PnL or signal.
         maxend=min(enter+p4.MAX_HOLD*p4.THREE,rows[-1].known_ms)
