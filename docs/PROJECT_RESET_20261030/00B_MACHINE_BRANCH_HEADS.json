@@ -1,0 +1,871 @@
+{
+  "schema": "EMBER_RESET_BRANCH_INDEX_V1",
+  "snapshot_day": "2026-10-30",
+  "source": "GitHub API /repos/{owner}/{repo}/branches?per_page=100",
+  "has_verified_every_branch_content": false,
+  "entries": [
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/config-sync-frequency-30000",
+      "head_commit_sha": "9e5fcf9a0f5fd671f1bd9c222233605114a4feaf",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/core-15000-validation",
+      "head_commit_sha": "0854cbabe52e4d7e4be2999c6aad165c3f4e368b",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/diagnostics-and-real-sanity",
+      "head_commit_sha": "73c3bf97ca46b011e2260bb50002708329d93354",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/htf-bias-experiments",
+      "head_commit_sha": "19b73fe1878ffd59eab3ef564b9bcc85068c9aef",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/implement-portfolio-wfo-tz",
+      "head_commit_sha": "feda21c6c8f2c44bec927238abe8ac85fd450c69",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/oos-portfolio-wfo",
+      "head_commit_sha": "50192482ec00111d8b6988c6b3d139dc85ae4035",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/out-of-sample-4alts",
+      "head_commit_sha": "adaad9db4231dff13227111c0ee224ae82f527f6",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/validate-ember-engine",
+      "head_commit_sha": "b61ddc946b0d1bd0e096c870f06fc6d80ef56010",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "agent/validate-ember-engine-2",
+      "head_commit_sha": "00a9ca3521d0dcf949ae1eb4d711163a4eed49ef",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "main",
+      "head_commit_sha": "592f0b8bfab514a6317e7c5cca12062d3f5c41e5",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/academic-engine-recovery-20261015",
+      "head_commit_sha": "0d4abcb171a78b400caaf1acb90557d0466d2fa2",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c58-route-c-parent-state-20261025",
+      "head_commit_sha": "303128e51304aeed9c7bc11e40cc5881a29e6ef5",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c113-final-execution-geometry-20261030",
+      "head_commit_sha": "0c70df72a1d44cdbaa5babfaa0a8ff1da1a4a4a7",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c114-independent-zone-reaction-value-20261030",
+      "head_commit_sha": "f09c75ce289b9ed86838dc844315c6afbd5f8815",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c115-price-only-4h-zone-reaction-20261030",
+      "head_commit_sha": "7d06fb56574f305dcf7d20eb01508bf0a7e74f8a",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c115-price-only-source-reconciliation-20261030",
+      "head_commit_sha": "9eb5625fcb93f1ff0cbebaed7cf74aa3f13a30e3",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c116-canonical-native1m-zone-reaction-20261030",
+      "head_commit_sha": "3f39c984ec22a52a4bc32253df44b140575ec3af",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c116-single-native1m-canonical-source-20261030",
+      "head_commit_sha": "3e40a4e7216b6e93355c61917b4494313e4e5f3e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/c117-random-time-4h-zone-counterfactual-20261030",
+      "head_commit_sha": "041eaf9fe8275c8c66047efc489b6b72b818a04d",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/ember-integrated-working-20261025",
+      "head_commit_sha": "0c6fb39a4a158d43bb48a7bf5d4796efc0de7982",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/ember-z01-structural-reaction-20261030",
+      "head_commit_sha": "c56749c95282dddb331f84428951d6d3fd89b543",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-course-fidelity-v05",
+      "head_commit_sha": "9f69d0e874dbd21a83f7c4c6bc66c43cb3ddcc25",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-element-audit-C04-20261014",
+      "head_commit_sha": "69847d95d64911455a97d4a590f8e1eeda2b2be7",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-element-audit-C05-20261014",
+      "head_commit_sha": "77b8e36f4e9f3f1d16d2302364d4258ab7443441",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-element-audit-C06-20261014",
+      "head_commit_sha": "f4ad834b934839188bda5a034c6ebe4a6601691f",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-element-audit-C07-20261014",
+      "head_commit_sha": "7f6e81bc405d4139b6206a9c5300725e59c5e0d0",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-element-audit-ledger-20261014",
+      "head_commit_sha": "ef18515b10ed352409c8fd4c72a3ac79ce71387d",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-frozen-oos-2025",
+      "head_commit_sha": "7a8c41c7bdff9e69be11e7bbef3a5be63557cb93",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-route-v04-futures-20261014",
+      "head_commit_sha": "a042163ea98e2b98ce951e693609f9b61548ab46",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/mtf-v05-parent-lifecycle-20261014",
+      "head_commit_sha": "8d788407d4214a4ba15f07f46a94fb7eadb9f144",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/EMBER-Research-Engine",
+      "branch": "research/reboot-inventory-evidence-first-20261030",
+      "head_commit_sha": "2de737fdd2dbb250ba97b66478576465af6770f6",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/ember-research-engine-v0.2.0",
+      "head_commit_sha": "6c4158653ca0786845d6468e2c81151c0e61e715",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/live-paper-hardening",
+      "head_commit_sha": "257003d04e0a36395ad26bc89a662ffcd162558e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-development-profitability",
+      "head_commit_sha": "633e46ca4b73319005e324b455bc5a1c147d4d8d",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p1-poi-imbalance",
+      "head_commit_sha": "fd0959dee5dae6f71964b4d208ccb7022d225b01",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p2-context-liquidity",
+      "head_commit_sha": "1ef2da9406b7a090e5bc022a014754fd87656291",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p3-interaction",
+      "head_commit_sha": "4207df409b0b8dcaae7569ec9e790347bc878f30",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p4-execution-structure",
+      "head_commit_sha": "ecdd726388cb6e912df85d0d2493973ea13b87e9",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p5-economics-risk-portfolio",
+      "head_commit_sha": "bfb4fef65c1c2ecd5c33b2b45315a2c8ef2f333a",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p6-scenario-fusion",
+      "head_commit_sha": "cfb9b433449f5f5aa8902f41d6b622a2d8ed5847",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p7-outcome-blind-recognition",
+      "head_commit_sha": "b749be2578251a3b447a78a79009ff3d45cffc57",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p8-semantic-freeze",
+      "head_commit_sha": "eef6bf319f53e4434d5f99bf54bc7f78c1b41f75",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-1-p9-development-profitability",
+      "head_commit_sha": "a46b075952d8525761a03275baa297f0941603b6",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-candidate-1-postmortem",
+      "head_commit_sha": "4606e0a3c1f83cb81d76ca0b48fbc44d38cb4b8c",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-core-candidate-2-research",
+      "head_commit_sha": "c237b640ba8aabf1f12d5c6c06e26ec88240e013",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-mtf-dealing-range-v2",
+      "head_commit_sha": "8be12a86f8edcfb46ff47f80552e8efea9f4b1f8",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-mtf-fta-first-v3",
+      "head_commit_sha": "1bab101ce70cc687b4e8474c55449b4ee5c1b58d",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-terminal-binance-ui-v1",
+      "head_commit_sha": "3799575924f18da2a6f4b31833a9ec10972ac6c5",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "agent/smoke-terminal-binance-ui-v2",
+      "head_commit_sha": "eedf6222303b43c73fd3b220a082607c37fbd55e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "main",
+      "head_commit_sha": "6c4158653ca0786845d6468e2c81151c0e61e715",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/Smoke-strategy",
+      "branch": "research/smoke-validation-audit-r1",
+      "head_commit_sha": "6c4158653ca0786845d6468e2c81151c0e61e715",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "agent/level-flow-visual-sync",
+      "head_commit_sha": "707afed9118f675e47dc6e39c00eaa687d9a11ed",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "backup/pre-phase0-20261012",
+      "head_commit_sha": "305762d713bc36975b8c465546e4c826f281cfc5",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "candidate/v5-qfvg-fs15-production",
+      "head_commit_sha": "2bb92db456e8f253cbac007ce5b16748ea982ad8",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "fix/paper-minute-monitor-and-strategy-slot-20261013",
+      "head_commit_sha": "0ecf3691b60399bb294beb4b5cac839f867a31cb",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "fix/sites-binance-proxy",
+      "head_commit_sha": "ffaf44864c2ef72e0ed30cb526dbab29c3972d83",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "fix/symbol-isolation-journal-dedupe",
+      "head_commit_sha": "8ae758b5b8bed82f497b0335a4f5479be839da20",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-logic-audit",
+      "head_commit_sha": "cdb80436a14d3ea135c00220ef780ad2419bd9af",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-long-4x60",
+      "head_commit_sha": "f6b95025c005eb251810aed31653194f3cadb157",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-sample-4x60",
+      "head_commit_sha": "baf31cc2c867ed0bab83c01c40094fcb89614599",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-v1",
+      "head_commit_sha": "7af9b47d17d3e5a7195da26a835bde2f52d97f00",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-v5-regime-gate",
+      "head_commit_sha": "352b0419ff4f4ba8632f71772eea3713eb12ff9e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-v5-visible-trace",
+      "head_commit_sha": "917f6656d978af701b5e66086eaed9169527a294",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "level-flow-validation-180d",
+      "head_commit_sha": "15befca449a7706f3dbb04ec26929f9b3b85478f",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "main",
+      "head_commit_sha": "4e79623bcb6c867cbbde4455c3671407a882e21b",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/anchoring-52w-high-r1",
+      "head_commit_sha": "3a1cfbcd745f7b5b8c3dcfbcea6c89fb0d82ea41",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/basis-convergence-r1",
+      "head_commit_sha": "bae583ae25e183b3a65dcd1e9c2c6b811d23b3d6",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/cointegration-stat-arb-r1",
+      "head_commit_sha": "c00adfe185441427d8ce025bb4298012f8a83b96",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/cross-sectional-reversal-prospective-r1",
+      "head_commit_sha": "5bce021f31d76c45ef4e47011505b2108f65564e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/cross-sectional-reversal-r1",
+      "head_commit_sha": "67bf7364860ebf6479353920b96c039f8bd99763",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/donchian-long-only-crossasset-oos-r1",
+      "head_commit_sha": "57b8acc596296a40b42b410e0f184fb888984538",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/donchian-trend-following-r1",
+      "head_commit_sha": "ed2c7d7b63f6cd115e29e1478cdace8d00219ee8",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/downside-beta-r1",
+      "head_commit_sha": "946d35c5105faf71ae2c2d7deedab1fb9874d8c7",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/dynamic-liquidity-universe-replication-r1",
+      "head_commit_sha": "85a6c5bfcef5b233ec95c8e2bb10e45be369859d",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/exp-15m-confirm-015",
+      "head_commit_sha": "c808d42bcee147e5cc6a5eeee8fe6adef2678d5f",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/exp-rr-gate-16",
+      "head_commit_sha": "b62a9a1173955648f18a9559f16b1234c8ef8463",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/expand-v5-oos-walk-forward",
+      "head_commit_sha": "92a25c37ae31ff13a903a8c78c17361fb06d1819",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/external-regime-filter-replication-r1",
+      "head_commit_sha": "5592e10ad519775f02c637964da96ce77b4d9001",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/funding-carry-r1",
+      "head_commit_sha": "cc3ed87fa28e197a3091fc8175d861a2a1e34954",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/illiquidity-premium-r1",
+      "head_commit_sha": "c0f3b5378c8fb3e5bcbd30fe1ef327b48f4c28cd",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/level-flow-edge-diagnostic-r1",
+      "head_commit_sha": "9d168c25c4ec29ebaa22fdd851ee795cf3ca747e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/low-volatility-prospective-r1",
+      "head_commit_sha": "1ecfcdd3aa02466ddf7396c6c7a24c55f2d5488f",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/low-volatility-r1",
+      "head_commit_sha": "12a7ba94ccf6761b7d98a9f5e2f00a6366c21c2d",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/market-beta-r1",
+      "head_commit_sha": "d95f38fffef0b05dbf9a9f71592f896882cd74cc",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/max-momentum-r1",
+      "head_commit_sha": "099ad7d9049759a9b261c24cce317cdd3b79157c",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/multispeed-voltarget-replication-r1",
+      "head_commit_sha": "d118e9b68c22d4f718740022ce947a13f2d48594",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/order-flow-imbalance-r1",
+      "head_commit_sha": "b10dc6b8920d7d104317d190e14baabe8ebb19d1",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/paper-journal-lifecycle",
+      "head_commit_sha": "85ac9182169b176e01ba7707c011d0d9b478e8ee",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/paper-observation-kill-switch",
+      "head_commit_sha": "4538b91c6f9598c059d11126723a88c1f4bed589",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/paper-review-gate",
+      "head_commit_sha": "2668014c86400d1e5621570a8a9962052dedb884",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/past-alpha-r1",
+      "head_commit_sha": "2263dcccdd12a56740c314163d1ceaed2ba803f6",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/portfolio-30d-19",
+      "head_commit_sha": "ab1daa0ad71b491f358132c1e2f43742356fb81b",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/portfolio-30d-funnel",
+      "head_commit_sha": "e628bc05a76c366f892e87bca6a53a24cf23920c",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/q1d-ob-additive-execution-matrix",
+      "head_commit_sha": "a3dd25e8f445f4d586bf41b757a67c4027094315",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/regime-cost-audit",
+      "head_commit_sha": "63b0d3d4c49a69cba14410b5a920d3f48e3679ea",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/regression-report-manifest",
+      "head_commit_sha": "65b094d3d989be4b017d7529f0cd26851edc6a71",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/research-matrix-r1",
+      "head_commit_sha": "8854551b44a714ed08e7a17e2044bc425ccf3eae",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/research-roadmap-v1",
+      "head_commit_sha": "0960b13adcf8581c6e62c3dbef0f4cfbe3f81fde",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/short-reversal-liquidity-r1",
+      "head_commit_sha": "c58b4406f6f81d914f856ca1b24e507794e75598",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/skewness-risk-r1",
+      "head_commit_sha": "3638e7b20bdd4172e2008e7974246e59eb63b6b9",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/trend-break-retest-r1",
+      "head_commit_sha": "25b3d7981b4924de60904fdcf22285c70b8fd8e3",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/trend-pullback-reclaim-r1",
+      "head_commit_sha": "02668508da306031fbcd76e1217eb10452a37f85",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-30d-matrix",
+      "head_commit_sha": "057c10a9a48243907f552543302eaff7430d3589",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-ab-long-horizon",
+      "head_commit_sha": "1907ee8bddc03fdf40bfd5b25bb5390d9d44a720",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-entry-timing-geometry-audit",
+      "head_commit_sha": "1a88d4eabf7bd34fe770d9fbe688ef3606169603",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-final-candidate-b",
+      "head_commit_sha": "88a8a1ca8c0571ca57ea5ccdcbe6457e8768d06b",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-free-space-additive-rescue-matrix",
+      "head_commit_sha": "4e560485aa6c3cc2d4fc884943bf3f1e9976b5b8",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-free-space-additive-rescue-untouched-oos",
+      "head_commit_sha": "756f17a2eda45bbe4cbc8b17d5c6e4f02c671f49",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-free-space-obstacle-density-audit",
+      "head_commit_sha": "59ff71b3bb50d2dd51a09b73050ef1237d2e8379",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-from-reaction-quality-diagnostic",
+      "head_commit_sha": "357cb07692b48d8acd968910ef258025d34c9625",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-gated-rescue-independent-oos",
+      "head_commit_sha": "d883712472befcbc5b1edc2ec94653c27a8f1e79",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-hybrid-regime-gate",
+      "head_commit_sha": "c9a8f3bbdc2d79496331ed30e54d017c680369f0",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-hybrid-rescue",
+      "head_commit_sha": "20f9c8e42fa4d661befa27a7eb048d6af2ac6f31",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-prereaction-free-space-audit",
+      "head_commit_sha": "11cf17670ea09ebe11c17fda3f98d549b8a0efd0",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-prereaction-free-space-matrix",
+      "head_commit_sha": "624b4bbd0c3323ebc6f76b4585d7886ecbc003c4",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-q1d-ob-additive-matrix",
+      "head_commit_sha": "e13d0313dce11426292b144bd88afb3a55cdf6ae",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-qfvg-fs15-untouched-oos",
+      "head_commit_sha": "87ec5d35710058952303c0276193c1a6e6506424",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-qfvg-production-equivalence",
+      "head_commit_sha": "cd41cdc9c391b4a56af2b94e3b4b59ffda592475",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-remaining-quality-segments-matrix",
+      "head_commit_sha": "e43552e4334c3581eb72bad64dbd9fa371ad7048",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-rescue-continuation-swing-gate",
+      "head_commit_sha": "c13fd570a52f7f49c02707fe5e03c1c7ab318eca",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-rescue-location-sweep-gate",
+      "head_commit_sha": "243a8f18d8e74d50e3a0ddab8c0ff602762bc6b9",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-sr4h-swing-next5m-execution-replay",
+      "head_commit_sha": "8fcf1998cb65a47e2619bcf402ab36027c18709e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-sr4h-swing-next5m-execution-replay-v2",
+      "head_commit_sha": "fde2d867319ec4e7d09ec2a277a2eb63ac3099fe",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-structure-retest-secondary-feature",
+      "head_commit_sha": "f70acdba06a20f6b296f9436d569d3d92f168044",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-structure-retest-swing-selector",
+      "head_commit_sha": "2147b07b9d4f800e58bf7c19d303a560547eb59a",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-structure-retest-swing-untouched-oos",
+      "head_commit_sha": "54138cdc12e0a4cda3ea99e294c9b6aa1ac4f656",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-structure-retest-target-selector",
+      "head_commit_sha": "8230ad53681d5ee739b1d48f2d86c17855af6468",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-sweep-reclaim-additive-entry-matrix",
+      "head_commit_sha": "8fcf1998cb65a47e2619bcf402ab36027c18709e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-target-selection-audit",
+      "head_commit_sha": "061487b29a5363bd58fa209ed78f6c139456e064",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-target-selection-execution",
+      "head_commit_sha": "f3a2b79683943a1a5644e11a645152013dcbad21",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-target-stop-geometry-audit",
+      "head_commit_sha": "11acb6c3be2a7077dd41230ada7520572a412dcc",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "research/v5-through-target-diagnostic",
+      "head_commit_sha": "f2c2fd4f61e2a8bea5651f129a1cfc9e5a4e4268",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "review/smoke-terminal-appdeploy-20260915",
+      "head_commit_sha": "3418af6f0d8a08664f5e67c00aa671de25bb9df3",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "review/terminal-recovery-observation-20260917",
+      "head_commit_sha": "53eab292db55e51b5d3438e50b03d3dc4989d5fc",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "rollback/smoke-os-pre-refactor-f808b01",
+      "head_commit_sha": "f808b01522a4eb72afec9c83595b208e42a6f39f",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "sol-long-entry-audit",
+      "head_commit_sha": "042cfaab0ae1c5fba570ba45a2ade772507d2c2e",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "terminal/visual-sync-current-main",
+      "head_commit_sha": "66987b5fb9f97a471c5e294d3d35389baaa9a062",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "terminal-binance-chart-v6",
+      "head_commit_sha": "463d2b1ef66451287477aea94b74e7bbfb38fa95",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "terminal-binance-workbench",
+      "head_commit_sha": "0d2d8285fe380de7b96916b85c6ef2d28131f29b",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "terminal-v6-binance-chart",
+      "head_commit_sha": "9e2a8cfc07871ae7787ec36afd08988bb837bf7b",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "terminal-v6-final-ci",
+      "head_commit_sha": "389ce23be9d2cf76dc427627efbe92fb2c189713",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/smoke-trading-terminal",
+      "branch": "verify-public-audit",
+      "head_commit_sha": "1f8f19233d13ea0ff28b1dfe80c6d6d56bac3ad8",
+      "protected": false
+    },
+    {
+      "repository": "SanChi117/telegram-signal-bot",
+      "branch": "main",
+      "head_commit_sha": "e177cbfb3560b302e4d2740d57ad716af8477366",
+      "protected": false
+    }
+  ],
+  "notes": [
+    "Branch HEAD means inventory only; do not imply CI or performance.",
+    "Repo main can differ from research branches and AppDeploy published snapshot; do not overwrite deployments.",
+    "At most first 100 branch results per repo, actual listed counts below 100 in current four repos."
+  ]
+}
