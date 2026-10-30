@@ -1,0 +1,111 @@
+{
+  "schema": "EMBER_A192_RESEARCH_SHORTLIST_V1",
+  "asof": "2026-10-31",
+  "mode": "RESEARCH_NO_ORDERS",
+  "source_checks": [
+    {
+      "repo": "chrysek70/hermes-trading",
+      "commit": "702ee511c669fb521744270e8b3cb9e8964ac998",
+      "system": "SuperTrend(10,3) long only 4h",
+      "evidence_type": "author CSV and source verified, not independent PnL replay",
+      "code_blobs": {
+        "signals": "ac6794eda99cc83e50a097b19e7bb30f9e9bdc89",
+        "backtest": "bba7e73f213ee6e6c63f809e53127e5f69d36c74",
+        "strategy_yaml": "753497f442e0a3d8819a825bb4e2ee6cced293d1"
+      },
+      "author_results": {
+        "BTC_48mo": {
+          "N": 35,
+          "return_pct": 38.661369,
+          "PF": 2.236525,
+          "DD_pct": 9.63057
+        },
+        "ETH_48mo": {
+          "N": 30,
+          "return_pct": 37.864311,
+          "PF": 2.922881,
+          "DD_pct": 5.30153
+        },
+        "BTC_ETH_parallel": {
+          "N": 65,
+          "return_pct": 39.72,
+          "PF": 2.5,
+          "DD_pct": 5.54
+        }
+      },
+      "risk_notes": [
+        "signal candle close entry uses same bar close with fixed slippage",
+        "current-band/current-low stop check order path needs investigation",
+        "30/35 trades thin, no independent native replay"
+      ],
+      "rank": 1
+    },
+    {
+      "repo": "EstebanSP23/crypto_systematic_research",
+      "commit": "5df0c43f6d48b7d8dbb74843d6747e5ddbb6819b",
+      "system": "Apex no-pyramid 180day breakouts 4h eight assets long-only",
+      "evidence_type": "author trade CSV + independent arithmetic grid count, not native replay",
+      "code_blobs": {
+        "walkforward": "52d6851b9356d9e26df860812489369b79ee1032",
+        "sensitivity_apex_csv": "ba2b9c788bf46559389a5b9178435941359418bd",
+        "apex_trades_csv": "d91bafb5129c4d896ff4cd260f16c60faa8b80b7"
+      },
+      "author_results": {
+        "P1": {
+          "trades": 19,
+          "APY_pct": 24.1725
+        },
+        "P2": {
+          "trades": 47,
+          "APY_pct": 5.9861,
+          "DD_pct": 14.1068,
+          "win_pct": 38.2979,
+          "expectancy_R": 0.19678
+        },
+        "grid": {
+          "cells": 27,
+          "positive_P2_expectancy": 27,
+          "positive_P2_APY": 26
+        },
+        "trade_csv": {
+          "P1_N": 19,
+          "P1_sum_USD": 994.931,
+          "P2_N": 47,
+          "P2_sum_USD": 277.071
+        }
+      },
+      "risk_notes": [
+        "few trades /year",
+        "funding and slippage omitted",
+        "top3 = 51% author profit",
+        "2025 losses"
+      ],
+      "rank": 2
+    },
+    {
+      "repo": "hrodrig/freqhub-strategies",
+      "code_sha": "6e80c0b96754c21744726120b6904f940621ec01",
+      "system": "FailureToReturn 1h original source ETH Binance native",
+      "evidence_type": "OUR actual Freqtrade 2026.4 native runs",
+      "CI_run": 41143948231,
+      "artifact_id": 13020268202,
+      "artifact_sha256": "c5c596390a5d425401dd396011949ea74e9467259cad5ddb45e96ed4bb4da5f5",
+      "fee5bps_side": {
+        "trades": 0,
+        "pnl": 0
+      },
+      "fee12p5bps_side": {
+        "trades": 0,
+        "pnl": 0
+      },
+      "verdict": "NO_TRADES_NO_POWER_FUTURES_ORIGINAL_LONG_ONLY_FOREX_INTENDED"
+    },
+    {
+      "repo": "AKzar1el/walk-forward-crypto",
+      "evidence_type": "source explicitly private in docs/REDACTION_REPORT.md",
+      "verdict": "NOT_REPRODUCIBLE_ORIGINAL"
+    }
+  ],
+  "external_author_claims_not_independently_replayed": true,
+  "no_new_economic_pass": true
+}
