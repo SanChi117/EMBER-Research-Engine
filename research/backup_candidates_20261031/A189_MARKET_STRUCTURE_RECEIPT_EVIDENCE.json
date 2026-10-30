@@ -1,0 +1,136 @@
+{
+  "schema": "EMBER_A189_MARKET_STRUCTURE_PUBLIC_RECEIPTS_CHECK_V1",
+  "source_sha": "3502b8ec96959ad47a9b63ae7474c17c7a2dbff7",
+  "scope": "arithmetic of public 15 receipt files; not native strategy backtest",
+  "strategies": {
+    "MsSupportResistanceV1": {
+      "n": 404,
+      "pnl_usdt": 703.15,
+      "profit_factor": 1.376467,
+      "wins": 172,
+      "win_rate_pct": 42.5743,
+      "top3_share_pct": 35.2961,
+      "profit_without_top3_usdt": 454.97,
+      "per_pair": [
+        {
+          "pair": "BTC",
+          "n": 74,
+          "pnl_usdt": 86.82
+        },
+        {
+          "pair": "ETH",
+          "n": 84,
+          "pnl_usdt": 128.89
+        },
+        {
+          "pair": "SOL",
+          "n": 76,
+          "pnl_usdt": 176.45
+        },
+        {
+          "pair": "XRP",
+          "n": 98,
+          "pnl_usdt": 218.55
+        },
+        {
+          "pair": "LTC",
+          "n": 72,
+          "pnl_usdt": 92.44
+        }
+      ],
+      "source_file_sha256": {
+        "refs/freqtrade/backtest_results/MsSupportResistanceV1-BTCUSDT-4h-trades.json": "e12f5256dfcca4a60009ccf01d81c5201b57e11df658119df4f630b099794391",
+        "refs/freqtrade/backtest_results/MsSupportResistanceV1-ETHUSDT-4h-trades.json": "32acd2af16d2d9b9d650ac029ba97be2934560bdb359695b8928deb6ee717a8f",
+        "refs/freqtrade/backtest_results/MsSupportResistanceV1-SOLUSDT-4h-trades.json": "3d219cbc74d68e631a046f920bfec5f910f88f0b6c8b90ac6b1b5c8319e0df26",
+        "refs/freqtrade/backtest_results/MsSupportResistanceV1-XRPUSDT-4h-trades.json": "8373d26d7ff48a5b957fb2e76014728a84246f855394c92f33a4067e4a9abf48",
+        "refs/freqtrade/backtest_results/MsSupportResistanceV1-LTCUSDT-4h-trades.json": "7eea1642917dd27b46cb45a29efbd20b5ddadd0cdf97b1fe49640877b82900a5"
+      }
+    },
+    "MsFilterV6": {
+      "n": 164,
+      "pnl_usdt": 398.52,
+      "profit_factor": 1.503896,
+      "wins": 59,
+      "win_rate_pct": 35.9756,
+      "top3_share_pct": 96.208,
+      "profit_without_top3_usdt": 15.11,
+      "per_pair": [
+        {
+          "pair": "BTC",
+          "n": 30,
+          "pnl_usdt": -15.88
+        },
+        {
+          "pair": "ETH",
+          "n": 25,
+          "pnl_usdt": 157.6
+        },
+        {
+          "pair": "SOL",
+          "n": 31,
+          "pnl_usdt": 190.81
+        },
+        {
+          "pair": "XRP",
+          "n": 46,
+          "pnl_usdt": 92.16
+        },
+        {
+          "pair": "LTC",
+          "n": 32,
+          "pnl_usdt": -26.17
+        }
+      ],
+      "source_file_sha256": {
+        "refs/freqtrade/backtest_results/MsFilterV6-BTCUSDT-4h-trades.json": "b0603eb5c02c05969dae5e1ab21f80bc304a61c4972ae283e3efea3437b3d5b9",
+        "refs/freqtrade/backtest_results/MsFilterV6-ETHUSDT-4h-trades.json": "8c13065e87ea3cf0809aa9c71cd01b4e94471c03fcc79421205ffbfcbc50037a",
+        "refs/freqtrade/backtest_results/MsFilterV6-SOLUSDT-4h-trades.json": "53adf4218661ccec531c18915c922b772a37b33a10d67f72f89ebe0d2d493979",
+        "refs/freqtrade/backtest_results/MsFilterV6-XRPUSDT-4h-trades.json": "12f51e7a8012008bb7c2f6b20197e1177f43d013a21a1ca7343e9e626d16b89c",
+        "refs/freqtrade/backtest_results/MsFilterV6-LTCUSDT-4h-trades.json": "3a325e20c0e5cde9391dca208876e6b1266f11494555ced71df52e7b77a983a5"
+      }
+    },
+    "MsFilterV6NoMs": {
+      "n": 208,
+      "pnl_usdt": 225.94,
+      "profit_factor": 1.214063,
+      "wins": 66,
+      "win_rate_pct": 31.7308,
+      "top3_share_pct": 169.6903,
+      "profit_without_top3_usdt": -157.46,
+      "per_pair": [
+        {
+          "pair": "BTC",
+          "n": 44,
+          "pnl_usdt": -40.83
+        },
+        {
+          "pair": "ETH",
+          "n": 30,
+          "pnl_usdt": 147.48
+        },
+        {
+          "pair": "SOL",
+          "n": 40,
+          "pnl_usdt": 81.07
+        },
+        {
+          "pair": "XRP",
+          "n": 51,
+          "pnl_usdt": 56.78
+        },
+        {
+          "pair": "LTC",
+          "n": 43,
+          "pnl_usdt": -18.55
+        }
+      ],
+      "source_file_sha256": {
+        "refs/freqtrade/backtest_results/MsFilterV6NoMs-BTCUSDT-4h-trades.json": "94ed85e04faea2e4c71103811fc482ed97269e0544a635b7b9538f18207a8a06",
+        "refs/freqtrade/backtest_results/MsFilterV6NoMs-ETHUSDT-4h-trades.json": "25d55d3adcf2cf97b7fb619445a670e8509f62845440ed32e4a7200e0b47131b",
+        "refs/freqtrade/backtest_results/MsFilterV6NoMs-SOLUSDT-4h-trades.json": "c7000961882810740f7962547aaefeebb85e3aefcff4241d556d71440680cb30",
+        "refs/freqtrade/backtest_results/MsFilterV6NoMs-XRPUSDT-4h-trades.json": "ec3b455d60597beca1a93a01035d5324a5ce1b3ec0e915352d87b5d16fda49fe",
+        "refs/freqtrade/backtest_results/MsFilterV6NoMs-LTCUSDT-4h-trades.json": "41e984fafea31e380a7229fb03d831bff87390fb08fdf07d0c8486baa0036ba9"
+      }
+    }
+  }
+}
