@@ -1,0 +1,132 @@
+name: "EMBER A211 daily original TrendFutures native 24 tests real Binance 2023-2026"
+on:
+  push:
+    branches: [research/a211-daily-donchian-original-futures-3year-native-20261031]
+    paths:
+      - ".github/workflows/ember-a211-original-daily-trend-3year-native.yml"
+      - "research/strategy_research_reset_20261031/a211_*.py"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  source-pinned-original-daily-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 125
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pin author source byte and native Freqtrade 2026.4 and prepare 4 offline wallets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4' technical
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git init -q /tmp/a211-original
+          git -C /tmp/a211-original -c credential.helper= fetch -q --depth 1 https://github.com/Kureshi25/cryptobot.git c8ffbaabee9f63630e179c698c53df4916b93f8e
+          git -C /tmp/a211-original checkout -q --detach FETCH_HEAD
+          test "$(git -C /tmp/a211-original rev-parse HEAD)" = c8ffbaabee9f63630e179c698c53df4916b93f8e
+          mkdir -p a211-daily-native
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('/tmp/a211-original')
+          f=root/'user_data/strategies/TrendFutures.py'
+          b=f.read_bytes()
+          blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          assert blob=='2e6b83ba128373655090ca4827d8c7954ffaedfd',blob
+          assert not (root/'user_data/strategies/TrendFutures.json').exists(), "AUTHOR_OPTIMIZED_PARAM_JSON_COULD_OVERRIDE_DEFAULTS"
+          (root/'user_data/backtest_results').mkdir(parents=True,exist_ok=True)
+          out=Path('a211-daily-native')
+          for sym in ('BTC','ETH','SOL','LINK'):
+              cfg={'bot_name':f'A211_original_1d_{sym}_OFFLINE_RESEARCH_ONLY',
+                'dry_run':True,'dry_run_wallet':1000,
+                'stake_currency':'USDT','stake_amount':100,'tradable_balance_ratio':0.99,
+                'max_open_trades':1,'trading_mode':'futures','margin_mode':'isolated',
+                'exchange':{'name':'binance','key':'','secret':'','password':'',
+                  'ccxt_config':{},'ccxt_async_config':{},
+                  'pair_whitelist':[f'{sym}/USDT:USDT'],'pair_blacklist':[]},
+                'pairlists':[{'method':'StaticPairList'}],
+                'telegram':{'enabled':False,'token':'','chat_id':'0'},
+                'api_server':{'enabled':False,'listen_ip_address':'127.0.0.1','listen_port':8080,
+                              'username':'a211','password':'offline-research-only'}}
+              (out/f'config-{sym}.json').write_text(json.dumps(cfg,indent=2))
+          print('A211_EXACT_ORIGINAL_AUTHOR_SOURCE_SHA_AND_DEFAULTS_VERIFIED',blob,flush=True)
+          PY
+          test -s research/strategy_research_reset_20261031/A211_ORIGINAL_DAILY_TREND_FUTURES_PREREG_RU.md
+      - name: Download full Jan 2023 - Sep 2026 real Binance 1d price 1h mark settled funding, verify SHA and gaps
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 4200s python research/strategy_research_reset_20261031/a211_prepare_true_daily_futures.py \
+            --datadir a211-daily-native/data 2>&1 | tee a211-daily-native/A211-source-verified.log
+          grep -Fq A211_FOUR_COIN_TRUE_2023_2026_DAILY_MARK_FUNDING_SOURCE_VERIFIED a211-daily-native/A211-source-verified.log
+          test -s a211-daily-native/data/A211_REAL_BINANCE_SOURCE_MANIFEST.json
+      - name: Run original source-pinned Freqtrade 1d 1x 24 native historical tests without hyperopt
+        shell: bash
+        run: |
+          set -euo pipefail
+          for year in 2024 2025 2026; do
+            if [ "$year" = 2024 ]; then timerange=20240101-20250101; fi
+            if [ "$year" = 2025 ]; then timerange=20250101-20260101; fi
+            if [ "$year" = 2026 ]; then timerange=20260101-20261001; fi
+            for sym in BTC ETH SOL LINK; do
+              for feeid in 5 12p5; do
+                if [ "$feeid" = 5 ]; then fee=0.0005; else fee=0.00125; fi
+                echo "A211_ORIGINAL_NATIVE_START $year $sym $feeid"
+                timeout 480s python research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
+                  -c "a211-daily-native/config-$sym.json" \
+                  --userdir /tmp/a211-original/user_data \
+                  --datadir "$GITHUB_WORKSPACE/a211-daily-native/data" \
+                  --strategy-path /tmp/a211-original/user_data/strategies \
+                  --strategy TrendFutures --timeframe 1d \
+                  --timerange "$timerange" --data-format-ohlcv json \
+                  --fee "$fee" --export trades --cache none \
+                  2>&1 | tee "a211-daily-native/$year-$sym-fee$feeid.log"
+                z="$(find /tmp/a211-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+                test -n "$z" && test -s "$z"
+                cp "$z" "a211-daily-native/$year-TrendFutures-$sym-fee$feeid.zip"
+                rm -f /tmp/a211-original/user_data/backtest_results/backtest-result*.zip
+                echo "A211_ORIGINAL_NATIVE_END $year $sym $feeid"
+              done
+            done
+          done
+      - name: Independently re-open 24 trade ZIP and compare 1x 100USDT buyhold and 4000USDT capital matched
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/strategy_research_reset_20261031/a211_verify_24_native_daily_trade_zips.py \
+            --results a211-daily-native --data a211-daily-native/data 2>&1 | tee a211-daily-native/A211-native-24-verification.log
+          grep -Fq A211_TWENTYFOUR_NATIVE_ZIPS_ORIGINAL_TREND_WITH_BENCHMARKS_VERIFIED a211-daily-native/A211-native-24-verification.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A211-24-real-Binance-native-Original-Donchian-daily-2024-2026
+          path: |
+            a211-daily-native/*.log
+            a211-daily-native/*.zip
+            a211-daily-native/data/A211_REAL_BINANCE_SOURCE_MANIFEST.json
+            a211-daily-native/A211_24_NATIVE_REAL_BINANCE_RESULTS_VERIFIED.json
+          retention-days: 30
+      - name: Persist verified original experiment receipt only after full data and ZIP reconciliation
+        if: success()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          target=research/strategy_research_reset_20261031/A211_24_NATIVE_REAL_BINANCE_RESULTS_VERIFIED.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          git checkout -q -B a211-ci-result FETCH_HEAD
+          cp a211-daily-native/A211_24_NATIVE_REAL_BINANCE_RESULTS_VERIFIED.json "$target"
+          git add "$target"
+          if git diff --staged --quiet; then echo A211_ALREADY_COMMITTED;exit 0;fi
+          git commit -qm "research(A211): verified three-year original daily native trend with full evidence and benchmarks"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          echo A211_REAL_DAILY_SOURCE_TRADE_VERDICT_COMMITTED
