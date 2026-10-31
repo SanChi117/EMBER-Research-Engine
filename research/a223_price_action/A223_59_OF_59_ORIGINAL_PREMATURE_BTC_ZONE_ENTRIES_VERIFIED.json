@@ -1,0 +1,68 @@
+{
+  "cycle": "A223",
+  "date_utc": "2026-10-31",
+  "status": "BLOCKED_SOURCE_CAUSALITY_ORIGINAL_4H_RSI_CONFIRMED_EARLY_BASE_ENTRIES",
+  "original_repository": "denniskid2520/btcusdt-research-archive",
+  "original_commit": "66410a708fe5c4ff0d2762fbe764cc25b51ae7e3",
+  "original_execution_layer_blob": "c90f162d8cddca544d7e8b604eee7682398f24a4",
+  "original_rsi_blob": "92e06ce2bf7f59a6f853c81ce176e153693e1776",
+  "market": "genuine Binance USD-M BTCUSDT 1h",
+  "period": "2023-11-01 to 2026-09-30 UTC",
+  "genuine_btc_1h_zip_sha_attested": 35,
+  "author_unmodified_executed_functions": [
+    "_identify_regime_zones",
+    "_generate_signals_in_zone",
+    "rsi_series",
+    "_rsi_series",
+    "_rsi_from_avgs"
+  ],
+  "source_event_source": "4h RSI(20) evaluated from closing price at 4h bar timestamp, recorded as regime zone starting at bar OPEN",
+  "first_1h_base_signal": "originally registered on first hour of active zone",
+  "causal_concern": "base 1h signal can be filled at next hour open, 3h before the 4h RSI becomes observable",
+  "years": [
+    {
+      "period": "2024",
+      "regime_starts": 28,
+      "original_base_signals": 28,
+      "premature_base_signals": 28,
+      "other_signals": 10
+    },
+    {
+      "period": "2025",
+      "regime_starts": 18,
+      "original_base_signals": 18,
+      "premature_base_signals": 18,
+      "other_signals": 6
+    },
+    {
+      "period": "2026 Jan-Sep",
+      "regime_starts": 13,
+      "original_base_signals": 13,
+      "premature_base_signals": 13,
+      "other_signals": 7
+    }
+  ],
+  "total_original_base_signals": 59,
+  "total_earlier_than_4h_confirmation": 59,
+  "complete_backtest_trade_set_reproduced": false,
+  "economic_pnl_computed": false,
+  "original_live_service_proven_same_issue": false,
+  "status_impact": "Archive 6-year WFO performance (author reported 566% and maxDD 12.7%) cannot be validated as causally executed original. Not an independent negative economic backtest; requires corrected prereg and untouched OOS before consideration.",
+  "checks": {
+    "source_AST_toy_run": {
+      "url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41226670044",
+      "result": "success",
+      "premature_hours": 3
+    },
+    "authentic_source_market_run": {
+      "url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41226851100",
+      "result": "success",
+      "market_zip_receipts": 35,
+      "artifact_id": 13051383832,
+      "artifact_sha256": "98499aba732191bacec5cac3107134e91d64b5c1525e182a48823ec74f3c99b2"
+    }
+  },
+  "verified_futures_candidate": false,
+  "real_orders": false,
+  "paper_orders": false
+}
