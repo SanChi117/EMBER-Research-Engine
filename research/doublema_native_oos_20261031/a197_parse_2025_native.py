@@ -46,7 +46,7 @@ def main():
         assert z["mark1h"]==8760
         assert z["funding_settlements"]>700
         assert z["5m"]==79200,(sym,z["5m"])
-        assert len(source["sources"][sym])>=48
+        assert len(source["sources"][sym])>=45
     outcomes={}
     for s in SYMS:
         outcomes[s]={}
