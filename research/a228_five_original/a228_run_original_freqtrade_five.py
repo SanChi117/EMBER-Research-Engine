@@ -20,10 +20,12 @@ SOURCE_RECEIPT=GEN/"A228_ORIGINAL_AND_MARKET_RECEIPTS.json"
 REPLAY=GEN/"native_backtests"
 STRATEGIES=(
     "DualTrendCompressionRestartShortV1Strategy",
+    "TrendFollowing",
+    "NASOSv7LongShort",
     "BearRegimeShortV1",
     "Risk_Stair_S5",
 )
-YEARS={"2024":"20240101-20250101", "2026_JAN_MAY":"20260101-20260601"}  # June excluded because actual mark unavailable
+YEARS={"2025":"20250101-20260101","2024":"20240101-20250101","2026_JAN_MAY":"20260101-20260601"} # original source unchanged, missing June genuine mark excluded
 COSTS={"base":0.0005,"stress":0.0011}
 
 
@@ -111,11 +113,17 @@ def run_one(year,timerange,cost_name,fee,strategy,config_file):
         "--timerange",timerange,
         "--fee",str(fee),
         "--max-open-trades","3",
+        "--enable-protections",
         "--export","trades",
         "--backtest-directory",str(dest),
         "--cache","none",
     ]
-    print("A228_NATIVE_START",year,cost_name,strategy,flush=True)
+    # Freqtrade fills/stops inside original timeframe were otherwise evaluated
+    # only with OHLC high/low; genuine 5m quotes are already prepared and immutable.
+    # Main 5m strategy NASOS cannot use identical 5m as lower detail timeframe.
+    if strategy!="NASOSv7LongShort":
+        command.extend(["--timeframe-detail","5m"])
+    print("A230_NATIVE_AUTHOR_PROTECTED_5M_START",year,cost_name,strategy,flush=True)
     try:
         run=subprocess.run(command,capture_output=True,text=True,timeout=540,
                            env={**os.environ,"PYTHONUNBUFFERED":"1"})
@@ -128,7 +136,7 @@ def run_one(year,timerange,cost_name,fee,strategy,config_file):
     if run.returncode!=0 or data is None:
         lines=[l.strip() for l in combined.splitlines() if l.strip()]
         failure=lines[-16:]
-        print("A228_NATIVE_BLOCKED",year,cost_name,strategy,
+        print("A230_NATIVE_AUTHOR_PROTECTED_5M_BLOCKED",year,cost_name,strategy,
               "returncode",run.returncode,"tail",str(failure)[-900:],flush=True)
         return {"state":"BLOCKED_NATIVE_RUNTIME","year":year,"cost_model":cost_name,
                 "strategy":strategy,"return_code":run.returncode,"log":str(dest/"native_freqtrade.log"),
@@ -154,7 +162,7 @@ def run_one(year,timerange,cost_name,fee,strategy,config_file):
         "native_original_source_only":True,"trade_orders":False,
         "assumptions":"Binance genuine USD-M 5m UTC candles resampled; true mark/funding datasets, native Freqtrade OHLC fills; higher fee used as cost stress NOT actual slippage; no verified maintenance margin/liquidation; 3 pairs not 33 Freqle league."
     }
-    print("A228_NATIVE_RESULT",json.dumps({k:v for k,v in result.items() if k in
+    print("A230_NATIVE_AUTHOR_PROTECTED_5M_RESULT",json.dumps({k:v for k,v in result.items() if k in
         ("strategy","year","cost_model","native_profit_total_pct","native_trade_count",
         "native_max_drawdown_account")},ensure_ascii=False),flush=True)
     return result
@@ -173,18 +181,25 @@ def main():
             "python":sys.version,"platform":platform.platform(),
             "strategy_runs":[],"warnings":["There is no independent orderbook/slippage fill replay",
                 "Funding and mark are genuine input; fill prices are modelled by Freqtrade",
+                "A230 corrected native author protections (--enable-protections), and 5m detail for 15m/1h/4h; NASOS already native 5m",
+                "2025 all FIVE original classes; 2024+2026_JAN_MAY top THREE 2025 positive sources as prior A229 design",
                 "One-year runs reset wallet; 3 majors differ from Freqle 33-pair league",
                 "IMPORTANT: official Binance FUTURES TESTNET public exchangeInfo only for CCXT contract metadata due to mainnet HTTP451; prices/mark/funding remain genuine mainnet USD-M archives; precision/limits require later mainnet parity",
                 "Risk_Stair S5 native 5x can liquidate; OHLC backtest is insufficient margin-tier verification"]}
     for year,timerange in YEARS.items():
         for scenario,fee in COSTS.items():
             for name in STRATEGIES:
+                # keep original first-pass economic gate for 2024 and 2026:
+                # Freqtrade 2025 negative 2 classes still get corrected 2025 control,
+                # but must not spend resources mining other periods for rescue.
+                if year!="2025" and name in ("TrendFollowing","NASOSv7LongShort"):
+                    continue
                 record=run_one(year,timerange,scenario,fee,name,config_file)
                 status["strategy_runs"].append(record)
                 (REPLAY/"A228_FIVE_NATIVE_REPLAY_STATUS.json").write_text(
                     json.dumps(status,indent=2,ensure_ascii=False)+"\n","utf8")
     completed=sum(x["state"]=="NATIVE_FREQTRADE_BACKTEST_COMPLETE" for x in status["strategy_runs"])
-    print("A228_ALL_RESULTS",json.dumps({"expected":len(YEARS)*len(COSTS)*len(STRATEGIES),
+    print("A230_ALL_RESULTS",json.dumps({"expected":len(YEARS)*len(COSTS)*len(STRATEGIES),
        "complete":completed,"blocked":len(status["strategy_runs"])-completed,
        "summary":[{k:v for k,v in x.items() if k in
        ("strategy","year","cost_model","state","native_profit_total_pct","native_trade_count","native_max_drawdown_account")}
