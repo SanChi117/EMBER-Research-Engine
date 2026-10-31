@@ -49,7 +49,7 @@ PINS={
 COINS=("BTCUSDT","ETHUSDT","SOLUSDT")
 TFS=("5m","15m","1h","4h")
 MONTH_START=(2024,11)
-MONTH_END_EXCL=(2026,1)  # 2026 mark-price archives have a missing full day; STOP at 2025 instead of imputing
+MONTH_END_EXCL=(2026,6)  # valid Jan-May 2026 only, June mark data has missing full day
 
 
 def month_iter():
@@ -99,8 +99,21 @@ def month_fetch(job,receipt_manifest):
     elif kind=="mark":
         url=f"https://data.binance.vision/data/futures/um/monthly/markPriceKlines/{sym}/8h/{sym}-8h-{y}-{m:02}.zip"
     else:
-        # genuine funding source from A217 attestation
-        _,rows,receipt=genuine.load_one((sym,"funding",y,m),receipt_manifest)
+        # Genuine funding from A217 SHA when available (2024+).
+        # For 2023 warmup only, verify official ZIP and CSV SHA directly;
+        # source contains actual funding settlements, never guessed rates.
+        if (y,m)>=(2024,1):
+            _,rows,receipt=genuine.load_one((sym,"funding",y,m),receipt_manifest)
+            return (job,rows,receipt)
+        url=f"https://data.binance.vision/data/futures/um/monthly/fundingRate/{sym}/{sym}-fundingRate-{y}-{m:02}.zip"
+        raw,receipt=csv_zip_content(url)
+        names=[x.strip().lower().replace("_","") for x in raw[0]]
+        it,ir=names.index("calctime"),names.index("lastfundingrate")
+        rows=[(genuine.as_ms(x[it]),float(x[ir])) for x in raw[1:] if x and x[it].isdigit()]
+        if len(rows)<75:
+            raise ValueError("Insufficient actual 2023 warmup funding "+url)
+        receipt["source_only_warmup"]=True
+        receipt["parsed_rows"]=len(rows)
         return (job,rows,receipt)
     raw,receipt=csv_zip_content(url)
     rows=[]
@@ -190,7 +203,7 @@ def store_native_market(candles,marks,settlements):
     for sym in COINS:
         pair=sym.replace("USDT","/USDT:USDT")
         frame=to_candle_frame(candles[sym],"5m",sym)
-        if frame.index[0]!=pd.Timestamp("2024-11-01T00:00:00Z") or frame.index[-1]!=pd.Timestamp("2025-12-31T23:55:00Z"):
+        if frame.index[0]!=pd.Timestamp("2024-11-01T00:00:00Z") or frame.index[-1]!=pd.Timestamp("2026-05-31T23:55:00Z"):
             raise ValueError(f"Unexpected study source window {sym}")
         for tf in TFS:
             tfdata=aggregate_5m(frame,tf).reset_index()
