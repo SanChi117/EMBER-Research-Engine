@@ -1,3 +1,7 @@
+> **⚠️ ИСТОРИЧЕСКИЙ ЭКСПЕРИМЕНТ / НЕ ТЕКУЩАЯ СТРАТЕГИЯ — `ARCHIVE_SNAPSHOT_SUPERSEDED`.** Этот файл описывает частные проверки/гипотезы старого этапа. Из него нельзя выводить прибыльность original Binance USDT-M Futures, текущий рейтинг или торговое разрешение. [Единая исправленная сводка](RESEARCH_STATUS_CANONICAL.md); [неизменный мандат](RESEARCH_MANDATE_LOCKED.md). Исходные цифры оставлены только как архивный след.
+
+---
+
 # A225 — immutable economic preflight checkpoint (2026-10-31)
 
 **Scope remains locked** to original independently verified profitable Binance USD-M Futures systems: [RESEARCH_MANDATE_LOCKED.md](RESEARCH_MANDATE_LOCKED.md). This checkpoint reports a strictly exploratory **market-hypothesis** test, not an authored strategy, not forward-paper and not a cause to modify the user's existing schedulers.
