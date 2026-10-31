@@ -1,0 +1,14 @@
+# A226 — предварительно зафиксированный быстрый тест двух СЕССИОННЫХ Price Action гипотез
+
+Дата: 31.10.2026. Главный неизменный контракт: `main/RESEARCH_MANDATE_LOCKED.md`, дополнительные `RESEARCH_PRICE_ACTION_ADDITIVE_TRACK.md` и `RESEARCH_FAST_STABILITY_GATE_ONLY.md`; обязательный отказ A220. Не реальная торговая стратегия и не обещание прибыли.
+
+**Отличие от уже отрицательной A225 E2**: не общий 20-bar 4h breakout → retest; здесь фиксированный *внешними часами* opening range (первичная сессия при формировании смены глобальных потоков ликвидности), **не выбираемый по рынку** диапазон, прямой пробой/закрытие и вход на следующем 1h open; нет ретеста и дополнительных индикаторных параметров. Этот эффект известен из систематических opening-range исследований на традиционных биржевых фьючерсах; перенос на Binance USD-M — **гипотеза**, а не доказательство.
+
+**Два замороженных объекта без оптимизации**:
+
+- **S1 ASIA→LONDON**: каждый UTC день фиксированный диапазон 00:00–08:00 из восьми закрывшихся часов. 08:00–16:00 UTC: первая закрытая 1h свеча выше range-high/ниже range-low, при предыдущем close внутри диапазона, даёт long/short; вход по open следующего 1h; structural stop = противоположная сторона исходного азиатского диапазона. Если нет сигнала до 15:00 UTC — нет сделки. Если стоп не достигнут — выход по open 16:00 UTC.
+- **S2 NEWYORK_OPENING**: диапазон 13:00–15:00 UTC из двух закрытых 1h баров, 15:00–21:00 — аналогичный сигнал с предыдущим close inside; вход по следующему open не позднее 20:00 UTC. Stop за противоположной границей диапазона. Exit 21:00 UTC open. Время в UTC зафиксировано (не динамически «удобные» US DST подборы).
+
+В каждом сценарии **не более одной позиции в день и на монету**, full chronology (range closes before trigger; signal close before entry), long/short allowed. Entry notional = min(equity×0.005/(distance to structural stop), equity/entry price), 1x max nominal, no additional leverage. Equity separate $1000 per BTC/ETH/SOL sleeve, 2024/2025/Jan–Sep 2026 independent restarts; history genuine Binance USD-M 1h OHLCV+signed funding with SHA256 source receipts (204 ZIP in A217). Commissions+spread+slippage one-way 10.5 bps BASE, 22.5 bps STRESS; intrabar stop-first, unfavorable open gap at true open, non-guaranteed fill; settlement cash from genuine fundingRate. Annual net, counts, worst trade, wick DD, real source checks. No optimization by parameters or by which coin/day. For each hypothesis predefined `PASS_SCREEN` iff STRESS net >0 at least 2 calendar periods with >=40 completed trades each period, no catastrophic third period, deepest sleeve drawdown less than 20%. Even PASS would be *only event screen*, not verified strategy until original ready source and native margin/liquidation/fill/OOS/forward parity.
+
+If fail, freeze results and do NOT adapt sessions/bar counts to rescue them. Keep broader search for unrelated mechanisms. No PAPER/live orders and no scheduler changes.
