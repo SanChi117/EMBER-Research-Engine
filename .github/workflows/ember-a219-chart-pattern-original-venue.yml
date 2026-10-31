@@ -1,0 +1,32 @@
+name: A219 Source-only 4h Chart Pattern Venue Audit
+
+on:
+  push:
+    branches:
+      - 'research/a219-4h-chart-pattern-futures-venue-audit-20261031'
+    paths:
+      - 'research/a219_chart_patterns_venue/**'
+      - '.github/workflows/ember-a219-chart-pattern-original-venue.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify_pinned_original_market_type:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original SHA and reject CCXT spot source; no PnL
+        run: python research/a219_chart_patterns_venue/a219_verify_venue_gate.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a219-pinned-original-market-type-rejection
+          path: research/a219_chart_patterns_venue/evidence.json
+          if-no-files-found: warn
+          retention-days: 30
