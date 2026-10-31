@@ -1,6 +1,6 @@
 # A235 — результаты 18 исправленных нативных тестов Freqtrade
 
-Дата: 31 октября 2026. Экономический артефакт, **НЕ решение о реальной торговле**. Первичная пререгистрация: [A235](research/a235_timeframe_parity/PREREG.md). Блокировка направления: `RESEARCH_MANDATE_LOCKED.md` (`main`).
+Дата: 31 октября 2026. Экономический артефакт, **НЕ решение о реальной торговле**. Первичная пререгистрация: [A235](a235_timeframe_parity/PREREG.md). Блокировка направления: `RESEARCH_MANDATE_LOCKED.md` (`main`).
 
 ## Причина повторного теста (подтверждено исходным кодом)
 
@@ -39,7 +39,7 @@
 
 ## Evidence
 
-- Machine-readable [A235_NATIVE_TF_RESULTS.json](research/A235_NATIVE_TF_RESULTS.json) — все 18 результатов и метаданные CI.
+- Machine-readable [A235_NATIVE_TF_RESULTS.json](A235_NATIVE_TF_RESULTS.json) — все 18 результатов и метаданные CI.
 - [CI log and jobs](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41241733734): source AST parity, 279 source ZIP receipts, 18 отдельных Freqtrade-complete.
 - GitHub Actions artifact **ID 13057093648**, ZIP 12 308 413 байт, **SHA-256** `2d1098c7ee6676d8bdbf8bd209478ed976a98336b5a6149ad724767a539af1e2`: полные native ZIP trade journals и input-source receipts. Artifact retention 30 дней, текущие payload-данные чисел извлечены из job log, а не рекламных описаний.
 - Старые A228/A229/A230 receipts не удалены. Реальные Binance ордера, автономный PAPER, Google Drive, мандат и исходники не изменены.
