@@ -1,0 +1,107 @@
+name: "EMBER A197 causal boundary corrected ONLY original DoubleMA native 5m replay vs A196 8 original receipts"
+on:
+  push:
+    branches: [research/a197-doublema-regime-and-bias-20261031]
+    paths:
+      - ".github/workflows/ember-a197-doublema-causal-native-5m.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  causal-callback-only-original-freqtrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 46
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: A196-Original-DoubleMA-1h-vs-5m-4Pairs-8-Genuine-Freqtrade-2026
+          run-id: 41148069316
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a197-original-A196-eight-receipts
+      - name: Pin original strategy SHA and genuine Freqtrade 2026.4
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/a197-author-original
+          test "$(git -C /tmp/a197-author-original rev-parse HEAD)" = 40af5c7c1c44253766428cfb06babf22f9817aa4
+          mkdir -p a197-causal-5m
+          python research/doublema_native_oos_20261031/a188_causal_patch_and_sanity.py \
+             /tmp/a197-author-original/user_data/strategies/VideoDoubleMaFuturesStrategy.py \
+             /tmp/a197-causal-fixed/user_data/strategies/VideoDoubleMaFuturesStrategy.py \
+             | tee a197-causal-5m/one-line-causal-test-copy-sanity.log
+          grep -Fq A188_CAUSALITY_BREACH_REPRODUCED_AND_ONE_LINE_BOUNDARY_FIX_SANITY_PASS a197-causal-5m/one-line-causal-test-copy-sanity.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('/tmp/a197-author-original/config/config_okx_futures_eth_only_binance_data.json').read_text())
+          assert c['max_open_trades']==1 and c['stake_amount']=='unlimited'
+          assert c['trading_mode']=='futures' and c['margin_mode']=='isolated' and c['dry_run_wallet']==10000
+          for s in ('BTC','ETH','SOL','LINK'):
+              x=json.loads(json.dumps(c))
+              x['exchange']['name']='binance';x['exchange']['pair_whitelist']=[f'{s}/USDT:USDT']
+              x['exchange']['ccxt_config']={};x['exchange']['ccxt_async_config']={}
+              for field in ('key','secret','password'):x['exchange'][field]=''
+              x['dry_run']=True;x['api_server']['enabled']=False;x['telegram']['enabled']=False
+              x['bot_name']=f'A197_CAUSAL_TEST_COPY_{s}_NO_ORDER'
+              Path(f'a197-causal-5m/config-{s}.json').write_text(json.dumps(x,indent=2))
+          print('A197_ONLY_ONE_SOURCE_LINE_PATCHED_FROM_PINNED_AUTHOR')
+          PY
+      - name: Strict identical real 1h mark funding and 5m source QA from A195/A196
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py --datadir a197-causal-5m/data | tee a197-causal-5m/real-1h-funding-source.log
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py --datadir a197-causal-5m/data | tee a197-causal-5m/real-5m-source.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a197-causal-5m/real-1h-funding-source.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a197-causal-5m/real-5m-source.log
+      - name: Genuine native eight 5m detail Freqtrade 2026.4 runs with boundary-fixed TEST COPY only
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in BTC ETH SOL LINK; do
+            for fee in 5 12p5; do
+              if [ "$fee" = '5' ];then RATE=0.0005;else RATE=0.00125;fi
+              echo "A197_CAUSAL_NATIVE_BEGIN $sym $fee"
+              timeout 390s python research/doublema_native_oos_20261031/a195_native_binance_offline.py \
+                -c "a197-causal-5m/config-$sym.json" \
+                --userdir /tmp/a197-causal-fixed/user_data \
+                --datadir "$GITHUB_WORKSPACE/a197-causal-5m/data" \
+                --strategy VideoDoubleMaFuturesStrategy --timeframe 1h --timeframe-detail 5m \
+                --timerange 20260513-20261001 --data-format-ohlcv json \
+                --fee "$RATE" --export trades --cache none \
+                2>&1 | tee "a197-causal-5m/causal-$sym-fee$fee.log"
+              z="$(find /tmp/a197-causal-fixed/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              test -s "$z"
+              cp "$z" "a197-causal-5m/causal-$sym-fee$fee.zip"
+              rm -f /tmp/a197-causal-fixed/user_data/backtest_results/backtest-result*.zip
+              echo "A197_CAUSAL_NATIVE_FINISHED $sym $fee"
+            done
+          done
+      - name: Independent original versus only one-line fixed 5m source receipt comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a197_compare_causal_5m.py \
+             --results a197-causal-5m --original-artifact /tmp/a197-original-A196-eight-receipts \
+             2>&1 | tee a197-causal-5m/native-causal-compare.log
+          grep -Fq A197_EIGHT_GENUINE_FREQTRADE_NATIVE_CAUSAL_VS_ORIGINAL_RECEIPTS_COMPLETE a197-causal-5m/native-causal-compare.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A197-Original-DoubleMA-5m-Callback-CAUSAL-Fixed-One-Line-Vs-8-Original-Trade-ZIPs
+          path: |
+            a197-causal-5m/*.zip
+            a197-causal-5m/*.log
+            a197-causal-5m/A197_CAUSAL_FIXED_VS_ORIGINAL_5M_MACHINE.json
+            a197-causal-5m/data/A195_DATA_SHA_MANIFEST.json
+            a197-causal-5m/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
