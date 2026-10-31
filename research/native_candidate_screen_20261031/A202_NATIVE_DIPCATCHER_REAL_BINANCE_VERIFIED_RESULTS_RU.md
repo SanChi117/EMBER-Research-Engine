@@ -42,6 +42,15 @@ Original source LONG+SHORT active, independently cross-checked per BASE:
 ## Эталон Freqle — не тот же experiment
 [Freqle league dip_catcher](https://freqle.org/strategy/72c23c05faa67eaa): 33 инструмента, **10 общих слотов**, период 2022–2024, 21,150 trades, net+747.5%, PF1.37, DD6.71, 1×, stake100, wallet1000, avg HOLD12h26m, max HOLD669h25m, no fresh walk-forward. **Не равняется** нашему 4-карманному Binance May–Sep2026. В Freqle отсутствует `--timeframe-detail 1m`; 5m intra-bar stop/ROI order may bias.
 
+## Дополнительная независимая проверка чувствительности к исполнению (по сырым STRESS trades)
+
+Статические Binance market metadata Freqtrade включают quantization: **BTC фактический stake в исходных STRESS сделках ~58–87 USDT, средний ~70.67**, а не всегда proposed $100 (шаг количества 0.001 BTC). Для ETH/SOL/LINK средние stake 99.0/99.6/99.5. Поэтому пользовательскому депозиту нельзя обещать «100 USD на каждую BTC сделку» без проверки лотов.
+
+Зная реальные суммы `stake_amount` и `net_USDT`, вычислена **описательная**, пост-хок «подушка дополнительного совокупного roundtrip расхода» при неизменных сделках и размерах: `net_USDT/sum(stake_amount)×10000 bps`:
+- BTC **19.3 bps**, ETH **57.1 bps**, SOL **10.5 bps**, LINK **33.3 bps** сверх уже смоделированных 12.5bps за каждое исполнение.
+- Это **не** калибровка ожидаемого slippage, не точный threshold биржевого исполнения и не тест с полной переигровкой очереди заявок: дополнительный спред меняет частоту и набор сделок, путь исполнений. Но показывает слабый запас BTC и SOL; ETH/LINK статистически интереснее, хотя исходный SL8% остаётся стоп-фактором.
+- Применять эти подушки как новые параметры отбора на той же истории ЗАПРЕЩЕНО (пост-хок).
+
 ## Решение
 
 - **A202 = ECONOMIC PASS 3/4, SPEED FAIL 0/4, RISK FAIL, EXECUTION APPROVAL FALSE.**
