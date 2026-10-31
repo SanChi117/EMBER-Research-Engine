@@ -1,3 +1,7 @@
+> **⚠️ АРХИВНОЕ СВИДЕТЕЛЬСТВО, НЕ ТЕКУЩИЙ СТАТУС.** AUTHOR_ACCOUNT_BACKTEST_UNVERIFIED_EXECUTION — исторический исходный BTC/ETH общий счёт. Ранний 4-wallet A233 нельзя подменять им; 2026 стресс отрицателен. Хранить для доказательств, не текущий приоритет. [Текущая единая сводка](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md). Ни одна стратегия не `VERIFIED_FUTURES_CANDIDATE`.
+
+---
+
 # A240 — завершён: нативная Double MA с ОДНИМ авторским счётом BTC/ETH
 
 **Дата: 31 октября 2026. Статус: `NEGATIVE_HISTORICAL_SHARED_WALLET_STRESS / NOT_VERIFIED`. Это исследовательский тест Binance USDT-M Futures, не разрешение к реальным сделкам или PAPER-подключению.** Четыре из четырёх нативных прогонов Freqtrade 2026.4 завершены, полный исходный журнал и SHA зафиксированы.
