@@ -1,0 +1,87 @@
+{
+  "cycle": "A221",
+  "date_utc": "2026-10-31",
+  "candidate": "yongzhe2160cs/trading-engine source commit efa37deac60fb9d91abcb181440c94f2f0eac4b8",
+  "status": "REJECT_OPERATIONAL_RISK_GATE_PARITY",
+  "reason": "Original signal-only research PnL does not survive original live default 3% daily-loss / 10% drawdown halt. This is an independent hourly optimistic approximation, NOT exact Bybit live replay.",
+  "provenance": {
+    "real_binance_usdm_month_zip_receipts": 204,
+    "source_manifest": "research/a217_trendrider_original/evidence/source_manifest.json",
+    "causal_prefix_probes": 18,
+    "source_signal_git_blob": "af7d999ff114a872df6bfe65fb5376577451021b",
+    "pinned_live_daemon_blob": "f19895a124328cd52ba8232d3a6c5cc9f29e8e10",
+    "pinned_risk_manager_blob": "398b5280d123120027f54be85ae80b22e16e9da5",
+    "github_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41224708395",
+    "run_success": true,
+    "artifact_id": 13051181458,
+    "artifact_sha256": "78cf7e906d8b947839b0afdbecd8c2b4ed64b95bfcde401382e60ec362f68add"
+  },
+  "original_deploy_risk": {
+    "max_total_dd": 0.1,
+    "max_daily_loss": 0.03,
+    "latched_until_operator_resume": true,
+    "author_explicit_deploy_gate": true
+  },
+  "account": "$3000 single 3 equal BTC/ETH/SOL sleeves; 1× gross, UTC next-open fills, genuine funding, 10.5bps BASE / 22.5bps STRESS per unit turnover",
+  "historical_without_live_breakers": [
+    {
+      "year": "2024",
+      "base_pct": 1.74764,
+      "stress_pct": -0.90813,
+      "stress_max_dd_pct": -16.53228
+    },
+    {
+      "year": "2025",
+      "base_pct": 17.46193,
+      "stress_pct": 14.01258,
+      "stress_max_dd_pct": -12.85924
+    },
+    {
+      "year": "2026JanSep",
+      "base_pct": 12.41368,
+      "stress_pct": 8.66338,
+      "stress_max_dd_pct": -13.14188
+    }
+  ],
+  "hourly_shadow_with_original_breakers": [
+    {
+      "year": "2024",
+      "base_pct": 0.96529,
+      "base_halted_utc": "2024-06-11T15:00:00+00:00",
+      "base_reason": "daily_loss_gt_3pct",
+      "stress_pct": -7.75804,
+      "stress_halted_utc": "2024-02-13T14:00:00+00:00",
+      "stress_reason": "drawdown_gt_10pct"
+    },
+    {
+      "year": "2025",
+      "base_pct": -2.03791,
+      "base_halted_utc": "2025-03-02T17:00:00+00:00",
+      "base_reason": "daily_loss_gt_3pct",
+      "stress_pct": -2.6612,
+      "stress_halted_utc": "2025-03-02T17:00:00+00:00",
+      "stress_reason": "daily_loss_gt_3pct"
+    },
+    {
+      "year": "2026JanSep",
+      "base_pct": -9.95163,
+      "base_halted_utc": "2026-01-29T02:00:00+00:00",
+      "base_reason": "drawdown_gt_10pct",
+      "stress_pct": -9.84732,
+      "stress_halted_utc": "2026-01-27T20:00:00+00:00",
+      "stress_reason": "drawdown_gt_10pct"
+    }
+  ],
+  "limit_notes": [
+    "Shadow checks one-hour not daemon's mid-window polling; intrabar mark/actual fill unknown",
+    "Backtest uses percentage target weights and hourly open, not actual post-fill changing leverage",
+    "No proof exchange liquidation or order queue",
+    "Author original created 2026-06-01, full 2024-26 includes known history and is not pristine unseen OOS",
+    "Cash-on-halt no automatic restart (original live latches _halted)",
+    "Exit closing fee included at modeled next open; real slippage can differ"
+  ],
+  "can_promote_to_verified": false,
+  "auto_paper_allowed": false,
+  "live_allowed": false,
+  "do_not_retune_risk_limits_on_seen_history": true
+}
