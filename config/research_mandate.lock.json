@@ -1,0 +1,55 @@
+{
+  "schema": "EMBER_RESEARCH_MANDATE_LOCK_V1",
+  "version": "2026-10-31",
+  "state": "LOCKED_USER_ONLY",
+  "is_main_research_objective": true,
+  "read_first": "RESEARCH_MANDATE_LOCKED.md",
+  "scope": "BINANCE_USDT_M_FUTURES",
+  "spot_only_candidate_allowed": false,
+  "original_open_source_candidate_first": true,
+  "independent_native_causal_backtest": true,
+  "real_futures_ohlcv_mark_funding_required": true,
+  "after_cost_positive_edge_required": true,
+  "portfolio_drawdown_and_robustness_required": true,
+  "frozen_original_parameters_before_validation": true,
+  "prospective_validation_required_for_verified": true,
+  "automated_real_exchange_orders_allowed": false,
+  "modify_existing_paper_automations_allowed": false,
+  "preferred_independent_family_candidate_count": 3,
+  "minimum_verified_count_before_review": 1,
+  "automatic_unlock_on_candidate": false,
+  "explicit_new_user_command_for_scope_change": true,
+  "strict_unacceptable_substitutions": [
+    "SPOT_ONLY",
+    "SYNTHETIC_PROFIT_AS_REAL",
+    "BACKTEST_OPTIMIZED_AS_OOS",
+    "FAILED_STRATEGY_RENAMED_WINNER",
+    "FIXED_LEVERAGE_PUMP_REQUIREMENT"
+  ],
+  "deprecated_cycles": [
+    "A214",
+    "A215",
+    "A216"
+  ],
+  "preserve_negative_evidence": [
+    "A188-A213"
+  ],
+  "candidate_statuses": [
+    "SOURCE_ONLY",
+    "BLOCKED",
+    "RESEARCH_NEGATIVE",
+    "INSUFFICIENT_EVIDENCE",
+    "PROVISIONAL",
+    "VERIFIED_FUTURES_CANDIDATE"
+  ],
+  "acceptance_conditions": [
+    "Pinned original source and params",
+    "Genuine USD-M price mark and funding receipts",
+    "Causal reproducible trades and full cost model",
+    "Positive net edge after stress costs vs honest baselines",
+    "Risk/portfolio drawdown/liq audit",
+    "Independent chronological OOS plus prospective PAPER evidence",
+    "Multiple independent regimes and sufficiently powered sample"
+  ],
+  "source_issue": "https://github.com/SanChi117/EMBER-Research-Engine/issues/9"
+}
