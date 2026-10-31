@@ -30,8 +30,10 @@ def four_pair_fetch(job, receipt_manifest):
         raise ValueError(f"BNB_MISSING_GENUINE_MONTHLY_FUNDING {year}-{month:02} {len(rows)}<{minimum}")
     if len({x[0] for x in rows}) != len(rows):
         raise ValueError("BNB_FUNDING_DUPLICATE_SETTLEMENT_TIMESTAMP")
-    if any(not (0 < b[0] - a[0] <= 8 * 3600_000) for a, b in zip(rows, rows[1:])):
-        raise ValueError("BNB_FUNDING_MISSING_SETTLEMENT_GAP")
+    gaps = [(a[0], b[0], (b[0]-a[0])/3600_000)
+            for a, b in zip(rows, rows[1:]) if not (0 < b[0]-a[0] <= 8*3600_000)]
+    if gaps:
+        raise ValueError(f"BNB_FUNDING_MISSING_SETTLEMENT_GAP month={year}-{month:02} n={len(rows)} bad_first={gaps[:5]} max_gap_h={max(g[-1] for g in gaps):.3f}")
     receipt.update(type="funding", parsed_rows=len(rows),
                    source_tag="OFFICIAL_BINANCE_USDM_BNB_NEW_SHA",
                    author_account_cycle="A237")
