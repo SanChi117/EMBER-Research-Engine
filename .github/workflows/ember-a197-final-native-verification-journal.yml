@@ -4,6 +4,7 @@ on:
     branches: [research/a197-doublema-regime-and-bias-20261031]
     paths:
       - ".github/workflows/ember-a197-final-native-verification-journal.yml"
+      - "research/doublema_native_oos_20261031/a197_finalize_three_native_tests.py"
   workflow_dispatch:
 permissions:
   actions: read
