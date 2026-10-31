@@ -1,3 +1,7 @@
+> **⚠️ НЕЗАВЕРШЁННОЕ НАМЕРЕНИЕ — `PRE_REGISTERED_NOT_EXECUTED`.** Созданы prereg и частичная подготовка source pins; **24 заявленных A247 native tests не запущены и не доказаны**, runner и verified CI отсутствуют. Нельзя читать исходный план ниже как сделанную работу. [Единый текущий статус](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md).
+
+---
+
 # A247 — prereg: четыре ДРУГИХ ранее мало проверенных исходника на 2024/2025/2026 USD-M
 
 Мандат `main/RESEARCH_MANDATE_LOCKED.md`, issue #9, original source unchanged. No real orders, no PAPER scheduler edits. Эти R014/R015/R031/R032 **не** повторяют Double MA, Risk Stair, TrendFollowing, Winner15m или A245 6 исходников.
