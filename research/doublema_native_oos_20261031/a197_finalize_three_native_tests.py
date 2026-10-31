@@ -104,7 +104,7 @@ def main():
     (q/'A197_ALL_THREE_INDEPENDENT_SOURCE_RECEIPTS_MACHINE.json').write_text(json.dumps(verified,indent=2,ensure_ascii=False)+'\n')
     (q/'A197_2025_REAL_DATA_SOURCE_SHA_VERIFIED.json').write_text(json.dumps(src,indent=2)+'\n')
     (q/'A197_NATIVE_16_ZIP_SHA_VERIFIED.json').write_text(json.dumps(native_shas,indent=2)+'\n')
-    text=(q/'A197_BIAS_AND_2025_RESULTS_RU.md').read_text()
+    text=(q/'A197_BIAS_AND_2025_RESULTS_RU.md').read_text().replace('**Статус:** результаты не внесены до завершения исходных тестов и проверки Freqtrade ZIP receipt.', '**Статус:** нативные результаты проверены по всем восьми оригинальным ZIP сделок. Подробности ниже.')
     part=[]
     part.append("\n## A197b — нативный исторический режим 2025: фактические результаты\n")
     part.append("Интервал **01.04.2025—31.12.2025**, 275 календарных дней. Независимые данные Binance USD-M с 5m детализацией, реальными funding и mark; исходные сделки автора не менялись. **Но этот период предшествует публикации стратегии и мог входить в её настройку, поэтому НЕ подлинный вневыборочный период.**\n")
