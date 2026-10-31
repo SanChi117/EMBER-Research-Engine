@@ -51,7 +51,7 @@ def main():
     for tf in ("5m", "15m", "1h", "4h"):
         if f"BNBUSDT_{tf}" not in actual:
             raise ValueError(f"BNB_4PAIR_MISSING_{tf}")
-    n = sum(x["type"] == "funding" and "BNBUSDT" in x["url"]
+    n = sum(x.get("type") == "funding" and "BNBUSDT" in x.get("url", "")
             for x in receipt["archive_receipts"])
     if n != 31:
         raise ValueError(f"A237_BNB_MONTHLY_FUNDING_N_{n}_EXPECTED_31")
