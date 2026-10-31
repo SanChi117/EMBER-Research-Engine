@@ -1,0 +1,33 @@
+name: A223 Pinned Original Futures Price Action Chronology Gate
+
+on:
+  push:
+    branches:
+      - 'research/a223-price-action-structural-retest-independent-source-audit-20261031'
+    paths:
+      - 'research/a223_price_action/**'
+      - '.github/workflows/ember-a223-original-price-action-chronology.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen_original_close_time_guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source attested original 4H/1H chronology probe, no PnL or orders
+        run: python research/a223_price_action/a223_original_d1_regime_open_time_audit.py
+      - name: Retain machine evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a223-original-4h-rsi-gate-timestamp-causality-report
+          path: research/a223_price_action/evidence/A223_D1_4H_REGIME_TIMESTAMP_SOURCE_GUARD.json
+          if-no-files-found: warn
+          retention-days: 30
