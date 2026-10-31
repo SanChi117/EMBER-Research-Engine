@@ -1,0 +1,121 @@
+name: "EMBER A200 source-pinned 15m Bigbear Bigbull actual Binance Futures 5m replay"
+on:
+  push:
+    branches: [research/a200-open-15m-event-driven-validation-20261031]
+    paths:
+      - ".github/workflows/ember-a200-genia-original-15m-real-5m.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-original-15m-two-patterns-four-coins-two-costs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin original public author source plus pure pandas numpy dependencies, no exchange keys
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'pandas==2.3.3' 'numpy==2.2.6'
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/genia503/mean-reversion-backtester.git /tmp/a200-genia-original
+          test "$(git -C /tmp/a200-genia-original rev-parse HEAD)" = 2325ebac97056e6a4f1f98483713513e86239074
+          mkdir -p a200-genia-independent
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root=Path("/tmp/a200-genia-original/backtest")
+          expect={
+              "multicoin_backtest.py":"e33000063b93b825af720791b8282372b6460fdc",
+              "tpsl_backtest.py":"fe1ffc3b58d28f844667d1889c30161b38b36e6c"}
+          for name,ref in expect.items():
+              b=(root/name).read_bytes()
+              sha=hashlib.sha1(b"blob "+str(len(b)).encode()+bytes([0])+b).hexdigest()
+              assert sha==ref,(name,sha)
+          print("A200_EXACT_AUTHOR_TWO_SIGNAL_AND_EXECUTION_FILE_BLOBS_SHA_PIN_OK")
+          PY
+      - name: Independently rebuild authentic original May-Sep 2026 Binance 1h mark funding for all 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+            --datadir a200-genia-independent/data 2>&1 | tee a200-genia-independent/A200-market-1h-funding.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a200-genia-independent/A200-market-1h-funding.log
+      - name: Independently rebuild genuine 5m Binance Vision monthly candles May to Sep, all four, SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+            --datadir a200-genia-independent/data 2>&1 | tee a200-genia-independent/A200-market-5m.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a200-genia-independent/A200-market-5m.log
+      - name: Genuine author's published 15m original signal and original stochastic backtest plus 16 real 5m conservative scenario replays
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s python research/native_candidate_screen_20261031/a200_author_15m_signals_strict_real_5m.py \
+            --original-repo /tmp/a200-genia-original \
+            --datadir a200-genia-independent/data \
+            --output a200-genia-independent \
+            2>&1 | tee a200-genia-independent/A200-original-vs-actual5m.log
+          grep -Fq A200_SOURCE_ORIGINAL_4PAIRS_2PATTERNS_2COSTS_16_TRUE_5M_RUNS_COMPLETED a200-genia-independent/A200-original-vs-actual5m.log
+      - name: Validate each of all 16 real 5m trade journals and original author ten seed baselines
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,math
+          from pathlib import Path
+          root=Path("a200-genia-independent")
+          src=json.loads((root/"A200_AUTHOR_SOURCE_SIGNALS_16_REAL_5M_COST_RISK_RUNS.json").read_text())
+          assert src["source_git_commit"]=="2325ebac97056e6a4f1f98483713513e86239074"
+          assert src["signal_methods_directly_author_code"] and src["original_author_backtest_method_directly_called"]
+          assert src["original_author_backtest_has_RANDOM_50_50_same_bar_order"]
+          assert len(src["patterns"])==4
+          assert set(src["predeclared_gate"])=={"bigbear","bigbull"}
+          checksum={}
+          for symbol,d in src["patterns"].items():
+              assert symbol in {"BTC","ETH","SOL","LINK"}
+              assert d["native_5m_candles"]==44064 and d["real_15m_grouped_candles"]==14688
+              assert len(d["real_5m_file_sha256"])==64
+              assert set(d["independent_strict_5m"])=={
+                  "bigbear_base","bigbear_stress","bigbull_base","bigbull_stress"}
+              for pattern in ("bigbear","bigbull"):
+                  seeds=d["source_author_seed_random_baseline"][pattern]
+                  assert len(seeds)==10 and [x["seed"] for x in seeds]==list(range(10))
+                  for model in ("base","stress"):
+                      label=f"{pattern}_{model}"
+                      x=d["independent_strict_5m"][label]
+                      p=root/f"A200_{pattern}_{symbol}_{model}_CONSERVATIVE_5M_TRADES.json"
+                      records=json.loads(p.read_text())
+                      assert len(records)==x["n"]
+                      assert abs(sum(t["net_pnl"] for t in records)-x["net_USDT"])<.001
+                      assert all(t["direction"]=="SHORT" and t["entry_time"]>t["signal_time"] for t in records)
+                      assert all("2026-05-13"<=t["entry_time"][:10]<"2026-10-01" for t in records)
+                      assert all(t["hold_minutes"]<=1435 for t in records)
+                      assert x["total_fees_USDT"]>=0 and x["max_5m_adverse_mark_wallet_DD_pct"]>=0
+                      assert math.isfinite(x["PF"])
+                      checksum[f"{pattern}_{symbol}_{model}"]=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert len(checksum)==16
+          (root/"A200_16_REAL_5M_TRADES_SHA256_VERIFIED.json").write_text(json.dumps(checksum,indent=2)+"\n")
+          h=json.loads((root/"data/A196_REAL_5M_SHA_MANIFEST.json").read_text())
+          assert len(h["symbols"])==4
+          for symbol in ("BTCUSDT","ETHUSDT","SOLUSDT","LINKUSDT"):
+              assert h["symbols"][symbol]["candles"]==44064
+          print("A200_16_ORIGINAL_SIGNAL_REAL_5M_TRADE_ARCHIVES_VERIFIED",json.dumps({
+              "gate":src["predeclared_gate"],"sha_zip_count":len(checksum)},ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A200-Original-15m-Genia-Author-Signals-Ten-Seeds-And-16-Genuine-Binance-5m-Trade-Journals
+          path: |
+            a200-genia-independent/*.json
+            a200-genia-independent/*.log
+            a200-genia-independent/data/A195_DATA_SHA_MANIFEST.json
+            a200-genia-independent/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
