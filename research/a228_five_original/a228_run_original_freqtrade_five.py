@@ -25,7 +25,7 @@ STRATEGIES=(
     "BearRegimeShortV1",
     "Risk_Stair_S5",
 )
-YEARS={"2025":"20250101-20260101","2026_JAN_SEP":"20260101-20261001"}
+YEARS={"2025":"20250101-20260101"}  # 2026 blocked: genuine Binance 8h mark June missing 3 bars; genuine 1h mark 24 bars
 COSTS={"base":0.0005,"stress":0.0011}
 
 
