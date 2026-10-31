@@ -1,0 +1,37 @@
+name: A225 Edge-First Genuine Futures Event Economics
+
+on:
+  push:
+    branches:
+      - 'research/a225-edge-first-4h-structural-event-screen-20261031'
+    paths:
+      - 'research/a225_edge_first/**'
+      - '.github/workflows/ember-a225-edge-first-real-usdm.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pristine_price_action_hypotheses:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pinned numerical versions
+        run: pip install numpy==2.1.3 pandas==2.2.3
+      - name: Pre-registered edge first 4h levels, native Binance USD-M SHA OHLCV/funding, all periods
+        run: python research/a225_edge_first/a225_native_4h_event_economics.py
+      - name: Archive authentic market summaries and complete model trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a225-authenticated-futures-4h-event-economics
+          path: |
+            research/a225_edge_first/evidence/A225_EVENT_EDGE_ECONOMIC_SCREEN.json
+            research/a225_edge_first/evidence/A225_EVENT_EDGE_TRADE_LEDGER.json
+          if-no-files-found: warn
+          retention-days: 30
