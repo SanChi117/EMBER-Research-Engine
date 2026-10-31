@@ -23,7 +23,7 @@ SHA = "c90f162d8cddca544d7e8b604eee7682398f24a4"
 
 
 def git_blob_sha(data: bytes) -> str:
-    return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\\0" + data).hexdigest()
+    return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
 
 
 def extract_original_function(data: str, name: str, globals_dict: dict):
