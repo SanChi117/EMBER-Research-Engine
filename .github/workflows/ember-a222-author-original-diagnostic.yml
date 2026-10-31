@@ -1,0 +1,31 @@
+name: A222 Original Author Price-Action Diagnostic
+
+on:
+  push:
+    branches:
+      - 'research/a222-price-action-source-first-locked-mandate-20261031'
+    paths:
+      - 'research/a222_price_action/**'
+      - '.github/workflows/ember-a222-author-original-diagnostic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original_author_source_diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==2.1.3 pandas==2.2.3
+      - run: python research/a222_price_action/a222_native_original_optimistic_diagnostic.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a222-author-native-diagnostic-not-net-futures-pnl
+          path: research/a222_price_action/evidence/A222_ORIGINAL_NATIVE_SAME_CLOSE_DIAGNOSTIC.json
+          if-no-files-found: warn
