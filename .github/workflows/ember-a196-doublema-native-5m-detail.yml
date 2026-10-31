@@ -1,0 +1,121 @@
+name: "EMBER A196 original DoubleMA compare true native 1h vs 5m detail at eight pair-fee setups"
+on:
+  push:
+    branches: [research/a196-doublema-execution-causality-20261031]
+    paths:
+      - ".github/workflows/ember-a196-doublema-native-5m-detail.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-native-real-five-min-detail:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: A195-Original-DoubleMA-4Pairs-8-Freqtrade-native-fees-real-Binance
+          run-id: 41147367668
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a196-native-A195-original-8-zip
+      - name: Pin genuine original Freqtrade==2026.4 and unchanged source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/a196-upstream
+          test "$(git -C /tmp/a196-upstream rev-parse HEAD)" = '40af5c7c1c44253766428cfb06babf22f9817aa4'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('/tmp/a196-upstream')
+          s=(root/'user_data/strategies/VideoDoubleMaFuturesStrategy.py').read_bytes()
+          sha=hashlib.sha1(b'blob '+str(len(s)).encode()+bytes([0])+s).hexdigest()
+          assert sha=='22ca6588bbd056e671783f676f1a4010cbfc1bb6',sha
+          target=Path('a196-native-detail')
+          target.mkdir(exist_ok=True)
+          original=json.loads((root/'config/config_okx_futures_eth_only_binance_data.json').read_text())
+          assert original['max_open_trades']==1
+          assert original['stake_amount']=='unlimited'
+          assert original['dry_run_wallet']==10000
+          assert original['trading_mode']=='futures'
+          assert original['margin_mode']=='isolated'
+          for s in ('BTC','ETH','SOL','LINK'):
+              c=json.loads(json.dumps(original))
+              c['exchange']['name']='binance'
+              c['exchange']['pair_whitelist']=[f'{s}/USDT:USDT']
+              c['exchange']['ccxt_config']={}
+              c['exchange']['ccxt_async_config']={}
+              for field in ('key','secret','password'):c['exchange'][field]=''
+              c['dry_run']=True
+              c['telegram']['enabled']=False
+              c['api_server']['enabled']=False
+              c['bot_name']=f'A196_NATIVE_5M_DETAIL_{s}_PAPER_NO_ORDER'
+              (target/f'config-{s}.json').write_text(json.dumps(c,indent=2))
+          print('A196_SAME_ORIGINAL_SOURCE_AND_AUTHOR_CONFIG_PINNED')
+          PY
+      - name: Rebuild identical A195 1h mark 4h funding from genuine Binance historical archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+            --datadir a196-native-detail/data 2>&1 | tee a196-native-detail/1h-data-source.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a196-native-detail/1h-data-source.log
+      - name: Load real Binance Vision 5m historical original futures OHLCV without gaps
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+            --datadir a196-native-detail/data 2>&1 | tee a196-native-detail/5m-data-source.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a196-native-detail/5m-data-source.log
+      - name: Actual unchanged original Freqtrade 2026.4 --timeframe-detail 5m all 4 coins two fees
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in BTC ETH SOL LINK; do
+            for scenario in 5 12p5; do
+              if [ "$scenario" = '5' ];then RATE=0.0005;else RATE=0.00125;fi
+              echo "A196_BEGIN_ORIGINAL_NATIVE_5M_DETAIL $sym $scenario"
+              timeout 360s python research/doublema_native_oos_20261031/a195_native_binance_offline.py \
+                -c "a196-native-detail/config-$sym.json" \
+                --userdir /tmp/a196-upstream/user_data \
+                --datadir "$GITHUB_WORKSPACE/a196-native-detail/data" \
+                --strategy VideoDoubleMaFuturesStrategy \
+                --timeframe 1h --timeframe-detail 5m \
+                --timerange 20260513-20261001 \
+                --data-format-ohlcv json --fee "$RATE" \
+                --export trades --cache none 2>&1 | tee "a196-native-detail/5m-detail-$sym-fee$scenario.log"
+              z="$(find /tmp/a196-upstream/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              test -n "$z" && test -s "$z"
+              cp "$z" "a196-native-detail/5m-detail-$sym-fee$scenario.zip"
+              rm -f /tmp/a196-upstream/user_data/backtest_results/backtest-result*.zip
+              echo "A196_COMPLETED_ORIGINAL_NATIVE_5M_DETAIL $sym $scenario"
+            done
+          done
+      - name: Independently compare all 16 original native ZIP files plus 5m source sha, freeze economic gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a196_compare_1h_to_5m_native.py \
+             a196-native-detail /tmp/a196-native-A195-original-8-zip \
+             2>&1 | tee a196-native-detail/A196_NATIVE_DETAIL_RECEIPTS.log
+          grep -Fq A196_EIGHT_NATIVE_SOURCE_EXECUTION_COMPARISONS_COMPLETED a196-native-detail/A196_NATIVE_DETAIL_RECEIPTS.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A196-Original-DoubleMA-1h-vs-5m-4Pairs-8-Genuine-Freqtrade-2026
+          path: |
+            a196-native-detail/*.log
+            a196-native-detail/*.zip
+            a196-native-detail/A196_5M_NATIVE_DETAIL_COMPARISON.json
+            a196-native-detail/data/A196_REAL_5M_SHA_MANIFEST.json
+            a196-native-detail/data/A195_DATA_SHA_MANIFEST.json
+          retention-days: 30
