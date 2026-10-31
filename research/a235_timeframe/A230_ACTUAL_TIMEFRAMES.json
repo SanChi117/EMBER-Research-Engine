@@ -1,0 +1,178 @@
+[
+  {
+    "archive": "generated/native_backtests/2024/base/BearRegimeShortV1/backtest-result-2026-10-31_19-56-09.zip",
+    "strategy": "BearRegimeShortV1",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 12,
+    "profit": 27.244051109999997
+  },
+  {
+    "archive": "generated/native_backtests/2024/base/DualTrendCompressionRestartShortV1Strategy/backtest-result-2026-10-31_19-56-05.zip",
+    "strategy": "DualTrendCompressionRestartShortV1Strategy",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 21,
+    "profit": -21.04637150000001
+  },
+  {
+    "archive": "generated/native_backtests/2024/base/Risk_Stair_S5/backtest-result-2026-10-31_19-56-18.zip",
+    "strategy": "Risk_Stair_S5",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 77,
+    "profit": 24.041806099999988
+  },
+  {
+    "archive": "generated/native_backtests/2024/stress/BearRegimeShortV1/backtest-result-2026-10-31_19-56-49.zip",
+    "strategy": "BearRegimeShortV1",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 12,
+    "profit": 25.57126633
+  },
+  {
+    "archive": "generated/native_backtests/2024/stress/DualTrendCompressionRestartShortV1Strategy/backtest-result-2026-10-31_19-56-44.zip",
+    "strategy": "DualTrendCompressionRestartShortV1Strategy",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 21,
+    "profit": -25.87170801000001
+  },
+  {
+    "archive": "generated/native_backtests/2024/stress/Risk_Stair_S5/backtest-result-2026-10-31_19-56-57.zip",
+    "strategy": "Risk_Stair_S5",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 77,
+    "profit": -36.51875127
+  },
+  {
+    "archive": "generated/native_backtests/2025/base/BearRegimeShortV1/backtest-result-2026-10-31_19-53-57.zip",
+    "strategy": "BearRegimeShortV1",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 35,
+    "profit": 43.27946073
+  },
+  {
+    "archive": "generated/native_backtests/2025/base/DualTrendCompressionRestartShortV1Strategy/backtest-result-2026-10-31_19-53-16.zip",
+    "strategy": "DualTrendCompressionRestartShortV1Strategy",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 50,
+    "profit": 93.15154820000002
+  },
+  {
+    "archive": "generated/native_backtests/2025/base/NASOSv7LongShort/backtest-result-2026-10-31_19-53-52.zip",
+    "strategy": "NASOSv7LongShort",
+    "timeframe": "1h",
+    "detail": "",
+    "trades": 59,
+    "profit": -56.084144239999986
+  },
+  {
+    "archive": "generated/native_backtests/2025/base/Risk_Stair_S5/backtest-result-2026-10-31_19-54-05.zip",
+    "strategy": "Risk_Stair_S5",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 60,
+    "profit": 166.13265979
+  },
+  {
+    "archive": "generated/native_backtests/2025/base/TrendFollowing/backtest-result-2026-10-31_19-53-47.zip",
+    "strategy": "TrendFollowing",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 1344,
+    "profit": -28.275710280000034
+  },
+  {
+    "archive": "generated/native_backtests/2025/stress/BearRegimeShortV1/backtest-result-2026-10-31_19-55-30.zip",
+    "strategy": "BearRegimeShortV1",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 35,
+    "profit": 38.292230839999995
+  },
+  {
+    "archive": "generated/native_backtests/2025/stress/DualTrendCompressionRestartShortV1Strategy/backtest-result-2026-10-31_19-54-50.zip",
+    "strategy": "DualTrendCompressionRestartShortV1Strategy",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 50,
+    "profit": 80.91157026000002
+  },
+  {
+    "archive": "generated/native_backtests/2025/stress/NASOSv7LongShort/backtest-result-2026-10-31_19-55-25.zip",
+    "strategy": "NASOSv7LongShort",
+    "timeframe": "1h",
+    "detail": "",
+    "trades": 57,
+    "profit": -58.71805628
+  },
+  {
+    "archive": "generated/native_backtests/2025/stress/Risk_Stair_S5/backtest-result-2026-10-31_19-55-38.zip",
+    "strategy": "Risk_Stair_S5",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 60,
+    "profit": 123.62616798999998
+  },
+  {
+    "archive": "generated/native_backtests/2025/stress/TrendFollowing/backtest-result-2026-10-31_19-55-20.zip",
+    "strategy": "TrendFollowing",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 1271,
+    "profit": -284.09800416999997
+  },
+  {
+    "archive": "generated/native_backtests/2026_JAN_MAY/base/BearRegimeShortV1/backtest-result-2026-10-31_19-57-25.zip",
+    "strategy": "BearRegimeShortV1",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 4,
+    "profit": -6.28930102
+  },
+  {
+    "archive": "generated/native_backtests/2026_JAN_MAY/base/DualTrendCompressionRestartShortV1Strategy/backtest-result-2026-10-31_19-57-20.zip",
+    "strategy": "DualTrendCompressionRestartShortV1Strategy",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 18,
+    "profit": 66.46737287999999
+  },
+  {
+    "archive": "generated/native_backtests/2026_JAN_MAY/base/Risk_Stair_S5/backtest-result-2026-10-31_19-57-30.zip",
+    "strategy": "Risk_Stair_S5",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 26,
+    "profit": -82.72329703
+  },
+  {
+    "archive": "generated/native_backtests/2026_JAN_MAY/stress/BearRegimeShortV1/backtest-result-2026-10-31_19-57-57.zip",
+    "strategy": "BearRegimeShortV1",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 4,
+    "profit": -7.241154229999999
+  },
+  {
+    "archive": "generated/native_backtests/2026_JAN_MAY/stress/DualTrendCompressionRestartShortV1Strategy/backtest-result-2026-10-31_19-57-53.zip",
+    "strategy": "DualTrendCompressionRestartShortV1Strategy",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 18,
+    "profit": 62.768784339999996
+  },
+  {
+    "archive": "generated/native_backtests/2026_JAN_MAY/stress/Risk_Stair_S5/backtest-result-2026-10-31_19-58-03.zip",
+    "strategy": "Risk_Stair_S5",
+    "timeframe": "1h",
+    "detail": "5m",
+    "trades": 26,
+    "profit": -95.61446751000001
+  }
+]
