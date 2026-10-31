@@ -1,3 +1,7 @@
+> **⚠️ СЛУЖЕБНОЕ / НЕ САМОСТОЯТЕЛЬНОЕ ДОКАЗАТЕЛЬСТВО ДОХОДНОСТИ.** PRE_REGISTRATION_NOT_OUTCOME — CI A243 завершился технически SUCCESS, но этот документ не содержит проверенный итог PnL и не утверждает экономический успех. [Текущий исправленный статус](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md).
+
+---
+
 # A243 PRE-REGISTERED original Winner15m source + author BTC/ETH 100 USDT account
 
 2026-10-31, Binance USDT-M Futures only; locked mandate and issue #9. No live orders, no changes to existing PAPER. Source-audit A242 just restored direct original `bt.json` for Winner15m (R026).
