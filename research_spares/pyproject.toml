@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ember-research-spares"
+version = "0.1.0"
+description = "Offline-only reusable research components for EMBER; no trading adapters"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ember_spares*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
