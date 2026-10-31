@@ -161,4 +161,6 @@ jobs:
             research/native_candidate_screen_20261031/A199_BINANCE_5M_1H_SOURCE_SHA_PARITY.json \
             research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
           git commit -m "A199 actual 16 source-pinned native futures Freqtrade ZIP receipts both strategies economic FAIL; SHA audit chain199"
+          git fetch origin research/a199-futures-source-5m-1h-native-screen-20261031
+          git rebase FETCH_HEAD
           git push origin HEAD:refs/heads/research/a199-futures-source-5m-1h-native-screen-20261031
