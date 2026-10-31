@@ -34,7 +34,7 @@ A230 runner имел `"timeframe":"1h"` для каждой стратегии (
 ## Next research queue (not an executed claim)
 
 1. **R001 Double MA** author BTC+ETH one shared account and source state, distinct from 4 separate sleeves A233; use pinned exact original portfolio, with no retrospective tuning.
-2. **R003? BearRegimeShortV1** (exact registry ID verify before commit): source-backed author config has **20 markets**, wallet $200, max2 stake100, different from A228 $1000/3 pairs; evaluate source chronology 1h BTC informative 20d momentum and author ex-post negative year evidence before spending on huge archive download.
+2. **R003 BearRegimeShortV1**: source-backed author config has **20 markets**, wallet $200, max2 stake100, different from A228 $1000/3 pairs; evaluate source chronology 1h BTC informative 20d momentum and author ex-post negative year evidence before spending on huge archive download.
 3. Winner15m, MTF_Hybrid, FTR, FVG, VolatilitySystem and all A234 entries should receive source/config/causal/economic status, not premature negative labels. For Risk S5, next critical gate is 5× margin/liq + execution + genuinely untouched forward OOS before any automated PAPER candidate promotion.
 4. Preserve all negative receipts. Updating an experiment's methodology must use separate pre-registered branch and diff, never fake 0% on a failed command. Multiple variants in a registry record must be individually tracked before declaring full coverage.
 
