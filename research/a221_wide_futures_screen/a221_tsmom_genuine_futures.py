@@ -169,9 +169,21 @@ def compute(params, source, candles, funding):
     ]
     details = {}
     sigs = {}
+    prefix_probes = []
     for sym in COINS:
         df = candles[sym]
         signal = source.tsmom_signals(df, params)
+        # Adversarial prefix stability: a later candle may never change an earlier decision.
+        for cut in ("2024-04-01T00:00:00Z", "2024-12-01T00:00:00Z",
+                    "2025-04-01T00:00:00Z", "2025-12-01T00:00:00Z",
+                    "2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"):
+            at = pd.Timestamp(cut)
+            prefix = source.tsmom_signals(df.loc[:at], params)
+            got = float(prefix.loc[at, "position"])
+            expected = float(signal.loc[at, "position"])
+            if not np.isclose(got, expected, rtol=0, atol=1e-12):
+                raise ValueError(f"TSMOM source future-prefix leakage {sym} {cut}: {got}!={expected}")
+            prefix_probes.append({"symbol": sym, "asof": cut, "passed": True})
         pos = signal["position"].shift(1).fillna(0.0)
         if pos.abs().max() > 1.000000001:
             raise ValueError("1x future exposure cap violated")
@@ -237,7 +249,7 @@ def compute(params, source, candles, funding):
         }
         if not all(np.isfinite(view[k]["net_return_pct"]) for k in view):
             raise ValueError("Nonfinite economic result")
-    return details
+    return details, prefix_probes
 
 
 def main():
@@ -261,7 +273,7 @@ def main():
         spec.loader.exec_module(mod)
         params = mod.TsmomParams(lookback=720, vol_window=336, target_vol=0.2, max_leverage=1.0, rebalance=24)
         candles, funding, receipts = load_all(manifest)
-        results = compute(params, mod, candles, funding)
+        results, prefix_probes = compute(params, mod, candles, funding)
     output = {
         "cycle": "A221",
         "market": "genuine Binance USD-M Futures, BTCUSDT ETHUSDT SOLUSDT",
@@ -277,12 +289,13 @@ def main():
         "liquidation_and_intrabar_mark_audited": False,
         "verified_futures_candidate": False,
         "periods": results,
+        "prefix_causality_probes": prefix_probes,
         "no_orders": True,
     }
     path = HERE / "evidence" / "A221_TSMOM_REAL_BINANCE_REPLAY.json"
     path.parent.mkdir(exist_ok=True)
     path.write_text(json.dumps(output, indent=2, ensure_ascii=False)+"\n",encoding="utf8")
-    print(json.dumps({"receipt_count":len(receipts),"periods":results},ensure_ascii=False),flush=True)
+    print(json.dumps({"receipt_count":len(receipts),"prefix_causality_probes":len(prefix_probes),"periods":results},ensure_ascii=False),flush=True)
 
 
 if __name__=="__main__":
