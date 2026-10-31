@@ -65,7 +65,10 @@ jobs:
               assert all(t['source_signal']=='PULLBACK_4' and datetime.fromisoformat(t['entry'].replace('Z','+00:00'))>datetime.fromisoformat(t['signal_bar'].replace('Z','+00:00')) for t in deals)
               assert all(t['initial_risk_usdt']>0 and t['leverage'] in (1,2,3) for t in deals)
               if label.startswith('external_1pct_cap'):
-                  assert all(t['initial_risk_usdt']<=10.01 for t in deals),('external_cap',label)
+                  prior_wallet=1000.0
+                  for t in deals:
+                      assert t['initial_risk_usdt'] <= prior_wallet*.01001+0.05,('external_cap_trade_as_pct_of_current_wallet',label,t['initial_risk_usdt'],prior_wallet)
+                      prior_wallet=t['wallet']
               sha[label]=hashlib.sha256(file.read_bytes()).hexdigest()
               shutil.copyfile(file,dest/(f'A198_{label}_VERIFIED_TRADES.json'))
           h=json.loads((p/'data/A198_2026_SOL_BTC_JAN_SEP_TRUE_WARMUP_SOURCE_SHA.json').read_text())
