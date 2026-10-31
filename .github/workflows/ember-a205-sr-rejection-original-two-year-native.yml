@@ -7,7 +7,7 @@ on:
       - "research/native_candidate_screen_20261031/a205_*.py"
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   native-original-sr-a205:
     runs-on: ubuntu-latest
@@ -121,3 +121,26 @@ jobs:
             a205-sr/2026/data/A195_DATA_SHA_MANIFEST.json
             a205-sr/2026/data/A196_REAL_5M_SHA_MANIFEST.json
           retention-days: 30
+
+      - name: Persist original trade-receipt machine verdict into immutable research history
+        if: success()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          target=research/native_candidate_screen_20261031/A205_SR_ORIGINAL_TWO_YEAR_NATIVE_VERIFIED.json
+          cp a205-sr/A205_16_NATIVE_SR_REJECTION_TWO_YEAR_VERIFIED.json "$target"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -c credential.helper= fetch --quiet origin "$GITHUB_REF_NAME"
+          git checkout -q -B a205-ci-result "origin/$GITHUB_REF_NAME"
+          git add "$target"
+          if git diff --staged --quiet; then
+            echo A205_RECEIPTS_ALREADY_COMMITTED
+            exit 0
+          fi
+          git commit -qm "research(A205): verified 16 true original native backtest receipts and gates"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          echo A205_NATIVE_MACHINE_VERDICT_PERSISTED_TO_GITHUB
