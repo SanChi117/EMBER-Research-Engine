@@ -1,0 +1,99 @@
+{
+  "cycle": "A237",
+  "run": 41242861062,
+  "job": 124660161408,
+  "state": "NATIVE_ALL_COMPLETE_NOT_VERIFIED",
+  "commit": "d2dbf06fcbd037d44209d6041032f6793ef29465",
+  "source_pins": {
+    "strategy": "ee2293e19f3cdecb082525f6d55a166249f74eb2",
+    "config": "965193dbe93e65389c0ce8b5669229667e9fd846"
+  },
+  "account": {
+    "currency": "USDT",
+    "wallet": 1000,
+    "stake": "unlimited",
+    "max_positions": 3,
+    "balance_ratio": 0.95,
+    "pairs": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT",
+      "SOL/USDT:USDT",
+      "BNB/USDT:USDT"
+    ]
+  },
+  "market": "Binance USDT-M MAINNET OHLCV mark and funding; exchange contract metadata TESTNET",
+  "freqtrade": "2026.9",
+  "periods": [
+    "2024",
+    "2025",
+    "2026_JAN_MAY"
+  ],
+  "costs": {
+    "base": 0.0005,
+    "stress": 0.0011
+  },
+  "artifact": [
+    {
+      "id": 13058187639,
+      "name": "a237-trendfollowing-original-four-pair-unlimited-stake",
+      "sha256": "sha256:7954cd6ffb092bf779894e38d56f4a312935fdef49429f5929961b730a22509e",
+      "bytes": 661184
+    }
+  ],
+  "results": [
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": -31.069521035999998,
+      "native_max_drawdown_account": 0.3382898580543629,
+      "native_trade_count": 405
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": -43.374596199,
+      "native_max_drawdown_account": 0.4512540115474097,
+      "native_trade_count": 409
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": -32.398432623,
+      "native_max_drawdown_account": 0.39150756484041116,
+      "native_trade_count": 392
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": -49.994926672000005,
+      "native_max_drawdown_account": 0.5158220139028,
+      "native_trade_count": 380
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": -4.300441303,
+      "native_max_drawdown_account": 0.22137840762233874,
+      "native_trade_count": 179
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -9.835822928999995,
+      "native_max_drawdown_account": 0.23392521523567703,
+      "native_trade_count": 156
+    }
+  ]
+}
