@@ -1,0 +1,352 @@
+{
+  "schema": "EMBER_A196_ORIGINAL_CODE_PREFIX_CAUSALITY_4_MARKETS_10_SNAPSHOTS",
+  "upstream_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "markets": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "LINK"
+  ],
+  "probe_columns": [
+    "enter_long",
+    "enter_short",
+    "enter_tag",
+    "first_pullback_long",
+    "first_pullback_short",
+    "pullback_stop_long_line",
+    "pullback_stop_short_line",
+    "cluster_zone_high",
+    "cluster_zone_low",
+    "ma_cluster_confirmed",
+    "htf_long_ok_4h",
+    "htf_short_ok_4h",
+    "long_direction_score",
+    "short_direction_score",
+    "prev_pivot_high",
+    "prev_pivot_low",
+    "atr_14",
+    "ma_width",
+    "fast_band_high",
+    "fast_band_low"
+  ],
+  "closed_1h_full_vs_prefix_probe": {
+    "BTC": {
+      "full_rows": 4800,
+      "evaluated_snapshots": 10,
+      "mismatching_snapshots": 0,
+      "observations": [
+        {
+          "at_closed_candle_start": "2026-05-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-05-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-27 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        }
+      ]
+    },
+    "ETH": {
+      "full_rows": 4800,
+      "evaluated_snapshots": 10,
+      "mismatching_snapshots": 0,
+      "observations": [
+        {
+          "at_closed_candle_start": "2026-05-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-05-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-27 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        }
+      ]
+    },
+    "SOL": {
+      "full_rows": 4800,
+      "evaluated_snapshots": 10,
+      "mismatching_snapshots": 0,
+      "observations": [
+        {
+          "at_closed_candle_start": "2026-05-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-05-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-27 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        }
+      ]
+    },
+    "LINK": {
+      "full_rows": 4800,
+      "evaluated_snapshots": 10,
+      "mismatching_snapshots": 0,
+      "observations": [
+        {
+          "at_closed_candle_start": "2026-05-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-05-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-15 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-06-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-07-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-08-29 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-12 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        },
+        {
+          "at_closed_candle_start": "2026-09-27 12:00:00+00:00",
+          "indicators_checked": 20,
+          "mismatches": [],
+          "full_entry": "nan",
+          "prefix_entry": "nan"
+        }
+      ]
+    }
+  },
+  "total_snapshots": 40,
+  "mismatching_snapshots": 0,
+  "limitations": [
+    "Only 40 selected time snapshots, not each bar",
+    "Not full Freqtrade lookahead-analysis",
+    "Not a custom_stoploss or custom_exit callback causal/recursive test",
+    "4h candles only close at 4h boundary, Freqtrade informative shift",
+    "No actual portfolio execution here; A196 native 5m result is separate",
+    "FROZEN original strategy class with no modifications, no live execution"
+  ]
+}

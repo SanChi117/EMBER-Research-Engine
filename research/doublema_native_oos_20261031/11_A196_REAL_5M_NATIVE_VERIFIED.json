@@ -1,0 +1,1728 @@
+{
+  "schema": "EMBER_A196_ORIGINAL_DOUBLEMA_1H_VS_5M_DETAIL_NATIVE",
+  "source_strategy_commit": "40af5c7c1c44253766428cfb06babf22f9817aa4",
+  "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "freqtrade": "2026.4",
+  "window": "[2026-05-13,2026-10-01)",
+  "base_source_run": 41147367668,
+  "fee_labels": {
+    "5": 0.0005,
+    "12p5": 0.00125
+  },
+  "5m_data_source": "real Binance Vision USD-M 5m July-Sep + May/June, no interpolation, SHA in manifest",
+  "outcomes": {
+    "BTC": {
+      "5": {
+        "one_hour": {
+          "n": 18,
+          "return_pct": -20.70403,
+          "pnl_usd": -2070.40307,
+          "PF": 0.4029,
+          "dd_pct": 26.23393,
+          "longs": 8,
+          "shorts": 10,
+          "long_pnl": -7.808,
+          "short_pnl": -2062.595,
+          "top3_of_all_gains": 0.795108,
+          "top3_of_net": null,
+          "stop_exit_count": 14,
+          "mean_duration_hours": 34.944,
+          "sum_funding": 43.5656
+        },
+        "five_minute": {
+          "n": 18,
+          "return_pct": -18.46716,
+          "pnl_usd": -1846.71604,
+          "PF": 0.4789,
+          "dd_pct": 25.05237,
+          "longs": 8,
+          "shorts": 10,
+          "long_pnl": 243.168,
+          "short_pnl": -2089.884,
+          "top3_of_all_gains": 0.724274,
+          "top3_of_net": null,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 34.764,
+          "sum_funding": 45.6272
+        },
+        "diff": {
+          "matched_entry_timestamps": 18,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 0,
+          "changed_exit_count": 15,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779084000000",
+              "direction": "SHORT",
+              "old_close": "2026-05-23 15:00:00+00:00",
+              "detail_close": "2026-05-23 14:40:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 353.9801,
+              "detail_pnl_usdt": 385.2998
+            },
+            {
+              "entry": "1779832800000",
+              "direction": "SHORT",
+              "old_close": "2026-05-27 00:00:00+00:00",
+              "detail_close": "2026-05-27 00:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -61.1096,
+              "detail_pnl_usdt": -61.1096
+            },
+            {
+              "entry": "1781362800000",
+              "direction": "LONG",
+              "old_close": "2026-06-16 03:00:00+00:00",
+              "detail_close": "2026-06-16 02:15:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 456.7835,
+              "detail_pnl_usdt": 554.4509
+            },
+            {
+              "entry": "1782676800000",
+              "direction": "SHORT",
+              "old_close": "2026-06-29 12:00:00+00:00",
+              "detail_close": "2026-06-29 12:05:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -395.3016,
+              "detail_pnl_usdt": -395.3016
+            },
+            {
+              "entry": "1782939600000",
+              "direction": "LONG",
+              "old_close": "2026-07-01 23:00:00+00:00",
+              "detail_close": "2026-07-01 21:45:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1.6159,
+              "detail_pnl_usdt": 208.4812
+            },
+            {
+              "entry": "1783112400000",
+              "direction": "LONG",
+              "old_close": "2026-07-04 06:00:00+00:00",
+              "detail_close": "2026-07-04 06:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -153.883,
+              "detail_pnl_usdt": -153.883
+            },
+            {
+              "entry": "1783490400000",
+              "direction": "SHORT",
+              "old_close": "2026-07-10 08:00:00+00:00",
+              "detail_close": "2026-07-10 08:15:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -529.0484,
+              "detail_pnl_usdt": -542.6574
+            },
+            {
+              "entry": "1784253600000",
+              "direction": "SHORT",
+              "old_close": "2026-07-19 02:00:00+00:00",
+              "detail_close": "2026-07-19 02:05:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -420.7064,
+              "detail_pnl_usdt": -435.2136
+            },
+            {
+              "entry": "1786388400000",
+              "direction": "SHORT",
+              "old_close": "2026-08-19 14:00:00+00:00",
+              "detail_close": "2026-08-19 14:45:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -435.7855,
+              "detail_pnl_usdt": -451.9857
+            },
+            {
+              "entry": "1787166000000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 22:00:00+00:00",
+              "detail_close": "2026-08-19 21:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 300.0112,
+              "detail_pnl_usdt": 289.4392
+            },
+            {
+              "entry": "1787950800000",
+              "direction": "SHORT",
+              "old_close": "2026-08-28 22:00:00+00:00",
+              "detail_close": "2026-08-28 22:40:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -88.0685,
+              "detail_pnl_usdt": -90.8835
+            },
+            {
+              "entry": "1789380000000",
+              "direction": "LONG",
+              "old_close": "2026-09-15 13:00:00+00:00",
+              "detail_close": "2026-09-15 13:35:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -404.3889,
+              "detail_pnl_usdt": -417.6166
+            },
+            {
+              "entry": "1789992000000",
+              "direction": "LONG",
+              "old_close": "2026-09-21 20:00:00+00:00",
+              "detail_close": "2026-09-21 15:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 284.6203,
+              "detail_pnl_usdt": 259.4631
+            },
+            {
+              "entry": "1790488800000",
+              "direction": "LONG",
+              "old_close": "2026-09-28 01:00:00+00:00",
+              "detail_close": "2026-09-28 01:40:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -149.5047,
+              "detail_pnl_usdt": -154.1049
+            },
+            {
+              "entry": "1790589600000",
+              "direction": "SHORT",
+              "old_close": "2026-09-28 12:00:00+00:00",
+              "detail_close": "2026-09-28 12:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -187.9205,
+              "detail_pnl_usdt": -192.7143
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": null,
+        "source_baseline_zip_sha256": "a6da95eb8de9d5f3ac1cee1f6d621fb8058f1390757aedc81dc776cec7bb424a",
+        "source_detail_zip_sha256": "ff7a396bbd3e7594292995ef5ef06350c7d8c7ad74c75b089d7b55da1b93a338"
+      },
+      "12p5": {
+        "one_hour": {
+          "n": 18,
+          "return_pct": -24.9668,
+          "pnl_usd": -2496.6802,
+          "PF": 0.33605,
+          "dd_pct": 29.61026,
+          "longs": 8,
+          "shorts": 10,
+          "long_pnl": -217.959,
+          "short_pnl": -2278.721,
+          "top3_of_all_gains": 0.803745,
+          "top3_of_net": null,
+          "stop_exit_count": 14,
+          "mean_duration_hours": 34.944,
+          "sum_funding": 42.6917
+        },
+        "five_minute": {
+          "n": 18,
+          "return_pct": -22.6875,
+          "pnl_usd": -2268.74952,
+          "PF": 0.40734,
+          "dd_pct": 28.48617,
+          "longs": 8,
+          "shorts": 10,
+          "long_pnl": 28.35,
+          "short_pnl": -2297.1,
+          "top3_of_all_gains": 0.742154,
+          "top3_of_net": null,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 34.755,
+          "sum_funding": 44.7131
+        },
+        "diff": {
+          "matched_entry_timestamps": 18,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 0,
+          "changed_exit_count": 15,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779084000000",
+              "direction": "SHORT",
+              "old_close": "2026-05-23 15:00:00+00:00",
+              "detail_close": "2026-05-23 14:30:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 324.2646,
+              "detail_pnl_usdt": 377.8395
+            },
+            {
+              "entry": "1779832800000",
+              "direction": "SHORT",
+              "old_close": "2026-05-27 00:00:00+00:00",
+              "detail_close": "2026-05-27 00:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -91.0703,
+              "detail_pnl_usdt": -91.0703
+            },
+            {
+              "entry": "1781362800000",
+              "direction": "LONG",
+              "old_close": "2026-06-16 03:00:00+00:00",
+              "detail_close": "2026-06-16 02:15:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 426.4835,
+              "detail_pnl_usdt": 524.0775
+            },
+            {
+              "entry": "1782676800000",
+              "direction": "SHORT",
+              "old_close": "2026-06-29 12:00:00+00:00",
+              "detail_close": "2026-06-29 12:05:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -425.548,
+              "detail_pnl_usdt": -425.548
+            },
+            {
+              "entry": "1782939600000",
+              "direction": "LONG",
+              "old_close": "2026-07-01 23:00:00+00:00",
+              "detail_close": "2026-07-01 21:45:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": -28.3302,
+              "detail_pnl_usdt": 178.3799
+            },
+            {
+              "entry": "1783112400000",
+              "direction": "LONG",
+              "old_close": "2026-07-04 06:00:00+00:00",
+              "detail_close": "2026-07-04 06:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -183.7202,
+              "detail_pnl_usdt": -183.7202
+            },
+            {
+              "entry": "1783490400000",
+              "direction": "SHORT",
+              "old_close": "2026-07-10 08:00:00+00:00",
+              "detail_close": "2026-07-10 08:15:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -544.2756,
+              "detail_pnl_usdt": -565.8311
+            },
+            {
+              "entry": "1784253600000",
+              "direction": "SHORT",
+              "old_close": "2026-07-19 02:00:00+00:00",
+              "detail_close": "2026-07-19 02:05:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -436.2619,
+              "detail_pnl_usdt": -451.7322
+            },
+            {
+              "entry": "1786388400000",
+              "direction": "SHORT",
+              "old_close": "2026-08-19 14:00:00+00:00",
+              "detail_close": "2026-08-19 14:45:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -446.4339,
+              "detail_pnl_usdt": -463.6044
+            },
+            {
+              "entry": "1787166000000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 22:00:00+00:00",
+              "detail_close": "2026-08-19 21:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 264.9008,
+              "detail_pnl_usdt": 255.3349
+            },
+            {
+              "entry": "1787950800000",
+              "direction": "SHORT",
+              "old_close": "2026-08-28 22:00:00+00:00",
+              "detail_close": "2026-08-28 22:40:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -108.8741,
+              "detail_pnl_usdt": -112.5033
+            },
+            {
+              "entry": "1789380000000",
+              "direction": "LONG",
+              "old_close": "2026-09-15 13:00:00+00:00",
+              "detail_close": "2026-09-15 13:35:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -411.1235,
+              "detail_pnl_usdt": -425.1619
+            },
+            {
+              "entry": "1789992000000",
+              "direction": "LONG",
+              "old_close": "2026-09-21 20:00:00+00:00",
+              "detail_close": "2026-09-21 15:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 247.9972,
+              "detail_pnl_usdt": 223.6829
+            },
+            {
+              "entry": "1790488800000",
+              "direction": "LONG",
+              "old_close": "2026-09-28 01:00:00+00:00",
+              "detail_close": "2026-09-28 01:40:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -166.0678,
+              "detail_pnl_usdt": -171.4248
+            },
+            {
+              "entry": "1790589600000",
+              "direction": "SHORT",
+              "old_close": "2026-09-28 12:00:00+00:00",
+              "detail_close": "2026-09-28 12:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -201.5114,
+              "detail_pnl_usdt": -208.0118
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": null,
+        "source_baseline_zip_sha256": "ddfbf03d8fa974ccdea7370ad1a649423e33481e0ffc4ccd9de282522886fe5b",
+        "source_detail_zip_sha256": "e2fd09132a8d06b55eb800bedd666b2b7a42117d5d49cc62a7c6ca418e489c0c"
+      }
+    },
+    "ETH": {
+      "5": {
+        "one_hour": {
+          "n": 23,
+          "return_pct": 34.8285,
+          "pnl_usd": 3482.85005,
+          "PF": 2.26387,
+          "dd_pct": 7.33165,
+          "longs": 13,
+          "shorts": 10,
+          "long_pnl": 2310.882,
+          "short_pnl": 1171.969,
+          "top3_of_all_gains": 0.581934,
+          "top3_of_net": 1.042371,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 15.783,
+          "sum_funding": -6.0979
+        },
+        "five_minute": {
+          "n": 35,
+          "return_pct": 23.26309,
+          "pnl_usd": 2326.3093,
+          "PF": 1.78177,
+          "dd_pct": 9.45924,
+          "longs": 24,
+          "shorts": 11,
+          "long_pnl": 918.303,
+          "short_pnl": 1408.007,
+          "top3_of_all_gains": 0.493469,
+          "top3_of_net": 1.124688,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 9.933,
+          "sum_funding": -5.0159
+        },
+        "diff": {
+          "matched_entry_timestamps": 23,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 12,
+          "changed_exit_count": 18,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779800400000",
+              "direction": "LONG",
+              "old_close": "2026-05-26 15:00:00+00:00",
+              "detail_close": "2026-05-26 15:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -429.1794,
+              "detail_pnl_usdt": -429.1794
+            },
+            {
+              "entry": "1780254000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-02 21:00:00+00:00",
+              "detail_close": "2026-06-02 15:35:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 915.4078,
+              "detail_pnl_usdt": 943.3171
+            },
+            {
+              "entry": "1780650000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-05 15:00:00+00:00",
+              "detail_close": "2026-06-05 14:05:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 739.9425,
+              "detail_pnl_usdt": 669.5552
+            },
+            {
+              "entry": "1781362800000",
+              "direction": "LONG",
+              "old_close": "2026-06-15 12:00:00+00:00",
+              "detail_close": "2026-06-15 01:30:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 986.1113,
+              "detail_pnl_usdt": 354.0924
+            },
+            {
+              "entry": "1783011600000",
+              "direction": "LONG",
+              "old_close": "2026-07-03 10:00:00+00:00",
+              "detail_close": "2026-07-03 08:45:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 290.6836,
+              "detail_pnl_usdt": 350.3378
+            },
+            {
+              "entry": "1783663200000",
+              "direction": "LONG",
+              "old_close": "2026-07-12 00:00:00+00:00",
+              "detail_close": "2026-07-11 23:10:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 71.523,
+              "detail_pnl_usdt": 311.7687
+            },
+            {
+              "entry": "1784412000000",
+              "direction": "LONG",
+              "old_close": "2026-07-21 03:00:00+00:00",
+              "detail_close": "2026-07-21 01:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 582.7193,
+              "detail_pnl_usdt": 578.6356
+            },
+            {
+              "entry": "1785499200000",
+              "direction": "SHORT",
+              "old_close": "2026-07-31 13:00:00+00:00",
+              "detail_close": "2026-07-31 13:15:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -63.7676,
+              "detail_pnl_usdt": -63.7676
+            },
+            {
+              "entry": "1786399200000",
+              "direction": "SHORT",
+              "old_close": "2026-08-11 01:00:00+00:00",
+              "detail_close": "2026-08-11 01:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -67.6259,
+              "detail_pnl_usdt": -67.6259
+            },
+            {
+              "entry": "1786701600000",
+              "direction": "SHORT",
+              "old_close": "2026-08-17 02:00:00+00:00",
+              "detail_close": "2026-08-17 02:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -313.6042,
+              "detail_pnl_usdt": -313.6042
+            },
+            {
+              "entry": "1787097600000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 16:00:00+00:00",
+              "detail_close": "2026-08-19 15:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1728.9042,
+              "detail_pnl_usdt": 1003.4988
+            },
+            {
+              "entry": "1787796000000",
+              "direction": "LONG",
+              "old_close": "2026-08-28 16:00:00+00:00",
+              "detail_close": "2026-08-28 16:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -567.2125,
+              "detail_pnl_usdt": -567.2125
+            },
+            {
+              "entry": "1788116400000",
+              "direction": "LONG",
+              "old_close": "2026-08-30 20:00:00+00:00",
+              "detail_close": "2026-08-30 20:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -108.7974,
+              "detail_pnl_usdt": -108.7974
+            },
+            {
+              "entry": "1788300000000",
+              "direction": "SHORT",
+              "old_close": "2026-09-01 23:00:00+00:00",
+              "detail_close": "2026-09-01 23:35:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -69.6458,
+              "detail_pnl_usdt": -69.6458
+            },
+            {
+              "entry": "1788472800000",
+              "direction": "LONG",
+              "old_close": "2026-09-03 22:00:00+00:00",
+              "detail_close": "2026-09-03 22:30:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -182.1253,
+              "detail_pnl_usdt": -182.1253
+            },
+            {
+              "entry": "1789304400000",
+              "direction": "SHORT",
+              "old_close": "2026-09-13 14:00:00+00:00",
+              "detail_close": "2026-09-13 14:05:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -79.3862,
+              "detail_pnl_usdt": -79.3862
+            },
+            {
+              "entry": "1789740000000",
+              "direction": "LONG",
+              "old_close": "2026-09-18 20:00:00+00:00",
+              "detail_close": "2026-09-18 18:35:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 615.8067,
+              "detail_pnl_usdt": 504.8187
+            },
+            {
+              "entry": "1790683200000",
+              "direction": "LONG",
+              "old_close": "2026-09-29 14:00:00+00:00",
+              "detail_close": "2026-09-29 14:05:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -115.7944,
+              "detail_pnl_usdt": -115.7944
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": 0.66793,
+        "source_baseline_zip_sha256": "a30f111efa92968ae6350b6f046ba261acc069865f81b154870c5e62a3847555",
+        "source_detail_zip_sha256": "b1e34fadc5fc7c5216e59c141e394fd509710e4e1ccffc4f85d31145b87ee1c3"
+      },
+      "12p5": {
+        "one_hour": {
+          "n": 23,
+          "return_pct": 39.5362,
+          "pnl_usd": 3953.62039,
+          "PF": 2.24567,
+          "dd_pct": 8.19691,
+          "longs": 13,
+          "shorts": 10,
+          "long_pnl": 3087.209,
+          "short_pnl": 866.411,
+          "top3_of_all_gains": 0.541935,
+          "top3_of_net": 0.97699,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 18.913,
+          "sum_funding": -10.9961
+        },
+        "five_minute": {
+          "n": 35,
+          "return_pct": 12.69678,
+          "pnl_usd": 1269.6775,
+          "PF": 1.34096,
+          "dd_pct": 13.8341,
+          "longs": 24,
+          "shorts": 11,
+          "long_pnl": 197.289,
+          "short_pnl": 1072.389,
+          "top3_of_all_gains": 0.504471,
+          "top3_of_net": 1.984041,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 9.933,
+          "sum_funding": -5.0979
+        },
+        "diff": {
+          "matched_entry_timestamps": 23,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 12,
+          "changed_exit_count": 18,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779800400000",
+              "direction": "LONG",
+              "old_close": "2026-05-26 15:00:00+00:00",
+              "detail_close": "2026-05-26 15:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -458.87,
+              "detail_pnl_usdt": -458.87
+            },
+            {
+              "entry": "1780254000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-02 21:00:00+00:00",
+              "detail_close": "2026-06-02 15:35:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 878.6108,
+              "detail_pnl_usdt": 906.2886
+            },
+            {
+              "entry": "1780650000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-05 15:00:00+00:00",
+              "detail_close": "2026-06-05 14:05:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 710.5129,
+              "detail_pnl_usdt": 640.0729
+            },
+            {
+              "entry": "1781362800000",
+              "direction": "LONG",
+              "old_close": "2026-06-15 12:00:00+00:00",
+              "detail_close": "2026-06-15 01:30:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 955.3565,
+              "detail_pnl_usdt": 323.8117
+            },
+            {
+              "entry": "1783011600000",
+              "direction": "LONG",
+              "old_close": "2026-07-03 10:00:00+00:00",
+              "detail_close": "2026-07-03 08:45:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 260.4483,
+              "detail_pnl_usdt": 320.0577
+            },
+            {
+              "entry": "1783663200000",
+              "direction": "LONG",
+              "old_close": "2026-07-15 00:00:00+00:00",
+              "detail_close": "2026-07-11 23:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 1209.7023,
+              "detail_pnl_usdt": 281.5182
+            },
+            {
+              "entry": "1784412000000",
+              "direction": "LONG",
+              "old_close": "2026-07-21 03:00:00+00:00",
+              "detail_close": "2026-07-21 01:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 552.2662,
+              "detail_pnl_usdt": 548.1855
+            },
+            {
+              "entry": "1785499200000",
+              "direction": "SHORT",
+              "old_close": "2026-07-31 13:00:00+00:00",
+              "detail_close": "2026-07-31 13:15:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -93.7997,
+              "detail_pnl_usdt": -93.7997
+            },
+            {
+              "entry": "1786399200000",
+              "direction": "SHORT",
+              "old_close": "2026-08-11 01:00:00+00:00",
+              "detail_close": "2026-08-11 01:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -97.6598,
+              "detail_pnl_usdt": -97.6598
+            },
+            {
+              "entry": "1786701600000",
+              "direction": "SHORT",
+              "old_close": "2026-08-17 02:00:00+00:00",
+              "detail_close": "2026-08-17 02:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -343.8278,
+              "detail_pnl_usdt": -343.8278
+            },
+            {
+              "entry": "1787097600000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 16:00:00+00:00",
+              "detail_close": "2026-08-19 15:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1697.5907,
+              "detail_pnl_usdt": 972.7313
+            },
+            {
+              "entry": "1787796000000",
+              "direction": "LONG",
+              "old_close": "2026-08-28 16:00:00+00:00",
+              "detail_close": "2026-08-28 16:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -596.8032,
+              "detail_pnl_usdt": -596.8032
+            },
+            {
+              "entry": "1788116400000",
+              "direction": "LONG",
+              "old_close": "2026-08-30 20:00:00+00:00",
+              "detail_close": "2026-08-30 20:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -138.7288,
+              "detail_pnl_usdt": -138.7288
+            },
+            {
+              "entry": "1788300000000",
+              "direction": "SHORT",
+              "old_close": "2026-09-01 23:00:00+00:00",
+              "detail_close": "2026-09-01 23:35:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -99.6827,
+              "detail_pnl_usdt": -99.6827
+            },
+            {
+              "entry": "1788472800000",
+              "direction": "LONG",
+              "old_close": "2026-09-03 22:00:00+00:00",
+              "detail_close": "2026-09-03 22:30:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -212.0011,
+              "detail_pnl_usdt": -212.0011
+            },
+            {
+              "entry": "1789304400000",
+              "direction": "SHORT",
+              "old_close": "2026-09-13 14:00:00+00:00",
+              "detail_close": "2026-09-13 14:05:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -109.4275,
+              "detail_pnl_usdt": -109.4275
+            },
+            {
+              "entry": "1789740000000",
+              "direction": "LONG",
+              "old_close": "2026-09-18 20:00:00+00:00",
+              "detail_close": "2026-09-18 18:35:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 585.329,
+              "detail_pnl_usdt": 474.4242
+            },
+            {
+              "entry": "1790683200000",
+              "direction": "LONG",
+              "old_close": "2026-09-29 14:00:00+00:00",
+              "detail_close": "2026-09-29 14:05:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -145.7185,
+              "detail_pnl_usdt": -145.7185
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": 0.32114,
+        "source_baseline_zip_sha256": "408743237701f45b91682c1a1771386d6dbda9fe6f401473725fed06e2757e78",
+        "source_detail_zip_sha256": "92820e31ae1a0f94e7ba05b3bc02420bf03e058b3ba9e3082637527468fe3b5b"
+      }
+    },
+    "SOL": {
+      "5": {
+        "one_hour": {
+          "n": 21,
+          "return_pct": 17.28431,
+          "pnl_usd": 1728.43087,
+          "PF": 1.54689,
+          "dd_pct": 10.57657,
+          "longs": 9,
+          "shorts": 12,
+          "long_pnl": 2807.832,
+          "short_pnl": -1079.401,
+          "top3_of_all_gains": 0.648737,
+          "top3_of_net": 1.834963,
+          "stop_exit_count": 12,
+          "mean_duration_hours": 17.095,
+          "sum_funding": -7.9574
+        },
+        "five_minute": {
+          "n": 26,
+          "return_pct": 22.1352,
+          "pnl_usd": 2213.51995,
+          "PF": 1.6879,
+          "dd_pct": 9.99565,
+          "longs": 10,
+          "shorts": 16,
+          "long_pnl": 3142.724,
+          "short_pnl": -929.204,
+          "top3_of_all_gains": 0.582729,
+          "top3_of_net": 1.429846,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 13.763,
+          "sum_funding": -6.981
+        },
+        "diff": {
+          "matched_entry_timestamps": 21,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 5,
+          "changed_exit_count": 17,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779084000000",
+              "direction": "SHORT",
+              "old_close": "2026-05-20 17:00:00+00:00",
+              "detail_close": "2026-05-20 17:35:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -536.717,
+              "detail_pnl_usdt": -536.717
+            },
+            {
+              "entry": "1779757200000",
+              "direction": "SHORT",
+              "old_close": "2026-05-26 05:00:00+00:00",
+              "detail_close": "2026-05-26 05:35:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -119.3341,
+              "detail_pnl_usdt": -120.3123
+            },
+            {
+              "entry": "1780254000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-01 18:00:00+00:00",
+              "detail_close": "2026-06-01 17:00:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 164.5482,
+              "detail_pnl_usdt": 287.5203
+            },
+            {
+              "entry": "1780401600000",
+              "direction": "SHORT",
+              "old_close": "2026-06-02 15:00:00+00:00",
+              "detail_close": "2026-06-02 14:25:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 343.3326,
+              "detail_pnl_usdt": 279.5273
+            },
+            {
+              "entry": "1781380800000",
+              "direction": "LONG",
+              "old_close": "2026-06-15 12:00:00+00:00",
+              "detail_close": "2026-06-15 11:25:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1246.9379,
+              "detail_pnl_usdt": 1255.4149
+            },
+            {
+              "entry": "1782712800000",
+              "direction": "LONG",
+              "old_close": "2026-06-29 11:00:00+00:00",
+              "detail_close": "2026-06-29 10:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 228.1167,
+              "detail_pnl_usdt": 286.1863
+            },
+            {
+              "entry": "1783468800000",
+              "direction": "SHORT",
+              "old_close": "2026-07-08 02:00:00+00:00",
+              "detail_close": "2026-07-08 01:40:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 352.0788,
+              "detail_pnl_usdt": 366.9855
+            },
+            {
+              "entry": "1785117600000",
+              "direction": "LONG",
+              "old_close": "2026-07-27 04:00:00+00:00",
+              "detail_close": "2026-07-27 04:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -80.1079,
+              "detail_pnl_usdt": -80.1079
+            },
+            {
+              "entry": "1785200400000",
+              "direction": "SHORT",
+              "old_close": "2026-07-28 15:00:00+00:00",
+              "detail_close": "2026-07-28 15:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -172.0162,
+              "detail_pnl_usdt": -172.0162
+            },
+            {
+              "entry": "1786600800000",
+              "direction": "LONG",
+              "old_close": "2026-08-13 16:00:00+00:00",
+              "detail_close": "2026-08-13 16:35:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -342.6109,
+              "detail_pnl_usdt": -342.6109
+            },
+            {
+              "entry": "1786690800000",
+              "direction": "SHORT",
+              "old_close": "2026-08-18 14:00:00+00:00",
+              "detail_close": "2026-08-18 14:20:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -312.1397,
+              "detail_pnl_usdt": -312.1397
+            },
+            {
+              "entry": "1787079600000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 19:00:00+00:00",
+              "detail_close": "2026-08-19 15:40:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1274.491,
+              "detail_pnl_usdt": 1316.7589
+            },
+            {
+              "entry": "1787810400000",
+              "direction": "LONG",
+              "old_close": "2026-08-27 07:00:00+00:00",
+              "detail_close": "2026-08-27 07:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -210.0725,
+              "detail_pnl_usdt": -210.0725
+            },
+            {
+              "entry": "1788044400000",
+              "direction": "LONG",
+              "old_close": "2026-08-30 23:00:00+00:00",
+              "detail_close": "2026-08-30 23:15:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -501.5244,
+              "detail_pnl_usdt": -501.5244
+            },
+            {
+              "entry": "1789304400000",
+              "direction": "SHORT",
+              "old_close": "2026-09-14 16:00:00+00:00",
+              "detail_close": "2026-09-14 16:15:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -554.7882,
+              "detail_pnl_usdt": -554.7882
+            },
+            {
+              "entry": "1789714800000",
+              "direction": "LONG",
+              "old_close": "2026-09-18 14:00:00+00:00",
+              "detail_close": "2026-09-18 13:40:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 542.4237,
+              "detail_pnl_usdt": 389.0054
+            },
+            {
+              "entry": "1789963200000",
+              "direction": "LONG",
+              "old_close": "2026-09-21 09:00:00+00:00",
+              "detail_close": "2026-09-21 08:40:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 650.1785,
+              "detail_pnl_usdt": 592.8184
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": 1.28065,
+        "source_baseline_zip_sha256": "97e635b9d799917951415955107ef94eb67037a7a6e39cec40e43385b1648f05",
+        "source_detail_zip_sha256": "cf884908cee63666659858b1fa68fae9020419dc6e4f8e51fbfce1310e1e1e65"
+      },
+      "12p5": {
+        "one_hour": {
+          "n": 20,
+          "return_pct": 16.09282,
+          "pnl_usd": 1609.28165,
+          "PF": 1.45764,
+          "dd_pct": 11.26921,
+          "longs": 9,
+          "shorts": 11,
+          "long_pnl": 2560.814,
+          "short_pnl": -951.533,
+          "top3_of_all_gains": 0.666622,
+          "top3_of_net": 2.123288,
+          "stop_exit_count": 12,
+          "mean_duration_hours": 18.85,
+          "sum_funding": -5.5061
+        },
+        "five_minute": {
+          "n": 26,
+          "return_pct": 14.54487,
+          "pnl_usd": 1454.48678,
+          "PF": 1.39788,
+          "dd_pct": 11.21718,
+          "longs": 10,
+          "shorts": 16,
+          "long_pnl": 2813.394,
+          "short_pnl": -1358.907,
+          "top3_of_all_gains": 0.59603,
+          "top3_of_net": 2.094037,
+          "stop_exit_count": 13,
+          "mean_duration_hours": 13.76,
+          "sum_funding": -7.1781
+        },
+        "diff": {
+          "matched_entry_timestamps": 20,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 6,
+          "changed_exit_count": 16,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779084000000",
+              "direction": "SHORT",
+              "old_close": "2026-05-20 17:00:00+00:00",
+              "detail_close": "2026-05-20 17:35:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -567.1025,
+              "detail_pnl_usdt": -567.1025
+            },
+            {
+              "entry": "1779757200000",
+              "direction": "SHORT",
+              "old_close": "2026-05-26 05:00:00+00:00",
+              "detail_close": "2026-05-26 05:35:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -146.7288,
+              "detail_pnl_usdt": -146.1733
+            },
+            {
+              "entry": "1780254000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-02 15:00:00+00:00",
+              "detail_close": "2026-06-01 16:55:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 932.2367,
+              "detail_pnl_usdt": 299.1366
+            },
+            {
+              "entry": "1781380800000",
+              "direction": "LONG",
+              "old_close": "2026-06-15 12:00:00+00:00",
+              "detail_close": "2026-06-15 11:25:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1241.215,
+              "detail_pnl_usdt": 1197.6385
+            },
+            {
+              "entry": "1782712800000",
+              "direction": "LONG",
+              "old_close": "2026-06-29 11:00:00+00:00",
+              "detail_close": "2026-06-29 10:10:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 197.9303,
+              "detail_pnl_usdt": 255.9563
+            },
+            {
+              "entry": "1783468800000",
+              "direction": "SHORT",
+              "old_close": "2026-07-08 02:00:00+00:00",
+              "detail_close": "2026-07-08 01:40:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 322.3587,
+              "detail_pnl_usdt": 337.2765
+            },
+            {
+              "entry": "1785117600000",
+              "direction": "LONG",
+              "old_close": "2026-07-27 04:00:00+00:00",
+              "detail_close": "2026-07-27 04:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -110.0625,
+              "detail_pnl_usdt": -110.0625
+            },
+            {
+              "entry": "1785200400000",
+              "direction": "SHORT",
+              "old_close": "2026-07-28 15:00:00+00:00",
+              "detail_close": "2026-07-28 15:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -202.1277,
+              "detail_pnl_usdt": -202.1277
+            },
+            {
+              "entry": "1786600800000",
+              "direction": "LONG",
+              "old_close": "2026-08-13 16:00:00+00:00",
+              "detail_close": "2026-08-13 16:35:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -372.3696,
+              "detail_pnl_usdt": -372.3696
+            },
+            {
+              "entry": "1786690800000",
+              "direction": "SHORT",
+              "old_close": "2026-08-18 14:00:00+00:00",
+              "detail_close": "2026-08-18 14:20:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -342.3542,
+              "detail_pnl_usdt": -342.3542
+            },
+            {
+              "entry": "1787079600000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 19:00:00+00:00",
+              "detail_close": "2026-08-19 15:40:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1243.5165,
+              "detail_pnl_usdt": 1285.7534
+            },
+            {
+              "entry": "1787810400000",
+              "direction": "LONG",
+              "old_close": "2026-08-27 07:00:00+00:00",
+              "detail_close": "2026-08-27 07:20:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -239.9284,
+              "detail_pnl_usdt": -239.9284
+            },
+            {
+              "entry": "1788044400000",
+              "direction": "LONG",
+              "old_close": "2026-08-30 23:00:00+00:00",
+              "detail_close": "2026-08-30 23:15:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -531.1614,
+              "detail_pnl_usdt": -531.1614
+            },
+            {
+              "entry": "1789304400000",
+              "direction": "SHORT",
+              "old_close": "2026-09-14 16:00:00+00:00",
+              "detail_close": "2026-09-14 16:15:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -585.1912,
+              "detail_pnl_usdt": -585.1912
+            },
+            {
+              "entry": "1789714800000",
+              "direction": "LONG",
+              "old_close": "2026-09-18 14:00:00+00:00",
+              "detail_close": "2026-09-18 13:40:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 512.0004,
+              "detail_pnl_usdt": 358.6973
+            },
+            {
+              "entry": "1789963200000",
+              "direction": "LONG",
+              "old_close": "2026-09-21 09:00:00+00:00",
+              "detail_close": "2026-09-21 08:40:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 619.6741,
+              "detail_pnl_usdt": 562.3571
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": 0.90381,
+        "source_baseline_zip_sha256": "2075ad2c96c535b7e28f6ae91225291a17363c569309e6a3894ad877542bd902",
+        "source_detail_zip_sha256": "4e292c08fc7aad07fafc107a33c69fc4a0f5da47d2a7718dcda8f778481d227d"
+      }
+    },
+    "LINK": {
+      "5": {
+        "one_hour": {
+          "n": 22,
+          "return_pct": 36.52463,
+          "pnl_usd": 3652.46263,
+          "PF": 3.16089,
+          "dd_pct": 7.89457,
+          "longs": 11,
+          "shorts": 11,
+          "long_pnl": 4285.822,
+          "short_pnl": -633.359,
+          "top3_of_all_gains": 0.652037,
+          "top3_of_net": 0.953781,
+          "stop_exit_count": 12,
+          "mean_duration_hours": 13.955,
+          "sum_funding": -31.8321
+        },
+        "five_minute": {
+          "n": 22,
+          "return_pct": 22.67047,
+          "pnl_usd": 2267.04706,
+          "PF": 2.34366,
+          "dd_pct": 7.93697,
+          "longs": 11,
+          "shorts": 11,
+          "long_pnl": 2976.998,
+          "short_pnl": -709.951,
+          "top3_of_all_gains": 0.579977,
+          "top3_of_net": 1.011618,
+          "stop_exit_count": 12,
+          "mean_duration_hours": 13.311,
+          "sum_funding": -26.431
+        },
+        "diff": {
+          "matched_entry_timestamps": 22,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 0,
+          "changed_exit_count": 17,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779919200000",
+              "direction": "SHORT",
+              "old_close": "2026-05-28 04:00:00+00:00",
+              "detail_close": "2026-05-28 03:55:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 591.0209,
+              "detail_pnl_usdt": 498.1848
+            },
+            {
+              "entry": "1781460000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-14 19:00:00+00:00",
+              "detail_close": "2026-06-14 19:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -78.9112,
+              "detail_pnl_usdt": -78.9112
+            },
+            {
+              "entry": "1783490400000",
+              "direction": "SHORT",
+              "old_close": "2026-07-08 08:00:00+00:00",
+              "detail_close": "2026-07-08 08:10:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -99.0729,
+              "detail_pnl_usdt": -98.1494
+            },
+            {
+              "entry": "1783663200000",
+              "direction": "LONG",
+              "old_close": "2026-07-10 06:00:00+00:00",
+              "detail_close": "2026-07-10 06:20:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -56.2258,
+              "detail_pnl_usdt": -55.7013
+            },
+            {
+              "entry": "1784401200000",
+              "direction": "LONG",
+              "old_close": "2026-07-21 00:00:00+00:00",
+              "detail_close": "2026-07-20 18:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 608.8423,
+              "detail_pnl_usdt": 620.5105
+            },
+            {
+              "entry": "1784926800000",
+              "direction": "SHORT",
+              "old_close": "2026-07-25 00:00:00+00:00",
+              "detail_close": "2026-07-25 00:25:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -60.4279,
+              "detail_pnl_usdt": -60.4279
+            },
+            {
+              "entry": "1785834000000",
+              "direction": "SHORT",
+              "old_close": "2026-08-06 15:00:00+00:00",
+              "detail_close": "2026-08-06 15:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -312.108,
+              "detail_pnl_usdt": -312.108
+            },
+            {
+              "entry": "1786197600000",
+              "direction": "LONG",
+              "old_close": "2026-08-11 22:00:00+00:00",
+              "detail_close": "2026-08-11 14:55:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 1016.0941,
+              "detail_pnl_usdt": 465.8092
+            },
+            {
+              "entry": "1786665600000",
+              "direction": "LONG",
+              "old_close": "2026-08-15 03:00:00+00:00",
+              "detail_close": "2026-08-15 02:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1858.7131,
+              "detail_pnl_usdt": 1174.6905
+            },
+            {
+              "entry": "1786978800000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 14:00:00+00:00",
+              "detail_close": "2026-08-19 13:05:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 278.7014,
+              "detail_pnl_usdt": 335.3406
+            },
+            {
+              "entry": "1787702400000",
+              "direction": "SHORT",
+              "old_close": "2026-08-26 00:00:00+00:00",
+              "detail_close": "2026-08-26 00:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -101.3301,
+              "detail_pnl_usdt": -101.3301
+            },
+            {
+              "entry": "1787796000000",
+              "direction": "LONG",
+              "old_close": "2026-08-27 03:00:00+00:00",
+              "detail_close": "2026-08-27 03:15:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -104.869,
+              "detail_pnl_usdt": -104.869
+            },
+            {
+              "entry": "1787950800000",
+              "direction": "SHORT",
+              "old_close": "2026-08-28 22:00:00+00:00",
+              "detail_close": "2026-08-28 22:40:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -111.633,
+              "detail_pnl_usdt": -111.633
+            },
+            {
+              "entry": "1788458400000",
+              "direction": "LONG",
+              "old_close": "2026-09-03 20:00:00+00:00",
+              "detail_close": "2026-09-03 19:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 180.9716,
+              "detail_pnl_usdt": 165.6433
+            },
+            {
+              "entry": "1788757200000",
+              "direction": "LONG",
+              "old_close": "2026-09-07 07:00:00+00:00",
+              "detail_close": "2026-09-07 07:40:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -7.7642,
+              "detail_pnl_usdt": -7.7642
+            },
+            {
+              "entry": "1788962400000",
+              "direction": "SHORT",
+              "old_close": "2026-09-09 16:00:00+00:00",
+              "detail_close": "2026-09-09 15:15:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 188.1264,
+              "detail_pnl_usdt": 202.8757
+            },
+            {
+              "entry": "1790276400000",
+              "direction": "LONG",
+              "old_close": "2026-09-25 16:00:00+00:00",
+              "detail_close": "2026-09-25 14:05:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 564.8802,
+              "detail_pnl_usdt": 435.9552
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": 0.62069,
+        "source_baseline_zip_sha256": "f5e12f509d8bb4e153ddad28ff9026697b4319f074f07b73c3de54ee6f3f9b26",
+        "source_detail_zip_sha256": "754470f1b5efce837da4800e951e35b81a7558f5bd6b7912d03eb096d6d9001d"
+      },
+      "12p5": {
+        "one_hour": {
+          "n": 22,
+          "return_pct": 38.68077,
+          "pnl_usd": 3868.07723,
+          "PF": 2.87272,
+          "dd_pct": 9.85887,
+          "longs": 11,
+          "shorts": 11,
+          "long_pnl": 4823.277,
+          "short_pnl": -955.2,
+          "top3_of_all_gains": 0.664177,
+          "top3_of_net": 1.018837,
+          "stop_exit_count": 12,
+          "mean_duration_hours": 14.227,
+          "sum_funding": -31.6242
+        },
+        "five_minute": {
+          "n": 22,
+          "return_pct": 17.75237,
+          "pnl_usd": 1775.23714,
+          "PF": 1.86318,
+          "dd_pct": 9.8951,
+          "longs": 11,
+          "shorts": 11,
+          "long_pnl": 2801.465,
+          "short_pnl": -1026.228,
+          "top3_of_all_gains": 0.601677,
+          "top3_of_net": 1.298722,
+          "stop_exit_count": 12,
+          "mean_duration_hours": 13.231,
+          "sum_funding": -25.8132
+        },
+        "diff": {
+          "matched_entry_timestamps": 22,
+          "baseline_exclusive": 0,
+          "5m_exclusive": 0,
+          "changed_exit_count": 17,
+          "changed_exit_receipts": [
+            {
+              "entry": "1779919200000",
+              "direction": "SHORT",
+              "old_close": "2026-05-28 04:00:00+00:00",
+              "detail_close": "2026-05-28 03:55:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 560.0868,
+              "detail_pnl_usdt": 467.4653
+            },
+            {
+              "entry": "1781460000000",
+              "direction": "SHORT",
+              "old_close": "2026-06-14 19:00:00+00:00",
+              "detail_close": "2026-06-14 19:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -108.9547,
+              "detail_pnl_usdt": -108.0184
+            },
+            {
+              "entry": "1783490400000",
+              "direction": "SHORT",
+              "old_close": "2026-07-08 08:00:00+00:00",
+              "detail_close": "2026-07-08 08:10:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -125.8465,
+              "detail_pnl_usdt": -124.6783
+            },
+            {
+              "entry": "1783663200000",
+              "direction": "LONG",
+              "old_close": "2026-07-10 06:00:00+00:00",
+              "detail_close": "2026-07-10 06:20:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -83.275,
+              "detail_pnl_usdt": -82.4999
+            },
+            {
+              "entry": "1784401200000",
+              "direction": "LONG",
+              "old_close": "2026-07-21 00:00:00+00:00",
+              "detail_close": "2026-07-20 18:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 563.7348,
+              "detail_pnl_usdt": 575.3718
+            },
+            {
+              "entry": "1784926800000",
+              "direction": "SHORT",
+              "old_close": "2026-07-25 00:00:00+00:00",
+              "detail_close": "2026-07-25 00:25:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -90.0695,
+              "detail_pnl_usdt": -89.3875
+            },
+            {
+              "entry": "1785834000000",
+              "direction": "SHORT",
+              "old_close": "2026-08-06 15:00:00+00:00",
+              "detail_close": "2026-08-06 15:30:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -337.784,
+              "detail_pnl_usdt": -335.2184
+            },
+            {
+              "entry": "1786197600000",
+              "direction": "LONG",
+              "old_close": "2026-08-11 22:00:00+00:00",
+              "detail_close": "2026-08-11 14:55:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 949.6275,
+              "detail_pnl_usdt": 420.2023
+            },
+            {
+              "entry": "1786665600000",
+              "direction": "LONG",
+              "old_close": "2026-08-15 03:00:00+00:00",
+              "detail_close": "2026-08-15 02:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 1827.2987,
+              "detail_pnl_usdt": 1129.7156
+            },
+            {
+              "entry": "1786978800000",
+              "direction": "LONG",
+              "old_close": "2026-08-19 20:00:00+00:00",
+              "detail_close": "2026-08-19 13:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 1164.0138,
+              "detail_pnl_usdt": 305.0707
+            },
+            {
+              "entry": "1787702400000",
+              "direction": "SHORT",
+              "old_close": "2026-08-26 00:00:00+00:00",
+              "detail_close": "2026-08-26 00:50:00+00:00",
+              "old_exit_reason": "stop_loss",
+              "detail_exit_reason": "stop_loss",
+              "old_pnl_usdt": -131.3924,
+              "detail_pnl_usdt": -131.3924
+            },
+            {
+              "entry": "1787796000000",
+              "direction": "LONG",
+              "old_close": "2026-08-27 03:00:00+00:00",
+              "detail_close": "2026-08-27 03:15:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -134.8045,
+              "detail_pnl_usdt": -134.8045
+            },
+            {
+              "entry": "1787950800000",
+              "direction": "SHORT",
+              "old_close": "2026-08-28 22:00:00+00:00",
+              "detail_close": "2026-08-28 22:40:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -141.701,
+              "detail_pnl_usdt": -141.701
+            },
+            {
+              "entry": "1788458400000",
+              "direction": "LONG",
+              "old_close": "2026-09-03 20:00:00+00:00",
+              "detail_close": "2026-09-03 19:05:00+00:00",
+              "old_exit_reason": "long_rr_structure_take_profit",
+              "detail_exit_reason": "long_rr_structure_take_profit",
+              "old_pnl_usdt": 150.821,
+              "detail_pnl_usdt": 135.5042
+            },
+            {
+              "entry": "1788757200000",
+              "direction": "LONG",
+              "old_close": "2026-09-07 07:00:00+00:00",
+              "detail_close": "2026-09-07 07:40:00+00:00",
+              "old_exit_reason": "trailing_stop_loss",
+              "detail_exit_reason": "trailing_stop_loss",
+              "old_pnl_usdt": -37.773,
+              "detail_pnl_usdt": -37.773
+            },
+            {
+              "entry": "1788962400000",
+              "direction": "SHORT",
+              "old_close": "2026-09-09 16:00:00+00:00",
+              "detail_close": "2026-09-09 15:15:00+00:00",
+              "old_exit_reason": "short_rr_structure_take_profit",
+              "detail_exit_reason": "short_rr_structure_take_profit",
+              "old_pnl_usdt": 158.2835,
+              "detail_pnl_usdt": 173.0439
+            },
+            {
+              "entry": "1790276400000",
+              "direction": "LONG",
+              "old_close": "2026-09-25 16:00:00+00:00",
+              "detail_close": "2026-09-25 12:20:00+00:00",
+              "old_exit_reason": "large_profit_50pct_giveback",
+              "detail_exit_reason": "large_profit_50pct_giveback",
+              "old_pnl_usdt": 534.4368,
+              "detail_pnl_usdt": 600.4515
+            }
+          ]
+        },
+        "detail_to_baseline_gain_ratio": 0.45895,
+        "source_baseline_zip_sha256": "44eaa154f60ae3257b95a841880e8f25cc47bd746fc83f69881ffb36be037ea8",
+        "source_detail_zip_sha256": "0ff5ec7dab5fd123529aba757f87b94ab382ddb2326d7c2126edfd3eb0cc3322"
+      }
+    }
+  },
+  "frozen_gate_per_coin": {
+    "ETH": false,
+    "SOL": true,
+    "LINK": false
+  },
+  "frozen_gate_at_least_2_of_3": false,
+  "limitations": [
+    "5m candles do not reveal intra-5m order path",
+    "limit fills approximated by Freqtrade no orderbook",
+    "NO explicit extra slippage added",
+    "full Freqtrade lookahead-analysis and recursive-analysis NOT performed",
+    "original near-full stake 2x exposure not 1pct-equity risk sizing",
+    "one regime not future prospective OOS",
+    "no real or simulated PAPER orders opened"
+  ]
+}

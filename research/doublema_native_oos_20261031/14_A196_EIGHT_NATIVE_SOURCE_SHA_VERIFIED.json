@@ -1,0 +1,19 @@
+{
+  "schema": "EMBER_A196_ORIGINAL_5M_NATIVE_8_ZIP_SHA256",
+  "source_native_run": 41148069316,
+  "source_native_artifact_id": 13022036458,
+  "source_native_artifact_digest": "a2feb855954701193f82895820dc00c2dfa64c1a7ee270bab56ef9633bda0339",
+  "source_causal_run": 41148182095,
+  "source_causal_artifact_id": 13021044804,
+  "source_causal_artifact_digest": "1fea6180ff6047470e1f083c8ddcb305fdfea6aedb54075a24f1ef5791553f61",
+  "native_zip_sha256": {
+    "BTC-5": "ff7a396bbd3e7594292995ef5ef06350c7d8c7ad74c75b089d7b55da1b93a338",
+    "BTC-12p5": "e2fd09132a8d06b55eb800bedd666b2b7a42117d5d49cc62a7c6ca418e489c0c",
+    "ETH-5": "b1e34fadc5fc7c5216e59c141e394fd509710e4e1ccffc4f85d31145b87ee1c3",
+    "ETH-12p5": "92820e31ae1a0f94e7ba05b3bc02420bf03e058b3ba9e3082637527468fe3b5b",
+    "SOL-5": "cf884908cee63666659858b1fa68fae9020419dc6e4f8e51fbfce1310e1e1e65",
+    "SOL-12p5": "4e292c08fc7aad07fafc107a33c69fc4a0f5da47d2a7718dcda8f778481d227d",
+    "LINK-5": "754470f1b5efce837da4800e951e35b81a7558f5bd6b7912d03eb096d6d9001d",
+    "LINK-12p5": "0ff5ec7dab5fd123529aba757f87b94ab382ddb2326d7c2126edfd3eb0cc3322"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "schema": "EMBER_A196_REAL_BINANCE_5M_DETAIL",
+  "begin": "2026-05-01",
+  "end_exclusive": "2026-10-01",
+  "symbols": {
+    "BTCUSDT": {
+      "candles": 44064,
+      "sources": {
+        "2026-05": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-05.zip",
+          "csv_sha256": "780e4e56138eeed3970e9d69a5feedbe7c52fe02322564ded858693fafc9ea1e",
+          "zip_sha256": "b1a73378796bb62084c32ca5865903beeaf87d521d950d5e7776343f682dea93",
+          "candles": 8928
+        },
+        "2026-06": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-06.zip",
+          "csv_sha256": "401ef34309db28705a30b23576510ea248f6fa16384f8e27322e75fa5cd18928",
+          "zip_sha256": "782c555963c852ca768335de21d5743147e5d50bff449600f8fceb9ebe5273de",
+          "candles": 8640
+        },
+        "2026-07": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-07.zip",
+          "csv_sha256": "565ed25f0e9a4274e93f22dcd22b5ef4095d4c01a382890127947833d646fe0f",
+          "zip_sha256": "ec750f7aa69c8f842fa1464a90ad4aa92452cfa767df9e8d70dc484e466c8fc3",
+          "candles": 8928
+        },
+        "2026-08": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-08.zip",
+          "csv_sha256": "2d40e3cfcbcc7d0d4b5463606c1effa9700645044f13706f618684793a7bfbd2",
+          "zip_sha256": "14fd408e5d2902665c66b701e861b173568b66399e3fa462b94c766d209567d1",
+          "candles": 8928
+        },
+        "2026-09": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+          "csv_sha256": "352ed47646f15de25b327958b7fc0ccc767b6fbf5586fe9041d947ca7844fb8c",
+          "zip_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26",
+          "candles": 8640
+        }
+      },
+      "first_ms": 1777593600000,
+      "last_ms": 1790812500000,
+      "file": "BTC_USDT_USDT-5m-futures.json"
+    },
+    "ETHUSDT": {
+      "candles": 44064,
+      "sources": {
+        "2026-05": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-05.zip",
+          "csv_sha256": "53ccaf0c7196bf3b2dfeccfff956828ed034dc195079c7501bc9b400b5fd85e3",
+          "zip_sha256": "3a642e9db105c9002210fc4d7f5a99a527d6b52d63823ae17076c1e2d2578eda",
+          "candles": 8928
+        },
+        "2026-06": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-06.zip",
+          "csv_sha256": "b238849627530f31687f4308a98852f3fcffa393683c8f74fe54581d87b98256",
+          "zip_sha256": "f26819283e11870b0b206acea9e084bcd7e3c6a5fb2abb8800ac5a424959e49d",
+          "candles": 8640
+        },
+        "2026-07": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-07.zip",
+          "csv_sha256": "80044e4f8f15c31a7519b468e23c7d8b66e0248e2045216b7d2b2736c239fe51",
+          "zip_sha256": "2e9ba157f21fbcb97f108dd263d572cd0b4d6cc1db7cd54446f762f4ce3e6dda",
+          "candles": 8928
+        },
+        "2026-08": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-08.zip",
+          "csv_sha256": "9c17f4a357326c7ff54abe9ddf0297c305f299d2ac6e93834d04df6b420d49c4",
+          "zip_sha256": "c7ac44cb1ac58dd231b1a94c9d68907e2b3a8079dbf2dd8a5e744a6234766d47",
+          "candles": 8928
+        },
+        "2026-09": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-09.zip",
+          "csv_sha256": "b83b1a75024d51f8b34b1edc69e4d393e913224393fd29bd095879619af490d7",
+          "zip_sha256": "143312487ffcc01c174156343fbf05ea48cbfa4e4602937caafb3e0ad3dbca9a",
+          "candles": 8640
+        }
+      },
+      "first_ms": 1777593600000,
+      "last_ms": 1790812500000,
+      "file": "ETH_USDT_USDT-5m-futures.json"
+    },
+    "SOLUSDT": {
+      "candles": 44064,
+      "sources": {
+        "2026-05": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-05.zip",
+          "csv_sha256": "528f7f565c8d67376a45d76badc88890fc3098e09482446d02a4f686b539d117",
+          "zip_sha256": "c878f5d988b90a6562259c9b98d709946c3c48b55b7e9c08affebe967238c3e6",
+          "candles": 8928
+        },
+        "2026-06": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-06.zip",
+          "csv_sha256": "2ee3ed1b8ec507bd56569e9bf4fe9f4cd6f28bdc8ae60b3800092faf006aa1dd",
+          "zip_sha256": "b1586ec5b540eb38bde1b39d3033f6cff16bb7e62a86f4775401a6134133acc3",
+          "candles": 8640
+        },
+        "2026-07": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-07.zip",
+          "csv_sha256": "d076c41ed711c0ba3069eb7d1183271ebcb3f08fc3cf02c88567b3999f34e84c",
+          "zip_sha256": "3e23ff1f6b8e99bfa5220b88b17d6397cec91d666a6bf50e5469080d4aedf11f",
+          "candles": 8928
+        },
+        "2026-08": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-08.zip",
+          "csv_sha256": "a55e6d3467b7953af014d19b9009d5452284c4a399b573c21cb30c8787b182f6",
+          "zip_sha256": "45a0adfe5568c062a1f218b3e1761a9637f4d7801db70a6ec321dfb389b08d32",
+          "candles": 8928
+        },
+        "2026-09": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-09.zip",
+          "csv_sha256": "83adfa31de378a36fdd3cbe7d420d689fceb1d8ce3e1d3c99988ae00888413a7",
+          "zip_sha256": "9b71841a30ba4e98cab7c3591240dcfccba0efde6889785b586f9af1e84079fe",
+          "candles": 8640
+        }
+      },
+      "first_ms": 1777593600000,
+      "last_ms": 1790812500000,
+      "file": "SOL_USDT_USDT-5m-futures.json"
+    },
+    "LINKUSDT": {
+      "candles": 44064,
+      "sources": {
+        "2026-05": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-05.zip",
+          "csv_sha256": "60d7f474ee3e5e7d8c054c1d960692c8c4b19d512ae73d2662f244533979348a",
+          "zip_sha256": "c0e69b6238a7e4a7a57589585902a44a71a3aa362256c39460875a0d4e7e42cb",
+          "candles": 8928
+        },
+        "2026-06": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-06.zip",
+          "csv_sha256": "3591465482196ee367b26eef40272d7fd8bb2011de75d51c96bab7edcae1a8fe",
+          "zip_sha256": "540c00109a81ea0e018ff110e7f75c619e5801d8c8cf8110f266ae493b2a9bec",
+          "candles": 8640
+        },
+        "2026-07": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-07.zip",
+          "csv_sha256": "a39965f25db3a181745e4d2f3d8c7f84445d54d4af0a6788ac1ea9e856743f04",
+          "zip_sha256": "ccf58557db3264763552fc4dfffe83e9de687ab3cbeb8d3442b1872adf24dabc",
+          "candles": 8928
+        },
+        "2026-08": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-08.zip",
+          "csv_sha256": "390a0508161af29616bc04ee04cc5f02e5db699ce4023588a33c5922708ae41e",
+          "zip_sha256": "346ab6faa2bea53aba539484aa09f7feef889b323e9be3ade43fa78f509ec023",
+          "candles": 8928
+        },
+        "2026-09": {
+          "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-09.zip",
+          "csv_sha256": "8e6d49b5357a92be87c6bd0d3cb6e512aacb2a789ecd9df4d6d3cee3834d4be8",
+          "zip_sha256": "69bf3e217716d7af3cbfe7c38258604bae18669a63ecc35444226b6f2cac8c08",
+          "candles": 8640
+        }
+      },
+      "first_ms": 1777593600000,
+      "last_ms": 1790812500000,
+      "file": "LINK_USDT_USDT-5m-futures.json"
+    }
+  }
+}
