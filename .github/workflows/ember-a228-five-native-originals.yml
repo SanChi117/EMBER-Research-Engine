@@ -1,0 +1,48 @@
+name: A228 FIVE Frozen Original Freqtrade USD-M Futures Replays
+
+on:
+  push:
+    branches:
+      - 'research/a228-five-original-native-freqtrade-replay-20261031'
+    paths:
+      - 'research/a228_five_original/**'
+      - '.github/workflows/ember-a228-five-native-originals.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay_five_originals_only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 62
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install native Freqtrade and published strategy dependencies (NO live trading)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'freqtrade>=2026.4,<2026.11' technical pandas pyarrow
+          python -m freqtrade --version
+          python -m pip freeze > research/a228_five_original/native_pip_freeze.txt
+      - name: SHA verify five untouched original strategies and genuine Binance monthly 5m, mark, funding
+        run: python research/a228_five_original/a228_prepare_pinned_originals_and_real_futures.py
+      - name: Execute all five unchanged source classes on 2025 and 2026, base/stress
+        run: python research/a228_five_original/a228_run_original_freqtrade_five.py
+      - name: Preserve original frozen source receipts, all native trade ledgers, failures and runtimes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a228-five-original-usdm-native-freqtrade-2025-26-verified-results
+          path: |
+            research/a228_five_original/native_pip_freeze.txt
+            research/a228_five_original/generated/A228_ORIGINAL_AND_MARKET_RECEIPTS.json
+            research/a228_five_original/generated/native_backtests/**
+          if-no-files-found: warn
+          compression-level: 6
+          retention-days: 30
