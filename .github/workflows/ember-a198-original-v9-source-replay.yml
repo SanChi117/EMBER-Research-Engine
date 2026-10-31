@@ -4,6 +4,7 @@ on:
     branches: [research/a198-sol-pullback-v9-original-signal-20261031]
     paths:
       - ".github/workflows/ember-a198-original-v9-source-replay.yml"
+      - "research/backup_candidates_20261031/a198_v9_source_signals_proxy_replay.py"
   workflow_dispatch:
 permissions:
   contents: read
