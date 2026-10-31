@@ -1,3 +1,9 @@
+> **АКТУАЛЬНЫЙ СТАТУС ПРОЕКТА — ТОЛЬКО [RESEARCH_STATUS_CANONICAL.md](RESEARCH_STATUS_CANONICAL.md).** Текущий README преимущественно описывает старый технический HYBRID engine; статус его юнит/CI PASS не означает прибыльной стратегии.
+>
+> Мандат [LOCKED](RESEARCH_MANDATE_LOCKED.md) и запреты пользователя не изменены. Этот файл хранится только для проверки старых выводов, не как рекомендация к PAPER/live.
+
+---
+
 > **🔒 ОБЯЗАТЕЛЬНЫЙ И НЕИЗМЕННЫЙ МАНДАТ ИССЛЕДОВАНИЯ:** прежде чем начинать новый цикл стратегий, прочитай [RESEARCH_MANDATE_LOCKED.md](RESEARCH_MANDATE_LOCKED.md) и [машинный контракт](config/research_mandate.lock.json). Основная цель — найти доказуемо прибыльные ORIGINAL-стратегии Binance **USDT-M FUTURES**. Не переключать на Spot и не менять цели без явного решения пользователя. A214–A216 не использовать.
 
 # EMBER Research Engine 0.2.0
