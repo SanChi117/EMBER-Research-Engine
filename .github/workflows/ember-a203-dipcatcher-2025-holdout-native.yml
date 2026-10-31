@@ -1,0 +1,102 @@
+name: "EMBER A203 independent original dip_catcher 2025 May-Sep 4-pair 2-fee native holdout"
+on:
+  push:
+    branches: [research/a203-2025-holdout-original-native-screen-20261031]
+    paths:
+      - ".github/workflows/ember-a203-2025-holdout-original-5m-native.yml"
+      - "research/native_candidate_screen_20261031/a203_*.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-dipcatcher-a203:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned native Freqtrade, exact original source, and dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4' technical 'pandas-ta==0.4.71b0'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git init -q /tmp/a203-original
+          git -C /tmp/a203-original -c credential.helper= fetch -q --depth 1 https://github.com/viktors1982/trading.git e572140b1b8cb550cb244c67d363087b81bd4ab8
+          git -C /tmp/a203-original checkout -q --detach FETCH_HEAD
+          test "$(git -C /tmp/a203-original rev-parse HEAD)" = e572140b1b8cb550cb244c67d363087b81bd4ab8
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('/tmp/a203-original')
+          p=root/'freqtrade/strategies/dip_catcher.py'
+          raw=p.read_bytes()
+          gitblob=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+          assert gitblob=='76ab2b3f91dc7beaa0be8021a245caa2b3f4186f',gitblob
+          out=Path('a203-2025-holdout');out.mkdir(exist_ok=True)
+          (root/'user_data/backtest_results').mkdir(parents=True,exist_ok=True)
+          for sym in ('BTC','ETH','SOL','LINK'):
+              cfg={'bot_name':f'A203_dip_catcher_{sym}_OFFLINE_RESEARCH_ONLY',
+                'dry_run':True,'dry_run_wallet':1000,
+                'stake_currency':'USDT','stake_amount':100,'tradable_balance_ratio':0.99,
+                'max_open_trades':1,'trading_mode':'futures','margin_mode':'isolated',
+                'exchange':{'name':'binance','key':'','secret':'','password':'',
+                    'ccxt_config':{},'ccxt_async_config':{},'pair_whitelist':[f'{sym}/USDT:USDT'],'pair_blacklist':[]},
+                'pairlists':[{'method':'StaticPairList'}],
+                'telegram':{'enabled':False,'token':'','chat_id':'0'},
+                'api_server':{'enabled':False,'listen_ip_address':'127.0.0.1','listen_port':8080,
+                              'username':'a203','password':'offline-no-api'}}
+              (out/f'config-{sym}.json').write_text(json.dumps(cfg,indent=2))
+          print('A203_PINNED_AUTHOR_DIPCATCHER_SOURCE_VALIDATED',gitblob)
+          PY
+      - name: Download independent genuine 2025 source with SHA and contiguous 5m mark funding checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a203_prepare_2025_holdout_source.py \
+            --datadir a203-2025-holdout/data 2>&1 | tee a203-2025-holdout/genuine-2025-data-source.log
+          grep -Fq A203_ALL_4_REAL_2025_BINANCE_MARK_FUNDING_5M_1H_CONTINUITY_PASS a203-2025-holdout/genuine-2025-data-source.log
+      - name: Eight original native Freqtrade source-pinned 5m backtests
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in BTC ETH SOL LINK; do
+            for scenario in 5 12p5; do
+              if [ "$scenario" = '5' ]; then rate=0.0005; else rate=0.00125; fi
+              echo "A203_ORIGINAL_NATIVE_BEGIN dip_catcher $sym $scenario"
+              timeout 480s python research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
+                -c "a203-2025-holdout/config-$sym.json" \
+                --userdir /tmp/a203-original/user_data \
+                --datadir "$GITHUB_WORKSPACE/a203-2025-holdout/data" \
+                --strategy-path /tmp/a203-original/freqtrade/strategies \
+                --strategy dip_catcher --timeframe 5m \
+                --timerange 20250513-20251001 --data-format-ohlcv json \
+                --fee "$rate" --export trades --cache none \
+                2>&1 | tee "a203-2025-holdout/dip_catcher-$sym-fee$scenario.log"
+              z="$(find /tmp/a203-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              test -n "$z" && test -s "$z"
+              cp "$z" "a203-2025-holdout/dip_catcher-$sym-fee$scenario.zip"
+              rm -f /tmp/a203-original/user_data/backtest_results/backtest-result*.zip
+              echo "A203_ORIGINAL_NATIVE_COMPLETE dip_catcher $sym $scenario"
+            done
+          done
+      - name: Verify all eight native trade archives and predeclared gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a203_verify_2025_holdout_native.py --results a203-2025-holdout 2>&1 | tee a203-2025-holdout/A203-native-verification.log
+          grep -Fq A203_EIGHT_TRUE_NATIVE_ORIGINAL_SOURCE_TRADE_ARCHIVES_VERIFIED a203-2025-holdout/A203-native-verification.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A203-DipCatcher-8-Original-Futures-Native-Freqtrade-Real-Binance
+          path: |
+            a203-2025-holdout/*.log
+            a203-2025-holdout/*.zip
+            a203-2025-holdout/A203_EIGHT_NATIVE_DIPCATCHER_TRADE_RECEIPTS_VERIFIED.json
+            a203-2025-holdout/data/A203_2025_SOURCE_SHA_MANIFEST.json
+          retention-days: 30
