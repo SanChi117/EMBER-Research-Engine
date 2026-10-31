@@ -1,0 +1,103 @@
+{
+  "cycle": "A240",
+  "scope": "Original Double MA author BTC ETH shared wallet, 1 position, Freqtrade 2026.4",
+  "status": "NATIVE_HISTORICAL_AUTHOR_ACCOUNT_COMPLETE_NOT_VERIFIED",
+  "workflow_run": 41244491757,
+  "workflow_commit": "f02419a5f94d372f92c95e98c42c918c82855476",
+  "strategy_original": {
+    "repo": "MirrorNew/2026DoubleMaFuturesStrategy",
+    "commit": "40af5c7c1c44253766428cfb06babf22f9817aa4",
+    "git_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6"
+  },
+  "original_config_git_blob": "b16e6695673c58d8b7a712fd329994b3a85313f4",
+  "account": {
+    "wallet_usdt": 10000,
+    "stake_amount": "unlimited",
+    "max_open_trades": 1,
+    "tradable_balance_ratio": 1,
+    "pairs": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT"
+    ],
+    "strategy_target_stake_usdt": 10000,
+    "leverage_default": 2
+  },
+  "periods": {
+    "2025": "[2025-04-01,2026-01-01)",
+    "2026": "[2026-05-13,2026-10-01)"
+  },
+  "fees_each_side": {
+    "base": 0.0005,
+    "stress": 0.00125
+  },
+  "input_data": "Genuine Binance mainnet USD-M 1h/4h/1d, mark and funding plus 5m detail, SHA receipts saved in artifact",
+  "records": [
+    {
+      "native_max_drawdown_account": 0.19494898668897165,
+      "native_profit_factor": 1.252483646675808,
+      "pair_trade_counts": {
+        "BTC/USDT:USDT": 37,
+        "ETH/USDT:USDT": 20
+      },
+      "period": "2025",
+      "return_pct_of_author_10000": 17.920391459899996,
+      "scenario": "base",
+      "trade_count": 57,
+      "drawdown_percent_of_account": 19.494898668897164
+    },
+    {
+      "native_max_drawdown_account": 0.2143366386127443,
+      "native_profit_factor": 1.0047554165980856,
+      "pair_trade_counts": {
+        "BTC/USDT:USDT": 37,
+        "ETH/USDT:USDT": 20
+      },
+      "period": "2025",
+      "return_pct_of_author_10000": 0.3788097674000002,
+      "scenario": "stress",
+      "trade_count": 57,
+      "drawdown_percent_of_account": 21.43366386127443
+    },
+    {
+      "native_max_drawdown_account": 0.22283958388307687,
+      "native_profit_factor": 0.9842853117764634,
+      "pair_trade_counts": {
+        "BTC/USDT:USDT": 18,
+        "ETH/USDT:USDT": 27
+      },
+      "period": "2026",
+      "return_pct_of_author_10000": -0.9077781948000003,
+      "scenario": "base",
+      "trade_count": 45,
+      "drawdown_percent_of_account": 22.28395838830769
+    },
+    {
+      "native_max_drawdown_account": 0.30070209093009403,
+      "native_profit_factor": 0.7890948567973523,
+      "pair_trade_counts": {
+        "BTC/USDT:USDT": 18,
+        "ETH/USDT:USDT": 27
+      },
+      "period": "2026",
+      "return_pct_of_author_10000": -13.967361021400002,
+      "scenario": "stress",
+      "trade_count": 45,
+      "drawdown_percent_of_account": 30.070209093009403
+    }
+  ],
+  "artifact": {
+    "id": 13059132102,
+    "name": "a240-doublema-original-author-single-btc-eth-wallet",
+    "sha256": "sha256:d5f3b450895ec44909450ea7c1e8e7d46bae5acbbf792a4ff9fd3d68b627ab77",
+    "bytes": 559468
+  },
+  "limitations": [
+    "2025 pre-publication in-sample, 2026 post-publication but already studied; not untouched OOS",
+    "Orderbook/spread and fill queue not independently replicated",
+    "Exchange precision and 0.5% maintenance tier from A195 offline static fixture, not authoritative Binance tiers/liquidations",
+    "Original class custom stakes 10000, 2x leverage; liquidation/mark stop path needs independent verification",
+    "Native Freqtrade 5m OHLC fills, fee stress not all true execution expenses",
+    "Trade ZIPs and detailed PnL reconciliation in artifacts; this JSON quotes job stdout summary not additional independent re-run"
+  ],
+  "verified": false
+}
