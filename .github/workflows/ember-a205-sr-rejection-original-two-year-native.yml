@@ -1,0 +1,123 @@
+name: "EMBER A205 original SR rejection scalper 5m 2025+2026 two-fee 16 native source tests"
+on:
+  push:
+    branches: [research/a205-original-sr-rejection-5m-independent-20261031]
+    paths:
+      - ".github/workflows/ember-a205-sr-rejection-original-two-year-native.yml"
+      - "research/native_candidate_screen_20261031/a205_*.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-sr-a205:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pin exact author source and real Freqtrade engine, make read-only research wallet configurations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4' technical
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git init -q /tmp/a205-original
+          git -C /tmp/a205-original -c credential.helper= fetch -q --depth 1 https://github.com/Meszqt/freqtrade-test.git 7062cdd465f30acb480f6ad8f678f958a8a0e554
+          git -C /tmp/a205-original checkout -q --detach FETCH_HEAD
+          test "$(git -C /tmp/a205-original rev-parse HEAD)" = 7062cdd465f30acb480f6ad8f678f958a8a0e554
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/a205-original')
+          raw=(root/'user_data/strategies/AggressiveSupportResistanceScalper.py').read_bytes()
+          blob=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+          assert blob=='4e3084865a95a694be5178fe60d9130ecd24c002',blob
+          out=Path('a205-sr');out.mkdir(exist_ok=True)
+          (root/'user_data/backtest_results').mkdir(parents=True,exist_ok=True)
+          for sym in ('BTC','ETH','SOL','LINK'):
+              cfg={'bot_name':f'A205_SR_{sym}_OFFLINE_RESEARCH_NO_ORDERS',
+                'dry_run':True,'dry_run_wallet':1000,
+                'stake_currency':'USDT','stake_amount':100,
+                'tradable_balance_ratio':0.99,'max_open_trades':1,
+                'trading_mode':'futures','margin_mode':'isolated',
+                'exchange':{'name':'binance','key':'','secret':'','password':'',
+                    'ccxt_config':{},'ccxt_async_config':{},
+                    'pair_whitelist':[f'{sym}/USDT:USDT'],'pair_blacklist':[]},
+                'pairlists':[{'method':'StaticPairList'}],
+                'telegram':{'enabled':False,'token':'','chat_id':'0'},
+                'api_server':{'enabled':False,'listen_ip_address':'127.0.0.1',
+                              'listen_port':8080,'username':'a205','password':'offline-no-api'}}
+              (out/f'config-{sym}.json').write_text(json.dumps(cfg,indent=2))
+          print('A205_PINNED_EXACT_AUTHOR_SOURCE_AND_CONFIGS_PASS',blob)
+          PY
+      - name: Genuine independent 2025 source continuity and sha receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a205-sr/2025
+          python research/native_candidate_screen_20261031/a203_prepare_2025_holdout_source.py \
+             --datadir a205-sr/2025/data 2>&1 | tee a205-sr/2025/real-binance-source.log
+          grep -Fq A203_ALL_4_REAL_2025_BINANCE_MARK_FUNDING_5M_1H_CONTINUITY_PASS a205-sr/2025/real-binance-source.log
+      - name: Genuine independent 2026 source continuity and sha receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a205-sr/2026
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+             --datadir a205-sr/2026/data 2>&1 | tee a205-sr/2026/real-1h-source.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a205-sr/2026/real-1h-source.log
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+             --datadir a205-sr/2026/data 2>&1 | tee a205-sr/2026/real-5m-source.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a205-sr/2026/real-5m-source.log
+      - name: Original Freqtrade native 16 runs on BOTH independently pinned periods and fees
+        shell: bash
+        run: |
+          set -euo pipefail
+          for year in 2025 2026; do
+            if [ "$year" = 2025 ]; then timerange=20250513-20251001; else timerange=20260513-20261001; fi
+            for sym in BTC ETH SOL LINK; do
+              for scenario in 5 12p5; do
+                if [ "$scenario" = '5' ]; then fee=0.0005; else fee=0.00125; fi
+                echo "A205_TRUE_NATIVE_BEGIN $year $sym $scenario"
+                timeout 480s python research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
+                  -c "a205-sr/config-$sym.json" \
+                  --userdir /tmp/a205-original/user_data \
+                  --datadir "$GITHUB_WORKSPACE/a205-sr/$year/data" \
+                  --strategy-path /tmp/a205-original/user_data/strategies \
+                  --strategy AggressiveSupportResistanceScalper --timeframe 5m \
+                  --timerange "$timerange" --data-format-ohlcv json \
+                  --fee "$fee" --export trades --cache none \
+                  2>&1 | tee "a205-sr/$year-AggressiveSupportResistanceScalper-$sym-fee$scenario.log"
+                z="$(find /tmp/a205-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+                test -n "$z" && test -s "$z"
+                cp "$z" "a205-sr/$year-AggressiveSupportResistanceScalper-$sym-fee$scenario.zip"
+                rm -f /tmp/a205-original/user_data/backtest_results/backtest-result*.zip
+                echo "A205_TRUE_NATIVE_COMPLETE $year $sym $scenario"
+              done
+            done
+          done
+      - name: Verify 16 ZIPs per-trade PnL + 10x original leverage + exact pre-registered economic/tempo gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a205_original_sr_native_verify.py --results a205-sr \
+             2>&1 | tee a205-sr/A205-native-verify.log
+          grep -Fq A205_SIXTEEN_ACTUAL_NATIVE_ORIGINAL_SOURCE_TRADE_ARCHIVES_VERIFIED a205-sr/A205-native-verify.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A205-16-original-10x-SR-rejection-native-real-Binance-two-years
+          path: |
+            a205-sr/*.log
+            a205-sr/*.zip
+            a205-sr/2025/*.log
+            a205-sr/2026/*.log
+            a205-sr/A205_16_NATIVE_SR_REJECTION_TWO_YEAR_VERIFIED.json
+            a205-sr/2025/data/A203_2025_SOURCE_SHA_MANIFEST.json
+            a205-sr/2026/data/A195_DATA_SHA_MANIFEST.json
+            a205-sr/2026/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
