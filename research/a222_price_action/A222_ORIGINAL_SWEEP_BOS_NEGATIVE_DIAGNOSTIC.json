@@ -1,0 +1,39 @@
+{
+  "cycle": "A222",
+  "market": "real Binance USD-M BTCUSDT 1h",
+  "source": "hroussel18/Revelio_Improved_Strategy",
+  "source_commit": "823f81c93afe82e704f4e40d4c6f3744db2790b4",
+  "funding_in_author_pnl": false,
+  "actual_futures_ledger_verified": false,
+  "same_signal_bar_close_fill": true,
+  "native_author_btc_cost_price_usd": 8,
+  "original_optimistic_periods": [
+    {
+      "period": "2024",
+      "signals": 109,
+      "simulated_trades": 65,
+      "diagnostic_return_pct": -3.87439,
+      "closed_trade_dd_pct": -16.93755
+    },
+    {
+      "period": "2025",
+      "signals": 100,
+      "simulated_trades": 63,
+      "diagnostic_return_pct": -17.42469,
+      "closed_trade_dd_pct": -42.46116
+    },
+    {
+      "period": "2026JanSep",
+      "signals": 67,
+      "simulated_trades": 48,
+      "diagnostic_return_pct": 7.33872,
+      "closed_trade_dd_pct": -16.26571
+    }
+  ],
+  "causal_signal_prefix_tests_passed": 6,
+  "source_zip_receipts_verified": 204,
+  "status": "REJECT_LOW_PRIORITY_SOURCE_NATIVE_NEGATIVE_2_OF_3_YEARS",
+  "verified_candidate": false,
+  "native_test_url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41225872005",
+  "note": "Original author backtester on genuine price archives, not fully costed futures PnL. No parameter retuning."
+}
