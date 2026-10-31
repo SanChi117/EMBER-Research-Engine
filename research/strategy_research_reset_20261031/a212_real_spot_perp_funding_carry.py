@@ -10,7 +10,6 @@ from concurrent.futures import ThreadPoolExecutor,as_completed
 from datetime import datetime,timezone
 from pathlib import Path
 from zipfile import ZipFile
-import numpy as np
 
 COINS=("BTC","ETH","SOL","LINK")
 YEARS=(2024,2025,2026)
