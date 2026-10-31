@@ -1,0 +1,276 @@
+{
+  "cycle": "A233",
+  "scope": "historical four separate wallets; not author portfolio, not new OOS",
+  "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "artifact_sha256": {
+    "2025": "bb1a20d559411458b8edcd04ebfe51b16263b1d36bbb2d24429760cac0a6e098",
+    "2026": "a2feb855954701193f82895820dc00c2dfa64c1a7ee270bab56ef9633bda0339"
+  },
+  "receipts": [
+    {
+      "year": "2025",
+      "fee_bps": "12p5",
+      "coin": "BTC",
+      "zip": "2025-BTC-fee12p5-5m.zip",
+      "sha256": "902bb4f7c1a4ced2f95f21b2221773b7b2828fc0b89edb33e0ad29da60d096da",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 38,
+      "recomputed_profit_usdt": 2649.68878738,
+      "reported_profit_usdt": 2649.6887873800006
+    },
+    {
+      "year": "2025",
+      "fee_bps": "5",
+      "coin": "BTC",
+      "zip": "2025-BTC-fee5-5m.zip",
+      "sha256": "6981af20e20020be254e9426879631aa91ee246dac6aa39b18c49f19e414d922",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 38,
+      "recomputed_profit_usdt": 3754.10644019,
+      "reported_profit_usdt": 3754.106440189998
+    },
+    {
+      "year": "2025",
+      "fee_bps": "12p5",
+      "coin": "ETH",
+      "zip": "2025-ETH-fee12p5-5m.zip",
+      "sha256": "827d81a14b672f4e00370185370c204f4676c3033c5170e617df0e758b317f93",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 37,
+      "recomputed_profit_usdt": 1947.40702788,
+      "reported_profit_usdt": 1947.4070278799995
+    },
+    {
+      "year": "2025",
+      "fee_bps": "5",
+      "coin": "ETH",
+      "zip": "2025-ETH-fee5-5m.zip",
+      "sha256": "011fb44cf3bf9b353729f663190e5b0d1887bd4abd43b46262d8169c0b966ac6",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 37,
+      "recomputed_profit_usdt": 2847.44612258,
+      "reported_profit_usdt": 2847.4461225800005
+    },
+    {
+      "year": "2025",
+      "fee_bps": "12p5",
+      "coin": "LINK",
+      "zip": "2025-LINK-fee12p5-5m.zip",
+      "sha256": "26819b698fe3e2fa1b63deee23b793951d622a28486f9fb256e5f975f7aad43b",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 50,
+      "recomputed_profit_usdt": -1468.0261485299998,
+      "reported_profit_usdt": -1468.0261485299998
+    },
+    {
+      "year": "2025",
+      "fee_bps": "5",
+      "coin": "LINK",
+      "zip": "2025-LINK-fee5-5m.zip",
+      "sha256": "bc8abaa246ef28a7aa28a2f32bcb85bab6a85ffe1308dd00c288f465c7181f07",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 50,
+      "recomputed_profit_usdt": -106.51267591,
+      "reported_profit_usdt": -106.51267590999987
+    },
+    {
+      "year": "2025",
+      "fee_bps": "12p5",
+      "coin": "SOL",
+      "zip": "2025-SOL-fee12p5-5m.zip",
+      "sha256": "f09e53108160ca639c080b10bfe3d06c0364f509fdad696a3483a7ba2fa8d2a2",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 39,
+      "recomputed_profit_usdt": -269.21515360000006,
+      "reported_profit_usdt": -269.2151535999999
+    },
+    {
+      "year": "2025",
+      "fee_bps": "5",
+      "coin": "SOL",
+      "zip": "2025-SOL-fee5-5m.zip",
+      "sha256": "46d72c3753b8030556396561fdc0dec6ad80c65c09089564776713884d78559f",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 39,
+      "recomputed_profit_usdt": 906.0347208200001,
+      "reported_profit_usdt": 906.0347208200003
+    },
+    {
+      "year": "2026",
+      "fee_bps": "12p5",
+      "coin": "BTC",
+      "zip": "5m-detail-BTC-fee12p5.zip",
+      "sha256": "e2fd09132a8d06b55eb800bedd666b2b7a42117d5d49cc62a7c6ca418e489c0c",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 18,
+      "recomputed_profit_usdt": -2268.7495226700003,
+      "reported_profit_usdt": -2268.74952267
+    },
+    {
+      "year": "2026",
+      "fee_bps": "5",
+      "coin": "BTC",
+      "zip": "5m-detail-BTC-fee5.zip",
+      "sha256": "ff7a396bbd3e7594292995ef5ef06350c7d8c7ad74c75b089d7b55da1b93a338",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 18,
+      "recomputed_profit_usdt": -1846.71604221,
+      "reported_profit_usdt": -1846.7160422099998
+    },
+    {
+      "year": "2026",
+      "fee_bps": "12p5",
+      "coin": "ETH",
+      "zip": "5m-detail-ETH-fee12p5.zip",
+      "sha256": "92820e31ae1a0f94e7ba05b3bc02420bf03e058b3ba9e3082637527468fe3b5b",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 35,
+      "recomputed_profit_usdt": 1269.67750296,
+      "reported_profit_usdt": 1269.6775029599999
+    },
+    {
+      "year": "2026",
+      "fee_bps": "5",
+      "coin": "ETH",
+      "zip": "5m-detail-ETH-fee5.zip",
+      "sha256": "b1e34fadc5fc7c5216e59c141e394fd509710e4e1ccffc4f85d31145b87ee1c3",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 35,
+      "recomputed_profit_usdt": 2326.30929546,
+      "reported_profit_usdt": 2326.30929546
+    },
+    {
+      "year": "2026",
+      "fee_bps": "12p5",
+      "coin": "LINK",
+      "zip": "5m-detail-LINK-fee12p5.zip",
+      "sha256": "0ff5ec7dab5fd123529aba757f87b94ab382ddb2326d7c2126edfd3eb0cc3322",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 22,
+      "recomputed_profit_usdt": 1775.2371413399999,
+      "reported_profit_usdt": 1775.23714134
+    },
+    {
+      "year": "2026",
+      "fee_bps": "5",
+      "coin": "LINK",
+      "zip": "5m-detail-LINK-fee5.zip",
+      "sha256": "754470f1b5efce837da4800e951e35b81a7558f5bd6b7912d03eb096d6d9001d",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 22,
+      "recomputed_profit_usdt": 2267.0470569599997,
+      "reported_profit_usdt": 2267.04705696
+    },
+    {
+      "year": "2026",
+      "fee_bps": "12p5",
+      "coin": "SOL",
+      "zip": "5m-detail-SOL-fee12p5.zip",
+      "sha256": "4e292c08fc7aad07fafc107a33c69fc4a0f5da47d2a7718dcda8f778481d227d",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 26,
+      "recomputed_profit_usdt": 1454.48678013,
+      "reported_profit_usdt": 1454.48678013
+    },
+    {
+      "year": "2026",
+      "fee_bps": "5",
+      "coin": "SOL",
+      "zip": "5m-detail-SOL-fee5.zip",
+      "sha256": "cf884908cee63666659858b1fa68fae9020419dc6e4f8e51fbfce1310e1e1e65",
+      "source_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+      "trades": 26,
+      "recomputed_profit_usdt": 2213.51994999,
+      "reported_profit_usdt": 2213.5199499900004
+    }
+  ],
+  "results": {
+    "2025_fee12p5": {
+      "trades": 164,
+      "net_usdt": 2859.85451313,
+      "return_pct_on_40000": 7.149636282825001,
+      "closed_trade_balance_drawdown_pct_NOT_MTM": 8.029578862909823,
+      "pooled_cash_profit_factor": 1.1492881082072706,
+      "top3_winners_usdt": 3742.95829513,
+      "net_without_top3_diagnostic_usdt": -883.1037819999997,
+      "funding_fees_reported_sum_NOT_added_again": -375.1928981288522,
+      "max_simultaneous_positions": 4,
+      "hours_with_multiple_positions": 311.16666666666663,
+      "max_sum_original_stakes_usdt": 39708.22648,
+      "zero_duration_trades_excluded_from_overlap": 12,
+      "author_BTC_ETH_archival_overlap_diagnostic": {
+        "max_simultaneous_positions": 2,
+        "hours_with_multiple_positions": 195.66666666666663,
+        "max_sum_original_stakes_usdt": 19979.386744999996,
+        "zero_duration_trades_excluded_from_overlap": 0
+      }
+    },
+    "2025_fee5": {
+      "trades": 164,
+      "net_usdt": 7401.07460768,
+      "return_pct_on_40000": 18.502686519199997,
+      "closed_trade_balance_drawdown_pct_NOT_MTM": 6.321591011779139,
+      "pooled_cash_profit_factor": 1.447657974149974,
+      "top3_winners_usdt": 3884.54980931,
+      "net_without_top3_diagnostic_usdt": 3516.5247983699996,
+      "funding_fees_reported_sum_NOT_added_again": -377.4700338054074,
+      "max_simultaneous_positions": 4,
+      "hours_with_multiple_positions": 305.8333333333333,
+      "max_sum_original_stakes_usdt": 39790.15848,
+      "zero_duration_trades_excluded_from_overlap": 12,
+      "author_BTC_ETH_archival_overlap_diagnostic": {
+        "max_simultaneous_positions": 2,
+        "hours_with_multiple_positions": 189.5,
+        "max_sum_original_stakes_usdt": 19979.38674499999,
+        "zero_duration_trades_excluded_from_overlap": 0
+      }
+    },
+    "2026_fee12p5": {
+      "trades": 101,
+      "net_usdt": 2230.65190176,
+      "return_pct_on_40000": 5.5766297544,
+      "closed_trade_balance_drawdown_pct_NOT_MTM": 8.50677599255156,
+      "pooled_cash_profit_factor": 1.1681720227594188,
+      "top3_winners_usdt": 3613.1074344500003,
+      "net_without_top3_diagnostic_usdt": -1382.4555326900004,
+      "funding_fees_reported_sum_NOT_added_again": 6.623912197118605,
+      "max_simultaneous_positions": 4,
+      "hours_with_multiple_positions": 382.16666666666674,
+      "max_sum_original_stakes_usdt": 39612.9021,
+      "zero_duration_trades_excluded_from_overlap": 16,
+      "author_BTC_ETH_archival_overlap_diagnostic": {
+        "max_simultaneous_positions": 2,
+        "hours_with_multiple_positions": 137.75,
+        "max_sum_original_stakes_usdt": 19996.90006,
+        "zero_duration_trades_excluded_from_overlap": 12
+      }
+    },
+    "2026_fee5": {
+      "trades": 101,
+      "net_usdt": 4960.1602602,
+      "return_pct_on_40000": 12.4004006505,
+      "closed_trade_balance_drawdown_pct_NOT_MTM": 6.421727467225377,
+      "pooled_cash_profit_factor": 1.4341665201474443,
+      "top3_winners_usdt": 3746.86430322,
+      "net_without_top3_diagnostic_usdt": 1213.2959569800005,
+      "funding_fees_reported_sum_NOT_added_again": 7.199289686094641,
+      "max_simultaneous_positions": 4,
+      "hours_with_multiple_positions": 382.25000000000006,
+      "max_sum_original_stakes_usdt": 39918.03279999999,
+      "zero_duration_trades_excluded_from_overlap": 16,
+      "author_BTC_ETH_archival_overlap_diagnostic": {
+        "max_simultaneous_positions": 2,
+        "hours_with_multiple_positions": 137.75,
+        "max_sum_original_stakes_usdt": 19996.90006,
+        "zero_duration_trades_excluded_from_overlap": 12
+      }
+    }
+  },
+  "limitations": [
+    "Drawdown is closed-trade balance only, not mark-to-market equity or liquidation risk.",
+    "Archived isolated single-pair trades cannot reconstruct rejected signals of one-slot multi-pair native backtest.",
+    "Four independent 10000 wallets are a retrospective diagnostic, not original BTC/ETH one-slot configuration.",
+    "Fee stress is not a queue/spread/slippage model; no statistical or forward profitability claim.",
+    "Top-3 removal is concentration sensitivity only, not a strategy variant or automatic rejection gate."
+  ]
+}
