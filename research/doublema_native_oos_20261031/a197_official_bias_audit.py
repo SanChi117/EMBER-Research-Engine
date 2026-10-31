@@ -58,7 +58,7 @@ def main():
                   "--datadir",args.datadir,
                   "--strategy","VideoDoubleMaFuturesStrategy",
                   "--timeframe","1h","--timerange",args.time,
-                  "--fee",str(args.fee),
+                  *(["--fee",str(args.fee)] if args.mode=="lookahead" else []),
                   "--data-format-ohlcv","json"]).get_parsed_arg()
     config=setup_utils_configuration(aa,RunMode.UTIL_NO_EXCHANGE)
     assert config["exchange"]["name"]=="binance"
