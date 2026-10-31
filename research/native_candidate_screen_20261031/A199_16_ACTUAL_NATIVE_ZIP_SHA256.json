@@ -1,0 +1,18 @@
+{
+  "FAdxSmaStrategy-BTC-fee5": "99300aea91cce286217ed7375ec095f19259e000f8df3a50d3f4c72abf2a8c46",
+  "FAdxSmaStrategy-BTC-fee12p5": "473281b95d7e6d10aeb9140d77cbe60fcc5f9174d2e27fbaab2a671e99b7168e",
+  "FAdxSmaStrategy-ETH-fee5": "28256cabe8760d7f7dbeb288dae6dab23c66be830d5428c667116aebfd2ef97b",
+  "FAdxSmaStrategy-ETH-fee12p5": "2c865e3d1e779a4231976f3346359d725010c67557091f433145923e27a7d58f",
+  "FAdxSmaStrategy-SOL-fee5": "cca2dfaeddcfe8b08174db2aa8eef3d7f14fa6872af3b9f33fa460a2ad9ea302",
+  "FAdxSmaStrategy-SOL-fee12p5": "18b675ab9534d64be3d1d3900e1f2dc20d2c98ca1943964e792ea3237484600a",
+  "FAdxSmaStrategy-LINK-fee5": "2bdb5814338b64ea2921e5760a82a1fb7467df83f7e949c00b8308c4b954ceaf",
+  "FAdxSmaStrategy-LINK-fee12p5": "df3496723efd9fc8ae22a8dcd517d6bd61b319c3ca6db34129dab3ef5338e53f",
+  "FReinforcedStrategy-BTC-fee5": "b1307d8087caba40cf8556976869850d5bb3f53f65399cb44ebaaecfb787128f",
+  "FReinforcedStrategy-BTC-fee12p5": "091b11812e197ec16e76256d72c8627647010d37a9685267d16b117c316f14e9",
+  "FReinforcedStrategy-ETH-fee5": "4f5ae8ed0f92519a73a2aefaf306b62df18dda4246da3147cb8fe47615f8b001",
+  "FReinforcedStrategy-ETH-fee12p5": "f541e3fa91d7090504ac5aa7a5b2fcd7ed472705f66f31ff19dfb7b88eedefd9",
+  "FReinforcedStrategy-SOL-fee5": "d99ef5227f88177334866ed4dc54de62ddebe3c7a2fb00c01b4efbe26af416ba",
+  "FReinforcedStrategy-SOL-fee12p5": "9a176ed96b628b8a07863068de2c8f88654ad06b404bf61e2a9003cc6370888c",
+  "FReinforcedStrategy-LINK-fee5": "0f110ba362691ecdb01843399401b2b3c3a237ba7a5167750bf85589f916a890",
+  "FReinforcedStrategy-LINK-fee12p5": "488b2ebc55b9c4f986f413d139d530af7cf68246dd68e25e19be95a62275aa1d"
+}
