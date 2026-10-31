@@ -1,3 +1,7 @@
+> **⚠️ АРХИВНОЕ СВИДЕТЕЛЬСТВО, НЕ ТЕКУЩИЙ СТАТУС.** CONTROLLED_NATIVE_SCREEN — A235 сравнил 3 актива с фиксированной ставкой, а не полный авторский общий счёт. Для TrendFollowing и Risk S5 более релевантны A237/A238. Не считать profitability VERIFIED. [Текущая единая сводка](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md). Ни одна стратегия не `VERIFIED_FUTURES_CANDIDATE`.
+
+---
+
 # A235 — результаты 18 исправленных нативных тестов Freqtrade
 
 Дата: 31 октября 2026. Экономический артефакт, **НЕ решение о реальной торговле**. Первичная пререгистрация: [A235](a235_timeframe_parity/PREREG.md). Блокировка направления: `RESEARCH_MANDATE_LOCKED.md` (`main`).
