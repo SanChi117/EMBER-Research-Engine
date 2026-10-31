@@ -1,0 +1,96 @@
+name: "EMBER A212 real Binance two-leg spot-perp basis+funding cash-and-carry three years"
+on:
+  push:
+    branches: [research/a212-spot-perp-delta-neutral-funding-2024-2026-20261031]
+    paths:
+      - ".github/workflows/ember-a212-real-two-leg-basis-carry.yml"
+      - "research/strategy_research_reset_20261031/a212_*.py"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  independent-true-spot-plus-perp-carry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Ensure prereg and source code no exchange API credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile research/strategy_research_reset_20261031/a212_real_spot_perp_funding_carry.py
+          test -s research/strategy_research_reset_20261031/A212_TWO_LEG_TRUE_FUNDING_CARRY_PREREG_RU.md
+          mkdir -p a212-real-two-leg
+          echo A212_FROZEN_TWO_LEG_SPOT_PERP_REPLAY_COMPILED
+      - name: Fetch 240 genuine spot and USD-M futures monthly price mark settled funding archives, strict byte SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 5100s python research/strategy_research_reset_20261031/a212_real_spot_perp_funding_carry.py \
+            --out a212-real-two-leg 2>&1 | tee a212-real-two-leg/A212-real-two-leg.log
+          grep -Fq A212_240_REAL_BINANCE_SPOT_PERP_MARK_FUNDING_SOURCES_AND_48_HEDGES_VERIFIED a212-real-two-leg/A212-real-two-leg.log
+      - name: Independently audit every source SHA receipt and 48 hedge ledgers after replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('a212-real-two-leg')
+          p=root/'A212_REAL_TWO_LEG_CARRY_2024_2025_2026_SHA_VERIFIED.json'
+          d=json.loads(p.read_text())
+          assert d['schema']=='A212_GENUINE_BOTH_SPOT_PERP_MARK_SETTLED_FUNDING_CARRY_TEST'
+          assert len(d['source_zip_csv_sha256'])>=240
+          assert len(d['trade_log_sha256'])==48
+          assert d['execution_approval'] is False
+          for name,metadata in d['trade_log_sha256'].items():
+              raw=(root/name).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==metadata['sha256'],name
+              trades=json.loads(raw)
+              assert len(trades)==metadata['n']
+              assert all(t['open_ms']<t['close_ms'] for t in trades)
+              assert all(abs(t['net_pnl_USDT']-(t['price_basis_realized_USDT']+t['funding_USDT']-t['roundtrip_fees_USDT']))<1e-8 for t in trades)
+              assert all(t['spot_entry']>0 and t['perp_entry']>0 and t['qty']>0 for t in trades)
+              assert all(t['open_ms']>=trades[i-1]['close_ms'] for i,t in enumerate(trades) if i>0)
+          for year in (2024,2025,2026):
+              for coin in ('BTC','ETH','SOL','LINK'):
+                  assert d['source_integrity'][f'{year}-{coin}']['all_three_leg_hourly_prices_contiguous']
+                  for mode in ('always','selective'):
+                      for fee in ('base','stress'):
+                          r=d['results'][str(year)][coin][mode][fee]
+                          assert r['trades']==d['trade_log_sha256'][f'A212_{year}_{coin}_{mode}_{fee}_TWO_REAL_LEGS.json']['n']
+          print('A212_ORIGINAL_240_SOURCE_SHAS_AND_48_HEDGE_LEDGERS_INDEPENDENTLY_VERIFIED',flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A212-actual-spot-perp-mark-funding-all-48-hedge-ledgers-2024-2026
+          path: |
+            a212-real-two-leg/A212-real-two-leg.log
+            a212-real-two-leg/A212_REAL_TWO_LEG_CARRY_2024_2025_2026_SHA_VERIFIED.json
+            a212-real-two-leg/A212_*_TWO_REAL_LEGS.json
+          retention-days: 30
+      - name: Persist verified two-leg carry economics to research GitHub branch
+        if: success()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          target=research/strategy_research_reset_20261031/A212_TWO_LEG_2024_2025_2026_REAL_BINANCE_VERIFIED.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          git checkout -q -B a212-ci-result FETCH_HEAD
+          cp a212-real-two-leg/A212_REAL_TWO_LEG_CARRY_2024_2025_2026_SHA_VERIFIED.json "$target"
+          git add "$target"
+          if git diff --staged --quiet; then echo A212_ALREADY_COMMITTED;exit 0;fi
+          git commit -qm "research(A212): verified real spot and futures basis+funding hedged economics across 2024/25/26"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          echo A212_VERIFIED_SPOT_PERP_CARRY_RESEARCH_RESULT_COMMITTED
