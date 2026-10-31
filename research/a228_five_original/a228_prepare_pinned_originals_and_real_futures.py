@@ -113,8 +113,38 @@ def month_fetch(job,receipt_manifest):
             raise ValueError(f"Invalid official {kind} OHLCV {sym} {y}-{m}")
         rows.append((stamp,*v))
     days=pd.Period(f"{y}-{m:02}",freq="M").days_in_month
-    expected=days*24*(12 if kind=="kline" else 1/8)
-    if len(rows)!=int(expected):
+    expected=int(days*24*(12 if kind=="kline" else 1/8))
+    if kind=="mark" and len(rows)!=expected:
+        # Binance Vision 8h 2026-06 published 87/90 native rows.
+        # NEVER fabricate missing mark; instead source genuine 1h mark
+        # snapshots and aggregate only if all original 1h hours exist.
+        backup=f"https://data.binance.vision/data/futures/um/monthly/markPriceKlines/{sym}/1h/{sym}-1h-{y}-{m:02}.zip"
+        hr_csv,hr_receipt=csv_zip_content(backup)
+        hourly=[]
+        for rec in hr_csv:
+            if not rec or not rec[0].isdigit():
+                continue
+            stamp=genuine.as_ms(rec[0]);val=tuple(map(float,rec[1:6]))
+            if not (0<val[2]<=min(val[0],val[3])<=max(val[0],val[3])<=val[1]):
+                raise ValueError(f"Bad genuine mark 1h fallback {backup}")
+            hourly.append((stamp,*val))
+        hourly.sort()
+        if len(hourly)!=days*24 or any(b[0]-a[0]!=3_600_000 for a,b in zip(hourly,hourly[1:])):
+            raise ValueError(f"OFFICIAL_MARK_SOURCE_INCOMPLETE 8h={len(rows)}/{expected}, 1h={len(hourly)}/{days*24}: {sym}/{y}-{m}")
+        merged=[]
+        for idx in range(0,len(hourly),8):
+            pack=hourly[idx:idx+8]
+            assert len(pack)==8 and pack[0][0]%(8*3_600_000)==0
+            merged.append((pack[0][0],pack[0][1],max(v[2] for v in pack),
+                          min(v[3] for v in pack),pack[-1][4],sum(v[5] for v in pack)))
+        receipt["source_8h_original_partial_zip_sha256"]=receipt["zip_sha256"]
+        receipt["recovered_from_genuine_1h_mark_archive"]=hr_receipt
+        receipt["reconstruction"]="8 fully observed consecutive genuine 1h mark candles per 8h bar, no synthetic imputation"
+        rows=merged
+        receipt["url"]=backup
+        receipt["zip_sha256"]=hr_receipt["zip_sha256"]
+        receipt["csv_sha256"]=hr_receipt["csv_sha256"]
+    if len(rows)!=expected:
         raise ValueError(f"Missing {kind} monthly values {sym}/{y}-{m} n={len(rows)} expected={expected}")
     receipt["parsed_rows"]=len(rows)
     return job,rows,receipt
