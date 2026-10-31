@@ -1,0 +1,109 @@
+name: "EMBER A199 rerun v2 FAdxSmaStrategy 1h 4 pairs x two fees exact original Futures native"
+on:
+  push:
+    branches: [research/a199-futures-source-5m-1h-native-screen-20261031]
+    paths:
+      - ".github/workflows/ember-a199-fadxsmastrategy-native-rerun-v2.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-fadxsmastrategy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 46
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pin real Freqtrade 2026.4 plus public original source, load dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4' technical
+          python -c "from importlib.metadata import version; print('A199_ENGINE_VERSION',version('freqtrade'));assert version('freqtrade')=='2026.4'"
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/freqtrade/freqtrade-strategies.git /tmp/a199-author-source
+          test "$(git -C /tmp/a199-author-source rev-parse HEAD)" = f3340ce11f5bdf62f598522e64d1f5638eaa13f5
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          s=Path('/tmp/a199-author-source/user_data/strategies/futures/FAdxSmaStrategy.py').read_bytes()
+          blob=hashlib.sha1(b'blob '+str(len(s)).encode()+bytes([0])+s).hexdigest()
+          assert blob=='3bb13caf079e8360a959c3ad4dd2b2507f3045c0',blob
+          out=Path('a199-FAdxSmaStrategy');out.mkdir(exist_ok=True)
+          for sym in ('BTC','ETH','SOL','LINK'):
+              cfg={
+                 'bot_name':f'A199_FAdxSmaStrategy_{sym}_OFFLINE_PAPER_ONLY',
+                 'dry_run':True,'dry_run_wallet':1000,'stake_currency':'USDT',
+                 'stake_amount':100,'tradable_balance_ratio':0.99,
+                 'max_open_trades':1,'trading_mode':'futures','margin_mode':'isolated',
+                 'exchange':{
+                   'name':'binance','key':'','secret':'','password':'',
+                   'ccxt_config':{},'ccxt_async_config':{},
+                   'pair_whitelist':[f'{sym}/USDT:USDT'],'pair_blacklist':[]},
+                 'pairlists':[{'method':'StaticPairList'}],
+                 'telegram':{'enabled':False,'token':'','chat_id':'0'},
+                 'api_server':{'enabled':False,'listen_ip_address':'127.0.0.1','listen_port':8080,'username':'a199','password':'disabled-no-network'}
+              }
+              (out/f'config-{sym}.json').write_text(json.dumps(cfg,indent=2))
+          print('A199_ORIGINAL_SOURCE_BYTE_PIN_OK',blob)
+          PY
+      - name: Rebuild same real Binance Vision 1h price mark funding from validated A195 scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+             --datadir a199-FAdxSmaStrategy/data 2>&1 | tee a199-FAdxSmaStrategy/real-1h-mark-funding.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a199-FAdxSmaStrategy/real-1h-mark-funding.log
+      - name: Rebuild all four authentic continuous 5m Binance futures price series
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+            --datadir a199-FAdxSmaStrategy/data 2>&1 | tee a199-FAdxSmaStrategy/real-5m-OHLCV.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a199-FAdxSmaStrategy/real-5m-OHLCV.log
+      - name: Execute eight actual original native Freqtrade backtests, 4 symbol x 2 fees
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in BTC ETH SOL LINK; do
+            for scenario in 5 12p5; do
+              if [ "$scenario" = '5' ];then RATE=0.0005;else RATE=0.00125;fi
+              echo "A199_ORIGINAL_NATIVE_BEGIN FAdxSmaStrategy $sym $scenario"
+              timeout 390s python research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
+                -c "a199-FAdxSmaStrategy/config-$sym.json" \
+                --userdir /tmp/a199-author-source/user_data \
+                --datadir "$GITHUB_WORKSPACE/a199-FAdxSmaStrategy/data" \
+                --strategy-path /tmp/a199-author-source/user_data/strategies/futures \
+                --strategy FAdxSmaStrategy --timeframe 1h --timeframe-detail 5m \
+                --timerange 20260513-20261001 --data-format-ohlcv json \
+                --fee "$RATE" --export trades --cache none \
+                2>&1 | tee "a199-FAdxSmaStrategy/FAdxSmaStrategy-$sym-fee$scenario.log"
+              z="$(find /tmp/a199-author-source/user_data/backtest_results -maxdepth 1 -name 'backtest-result*.zip' -type f -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+              test -n "$z" && test -s "$z"
+              cp "$z" "a199-FAdxSmaStrategy/FAdxSmaStrategy-$sym-fee$scenario.zip"
+              rm -f /tmp/a199-author-source/user_data/backtest_results/backtest-result*.zip
+              echo "A199_ORIGINAL_NATIVE_FINISHED FAdxSmaStrategy $sym $scenario"
+            done
+          done
+      - name: Parse true native Freqtrade ZIP and predeclared cross-pair acceptability gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a199_parse_original_native.py \
+            --results a199-FAdxSmaStrategy --strategy FAdxSmaStrategy \
+            2>&1 | tee a199-FAdxSmaStrategy/A199-original-native-verify.log
+          grep -Fq 'A199_EIGHT_ACTUAL_NATIVE_SOURCE_TRADE_ARCHIVES_VERIFIED FAdxSmaStrategy' a199-FAdxSmaStrategy/A199-original-native-verify.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A199-FAdxSmaStrategy-8-Original-Futures-Freqtrade2026-4-Native-Real-Binance
+          path: |
+            a199-FAdxSmaStrategy/*.log
+            a199-FAdxSmaStrategy/*.zip
+            a199-FAdxSmaStrategy/A199_FAdxSmaStrategy_EIGHT_NATIVE_RESULTS.json
+            a199-FAdxSmaStrategy/data/A195_DATA_SHA_MANIFEST.json
+            a199-FAdxSmaStrategy/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
