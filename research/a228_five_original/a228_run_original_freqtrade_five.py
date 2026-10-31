@@ -199,7 +199,7 @@ def main():
                 (REPLAY/"A228_FIVE_NATIVE_REPLAY_STATUS.json").write_text(
                     json.dumps(status,indent=2,ensure_ascii=False)+"\n","utf8")
     completed=sum(x["state"]=="NATIVE_FREQTRADE_BACKTEST_COMPLETE" for x in status["strategy_runs"])
-    print("A230_ALL_RESULTS",json.dumps({"expected":len(YEARS)*len(COSTS)*len(STRATEGIES),
+    print("A230_ALL_RESULTS",json.dumps({"expected":len(status["strategy_runs"]),
        "complete":completed,"blocked":len(status["strategy_runs"])-completed,
        "summary":[{k:v for k,v in x.items() if k in
        ("strategy","year","cost_model","state","native_profit_total_pct","native_trade_count","native_max_drawdown_account")}
