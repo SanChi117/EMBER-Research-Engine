@@ -1,3 +1,9 @@
+> **⚠️ АРХИВНЫЙ СНИМОК / ARCHIVE_SNAPSHOT_SUPERSEDED.** Этот отчёт создан ассистентом в промежуточный момент и **НЕ является действующим статусом**. Часть формулировок о готовности, полноте, количестве тестов и запусках уже устарела. **Использовать исключительно [текущий исправленный реестр](RESEARCH_STATUS_CANONICAL.md).**
+>
+> Мандат [LOCKED](RESEARCH_MANDATE_LOCKED.md) и запреты пользователя не изменены. Этот файл хранится только для проверки старых выводов, не как рекомендация к PAPER/live.
+
+---
+
 # A244 — очередной контрольный срез полного пересмотра 76 записей (2026-10-31)
 
 **LOCKED**: `RESEARCH_MANDATE_LOCKED.md` и issue #9, Binance USDT-M Futures, pinned original source, causal native economic tests, no real/live/PAPER planner changes, 0 independently `VERIFIED_FUTURES_CANDIDATE`. Это дополнение к `RESEARCH_PROGRESS_A239_20261031.md`, которое остаётся неизменным архивным checkpoint.
