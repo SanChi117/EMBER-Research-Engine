@@ -1,0 +1,35 @@
+{
+  "source_blob": "b7d013a802b45d2dd1cb0b91d4083fb247efac75",
+  "prefix_tests": [
+    {
+      "cut": "2024-03-15T03:00:00Z",
+      "bars": 10539,
+      "all_columns_equal": true
+    },
+    {
+      "cut": "2025-06-15T13:00:00Z",
+      "bars": 21517,
+      "all_columns_equal": true
+    },
+    {
+      "cut": "2026-09-15T23:00:00Z",
+      "bars": 32495,
+      "all_columns_equal": true
+    }
+  ],
+  "buy_params": {
+    "ema_fast": 9,
+    "ema_slow": 16,
+    "rsi_period": 16,
+    "rsi_pullback_low": 30,
+    "rsi_pullback_high": 65,
+    "rsi_bounce": 35,
+    "adx_threshold": 20,
+    "volume_factor": 1.3
+  },
+  "sell_params": {
+    "rsi_exit": 78
+  },
+  "status": "PREFIX_PASS_NOT_PROFITABILITY",
+  "note": "Full-price history vs closed informative prefixes. Does not establish order callback causality or profitability."
+}

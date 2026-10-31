@@ -1,0 +1,593 @@
+{
+  "cycle": "A217",
+  "strategy_source": "darkvolg/Trading/FreqtradeBot/user_data/strategies/TrendRiderStrategy_public.py",
+  "source_sha": "b7d013a802b45d2dd1cb0b91d4083fb247efac75",
+  "strategy_family": "multi-trigger trend/pullback momentum",
+  "futures_mode": "Binance USDT-M isolated long-only 1x",
+  "dataset_SHA": "282a9d026bf6e06a6e8a4c08f1cede4bde3ee5c8f6df9322055ba33a403b9961",
+  "periods": [
+    "2024",
+    "2025",
+    "2026-01-01/2026-10-01 exclusive"
+  ],
+  "execution_assumptions": "Freqtrade2026.4 original code, 1h + 5m detail, original limit candle fills, real mark/funding, static exchange tiers",
+  "after_cost_metrics": [
+    {
+      "year": 2024,
+      "symbol": "BTC",
+      "fee_per_side": 0.0005,
+      "trades": 148,
+      "net_usdt": -19.43859851,
+      "wallet_net_pct": -1.9438598509999998,
+      "pf": 0.6792221120141101,
+      "native_realized_dd_pct": 2.8204968772191337,
+      "funding_usdt": -1.0126058797147524,
+      "top3_winner_share": 0.22180415741184437,
+      "exit_reasons": {
+        "early_loss_cut_4h": 92,
+        "roi": 26,
+        "early_loss_cut_2h": 17,
+        "rsi_overbought": 1,
+        "stop_loss": 2,
+        "early_loss_cut_8h": 8,
+        "ema_bearish_cross": 1,
+        "trend_broken": 1
+      },
+      "native_zip_sha256": "ed4c01c54a9cdf17b4a52574cf75fd7516175e68b34c1171f1c58d8ca846b434",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "BTC",
+      "fee_per_side": 0.00125,
+      "trades": 149,
+      "net_usdt": -42.03251166,
+      "wallet_net_pct": -4.203251165999999,
+      "pf": 0.4259786129972592,
+      "native_realized_dd_pct": 4.808581004169631,
+      "funding_usdt": -1.059943028710016,
+      "top3_winner_share": 0.26387609715267224,
+      "exit_reasons": {
+        "early_loss_cut_4h": 96,
+        "roi": 22,
+        "early_loss_cut_2h": 23,
+        "rsi_overbought": 1,
+        "stop_loss": 2,
+        "early_loss_cut_8h": 4,
+        "ema_bearish_cross": 1
+      },
+      "native_zip_sha256": "729c7f53b2e8a8f28c9d61682ba2bd3557fe54233eaa0f1d1923251678108c05",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "ETH",
+      "fee_per_side": 0.0005,
+      "trades": 120,
+      "net_usdt": -2.482123399999999,
+      "wallet_net_pct": -0.2482123399999999,
+      "pf": 0.955705609392331,
+      "native_realized_dd_pct": 1.0943060348870612,
+      "funding_usdt": -1.053014143909968,
+      "top3_winner_share": 0.19561222711578813,
+      "exit_reasons": {
+        "early_loss_cut_4h": 74,
+        "roi": 22,
+        "early_loss_cut_8h": 5,
+        "early_loss_cut_2h": 18,
+        "rsi_overbought": 1
+      },
+      "native_zip_sha256": "c996c1569122e367625e103310fa86e6f84521d0429364119de85e25f6fb34b2",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "ETH",
+      "fee_per_side": 0.00125,
+      "trades": 122,
+      "net_usdt": -25.88611131,
+      "wallet_net_pct": -2.588611131,
+      "pf": 0.6273144502933036,
+      "native_realized_dd_pct": 3.03725035356343,
+      "funding_usdt": -1.053261876909968,
+      "top3_winner_share": 0.2150866744793014,
+      "exit_reasons": {
+        "early_loss_cut_4h": 76,
+        "roi": 20,
+        "early_loss_cut_2h": 23,
+        "early_loss_cut_8h": 2,
+        "rsi_overbought": 1
+      },
+      "native_zip_sha256": "8b514cbc1b8df66adc98825bc8142a0468baabe88b8932e58632e65a767bdafd",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "LINK",
+      "fee_per_side": 0.0005,
+      "trades": 106,
+      "net_usdt": -5.47660992,
+      "wallet_net_pct": -0.547660992,
+      "pf": 0.9367161191594663,
+      "native_realized_dd_pct": 2.3254780140104785,
+      "funding_usdt": -1.018709645910788,
+      "top3_winner_share": 0.12955628792975368,
+      "exit_reasons": {
+        "early_loss_cut_2h": 37,
+        "roi": 32,
+        "early_loss_cut_4h": 34,
+        "early_loss_cut_8h": 2,
+        "ema_bearish_cross": 1
+      },
+      "native_zip_sha256": "d599dca949b7b2236025d1a11bd5902bdd45892f816289d9918d15a22e5f8bfd",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "LINK",
+      "fee_per_side": 0.00125,
+      "trades": 106,
+      "net_usdt": -20.778699500000002,
+      "wallet_net_pct": -2.07786995,
+      "pf": 0.7776472587512098,
+      "native_realized_dd_pct": 3.243454587213642,
+      "funding_usdt": -1.051949368369021,
+      "top3_winner_share": 0.14441685968314286,
+      "exit_reasons": {
+        "early_loss_cut_2h": 40,
+        "roi": 31,
+        "early_loss_cut_4h": 33,
+        "ema_bearish_cross": 1,
+        "early_loss_cut_8h": 1
+      },
+      "native_zip_sha256": "bc80dc38c4822b378b4a4d33e844118bcc7d163d5b88da617a5797bab57d4308",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "SOL",
+      "fee_per_side": 0.0005,
+      "trades": 133,
+      "net_usdt": -8.8391369,
+      "wallet_net_pct": -0.88391369,
+      "pf": 0.9164352395662109,
+      "native_realized_dd_pct": 1.915985658405882,
+      "funding_usdt": -1.384580233459398,
+      "top3_winner_share": 0.11055110231404686,
+      "exit_reasons": {
+        "stop_loss": 1,
+        "roi": 38,
+        "early_loss_cut_2h": 38,
+        "early_loss_cut_4h": 54,
+        "trend_broken": 1,
+        "rsi_overbought": 1
+      },
+      "native_zip_sha256": "524591893d59283bfd370e42c583954b85270daa46d503be4d717bdf4b449343",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2024,
+      "symbol": "SOL",
+      "fee_per_side": 0.00125,
+      "trades": 134,
+      "net_usdt": -46.25497075,
+      "wallet_net_pct": -4.625497075,
+      "pf": 0.6405093665123062,
+      "native_realized_dd_pct": 4.625497074999998,
+      "funding_usdt": -1.3174606025278262,
+      "top3_winner_share": 0.12825369897982042,
+      "exit_reasons": {
+        "stop_loss": 2,
+        "roi": 31,
+        "early_loss_cut_2h": 47,
+        "rsi_overbought": 2,
+        "early_loss_cut_4h": 51,
+        "trend_broken": 1
+      },
+      "native_zip_sha256": "df483921d200e8b7ab1407f5daa495e3f10bd1271fec639d232ff871042990dc",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "BTC",
+      "fee_per_side": 0.0005,
+      "trades": 124,
+      "net_usdt": -10.75631499,
+      "wallet_net_pct": -1.075631499,
+      "pf": 0.7827580176825897,
+      "native_realized_dd_pct": 1.636265505304142,
+      "funding_usdt": -0.6258015682238038,
+      "top3_winner_share": 0.22480457901504874,
+      "exit_reasons": {
+        "early_loss_cut_8h": 21,
+        "early_loss_cut_4h": 72,
+        "roi": 16,
+        "early_loss_cut_2h": 11,
+        "trend_broken": 2,
+        "rsi_overbought": 2
+      },
+      "native_zip_sha256": "9d12ebc3fb47cc863d36e852dd6f527f84dd379bebb03c6c09d9fbf204084f0d",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "BTC",
+      "fee_per_side": 0.00125,
+      "trades": 130,
+      "net_usdt": -35.44509645,
+      "wallet_net_pct": -3.544509645,
+      "pf": 0.46151992671878117,
+      "native_realized_dd_pct": 3.6877744440811413,
+      "funding_usdt": -0.5559418014106577,
+      "top3_winner_share": 0.2817777273003336,
+      "exit_reasons": {
+        "early_loss_cut_8h": 13,
+        "early_loss_cut_4h": 86,
+        "roi": 13,
+        "early_loss_cut_2h": 13,
+        "trend_broken": 2,
+        "rsi_overbought": 2,
+        "ema_bearish_cross": 1
+      },
+      "native_zip_sha256": "77536b888b010f6542bbba1c65a08c4ec09971b2d0b321a340fc1023da13a99f",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "ETH",
+      "fee_per_side": 0.0005,
+      "trades": 102,
+      "net_usdt": -33.2140483,
+      "wallet_net_pct": -3.32140483,
+      "pf": 0.527383374503756,
+      "native_realized_dd_pct": 3.873642838379226,
+      "funding_usdt": -0.2877669765230248,
+      "top3_winner_share": 0.2557041148472997,
+      "exit_reasons": {
+        "roi": 19,
+        "early_loss_cut_4h": 57,
+        "early_loss_cut_2h": 22,
+        "trend_broken": 2,
+        "early_loss_cut_8h": 2
+      },
+      "native_zip_sha256": "66a4ae617bca484f4492e419cf9fdf6a523451d54788eead6ece5391810268ff",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "ETH",
+      "fee_per_side": 0.00125,
+      "trades": 102,
+      "net_usdt": -49.55216179,
+      "wallet_net_pct": -4.955216179,
+      "pf": 0.3838949266108239,
+      "native_realized_dd_pct": 5.4617404971207675,
+      "funding_usdt": -0.27188711473418214,
+      "top3_winner_share": 0.3023034665543683,
+      "exit_reasons": {
+        "roi": 14,
+        "early_loss_cut_4h": 57,
+        "early_loss_cut_2h": 24,
+        "early_loss_cut_8h": 5,
+        "trend_broken": 2
+      },
+      "native_zip_sha256": "06bc4e8bfe406e4e709289c2bad3f92eedce251f8eef3fbcff8eabf23666087b",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "LINK",
+      "fee_per_side": 0.0005,
+      "trades": 92,
+      "net_usdt": -16.819858500000002,
+      "wallet_net_pct": -1.6819858500000002,
+      "pf": 0.8043581428099633,
+      "native_realized_dd_pct": 2.8766368912918048,
+      "funding_usdt": -0.3067030040969846,
+      "top3_winner_share": 0.15158125717193066,
+      "exit_reasons": {
+        "early_loss_cut_2h": 31,
+        "roi": 26,
+        "early_loss_cut_4h": 31,
+        "early_loss_cut_8h": 1,
+        "trend_broken": 2,
+        "stop_loss": 1
+      },
+      "native_zip_sha256": "d460fc5579f9c9dbbe6a8298541a0380aea8386a70213cf929bb3bc1423d0785",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "LINK",
+      "fee_per_side": 0.00125,
+      "trades": 92,
+      "net_usdt": -37.13515754,
+      "wallet_net_pct": -3.7135157540000003,
+      "pf": 0.6016229770511323,
+      "native_realized_dd_pct": 4.797755871769657,
+      "funding_usdt": -0.3129719153194393,
+      "top3_winner_share": 0.18705466385872732,
+      "exit_reasons": {
+        "early_loss_cut_2h": 33,
+        "roi": 21,
+        "early_loss_cut_4h": 35,
+        "trend_broken": 2,
+        "stop_loss": 1
+      },
+      "native_zip_sha256": "61c078ff00cd51b935e21627c7bd12cad64b100e0c4fcdbe75fdeb18c54a8239",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "SOL",
+      "fee_per_side": 0.0005,
+      "trades": 104,
+      "net_usdt": -2.031902209999999,
+      "wallet_net_pct": -0.2031902209999999,
+      "pf": 0.9686549901605562,
+      "native_realized_dd_pct": 1.481022568996648,
+      "funding_usdt": -0.18831805124944534,
+      "top3_winner_share": 0.16598744584343675,
+      "exit_reasons": {
+        "early_loss_cut_4h": 54,
+        "roi": 28,
+        "early_loss_cut_2h": 20,
+        "trailing_stop_loss": 1,
+        "early_loss_cut_8h": 1
+      },
+      "native_zip_sha256": "8fa290355ee22464b39d198824a7352e71eb902d87285ef8b54a86b1291fe203",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2025,
+      "symbol": "SOL",
+      "fee_per_side": 0.00125,
+      "trades": 105,
+      "net_usdt": -19.72806881,
+      "wallet_net_pct": -1.972806881,
+      "pf": 0.7404029317156837,
+      "native_realized_dd_pct": 2.200005452730792,
+      "funding_usdt": -0.16173133849528532,
+      "top3_winner_share": 0.18538714627385272,
+      "exit_reasons": {
+        "early_loss_cut_4h": 53,
+        "roi": 24,
+        "early_loss_cut_2h": 25,
+        "trailing_stop_loss": 1,
+        "early_loss_cut_8h": 2
+      },
+      "native_zip_sha256": "4b842cec11bc1551883fae14ab63f367b82c821f7aeae6ff0857c7380a7307c3",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "BTC",
+      "fee_per_side": 0.0005,
+      "trades": 78,
+      "net_usdt": 1.3221255400000003,
+      "wallet_net_pct": 0.13221255400000004,
+      "pf": 1.0600799058945727,
+      "native_realized_dd_pct": 0.4547943732079922,
+      "funding_usdt": -0.09697456020445093,
+      "top3_winner_share": 0.3141875306918458,
+      "exit_reasons": {
+        "roi": 16,
+        "early_loss_cut_4h": 51,
+        "early_loss_cut_8h": 5,
+        "trend_broken": 1,
+        "early_loss_cut_2h": 5
+      },
+      "native_zip_sha256": "0418d85436bb6b6cc853f81121798b0a3117da20e1502a498a98e0078b0e876a",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "BTC",
+      "fee_per_side": 0.00125,
+      "trades": 79,
+      "net_usdt": -11.01143235,
+      "wallet_net_pct": -1.1011432349999999,
+      "pf": 0.5941787576805431,
+      "native_realized_dd_pct": 1.2827072210632724,
+      "funding_usdt": -0.10379771288314697,
+      "top3_winner_share": 0.3731637288347176,
+      "exit_reasons": {
+        "early_loss_cut_8h": 3,
+        "early_loss_cut_4h": 57,
+        "roi": 11,
+        "trend_broken": 1,
+        "early_loss_cut_2h": 6,
+        "rsi_overbought": 1
+      },
+      "native_zip_sha256": "689644036b3f7a53ed6e4beae44996d9d11e897f311f2607303137d694f0f6dd",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "ETH",
+      "fee_per_side": 0.0005,
+      "trades": 71,
+      "net_usdt": 4.334752819999999,
+      "wallet_net_pct": 0.43347528199999996,
+      "pf": 1.1972550783395526,
+      "native_realized_dd_pct": 0.8554753743476955,
+      "funding_usdt": -0.14662645179313943,
+      "top3_winner_share": 0.295973604146468,
+      "exit_reasons": {
+        "early_loss_cut_4h": 48,
+        "early_loss_cut_8h": 6,
+        "roi": 12,
+        "early_loss_cut_2h": 4,
+        "rsi_overbought": 1
+      },
+      "native_zip_sha256": "6288d0ed41aa5d4c1f77fc9b17b14fbdecb61e776055f6374e7737784f1bac84",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "ETH",
+      "fee_per_side": 0.00125,
+      "trades": 72,
+      "net_usdt": -5.05863342,
+      "wallet_net_pct": -0.5058633419999999,
+      "pf": 0.8161612749663176,
+      "native_realized_dd_pct": 1.3608262929404504,
+      "funding_usdt": -0.12644131163683847,
+      "top3_winner_share": 0.3396222620095552,
+      "exit_reasons": {
+        "early_loss_cut_4h": 51,
+        "roi": 11,
+        "early_loss_cut_2h": 6,
+        "early_loss_cut_8h": 3,
+        "rsi_overbought": 1
+      },
+      "native_zip_sha256": "60c588c53820066eda05ac1f59b02bf2d5fa93fe8337420c0b21a49429bd2048",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "LINK",
+      "fee_per_side": 0.0005,
+      "trades": 65,
+      "net_usdt": -9.91611767,
+      "wallet_net_pct": -0.991611767,
+      "pf": 0.761207607683146,
+      "native_realized_dd_pct": 1.7464558470000044,
+      "funding_usdt": -0.238443493436927,
+      "top3_winner_share": 0.3310539026168184,
+      "exit_reasons": {
+        "early_loss_cut_4h": 39,
+        "early_loss_cut_2h": 13,
+        "roi": 13
+      },
+      "native_zip_sha256": "9a0522bbd11a8f11f0532df07ff984fd5863631f4676e23c43ed362a9acdda0f",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "LINK",
+      "fee_per_side": 0.00125,
+      "trades": 65,
+      "net_usdt": -16.45560432,
+      "wallet_net_pct": -1.645560432,
+      "pf": 0.63964567561357,
+      "native_realized_dd_pct": 2.015601810999999,
+      "funding_usdt": -0.229777448732927,
+      "top3_winner_share": 0.3587693053941522,
+      "exit_reasons": {
+        "early_loss_cut_4h": 39,
+        "early_loss_cut_2h": 14,
+        "roi": 12
+      },
+      "native_zip_sha256": "0d4fbb7863c306ca632c771b725c6d03683d99f9dfc460e6609edd384c4c1e68",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "SOL",
+      "fee_per_side": 0.0005,
+      "trades": 55,
+      "net_usdt": 9.20339001,
+      "wallet_net_pct": 0.920339001,
+      "pf": 1.4357078927812978,
+      "native_realized_dd_pct": 0.8860946906521918,
+      "funding_usdt": 0.03412268355532606,
+      "top3_winner_share": 0.34507315675504585,
+      "exit_reasons": {
+        "early_loss_cut_4h": 33,
+        "early_loss_cut_2h": 5,
+        "roi": 12,
+        "early_loss_cut_8h": 5
+      },
+      "native_zip_sha256": "8cbbc1082e52b1b1f92d22d612b616375d1ffef76aa84e1bcb026c7f540fcfc6",
+      "source_hash_checked_in_zip": true
+    },
+    {
+      "year": 2026,
+      "symbol": "SOL",
+      "fee_per_side": 0.00125,
+      "trades": 55,
+      "net_usdt": 2.7219233099999998,
+      "wallet_net_pct": 0.27219233099999995,
+      "pf": 1.10850733116953,
+      "native_realized_dd_pct": 1.234065504956037,
+      "funding_usdt": 0.023917686534326056,
+      "top3_winner_share": 0.376281253096862,
+      "exit_reasons": {
+        "early_loss_cut_4h": 32,
+        "early_loss_cut_2h": 6,
+        "roi": 12,
+        "early_loss_cut_8h": 5
+      },
+      "native_zip_sha256": "3aed6af655174eea91d4e8ea1747d61df305b0e5fdd2eeefbe77a87ba77923c6",
+      "source_hash_checked_in_zip": true
+    }
+  ],
+  "year_summaries": [
+    {
+      "year": 2024,
+      "fee_per_side": 0.0005,
+      "trades": 507,
+      "net_usdt_four_separate_wallets": -36.23646873,
+      "return_pct_on_4000_segregated_capital": -0.9059117182499999,
+      "positive_pairs": 0,
+      "cash_usdt_benchmark_return": 0
+    },
+    {
+      "year": 2024,
+      "fee_per_side": 0.00125,
+      "trades": 511,
+      "net_usdt_four_separate_wallets": -134.95229322,
+      "return_pct_on_4000_segregated_capital": -3.3738073305,
+      "positive_pairs": 0,
+      "cash_usdt_benchmark_return": 0
+    },
+    {
+      "year": 2025,
+      "fee_per_side": 0.0005,
+      "trades": 422,
+      "net_usdt_four_separate_wallets": -62.822124,
+      "return_pct_on_4000_segregated_capital": -1.5705531000000001,
+      "positive_pairs": 0,
+      "cash_usdt_benchmark_return": 0
+    },
+    {
+      "year": 2025,
+      "fee_per_side": 0.00125,
+      "trades": 429,
+      "net_usdt_four_separate_wallets": -141.86048459,
+      "return_pct_on_4000_segregated_capital": -3.54651211475,
+      "positive_pairs": 0,
+      "cash_usdt_benchmark_return": 0
+    },
+    {
+      "year": 2026,
+      "fee_per_side": 0.0005,
+      "trades": 269,
+      "net_usdt_four_separate_wallets": 4.944150699999999,
+      "return_pct_on_4000_segregated_capital": 0.12360376749999998,
+      "positive_pairs": 3,
+      "cash_usdt_benchmark_return": 0
+    },
+    {
+      "year": 2026,
+      "fee_per_side": 0.00125,
+      "trades": 271,
+      "net_usdt_four_separate_wallets": -29.803746779999997,
+      "return_pct_on_4000_segregated_capital": -0.7450936694999999,
+      "positive_pairs": 1,
+      "cash_usdt_benchmark_return": 0
+    }
+  ],
+  "drawdown": "per-pair native realized DD only; full mark-to-market portfolio audit not complete",
+  "robustness": "three nonoverlapping periods, two cost levels; historical validation, no pristine forward",
+  "status": "RESEARCH_NEGATIVE",
+  "reason": "One or more full-year/cost aggregate results nonpositive",
+  "limitations": [
+    "No measured bid-ask or queue fills",
+    "No independent intrabar gap/liquidation proof",
+    "No prospective PAPER",
+    "No common-wallet portfolio test",
+    "Prepublication periods not claimed as pristine OOS"
+  ]
+}
