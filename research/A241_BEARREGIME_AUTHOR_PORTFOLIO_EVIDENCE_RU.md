@@ -1,3 +1,7 @@
+> **⚠️ СЛУЖЕБНОЕ / НЕ САМОСТОЯТЕЛЬНОЕ ДОКАЗАТЕЛЬСТВО ДОХОДНОСТИ.** SOURCE_AUDIT_ONLY — это проверка исходного конфига и внешнего отчёта автора. НЕ новый независимый экономический бэктест. [Текущий исправленный статус](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md).
+
+---
+
 # A241 — R003 BearRegimeShortV1, восстановлены исходный портфель и авторские отрицательные результаты
 
 31 октября 2026. Это **source-and-config evidence audit** из pinned upstream, а не новый экономический прогон EMBER. Исследовательский мандат `RESEARCH_MANDATE_LOCKED.md` и issue #9 без изменений. Binance USDT-M Futures; никакого Spot, реальных заявок или изменения PAPER.
