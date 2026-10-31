@@ -1,0 +1,192 @@
+{
+  "cycle": "A245",
+  "group": "A",
+  "run_id": 41245981488,
+  "job_id": 124669395539,
+  "sha_committed_workflow": "f89345105eddcc455bd3cfe67ed6478daa58c062",
+  "source_pins": "research/a245_other_originals/PREREG_RU.md",
+  "account": "3-pair controlled BTC/ETH/SOL $1000, $100 stake, 3 positions; not exact source author portfolios",
+  "cost_per_side": {
+    "base": 0.0005,
+    "stress": 0.0011
+  },
+  "data": "Binance genuine USD-M futures OHLCV 5m, mark, funding source archive SHA in artifacts",
+  "dataset_periods": [
+    "2024",
+    "2025",
+    "2026_JAN_MAY"
+  ],
+  "results": [
+    {
+      "strategy": "MTF_Hybrid",
+      "timeframe": "15m",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": 2.173020420999998,
+      "native_max_drawdown_account": 0.0772168773396741,
+      "native_trade_count": 1625
+    },
+    {
+      "strategy": "FailureToReturnStrategy",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": 0.5007340599999999,
+      "native_max_drawdown_account": 0.0023160815414129438,
+      "native_trade_count": 12
+    },
+    {
+      "strategy": "FVGChannel",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": -8.493305850999999,
+      "native_max_drawdown_account": 0.11783836908558858,
+      "native_trade_count": 897
+    },
+    {
+      "strategy": "MTF_Hybrid",
+      "timeframe": "15m",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": -10.627119038,
+      "native_max_drawdown_account": 0.14743641827412554,
+      "native_trade_count": 1536
+    },
+    {
+      "strategy": "FailureToReturnStrategy",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": 0.40697262399999995,
+      "native_max_drawdown_account": 0.002434797784816052,
+      "native_trade_count": 12
+    },
+    {
+      "strategy": "FVGChannel",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": -19.429754069,
+      "native_max_drawdown_account": 0.2133272012638228,
+      "native_trade_count": 890
+    },
+    {
+      "strategy": "MTF_Hybrid",
+      "timeframe": "15m",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": -13.789581658999998,
+      "native_max_drawdown_account": 0.1686264297495699,
+      "native_trade_count": 1736
+    },
+    {
+      "strategy": "FailureToReturnStrategy",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": 0.545338215,
+      "native_max_drawdown_account": 0.012738264515055707,
+      "native_trade_count": 23
+    },
+    {
+      "strategy": "FVGChannel",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": -13.878947857,
+      "native_max_drawdown_account": 0.1736839074111978,
+      "native_trade_count": 993
+    },
+    {
+      "strategy": "MTF_Hybrid",
+      "timeframe": "15m",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": -34.473996336999996,
+      "native_max_drawdown_account": 0.3665643660654167,
+      "native_trade_count": 1653
+    },
+    {
+      "strategy": "FailureToReturnStrategy",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": 0.39232179100000003,
+      "native_max_drawdown_account": 0.013784292152362853,
+      "native_trade_count": 24
+    },
+    {
+      "strategy": "FVGChannel",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": -23.698120922999998,
+      "native_max_drawdown_account": 0.2672966413846104,
+      "native_trade_count": 984
+    },
+    {
+      "strategy": "MTF_Hybrid",
+      "timeframe": "15m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": -5.753180553000001,
+      "native_max_drawdown_account": 0.11229203559876547,
+      "native_trade_count": 636
+    },
+    {
+      "strategy": "FailureToReturnStrategy",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": 0.45624143400000006,
+      "native_max_drawdown_account": 0.0020530748292319143,
+      "native_trade_count": 6
+    },
+    {
+      "strategy": "FVGChannel",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": -12.673265484999998,
+      "native_max_drawdown_account": 0.13470767400783848,
+      "native_trade_count": 367
+    },
+    {
+      "strategy": "MTF_Hybrid",
+      "timeframe": "15m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -10.101596290000002,
+      "native_max_drawdown_account": 0.15396304397417854,
+      "native_trade_count": 599
+    },
+    {
+      "strategy": "FailureToReturnStrategy",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": 0.409309485,
+      "native_max_drawdown_account": 0.002169555413580376,
+      "native_trade_count": 6
+    },
+    {
+      "strategy": "FVGChannel",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -18.241836031,
+      "native_max_drawdown_account": 0.18474371378518226,
+      "native_trade_count": 359
+    }
+  ],
+  "expected": 18,
+  "complete": 18,
+  "blocked": 0,
+  "artifact": {
+    "id": 13058698873,
+    "sha256": "sha256:7c6717d0207085083f89af0104674eb602e9dcab6c4aceafe6a3c9cea0b32eae",
+    "bytes": 6850575
+  },
+  "verified_futures_candidate": false
+}
