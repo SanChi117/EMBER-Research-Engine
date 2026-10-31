@@ -1,0 +1,81 @@
+name: A240 Double MA Original Binance BTC ETH One Shared Account — Native Freqtrade
+on:
+  push:
+    branches:
+      - 'research/a240-doublema-one-wallet-native-20261101'
+    paths:
+      - 'research/a240_doublema_author_wallet/**'
+      - '.github/workflows/ember-a240-doublema-author-onewallet.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original_author_btc_eth_shared_wallet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 59
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin genuine Freqtrade native implementation and original author source SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git init -q /tmp/a240-original
+          git -C /tmp/a240-original -c credential.helper= fetch --quiet --no-tags --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git 40af5c7c1c44253766428cfb06babf22f9817aa4
+          git -C /tmp/a240-original checkout -q --detach FETCH_HEAD
+          test "$(git -C /tmp/a240-original rev-parse HEAD)" = '40af5c7c1c44253766428cfb06babf22f9817aa4'
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          def blob(b):return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+          root=Path('/tmp/a240-original')
+          assert blob((root/'user_data/strategies/VideoDoubleMaFuturesStrategy.py').read_bytes())=='22ca6588bbd056e671783f676f1a4010cbfc1bb6'
+          assert blob((root/'config/config_binance_futures.json').read_bytes())=='b16e6695673c58d8b7a712fd329994b3a85313f4'
+          print('A240_AUTHOR_ORIGINAL_STRATEGY_AND_BTC_ETH_SHARED_CONFIG_GIT_SHA_OK')
+          PY
+      - name: Genuine Binance USD-M 2025 BTC ETH native OHLCV mark funding and 5m SHA receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/a240_doublema_author_wallet/a240_prepare_two.py --period 2025 --datadir a240-2025/data
+      - name: Original BTC ETH shared wallet 2025 BASE and STRESS two native Freqtrade runs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/a240_doublema_author_wallet/a240_run_and_audit.py --period 2025 --original /tmp/a240-original --datadir a240-2025/data --outdir a240-2025/native
+      - name: Genuine Binance USD-M 2026 BTC ETH native OHLCV mark funding and 5m SHA receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/a240_doublema_author_wallet/a240_prepare_two.py --period 2026 --datadir a240-2026/data
+      - name: Original BTC ETH shared wallet 2026 BASE and STRESS two native Freqtrade runs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/a240_doublema_author_wallet/a240_run_and_audit.py --period 2026 --original /tmp/a240-original --datadir a240-2026/data --outdir a240-2026/native
+      - name: Archive all genuine source SHA and complete native trades including blocked events
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a240-doublema-original-author-single-btc-eth-wallet
+          path: |
+            a240-2025/native/**
+            a240-2026/native/**
+            a240-2025/data/A197_2025_AUTHENTIC_SOURCE_SHA_MANIFEST.json
+            a240-2026/data/A195_DATA_SHA_MANIFEST.json
+            a240-2026/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
+          compression-level: 6
+          if-no-files-found: warn
