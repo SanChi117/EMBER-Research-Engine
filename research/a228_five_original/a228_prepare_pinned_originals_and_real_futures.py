@@ -169,11 +169,13 @@ def aggregate_5m(frame,timeframe):
     if timeframe=="5m":
         return frame.copy()
     rules={"15m":3,"1h":12,"4h":48}
+    pandas_rule={"15m":"15min","1h":"1h","4h":"4h"}
     if timeframe not in rules:raise ValueError(timeframe)
-    count=frame.open.resample(timeframe,closed="left",label="left").count()
+    freq=pandas_rule[timeframe]
+    count=frame.open.resample(freq,closed="left",label="left").count()
     if (count!=rules[timeframe]).any():
         raise ValueError(f"Aggregation not from complete {timeframe} UTC bins")
-    return frame.resample(timeframe,closed="left",label="left").agg({
+    return frame.resample(freq,closed="left",label="left").agg({
         "open":"first","high":"max","low":"min","close":"last","volume":"sum"
     })
 
