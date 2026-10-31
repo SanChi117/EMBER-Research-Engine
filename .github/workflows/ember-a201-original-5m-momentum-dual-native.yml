@@ -4,6 +4,7 @@ on:
     branches: [research/a201-momentum-wick-rsi-native-screen-20261031]
     paths:
       - ".github/workflows/ember-a201-original-5m-momentum-dual-native.yml"
+      - "research/native_candidate_screen_20261031/a201_*.py"
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,7 +25,9 @@ jobs:
           set -euo pipefail
           python -m pip install 'freqtrade==2026.4' technical
           python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
-          git -c credential.helper= clone --quiet --depth 1 https://github.com/TheoBrigitte/freqtrade.git /tmp/a201-original
+          git init -q /tmp/a201-original
+          git -C /tmp/a201-original -c credential.helper= fetch -q --depth 1 https://github.com/TheoBrigitte/freqtrade.git c9def379b1036064d592c3a0518a07811f5a9a76
+          git -C /tmp/a201-original checkout -q --detach FETCH_HEAD
           test "$(git -C /tmp/a201-original rev-parse HEAD)" = c9def379b1036064d592c3a0518a07811f5a9a76
           python - <<'PY'
           import hashlib,json
@@ -53,6 +56,14 @@ jobs:
                   (out/f'config-{st}-{sym}.json').write_text(json.dumps(config,indent=2))
           print('A201_TWO_ORIGINAL_SOURCES_BYTE_PIN_OK',pins)
           PY
+      - name: Falsify lookahead by testing original signals against future data
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a201_causal_prefix_original.py \
+            --original-repo /tmp/a201-original --output a201-original \
+            2>&1 | tee a201-original/causal-prefix.log
+          grep -Fq A201_BOTH_UNCHANGED_ORIGINAL_SOURCE_CAUSAL_PREFIX_AUDITS_PASS a201-original/causal-prefix.log
       - name: Prepare authentic A195 1h mark and funding data
         shell: bash
         run: |
@@ -108,6 +119,7 @@ jobs:
             a201-original/*.log
             a201-original/*.zip
             a201-original/A201_16_ACTUAL_NATIVE_TRADE_ARCHIVES_VERIFIED.json
+            a201-original/A201_ORIGINAL_SIGNAL_CAUSAL_PREFIX_MACHINE.json
             a201-original/data/A195_DATA_SHA_MANIFEST.json
             a201-original/data/A196_REAL_5M_SHA_MANIFEST.json
           retention-days: 30
