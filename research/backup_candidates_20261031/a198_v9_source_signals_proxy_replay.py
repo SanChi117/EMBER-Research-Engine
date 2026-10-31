@@ -5,7 +5,7 @@ No live API, no bot instantiated, no credentials, no orders. Strictly causal 1h/
 2 fees+slippage models x 2 risk options, no tuning. Real Binance SOL/BTC futures data.
 """
 from __future__ import annotations
-import argparse,hashlib,importlib.util,json,math,types,collections
+import argparse,hashlib,importlib.util,json,math,types,collections,sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -25,6 +25,8 @@ def load_source(file):
     assert sha==BLOB,("AUTHOR_SOURCE_BLOB_PIN_MISMATCH",sha)
     spec=importlib.util.spec_from_file_location("a198_original_v9_source_only",file)
     obj=importlib.util.module_from_spec(spec)
+    # Python dataclasses requires module registered before evaluating annotations.
+    sys.modules[spec.name]=obj
     spec.loader.exec_module(obj)
     return obj,sha
 
