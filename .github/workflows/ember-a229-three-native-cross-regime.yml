@@ -1,0 +1,48 @@
+name: A229 THREE Native Futures Originals 2024 and Jan-May 2026
+
+on:
+  push:
+    branches:
+      - 'research/a229-three-native-originals-cross-regime-20261031'
+    paths:
+      - 'research/a228_five_original/**'
+      - 'research/a229_cross_regime/**'
+      - '.github/workflows/ember-a229-three-native-cross-regime.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay_three_originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned native backtest environment, NOT live trading
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'freqtrade==2026.9' technical pandas pyarrow
+          python -m freqtrade --version
+          python -m pip freeze > research/a228_five_original/native_pip_freeze.txt
+      - name: Real Binance mainnet OHLCV/mark/funding 2024 and Jan-May 2026 and SHA verified original sources
+        run: python research/a228_five_original/a228_prepare_pinned_originals_and_real_futures.py
+      - name: Native Freqtrade independent years and fee stress for three preserved originals
+        run: python research/a228_five_original/a228_run_original_freqtrade_five.py
+      - name: Archive genuine source manifest and complete original native trade journals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a229-three-original-binance-usdm-independent-2024-2026-trades
+          path: |
+            research/a228_five_original/native_pip_freeze.txt
+            research/a228_five_original/generated/A228_ORIGINAL_AND_MARKET_RECEIPTS.json
+            research/a228_five_original/generated/native_backtests/**
+          if-no-files-found: warn
+          retention-days: 30
