@@ -1,0 +1,92 @@
+name: "EMBER A206 original raw S/R signal events versus native fills, genuine Binance both years"
+on:
+  push:
+    branches: [research/a206-original-sr-signal-vs-limit-fill-diagnostic-20261031]
+    paths:
+      - ".github/workflows/ember-a206-original-sr-signal-vs-native-fills.yml"
+      - "research/native_candidate_screen_20261031/a206_*.py"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-source-causal-signals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install exact indicator engine and pin source and report versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4' technical
+          python -c "from importlib.metadata import version;assert version('freqtrade')=='2026.4'"
+          git init -q /tmp/a206-original
+          git -C /tmp/a206-original -c credential.helper= fetch -q --depth 1 https://github.com/Meszqt/freqtrade-test.git 7062cdd465f30acb480f6ad8f678f958a8a0e554
+          git -C /tmp/a206-original checkout -q --detach FETCH_HEAD
+          test "$(git -C /tmp/a206-original rev-parse HEAD)" = 7062cdd465f30acb480f6ad8f678f958a8a0e554
+          test -s research/native_candidate_screen_20261031/A205_SR_ORIGINAL_TWO_YEAR_NATIVE_VERIFIED.json
+          mkdir -p a206-signal-audit
+      - name: Download genuine Binance Vision USD-M May-Sep 2025 with 80 original SHA receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a203_prepare_2025_holdout_source.py \
+            --datadir a206-signal-audit/2025/data 2>&1 | tee a206-signal-audit/real-2025-source.log
+          grep -Fq A203_ALL_4_REAL_2025_BINANCE_MARK_FUNDING_5M_1H_CONTINUITY_PASS a206-signal-audit/real-2025-source.log
+      - name: Download genuine Binance Vision USD-M May-Sep 2026 verified A195 A196
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+             --datadir a206-signal-audit/2026/data 2>&1 | tee a206-signal-audit/real-2026-1h.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a206-signal-audit/real-2026-1h.log
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+             --datadir a206-signal-audit/2026/data 2>&1 | tee a206-signal-audit/real-2026-5m.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a206-signal-audit/real-2026-5m.log
+      - name: Count unchanged author raw signals, verify prefix causality, compare A205 native fills
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a206_original_source_raw_signal_audit.py \
+            --source /tmp/a206-original/user_data/strategies/AggressiveSupportResistanceScalper.py \
+            --data2025 a206-signal-audit/2025/data \
+            --data2026 a206-signal-audit/2026/data \
+            --trades research/native_candidate_screen_20261031/A205_SR_ORIGINAL_TWO_YEAR_NATIVE_VERIFIED.json \
+            --output a206-signal-audit/A206_ORIGINAL_SOURCE_SIGNALS_VS_A205_NATIVE_FILL_AUDIT.json \
+            2>&1 | tee a206-signal-audit/A206-source-signal-audit.log
+          grep -Fq A206_TWO_REAL_YEARS_FOUR_PAIRS_ORIGINAL_RAW_SIGNALS_PREFIX_AUDITED a206-signal-audit/A206-source-signal-audit.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A206-original-source-signal-vs-actual-native-fills-two-real-years
+          path: |
+            a206-signal-audit/*.log
+            a206-signal-audit/A206_ORIGINAL_SOURCE_SIGNALS_VS_A205_NATIVE_FILL_AUDIT.json
+            a206-signal-audit/2025/data/A203_2025_SOURCE_SHA_MANIFEST.json
+            a206-signal-audit/2026/data/A195_DATA_SHA_MANIFEST.json
+            a206-signal-audit/2026/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
+      - name: Save independently verified raw-signal machine verdict to research branch
+        if: success()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          target=research/native_candidate_screen_20261031/A206_ORIGINAL_SOURCE_SIGNALS_VS_A205_NATIVE_FILL_AUDIT.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          git checkout -q -B a206-ci-result FETCH_HEAD
+          cp a206-signal-audit/A206_ORIGINAL_SOURCE_SIGNALS_VS_A205_NATIVE_FILL_AUDIT.json "$target"
+          git add "$target"
+          if git diff --staged --quiet; then echo A206_ALREADY_COMMITTED;exit 0;fi
+          git commit -qm "research(A206): verified original raw signals against genuine Binance history and A205 native fills"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          echo A206_RESULT_COMMITTED
