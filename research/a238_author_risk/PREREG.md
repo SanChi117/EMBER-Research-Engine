@@ -1,0 +1,11 @@
+# A238 PRE-REGISTERED: Risk_Stair_S5 author experiment account, Binance USDT-M
+
+Date 2026-10-31. MANDATE LOCKED; PAPER research only. A235 fixed original 15m source TF, but tested 3 pairs + fixed $100 stake; A238 tests author's shared account source setup.
+
+Pinned source `linhuang1212-coder/crypto-quant-trading` commit `63c012a0329a280f99fe57896456d4b9363c9c71`, `user_data/strategies/risk_exp/Risk_Stair_S5.py` blob `9b6ba1f5466727da1e9446f4e283b1c555fca59b`.
+
+Author experiment manifest `user_data/scripts/risk_experiment_manifest.json` blob `b07d45fe9485a0e71af6ff26f8cfd66af793f587` includes exact S5, 5x, late stop stages (20b/-0.06,40b/-0.04). Experiment PowerShell script `user_data/scripts/run_risk_experiments.ps1` blob `6e35055ecf8aa7e7ee247ddf5ac5f9b9a0d10c93` invokes `--config /freqtrade/user_data/config_backtest.json` and `--starting-balance 1000` for manifest strategies. Frozen config `user_data/config_backtest.json` blob `ee0f8c8a4c1ad827a38109c7872c1f09ac7383f3` explicitly: futures isolated, whitelist BTC/ETH/SOL/ADA, `stake_amount=unlimited`, `max_open_trades=4`, `tradable_balance_ratio=0.40`, no strategy-name override. S5 original strategy carries `order_types.stoploss_on_exchange=True`; preserve by removing generic A228 adapter override. **Remaining source mismatch**: PS1 strategy directory `experiments` whereas checked-in S5 source is in `risk_exp`; do not assert original exact invocation without resolver evidence.
+
+**Precommitted tests**: exact 15m signal and 5m intrabar detail, unchanged SHA-pinned class, original 5x leverage, protections as original (if none, don't invent), single shared $1000 wallet /4 max /40% balance ratio/unlimited stake, 4 symbols. 2024, 2025 and 2026 Jan–May separately reset wallet, fee BASE 0.05%/side and STRESS 0.11%/side: **six** runs. Genuine Binance MAINNET USDT-M 5m klines, 8h mark and 8h official funding for all 4 pairs, source ZIP SHA; only contract metadata via official Binance Futures testnet due HTTP 451. No spot fallback, no synthetic data. SHA check author config+manifest+script. Model fills, funding and stop handling still cannot establish actual margin/liquidation; 5x potential fatal, preserve stress and fills to report.
+
+All existing A228/A230/A235 results retained; old years are NOT new untouched OOS. Failures recorded as BLOCKED; no unearned VERIFIED. No real/PAPER actions.
