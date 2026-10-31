@@ -42,7 +42,7 @@ jobs:
           author_json=root/'user_data/strategies/TrendFutures.json'
           assert author_json.exists(), "AUTHOR_ADJACENT_OPTIMIZATION_JSON_MISSING"
           j=author_json.read_bytes()
-          jsha=hashlib.sha1(b'blob '+str(len(j)).encode()+b'\\0'+j).hexdigest()
+          jsha=hashlib.sha1(b'blob '+str(len(j)).encode()+b'\0'+j).hexdigest()
           assert jsha=='d9793456adc34cf51eb9c16a4a8ccdb3f84e6bfc',jsha
           isolated=Path('/tmp/a211-clean-strategy')
           isolated.mkdir(exist_ok=True)
