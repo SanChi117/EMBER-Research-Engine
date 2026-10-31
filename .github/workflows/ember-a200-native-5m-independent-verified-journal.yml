@@ -1,0 +1,162 @@
+name: "EMBER A200 independent source direct-signal 16 actual 5m receipts verify and SHA audit chain 200"
+on:
+  push:
+    branches: [research/a200-open-15m-event-driven-validation-20261031]
+    paths:
+      - ".github/workflows/ember-a200-native-5m-independent-verified-journal.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  independent-source-signal-actual-5m-economics-and-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: A200-Original-15m-Genia-Author-Signals-Ten-Seeds-And-16-Genuine-Binance-5m-Trade-Journals
+          run-id: 41154025918
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a200-authentic-original-author-16-real5m
+      - name: Independently examine exact code/source 16 5m trade journals 10 author random original seeds and strict gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,shutil,math
+          from pathlib import Path
+          root=Path("/tmp/a200-authentic-original-author-16-real5m")
+          dest=Path("research/native_candidate_screen_20261031")
+          file=root/"A200_AUTHOR_SOURCE_SIGNALS_16_REAL_5M_COST_RISK_RUNS.json"
+          assert file.is_file(),("MISSING_A200_MACHINE_RECEIPT",file)
+          data=json.loads(file.read_text())
+          assert data["source_git_commit"]=="2325ebac97056e6a4f1f98483713513e86239074"
+          assert data["signal_methods_directly_author_code"] is True
+          assert data["original_author_backtest_method_directly_called"] is True
+          assert data["original_author_backtest_has_RANDOM_50_50_same_bar_order"] is True
+          assert data["independent_5m_trading_executor_not_author_native"] is True
+          assert data["all_May_Sep_history_NOT_pristine_OOS"] is True
+          assert data["sim_wallet_USDT"]==1000 and data["fixed_stake_USDT"]==100
+          assert set(data["patterns"])=={"BTC","ETH","SOL","LINK"}
+          assert set(data["predeclared_gate"])=={"bigbear","bigbull"}
+          shas={};out={};baseline_sensitivity={}
+          expected_base_n={
+            "bigbear":{"BTC":15,"ETH":45,"SOL":50,"LINK":60},
+            "bigbull":{"BTC":2,"ETH":6,"SOL":11,"LINK":10}}
+          expected_base_pct={
+            "bigbear":{"BTC":-0.201066,"ETH":-0.371136,"SOL":-0.670220,"LINK":-0.920295},
+            "bigbull":{"BTC":-0.050015,"ETH":-0.150045,"SOL":-0.217067,"LINK":-0.134044}}
+          expected_stress_pct={
+            "bigbear":{"BTC":-0.487778,"ETH":-1.400763,"SOL":-1.813635,"LINK":-2.201390},
+            "bigbull":{"BTC":-0.090065,"ETH":-0.270195,"SOL":-0.432788,"LINK":-0.450325}}
+          for sym,x in data["patterns"].items():
+            assert x["native_5m_candles"]==44064 and x["real_15m_grouped_candles"]==14688
+            assert len(x["real_5m_file_sha256"])==64
+            assert set(x["independent_strict_5m"])=={
+              "bigbear_base","bigbear_stress","bigbull_base","bigbull_stress"}
+            for pattern in ("bigbear","bigbull"):
+              orig=x["source_author_seed_random_baseline"][pattern]
+              assert len(orig)==10 and [y["seed"] for y in orig]==list(range(10))
+              assert all("net_USDT" in y and y["n"]>=0 for y in orig)
+              baseline_sensitivity[f"{sym}_{pattern}"]={
+                 "min_original_author_seed_net_USDT":min(y["net_USDT"] for y in orig),
+                 "max_original_author_seed_net_USDT":max(y["net_USDT"] for y in orig),
+                 "max_minus_min_USDT":round(max(y["net_USDT"] for y in orig)-min(y["net_USDT"] for y in orig),6),
+                 "native_5m_stop_first_base_net_USDT":x["independent_strict_5m"][pattern+"_base"]["net_USDT"],
+                 "original_author_seed0_net_USDT":orig[0]["net_USDT"]}
+              for model in ("base","stress"):
+                k=f"{pattern}_{model}"
+                z=x["independent_strict_5m"][k]
+                doc=root/f"A200_{pattern}_{sym}_{model}_CONSERVATIVE_5M_TRADES.json"
+                assert doc.is_file(),doc
+                records=json.loads(doc.read_text())
+                assert z["n"]==len(records)==expected_base_n[pattern][sym]
+                assert all(t["direction"]=="SHORT" and t["entry_time"]>t["signal_time"] for t in records)
+                assert all("2026-05-13"<=t["entry_time"][:10]<"2026-10-01" for t in records)
+                assert all(t["hold_minutes"]<=1435 and t["fees"]>=0 for t in records)
+                assert abs(z["net_USDT"]-sum(t["net_pnl"] for t in records))<0.001
+                assert abs(z["total_fees_USDT"]-sum(t["fees"] for t in records))<.001
+                assert abs(z["total_funding_USDT"]-sum(t["funding_net"] for t in records))<.001
+                assert z["PF"]<1 and z["net_USDT"]<0
+                assert z["max_5m_adverse_mark_wallet_DD_pct"]>=0
+                expected=(expected_base_pct if model=="base" else expected_stress_pct)[pattern][sym]
+                assert abs(z["wallet_return_pct"]-expected)<0.000001,(sym,k,z["wallet_return_pct"],expected)
+                sha=hashlib.sha256(doc.read_bytes()).hexdigest()
+                shas[f"{sym}_{k}"]=sha
+          assert len(shas)==16
+          for pattern,meta in data["predeclared_gate"].items():
+             assert meta["count"]==0
+             assert all(v is False for v in meta["qualifying_pairs"].values())
+             assert meta["predeclared_gate_pass"] is False
+             assert meta["completed_4_pair_separate_wallet_trades_base"]==(170 if pattern=="bigbear" else 29)
+          assert data["any_candidate_economic_pass"] is False
+          source5=json.loads((root/"data/A196_REAL_5M_SHA_MANIFEST.json").read_text())
+          assert len(source5["symbols"])==4 and all(source5["symbols"][s]["candles"]==44064 for s in ("BTCUSDT","ETHUSDT","SOLUSDT","LINKUSDT"))
+          original1=json.loads((root/"data/A195_DATA_SHA_MANIFEST.json").read_text())
+          assert len(original1["source_shas"])==4
+          docs={
+            "A200_16_SOURCE_ORIGINAL_5M_TRADES_MACHINE_VERIFIED.json":data,
+            "A200_16_REAL_BINANCE_5M_TRADE_SHA256_VERIFIED.json":{
+              "source_artifact_id":13024651130,
+              "source_run":41154025918,
+              "source_artifact_sha256":"b931dc3419a6f880e25b5d36308e941c78836df66c2fdc55ee8c1f64510cb19c",
+              "real_5m_16_trade_logs_sha256":shas},
+            "A200_ORIGINAL_15M_RANDOM_SEED_SENSITIVITY_VERIFIED.json":baseline_sensitivity,
+            "A200_BINANCE_MARK_FUNDING_5M_SOURCE_SHA_VERIFIED.json":{
+              "source_5m_binance_vision":source5,
+              "mark_funding_and_1h_binance_vision":original1}
+          }
+          for name,payload in docs.items():
+             (dest/name).write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n")
+          print("A200_AUTHOR_ORIGINAL_SOURCE_10_SEEDS_AND_16_REAL_5M_INDEPENDENT_PNL_SHA_VERIFIED")
+          print(json.dumps({
+            "bigbear_trades":170,"bigbull_trades":29,
+            "n_verified_trade_jsons":16,
+            "economic_gate":"FAILED",
+            "author_seed0_and_range":baseline_sensitivity},ensure_ascii=False)[:8500])
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a199-ledger
+          grep -Fq 'INTEGRITY_PASS entries 199' /tmp/a199-ledger
+      - name: Append A200 action economic failure only after all artifacts passed independent source verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A200 \
+            --cycle GENIA_ORIGINAL_EVENT_DRIVEN_15M_4PAIRS_16_REAL_BINANCE_5M_SOURCE_REPLAY \
+            --planned "After A199 all candidates FAILED, investigate new published 15m crypto Futures 2025 to 2026 walk-forward with open source. Pre-source pinned genia503 mean-reversion-backtester commit2325ebac97056e6a4f1f98483713513e86239074, actual author BIGBEAR -1pct candle 2x volume SHORT continuation, BIGBULL +2pct candle SHORT reversion, both 15m next open entry, TP0.4pct SL0.15pct, skip 06-10UTC, max hold24h, one position each pair 100USDT stake 1000USDT isolated wallet. Freeze 4 BTC ETH SOL LINK genuine Binance USD-M historical 5m, 2 pattern x4 pair x2 fee cases 16, costs base taker0.05pct TP maker0.02pct, stress taker0.125pct TP maker0.05pct plus 0.05pct slippage at both fills. Freeze gate >=2/4 pairs positive N25 PF>=1.2 DD<=10pct and top3win<60pct at BOTH fees, >=141 trades in 141d. Strict stop-first real 5m and author original published random same-bar 15m simulator ten seeds 0..9, no optimization. PAPER RESEARCH only." \
+            --executed "Upstream original frozen git exact author multicoin_backtest.py blob e33000063b93b825af720791b8282372b6460fdc and tpsl_backtest.py blob fe1ffc3b58d28f844667d1889c30161b38b36e6c. Author original detect_bigbear/detect_bigbull and original run_book on genuine 15m aggregated Binance 5m called for 10 seeded original random tie rollouts. Public README author reported 1763 bigbear +145.6 USD and 517 bigbull +72.6 USD for 7 coin 2025Mar-2026Mar OOS but original OHLCV parquets absent so cannot assert direct author parity. Independent strict 5m actual Binance 44064 candles per pair, stop-first same-bar, conservative gap, real settled funding, two commissions+slippage, 16 trade-by-trade receipts. CI success run41154025918 artifact13024651130 SHA256 b931dc3419a6f880e25b5d36308e941c78836df66c2fdc55ee8c1f64510cb19c. Independent verify sources, positions, times, trade profits/fees and exact SHA after reading all 16 raw JSON receipts." \
+            --result "TECHNICAL_AUTHOR_SOURCE_SIGNALS_REPLAY_PASS; ORIGINAL_15M_SAME_BAR_RANDOM_50_50_ORDER_BIAS_CONFIRMED; 16_REAL_BINANCE_5M_STRICT_STOP_FIRST_SCENARIOS_COMPLETED; ECONOMIC_GATE_FAIL. Bigbear 170 separate pair-wallet trades 141d 1.21/day: BTC15 netBASE -0.201066pct STRESS -0.487778pct PF0.32998; ETH45 -0.371136pct stress -1.400763pct PF0.53622; SOL50 -0.670220pct stress -1.813635pct PF0.32998; LINK60 -0.920295pct stress -2.201390pct PF0.26398. Bigbull 29 separate trades/141d: BTC2 -0.050015pct; ETH6 -0.150045pct; SOL11 -0.217067pct; LINK10 -0.134044pct, all stressed negative. Both 0/4 qualification, NO LIVE/PAPER changes. Author historical 2025 positive claim not independently verified and not interchangeable with 2026 losses." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Original source explicitly uses np.random.random()<0.5 when TP and SL both crossed in a 15m candle, no source full OHLCV published; technical lookahead and stochastic tie makes author headline insufficient. Original authored signal functions directly reused, independent 5m conservative engine not native author's backtest, mark stop and maker queue not reproduced, 4 separate 1000USDT wallet accounts not a portfolio. Sources Binance Vision actual archive SHA, full 5m continuity, no source trading filter/TP/SL optimizations. May-Sep2026 period partly predates author 2026Aug6 publication; cannot claim pristine untouched OOS. Deep loss on tiny stakes not proof loss at all times, only fails predeclared economic gate. No real or PAPER orders." \
+            --evidence ../../research/native_candidate_screen_20261031/A200_15M_EVENT_DRIVEN_ORIGINAL_SOURCE_PREREG_RU.md \
+            --evidence ../../research/native_candidate_screen_20261031/A200_15M_ORIGINAL_SOURCE_REAL_BINANCE_RESULTS_RU.md \
+            --evidence ../../research/native_candidate_screen_20261031/A200_16_SOURCE_ORIGINAL_5M_TRADES_MACHINE_VERIFIED.json \
+            --evidence ../../research/native_candidate_screen_20261031/A200_16_REAL_BINANCE_5M_TRADE_SHA256_VERIFIED.json \
+            --evidence ../../research/native_candidate_screen_20261031/A200_ORIGINAL_15M_RANDOM_SEED_SENSITIVITY_VERIFIED.json \
+            --evidence ../../research/native_candidate_screen_20261031/A200_BINANCE_MARK_FUNDING_5M_SOURCE_SHA_VERIFIED.json \
+            --evidence ../../research/native_candidate_screen_20261031/a200_author_15m_signals_strict_real_5m.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a200-new-ledger
+          grep -Fq 'INTEGRITY_PASS entries 200' /tmp/a200-new-ledger
+      - name: Commit immutable 16 source signal real 5m journals and advance audit 200
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/native_candidate_screen_20261031/A200_16_SOURCE_ORIGINAL_5M_TRADES_MACHINE_VERIFIED.json \
+            research/native_candidate_screen_20261031/A200_16_REAL_BINANCE_5M_TRADE_SHA256_VERIFIED.json \
+            research/native_candidate_screen_20261031/A200_ORIGINAL_15M_RANDOM_SEED_SENSITIVITY_VERIFIED.json \
+            research/native_candidate_screen_20261031/A200_BINANCE_MARK_FUNDING_5M_SOURCE_SHA_VERIFIED.json \
+            research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A200 real source-pinned 15m event-driven both authors economic failed, 16 5m trade receipt SHA evidence, audit chain200"
+          git fetch origin research/a200-open-15m-event-driven-validation-20261031
+          git rebase FETCH_HEAD
+          git push origin HEAD:refs/heads/research/a200-open-15m-event-driven-validation-20261031
