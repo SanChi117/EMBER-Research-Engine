@@ -1,0 +1,3166 @@
+{
+  "caveats": [
+    "Already investigated 2024-26 market periods in project, no pristine OOS",
+    "Actual 1h mark open approximates subsecond funding settlement mark",
+    "Market order slippage scenarios do not capture venue outages or order leg asynchrony",
+    "Spot and perp quantities same; notional near 100 and 300USDT perp collateral reserve modeled",
+    "Real perp liquidation thresholds and transfer failures are NOT faithfully exchange-modelled",
+    "Four partitioned 1000USDT wallets not a unified rebalancing 4000USDT portfolio",
+    "Spot baseline different risk exposure; matched spot notional but not risk-matched",
+    "Short futures leg can liquidate even if spot leg rises, and collateral may not be transferable"
+  ],
+  "execution_approval": false,
+  "no_full_portfolio_equity_curve": true,
+  "param_rule": {
+    "fees": {
+      "base": {
+        "perp_fee": 0.0005,
+        "slippage": 0.0001,
+        "spot_fee": 0.001
+      },
+      "stress": {
+        "perp_fee": 0.00125,
+        "slippage": 0.0003,
+        "spot_fee": 0.0015
+      }
+    },
+    "market_order_only": true,
+    "modes": [
+      "always",
+      "selective"
+    ],
+    "period": "May13-Sep30 each 2024,2025,2026",
+    "perp_initial_margin_reserve_multiple": 3.0,
+    "same_coin_quantity_spot_and_short_perpetual": true,
+    "signal_funding_last_9_already_settled_greater_than": 0.0001,
+    "spot_nominal": 100.0,
+    "wallet_each_coin": 1000.0
+  },
+  "per_year_4partition_wallet_summary": {
+    "2024": {
+      "always": {
+        "base": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 9.207061,
+          "beat_cash": true,
+          "beat_spot_100USDT_each": true,
+          "four_leg_fee_USDT": 1.178039,
+          "funding_received_USDT": 10.589636,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.230177,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": -15.309648,
+          "positive_coins": 4,
+          "price_basis_pnl_USDT": -0.204537,
+          "total_trade_count": 4,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.033899
+        },
+        "stress": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 7.909777,
+          "beat_cash": true,
+          "beat_spot_100USDT_each": true,
+          "four_leg_fee_USDT": 2.15919,
+          "funding_received_USDT": 10.587519,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.197744,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": -15.856315,
+          "positive_coins": 4,
+          "price_basis_pnl_USDT": -0.518553,
+          "total_trade_count": 4,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.039025
+        }
+      },
+      "selective": {
+        "base": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": -0.138902,
+          "beat_cash": false,
+          "beat_spot_100USDT_each": true,
+          "four_leg_fee_USDT": 2.079297,
+          "funding_received_USDT": 1.984398,
+          "independent_4_partition_wallets_4000USDT_return_pct": -0.003473,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": -15.309648,
+          "positive_coins": 1,
+          "price_basis_pnl_USDT": -0.044002,
+          "total_trade_count": 7,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.046079
+        },
+        "stress": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": -2.425918,
+          "beat_cash": false,
+          "beat_spot_100USDT_each": true,
+          "four_leg_fee_USDT": 3.811511,
+          "funding_received_USDT": 1.984002,
+          "independent_4_partition_wallets_4000USDT_return_pct": -0.060648,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": -15.856315,
+          "positive_coins": 0,
+          "price_basis_pnl_USDT": -0.598409,
+          "total_trade_count": 7,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.095825
+        }
+      }
+    },
+    "2025": {
+      "always": {
+        "base": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 8.410715,
+          "beat_cash": true,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 1.385761,
+          "funding_received_USDT": 10.049764,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.210268,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 123.049181,
+          "positive_coins": 4,
+          "price_basis_pnl_USDT": -0.253288,
+          "total_trade_count": 4,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.031107
+        },
+        "stress": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 6.885166,
+          "beat_cash": true,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 2.539917,
+          "funding_received_USDT": 10.047755,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.172129,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 122.377961,
+          "positive_coins": 4,
+          "price_basis_pnl_USDT": -0.622673,
+          "total_trade_count": 4,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.044822
+        }
+      },
+      "selective": {
+        "base": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": -0.482041,
+          "beat_cash": false,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 0.585786,
+          "funding_received_USDT": 0.089769,
+          "independent_4_partition_wallets_4000USDT_return_pct": -0.012051,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 123.049181,
+          "positive_coins": 0,
+          "price_basis_pnl_USDT": 0.013976,
+          "total_trade_count": 2,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.048204
+        },
+        "stress": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": -1.126148,
+          "beat_cash": false,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 1.073699,
+          "funding_received_USDT": 0.089751,
+          "independent_4_partition_wallets_4000USDT_return_pct": -0.028154,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 122.377961,
+          "positive_coins": 0,
+          "price_basis_pnl_USDT": -0.142199,
+          "total_trade_count": 2,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.112615
+        }
+      }
+    },
+    "2026": {
+      "always": {
+        "base": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 4.326458,
+          "beat_cash": true,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 1.329886,
+          "funding_received_USDT": 5.788533,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.108161,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 85.855964,
+          "positive_coins": 4,
+          "price_basis_pnl_USDT": -0.132188,
+          "total_trade_count": 4,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.061152
+        },
+        "stress": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 2.863198,
+          "beat_cash": true,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 2.437481,
+          "funding_received_USDT": 5.787377,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.07158,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 85.218226,
+          "positive_coins": 3,
+          "price_basis_pnl_USDT": -0.486695,
+          "total_trade_count": 4,
+          "worst_individual_wallet_1h_mark_dd_pct": 0.077632
+        }
+      },
+      "selective": {
+        "base": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 0.0,
+          "beat_cash": false,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 0,
+          "funding_received_USDT": 0,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.0,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 85.855964,
+          "positive_coins": 0,
+          "price_basis_pnl_USDT": 0,
+          "total_trade_count": 0,
+          "worst_individual_wallet_1h_mark_dd_pct": 0
+        },
+        "stress": {
+          "PORTFOLIO_MAX_DRAWDOWN_NOT_COMPUTED": true,
+          "all_four_wallets_combined_net_USDT": 0.0,
+          "beat_cash": false,
+          "beat_spot_100USDT_each": false,
+          "four_leg_fee_USDT": 0,
+          "funding_received_USDT": 0,
+          "independent_4_partition_wallets_4000USDT_return_pct": 0.0,
+          "margin_risk_breaches": 0,
+          "net_100USDT_each_coin_spot_benchmark_USDT": 85.218226,
+          "positive_coins": 0,
+          "price_basis_pnl_USDT": 0,
+          "total_trade_count": 0,
+          "worst_individual_wallet_1h_mark_dd_pct": 0
+        }
+      }
+    }
+  },
+  "research_gate": {
+    "always": {
+      "execution_approval": false,
+      "research_economy_gate": true
+    },
+    "selective": {
+      "execution_approval": false,
+      "research_economy_gate": false
+    }
+  },
+  "research_type": "INDEPENDENT_REPLAY_NOT_FREQTRADE_NATIVE",
+  "results": {
+    "2024": {
+      "BTC": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 2.299127,
+            "basis_price_pnl_after_slippage_USDT": -0.056542,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.304429,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.018336,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.938156,
+            "net_vs_spot_hold_USDT": -0.836756,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 2.774912,
+            "trades": 1,
+            "wallet_profit_USDT": 1.938156,
+            "wallet_return_pct": 0.193816,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.432104
+          },
+          "stress": {
+            "actual_funding_received_USDT": 2.298667,
+            "basis_price_pnl_after_slippage_USDT": -0.13769,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.557983,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.034823,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.602994,
+            "net_vs_spot_hold_USDT": -1.029308,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 2.632302,
+            "trades": 1,
+            "wallet_profit_USDT": 1.602994,
+            "wallet_return_pct": 0.160299,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.431419
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0.445677,
+            "basis_price_pnl_after_slippage_USDT": -0.042615,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.607729,
+            "losers": 1,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.046079,
+            "mean_hold_days": 6.83333,
+            "net_vs_cash_USDT": -0.204668,
+            "net_vs_spot_hold_USDT": -2.97958,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 2.774912,
+            "trades": 2,
+            "wallet_profit_USDT": -0.204668,
+            "wallet_return_pct": -0.020467,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.770725
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0.445588,
+            "basis_price_pnl_after_slippage_USDT": -0.204648,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 1.114009,
+            "losers": 2,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.095825,
+            "mean_hold_days": 6.83333,
+            "net_vs_cash_USDT": -0.87307,
+            "net_vs_spot_hold_USDT": -3.505371,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 2.632302,
+            "trades": 2,
+            "wallet_profit_USDT": -0.87307,
+            "wallet_return_pct": -0.087307,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.769971
+          }
+        }
+      },
+      "ETH": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 3.031282,
+            "basis_price_pnl_after_slippage_USDT": -0.066087,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.283185,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.023505,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.682011,
+            "net_vs_spot_hold_USDT": 14.054059,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -11.372048,
+            "trades": 1,
+            "wallet_profit_USDT": 2.682011,
+            "wallet_return_pct": 0.268201,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.955777
+          },
+          "stress": {
+            "actual_funding_received_USDT": 3.030676,
+            "basis_price_pnl_after_slippage_USDT": -0.141569,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.519042,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.039025,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.370066,
+            "net_vs_spot_hold_USDT": 13.871988,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -11.501923,
+            "trades": 1,
+            "wallet_profit_USDT": 2.370066,
+            "wallet_return_pct": 0.237007,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.955186
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0.598215,
+            "basis_price_pnl_after_slippage_USDT": -0.016511,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.594075,
+            "losers": 1,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.042841,
+            "mean_hold_days": 8.0,
+            "net_vs_cash_USDT": -0.012371,
+            "net_vs_spot_hold_USDT": 11.359677,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -11.372048,
+            "trades": 2,
+            "wallet_profit_USDT": -0.012371,
+            "wallet_return_pct": -0.001237,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.845148
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0.598096,
+            "basis_price_pnl_after_slippage_USDT": -0.17491,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 1.088986,
+            "losers": 2,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.092225,
+            "mean_hold_days": 8.0,
+            "net_vs_cash_USDT": -0.6658,
+            "net_vs_spot_hold_USDT": 10.836122,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -11.501923,
+            "trades": 2,
+            "wallet_profit_USDT": -0.6658,
+            "wallet_return_pct": -0.06658,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.844379
+          }
+        }
+      },
+      "LINK": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 2.561166,
+            "basis_price_pnl_after_slippage_USDT": -0.044839,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.281011,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.033899,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.235316,
+            "net_vs_spot_hold_USDT": 15.044347,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -12.80903,
+            "trades": 1,
+            "wallet_profit_USDT": 2.235316,
+            "wallet_return_pct": 0.223532,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.843997
+          },
+          "stress": {
+            "actual_funding_received_USDT": 2.560654,
+            "basis_price_pnl_after_slippage_USDT": -0.119744,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.515047,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.0376,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.925864,
+            "net_vs_spot_hold_USDT": 14.863475,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -12.937611,
+            "trades": 1,
+            "wallet_profit_USDT": 1.925864,
+            "wallet_return_pct": 0.192586,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.843429
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0.423743,
+            "basis_price_pnl_after_slippage_USDT": -0.023362,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.581856,
+            "losers": 2,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.038557,
+            "mean_hold_days": 6.5,
+            "net_vs_cash_USDT": -0.181475,
+            "net_vs_spot_hold_USDT": 12.627555,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -12.80903,
+            "trades": 2,
+            "wallet_profit_USDT": -0.181475,
+            "wallet_return_pct": -0.018147,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.905315
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0.423659,
+            "basis_price_pnl_after_slippage_USDT": -0.178505,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 1.066605,
+            "losers": 2,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.082145,
+            "mean_hold_days": 6.5,
+            "net_vs_cash_USDT": -0.82145,
+            "net_vs_spot_hold_USDT": 12.116161,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": -12.937611,
+            "trades": 2,
+            "wallet_profit_USDT": -0.82145,
+            "wallet_return_pct": -0.082145,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.904534
+          }
+        }
+      },
+      "SOL": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 2.698061,
+            "basis_price_pnl_after_slippage_USDT": -0.037069,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.309414,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.019506,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.351578,
+            "net_vs_spot_hold_USDT": -3.74494,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 6.096518,
+            "trades": 1,
+            "wallet_profit_USDT": 2.351578,
+            "wallet_return_pct": 0.235158,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.978816
+          },
+          "stress": {
+            "actual_funding_received_USDT": 2.697522,
+            "basis_price_pnl_after_slippage_USDT": -0.11955,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.567118,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.035994,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.010853,
+            "net_vs_spot_hold_USDT": -3.940064,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 5.950917,
+            "trades": 1,
+            "wallet_profit_USDT": 2.010853,
+            "wallet_return_pct": 0.201085,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.978223
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0.516763,
+            "basis_price_pnl_after_slippage_USDT": 0.038486,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.295637,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.01958,
+            "mean_hold_days": 13.0,
+            "net_vs_cash_USDT": 0.259612,
+            "net_vs_spot_hold_USDT": -5.836906,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 6.096518,
+            "trades": 1,
+            "wallet_profit_USDT": 0.259612,
+            "wallet_return_pct": 0.025961,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.82053
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0.516659,
+            "basis_price_pnl_after_slippage_USDT": -0.040346,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.541911,
+            "losers": 1,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.036077,
+            "mean_hold_days": 13.0,
+            "net_vs_cash_USDT": -0.065598,
+            "net_vs_spot_hold_USDT": -6.016515,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 5.950917,
+            "trades": 1,
+            "wallet_profit_USDT": -0.065598,
+            "wallet_return_pct": -0.00656,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.819766
+          }
+        }
+      }
+    },
+    "2025": {
+      "BTC": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 2.582351,
+            "basis_price_pnl_after_slippage_USDT": -0.034286,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.316341,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.019205,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.231724,
+            "net_vs_spot_hold_USDT": -8.487066,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 10.718789,
+            "trades": 1,
+            "wallet_profit_USDT": 2.231724,
+            "wallet_return_pct": 0.223172,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.331643
+          },
+          "stress": {
+            "actual_funding_received_USDT": 2.581835,
+            "basis_price_pnl_after_slippage_USDT": -0.118613,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.579807,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.035692,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.883415,
+            "net_vs_spot_hold_USDT": -8.685613,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 10.569028,
+            "trades": 1,
+            "wallet_profit_USDT": 1.883415,
+            "wallet_return_pct": 0.188342,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.330979
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -10.718789,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 10.718789,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -10.569028,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 10.569028,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      },
+      "ETH": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 3.124808,
+            "basis_price_pnl_after_slippage_USDT": -0.009927,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.399042,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.025577,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.715839,
+            "net_vs_spot_hold_USDT": -63.09119,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 65.807029,
+            "trades": 1,
+            "wallet_profit_USDT": 2.715839,
+            "wallet_return_pct": 0.271584,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.035188
+          },
+          "stress": {
+            "actual_funding_received_USDT": 3.124183,
+            "basis_price_pnl_after_slippage_USDT": -0.116306,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.731382,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.035886,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.276496,
+            "net_vs_spot_hold_USDT": -63.331181,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 65.607676,
+            "trades": 1,
+            "wallet_profit_USDT": 2.276496,
+            "wallet_return_pct": 0.22765,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.034783
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -65.807029,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 65.807029,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -65.607676,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 65.607676,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      },
+      "LINK": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 2.640129,
+            "basis_price_pnl_after_slippage_USDT": -0.170871,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.340786,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.031107,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 2.128472,
+            "net_vs_spot_hold_USDT": -24.859012,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 26.987483,
+            "trades": 1,
+            "wallet_profit_USDT": 2.128472,
+            "wallet_return_pct": 0.212847,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.451121
+          },
+          "stress": {
+            "actual_funding_received_USDT": 2.639601,
+            "basis_price_pnl_after_slippage_USDT": -0.26169,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.624624,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.044822,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.753287,
+            "net_vs_spot_hold_USDT": -25.06979,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 26.823076,
+            "trades": 1,
+            "wallet_profit_USDT": 1.753287,
+            "wallet_return_pct": 0.175329,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.450632
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -26.987483,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 26.987483,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -26.823076,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 26.823076,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      },
+      "SOL": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 1.702476,
+            "basis_price_pnl_after_slippage_USDT": -0.038204,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.329592,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.018718,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.33468,
+            "net_vs_spot_hold_USDT": -18.2012,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 19.53588,
+            "trades": 1,
+            "wallet_profit_USDT": 1.33468,
+            "wallet_return_pct": 0.133468,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.7838
+          },
+          "stress": {
+            "actual_funding_received_USDT": 1.702136,
+            "basis_price_pnl_after_slippage_USDT": -0.126064,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.604104,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.035206,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 0.971968,
+            "net_vs_spot_hold_USDT": -18.406213,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 19.378181,
+            "trades": 1,
+            "wallet_profit_USDT": 0.971968,
+            "wallet_return_pct": 0.097197,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.783246
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0.089769,
+            "basis_price_pnl_after_slippage_USDT": 0.013976,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.585786,
+            "losers": 2,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.048204,
+            "mean_hold_days": 1.83333,
+            "net_vs_cash_USDT": -0.482041,
+            "net_vs_spot_hold_USDT": -20.017921,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 19.53588,
+            "trades": 2,
+            "wallet_profit_USDT": -0.482041,
+            "wallet_return_pct": -0.048204,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.795225
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0.089751,
+            "basis_price_pnl_after_slippage_USDT": -0.142199,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 1.073699,
+            "losers": 2,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.112615,
+            "mean_hold_days": 1.83333,
+            "net_vs_cash_USDT": -1.126148,
+            "net_vs_spot_hold_USDT": -20.504329,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 19.378181,
+            "trades": 2,
+            "wallet_profit_USDT": -1.126148,
+            "wallet_return_pct": -0.112615,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.794466
+          }
+        }
+      }
+    },
+    "2026": {
+      "BTC": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 1.843687,
+            "basis_price_pnl_after_slippage_USDT": -0.036748,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.305725,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.018533,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.501214,
+            "net_vs_spot_hold_USDT": -2.14864,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 3.649854,
+            "trades": 1,
+            "wallet_profit_USDT": 1.501214,
+            "wallet_return_pct": 0.150121,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.710604
+          },
+          "stress": {
+            "actual_funding_received_USDT": 1.843319,
+            "basis_price_pnl_after_slippage_USDT": -0.118243,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.560346,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.03502,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.164729,
+            "net_vs_spot_hold_USDT": -2.341728,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 3.506456,
+            "trades": 1,
+            "wallet_profit_USDT": 1.164729,
+            "wallet_return_pct": 0.116473,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.709865
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -3.649854,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 3.649854,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -3.506456,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 3.506456,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      },
+      "ETH": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 1.495592,
+            "basis_price_pnl_after_slippage_USDT": -0.044916,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.327009,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.019588,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.123666,
+            "net_vs_spot_hold_USDT": -16.702609,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 17.826275,
+            "trades": 1,
+            "wallet_profit_USDT": 1.123666,
+            "wallet_return_pct": 0.112367,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.27853
+          },
+          "stress": {
+            "actual_funding_received_USDT": 1.495293,
+            "basis_price_pnl_after_slippage_USDT": -0.132084,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.599358,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.036074,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 0.76385,
+            "net_vs_spot_hold_USDT": -16.906265,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 17.670115,
+            "trades": 1,
+            "wallet_profit_USDT": 0.76385,
+            "wallet_return_pct": 0.076385,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.277876
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -17.826275,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 17.826275,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -17.670115,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 17.670115,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      },
+      "LINK": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 1.996147,
+            "basis_price_pnl_after_slippage_USDT": -0.047904,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.359311,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.029627,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.588932,
+            "net_vs_spot_hold_USDT": -37.754838,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 39.34377,
+            "trades": 1,
+            "wallet_profit_USDT": 1.588932,
+            "wallet_return_pct": 0.158893,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.673889
+          },
+          "stress": {
+            "actual_funding_received_USDT": 1.995748,
+            "basis_price_pnl_after_slippage_USDT": -0.143683,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.65856,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.04611,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 1.193505,
+            "net_vs_spot_hold_USDT": -37.974735,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 39.16824,
+            "trades": 1,
+            "wallet_profit_USDT": 1.193505,
+            "wallet_return_pct": 0.11935,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 1.673357
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -39.34377,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 39.34377,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -39.16824,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 39.16824,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      },
+      "SOL": {
+        "always": {
+          "base": {
+            "actual_funding_received_USDT": 0.453107,
+            "basis_price_pnl_after_slippage_USDT": -0.00262,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0.337841,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.061152,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": 0.112646,
+            "net_vs_spot_hold_USDT": -24.923419,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 25.036065,
+            "trades": 1,
+            "wallet_profit_USDT": 0.112646,
+            "wallet_return_pct": 0.011265,
+            "winners": 1,
+            "worst_perp_collateral_to_notional_ratio": 2.033586
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0.453017,
+            "basis_price_pnl_after_slippage_USDT": -0.092685,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0.619217,
+            "losers": 1,
+            "max_1h_marked_to_market_wallet_dd_pct": 0.077632,
+            "mean_hold_days": 141.0,
+            "net_vs_cash_USDT": -0.258886,
+            "net_vs_spot_hold_USDT": -25.132301,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 24.873415,
+            "trades": 1,
+            "wallet_profit_USDT": -0.258886,
+            "wallet_return_pct": -0.025889,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": 2.03298
+          }
+        },
+        "selective": {
+          "base": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.0005,
+              "slippage": 0.0001,
+              "spot_fee": 0.001
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -25.036065,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 25.036065,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          },
+          "stress": {
+            "actual_funding_received_USDT": 0,
+            "basis_price_pnl_after_slippage_USDT": 0,
+            "commission_model": {
+              "perp_fee": 0.00125,
+              "slippage": 0.0003,
+              "spot_fee": 0.0015
+            },
+            "four_leg_fees_paid_USDT": 0,
+            "losers": 0,
+            "max_1h_marked_to_market_wallet_dd_pct": 0,
+            "mean_hold_days": null,
+            "net_vs_cash_USDT": 0.0,
+            "net_vs_spot_hold_USDT": -24.873415,
+            "perp_margin_risk_breach": false,
+            "source_mark_at_settlement_approximation": "genuine mark price current-hour OPEN; exact subsecond mark is unavailable",
+            "spot_only_100USDT_hold_benchmark_net_USDT": 24.873415,
+            "trades": 0,
+            "wallet_profit_USDT": 0.0,
+            "wallet_return_pct": 0.0,
+            "winners": 0,
+            "worst_perp_collateral_to_notional_ratio": null
+          }
+        }
+      }
+    }
+  },
+  "schema": "A212_GENUINE_BOTH_SPOT_PERP_MARK_SETTLED_FUNDING_CARRY_TEST",
+  "source_idea": "Kureshi25/cryptobot funding_scan.py and selectivity_test.py, WITHOUT their funding-only engine",
+  "source_integrity": {
+    "2024-BTC": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2024-ETH": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2024-LINK": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2024-SOL": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2025-BTC": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2025-ETH": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2025-LINK": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2025-SOL": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 0,
+      "hourly_price_rows": 3672
+    },
+    "2026-BTC": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 24,
+      "hourly_price_rows": 3672
+    },
+    "2026-ETH": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 24,
+      "hourly_price_rows": 3672
+    },
+    "2026-LINK": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 24,
+      "hourly_price_rows": 3672
+    },
+    "2026-SOL": {
+      "all_three_leg_hourly_prices_contiguous": true,
+      "funding_settlements": 459,
+      "genuine_daily_mark_hour_recoveries": 24,
+      "hourly_price_rows": 3672
+    }
+  },
+  "source_zip_csv_sha256": {
+    "2024-BTC-funding-05": {
+      "csv_sha256": "a34fabae463dec2ecc27f818d6d5b4dbc25219c91ffaddd977efe9059006e10c",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "aef8c5fdce1493fd570b5829a72f2f17c7e459483390f25544d16c2a30be592e"
+    },
+    "2024-BTC-funding-06": {
+      "csv_sha256": "7c470eeee3147e084d6f1fb2daa77b1fd81a3b3dc9c4cb803473e9eca7cacb91",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "43fc4473820d1fb4fe340d1b1951a87555f6841aa352e684fa95d6adffce04c6"
+    },
+    "2024-BTC-funding-07": {
+      "csv_sha256": "60d8e545d10334fec77b28b698b694f5c2b968a1b37e68d0a909c5dd0417a138",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "acab0593c1452660ce74a6c239fb215c1192b0a9c6e8c1689e6495de40a0174b"
+    },
+    "2024-BTC-funding-08": {
+      "csv_sha256": "5031f1d1dde94295b621afcd52b5c4bd5c93cebaadcc0a984c9c0ed0f1324367",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "7003d29a43dd5f9357f838da8766834954939e22c1d80af682d9f33984f67b71"
+    },
+    "2024-BTC-funding-09": {
+      "csv_sha256": "5ba49e01519e554a26aa68bf57e94d745b504de738ff522cdd0781542efc626f",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "6ef23b02392b481ef9c3855434bf3644289fb6e228b4f7d9a0dfc6d3cdff1116"
+    },
+    "2024-BTC-mark-05": {
+      "csv_sha256": "055c2d8546720b245df56c5bebce149a40a99dba75091c42b38beb1651f91ef2",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2024-05.zip",
+      "zip_sha256": "4cd99fc326ea26513e995e09018a6303ca51581503dd01b7c79188f8fea100fe"
+    },
+    "2024-BTC-mark-06": {
+      "csv_sha256": "87a0d2be4c7cb0c882b6720ce50e49406ba734dbbba144b0b11658cdfc4f8b8f",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2024-06.zip",
+      "zip_sha256": "f725086a0492f3a8be3234413fc6902d8191a4ed074c5a15d4bf0e53d8f37efb"
+    },
+    "2024-BTC-mark-07": {
+      "csv_sha256": "5b4c960ac0da188debfd02482638ea4e9ecd11252828aa11e3d9f9ab9480e54d",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2024-07.zip",
+      "zip_sha256": "1841595033d00f777e1fa1229a30d121e8953deee29c1150d9ae7f0c650604f3"
+    },
+    "2024-BTC-mark-08": {
+      "csv_sha256": "43b07f6662b5a84332beb00ab7495df5342838acad69746a72e24de0a778c755",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2024-08.zip",
+      "zip_sha256": "445f615d788151be98e4d021ba11ebb29ebc26ae2fe2ae6aeedc3e1ac0c7afab"
+    },
+    "2024-BTC-mark-09": {
+      "csv_sha256": "a958baf3bf10e4dc5e02e7a00ea81431046b57dd5695cfa29fd44584901c96dc",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2024-09.zip",
+      "zip_sha256": "cea573092cc212d76601450db3abe4dda8a801ae8cb770df771352ff4779e2af"
+    },
+    "2024-BTC-perp-05": {
+      "csv_sha256": "0b75d764abe13630b8569980973aa3c8c15a7198bbaab75997ad11cd0144eb61",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-05.zip",
+      "zip_sha256": "1d607e3b26e6886ba742477bc97687f0b86c4c26ac564325dc5f1667e0362d35"
+    },
+    "2024-BTC-perp-06": {
+      "csv_sha256": "afd6f59af19f2875c9e60eab6602506c71e5b30aba0f849f714bef69ecd11ca2",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-06.zip",
+      "zip_sha256": "7dba8642e56641fca2c7f3f363050ae88bf0d6c87d28e14b747fbd3267d4d3a8"
+    },
+    "2024-BTC-perp-07": {
+      "csv_sha256": "adc480fd9a76b074ac475da9eec0e0045364b1a5811f41a3cea3abb75638ac3e",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-07.zip",
+      "zip_sha256": "920aacb84b2745ee8f31806a753cdc5b2d672e6814d9c50c0bf524ad45eb5611"
+    },
+    "2024-BTC-perp-08": {
+      "csv_sha256": "7f29c7b3814ca90cc77d5921783da8187e0c8790b7b346b7db3de0fadec74483",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-08.zip",
+      "zip_sha256": "8d8465eb4c8a4fd05ebc0126e4c14a217edb2039441546bf095229e975268de6"
+    },
+    "2024-BTC-perp-09": {
+      "csv_sha256": "8293493f536ef822445ea6df56a5660fa57df90d8afd6ea448d0e92cf709e2c4",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-09.zip",
+      "zip_sha256": "0a8118b3601f18ddad04a8afcf887fdc01661f66824a0ce49e0419be1f97f907"
+    },
+    "2024-BTC-spot-05": {
+      "csv_sha256": "91dbe1643d1ad647950d050f0cf1df64446a7018c7c8bcc03b6ca967d897f523",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-05.zip",
+      "zip_sha256": "077c71eec71a8ecf2edb6e3a3927b600b8f358fd37066ce120c19fb5302a9ab8"
+    },
+    "2024-BTC-spot-06": {
+      "csv_sha256": "296ecbf770ba2da7081b524e27bb1a5f8c48fa8086fefac550976436ad7147de",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-06.zip",
+      "zip_sha256": "2e1f968fa34b9feabfb19cc6eec47a146e20d64a706f4b17d0babf4d2f475c39"
+    },
+    "2024-BTC-spot-07": {
+      "csv_sha256": "98da4aab966ab3f9b1876094b39b57136b948653c8cf700330f66bc73d8314a0",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-07.zip",
+      "zip_sha256": "41fd58a70ae40bebb74682555cc5054709f8dde0f5c8193ae2103dac95274e5f"
+    },
+    "2024-BTC-spot-08": {
+      "csv_sha256": "29350a336ad85f05843bbc9c9a814d6d5fc549fddd120ea339222d008cb9a520",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-08.zip",
+      "zip_sha256": "88521a975ee7bfdd21f891d81f4243a01b90b977cf525d11747e27c66e3bad60"
+    },
+    "2024-BTC-spot-09": {
+      "csv_sha256": "4a7b53becfa4d523eefb3ab7bbc7bcd3f01d29f8a9bb68e8024004aed6395e12",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2024-09.zip",
+      "zip_sha256": "123f402c6dbf19b9b72b4af7ad4d5325c73ba4833148cc398b803d7a34ac5c5f"
+    },
+    "2024-ETH-funding-05": {
+      "csv_sha256": "24c95ca7ba4b988ef32ec0630a8a45d65f2e8950562d319db9918872b05ae307",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "8350ab4d61b12ec61539611e30809039f54814213bc4c937609360b1ff28b5e0"
+    },
+    "2024-ETH-funding-06": {
+      "csv_sha256": "fb54578bc02f43acd34cf6675217b6a663effd31bf8a434b9495ef6da34a87e1",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "def13f4a478c28b0111fb24c57f95fcee80e71982ed74f12e465d20d328e2275"
+    },
+    "2024-ETH-funding-07": {
+      "csv_sha256": "32bdbd3ea7c5b67adb052a55461e683cd9fc8b0b6183243897dd397f10a6a655",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "9d236281ab6430250ad2b472cbbf03812a40aed42e73c8339fc6be55a2417a82"
+    },
+    "2024-ETH-funding-08": {
+      "csv_sha256": "69f71f0c8a87d5bda2e1810c3757fe6a40be2cb5243883ec27442ce9a78f43ae",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "e17684bc761924eb5e1912c52cfa997eddeb99da303e68e28f6f37369f672b9d"
+    },
+    "2024-ETH-funding-09": {
+      "csv_sha256": "fd880d5b9364768b9b3772d1608bae4890246d036ec0a01a9236b8937ab650b6",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "ffb6e7441053137cb7ca81cc83bcdd996612f7dbb15aa2e168a7ee521f8cbbca"
+    },
+    "2024-ETH-mark-05": {
+      "csv_sha256": "6e1824a8baa375b204bd7119499402f41a88636ca448c81d73e260c913446c2d",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2024-05.zip",
+      "zip_sha256": "51739079dcec6b65dfc3b108f1f6d009a8e92a3ee60425dd8384e7604974a7be"
+    },
+    "2024-ETH-mark-06": {
+      "csv_sha256": "6d3e6a6ab876e49597981d407daa7d4f84e30cf4516291e85b90ab4d1cd1c933",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2024-06.zip",
+      "zip_sha256": "e16d550e6995d44bb5820218e1a817012be1495790c1f5074e31d681f13c2cf0"
+    },
+    "2024-ETH-mark-07": {
+      "csv_sha256": "f12d92d0999c7ba6c2e298f0d3b5c29c5486c4203ab482fd0694e58acf4f5833",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2024-07.zip",
+      "zip_sha256": "7f296e401087e50f3156779ad25a67e29b138cf35aa8afc89971e0862b42011e"
+    },
+    "2024-ETH-mark-08": {
+      "csv_sha256": "85438525d099a0e2434061dad673502e88e5df23a598e9e7fd547360afd9a360",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2024-08.zip",
+      "zip_sha256": "81050d8e794a6c82a728a2ef1aeeea825ded69960aa905742796c5244eb7febe"
+    },
+    "2024-ETH-mark-09": {
+      "csv_sha256": "f9a74f073cafc9a8fccd68bf597be94c253920db493496a0e72c5656390cd582",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2024-09.zip",
+      "zip_sha256": "5c98619433ccccb9484dbe9e278dac80b40944f63440941ca60142f4efa415b2"
+    },
+    "2024-ETH-perp-05": {
+      "csv_sha256": "6a68141ddb62b61c23a979b2e821649e58d3a8688aab9a0a14ce107f1e089edd",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-05.zip",
+      "zip_sha256": "a9b42949325fd4f236c7c88b63f35d94910109218ce2db80b8e29f7a2b2d623b"
+    },
+    "2024-ETH-perp-06": {
+      "csv_sha256": "11aa93d4c162e2392dc0a3c3d026f8852a89ed493bb48f40dcdb9527e10712a1",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-06.zip",
+      "zip_sha256": "479dced4a591035987e084dc8a5e5f3f1f2593704c0aeecdebc20c89b35c1d98"
+    },
+    "2024-ETH-perp-07": {
+      "csv_sha256": "f95e9c486bf0264632fda1e9bdf097dca69508bd1f2b86ee7014a5931a6909e8",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-07.zip",
+      "zip_sha256": "8cc8d8b6ef13fa0393f53690e5d569afb8a50488e4d7852e20ac22d7bcf17cf5"
+    },
+    "2024-ETH-perp-08": {
+      "csv_sha256": "e30427d292ded2415508e13111dee403456f1e60a98362ef727f511a5108ced7",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-08.zip",
+      "zip_sha256": "00eddbb3297515be14426119f07468846cd04dc527dbc19834dd45294740a67c"
+    },
+    "2024-ETH-perp-09": {
+      "csv_sha256": "25887f4f82c4a5ab5855138ed96b6a10d47de53c5ee7949c09b32fc8fa5db2e2",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-09.zip",
+      "zip_sha256": "37bea2dbe4281fbcaa45a849b6eed4393713b7236c5cb35cff63876e96df5677"
+    },
+    "2024-ETH-spot-05": {
+      "csv_sha256": "a924200708df4730346d10f076c1f2001ce0297a945d2c78a9ebb29dece98f3a",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-05.zip",
+      "zip_sha256": "0307d64f0d9ae6ff4001442a014d7b02dcbc5a003dcc36ba139f1c9695996b51"
+    },
+    "2024-ETH-spot-06": {
+      "csv_sha256": "646d754e5a1bfb2726c188b3b36e77addb6b421103912cb6527edcb059866b30",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-06.zip",
+      "zip_sha256": "59ee6920bd72d93d1130c89711c93ea192bbfd5f82b548dcb0448f66450f6a06"
+    },
+    "2024-ETH-spot-07": {
+      "csv_sha256": "fd9142051e9cf193c744d61e25b7b0addccace4e0b4a694f623da7ae6f44f810",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-07.zip",
+      "zip_sha256": "83181cfcc1f1e32a542e2c220cbd58acd1c550cc64ad1e2c414e47088266aa7c"
+    },
+    "2024-ETH-spot-08": {
+      "csv_sha256": "00e15772abddace92de1f32e445678d6393bd21fa168e1ba859063f65080d7c2",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-08.zip",
+      "zip_sha256": "d908255a48978f6acb769c4b856a3307c58a8c19dbf2b3b7f10067245d5e8b89"
+    },
+    "2024-ETH-spot-09": {
+      "csv_sha256": "484ab5341b08e58d387c1cff60a65927862dc46702583ec88bd2eff8dcfe5969",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2024-09.zip",
+      "zip_sha256": "bfbdda97d03abac469199120ec3c2f1305e2d5947e9155ff84dbeafe33cd4a67"
+    },
+    "2024-LINK-funding-05": {
+      "csv_sha256": "a1b29a9e5027e0c3a3c979172d847d2956aabae622f543509cd908f9b17661bf",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "57e4ff08bdd4a70e775f722f0ef8a104e937e719f6cfdd6557c9628e2ef50895"
+    },
+    "2024-LINK-funding-06": {
+      "csv_sha256": "925d737bea5faa860ebad9014d9880fbdc08a487b270647fce387f8b615d4580",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "ed259e3baf5dd43e03751fdfc78b35e5978c7c7dd01a61b0dbe29d0d09b2de83"
+    },
+    "2024-LINK-funding-07": {
+      "csv_sha256": "27c0d0f54991aecdc4b797ff838bc1e10fd801ddc3d01e710fbc09a53bd72ca8",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "84fda29e97f5e126ab3d301d83aadd58a271b9cb7e128eae315629a43fec8040"
+    },
+    "2024-LINK-funding-08": {
+      "csv_sha256": "24165662be144e9f9daf080cb3b05eafa13cc5fc0a5c96b4637722d0f093934b",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "9cb25c7b945c3e0df7f40833e46c893ab10c9e4eff1fcbbd17967fe04571332d"
+    },
+    "2024-LINK-funding-09": {
+      "csv_sha256": "8993efb733b8cf081000c6821fc03c26d378eff744fab32828a4737890dbeea8",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "82f0d865cf2d02ab345c4254fe59ffeb3e5b6bae39bcb1a0d06dc67ff55a718a"
+    },
+    "2024-LINK-mark-05": {
+      "csv_sha256": "7a895ec859c8c15c34b749d9dcf5d7168874c7810badbefdaea22592be36e0b7",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2024-05.zip",
+      "zip_sha256": "4cbb8b5067940a19ea57c0869855c1c1597a8b4a9a1a8727835c79c260926994"
+    },
+    "2024-LINK-mark-06": {
+      "csv_sha256": "e21bf1deb176d848c00382ae2210e3473681235d2157adfe6fdb067b4a594298",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2024-06.zip",
+      "zip_sha256": "2e9329ba6ff7edd33271e5cb1792ab2416be830e416f5cb8183db3103a324b7f"
+    },
+    "2024-LINK-mark-07": {
+      "csv_sha256": "544d8516ac0fd1e6ecdd38bb152c8fec9eb7ee0ada340f73a87e4fe070972794",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2024-07.zip",
+      "zip_sha256": "8d4d60550c0901fb581493c386b7cc0eb8fb578de7fea39ec9b7605142183cb5"
+    },
+    "2024-LINK-mark-08": {
+      "csv_sha256": "3e611df02a072129044d8d638b3ea456f08bfba71989ecc033a16c7ab1328723",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2024-08.zip",
+      "zip_sha256": "07d1a012efcc13d105830fc95e5343c8a09701948996ad61db56aebf341f5195"
+    },
+    "2024-LINK-mark-09": {
+      "csv_sha256": "453286a636153f1c4e39037966f78f64d2101522ffb38fe6a9d22fcdcfe924a1",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2024-09.zip",
+      "zip_sha256": "576cbb08c8e47a1f1efe6a64bdc409b65b0eeaab7deed03e5a42a153f2641258"
+    },
+    "2024-LINK-perp-05": {
+      "csv_sha256": "204e902c1828f983e555139cc928f6ab6dc42c7a8b9cb561ca0cbac09ae376a0",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-05.zip",
+      "zip_sha256": "a0db20d251b5e4e7afa0b61905440aa4b5a1f5cae819cabbf90fb8bbf11b5e14"
+    },
+    "2024-LINK-perp-06": {
+      "csv_sha256": "fcda8743bafb66a903e5253947e61aa1cd7145d89699efda121c0d7e58cd2479",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-06.zip",
+      "zip_sha256": "8a05ec52167f931b1cf3fddea3c44d5b80977b07ccdeef5d647a6d937bcf484b"
+    },
+    "2024-LINK-perp-07": {
+      "csv_sha256": "9d1eea9ec2cd6c8c908189a1b1a47ce2e4107f94ca153ca3b17525b49715bd0e",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-07.zip",
+      "zip_sha256": "b0f2f09d5a37dc59e7aafb34e8f8c0e561560e55cd162554f0fa50c12eee0747"
+    },
+    "2024-LINK-perp-08": {
+      "csv_sha256": "33d53474298f4b60f921c5979693f1a8205ae5b4ad3d6f870dcaa7a0f6759a74",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-08.zip",
+      "zip_sha256": "ca361b3a0ba9cb0a3fa86ce829670332caf68fa1a975a4b14fcbdb80c25b2660"
+    },
+    "2024-LINK-perp-09": {
+      "csv_sha256": "d92ecc097892956c45730926dc947c1c7494650d2adf2fbfb88e13c6af855b21",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-09.zip",
+      "zip_sha256": "086a233724da625f1c0dc78ba146450a5a35df3af725dae59cf5f92da5cb47f4"
+    },
+    "2024-LINK-spot-05": {
+      "csv_sha256": "48a13372a2e49b623229e871b6592d82ef5cb9494c6005a7ee6cab30bc91ab37",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-05.zip",
+      "zip_sha256": "5e855c04f61be1c705d18b11e52bd93edcea7400f5f577876525c9479fcae1bf"
+    },
+    "2024-LINK-spot-06": {
+      "csv_sha256": "b58458d889bde26105c0b5ecff9e6c7ce27a0329d0cd77681e38276961eda071",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-06.zip",
+      "zip_sha256": "be103fe4dc46059d51efd8564ca444342a05f62042c530ddd4908753ffc30217"
+    },
+    "2024-LINK-spot-07": {
+      "csv_sha256": "b1fe1febe56e5783cfebb02277503c1d32f888cc96aeef3ed9c9ee5231e6b2ce",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-07.zip",
+      "zip_sha256": "8df65ec85239a360a08742d6545ecf9088318f80e3c3bd302406071b5791542c"
+    },
+    "2024-LINK-spot-08": {
+      "csv_sha256": "d85900d6fa309b538d67bf0591da86268bf7a8d6f2ba88f4ab9d3e5cfcd34d89",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-08.zip",
+      "zip_sha256": "8c7e1b50eba0c2aa86157c509830509b4e6b4cbf275fb4e0c59586265a0fb71b"
+    },
+    "2024-LINK-spot-09": {
+      "csv_sha256": "f662ca03097d95bf568076176403d00a38d24013d61e75939475bbbdeaeceba1",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2024-09.zip",
+      "zip_sha256": "b911cb9ddcd47aa5eeff1ac8474565625d72f333c20c5e26e9c602963e3f22c1"
+    },
+    "2024-SOL-funding-05": {
+      "csv_sha256": "84603b203a1b752d92dd711e3dee1e017298ba0c251532046bdae4f166b07369",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "cdd788722e8b85fd6c9d992e7c1c767be87afc91db5b8c07751f898b373cbf29"
+    },
+    "2024-SOL-funding-06": {
+      "csv_sha256": "4eb1f03fd2dfd891197e9db64a191a3bdce05b9dcebdeb8f8fa7a3d552e7dbe1",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "8da6c97d67718422a5df9a0d50e37849521fb54de87cbb3b3397e441439dfcc9"
+    },
+    "2024-SOL-funding-07": {
+      "csv_sha256": "0a7de0bd5ebff08f0f38d6076ddcbe55c80b48b91c4da745216ef89e30cefece",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "2585a0db933c70b62c87cac509de42ac09b98d370238c0d8c68249a20bd2b9a3"
+    },
+    "2024-SOL-funding-08": {
+      "csv_sha256": "77dbd58ee7ed1935f724605a532d8cf65ca07baae31b665e8b4509adbdcb0b89",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "ef076200aab768d33f71449957f6cd9c96c0da696708a5f561b97e7a0995e8d2"
+    },
+    "2024-SOL-funding-09": {
+      "csv_sha256": "a765eaf7581492b7e6459ea9aa6771f73e6a22479eb113f2d50fb41be2506bac",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "7666e4d3e6ea6dd28011c508cf01421007521e98e96ea551f809836441b43ca0"
+    },
+    "2024-SOL-mark-05": {
+      "csv_sha256": "bd247d3b5ad1b88fa7bbd343db5d5a51df5cf23a5ee79e31964ff0724ed314b1",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2024-05.zip",
+      "zip_sha256": "d7a8b3115a3c538a79c397dd639d2099bc794f788a069040ea5c02a4fab6283d"
+    },
+    "2024-SOL-mark-06": {
+      "csv_sha256": "8cce3db5592c6fc90d649eca5ef78726712a8fa8115898fd65e2e9ffa6f12e0b",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2024-06.zip",
+      "zip_sha256": "e3c6225c5f862333c87541a8db0084f0134942350f88403f3bebfc1f2c58de0d"
+    },
+    "2024-SOL-mark-07": {
+      "csv_sha256": "20c2fe34f016bde960ff44d1aaf85e12ed75c2a3c1d4ed137f2d0bc3039be017",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2024-07.zip",
+      "zip_sha256": "47559c98f3429f449bdc8f47b87abbc2a8c2e39060c1a11ad0ef654ff0750dcf"
+    },
+    "2024-SOL-mark-08": {
+      "csv_sha256": "b8dec38c3bb75e5bd5305497f65dcd3bf558aa92e56e9a1e2ba29676dd1cbe18",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2024-08.zip",
+      "zip_sha256": "961ffe2a2c3fcc071e4c8f66f097facb36a691adc8c1874cd939484d6950f632"
+    },
+    "2024-SOL-mark-09": {
+      "csv_sha256": "f0484af27c2d3aaa1753f902badd8edcf3ea86965d6272c95ffd0216a424109e",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2024-09.zip",
+      "zip_sha256": "37933b67e09e7620d1f047c17f77d6b5e0dd37b24eff240209584258f92ef364"
+    },
+    "2024-SOL-perp-05": {
+      "csv_sha256": "d9f01d252206b3a3e1fbdb1f73d09edab259a34c9afc343b1171753d18a78dc3",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-05.zip",
+      "zip_sha256": "b22668d0d3fc2fb430efd5cca654dcf167b5df2d8997401f49d8e3f9ba43b3c8"
+    },
+    "2024-SOL-perp-06": {
+      "csv_sha256": "bb1f3833107bfb2485f27a743a4ecde627ccb22a6ea49571efcf46d81aad7f5e",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-06.zip",
+      "zip_sha256": "80e770b293faa4ae6da7d149df3e1912da67bb121b58123260c7f4b755f4809d"
+    },
+    "2024-SOL-perp-07": {
+      "csv_sha256": "0ea9134737cedcfb9a3d3cf588a683523422f01a57c44f4e9d9a6420ef1219af",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-07.zip",
+      "zip_sha256": "da7072219268b51067972bf51032440ba3214d63df037180bc0c9e33a77ffa8b"
+    },
+    "2024-SOL-perp-08": {
+      "csv_sha256": "4936aefda680ed45f7c6a6e2ef0717eca0a438c0d206d092fac41c3161cbf154",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-08.zip",
+      "zip_sha256": "08bc16fd25cb4b024ac2f3d187d4ed5426014e48808ea9523b9792b141dca34d"
+    },
+    "2024-SOL-perp-09": {
+      "csv_sha256": "9ce293c3c0fae54946d2b132f7e1dd685aaf55b44b9ea776d324659053eba274",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-09.zip",
+      "zip_sha256": "c99c50b8413b34318d5aa778b890d8d06d5c333c4db101570c1c9ee7e35b6451"
+    },
+    "2024-SOL-spot-05": {
+      "csv_sha256": "002638e9114e4ba26a26cb3fbf0901a4a767fc1bdeabcab5523f6653b48c3313",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-05.zip",
+      "zip_sha256": "effcd422f7171f6b8fdaec8b8a7bdf9f354e772503569ca648f5a106f82871d9"
+    },
+    "2024-SOL-spot-06": {
+      "csv_sha256": "5cc625121f1514945f7424ff0da1b20d7d43fa32cd58f2b1bd8d80cfffcab9f8",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-06.zip",
+      "zip_sha256": "578fd34d382d7663934a9556c3316a28ac504cffa9a53434b2909f241271898f"
+    },
+    "2024-SOL-spot-07": {
+      "csv_sha256": "a4f4826e1cb54ee26ba3911b55dadbe961073ad98cfa4d7675efdfffdf801c70",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-07.zip",
+      "zip_sha256": "828f2a8814662d3bcff915eec19fd1771ec996a4a024317fda3f2d2ba61fb310"
+    },
+    "2024-SOL-spot-08": {
+      "csv_sha256": "2205538ab0c71535d06116c7d6ccc3d2ec477464c9234be73fd5f0e5ec13d841",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-08.zip",
+      "zip_sha256": "4f9d4d80f237b67b7038f6d2fc4e131daf8ca65f679359a92ba33574014b1c2a"
+    },
+    "2024-SOL-spot-09": {
+      "csv_sha256": "a973dc99efdde873718e87df308ff20b360e59a4d9d0330f177fba303ae70291",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2024-09.zip",
+      "zip_sha256": "70641e992419a4003519e06094c68b2e13971341e92559e307a38d7215d94b63"
+    },
+    "2025-BTC-funding-05": {
+      "csv_sha256": "1b2173413c8c7094b9de3c7947cf5166a0f187ba7f5b780b1814f914da53a8fc",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "e7355e2775b88009c984db1783bb8ed6b5f24ede2b52bb764151b5722d6a5e42"
+    },
+    "2025-BTC-funding-06": {
+      "csv_sha256": "174f61370818411b81a865f699245222048fcace42ca37b2e59678c384a0b9fb",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "a1f4a40953740fa83ee9ad97776ff8325d1958654a67f1325614071a983819d4"
+    },
+    "2025-BTC-funding-07": {
+      "csv_sha256": "3a8c9ecc02b9c98e28d90d4899d7d2ab71968642ae48c2946fa33c838a067caa",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "b097dff828f6e43fece23db0d3cb98042a9d7bc19693b8cbfd051d88eb973b7b"
+    },
+    "2025-BTC-funding-08": {
+      "csv_sha256": "09ba18d84132b7f25a73f86b6d64670d276b7c724fdcd03849dc7e244b2631f7",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "1180129860b6e196e8d70bb9719e81573aa6b4acb423ba5ee7f82f10c836f7ab"
+    },
+    "2025-BTC-funding-09": {
+      "csv_sha256": "6abdd226245d7e1790d123116925af0b548218ffa345d81ccb7b40b0d1936118",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "21dc6570fc6bffad0e7b5f9e99211b82ad07c95ab4f18c3a2daa3b95ec98344c"
+    },
+    "2025-BTC-mark-05": {
+      "csv_sha256": "ca760d79f07a79921bd90218bfa0f56e48d960739c880fedf2d2db4b48eaa677",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2025-05.zip",
+      "zip_sha256": "eb0f3a60274e2ed18c724f295846d787ead5f5f084d6b776ad2cd095e32ba9cd"
+    },
+    "2025-BTC-mark-06": {
+      "csv_sha256": "bfef15bb7394528572d6e9d98aa00c44548bc66106b209a8d22a1ca1f08161d9",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2025-06.zip",
+      "zip_sha256": "af4ef4580eef01d1c2347e1278510e45ba88117c16d47c8bf3fe4b6bd6855a56"
+    },
+    "2025-BTC-mark-07": {
+      "csv_sha256": "f1347937d3b0ebe73496da6b56a6335a5a6f14d5a559e1e13ad0eec30ecb399f",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2025-07.zip",
+      "zip_sha256": "588be1d9cfe5eeebb669d68641bf6191261dc094064862d212ac0038300bb3a2"
+    },
+    "2025-BTC-mark-08": {
+      "csv_sha256": "3ad59537d658febc9c3b784fca2cbd2e0bba5921c14bff8fe07e9896d4836232",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2025-08.zip",
+      "zip_sha256": "d2dfb094239345d21becd886ae48f951b0b2c5ed7ac8205a51cb79468848ecd7"
+    },
+    "2025-BTC-mark-09": {
+      "csv_sha256": "787b24a51f6ab77755cd604542230646e66b26e65fbf3628cd9942db3b42c745",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2025-09.zip",
+      "zip_sha256": "f9a0fefe071a465d2652a327c4409910f9da9e4376c0fa3f592272f6725fbcbf"
+    },
+    "2025-BTC-perp-05": {
+      "csv_sha256": "a28053236b5d6ef7396db6d4336c87ddf350ac907a99baff62aa948b4bc926c6",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-05.zip",
+      "zip_sha256": "2e736b9e792d5ae9d4607d7426e4530020762cb898d580b18d3fb0faf9d2ba8e"
+    },
+    "2025-BTC-perp-06": {
+      "csv_sha256": "3fdd3d8987dd21f58c2d35cc2287789cdbce04f68fe165bbc69cbd852bd5ca48",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-06.zip",
+      "zip_sha256": "d1d9d5dbc540c19dd882305937f864f59ffffe3f5449a6b05b3f95efe7ca4fbc"
+    },
+    "2025-BTC-perp-07": {
+      "csv_sha256": "c51b4888393f2d900f29d0aff498595db14cb3c6a2adb4a3693a4c3dcfcd6fac",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-07.zip",
+      "zip_sha256": "3f471677b97cd3c5c21e9c1420bd7d58c1fe4041a3d2e195369277298ca01ea2"
+    },
+    "2025-BTC-perp-08": {
+      "csv_sha256": "a16f61dd51720e77c65544a3d3f7930113d7482376e170443d223adf61dd4f92",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-08.zip",
+      "zip_sha256": "a240d3f766cd5c3db4e0702cf660ae54e327ec67aba169dda55abc90cae055f2"
+    },
+    "2025-BTC-perp-09": {
+      "csv_sha256": "87f128ea9e1195e289e7949f38cd7d6180884c0d9b9a555c166323be8c35e20d",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-09.zip",
+      "zip_sha256": "b15817c45e6ca13a907772591664a57e00b711fecbd4285f2a16ced3c7023019"
+    },
+    "2025-BTC-spot-05": {
+      "csv_sha256": "4afd5d44b7f26d7696bbf715bba99affb60dbc46bbfdbd220fc7ce3da149f897",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-05.zip",
+      "zip_sha256": "da6213bf4c57ea60faed3ef1f6a0ecb87f22ca7a3a67614604cf44d2d6b265fe"
+    },
+    "2025-BTC-spot-06": {
+      "csv_sha256": "f8165ea0773ad50cec5683c8d60f78ed1453df8ed0dbed1e34337746a7e9f4ab",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-06.zip",
+      "zip_sha256": "d0760943538f48032dd066401e53f46bbf4868e6545929678e23bcdee032a5e8"
+    },
+    "2025-BTC-spot-07": {
+      "csv_sha256": "124b7f5a138ed01bbfe9880b0c8c4cce9cc042aa3930722e0d58f7cb7406c0d2",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-07.zip",
+      "zip_sha256": "487738ee596380eaad32a2a93c75d17e1ebdd165a9b544c0e44be36079f5c02e"
+    },
+    "2025-BTC-spot-08": {
+      "csv_sha256": "1baf4c2161abf5945606af96eaefdc7ff0103cf7adb135892661b7fc2f694a91",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-08.zip",
+      "zip_sha256": "a99ec5bac64333fb521b2ab1bac5e8387eede6413cc7841656a02be95613c64f"
+    },
+    "2025-BTC-spot-09": {
+      "csv_sha256": "a34b5099289ad452bd6eae39df253ac81d427daca85d1ee231ddff5f0ad72e8b",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-09.zip",
+      "zip_sha256": "b0ad5b54097f6adb440d07204fd215dae9b224fb73569fd4309a55c9234d46b3"
+    },
+    "2025-ETH-funding-05": {
+      "csv_sha256": "b2108a2ea1bdd1d6c2a59fb58cca8a819c16f4679b88ded85d473d8284fa5762",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "996aff38f046b50510301532ac5cbdca115afca971c49cb548f50e5d70e18d99"
+    },
+    "2025-ETH-funding-06": {
+      "csv_sha256": "b5b7342d5ae78f747a98e8c7aa402937c58225f91c1bed12f5743f56229b73fc",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "ae7ca242249ca3df06d1222a0c264fe83b18c4b2c19fe656e864f7d081d5e198"
+    },
+    "2025-ETH-funding-07": {
+      "csv_sha256": "11d07c705a92b5b4cf849566e9601f7be6c3bab95438bddfbe627b68a0cc7741",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "5f2d840c5669ca946529c33f6df32433c5d0cd973eb4adfd40459270c460e7f8"
+    },
+    "2025-ETH-funding-08": {
+      "csv_sha256": "642d525ad086a832921acc04050eae37b923f4a6ad0e94055467c7db8be555ff",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "c3fca21c71afb4962e89f8e3d84afe5832019ed8f570ee7c7c299f2436a28b62"
+    },
+    "2025-ETH-funding-09": {
+      "csv_sha256": "33573e23dbebae525a2cfea1b6dd56a0ad3abddbada7db741bf2b99d81cd3056",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "2fa09df245aadc73cf43f837a72c3009fcd7d10c8c4e3db48b2d1021c331841a"
+    },
+    "2025-ETH-mark-05": {
+      "csv_sha256": "9a0cb0529662ff026d1e615a40facc500f3bd0fb8ab62ea47241cb7fd73085fa",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2025-05.zip",
+      "zip_sha256": "f04157e9024c129f0ed90ff9ca7b8c50efd84277397625be01ab8677e3ff9bb6"
+    },
+    "2025-ETH-mark-06": {
+      "csv_sha256": "16bdee53b8d51ad3a7238d3888f6c42f7d9279ee4fb6fbdb1c324fb7a0a339dc",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2025-06.zip",
+      "zip_sha256": "0dc2039c33c37922816c55d0a7865895b0fd44a6e12a95e2632508a5d136b84c"
+    },
+    "2025-ETH-mark-07": {
+      "csv_sha256": "1809f3c901a6beacda9f4ab9a9aa973586776b2d1318d74cb71fc98a1e035363",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2025-07.zip",
+      "zip_sha256": "8f07b4c0665b73e60d25ef331edd350e28cf63c5bd4be6d157a56bfa2a5a11a8"
+    },
+    "2025-ETH-mark-08": {
+      "csv_sha256": "f3fe44ee7505885fd627e16a4718262185c9ededdde4b84294d7df0d3f7d5ca3",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2025-08.zip",
+      "zip_sha256": "bb82a5887e9540f03c1698a6d25e1959fa3d64110ed348bf5b1331a9f7015264"
+    },
+    "2025-ETH-mark-09": {
+      "csv_sha256": "7a8db1fc70307ac75aec016b51ce9dc7d6ae89bf7aa6f4ff55076524f5d5ffc2",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2025-09.zip",
+      "zip_sha256": "d0ada9d948691985825094ba218b995bed68df8ead9fc6b599c24fa556941381"
+    },
+    "2025-ETH-perp-05": {
+      "csv_sha256": "78774ec61fcb71af86b5b84494bc9056ddfa4df0bd550e6e1628262b38b23172",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-05.zip",
+      "zip_sha256": "201829c864a26677ad0b53df5b0491e9eab00e6f48e1a8bf5204dc7d794dd7ea"
+    },
+    "2025-ETH-perp-06": {
+      "csv_sha256": "bb9505b1b1c02abc3006d8777d715aa37e7b5025eed724c0e509273b766a55c0",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-06.zip",
+      "zip_sha256": "45763ee27ad110703c6f71d9ec80711de151b8211b14ad98cc978c4d5ede82ce"
+    },
+    "2025-ETH-perp-07": {
+      "csv_sha256": "a58666c8fde5782e58c0cf72055fa2466a28a35a6d0a1a0a2aeb541d46cfcfef",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-07.zip",
+      "zip_sha256": "e9c3dcdc09de72386d465800c665169c9bb011f35d350f9ba9bc7b4d7a69876a"
+    },
+    "2025-ETH-perp-08": {
+      "csv_sha256": "600513847e1399697d3777f04f5d80b6caee193bdbcd83d98a40436962f69332",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-08.zip",
+      "zip_sha256": "51e3ca163e71691ebb43b55d32698fc5c25506ee2e663a195d8e5863194908c2"
+    },
+    "2025-ETH-perp-09": {
+      "csv_sha256": "7db9c7bf2c25959ede9ac687f446e211246ca218785c1acc8ce358e836260c8d",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-09.zip",
+      "zip_sha256": "9bab9763c1cb2514df907fe6e746405428c6b92cbba12ff987e4820b2a8726f0"
+    },
+    "2025-ETH-spot-05": {
+      "csv_sha256": "2de806f069abca31b4aa19b566fbe0dd351eb6b8cdb13e0fef67436682cdbf5a",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-05.zip",
+      "zip_sha256": "720a319face496acff79d8e6279b9b03f31495097d555c74daa076cd66421bee"
+    },
+    "2025-ETH-spot-06": {
+      "csv_sha256": "33c8d5e840a16d3501f27317ff4d594c061ca79ff2c55294ddb0ce4befbb6dd3",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-06.zip",
+      "zip_sha256": "780788805b48a094886590d939ef45372db2ee053aa5d464f8e135121df2b8eb"
+    },
+    "2025-ETH-spot-07": {
+      "csv_sha256": "03921e8c6eb5d7ca82a43f6da3fd2ab4017b2993eea054b99995f258139f2374",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-07.zip",
+      "zip_sha256": "d5c4c2482004a49b479ff5bfbdb885b25035ace24e5f95edd8057507718df366"
+    },
+    "2025-ETH-spot-08": {
+      "csv_sha256": "6b533713a2d6776913fe7daeb2dfc2d4d56393a8ec74f08ec696bae7357fcaa5",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-08.zip",
+      "zip_sha256": "1ebdd24f8e1df5369518b721fdb0bfaaca9892ae71499b82783194573f804cad"
+    },
+    "2025-ETH-spot-09": {
+      "csv_sha256": "bc03b39bb02f76fe9c395cb7718899bcc4997a3930c495b423e5fad2dd8bd60d",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2025-09.zip",
+      "zip_sha256": "f83ffff284b408574a4571e83fabc5c641e20edc71818912541cc38ec7e1be43"
+    },
+    "2025-LINK-funding-05": {
+      "csv_sha256": "00820326bc6a00f00c1aa45cc79894a7eaef07ce2eb652d6b28dae67efa15ed9",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "7d3b60afb85860117409e2137884e2a01e45a22eb2e4d1353514244f83796002"
+    },
+    "2025-LINK-funding-06": {
+      "csv_sha256": "02045c006469ee05cbe0795e4fb0c76f8391b1992033a4350492b6a698f86190",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "cbdf6273e84d457b4915139e41a278629cbdfc02855e290b6d9ff34218eb36a5"
+    },
+    "2025-LINK-funding-07": {
+      "csv_sha256": "e36135402f376cf57c7049f2af2129d965b0bea4a9ad92b917c23b5d37dd5f99",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "56651da01247f19d5e63e6c40f8835934735e60915587068e325f2859101b7e4"
+    },
+    "2025-LINK-funding-08": {
+      "csv_sha256": "5973248474e705df668f0878ad43a9a22335396a7e1c728e13985bba88346a31",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "3fd351cfdd3aa11d1e280740f56a0a244112862fb3a583d7600d658339060f53"
+    },
+    "2025-LINK-funding-09": {
+      "csv_sha256": "6514f045035a78db9645e0457997fd510907959146029d27fcbf522cb0c44ae2",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "5b90724992ead316299b755ec6ff59e70adb6a61dbfa93b58942470a7cf091df"
+    },
+    "2025-LINK-mark-05": {
+      "csv_sha256": "07bd927efcc9e4676502ad84b9b0e3be783dbf784c8d3ccfbf65932a78e5e0ad",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2025-05.zip",
+      "zip_sha256": "1cb155d810413fe2a3b421e79779ca37c51200f7bbb12e8973a24ade7b450d6e"
+    },
+    "2025-LINK-mark-06": {
+      "csv_sha256": "981c9283c77598a959e4ef9db8231913c45a56a4ceb326e9093e48cc416453fe",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2025-06.zip",
+      "zip_sha256": "307ec5dccbc9059d5a151170f8fe048e829f9bd6127cd6acc0f16825ba28a54a"
+    },
+    "2025-LINK-mark-07": {
+      "csv_sha256": "3f7b7a21abf5f55a015b4bc529f331664ee9417de6795efcc9fdb442f9d8e7cc",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2025-07.zip",
+      "zip_sha256": "ce5173da1bd89558d0ac847a2ec89f852e74e9dfc885dbcded46ab4760e7c536"
+    },
+    "2025-LINK-mark-08": {
+      "csv_sha256": "e234e439d32fe52d5ae94e8739da9f041de801015d3e1b77e81031762498e7ad",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2025-08.zip",
+      "zip_sha256": "a667fa7066ccfb3626c1f817a741a14ff092d3ba0302ca2406643d39c0aae919"
+    },
+    "2025-LINK-mark-09": {
+      "csv_sha256": "28c40514dcce1ef51ffb60e55b4e425e7d26ec0462e3b7b0795b5ae8b6a375d5",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2025-09.zip",
+      "zip_sha256": "118e301f1c40277b623e17aace05823fef195a089065d69ed7edcf137a799b59"
+    },
+    "2025-LINK-perp-05": {
+      "csv_sha256": "bd00eb182eef8e7fe300f635cb77729ad850e6f2c0045879fa91255f2b443c55",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-05.zip",
+      "zip_sha256": "ba574e76e7e394db368df3dae93028f6c1e7039c0513b3cc50d0ab82ec8c18a0"
+    },
+    "2025-LINK-perp-06": {
+      "csv_sha256": "338232ad3dc6149f0c6393c722b6c2fe03b1eafa436e323a65c50bfdf2ac59f1",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-06.zip",
+      "zip_sha256": "e5db5f3c3586190e79f3a07d2de9128ae8f8a8b57e2fd7cf0fdd275954c89f24"
+    },
+    "2025-LINK-perp-07": {
+      "csv_sha256": "1eee38c1e5429d264c78aff3a39a7a6cfc4f60fe0ea0948bf36482cd72b3a5d8",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-07.zip",
+      "zip_sha256": "cc46f354c454f6a605d6ba46e297101c3a76c0b3bd3715b9fd0baf3f09a1bef7"
+    },
+    "2025-LINK-perp-08": {
+      "csv_sha256": "2ef8ee15556eb78eaf82e6bd30be4d98ef4e2c8ce1ce21317cd8a2836772598c",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-08.zip",
+      "zip_sha256": "c1fc858b4e8e66b23a44de8fc1425c011a0f7d5ea3de6ce4a353e449d151663d"
+    },
+    "2025-LINK-perp-09": {
+      "csv_sha256": "c79ae391bdb307bce8f2c3968e6dea640af017b99e28865ead7f1d684e3d8c3e",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-09.zip",
+      "zip_sha256": "a2446b829ed50ee36fcc9dcb8ec7f3f13020780038fba463e4b3c4886f7a50e9"
+    },
+    "2025-LINK-spot-05": {
+      "csv_sha256": "39b64cbd3a7c4907b816fd4f6ae571ba64662b6dec714d531b30ff8c55d93146",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-05.zip",
+      "zip_sha256": "c6132d1a0a7c7804b652e7eee6778aac8a450d407fe9609bd2a9dfb6669c22b3"
+    },
+    "2025-LINK-spot-06": {
+      "csv_sha256": "181ca869da0f46faa6a4427c82610f196609e980d9e307c3bd8ac7ff48c5cc4a",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-06.zip",
+      "zip_sha256": "a35a349d477a4a5a97408b778b856fb648cfb464fd97f7f952cdd688e44e7fce"
+    },
+    "2025-LINK-spot-07": {
+      "csv_sha256": "fe152eb447879b35c7868ea3b16696dc65a9ef3173a5861fc93e8cb94a2efea5",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-07.zip",
+      "zip_sha256": "2941b47fba2bbe3e0037c9b5d18eb533d68a8afe0bb9b8a694a2aae5b3667dbe"
+    },
+    "2025-LINK-spot-08": {
+      "csv_sha256": "6186b9c7368e13779686049c23a94a41ee3563978bdd4487f703dbb44b34204e",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-08.zip",
+      "zip_sha256": "508f07182a223446d51ef6b0eba5a900f8994cf6b9e229ebd1448022ed12d908"
+    },
+    "2025-LINK-spot-09": {
+      "csv_sha256": "dd3f9a37ea5e1389ac13e0368982c06f0c692a67ac0f73a743e95f7b0f60d48c",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2025-09.zip",
+      "zip_sha256": "a4905ef32106ced5672a57d0ac3f39a214b19cfa3cdc3b14b81f7125ae8b1fdc"
+    },
+    "2025-SOL-funding-05": {
+      "csv_sha256": "a7fcb14cc35f5f44a0ea2d63dff74da1018890c648f193dc3a9d2c828039c0c8",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "eb03fd0d0b31eef9ee05544ea8dcce097a807d3475f67d0a5f0859c487c5f5c3"
+    },
+    "2025-SOL-funding-06": {
+      "csv_sha256": "9f689a969b5b78a0a4159dd7cad4012e09125553e26ff120e0e126defb8b3a19",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "4ccee0a6fd67cb775be49d124b9eb038f26acd09426fcb9aaf9d3de74cf3a24e"
+    },
+    "2025-SOL-funding-07": {
+      "csv_sha256": "0a573dd6a1ad0082c78357843e85e23f2c3846c78187174b00ffe19ef184200c",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "66ce38d1a8bc4bdd53af29d8ea5c72493ed48fe9894ee5e9ff4600ccec864c4f"
+    },
+    "2025-SOL-funding-08": {
+      "csv_sha256": "156340e5ae9ab9073b8ce1a10efb08b2852546182dd1d5d3f7f4dd961db8bada",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "fe9efc3abe1e4be2a2fa9a4008e6957856387f6783a06b97cac3ee271746915f"
+    },
+    "2025-SOL-funding-09": {
+      "csv_sha256": "138ccc19db09dd2d01be23e89b44d3727d800ec18ae232a3a116b66d85aeeb7a",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "f953315124d20dab98ba710d108103fb4cf054d1535787fd76d35d6b9c18e534"
+    },
+    "2025-SOL-mark-05": {
+      "csv_sha256": "a535aa46bd3c2a91a05e1db63ba941c3d736b9a3843923f58a92eb4d5789354b",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2025-05.zip",
+      "zip_sha256": "ad1e95068c8943c30d4cdf13018dfe53c47505c5b8319f1c5786662b9915d2f4"
+    },
+    "2025-SOL-mark-06": {
+      "csv_sha256": "13c3f0ae247514486b960abeaa6517dac7e9c87a3c0bb7b8e69300120608a0b2",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2025-06.zip",
+      "zip_sha256": "fd606791eb2a8504de29d165c8f11dcb868adc9a1fa8215dd2198c89badbd3fc"
+    },
+    "2025-SOL-mark-07": {
+      "csv_sha256": "44f1aba2eac4277deba97b38385328a87a28a2b673b5d6b3ac63b0c72124b8d7",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2025-07.zip",
+      "zip_sha256": "c0adc9ec978c0ad69f0317c01d99d3007ffe9cf26d9d0c8b43218bbb98411681"
+    },
+    "2025-SOL-mark-08": {
+      "csv_sha256": "3acb5ab67356dc2e347a2126d21cb7c69346ebd2d1752bb45f3d5dab6ddc5a15",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2025-08.zip",
+      "zip_sha256": "374b5fc82452b6685df506c9ff8884eb6af6e7a4796a31ccc4fc179a0f71ec03"
+    },
+    "2025-SOL-mark-09": {
+      "csv_sha256": "5f3f2f076ab3ac3dcf444e7274ca3b358af2f80335a61f82b22e66d7047fb6a7",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2025-09.zip",
+      "zip_sha256": "befc876408599aff0aa76c544ae84aeab63d95c53f15c3f1789a3398c7b4f227"
+    },
+    "2025-SOL-perp-05": {
+      "csv_sha256": "21136d2281ef472a79fe6e427d4a3e0c0bbe54a17168f1f4f426eb1e9b389393",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-05.zip",
+      "zip_sha256": "b20e5bf7b4b3b3d5c0720ab2d845e03933ef08f15d3f06570b009463ba12bad9"
+    },
+    "2025-SOL-perp-06": {
+      "csv_sha256": "92f8281ea7d5f37198ff744579eff2fbafeddf1913b581984473542c482504ad",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-06.zip",
+      "zip_sha256": "72d6fb9cab913d98220a06a08eab70a361b5d3fe84ea9701420e5f2cc6600c7c"
+    },
+    "2025-SOL-perp-07": {
+      "csv_sha256": "1538e72577c91a203dfa21aa477235289cad3c0231f630eb991ffa5ebb458bf2",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-07.zip",
+      "zip_sha256": "5493328c22d7804c5d64298e8ac475786eba0810cdb31ed6e6134f5720c5a2bc"
+    },
+    "2025-SOL-perp-08": {
+      "csv_sha256": "4f27f81355238c30a681f5ff8fcd6ebb6d63af0406f7880923095b0490a41d44",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-08.zip",
+      "zip_sha256": "ff753c960ffa6954d3ffbd9cf6f6a0f8d2b280753cf868ebe4732d0afa5a14fd"
+    },
+    "2025-SOL-perp-09": {
+      "csv_sha256": "77a94d2c9abdf89be591ba4d0c83926aa21a869b5176817c656b4846efefb203",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-09.zip",
+      "zip_sha256": "9cbc37023b21bc91802c38689466e2bb69eff22e55d6012c6feb0bb0bce56004"
+    },
+    "2025-SOL-spot-05": {
+      "csv_sha256": "c7886c2ac205178df2b5540307a3cea13e07898843c3e70a7ec23f086e8372d6",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-05.zip",
+      "zip_sha256": "cb07bdbbed3f21db679ea6944805a4282f121440abf0415905fe4fdc05f480f2"
+    },
+    "2025-SOL-spot-06": {
+      "csv_sha256": "a9d94b3e785427c0b24317510fb36afdfe959f97868b86724b2df34aaf57c1d1",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-06.zip",
+      "zip_sha256": "082af5c4634055a860eb765f2b0549344ae6dfd9274eaa09b06859eb7125ad0f"
+    },
+    "2025-SOL-spot-07": {
+      "csv_sha256": "e93f87cd7d4d8e5fbd2440c31a807b1e24fe6fcc6426f413fdde2586a7ac08f6",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-07.zip",
+      "zip_sha256": "c2e17bfe68c0ae9ac8c12162c7a64534d91f56a9f9ec0560f300fa6414fc8f19"
+    },
+    "2025-SOL-spot-08": {
+      "csv_sha256": "b604d55f657c0c6e747b8e011754997c7c34338f203b1ed01cc95be8c48eab9e",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-08.zip",
+      "zip_sha256": "7ea49f6b1196a1c26473433850dfe139b775380cc4cdf03bf853fb553ee6c4e0"
+    },
+    "2025-SOL-spot-09": {
+      "csv_sha256": "6a1a6d4ff455956062cafb3e92bfa66dad60e58101133c015e0a8fdd62a5b042",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2025-09.zip",
+      "zip_sha256": "87ad6a05fe9d7fa90d4abd08cc3e6806759e9f3dcab69869fa3566d43bc876da"
+    },
+    "2026-BTC-daily-repair-2026-06-29": {
+      "csv_sha256": "a871382a6220a9b43cef146acc00da44eeaf6558bc2c0790584fc79c96295a3f",
+      "url": "https://data.binance.vision/data/futures/um/daily/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-06-29.zip",
+      "zip_sha256": "122fd96f8693a9794e2dbdb4491858078676045170acce68046e32f32f7b4068"
+    },
+    "2026-BTC-funding-05": {
+      "csv_sha256": "0652f44f188aa7e06fb7241913b911f9236d437a074f09b3a00a30802280ca50",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "445b65fd6b17bfcfb5e4d035db29fad34f729fa078f0449024db42621be84e6e"
+    },
+    "2026-BTC-funding-06": {
+      "csv_sha256": "10ea717c26b580f5502ebe35c4be852b5e1340dcfb4ab0f4b32e082ff3df7dfb",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "cff97ce688329592bccbbf5873b5c7021649e093f5f5806e332c5b4fb7fd6a00"
+    },
+    "2026-BTC-funding-07": {
+      "csv_sha256": "02908616d8425b90a33b4f9ed51ef063382b80a3f35b17e628413e90544ff4ff",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "e36fcc66f493d7d9ec348c852fc22e9f318c79cf7adae17398a3994ae0adc41e"
+    },
+    "2026-BTC-funding-08": {
+      "csv_sha256": "04b169161a02113cc6e8982ccc3ef7f5854821bcb07b4755d0d09bbbce46b338",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "7c108b3a02bd6dc7345ca7323e3a49664edcea0afdcf780ffb3b44762c45a964"
+    },
+    "2026-BTC-funding-09": {
+      "csv_sha256": "4fc56ed1f2ce7679a0911bfa432170e61fa159bbcc0668caa821f3d2c4a80aa2",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "913cd31b8f924a06717a2fac17f3df6132c24ccded209eb3e4ae7d83e1b247f2"
+    },
+    "2026-BTC-mark-05": {
+      "csv_sha256": "61a24517118d06dfb9d0436209a71092e22ca809a29723623123844b2f44e2e7",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-05.zip",
+      "zip_sha256": "4930e4401f6d663cf9fe2fb082738b011e619e77972bfe764b2600f05fc91b72"
+    },
+    "2026-BTC-mark-06": {
+      "csv_sha256": "b54fb9f1f1224011573f8dfb3d31b69f7dda951e4d4f56d6e0c4f0940d646845",
+      "source_rows": 697,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip",
+      "zip_sha256": "7d1d36168726c482372301b51ac2b035a974a82b6ece309c3dbcd196b872edba"
+    },
+    "2026-BTC-mark-07": {
+      "csv_sha256": "fcc1bf5510f8328f75e36e56b2d08a658885615f39bc480ced7c6c6bc16a7c15",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip",
+      "zip_sha256": "1b9a914bf005f439cc83d953ab65cd098703aba1436914bddd0ffd5638e17212"
+    },
+    "2026-BTC-mark-08": {
+      "csv_sha256": "e2723649d4c6532e57f31e9cec2d3ef2763a2e1b8f866d1068c1e6b5325e1257",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-08.zip",
+      "zip_sha256": "b51fcdc17ed10a3f91a0711944eae97978c0b9c57999a0dfce65ce64e1259540"
+    },
+    "2026-BTC-mark-09": {
+      "csv_sha256": "64e907fb91855d57a104e1d60f71a29215a6f65446348d0c3c6a4b2922577af5",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-09.zip",
+      "zip_sha256": "bd300f5ec76b11de2c7c3779bcf85d6c1178e29f703b0b150ced75b0e754d29f"
+    },
+    "2026-BTC-perp-05": {
+      "csv_sha256": "6fbaff4eb84bca705ff0cff300c696a584c8d90a4b3807a63a9c729f86659dec",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-05.zip",
+      "zip_sha256": "9a367708c90de999a7a9d3114fd111ff28203b13c8daef77d154b5216fb571f7"
+    },
+    "2026-BTC-perp-06": {
+      "csv_sha256": "43b014f49ac5586b1f575791649ee5e88b629ace2a8f58d167eb379ae5a52112",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip",
+      "zip_sha256": "30bba473837a672a6a00a181a447446852414e6927bbda6684f873571788e9aa"
+    },
+    "2026-BTC-perp-07": {
+      "csv_sha256": "fb49ce88123549ab9156d4f7afb0fd1bd32880ec4cf52066277d0008e187c2d1",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip",
+      "zip_sha256": "a09f135066ace6925ce051ddbbdd4345c103423fbe35d32b568942de978dcc7c"
+    },
+    "2026-BTC-perp-08": {
+      "csv_sha256": "08ed90afdac40e82c6e516587d5f1291b7970bac765704852996c5b5047f8a3f",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-08.zip",
+      "zip_sha256": "b594301740cbb39818ba60f2835e4636aa06ad53308e25b1b312f1443fe0ccfe"
+    },
+    "2026-BTC-perp-09": {
+      "csv_sha256": "6c93df5ac755f8be4a976f56069b1f0dc274aeff99d598afc0dc1c300f996690",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-09.zip",
+      "zip_sha256": "07ab960882feb6d3120673a851f2a654c4c3f31f3a74d1f3fc4b0351a8ee1483"
+    },
+    "2026-BTC-spot-05": {
+      "csv_sha256": "9f87e717a3b713ba6861c947a23fb8428c55e168ad42490f3830670251ec7e6b",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-05.zip",
+      "zip_sha256": "11b8537dc1769a7de9d6cb2e0354dd4a376018986a826c67d1078e25fbf8fb80"
+    },
+    "2026-BTC-spot-06": {
+      "csv_sha256": "34d3a8b9121bf5e2ed5929e49fa383c8d0876835a24183d623ee9dc24f95d04b",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip",
+      "zip_sha256": "7c446aee297f382ee92b8d9b3300a1d7c21bed8166118f3bb261275bed5e308e"
+    },
+    "2026-BTC-spot-07": {
+      "csv_sha256": "e51786ad8ac90ce733ffcf6d03352ff6a4a256f22447e02238931b7c53534f8b",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip",
+      "zip_sha256": "ec98553c10acdbf3f210c55045614e8d3daf616e407c36718269361b1e972b16"
+    },
+    "2026-BTC-spot-08": {
+      "csv_sha256": "20d4c54659b418e928b5283ca8834fec33fcbccd8701d52a7be94566d6483449",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-08.zip",
+      "zip_sha256": "1fa85817e358f73e0dd9509f6f31c79bf9b23d9470971a882c8f814871a3fccf"
+    },
+    "2026-BTC-spot-09": {
+      "csv_sha256": "c4283dab2dfbd8ae492c7de8088e16cdd2cdab34b9fd6ce2deb01b97e2a03886",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-09.zip",
+      "zip_sha256": "39b31046d702bd7e482e03b125d6fbfd730147aa5d9ad03d8b04bf1961a8e9bd"
+    },
+    "2026-ETH-daily-repair-2026-06-29": {
+      "csv_sha256": "894fbaf869101e0aa68c5d85b86297a7bbc101768e031a1a63cd5f7af3dc3502",
+      "url": "https://data.binance.vision/data/futures/um/daily/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2026-06-29.zip",
+      "zip_sha256": "29ef5b9ab185b18c7bcb73fd7ba12d14ebcef404367c886ad13705592ef99c20"
+    },
+    "2026-ETH-funding-05": {
+      "csv_sha256": "ae197723dde6cc0893e974f02d3f30cc39afa5855bc5721129d5a80c741db570",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "ff926ad3fc48493c26c85af16620b19c695cc1854faa1e7f0ea2ab9fdafc2084"
+    },
+    "2026-ETH-funding-06": {
+      "csv_sha256": "ce6e43bde5e82f50da2ae05ca07394394cff681f7856f264461d4f1eb88b8e77",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "cc6fb028a811bc423b711f6b89de067bf92a2eda61303e1ce0b219b5d3210e47"
+    },
+    "2026-ETH-funding-07": {
+      "csv_sha256": "762a70b4bd63a2b7a1483ea91b2e5195a8ce4c10f932967b46a5109fae72a689",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "ece7f6c64d0e45fbd64929dec40bae525fe365381046e367de5ca0827bc623d3"
+    },
+    "2026-ETH-funding-08": {
+      "csv_sha256": "e81333c5828b7611cc27ce119b928525cd1697d6beb1037c6d7007f510f8e37b",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "8b843307038b3aedf725b1342003cce39f9526451ed92f407ca80bc637487839"
+    },
+    "2026-ETH-funding-09": {
+      "csv_sha256": "730266ab9c83238901af9960bbe8d8658018586a3d791a1932ea7259666a70e1",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "d1916b9181cf3507ad5a6522ac6587cd84a424941f1a2132ab887f768b5dd4de"
+    },
+    "2026-ETH-mark-05": {
+      "csv_sha256": "f15ec1271112acdee0f43db54598d88dfb450ca562082fecc574a019c27fee9f",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2026-05.zip",
+      "zip_sha256": "8c8eb74b687d1b89f5d50e61970510c528dcb6096e0c63f0c12e011379a721c0"
+    },
+    "2026-ETH-mark-06": {
+      "csv_sha256": "95329e2bbc18d6394004144c4a0785f936227f85a2a0bd96375549288628a6c5",
+      "source_rows": 697,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2026-06.zip",
+      "zip_sha256": "f3321778da750ed4a24ce9907af8956dadd6bf022832b1d54594159ef923100b"
+    },
+    "2026-ETH-mark-07": {
+      "csv_sha256": "690ddf1488c0565721d17b9a3b9a1ded589f53f3c103db455068e797eea82035",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2026-07.zip",
+      "zip_sha256": "d1d9f24465a6723c4fb59995aa2bfd9d1a768d5c12f2b00278e4bf2128321a52"
+    },
+    "2026-ETH-mark-08": {
+      "csv_sha256": "4595d7ede3fa7dc437340d75d58ddbae39a683fb2aa9e24d4f0a3c7021a9d88d",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2026-08.zip",
+      "zip_sha256": "3bb644e423b6e2d022f671c18a46c7120f064df05ac3b5bf296031afdce2a178"
+    },
+    "2026-ETH-mark-09": {
+      "csv_sha256": "ff891d6e3898e76a829ae4de915338e4a3e4c9477faec0b0fd9c3cab3296f27d",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/ETHUSDT/1h/ETHUSDT-1h-2026-09.zip",
+      "zip_sha256": "3ce5b66dde611de6f25bc38b17f972aa397a194557e6b1e94abea5c36cd9c9dd"
+    },
+    "2026-ETH-perp-05": {
+      "csv_sha256": "4200cfb8f87d2625716d453cee8e8a796275c553a074c39e6c9ec6b8149d9f4a",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-05.zip",
+      "zip_sha256": "5353c7cd71f610eca5a58824606ba1016efe34ea62fd6e6cd4b7be4b99277915"
+    },
+    "2026-ETH-perp-06": {
+      "csv_sha256": "776adb89caf301a955644f96a2df0c7b2d532c7108e67aba9ac464beb7f29efb",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-06.zip",
+      "zip_sha256": "138bcb6c7c8be4c5bdd8048fa417be551fbeffe4024f64e5bef5ed30d3069d8c"
+    },
+    "2026-ETH-perp-07": {
+      "csv_sha256": "95a472c3eee8d40fa140f40a1cdf7b857f22d739c5d8db1fdf7a0653c6e8e508",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-07.zip",
+      "zip_sha256": "2036043c65c50a1d9c817db4c93db0c97366851d7cc972efb8c5e951cb3b5cdd"
+    },
+    "2026-ETH-perp-08": {
+      "csv_sha256": "aa699e2d4e816d75363bf9a24f7aff38ea2e57934586bf07e379569ff6befe7d",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-08.zip",
+      "zip_sha256": "52ede96e424bdc696b4b7a30aa4f2f56cd32e58c6598400f25f7b3a8dc6cf50a"
+    },
+    "2026-ETH-perp-09": {
+      "csv_sha256": "1695df5f937615d320c70a5b54c7f28397ade6ebd4ceb7feff9f79f8687cfeb7",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-09.zip",
+      "zip_sha256": "f4331baae4c38dea1c123836808f3353473cc28e6c434ef38669698ae79599fc"
+    },
+    "2026-ETH-spot-05": {
+      "csv_sha256": "1b94e1a76eee0dcd69026167e7842a93e1c7ac2adb2524279b8c77e97c9c18c9",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-05.zip",
+      "zip_sha256": "8c4cef22ad7046183621f1a41155e91301780a3c9f377d7770763027b08e2462"
+    },
+    "2026-ETH-spot-06": {
+      "csv_sha256": "0d644cfce53cc567c9d0a1d2186f3898886642b00ad1240a378c9e087298956e",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-06.zip",
+      "zip_sha256": "e24954ab4ada9dc5f6bbf9ac30275d459a5729fb522f045f627296b4ad7ee985"
+    },
+    "2026-ETH-spot-07": {
+      "csv_sha256": "cd9199f45b80ccbd7f0d76ff41b190edb1a7afb9090b03445c88e956f5facc27",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-07.zip",
+      "zip_sha256": "5e8c974c008689943b473ccc5890707d0c2cd0b7e71bdb28c0ad65a87abde338"
+    },
+    "2026-ETH-spot-08": {
+      "csv_sha256": "b54024ef5cf0fda17555e9ece5ae36ac8fe9f93393e950f5e8942ea42aa8ac12",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-08.zip",
+      "zip_sha256": "ebac99df5b1d9c84c56ea8f7a86daf09bcb43f8fdbded0049fec5205ab977dcc"
+    },
+    "2026-ETH-spot-09": {
+      "csv_sha256": "e05983eb48792dceafec067f5bf110c31f53305ebc0df6288248bedbe06cc246",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1h/ETHUSDT-1h-2026-09.zip",
+      "zip_sha256": "04a3deb832f99c5f4e961c28baa4c6856b1f1cc5a7d887068aafeed6a717f4ac"
+    },
+    "2026-LINK-daily-repair-2026-06-29": {
+      "csv_sha256": "7cbd899645c439a4a3a84490fe9877a71ebdad1b0794ac8a12476e8603a45007",
+      "url": "https://data.binance.vision/data/futures/um/daily/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2026-06-29.zip",
+      "zip_sha256": "215ef3e4f500ac8e664a8ab948ab9763a38cb12733d25bb8b62a3bb283d55c70"
+    },
+    "2026-LINK-funding-05": {
+      "csv_sha256": "ad7fd98d6fd4ec16e61f9fd5a9a5a95f705563d8ccc97454c96a08168168edf0",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "06536cdd66211e1a25629a54d489493aaab6b3613b9d2207a65af44a3826da1b"
+    },
+    "2026-LINK-funding-06": {
+      "csv_sha256": "a3ed864d1406410f03f47b615c47faa5ec54d2463c7954ae96dc3a9963d3e6e7",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "33654b89221e8e9c544632cdee76e38c3eedf40aa2c1536ead56e849781e8d07"
+    },
+    "2026-LINK-funding-07": {
+      "csv_sha256": "786eda9077c2de646ae1e5de58c304625f6404f0e9262ea3cd735c48919c2851",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "42f06dfc2f6ab34dda1a7ae739d978b11b05384e098be9d556abf9015414ba9f"
+    },
+    "2026-LINK-funding-08": {
+      "csv_sha256": "e3b77af60b12ffa10d2573adb4ae7aef42c8fc51e3496264d5450fdc68facf68",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "45134ee1041a243a361107c70d558b553c0919ee4f524c87364f4529f6971667"
+    },
+    "2026-LINK-funding-09": {
+      "csv_sha256": "2fb5ca8358c7930f6cf8bf8db255a596c87f13f651d31ca536db3e913010681d",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "9b171146a071a8223ccd8082927af5b8076b70deab0b95a80a249c0941cc5eb5"
+    },
+    "2026-LINK-mark-05": {
+      "csv_sha256": "933e0fe2aea02fada90d69ba7addd1d5f20bcc53e561552a294c54f5672e3c95",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2026-05.zip",
+      "zip_sha256": "93048549483289f73f2009a550a35db00133cfa750142bddf7bfeb44330d7df5"
+    },
+    "2026-LINK-mark-06": {
+      "csv_sha256": "ef949d6d24473f2a694e934579f7f4c0226c62ac42f24f7b4137bf4781271adb",
+      "source_rows": 697,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2026-06.zip",
+      "zip_sha256": "63228843d44b02f101e5c3c4cf0ffc16b88b7c0702145d85d0023fd2b3bc6d53"
+    },
+    "2026-LINK-mark-07": {
+      "csv_sha256": "0b5542a5397c8517ee8254640df705b72f6711fd88478224a75bdb4bef7536cc",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2026-07.zip",
+      "zip_sha256": "723fb21c806bc7cb20e0d025c4e99d65fa8c960701351670f111bbca97eef2b7"
+    },
+    "2026-LINK-mark-08": {
+      "csv_sha256": "e0a9b84b4dcf8875cc7c2f4c34232bbaa6c70b4777add44ee9403aa166e13907",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2026-08.zip",
+      "zip_sha256": "a7ee0c7e6f6646b10ff4453a61e697ac9e58780714fde5e0642cb04caf4366f7"
+    },
+    "2026-LINK-mark-09": {
+      "csv_sha256": "c62b8449a25dd998d4e075c7b0585c156c255d3051f4bdc0a0eb13d758feceb8",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/LINKUSDT/1h/LINKUSDT-1h-2026-09.zip",
+      "zip_sha256": "108ac9b952ae76f6357e3e9c8337e4c2cd9e05b3df458b54817fceeeec328709"
+    },
+    "2026-LINK-perp-05": {
+      "csv_sha256": "335217ae041a3da21d544806dca0f7b742fcf42a67aede2cdda88665db61cb9b",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-05.zip",
+      "zip_sha256": "fece4fba9d49887f6e87063cc24b5ee7bf5aab2d19b347e21b8588323c72e2a5"
+    },
+    "2026-LINK-perp-06": {
+      "csv_sha256": "b32466a93c0743ce917b3dd8e62a25d3d6eccd9d63de0b65abfac90198a9bd4b",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-06.zip",
+      "zip_sha256": "1959745f56af66b7c9b6977c213fb828568b766b910d3798ffc3096bf5f00af2"
+    },
+    "2026-LINK-perp-07": {
+      "csv_sha256": "60f1d950283f69afed4c6161149206971dc495361dc196e0c2b66e651c53c16e",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-07.zip",
+      "zip_sha256": "627adcc5610e00deae964e78a60486c273eeb1d821b6124e31f919369925f71e"
+    },
+    "2026-LINK-perp-08": {
+      "csv_sha256": "7ae9fee5c7f7644b8d43ac9f4f1c02c3a76a2bc479d22f3c55a26b7f1a431095",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-08.zip",
+      "zip_sha256": "dbc869b6098dcd781b959a2fc36c56ef31ed718f5b2019765b886a0d434464f3"
+    },
+    "2026-LINK-perp-09": {
+      "csv_sha256": "d5ed83de3304e21adccfaf2835321e003b7af13c1365cd21637f0ab9cf75fcc6",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-09.zip",
+      "zip_sha256": "d8fa671d4a22ac66ffbbc4f79c598b679bc7ac9a735bd15278b55738625f666d"
+    },
+    "2026-LINK-spot-05": {
+      "csv_sha256": "05f07c1a8f7325b7909207056997fe11fcfe21f746f84b5cb8e98bb524fd1ce8",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-05.zip",
+      "zip_sha256": "0534ec30207efdb505d706f121d955d8af7da21afed9ae7d695cda7e7deea6f0"
+    },
+    "2026-LINK-spot-06": {
+      "csv_sha256": "b7f62fba5c64bf719262b8db4fb171a17e3154412a947dbdfa2b05bf99a84411",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-06.zip",
+      "zip_sha256": "721a4a6ec6d483e744bb4ee9ae15c707a40a7302745bde76d30cf92832681090"
+    },
+    "2026-LINK-spot-07": {
+      "csv_sha256": "bab6ff99765c0adf805281d07f5802c25a17e7eb01859f4b4fa1e44553fd6707",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-07.zip",
+      "zip_sha256": "fb305b15d2c180d3046c77a101ad89d5e6c139557fa2f5deb8824d3cadb2ea8c"
+    },
+    "2026-LINK-spot-08": {
+      "csv_sha256": "e01d9460378dd9bd767a70f062095a12ae1a08102bd5622695a813c5080e3c27",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-08.zip",
+      "zip_sha256": "b41a1fd47dd5b11cbb5c163e35edd63b77af2635f3f948939b7533dcc49f8077"
+    },
+    "2026-LINK-spot-09": {
+      "csv_sha256": "7294f74e19dc3b1c17f8c47541a5d53fd69d2aafd7b63efd4a48e40bc70bf082",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/LINKUSDT/1h/LINKUSDT-1h-2026-09.zip",
+      "zip_sha256": "3300d4a09247514a4dce5b551d38237625fec29c876a1ba8a96cb38198da7497"
+    },
+    "2026-SOL-daily-repair-2026-06-29": {
+      "csv_sha256": "bdbd315c1b831a1e4c26904022946f94ca5d206e2e078120dd112df3640c9d5d",
+      "url": "https://data.binance.vision/data/futures/um/daily/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2026-06-29.zip",
+      "zip_sha256": "fb823a930164896410b30cd46682bfedb9b938cb0c2518de9ef206e230f7306d"
+    },
+    "2026-SOL-funding-05": {
+      "csv_sha256": "8a82f295a753ad9c850c6e99c0a9cdb774cfee7c0f43bf366b0092cbf6d6556a",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "c13066e5f7c5d161dbebd488cbeaab1205688c6dc7f9fafcc8f94296f2c1e47b"
+    },
+    "2026-SOL-funding-06": {
+      "csv_sha256": "6cffa9dbfa23926961bec1b65300a10980aaa86d419014f79a6f8d9274cd8269",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "8d32fa3153d54c58667650e8b2c65e489b3a433b775052a93208bf60541a40d3"
+    },
+    "2026-SOL-funding-07": {
+      "csv_sha256": "26641cedb876febeef34cff1f025bb39f490c29a3218b53ec8ecf9f5d178d307",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "13f655eaa29865b16acc7bd97be74e212bc4c2139fc2f9ead4d150852c2a9ebb"
+    },
+    "2026-SOL-funding-08": {
+      "csv_sha256": "6e9494e0f229e692a0c108d8fe39832e0abbb1d55de2cce20fb3be54fa5f51e8",
+      "source_rows": 94,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "593e99bb628c0b178a5a2c8f415e1ed489dfd7dea497366f1fee91b8768c704d"
+    },
+    "2026-SOL-funding-09": {
+      "csv_sha256": "15c5b43ef4f489da1371b1ff74aa54f718215cfda2a4bc90bb702fab45d1c881",
+      "source_rows": 91,
+      "url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "8503ce0767496c63929bedc4f43307efcea8216d181a873b32a695f6d85092ef"
+    },
+    "2026-SOL-mark-05": {
+      "csv_sha256": "a47e456a3694fa2b47d026322acbfbbd91eb35888de69dc4f1bfcdf99a5ec8cd",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2026-05.zip",
+      "zip_sha256": "5c29f7a432418eb4f20284b499e582a72e56ffab5bfb2bb69de07880b8372055"
+    },
+    "2026-SOL-mark-06": {
+      "csv_sha256": "bd84ca2f9a71a5279c7562005d8c20ea4224b88faa8e2e093d4e10bbad675863",
+      "source_rows": 697,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2026-06.zip",
+      "zip_sha256": "f50a7a3932c0ae29b745dc1d21d7f380195565b7064753b3c0b03dc2dc999f67"
+    },
+    "2026-SOL-mark-07": {
+      "csv_sha256": "4e00c264f16bcdc108e360e13b7d999c48867b5cbe963c6fb59330e9bc6018b3",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2026-07.zip",
+      "zip_sha256": "595d481d66e8d00341e1dd6e7ba67da41963f661e9c3ffdc85c5dc8d37634d91"
+    },
+    "2026-SOL-mark-08": {
+      "csv_sha256": "4b21cad84b83e53cc66198f6da26157395438947a7d745b0086a3978cf442802",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2026-08.zip",
+      "zip_sha256": "e979dbd35fa7abed89c376d6db17d57ae6fbfd7b98088deba847a6a65fa61966"
+    },
+    "2026-SOL-mark-09": {
+      "csv_sha256": "5c114253966ed82537be22491db812fa80717de1b68188af3014d6d62e486630",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/SOLUSDT/1h/SOLUSDT-1h-2026-09.zip",
+      "zip_sha256": "953b7bf5deeef54d5929581b855ac4097539708e14381c8e55578803de3f5a68"
+    },
+    "2026-SOL-perp-05": {
+      "csv_sha256": "8d3348383a6893f96c6449c0582396baee67efbfc3fa25e2312a36f150348d8b",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-05.zip",
+      "zip_sha256": "0d1aef19746005c140421825e55e482813330b19a82cbc24c792aaa0464778c2"
+    },
+    "2026-SOL-perp-06": {
+      "csv_sha256": "b00ce6578ce2d691476281e26ddeefc0653b95721e40b5ed9ccc81304302f42a",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-06.zip",
+      "zip_sha256": "5b6913a64843d8fbadeb1783a2ef064291355a33e6eee84f1a03c7e8786acfc8"
+    },
+    "2026-SOL-perp-07": {
+      "csv_sha256": "faab9b47d62e325fb72e16554ea8b81fca366b0cf26a1116fff62e16ad49215a",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-07.zip",
+      "zip_sha256": "4a88a47617d14ba94ae2154732ba724497a8cad66b1d7fd0dc4f88216101e0be"
+    },
+    "2026-SOL-perp-08": {
+      "csv_sha256": "3513f142da378dafcd50365072d8c030749b4a46123135fef8bca64f6ca960c6",
+      "source_rows": 745,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-08.zip",
+      "zip_sha256": "a25ab3dfcabcf739bd8bdd0aa9b1302865d5c571a5af1ffbb6e4a2b5c26ab833"
+    },
+    "2026-SOL-perp-09": {
+      "csv_sha256": "2aa73a3a60580b7d7c0cc567e08c436bbd544727031a31b2afeaee8f524302b7",
+      "source_rows": 721,
+      "url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-09.zip",
+      "zip_sha256": "e57f44b7df1f4269a06395c161d3618d9bc3d56e623825fc77c615d713a19263"
+    },
+    "2026-SOL-spot-05": {
+      "csv_sha256": "4ec6a33334fd5462229d81dfbd4140e94a7381ffd9adc773b376f54f5807e8d7",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-05.zip",
+      "zip_sha256": "bc33dc72343c662cb0614d4afe2ce7030ec7a4648d7c9a2dd1e99477e0001101"
+    },
+    "2026-SOL-spot-06": {
+      "csv_sha256": "ba9147407db93c2584dfc498a1ccef286b67c8377b07d91955a4f2ad399d7091",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-06.zip",
+      "zip_sha256": "feb36f4d0a5bb0c13596b57d9477f60e7331cec8762b23102cb5ea188eddcdaf"
+    },
+    "2026-SOL-spot-07": {
+      "csv_sha256": "030c3a8244a300d5d93f87d893e7eaf4889261ca85b7099a17e5c78e7626021c",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-07.zip",
+      "zip_sha256": "62abffc3fdbf438465dc44432d16a1806e6c140ab3e1824ffceb908d831f67e2"
+    },
+    "2026-SOL-spot-08": {
+      "csv_sha256": "8622ba2bf4c5515a2087a23b634d0637448d96545698d8fe052d254dbab9866d",
+      "source_rows": 744,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-08.zip",
+      "zip_sha256": "fcec8b92044eb5a2cdcbfb038afce21bb8e02a06b18b1eaffc4ef88bacb1185e"
+    },
+    "2026-SOL-spot-09": {
+      "csv_sha256": "e07556f66b636e7c83db1bc11f98d7306d3a014c07160e95107b9bc53e63ccb8",
+      "source_rows": 720,
+      "url": "https://data.binance.vision/data/spot/monthly/klines/SOLUSDT/1h/SOLUSDT-1h-2026-09.zip",
+      "zip_sha256": "3253ecc95e95ccac49036d4efb297e40906df5e1516f91b5288121e20457e343"
+    }
+  },
+  "trade_log_sha256": {
+    "A212_2024_BTC_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "688faf74c8a0d067812373d0968e124c1cd047fac5d6c097fa121bfb94978e43"
+    },
+    "A212_2024_BTC_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "702f02973bde4c2525eebf4dbf6149915a5ea0a6dd33fa42dcd1af01aeb78e1b"
+    },
+    "A212_2024_BTC_selective_base_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "9ac4a894f1d94b780c4a381192e859e4630d03499d04dc57f8f4561140b713fb"
+    },
+    "A212_2024_BTC_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "d003ab32a2a666453745c7afb8bafd67dea416be995415d220b2089cc0916f16"
+    },
+    "A212_2024_ETH_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "64ea2b9aae5c196156323826874207720419bd98642607f6045c1a4759a6c350"
+    },
+    "A212_2024_ETH_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "8d969c58378eda773b7f7aad55eef34771c10492ef78a3ad172e97335d4166e7"
+    },
+    "A212_2024_ETH_selective_base_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "a8277d1571098f000d5a6fbb53368ac54df6b0e30e6849c7bad1e70004b694c6"
+    },
+    "A212_2024_ETH_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "cb4cfe00e59f106f9d9ebee78438a29e64724b447577575a9d789f7d6cff7a58"
+    },
+    "A212_2024_LINK_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "a8e14e33427196959c047e613816f8072795ee8c51806f77e1710e4eb57a05e1"
+    },
+    "A212_2024_LINK_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "dbdc5cb6f5ef0286c5e1bd533bc23926d6b7050a41083f42fe699fa8ffba0dd4"
+    },
+    "A212_2024_LINK_selective_base_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "b29577f82ea6950f384bc219701ce9e85b307dd4a146199ab918206248bd7881"
+    },
+    "A212_2024_LINK_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "4601df64b7667a6589ff7570f6056b27d9876c5e6404d49882291f6caa1f7c48"
+    },
+    "A212_2024_SOL_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "00b5ca28a3a0431cb1e39097d510f2ecaec56c6bafeadf0110f0dae8610cdf75"
+    },
+    "A212_2024_SOL_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "30b4f4dbd00b3eca220dc2d29faa3cc7dfe17bd8cb65e5734e1f5efdae817237"
+    },
+    "A212_2024_SOL_selective_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "d482571ed9ccfba1cbb856b157d357e4346a73012c440813371e2a597a67eb90"
+    },
+    "A212_2024_SOL_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "739c8114203bbe6a48393109818aa3029564aa3d32cc4f6043360b45590eb9ca"
+    },
+    "A212_2025_BTC_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "885ceee66cf1c98886590dcfd85f70e0977dce1ef8ee0be8b93d59f88d5d11d1"
+    },
+    "A212_2025_BTC_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "8c00e1453ac937e6de0b4423bb1a5258d334c30b970164bf859689d025e9d621"
+    },
+    "A212_2025_BTC_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2025_BTC_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2025_ETH_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "7f1b39c4d9e45bc634e20ccadfb206f457bb08d1f2aaf6628a65d98a47e5c176"
+    },
+    "A212_2025_ETH_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "21230152175d2465585c24310d78c77d98d0684b0c22ec756413ab8d1dbf7c09"
+    },
+    "A212_2025_ETH_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2025_ETH_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2025_LINK_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "87b6bc212d32f3aac3abf8b4ea3f578421afe25f9a4a6130dd47e3d1007516c7"
+    },
+    "A212_2025_LINK_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "3e4cb35d11f6a1de97e9be459a54d21440e381b56bc7c5a5b1ec668503ca71af"
+    },
+    "A212_2025_LINK_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2025_LINK_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2025_SOL_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "4672b0dc68b58c9d51bba62344ca1f1ebe88c47cb44b08e500d59255c8b428f3"
+    },
+    "A212_2025_SOL_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "6f90885da774992696778cc67a3f6f8af81e7eba0ebe18099be56a44d6ee4793"
+    },
+    "A212_2025_SOL_selective_base_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "c7dc50e96f2659dab95b33be4e6a1825c30f8372fe6c650513054ff462f8af98"
+    },
+    "A212_2025_SOL_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 2,
+      "sha256": "fcef162aba0a8fc89c10429272483a3cdcdba01ef8bd5cbc9d94f66bb13b0ee4"
+    },
+    "A212_2026_BTC_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "f128079c8b9c1bd22521bcd6b82c84e8249e7a9b9c2b398d1fd72061b85d9652"
+    },
+    "A212_2026_BTC_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "0422da08fc8c1d89503e6074095dcbf674b8961f07099551184ce627e3ffc3e4"
+    },
+    "A212_2026_BTC_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_BTC_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_ETH_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "6a577750b128693c5208f40e6c74dbf1ae4662fe47e68296dfa75102fe71d7aa"
+    },
+    "A212_2026_ETH_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "a4969754fe16850d22047f7926b3d5a0ea917e5d225e446a3a7010a04cdbcda8"
+    },
+    "A212_2026_ETH_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_ETH_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_LINK_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "7a1631e66a2dfd44f5e1ad912ea86519d3ea5ac5fa90bf3afb73d5ce256acf1b"
+    },
+    "A212_2026_LINK_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "6b8e561de496b4d4b94bfd5a5763000b90683c68321dae9c428d4a704feee0f8"
+    },
+    "A212_2026_LINK_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_LINK_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_SOL_always_base_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "412c8a31b9dc25fece7e30255352be0cf7dad8c8610d294eee3465675a81b979"
+    },
+    "A212_2026_SOL_always_stress_TWO_REAL_LEGS.json": {
+      "n": 1,
+      "sha256": "22740654f2f8cde5de57858ba0b3fdf197a4fd61ff3be0adaf4836d1e85cf596"
+    },
+    "A212_2026_SOL_selective_base_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "A212_2026_SOL_selective_stress_TWO_REAL_LEGS.json": {
+      "n": 0,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  }
+}
