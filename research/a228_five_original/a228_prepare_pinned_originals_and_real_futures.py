@@ -49,7 +49,7 @@ PINS={
 COINS=("BTCUSDT","ETHUSDT","SOLUSDT")
 TFS=("5m","15m","1h","4h")
 MONTH_START=(2024,11)
-MONTH_END_EXCL=(2026,10)
+MONTH_END_EXCL=(2026,1)  # 2026 mark-price archives have a missing full day; STOP at 2025 instead of imputing
 
 
 def month_iter():
@@ -187,7 +187,7 @@ def store_native_market(candles,marks,settlements):
     for sym in COINS:
         pair=sym.replace("USDT","/USDT:USDT")
         frame=to_candle_frame(candles[sym],"5m",sym)
-        if frame.index[0]!=pd.Timestamp("2024-11-01T00:00:00Z") or frame.index[-1]!=pd.Timestamp("2026-09-30T23:55:00Z"):
+        if frame.index[0]!=pd.Timestamp("2024-11-01T00:00:00Z") or frame.index[-1]!=pd.Timestamp("2025-12-31T23:55:00Z"):
             raise ValueError(f"Unexpected study source window {sym}")
         for tf in TFS:
             tfdata=aggregate_5m(frame,tf).reset_index()
