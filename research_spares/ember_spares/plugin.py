@@ -24,7 +24,7 @@ from typing import Any, Union, get_args, get_origin, get_type_hints
 from .registry import REGISTRY, get_component
 from .types import Candle, Evidence
 
-_ALLOWED_MODULES = frozenset({'market', 'accounting', 'signals', 'structure', 'research', 'extra'})
+_ALLOWED_MODULES = frozenset({'market', 'accounting', 'signals', 'structure', 'research', 'extra', 'advanced', 'operations', 'workflow', 'adapters'})
 # Additional algorithms belong to existing Z families; the 37 required IDs stay stable.
 _EXTENSIONS = {
     'Z15.patterns': ('extra', 'detect_patterns'),
@@ -32,7 +32,37 @@ _EXTENSIONS = {
     'Z19.var': ('extra', 'efficiency_weighted_ema'),
     'Z27.predict_linear': ('extra', 'predict_verified_linear'),
     'Z30.holdout_gate': ('extra', 'check_train_holdout'),
+    'Z01.signal_frame': ('advanced', 'historical_signal_frame'),
+    'Z02.liquidation_boundary': ('advanced', 'liquidation_boundary'),
+    'Z03.depth': ('advanced', 'orderbook_depth'),
+    'Z03.quote_fill': ('advanced', 'quote_fill'),
+    'Z04.parity': ('advanced', 'full_trace_parity'),
+    'Z05.cash_ledger': ('advanced', 'two_leg_cash_ledger'),
+    'Z07.correlated_gate': ('advanced', 'correlated_risk_gate'),
+    'Z09.bracket_uncertainty': ('operations', 'bar_bracket_uncertainty'),
+    'Z10.replay': ('advanced', 'portfolio_replay'),
+    'Z11.history': ('advanced', 'progress_zone_history'),
+    'Z14.compression': ('advanced', 'compression_breakout'),
+    'Z17.failure_exit': ('advanced', 'failure_exit'),
+    'Z20.funding': ('advanced', 'funding_pressure'),
+    'Z21.oi': ('advanced', 'oi_signal'),
+    'Z22.taker_series': ('advanced', 'taker_series'),
+    'Z24.basket': ('advanced', 'basket_orders'),
+    'Z25.pair_diagnostics': ('advanced', 'pair_diagnostics'),
+    'Z26.dislocation': ('advanced', 'dislocation_plan'),
+    'Z28.dual_entry': ('advanced', 'dual_entry_risk'),
+    'Z30.bootstrap': ('advanced', 'bootstrap_mean_ci'),
+    'Z31.regimes': ('advanced', 'attribution_by_regime'),
+    'Z32.scan_source': ('advanced', 'review_source_for_lookahead'),
+    'Z34.impact_envelope': ('advanced', 'volume_impact_envelope'),
+    'Z35.preregistered': ('advanced', 'session_preregistered'),
+    'Z37.with_addons': ('advanced', 'risk_with_addons'),
+    'Z00.bundle': ('workflow', 'calculate_indicators'),
+    'Z38.parity_exports': ('adapters', 'parity_from_exports'),
+    'Z38.normalize_original': ('adapters', 'normalized_signal_rows'),
+    'Z31.trade_exports': ('adapters', 'trade_report_rows'),
 }
+
 _CALLABLES: dict[str, Any] = {}
 
 

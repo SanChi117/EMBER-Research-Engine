@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ember-research-spares"
-version = "0.2.0"
+version = "0.3.0"
 description = "Installable offline plug-and-play research parts for EMBER; zero orders"
 requires-python = ">=3.10"
 dependencies = []

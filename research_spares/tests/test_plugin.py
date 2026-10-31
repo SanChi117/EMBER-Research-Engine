@@ -27,8 +27,8 @@ def basic():
 class PlugAndPlay(unittest.TestCase):
     def test_manifest_complete(self):
         items = manifest()
-        self.assertEqual(len(items), 42)
-        self.assertEqual(len({x["id"] for x in items}),42)
+        self.assertEqual(len(items), 71)
+        self.assertEqual(len({x["id"] for x in items}),71)
         self.assertNotIn('Z12', {x['id'] for x in items})
         self.assertTrue(all(x in {y['id'] for y in items} for x in ('Z15.patterns','Z19.ott','Z27.predict_linear')))
 

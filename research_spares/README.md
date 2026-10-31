@@ -1,86 +1,82 @@
-# EMBER Spare Parts — автономная библиотека исследовательских компонентов
+# EMBER / SMOKE Spare Parts — подключаемая библиотека v0.3.0
 
-**Версия:** 0.2.0 | **Рабочая ветка:** `research/spares-library-core-20261101` | **Рынок проекта:** Binance USDT-M Futures | **Режим:** `RESEARCH-ONLY / DISCONNECTED`.
+**Статус:** исходный код + тесты + прямые входы в Binance USD-M **READ-ONLY**, без торгового исполнения. Отдельная исследовательская ветка; никаких изменений существующих стратегий, PAPER-планировщиков и биржевого аккаунта.
 
-Это **реальный изолированный пакет Python**: 37 зарегистрированных интерфейсов `Z01–Z38` (кроме уже имеющегося в SMOKE `Z12`), код, unit-тесты, проверка контрактов и локальное использование. Он **не подключён** к действующим EMBER/SMOKE, Binance, Google Drive, PAPER или планировщикам.
+## Что реально реализовано
 
-**Честное ограничение:** это оригинальные независимые **референсные реализации** функций, а не побайтово или посделочно перенесённые оригинальные модули авторов стратегий. Никакой стратегии не приписывается прибыльность на основании работы библиотеки. Технически тестируемые функции не являются гарантией точности на реальном рынке или готовности безопасно ставить биржевые ордера.
+- **37/37** существующих ID Z01–Z38 (кроме ранее реализованного в SMOKE Z12) по-прежнему импортируются через `invoke('Zxx', args)`.
+- **34 дополнительных операций** (`Zxx.some_name` и `Z00.bundle`): реальная загрузка Binance USD-M klines, mark-price, funding, OI и taker-buy volume; расчёт маржи на заданных ступенях, отдельная модель границы maintenance, двухногий журнал, защита портфельного риска, незатираемый SQLite risk latch, учет порядка реальных fill events, потоковые признаки, техническая диагностика, импорт сигналов внешних исполнителей.
+- `run_binance_usdm()` — **единый вход** от REST фьючерсов к вычисляемым признакам; возвращает `SOURCE_COMPLETE` или `PARTIAL_SOURCE` с точной причиной нехватки данных. Публичный REST может быть недоступен по географическим причинам и OI имеет ограниченное окно хранения.
+- `run_on_candles()` — универсальная подача `Polars.DataFrame`, `Polars.LazyFrame`, `pandas`, списка строк EMBER/SMOKE; контроль таймфрейма, UTC, symbol, closed candle.
+- `SQLiteResearchLedger` — сохраняет только подтверждённые *переданные* события, не считает свечное касание гарантированным fill. Risk halt не сбрасывается при рестарте.
+- Все интерфейсы автономные и могут быть подключены выборочно Python-импортом; никаких API-ключей, POST, real/live/paper orders, планировщиков и автоматических изменений стратегии.
 
-## Что именно готово
+## Установка — один раз
 
-- Существуют импортируемые Python-функции для каждого из 37 ID, без заглушек `pass`/`NotImplemented`.
-- Нет внешних зависимостей в работающем пакете, нет API ключей, сети, live/order gateway, произвольного `eval` и фоновых задач.
-- Все функции работают на переданных исторических/симулированных значениях. Набор unit-тестов можно запустить локально.
-- Реестр `ember_spares.registry.REGISTRY` содержит ID, модуль, публичную точку входа и метку `CORE_TESTABLE` или `REQUIRES_MARKET_DATA`.
-- Автоматическое включение всех модулей **запрещено**: исследовательский код только импортируется явным вызовом функции.
-
-### Не готово и не заявляется
-
-- API/историческая загрузка настоящих Binance funding, mark/index, OI, L2, taker и корректная синхронизация с биржей.
-- Точная Binance ликвидация (maintenance tiers, liquidation fees, cross margin, ADL), реальный лимитный fill с очередью, любые реальные/виртуальные сделки.
-- Соответствие входов/выходов первоисточникам (никакой source-parity ещё нет).
-- Полный детектор всех фигуральных паттернов Z15 (реализована одна корректно подтверждаемая double top), точная OTT Z19 (есть HMA/SuperTrend), полноценный ML-тренер Z27, автоматизированные внешние runtime адаптеры Z38.
-- Доказанная экономическая выгода любой функции.
-
-## Для немедленного вызова без отдельных адаптаций
-
-Откройте [READY_TO_USE.md](READY_TO_USE.md): любой из 37 модулей вызывается через `from ember_spares import invoke`; `run_on_candles` принимает EMBER Polars/Pandas/list и не смешивает символы. `python -m ember_spares.examples` исполняет **все 37 ID**.
-
-## Быстрый запуск
-
-Из корня репозитория на исследовательской ветке:
+Из корня EMBER **на ветке `research/spares-library-core-20261101`**:
 
 ```bash
-cd research_spares
-python -m unittest discover -s tests -v
-# Для установки как локального пакета без торговых адаптеров:
-python -m pip install -e .
+python -m pip install -e ./research_spares
+python -m pytest research_spares/tests -q
+python -m ember_spares.examples
+ember-spares list
 ```
 
-Примеры без подключения к бирже:
+Или без переключения ветки:
+
+```bash
+python -m pip install 'git+https://github.com/SanChi117/EMBER-Research-Engine.git@research/spares-library-core-20261101#subdirectory=research_spares'
+```
+
+## Одной командой — реальные публичные данные Binance USDT-M
 
 ```python
-from ember_spares.registry import REGISTRY, get_component
-from ember_spares.market import classify_bracket_bar, BarOutcome
-from ember_spares.types import Candle
-from ember_spares.signals import taker_pressure, oi_quadrant
+from ember_spares import run_binance_usdm
 
-print(len(REGISTRY))  # 37
-print(get_component('Z09'))
-bar = Candle(0, 60, 100, 105, 95, 102, 1000, 60)
-assert classify_bracket_bar(bar, 'long', 96, 104) == BarOutcome.AMBIGUOUS
-assert taker_pressure([40, 70], [100, 100]) == 0.55
-print(oi_quadrant(100, 101, 50, 51))  # NEW_LONGS (эвристика)
+r = run_binance_usdm(
+    symbol='SOLUSDT', interval='15m',
+    start_ms=1735689600000, end_ms=1736035200000,
+    decision_at=1736035200,  # UTC seconds; никакой будущей свечи
+    funding_lag_ms=1000, oi_lag_ms=1000,  # гипотезы задержки, фиксировать в эксперименте
+    oi_period='15m',
+)
+print(r['status'], r['missing'])
+print(r['features']['Z22'])  # taker-buy pressure из того же фьючерсного OHLCV
 ```
 
-## Контракты времени и исполнения
+**Важно:** `decision_at` — UTC секунды; `start_ms/end_ms` — UTC миллисекунды. OI endpoint сохраняет только ограниченную историю; `PARTIAL_SOURCE` не означает, что можно подставить Spot. Исторические depth/queue публичным REST не восстанавливаются.
 
-- Для `Candle` нужны **открытие/закрытие в UTC epoch seconds** и `available_at >= close_time`; функция обязана получать только свечи, доступные в момент исторического решения. Модуль `market.asof_evidence()` проверяет появление событий у разных источников.
-- Работающие со свечами функции без `decision_at` полагаются на то, что вызывающий код заранее ограничил данные по времени. **Не передавать будущую историю целиком в исторический сигнал.** До реального использования необходим per-feature availability tracer и приёмочный parity-тест.
-- При касании SL и TP на одной свече `classify_bracket_bar()` возвращает `AMBIGUOUS`, а не случайный «выигрыш».
-- `maker_fill_certainty()` без полных свидетельств исполнения возвращает `UNKNOWN`.
-- `maintenance_required()` и `margin_state()` — информативное условие недостатка маржи при **заданных** уровнях, а не расчёт биржевой цены ликвидации.
-- `RiskState` после срабатывания защитной защёлки **не размораживается автоматически**, в том числе после рестарта/смены дня.
+## По ID из единой функции, без переписывания интерфейса
 
-## Компоненты
+```python
+from ember_spares import invoke
 
-| Блок | Файлы | ID |
-|---|---|---|
-| Биржевое время, стакан, неопределённость fills | `market.py`, `types.py` | Z01 Z03 Z09 Z10 |
-| Маржа, двухногий PnL, cash ledger, risk state | `accounting.py` | Z02 Z05 Z06 Z07 Z08 Z37 |
-| Структура, PA, состояния, HMA/SuperTrend, Fibonacci | `structure.py` | Z11 Z13 Z14 Z15 Z16 Z17 Z18 Z19 Z28 |
-| Funding/OU, OI, taker, lead-lag, пары, momentum, ML gate | `signals.py` | Z20 Z21 Z22 Z23 Z24 Z25 Z26 Z27 |
-| Parity, ablation, статистика, leakage, capacity, exposure | `research.py` | Z04 Z29 Z30 Z31 Z32 Z33 Z34 Z35 Z36 Z38 |
-| Уже реализован в SMOKE — не копируем | `app/lib/level/{math,backtest}.ts` | Z12 |
+result = invoke('Z32.scan_source', {'code':'x.shift(-1)'})
+assert result == ['NEGATIVE_SHIFT']
 
-Подробное сопоставление с исходными стратегиями и кодом EMBER/SMOKE: [SPARE_PARTS_LIBRARY_20261101.md](../SPARE_PARTS_LIBRARY_20261101.md).
+risk = invoke('Z07.correlated_gate', {
+  'existing':[],
+  'new':{'strategy':'A','symbol':'SOLUSDT','direction':'long',
+         'stop_risk_usdt':10.,'notional_usdt':500.},
+  'max_stop_risk':100.,'max_gross_notional':10000.,
+  'max_strategy_stop_risk':40.,'max_symbol_notional':2000.,
+})
+assert risk['allow']
+```
 
-## Критерий «можно подключить» (пока НЕ выполнен)
+Дополнительные готовые вызовы: `Z02.liquidation_boundary`, `Z03.depth`, `Z05.cash_ledger`, `Z09.bracket_uncertainty`, `Z14.compression`, `Z17.failure_exit`, `Z20.funding`, `Z21.oi`, `Z22.taker_series`, `Z24.basket`, `Z25.pair_diagnostics`, `Z26.dislocation`, `Z28.dual_entry`, `Z30.bootstrap`, `Z31.regimes`, `Z34.impact_envelope`, `Z37.with_addons`, `Z38.parity_exports` и другие через `ember-spares list`.
 
-1. Проверить полноценное совпадение поведения с нужным оригиналом либо явно назвать новую независимую реализацию.
-2. Реализовать adapter in/out под версионированный контракт EMBER/SMOKE и истинный `available_at` каждого внешнего источника.
-3. Проверить применимость лицензий внешнего кода (в этой версии **нет копирования третьесторонних файлов**).
-4. Проверить на реалистичных архивных Binance USDT-M Futures данных, комиссии, funding, исполнение, маржу/ликвидации и ошибки.
-5. Пройти интеграционные регрессии, отдельный OOS и PAPER gate, только после явного решения пользователя подключать в стратегию.
+## Исполнение денег: жёсткая граница ответственности
 
-**Назначение библиотеки:** чтобы можно было позже выбрать нужный компонент и интегрировать его без повторного написания референсной математики. Самостоятельно вводить его в торговлю нельзя.
+- **Работает:** расчёт по предоставленным price/mark/funding/OI/fee/margin-ступеням, cash ledger, примерная maintenance-граница, лимиты риска, подтверждённые/частичные order receipts, бюджет двух ног, временна́я причинность, сохранение risk latch в SQLite.
+- **Нельзя обещать:** точную биржевую ликвидацию (cross, ADL, точные обновляемые tiers и прочие нюансы), реконструкцию исторической очереди заявок по OHLCV, реальный fill без подтверждённого исполнения, исходный 1:1 результат чужой стратегии без её original runtime и версии, положительную доходность.
+- Для неопределённой свечи стоп/цель возвращается `AMBIGUOUS`; для исторического отсутствия OI/depth — `BLOCKED_DATA`, а не выдуманная цена сделки. Это корректно работающий отказ, а не ошибочный сигнал.
+
+## Где хранится документация
+
+- [READY_TO_USE.md](READY_TO_USE.md) — устоявшийся `invoke` + импорт OHLCV.
+- [COMPONENT_STATUS.md](COMPONENT_STATUS.md) — что конкретно вычисляется в каждом Z-ID, и что является требованием внешних данных или биржевого режима.
+- [PROVENANCE.md](PROVENANCE.md) — отличия собственных референсных реализаций от первоисточников (отдельное юридическое и поведенческое подтверждение).
+- [SPARE_PARTS_LIBRARY_20261101.md](../SPARE_PARTS_LIBRARY_20261101.md) — полный каталог источников и стратегия→деталь.
+
+**Важно:** ни один из 76 оригиналов не получил статуса проверенной прибыльной Binance USD-M стратегии только от установки данной библиотеки.
