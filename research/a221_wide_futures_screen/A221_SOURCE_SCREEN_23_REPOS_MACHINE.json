@@ -1,0 +1,196 @@
+{
+  "date_utc": "2026-10-31",
+  "scope": "Binance USDT-M Futures only",
+  "locked_mandate": "main/RESEARCH_MANDATE_LOCKED.md",
+  "fresh_sources_inspected": 17,
+  "total_rows": 23,
+  "verified_futures_candidates": 0,
+  "economic_original_replay_count": 1,
+  "prior_rejected_and_user_veto_respected": true,
+  "items": [
+    {
+      "repository": "yongzhe2160cs/trading-engine",
+      "source_commit": "efa37deac60fb9d91abcb181440c94f2f0eac4b8",
+      "mechanism": "TSMOM / directional persistence BTC ETH SOL",
+      "status": "ECONOMIC_PRELIMINARY_2_OF_3",
+      "evidence_note": "True USD-M source; original 720h signal; 204 SHA verified Binance UM price+funding months; BASE +1.75/+17.46/+12.41%; STRESS -0.91/+14.01/+8.66% in 2024/25/26; no untouched OOS or liquidation proof",
+      "audit_depth": "NATIVE_FUTURES_ECONOMIC_REPLAY"
+    },
+    {
+      "repository": "OctopusTakopi/crypto-trend-following",
+      "source_commit": "804eb428705c913988371c28a57ca051bb3a7f9c",
+      "mechanism": "multi-speed CTA trend + portfolio vol target",
+      "status": "SOURCE_AUDITED_DEFERRED",
+      "evidence_note": "Real Binance perpetual archives and reported measured funding; reported net Sharpe ~1.04 full, maxDD ~30.1%; 788 universe / 143 tradable on average, $100k original model, no detailed margin liquidation, very correlated crypto and partly discretionary source parameters; related trend family not second independent edge",
+      "audit_depth": "ORIGINAL_SOURCE_AND_METHOD_READ"
+    },
+    {
+      "repository": "fortunato/pymarket-structure",
+      "source_commit": "3502b8ec96959ad47a9b63ae7474c17c7a2dbff7",
+      "mechanism": "4h S/R reaction and filtered TSI",
+      "status": "REJECT_NO_ORIGINAL_STRATEGY_SOURCE",
+      "evidence_note": "Author 360-day Freqtrade report +70.32%, 404 trades but repo contains trade JSON and chart data, not runnable MsSupportResistanceV1 strategy; params explicitly curvefit to given year",
+      "audit_depth": "SOURCE_TREE_SEARCH"
+    },
+    {
+      "repository": "MG-Trading-Terminal/trading-strategy",
+      "source_commit": "e6d26a6d41693ea74024cf699942f72f224e296c",
+      "mechanism": "crowd positioning + OI barrel",
+      "status": "REJECT_UNREPRODUCIBLE_AND_OOS_FAILURE",
+      "evidence_note": "Markdown-only reports/no runnable original in repo; own honest OOS 15 coins×30d, 60 trades, +0.08%/trade prefee, below declared TP/SL breakeven; earlier 90% WR claim contradicted",
+      "audit_depth": "SOURCE_AND_ADVERSE_REPORT_READ"
+    },
+    {
+      "repository": "MiltonTulli/trading-bot",
+      "source_commit": "c448d2473cc888eacf36d484e9a79a18546c7aa1",
+      "mechanism": "BTC channel-volume breakout",
+      "status": "REJECT_LOOKAHEAD_COST_AND_DATA_MINING",
+      "evidence_note": "Author admits same candle close signal/fill, funding excluded, no slippage, 3240+ configurations selected; 61-month positive extrapolation not causal fully costed original",
+      "audit_depth": "AUTHOR_ADMISSIONS_READ"
+    },
+    {
+      "repository": "Adeline117/Strategy-project",
+      "source_commit": "8c9e5184df7062b75faa6e60297d7c6037783a54",
+      "mechanism": "funding extreme contrarian BTC",
+      "status": "REJECT_REGIME_UNSTABLE_TUNED",
+      "evidence_note": "2021/22 OOS negative; later years better; best 2.5z/60d/8h parameters optimized; fallback to synthetic data possible; not robust unmodified original",
+      "audit_depth": "AUTHOR_OOS_READ"
+    },
+    {
+      "repository": "DylanSiegel/GO-Microstructures",
+      "source_commit": "1678531b9ec81a90b61fc5b1f3a0d2131ba0baa9",
+      "mechanism": "dual-scale Hawkes order flow",
+      "status": "RESEARCH_TOOL_ONLY",
+      "evidence_note": "High-performance Binance Futures aggTrades research and IC models; no corresponding fully executable portfolio PnL with queue/funding proven; A207 raw taker-pressure alone failed (different model, not blanket refutation)",
+      "audit_depth": "CODE_AND_REPORT_SOURCE_READ"
+    },
+    {
+      "repository": "tsuithomas/crypto_research_order_book_imbalance",
+      "source_commit": "5cbed9600b98235204ef575a5712b9bac3d4848b",
+      "mechanism": "L2 microprice order book imbalance",
+      "status": "BLOCKED_EXECUTION_BOOK_SOURCE",
+      "evidence_note": "Model's positive EV hinges on maker fills; historical FIFO queue and spread/impact audit missing; cannot verify profit with Binance 1h price ZIP",
+      "audit_depth": "SOURCE_README_READ"
+    },
+    {
+      "repository": "mamipour/lead-lag-trader",
+      "source_commit": "ece2afe71bc96b0b4c9622d747b102f7e5fe9af4",
+      "mechanism": "cross-asset lead lag",
+      "status": "REJECT_WRONG_VENUE_RISK",
+      "evidence_note": "Validated primarily on Kraken Futures 19 alts, not Binance USD-M; reported maxDD 47.1%",
+      "audit_depth": "AUTHOR_README_READ"
+    },
+    {
+      "repository": "xujaan/futurabot",
+      "source_commit": "f26753b1fff85ef1d11c859d982535b820ba3759",
+      "mechanism": "multi-signal SMC breakout-retest scalp",
+      "status": "LOW_PRIORITY_COMPLEX_HEURISTICS",
+      "evidence_note": "Combines SMC, RVOL, OBI, VPIN, CVD, OI, funding and RR-optimized runner; no independent frozen multi-year Binance USD-M native log established in reviewed README",
+      "audit_depth": "AUTHOR_README_READ"
+    },
+    {
+      "repository": "bockuden/crypto-cointegration-research",
+      "source_commit": "071b0be8a2c47d640ff9856b275b8561b204efcf",
+      "mechanism": "two-leg spot-perp cointegration",
+      "status": "REJECT_RELATED_NEGATIVE_AND_NOT_DIRECTIONAL",
+      "evidence_note": "Author true crypto spot/perp result enormous fees and negative economics; closely related to A212/213, not a new standalone directional futures signal",
+      "audit_depth": "AUTHOR_README_READ"
+    },
+    {
+      "repository": "SebastianBoehler/MarketTensor",
+      "source_commit": "e120925ba850b2364a17914ebbf38a1fa56be9cb",
+      "mechanism": "ML HMM / funding + OI classifier",
+      "status": "REJECT_NO_MEANINGFUL_EDGE",
+      "evidence_note": "Real Binance Futures 2023-25 pipeline, reported best 1D CNN cumulative .0838 Sharpe .0828 vs majority baseline .0728 Sharpe .0822; marginal, no evident net cost advantage",
+      "audit_depth": "AUTHOR_README_READ"
+    },
+    {
+      "repository": "PVinh-Quant/Kairos-v2",
+      "source_commit": "50c3efc69a5128b98c30df0cb3b30d1da965dd76",
+      "mechanism": "quant ML/backtest framework",
+      "status": "TOOL_NOT_STRATEGY",
+      "evidence_note": "Analytics/validation engine, no single pinned profitable USD-M original edge",
+      "audit_depth": "README_READ"
+    },
+    {
+      "repository": "Superjojo74/nautilus-perp-funding",
+      "source_commit": "f939a4cdc840252e47d1016300f96dbbce6a58f9",
+      "mechanism": "accurate funding settlement for Nautilus",
+      "status": "USEFUL_TEST_TOOL_NOT_EDGE",
+      "evidence_note": "Cent-level funding cashflow parity module, original EMA cross remains negative; source supports accounting, not profitable strategy",
+      "audit_depth": "TECH_SOURCE_AND_README"
+    },
+    {
+      "repository": "zabor-crypto/zaBor",
+      "source_commit": "4c705d58d7f22b0a29d2f03b9ab130e2f35b14af",
+      "mechanism": "crash risk guard, liquidation and funding research",
+      "status": "TOOL_NOT_EDGE",
+      "evidence_note": "Risk control and strategy-agnostic research stack; not verified standalone USD-M alpha",
+      "audit_depth": "README_READ"
+    },
+    {
+      "repository": "freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "mechanism": "VolatilitySystem.py original 1h ATR shock",
+      "status": "REJECT_UNSAFE_STOP_AND_DCA",
+      "evidence_note": "Futures long-short 2x, source stoploss=-1, position_adjustment_enable=True and stake doubling; no independently demonstrated margin survival / net OOS",
+      "audit_depth": "ORIGINAL_CODE_BLOB_15ce2473f3f60bd33c4a67b0b8b228e379850f19"
+    },
+    {
+      "repository": "younghwan91/quantbox-engine",
+      "source_commit": null,
+      "mechanism": "futures common backtester",
+      "status": "UNAVAILABLE_GITHUB_404",
+      "evidence_note": "Public search index finds landing page but repo unavailable through connected GitHub read; cannot verify source or runnable equity claims",
+      "audit_depth": "LINK_RESOLUTION_FAILED"
+    },
+    {
+      "repository": "juriok/chart-pattern-backtester",
+      "source_commit": "2972c880144997ec305dc3dac23d78ee5a831176",
+      "mechanism": "4h pattern breakouts",
+      "status": "ALREADY_REJECTED_A219",
+      "evidence_note": "CCXT spot pair selector despite author futures PnL labels, source SHA verified in A219; do not rerun",
+      "audit_depth": "A219_PRIOR_VERIFIED"
+    },
+    {
+      "repository": "Kureshi25/cryptobot",
+      "source_commit": null,
+      "mechanism": "1D Donchian TrendFutures",
+      "status": "ALREADY_FAILED_A211",
+      "evidence_note": "Original Binance futures negative 2024/25 genuine native, source already tested; no retune",
+      "audit_depth": "A211_PRIOR_VERIFIED"
+    },
+    {
+      "repository": "MirrorNew/2026DoubleMaFuturesStrategy",
+      "source_commit": null,
+      "mechanism": "Double MA compression ETH Futures",
+      "status": "ALREADY_FAILED_A188_A197",
+      "evidence_note": "Original native historical profits lose causal/multiasset regime verification; prereg gates fail; do not repeat",
+      "audit_depth": "A188_A197_PRIOR_VERIFIED"
+    },
+    {
+      "repository": "OctopusTakopi/funding-rate-alpha",
+      "source_commit": null,
+      "mechanism": "cross-sectional funding carry",
+      "status": "USER_VETO_A220",
+      "evidence_note": "User explicitly rejected this original; no backtest or requeue",
+      "audit_depth": "MAIN_VETO"
+    },
+    {
+      "repository": "AbdullaE100/perp-quant-lab",
+      "source_commit": null,
+      "mechanism": "cross-sectional factor ranking",
+      "status": "USER_VETO_A220",
+      "evidence_note": "User explicitly rejected this original; no backtest or requeue",
+      "audit_depth": "MAIN_VETO"
+    },
+    {
+      "repository": "agarwalchirag535-lab/smallcap-pump-reversal",
+      "source_commit": null,
+      "mechanism": "post-pump reversal shorts",
+      "status": "USER_VETO_A220",
+      "evidence_note": "User explicitly rejected this original; no backtest or requeue",
+      "audit_depth": "MAIN_VETO"
+    }
+  ]
+}
