@@ -44,8 +44,8 @@ jobs:
                    'ccxt_config':{},'ccxt_async_config':{},
                    'pair_whitelist':[f'{sym}/USDT:USDT'],'pair_blacklist':[]},
                  'pairlists':[{'method':'StaticPairList'}],
-                 'telegram':{'enabled':False},
-                 'api_server':{'enabled':False}
+                 'telegram':{'enabled':False,'token':'','chat_id':'0'},
+                 'api_server':{'enabled':False,'listen_ip_address':'127.0.0.1','listen_port':8080,'username':'a199','password':'disabled-no-network'}
               }
               (out/f'config-{sym}.json').write_text(json.dumps(cfg,indent=2))
           print('A199_ORIGINAL_SOURCE_BYTE_PIN_OK',blob)
