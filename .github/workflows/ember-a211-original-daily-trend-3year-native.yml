@@ -38,8 +38,19 @@ jobs:
           b=f.read_bytes()
           blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
           assert blob=='2e6b83ba128373655090ca4827d8c7954ffaedfd',blob
-          assert not (root/'user_data/strategies/TrendFutures.json').exists(), "AUTHOR_OPTIMIZED_PARAM_JSON_COULD_OVERRIDE_DEFAULTS"
-          (root/'user_data/backtest_results').mkdir(parents=True,exist_ok=True)
+          import shutil
+          author_json=root/'user_data/strategies/TrendFutures.json'
+          assert author_json.exists(), "AUTHOR_ADJACENT_OPTIMIZATION_JSON_MISSING"
+          j=author_json.read_bytes()
+          jsha=hashlib.sha1(b'blob '+str(len(j)).encode()+b'\\0'+j).hexdigest()
+          assert jsha=='d9793456adc34cf51eb9c16a4a8ccdb3f84e6bfc',jsha
+          isolated=Path('/tmp/a211-clean-strategy')
+          isolated.mkdir(exist_ok=True)
+          shutil.copyfile(f,isolated/'TrendFutures.py')
+          assert (isolated/'TrendFutures.py').read_bytes()==b
+          assert not (isolated/'TrendFutures.json').exists()
+          Path('/tmp/a211-clean-userdir/backtest_results').mkdir(parents=True,exist_ok=True)
+          print('A211_ISOLATED_PYTHON_SOURCE_NO_AUTHOR_OPTIMIZATION_JSON',blob,jsha,flush=True)
           out=Path('a211-daily-native')
           for sym in ('BTC','ETH','SOL','LINK'):
               cfg={'bot_name':f'A211_original_1d_{sym}_OFFLINE_RESEARCH_ONLY',
@@ -79,17 +90,17 @@ jobs:
                 echo "A211_ORIGINAL_NATIVE_START $year $sym $feeid"
                 timeout 480s python research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
                   -c "a211-daily-native/config-$sym.json" \
-                  --userdir /tmp/a211-original/user_data \
+                  --userdir /tmp/a211-clean-userdir \
                   --datadir "$GITHUB_WORKSPACE/a211-daily-native/data" \
-                  --strategy-path /tmp/a211-original/user_data/strategies \
+                  --strategy-path /tmp/a211-clean-strategy \
                   --strategy TrendFutures --timeframe 1d \
                   --timerange "$timerange" --data-format-ohlcv json \
                   --fee "$fee" --export trades --cache none \
                   2>&1 | tee "a211-daily-native/$year-$sym-fee$feeid.log"
-                z="$(find /tmp/a211-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+                z="$(find /tmp/a211-clean-userdir/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
                 test -n "$z" && test -s "$z"
                 cp "$z" "a211-daily-native/$year-TrendFutures-$sym-fee$feeid.zip"
-                rm -f /tmp/a211-original/user_data/backtest_results/backtest-result*.zip
+                rm -f /tmp/a211-clean-userdir/backtest_results/backtest-result*.zip
                 echo "A211_ORIGINAL_NATIVE_END $year $sym $feeid"
               done
             done
