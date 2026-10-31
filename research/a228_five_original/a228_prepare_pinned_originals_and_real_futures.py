@@ -48,7 +48,7 @@ PINS={
 }
 COINS=("BTCUSDT","ETHUSDT","SOLUSDT")
 TFS=("5m","15m","1h","4h")
-MONTH_START=(2024,11)
+MONTH_START=(2023,11)
 MONTH_END_EXCL=(2026,6)  # valid Jan-May 2026 only, June mark data has missing full day
 
 
@@ -203,7 +203,7 @@ def store_native_market(candles,marks,settlements):
     for sym in COINS:
         pair=sym.replace("USDT","/USDT:USDT")
         frame=to_candle_frame(candles[sym],"5m",sym)
-        if frame.index[0]!=pd.Timestamp("2024-11-01T00:00:00Z") or frame.index[-1]!=pd.Timestamp("2026-05-31T23:55:00Z"):
+        if frame.index[0]!=pd.Timestamp("2023-11-01T00:00:00Z") or frame.index[-1]!=pd.Timestamp("2026-05-31T23:55:00Z"):
             raise ValueError(f"Unexpected study source window {sym}")
         for tf in TFS:
             tfdata=aggregate_5m(frame,tf).reset_index()
