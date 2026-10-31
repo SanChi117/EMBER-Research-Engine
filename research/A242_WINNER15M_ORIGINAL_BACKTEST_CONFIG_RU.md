@@ -1,3 +1,7 @@
+> **⚠️ СЛУЖЕБНОЕ / НЕ САМОСТОЯТЕЛЬНОЕ ДОКАЗАТЕЛЬСТВО ДОХОДНОСТИ.** SOURCE_CONFIG_RECOVERY_ONLY — найден оригинальный конфиг. НЕ доказана прибыль, реальное исполнение или завершение A243. [Текущий исправленный статус](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md).
+
+---
+
 # A242 — Winner15m: найден точный исходный Binance Futures backtest config (R026)
 
 Дата 31.10.2026. Исследование only Binance USDT-M Futures; без реальных торгов и изменений PAPER, мандат `main/RESEARCH_MANDATE_LOCKED.md` LOCKED. Не экономический replay, не прибыльный VERIFIED.
