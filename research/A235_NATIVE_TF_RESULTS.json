@@ -1,0 +1,216 @@
+{
+  "scope": "A235 corrected three original TF, NOT original author portfolio",
+  "state": "NATIVE_BACKTEST_RESULTS_PRESENT_NOT_VERIFIED",
+  "run_id": 41241733734,
+  "job_id": 124656841300,
+  "source_branch": "research/a235-native-timeframe-parity-20261031",
+  "workflow_commit": "54b0492534b4e34b61c2cf2565d0c1190728290b",
+  "result_type": "modeled Freqtrade net return relative to USDT1000 wallet; independent years reset",
+  "market": "Binance USD-M MAINNET OHLCV mark and funding using Testnet contract metadata",
+  "markets": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT"
+  ],
+  "costs": {
+    "base": 0.0005,
+    "stress": 0.0011
+  },
+  "locked_timeframes": {
+    "TrendFollowing": "4h",
+    "Risk_Stair_S5": "15m",
+    "NASOSv7LongShort": "5m"
+  },
+  "run_summary": {
+    "expected": 18,
+    "complete": 18,
+    "blocked": 0
+  },
+  "artifact": {
+    "id": 13057093648,
+    "digest": "sha256:2d1098c7ee6676d8bdbf8bd209478ed976a98336b5a6149ad724767a539af1e2",
+    "bytes": 12308413
+  },
+  "results": [
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": 7.075271951000002,
+      "native_max_drawdown_account": 0.048713865092245935,
+      "native_trade_count": 479,
+      "model_max_drawdown_percent": 4.8714
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": 19.722793328,
+      "native_max_drawdown_account": 0.0927087747693815,
+      "native_trade_count": 116,
+      "model_max_drawdown_percent": 9.2709
+    },
+    {
+      "strategy": "NASOSv7LongShort",
+      "timeframe": "5m",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": -0.20306972299999995,
+      "native_max_drawdown_account": 0.014623279976123602,
+      "native_trade_count": 8,
+      "model_max_drawdown_percent": 1.4623
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": -4.975171141,
+      "native_max_drawdown_account": 0.08634492811563348,
+      "native_trade_count": 436,
+      "model_max_drawdown_percent": 8.6345
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": 5.481852687999996,
+      "native_max_drawdown_account": 0.11982252971083826,
+      "native_trade_count": 118,
+      "model_max_drawdown_percent": 11.9823
+    },
+    {
+      "strategy": "NASOSv7LongShort",
+      "timeframe": "5m",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": -0.21057652499999982,
+      "native_max_drawdown_account": 0.014736094412742137,
+      "native_trade_count": 8,
+      "model_max_drawdown_percent": 1.4736
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": -11.116801101,
+      "native_max_drawdown_account": 0.13316660891761156,
+      "native_trade_count": 349,
+      "model_max_drawdown_percent": 13.3167
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": 16.951018704000003,
+      "native_max_drawdown_account": 0.08934502528541026,
+      "native_trade_count": 129,
+      "model_max_drawdown_percent": 8.9345
+    },
+    {
+      "strategy": "NASOSv7LongShort",
+      "timeframe": "5m",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": -0.8189590579999999,
+      "native_max_drawdown_account": 0.015057450649999964,
+      "native_trade_count": 5,
+      "model_max_drawdown_percent": 1.5057
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": -17.565300031,
+      "native_max_drawdown_account": 0.18366131297050983,
+      "native_trade_count": 340,
+      "model_max_drawdown_percent": 18.3661
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": 4.555829160000003,
+      "native_max_drawdown_account": 0.10105469500156565,
+      "native_trade_count": 132,
+      "model_max_drawdown_percent": 10.1055
+    },
+    {
+      "strategy": "NASOSv7LongShort",
+      "timeframe": "5m",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": -0.811395179,
+      "native_max_drawdown_account": 0.01516819942999996,
+      "native_trade_count": 5,
+      "model_max_drawdown_percent": 1.5168
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": -0.5702148550000004,
+      "native_max_drawdown_account": 0.0794793420859364,
+      "native_trade_count": 180,
+      "model_max_drawdown_percent": 7.9479
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": -1.9754800989999999,
+      "native_max_drawdown_account": 0.08789374701556034,
+      "native_trade_count": 52,
+      "model_max_drawdown_percent": 8.7894
+    },
+    {
+      "strategy": "NASOSv7LongShort",
+      "timeframe": "5m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": 0,
+      "native_max_drawdown_account": 0,
+      "native_trade_count": 0,
+      "model_max_drawdown_percent": 0
+    },
+    {
+      "strategy": "TrendFollowing",
+      "timeframe": "4h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -3.240182137,
+      "native_max_drawdown_account": 0.09186847063883541,
+      "native_trade_count": 160,
+      "model_max_drawdown_percent": 9.1868
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -6.396490058999999,
+      "native_max_drawdown_account": 0.11883847762777963,
+      "native_trade_count": 52,
+      "model_max_drawdown_percent": 11.8838
+    },
+    {
+      "strategy": "NASOSv7LongShort",
+      "timeframe": "5m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": 0,
+      "native_max_drawdown_account": 0,
+      "native_trade_count": 0,
+      "model_max_drawdown_percent": 0
+    }
+  ]
+}
