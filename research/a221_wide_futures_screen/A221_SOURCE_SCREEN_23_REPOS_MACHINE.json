@@ -12,8 +12,8 @@
       "repository": "yongzhe2160cs/trading-engine",
       "source_commit": "efa37deac60fb9d91abcb181440c94f2f0eac4b8",
       "mechanism": "TSMOM / directional persistence BTC ETH SOL",
-      "status": "ECONOMIC_PRELIMINARY_2_OF_3",
-      "evidence_note": "True USD-M source; original 720h signal; 204 SHA verified Binance UM price+funding months; BASE +1.75/+17.46/+12.41%; STRESS -0.91/+14.01/+8.66% in 2024/25/26; no untouched OOS or liquidation proof",
+      "status": "REJECT_OPERATIONAL_RISK_GATE_PARITY",
+      "evidence_note": "204 genuine Binance USD-M ZIP and 18 causality prefix probes; full-position 2025/26 BASE/STRESS looked profitable, BUT pinned original live risk limits daily loss >3% or HWM drawdown >10% triggered all 3 test years; halted BASE 2024 +0.97%, 2025 -2.04%, 2026 Jan-Sep -9.95%, STRESS -7.76/-2.66/-9.85%. Do not promote, tune risk, or reuse as winner.",
       "audit_depth": "NATIVE_FUTURES_ECONOMIC_REPLAY"
     },
     {
@@ -192,5 +192,8 @@
       "evidence_note": "User explicitly rejected this original; no backtest or requeue",
       "audit_depth": "MAIN_VETO"
     }
-  ]
+  ],
+  "economic_research_rejection_count": 1,
+  "completed_independent_live_risk_shadow_count": 1,
+  "strongest_candidate_status": "NONE_PASSED_OPERATIONAL_PARITY"
 }
