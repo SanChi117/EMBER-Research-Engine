@@ -141,7 +141,7 @@ def run_one(year,timerange,cost_name,fee,strategy,config_file):
         "state":"NATIVE_FREQTRADE_BACKTEST_COMPLETE",
         "strategy":strategy,"year":year,"cost_model":cost_name,
         "fee_each_side":fee,"result_file":path,
-        "native_profit_total_pct":metrics.get("profit_total_pct"),
+        "native_profit_total_pct":(100*float(metrics["profit_total_abs"])/1000 if metrics.get("profit_total_abs") is not None else None),
         "native_profit_total_abs_usdt":metrics.get("profit_total_abs"),
         "native_max_drawdown_account":metrics.get("max_drawdown_account"),
         "native_max_drawdown_abs":metrics.get("max_drawdown_abs"),
