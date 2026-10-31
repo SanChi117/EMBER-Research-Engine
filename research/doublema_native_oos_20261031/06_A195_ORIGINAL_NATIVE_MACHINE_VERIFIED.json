@@ -1,0 +1,319 @@
+{
+  "schema": "EMBER_A195_ORIGINAL_DOUBLEMA_4_PAIR_NATIVE_8_RECEIPTS",
+  "date": "2026-10-31",
+  "original_commit": "40af5c7c1c44253766428cfb06babf22f9817aa4",
+  "original_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "engine": "freqtrade==2026.4",
+  "window": "[2026-05-13,2026-10-01)",
+  "initial_usdt": 10000,
+  "leverage": 2,
+  "mode": "one pair per run Binance USD-M historical, synthetic STATIC metadata Binance, isolated",
+  "data_manifest": "A195_DATA_SHA_MANIFEST.json",
+  "resampling": "4h/1d native equivalent rollup from contiguous real Binance USD-M1h",
+  "costs": "0.0005 and 0.00125 trading fee per fill side, no extra adverse slippage; native actual Binance Vision settled funding and mark klines",
+  "prior_A187_control": "A187 uses same original class but OKX offline market metadata; compare ETH 5bps carefully; original source pin frozen May12",
+  "original_ETH_A187_reference": {
+    "n": 27,
+    "return_pct": 39.864217,
+    "profit_usd": 3986.421749,
+    "profit_factor": 2.23859
+  },
+  "ETH_5bps_matches_A187_within_10c": null,
+  "ETH_A187_control_noncomparable_October_not_yet_monthly_published": true,
+  "outcomes": {
+    "BTC": {
+      "5": {
+        "n": 18,
+        "longs": 8,
+        "shorts": 10,
+        "long_profit_usd": -7.8078,
+        "short_profit_usd": -2062.5953,
+        "profit_usd": -2070.4031,
+        "return_pct": -20.704,
+        "profit_factor": 0.4029,
+        "max_wallet_dd_pct": 26.2339,
+        "win_pct": 27.778,
+        "top3_wins_fraction_of_all_wins": 0.7951,
+        "top3_wins_fraction_of_NET_profit": null,
+        "mean_trade_hours": 34.944,
+        "sum_native_funding_fees_usd": 43.5656,
+        "first_entry": "2026-05-18 06:00:00+00:00",
+        "last_entry": "2026-09-28 10:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "large_profit_50pct_giveback": 2,
+          "long_rr_structure_take_profit": 2,
+          "stop_loss": 6,
+          "trailing_stop_loss": 8
+        },
+        "net_trade_usd": -2070.4030695
+      },
+      "12p5": {
+        "n": 18,
+        "longs": 8,
+        "shorts": 10,
+        "long_profit_usd": -217.9589,
+        "short_profit_usd": -2278.7213,
+        "profit_usd": -2496.6802,
+        "return_pct": -24.9668,
+        "profit_factor": 0.336,
+        "max_wallet_dd_pct": 29.6103,
+        "win_pct": 22.222,
+        "top3_wins_fraction_of_all_wins": 0.8037,
+        "top3_wins_fraction_of_NET_profit": null,
+        "mean_trade_hours": 34.944,
+        "sum_native_funding_fees_usd": 42.6917,
+        "first_entry": "2026-05-18 06:00:00+00:00",
+        "last_entry": "2026-09-28 10:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "large_profit_50pct_giveback": 2,
+          "long_rr_structure_take_profit": 2,
+          "stop_loss": 6,
+          "trailing_stop_loss": 8
+        },
+        "net_trade_usd": -2496.68020145
+      }
+    },
+    "ETH": {
+      "5": {
+        "n": 23,
+        "longs": 13,
+        "shorts": 10,
+        "long_profit_usd": 2310.8815,
+        "short_profit_usd": 1171.9685,
+        "profit_usd": 3482.85,
+        "return_pct": 34.8285,
+        "profit_factor": 2.2639,
+        "max_wallet_dd_pct": 7.3317,
+        "win_pct": 39.13,
+        "top3_wins_fraction_of_all_wins": 0.5819,
+        "top3_wins_fraction_of_NET_profit": 1.0424,
+        "mean_trade_hours": 15.783,
+        "sum_native_funding_fees_usd": -6.0979,
+        "first_entry": "2026-05-22 19:00:00+00:00",
+        "last_entry": "2026-09-29 12:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "large_profit_50pct_giveback": 1,
+          "long_breakout_body_line_invalid": 1,
+          "long_rr_structure_take_profit": 5,
+          "short_rr_structure_take_profit": 3,
+          "stop_loss": 4,
+          "trailing_stop_loss": 9
+        },
+        "net_trade_usd": 3482.85004532
+      },
+      "12p5": {
+        "n": 23,
+        "longs": 13,
+        "shorts": 10,
+        "long_profit_usd": 3087.2091,
+        "short_profit_usd": 866.4112,
+        "profit_usd": 3953.6204,
+        "return_pct": 39.5362,
+        "profit_factor": 2.2457,
+        "max_wallet_dd_pct": 8.1969,
+        "win_pct": 39.13,
+        "top3_wins_fraction_of_all_wins": 0.5419,
+        "top3_wins_fraction_of_NET_profit": 0.977,
+        "mean_trade_hours": 18.913,
+        "sum_native_funding_fees_usd": -10.9961,
+        "first_entry": "2026-05-22 19:00:00+00:00",
+        "last_entry": "2026-09-29 12:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "long_breakout_body_line_invalid": 1,
+          "long_rr_structure_take_profit": 6,
+          "short_rr_structure_take_profit": 3,
+          "stop_loss": 4,
+          "trailing_stop_loss": 9
+        },
+        "net_trade_usd": 3953.62039197
+      }
+    },
+    "SOL": {
+      "5": {
+        "n": 21,
+        "longs": 9,
+        "shorts": 12,
+        "long_profit_usd": 2807.8321,
+        "short_profit_usd": -1079.4013,
+        "profit_usd": 1728.4309,
+        "return_pct": 17.2843,
+        "profit_factor": 1.5469,
+        "max_wallet_dd_pct": 10.5766,
+        "win_pct": 42.857,
+        "top3_wins_fraction_of_all_wins": 0.6487,
+        "top3_wins_fraction_of_NET_profit": 1.835,
+        "mean_trade_hours": 17.095,
+        "sum_native_funding_fees_usd": -7.9574,
+        "first_entry": "2026-05-18 06:00:00+00:00",
+        "last_entry": "2026-09-28 10:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "large_profit_50pct_giveback": 1,
+          "long_rr_structure_take_profit": 5,
+          "short_rr_structure_take_profit": 3,
+          "stop_loss": 6,
+          "trailing_stop_loss": 6
+        },
+        "net_trade_usd": 1728.43087072
+      },
+      "12p5": {
+        "n": 20,
+        "longs": 9,
+        "shorts": 11,
+        "long_profit_usd": 2560.8144,
+        "short_profit_usd": -951.5327,
+        "profit_usd": 1609.2816,
+        "return_pct": 16.0928,
+        "profit_factor": 1.4576,
+        "max_wallet_dd_pct": 11.2692,
+        "win_pct": 40.0,
+        "top3_wins_fraction_of_all_wins": 0.6666,
+        "top3_wins_fraction_of_NET_profit": 2.1233,
+        "mean_trade_hours": 18.85,
+        "sum_native_funding_fees_usd": -5.5061,
+        "first_entry": "2026-05-18 06:00:00+00:00",
+        "last_entry": "2026-09-28 10:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "long_rr_structure_take_profit": 5,
+          "short_rr_structure_take_profit": 3,
+          "stop_loss": 6,
+          "trailing_stop_loss": 6
+        },
+        "net_trade_usd": 1609.28164787
+      }
+    },
+    "LINK": {
+      "5": {
+        "n": 22,
+        "longs": 11,
+        "shorts": 11,
+        "long_profit_usd": 4285.8217,
+        "short_profit_usd": -633.3591,
+        "profit_usd": 3652.4626,
+        "return_pct": 36.5246,
+        "profit_factor": 3.1609,
+        "max_wallet_dd_pct": 7.8946,
+        "win_pct": 40.909,
+        "top3_wins_fraction_of_all_wins": 0.652,
+        "top3_wins_fraction_of_NET_profit": 0.9538,
+        "mean_trade_hours": 13.955,
+        "sum_native_funding_fees_usd": -31.8321,
+        "first_entry": "2026-05-16 14:00:00+00:00",
+        "last_entry": "2026-09-24 19:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "large_profit_50pct_giveback": 2,
+          "long_rr_structure_take_profit": 5,
+          "short_breakout_body_line_invalid": 1,
+          "short_rr_structure_take_profit": 2,
+          "stop_loss": 3,
+          "trailing_stop_loss": 9
+        },
+        "net_trade_usd": 3652.4626303
+      },
+      "12p5": {
+        "n": 22,
+        "longs": 11,
+        "shorts": 11,
+        "long_profit_usd": 4823.2772,
+        "short_profit_usd": -955.2,
+        "profit_usd": 3868.0772,
+        "return_pct": 38.6808,
+        "profit_factor": 2.8727,
+        "max_wallet_dd_pct": 9.8589,
+        "win_pct": 40.909,
+        "top3_wins_fraction_of_all_wins": 0.6642,
+        "top3_wins_fraction_of_NET_profit": 1.0188,
+        "mean_trade_hours": 14.227,
+        "sum_native_funding_fees_usd": -31.6242,
+        "first_entry": "2026-05-16 14:00:00+00:00",
+        "last_entry": "2026-09-24 19:00:00+00:00",
+        "trade_receipts_sha": "stored in artifact ZIP for this exact pair+fee",
+        "exit_reasons": {
+          "large_profit_50pct_giveback": 1,
+          "long_rr_structure_take_profit": 6,
+          "short_breakout_body_line_invalid": 1,
+          "short_rr_structure_take_profit": 2,
+          "stop_loss": 3,
+          "trailing_stop_loss": 9
+        },
+        "net_trade_usd": 3868.077235
+      }
+    }
+  },
+  "fee_path_parity": {
+    "BTC": {
+      "matched_entries": 18,
+      "added_high_fee": 0,
+      "removed_high_fee": 0,
+      "changed_exit_date_samples": [],
+      "changed_exit_count": 0
+    },
+    "ETH": {
+      "matched_entries": 23,
+      "added_high_fee": 0,
+      "removed_high_fee": 0,
+      "changed_exit_date_samples": [
+        {
+          "entry": "2026-07-10 06:00:00+00:00",
+          "old_exit": "2026-07-12 00:00:00+00:00",
+          "new_exit": "2026-07-15 00:00:00+00:00",
+          "old_profit": 71.523,
+          "new_profit": 1209.7023
+        }
+      ],
+      "changed_exit_count": 1
+    },
+    "SOL": {
+      "matched_entries": 20,
+      "added_high_fee": 0,
+      "removed_high_fee": 1,
+      "changed_exit_date_samples": [
+        {
+          "entry": "2026-05-31 19:00:00+00:00",
+          "old_exit": "2026-06-01 18:00:00+00:00",
+          "new_exit": "2026-06-02 15:00:00+00:00",
+          "old_profit": 164.5482,
+          "new_profit": 932.2367
+        }
+      ],
+      "changed_exit_count": 1
+    },
+    "LINK": {
+      "matched_entries": 22,
+      "added_high_fee": 0,
+      "removed_high_fee": 0,
+      "changed_exit_date_samples": [
+        {
+          "entry": "2026-08-17 15:00:00+00:00",
+          "old_exit": "2026-08-19 14:00:00+00:00",
+          "new_exit": "2026-08-19 20:00:00+00:00",
+          "old_profit": 278.7014,
+          "new_profit": 1164.0138
+        }
+      ],
+      "changed_exit_count": 1
+    }
+  },
+  "gate_per_NEW_coin": {
+    "BTC": false,
+    "SOL": false,
+    "LINK": false
+  },
+  "total_new_coins_passing": 0,
+  "mechanical_gate_pass": false,
+  "limitations": [
+    "Original 2x/near-full-account stake not 1pct risk sizing",
+    "Current source has not passed lookahead-analysis / recursive-analysis",
+    "Original limit fill model, no orderbook/real market slippage, no 5m execution detail",
+    "Exact source, no parameter retune, but Binance market metadata differs A187 OKX",
+    "Only one 2026 historical window crossmarket; BTC author previously tested 2021-2026",
+    "Research team has already inspected historical 2026 data: not prospective unseen to entire research team",
+    "No live, no autotrading, no SMOKE or PAPER scheduler modification"
+  ]
+}
