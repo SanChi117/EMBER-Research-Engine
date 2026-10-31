@@ -1,0 +1,113 @@
+name: "EMBER A201 independent native original momentum_wick + momentum_rsi 4x2 fees real Binance 5m"
+on:
+  push:
+    branches: [research/a201-momentum-wick-rsi-native-screen-20261031]
+    paths:
+      - ".github/workflows/ember-a201-original-5m-momentum-dual-native.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-a201:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned native Freqtrade and verify original source bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4' technical
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/TheoBrigitte/freqtrade.git /tmp/a201-original
+          test "$(git -C /tmp/a201-original rev-parse HEAD)" = c9def379b1036064d592c3a0518a07811f5a9a76
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/a201-original')
+          pins={'momentum_wick':'1377a5bbf454252ca835cca3056787ac8ed73c04',
+                'momentum_rsi':'3f839276f661f242a30e4dd1aa0b739459e7d65b'}
+          for name,exp in pins.items():
+              raw=(root/'strategies'/'momentum'/f'{name}.py').read_bytes()
+              sha=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+              assert sha==exp,(name,sha)
+          out=Path('a201-original');out.mkdir(exist_ok=True)
+          (root/'user_data'/'backtest_results').mkdir(parents=True,exist_ok=True)
+          for st in pins:
+              for sym in ('BTC','ETH','SOL','LINK'):
+                  config={'bot_name':f'A201_{st}_{sym}_OFFLINE_PAPER_ONLY',
+                    'dry_run':True,'dry_run_wallet':1000,'stake_currency':'USDT',
+                    'stake_amount':100,'tradable_balance_ratio':0.99,'max_open_trades':1,
+                    'trading_mode':'futures','margin_mode':'isolated',
+                    'exchange':{'name':'binance','key':'','secret':'','password':'',
+                       'ccxt_config':{},'ccxt_async_config':{},'pair_whitelist':[f'{sym}/USDT:USDT'],'pair_blacklist':[]},
+                    'pairlists':[{'method':'StaticPairList'}],
+                    'telegram':{'enabled':False,'token':'','chat_id':'0'},
+                    'api_server':{'enabled':False,'listen_ip_address':'127.0.0.1','listen_port':8080,
+                                  'username':'a201','password':'disabled-no-network'}}
+                  (out/f'config-{st}-{sym}.json').write_text(json.dumps(config,indent=2))
+          print('A201_TWO_ORIGINAL_SOURCES_BYTE_PIN_OK',pins)
+          PY
+      - name: Prepare authentic A195 1h mark and funding data
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+            --datadir a201-original/data 2>&1 | tee a201-original/source-1h.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a201-original/source-1h.log
+      - name: Prepare authentic A196 5m Binance Futures OHLCV data
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+            --datadir a201-original/data 2>&1 | tee a201-original/source-5m.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a201-original/source-5m.log
+      - name: Native Freqtrade 16 unchanged-strategy runs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for st in momentum_wick momentum_rsi; do
+            for sym in BTC ETH SOL LINK; do
+              for scenario in 5 12p5; do
+                if [ "$scenario" = 5 ]; then rate=0.0005; else rate=0.00125; fi
+                echo "A201_NATIVE_BEGIN $st $sym $scenario"
+                timeout 480s python research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
+                  -c "a201-original/config-$st-$sym.json" \
+                  --userdir /tmp/a201-original/user_data \
+                  --datadir "$GITHUB_WORKSPACE/a201-original/data" \
+                  --strategy-path /tmp/a201-original/strategies/momentum \
+                  --strategy "$st" --timeframe 5m \
+                  --timerange 20260513-20261001 --data-format-ohlcv json \
+                  --fee "$rate" --export trades --cache none \
+                  2>&1 | tee "a201-original/$st-$sym-fee$scenario.log"
+                z="$(find /tmp/a201-original/user_data/backtest_results -maxdepth 1 -type f -name 'backtest-result*.zip' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)"
+                test -n "$z" && test -s "$z"
+                cp "$z" "a201-original/$st-$sym-fee$scenario.zip"
+                rm -f /tmp/a201-original/user_data/backtest_results/backtest-result*.zip
+                echo "A201_NATIVE_COMPLETE $st $sym $scenario"
+              done
+            done
+          done
+      - name: Verify all 16 native trade receipts, locked economic gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/native_candidate_screen_20261031/a201_verify_original_native.py --results a201-original \
+            2>&1 | tee a201-original/A201-native-verification.log
+          grep -Fq A201_SIXTEEN_NATIVE_4PAIR_2ORIGINAL_2FEE_TRADE_ARCHIVES_VERIFIED a201-original/A201-native-verification.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A201-16-Original-5m-Futures-Native-Trade-Archives
+          path: |
+            a201-original/*.log
+            a201-original/*.zip
+            a201-original/A201_16_ACTUAL_NATIVE_TRADE_ARCHIVES_VERIFIED.json
+            a201-original/data/A195_DATA_SHA_MANIFEST.json
+            a201-original/data/A196_REAL_5M_SHA_MANIFEST.json
+          retention-days: 30
