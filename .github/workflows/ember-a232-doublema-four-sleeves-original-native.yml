@@ -1,0 +1,44 @@
+name: A232 Original DoubleMA Fixed Four Segregated Sleeves from Verified Native Trade ZIP
+
+on:
+  push:
+    branches:
+      - 'research/a232-doublema-source-parity-review'
+    paths:
+      - 'research/doublema_native_oos_20261031/A232_*'
+      - '.github/workflows/ember-a232-doublema-four-sleeves-original-native.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify_existing_original_trades:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download 2025 eight original Freqtrade 5m-detail Binance USD-M trade receipts
+        uses: actions/download-artifact@v4
+        with:
+          name: A197-Original-DoubleMA-2025-Alternate-Regime-8-Native-5m-Results
+          run-id: 41149728068
+          github-token: ${{ github.token }}
+          path: a232-archived/2025
+      - name: Download 2026 eight original Freqtrade 5m-detail Binance USD-M trade receipts
+        uses: actions/download-artifact@v4
+        with:
+          name: A196-Original-DoubleMA-1h-vs-5m-4Pairs-8-Genuine-Freqtrade-2026
+          run-id: 41148069316
+          github-token: ${{ github.token }}
+          path: a232-archived/2026
+      - name: Independently sum original genuine trade ZIPs — including both winners and losers
+        run: python research/doublema_native_oos_20261031/a232_fixed_four_sleeve_native_receipt_verification.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a232-original-doublema-all-four-assets-two-regimes-genuine-pnl
+          path: a232-diagnostic/A232_FIXED_FOUR_SLEEVE_REAL_NATIVE_SOURCE_PNL.json
+          if-no-files-found: warn
+          retention-days: 30
