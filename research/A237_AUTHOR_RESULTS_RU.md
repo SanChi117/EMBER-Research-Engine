@@ -1,3 +1,7 @@
+> **⚠️ АРХИВНОЕ СВИДЕТЕЛЬСТВО, НЕ ТЕКУЩИЙ СТАТУС.** AUTHOR_ACCOUNT_BACKTEST_UNVERIFIED_EXECUTION — оригинальный портфель, исторический стресс отрицателен. Не считать тест реальным исполнением, а источник победителем. [Текущая единая сводка](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md). Ни одна стратегия не `VERIFIED_FUTURES_CANDIDATE`.
+
+---
+
 # A237 — независимая экономическая проверка исходного общего счёта TrendFollowing
 
 **31 октября 2026 · завершено 6/6, блокировок 0 · Binance USDT-M Futures.**
