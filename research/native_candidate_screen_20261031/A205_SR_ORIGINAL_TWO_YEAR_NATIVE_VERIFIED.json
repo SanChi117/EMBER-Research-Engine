@@ -1,0 +1,785 @@
+{
+  "schema": "A205_SOURCE_PINNED_NATIVE_16_ZIPS_TWO_INDEPENDENT_YEARS",
+  "strategy": "AggressiveSupportResistanceScalper",
+  "original_repo": "Meszqt/freqtrade-test",
+  "commit": "7062cdd465f30acb480f6ad8f678f958a8a0e554",
+  "source_gitblob": "4e3084865a95a694be5178fe60d9130ecd24c002",
+  "engine": "freqtrade==2026.4",
+  "years": [
+    2025,
+    2026
+  ],
+  "timeranges": [
+    "2025-05-13/2025-10-01",
+    "2026-05-13/2026-10-01"
+  ],
+  "fees_per_side": {
+    "5": 0.0005,
+    "12p5": 0.00125
+  },
+  "initial_wallet_each_symbol_USDT": 1000,
+  "stake_margin_each_trade_USDT": 100,
+  "leverage_original": 10,
+  "max_open_each_symbol": 1,
+  "data": "genuine Binance Vision futures five minute OHLCV and hourly mark/funding A195,A196,A203",
+  "results": {
+    "2025": {
+      "BTC": {
+        "5": {
+          "trades": 3,
+          "net_USDT": -5.438392,
+          "wallet_return_pct": -0.543839,
+          "profit_factor": 0.22263,
+          "max_wallet_dd_pct": 0.66594,
+          "win_rate_pct": 33.33333,
+          "top3_gross_win_share": 1.0,
+          "long_n": 3,
+          "short_n": 0,
+          "mean_hold_minutes": 225.0,
+          "median_hold_minutes": 80.0,
+          "p90_hold_minutes": 550.0,
+          "max_hold_minutes": 550.0,
+          "held_gt_120m_n": 1,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 2,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 64742.5,
+          "stops": 1,
+          "roi_exits": 0,
+          "time_exit_n": 1,
+          "fast_rotation_n": 1,
+          "other_exit_reasons": [
+            "fast_profit_rotation",
+            "scalp_time_limit",
+            "stop_loss"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": -6.9933,
+          "sum_stake_USDT": 281.3205,
+          "zip_sha256": "d269fd5938a1aacb2aa8fb2ec6088f10f436374f0a7e2a0fdd383dbb5d1ea2a3",
+          "intervals": [
+            [
+              1750426800.0,
+              1750429500.0
+            ],
+            [
+              1757811300.0,
+              1757816100.0
+            ],
+            [
+              1758203400.0,
+              1758236400.0
+            ]
+          ]
+        },
+        "12p5": {
+          "trades": 3,
+          "net_USDT": -10.314605,
+          "wallet_return_pct": -1.031461,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 1.03146,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 3,
+          "short_n": 0,
+          "mean_hold_minutes": 228.333,
+          "median_hold_minutes": 90.0,
+          "p90_hold_minutes": 550.0,
+          "max_hold_minutes": 550.0,
+          "held_gt_120m_n": 1,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 2,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 64737.5,
+          "stops": 1,
+          "roi_exits": 0,
+          "time_exit_n": 2,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [
+            "scalp_time_limit",
+            "stop_loss"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": -8.4817,
+          "sum_stake_USDT": 281.3205,
+          "zip_sha256": "89bf41d59e2f20b039dc7c54e16baffa9c221a92b271e09c4fe9cfd768a413e2",
+          "intervals": [
+            [
+              1750426800.0,
+              1750429500.0
+            ],
+            [
+              1757811300.0,
+              1757816700.0
+            ],
+            [
+              1758203400.0,
+              1758236400.0
+            ]
+          ]
+        }
+      },
+      "ETH": {
+        "5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "eae41ec108cead9b75a7405b0811b993c2d0f11f27b817746ad65b4c2bfe4878",
+          "intervals": []
+        },
+        "12p5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "6a6f5bb559ce96828ff4652fdc03f4d6c2f4e1d2fcb388288d044b7a34e7d16e",
+          "intervals": []
+        }
+      },
+      "SOL": {
+        "5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "9fd92de6abf12aa6ae3459646ec38a64a8d3277efba10e281f8f9d9d29e35770",
+          "intervals": []
+        },
+        "12p5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "3412a3567236a2d7446b9ba0a1b085c9b27b17042989cc46258fab26aa1246a2",
+          "intervals": []
+        }
+      },
+      "LINK": {
+        "5": {
+          "trades": 4,
+          "net_USDT": 6.38137,
+          "wallet_return_pct": 0.638137,
+          "profit_factor": 27.40745,
+          "max_wallet_dd_pct": 0.02406,
+          "win_rate_pct": 75.0,
+          "top3_gross_win_share": 1.0,
+          "long_n": 2,
+          "short_n": 2,
+          "mean_hold_minutes": 375.0,
+          "median_hold_minutes": 90.0,
+          "p90_hold_minutes": 1275.0,
+          "max_hold_minutes": 1275.0,
+          "held_gt_120m_n": 1,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 3,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 43195.0,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 2,
+          "fast_rotation_n": 2,
+          "other_exit_reasons": [
+            "fast_profit_rotation",
+            "scalp_time_limit"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": -0.2417,
+          "sum_stake_USDT": 399.5314,
+          "zip_sha256": "4e33404c3b3124e122575c668e55d9e8097bcd2b1b5bcaced09681d03a1a445f",
+          "intervals": [
+            [
+              1748581800.0,
+              1748584500.0
+            ],
+            [
+              1749171600.0,
+              1749177000.0
+            ],
+            [
+              1751768700.0,
+              1751774100.0
+            ],
+            [
+              1758203400.0,
+              1758279900.0
+            ]
+          ]
+        },
+        "12p5": {
+          "trades": 4,
+          "net_USDT": 0.390324,
+          "wallet_return_pct": 0.039032,
+          "profit_factor": 1.13691,
+          "max_wallet_dd_pct": 0.28435,
+          "win_rate_pct": 50.0,
+          "top3_gross_win_share": 1.0,
+          "long_n": 2,
+          "short_n": 2,
+          "mean_hold_minutes": 375.0,
+          "median_hold_minutes": 90.0,
+          "p90_hold_minutes": 1275.0,
+          "max_hold_minutes": 1275.0,
+          "held_gt_120m_n": 1,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 3,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 43195.0,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 3,
+          "fast_rotation_n": 1,
+          "other_exit_reasons": [
+            "fast_profit_rotation",
+            "scalp_time_limit"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": -1.7402,
+          "sum_stake_USDT": 399.5314,
+          "zip_sha256": "a58efd59b5d2904a0ce657f43d3bd3c26e4ad81b7e8ae2b1af52eee809f8df18",
+          "intervals": [
+            [
+              1748581800.0,
+              1748584500.0
+            ],
+            [
+              1749171600.0,
+              1749177000.0
+            ],
+            [
+              1751768700.0,
+              1751774100.0
+            ],
+            [
+              1758203400.0,
+              1758279900.0
+            ]
+          ]
+        }
+      }
+    },
+    "2026": {
+      "BTC": {
+        "5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "7f055fa12f5c8d8fcb565459c979455ec576d765388d5f8fa2455bdd10fdf075",
+          "intervals": []
+        },
+        "12p5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "8202409cd38016f3ceb2110b14ac611ca75163c815299ffb2a3365d5fb8d2ead",
+          "intervals": []
+        }
+      },
+      "ETH": {
+        "5": {
+          "trades": 5,
+          "net_USDT": -4.113931,
+          "wallet_return_pct": -0.411393,
+          "profit_factor": 0.51668,
+          "max_wallet_dd_pct": 0.72903,
+          "win_rate_pct": 60.0,
+          "top3_gross_win_share": 1.0,
+          "long_n": 0,
+          "short_n": 5,
+          "mean_hold_minutes": 65.0,
+          "median_hold_minutes": 60.0,
+          "p90_hold_minutes": 90.0,
+          "max_hold_minutes": 90.0,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 4,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 26032.5,
+          "stops": 1,
+          "roi_exits": 0,
+          "time_exit_n": 1,
+          "fast_rotation_n": 3,
+          "other_exit_reasons": [
+            "fast_profit_rotation",
+            "scalp_time_limit",
+            "stop_loss"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": -7.0022,
+          "sum_stake_USDT": 499.37,
+          "zip_sha256": "cb287b8116539dea11e84a2a0d77d66b909e420ef0f27ba966b81ab8a298340a",
+          "intervals": [
+            [
+              1778938500.0,
+              1778943900.0
+            ],
+            [
+              1779079800.0,
+              1779083100.0
+            ],
+            [
+              1779131400.0,
+              1779133800.0
+            ],
+            [
+              1782222600.0,
+              1782227400.0
+            ],
+            [
+              1785215400.0,
+              1785219000.0
+            ]
+          ]
+        },
+        "12p5": {
+          "trades": 5,
+          "net_USDT": -10.68151,
+          "wallet_return_pct": -1.068151,
+          "profit_factor": 0.2749,
+          "max_wallet_dd_pct": 1.06815,
+          "win_rate_pct": 40.0,
+          "top3_gross_win_share": 1.0,
+          "long_n": 0,
+          "short_n": 5,
+          "mean_hold_minutes": 77.0,
+          "median_hold_minutes": 85.0,
+          "p90_hold_minutes": 90.0,
+          "max_hold_minutes": 90.0,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 4,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 26030.0,
+          "stops": 1,
+          "roi_exits": 0,
+          "time_exit_n": 2,
+          "fast_rotation_n": 2,
+          "other_exit_reasons": [
+            "fast_profit_rotation",
+            "scalp_time_limit",
+            "stop_loss"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": -8.5138,
+          "sum_stake_USDT": 499.37,
+          "zip_sha256": "5101775666331c9a915d97b775a4191a7c13ca84e266615d77b9636cd556d0db",
+          "intervals": [
+            [
+              1778938500.0,
+              1778943900.0
+            ],
+            [
+              1779079800.0,
+              1779084600.0
+            ],
+            [
+              1779131400.0,
+              1779133800.0
+            ],
+            [
+              1782222600.0,
+              1782227700.0
+            ],
+            [
+              1785215400.0,
+              1785220800.0
+            ]
+          ]
+        }
+      },
+      "SOL": {
+        "5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "e7b0cc21df6f8052f5c8b86fb0ea785eb4d74bdda3c928dc523fb2d7408a0098",
+          "intervals": []
+        },
+        "12p5": {
+          "trades": 0,
+          "net_USDT": 0.0,
+          "wallet_return_pct": 0.0,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 0.0,
+          "top3_gross_win_share": null,
+          "long_n": 0,
+          "short_n": 0,
+          "mean_hold_minutes": null,
+          "median_hold_minutes": null,
+          "p90_hold_minutes": null,
+          "max_hold_minutes": null,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 0,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": null,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 0,
+          "other_exit_reasons": [],
+          "funding_USDT": 0,
+          "worst_trade_profit_ratio_pct": 0,
+          "sum_stake_USDT": 0,
+          "zip_sha256": "4ff37ed86b24dc7e9ae51a00cf09abf7e82ad70f4fe0625a56925474c95466cb",
+          "intervals": []
+        }
+      },
+      "LINK": {
+        "5": {
+          "trades": 2,
+          "net_USDT": 3.6093,
+          "wallet_return_pct": 0.36093,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 100.0,
+          "top3_gross_win_share": 1.0,
+          "long_n": 1,
+          "short_n": 1,
+          "mean_hold_minutes": 62.5,
+          "median_hold_minutes": 62.5,
+          "p90_hold_minutes": 65.0,
+          "max_hold_minutes": 65.0,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 1,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 1515.0,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 2,
+          "other_exit_reasons": [
+            "fast_profit_rotation"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": 1.7538,
+          "sum_stake_USDT": 199.8947,
+          "zip_sha256": "a5743abce3aa3ab53740f2696db05b8038068186c431f236482b7117c82a1d7b",
+          "intervals": [
+            [
+              1785120000.0,
+              1785123900.0
+            ],
+            [
+              1785214800.0,
+              1785218400.0
+            ]
+          ]
+        },
+        "12p5": {
+          "trades": 2,
+          "net_USDT": 2.841301,
+          "wallet_return_pct": 0.28413,
+          "profit_factor": 0.0,
+          "max_wallet_dd_pct": 0.0,
+          "win_rate_pct": 100.0,
+          "top3_gross_win_share": 1.0,
+          "long_n": 1,
+          "short_n": 1,
+          "mean_hold_minutes": 72.5,
+          "median_hold_minutes": 72.5,
+          "p90_hold_minutes": 80.0,
+          "max_hold_minutes": 80.0,
+          "held_gt_120m_n": 0,
+          "held_gt_1440m_n": 0,
+          "reentry_gap_count": 1,
+          "reentry_gap_le_5m_n": 0,
+          "reentry_gap_median_min": 1500.0,
+          "stops": 0,
+          "roi_exits": 0,
+          "time_exit_n": 0,
+          "fast_rotation_n": 2,
+          "other_exit_reasons": [
+            "fast_profit_rotation"
+          ],
+          "funding_USDT": 0.0,
+          "worst_trade_profit_ratio_pct": 1.2686,
+          "sum_stake_USDT": 199.8947,
+          "zip_sha256": "6b3d1c54b451de3f5aa25277e4e402870f4e8a602f754d44794b4e00b592f319",
+          "intervals": [
+            [
+              1785120000.0,
+              1785124800.0
+            ],
+            [
+              1785214800.0,
+              1785218700.0
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "economic_pair_pass_both_years_both_fees": {
+    "BTC": false,
+    "ETH": false,
+    "SOL": false,
+    "LINK": false
+  },
+  "year_fee_closed_trade_counts": {
+    "2025": {
+      "5": 7,
+      "12p5": 7
+    },
+    "2026": {
+      "5": 7,
+      "12p5": 7
+    }
+  },
+  "independent_frequency_min_1_per_day": false,
+  "economic_research_gate": false,
+  "tempo_execution_gate": false,
+  "execution_approval": false,
+  "tempo_by_year_fee": {
+    "2025": {
+      "5": {
+        "all_four_occupied_pct": 0.0,
+        "at_least_one_slot_free_pct": 100.0,
+        "mean_open_positions": 0.0107,
+        "by_concurrency_pct": {
+          "0": 99.2,
+          "1": 0.529,
+          "2": 0.271,
+          "3": 0.0,
+          "4": 0.0
+        },
+        "closed_trades_per_day": 0.04965,
+        "within_5m_reentry_pct": 0.0,
+        "held_gt_2h_pct": 28.571,
+        "time_limit_parity_pass": false,
+        "tempo_gate_3_per_day": false,
+        "reentry_event_gate": true,
+        "free_slot_gate": true,
+        "p90_hold_le_24h": true
+      },
+      "12p5": {
+        "all_four_occupied_pct": 0.0,
+        "at_least_one_slot_free_pct": 100.0,
+        "mean_open_positions": 0.0108,
+        "by_concurrency_pct": {
+          "0": 99.195,
+          "1": 0.534,
+          "2": 0.271,
+          "3": 0.0,
+          "4": 0.0
+        },
+        "closed_trades_per_day": 0.04965,
+        "within_5m_reentry_pct": 0.0,
+        "held_gt_2h_pct": 28.571,
+        "time_limit_parity_pass": false,
+        "tempo_gate_3_per_day": false,
+        "reentry_event_gate": true,
+        "free_slot_gate": true,
+        "p90_hold_le_24h": true
+      }
+    },
+    "2026": {
+      "5": {
+        "all_four_occupied_pct": 0.0,
+        "at_least_one_slot_free_pct": 100.0,
+        "mean_open_positions": 0.0022,
+        "by_concurrency_pct": {
+          "0": 99.803,
+          "1": 0.172,
+          "2": 0.025,
+          "3": 0.0,
+          "4": 0.0
+        },
+        "closed_trades_per_day": 0.04965,
+        "within_5m_reentry_pct": 0.0,
+        "held_gt_2h_pct": 0.0,
+        "time_limit_parity_pass": true,
+        "tempo_gate_3_per_day": false,
+        "reentry_event_gate": true,
+        "free_slot_gate": true,
+        "p90_hold_le_24h": true
+      },
+      "12p5": {
+        "all_four_occupied_pct": 0.0,
+        "at_least_one_slot_free_pct": 100.0,
+        "mean_open_positions": 0.0026,
+        "by_concurrency_pct": {
+          "0": 99.766,
+          "1": 0.207,
+          "2": 0.027,
+          "3": 0.0,
+          "4": 0.0
+        },
+        "closed_trades_per_day": 0.04965,
+        "within_5m_reentry_pct": 0.0,
+        "held_gt_2h_pct": 0.0,
+        "time_limit_parity_pass": true,
+        "tempo_gate_3_per_day": false,
+        "reentry_event_gate": true,
+        "free_slot_gate": true,
+        "p90_hold_le_24h": true
+      }
+    }
+  },
+  "limitations": [
+    "This already used market years for multiple prior research projects, not pristine OOS",
+    "Source levered 10x: a 6% stoploss is 6% of margin (roughly 0.6% price), not 6% price",
+    "No extra bid-ask/slippage/nonfill beyond Freqtrade native limit simulation",
+    "Four independent wallets cannot be summated into a single portfolio",
+    "Even research gate passing would require separate forward PAPER and execution quality controls"
+  ]
+}
