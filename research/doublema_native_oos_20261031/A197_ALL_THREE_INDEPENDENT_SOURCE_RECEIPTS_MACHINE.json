@@ -1,0 +1,512 @@
+{
+  "schema": "EMBER_A197_INDEPENDENT_THREE_IMMUTABLE_ARTIFACT_FINAL_AUDIT",
+  "engine": "freqtrade==2026.4",
+  "original_author_git_blob": "22ca6588bbd056e671783f676f1a4010cbfc1bb6",
+  "official_lookahead_ETH_SOL_signals": 20,
+  "official_lookahead_detected_bias": false,
+  "recursive_variants_ETH": 24,
+  "recursive_variants_SOL": 16,
+  "alternate_2025_original_PnL": {
+    "BTC": {
+      "5": {
+        "n": 38,
+        "net_pct": 37.54106,
+        "PF": 1.85674,
+        "DD_pct": 9.41261,
+        "PnL_USDT": 3754.10644,
+        "win_pct": 39.4737,
+        "long_n": 13,
+        "short_n": 25,
+        "long_USDT": 1662.7676,
+        "short_USDT": 2091.3389,
+        "top3_fraction_all_wins": 0.41984,
+        "top3_fraction_NET": 0.90988,
+        "mean_trade_h": 52.965,
+        "funding_USDT": -246.7676,
+        "sha256_native_zip": "6981af20e20020be254e9426879631aa91ee246dac6aa39b18c49f19e414d922",
+        "first_trade": "2025-04-02 20:00:00+00:00",
+        "last_trade": "2025-12-31 20:00:00+00:00"
+      },
+      "12p5": {
+        "n": 38,
+        "net_pct": 26.49689,
+        "PF": 1.52264,
+        "DD_pct": 10.63865,
+        "PnL_USDT": 2649.68879,
+        "win_pct": 39.4737,
+        "long_n": 13,
+        "short_n": 25,
+        "long_USDT": 1294.9077,
+        "short_USDT": 1354.7811,
+        "top3_fraction_all_wins": 0.4308,
+        "top3_fraction_NET": 1.25508,
+        "mean_trade_h": 52.941,
+        "funding_USDT": -246.7749,
+        "sha256_native_zip": "902bb4f7c1a4ced2f95f21b2221773b7b2828fc0b89edb33e0ad29da60d096da",
+        "first_trade": "2025-04-02 20:00:00+00:00",
+        "last_trade": "2025-12-31 20:00:00+00:00"
+      }
+    },
+    "ETH": {
+      "5": {
+        "n": 37,
+        "net_pct": 28.47446,
+        "PF": 1.68533,
+        "DD_pct": 21.10379,
+        "PnL_USDT": 2847.44612,
+        "win_pct": 45.9459,
+        "long_n": 17,
+        "short_n": 20,
+        "long_USDT": 1978.0953,
+        "short_USDT": 869.3508,
+        "top3_fraction_all_wins": 0.46645,
+        "top3_fraction_NET": 1.14708,
+        "mean_trade_h": 7.813,
+        "funding_USDT": -16.9328,
+        "sha256_native_zip": "011fb44cf3bf9b353729f663190e5b0d1887bd4abd43b46262d8169c0b966ac6",
+        "first_trade": "2025-04-06 17:00:00+00:00",
+        "last_trade": "2025-11-11 18:00:00+00:00"
+      },
+      "12p5": {
+        "n": 37,
+        "net_pct": 19.47407,
+        "PF": 1.41889,
+        "DD_pct": 24.44188,
+        "PnL_USDT": 1947.40703,
+        "win_pct": 45.9459,
+        "long_n": 17,
+        "short_n": 20,
+        "long_USDT": 1649.7233,
+        "short_USDT": 297.6837,
+        "top3_fraction_all_wins": 0.47038,
+        "top3_fraction_NET": 1.5933,
+        "mean_trade_h": 7.975,
+        "funding_USDT": -18.1171,
+        "sha256_native_zip": "827d81a14b672f4e00370185370c204f4676c3033c5170e617df0e758b317f93",
+        "first_trade": "2025-04-06 17:00:00+00:00",
+        "last_trade": "2025-11-11 18:00:00+00:00"
+      }
+    },
+    "SOL": {
+      "5": {
+        "n": 39,
+        "net_pct": 9.06035,
+        "PF": 1.2449,
+        "DD_pct": 9.18021,
+        "PnL_USDT": 906.03472,
+        "win_pct": 46.1538,
+        "long_n": 21,
+        "short_n": 18,
+        "long_USDT": 196.9886,
+        "short_USDT": 709.0461,
+        "top3_fraction_all_wins": 0.30359,
+        "top3_fraction_NET": 1.54327,
+        "mean_trade_h": 3.152,
+        "funding_USDT": -92.0281,
+        "sha256_native_zip": "46d72c3753b8030556396561fdc0dec6ad80c65c09089564776713884d78559f",
+        "first_trade": "2025-04-06 17:00:00+00:00",
+        "last_trade": "2025-12-31 07:00:00+00:00"
+      },
+      "12p5": {
+        "n": 39,
+        "net_pct": -2.69215,
+        "PF": 0.93745,
+        "DD_pct": 11.63948,
+        "PnL_USDT": -269.21515,
+        "win_pct": 46.1538,
+        "long_n": 21,
+        "short_n": 18,
+        "long_USDT": -412.4325,
+        "short_USDT": 143.2173,
+        "top3_fraction_all_wins": 0.32169,
+        "top3_fraction_NET": null,
+        "mean_trade_h": 3.147,
+        "funding_USDT": -90.4076,
+        "sha256_native_zip": "f09e53108160ca639c080b10bfe3d06c0364f509fdad696a3483a7ba2fa8d2a2",
+        "first_trade": "2025-04-06 17:00:00+00:00",
+        "last_trade": "2025-12-31 07:00:00+00:00"
+      }
+    },
+    "LINK": {
+      "5": {
+        "n": 50,
+        "net_pct": -1.06513,
+        "PF": 0.97521,
+        "DD_pct": 15.96202,
+        "PnL_USDT": -106.51268,
+        "win_pct": 24.0,
+        "long_n": 23,
+        "short_n": 27,
+        "long_USDT": 188.721,
+        "short_USDT": -295.2337,
+        "top3_fraction_all_wins": 0.40443,
+        "top3_fraction_NET": null,
+        "mean_trade_h": 4.893,
+        "funding_USDT": -21.7415,
+        "sha256_native_zip": "bc8abaa246ef28a7aa28a2f32bcb85bab6a85ffe1308dd00c288f465c7181f07",
+        "first_trade": "2025-04-06 16:00:00+00:00",
+        "last_trade": "2025-12-31 20:00:00+00:00"
+      },
+      "12p5": {
+        "n": 50,
+        "net_pct": -14.68026,
+        "PF": 0.71403,
+        "DD_pct": 21.52948,
+        "PnL_USDT": -1468.02615,
+        "win_pct": 24.0,
+        "long_n": 23,
+        "short_n": 27,
+        "long_USDT": -433.2465,
+        "short_USDT": -1034.7797,
+        "top3_fraction_all_wins": 0.41277,
+        "top3_fraction_NET": null,
+        "mean_trade_h": 4.888,
+        "funding_USDT": -19.8933,
+        "sha256_native_zip": "26819b698fe3e2fa1b63deee23b793951d622a28486f9fb256e5f975f7aad43b",
+        "first_trade": "2025-04-06 16:00:00+00:00",
+        "last_trade": "2025-12-31 20:00:00+00:00"
+      }
+    }
+  },
+  "alternate_2025_frozen_gate": {
+    "ETH": false,
+    "SOL": false,
+    "LINK": false
+  },
+  "alternate_2025_pass_2_of_3": false,
+  "causal_2026_corrected_vs_original_5m": {
+    "BTC": {
+      "5": {
+        "original": {
+          "n": 18,
+          "return_pct": -18.46716,
+          "pf": 0.478896,
+          "maxdd_pct": 25.052367,
+          "net_USDT": -1846.716042,
+          "long_USDT": 243.1679,
+          "short_USDT": -2089.8839,
+          "top3_net_fraction": null,
+          "top3_gross_fraction": 0.724274,
+          "stops": 13
+        },
+        "causal_only_boundary_fix": {
+          "n": 18,
+          "return_pct": -18.46716,
+          "pf": 0.478896,
+          "maxdd_pct": 25.052367,
+          "net_USDT": -1846.716042,
+          "long_USDT": 243.1679,
+          "short_USDT": -2089.8839,
+          "top3_net_fraction": null,
+          "top3_gross_fraction": 0.724274,
+          "stops": 13
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 18,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "ff7a396bbd3e7594292995ef5ef06350c7d8c7ad74c75b089d7b55da1b93a338",
+        "sha256_causal_native_zip": "2d7c5388a00768613b19a7adef4237c3eb2570103f727fcb29529886e4b80ffa"
+      },
+      "12p5": {
+        "original": {
+          "n": 18,
+          "return_pct": -22.687495,
+          "pf": 0.407338,
+          "maxdd_pct": 28.486171,
+          "net_USDT": -2268.749523,
+          "long_USDT": 28.3504,
+          "short_USDT": -2297.0999,
+          "top3_net_fraction": null,
+          "top3_gross_fraction": 0.742154,
+          "stops": 13
+        },
+        "causal_only_boundary_fix": {
+          "n": 18,
+          "return_pct": -22.687495,
+          "pf": 0.407338,
+          "maxdd_pct": 28.486171,
+          "net_USDT": -2268.749523,
+          "long_USDT": 28.3504,
+          "short_USDT": -2297.0999,
+          "top3_net_fraction": null,
+          "top3_gross_fraction": 0.742154,
+          "stops": 13
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 18,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "e2fd09132a8d06b55eb800bedd666b2b7a42117d5d49cc62a7c6ca418e489c0c",
+        "sha256_causal_native_zip": "7565deb686555971762793e6ce7c056701874f53abdd8ec67759e4e3a1a81e2f"
+      }
+    },
+    "ETH": {
+      "5": {
+        "original": {
+          "n": 35,
+          "return_pct": 23.263093,
+          "pf": 1.781773,
+          "maxdd_pct": 9.459243,
+          "net_USDT": 2326.309295,
+          "long_USDT": 918.3028,
+          "short_USDT": 1408.0065,
+          "top3_net_fraction": 1.124688,
+          "top3_gross_fraction": 0.493469,
+          "stops": 13
+        },
+        "causal_only_boundary_fix": {
+          "n": 35,
+          "return_pct": 23.263093,
+          "pf": 1.781773,
+          "maxdd_pct": 9.459243,
+          "net_USDT": 2326.309295,
+          "long_USDT": 918.3028,
+          "short_USDT": 1408.0065,
+          "top3_net_fraction": 1.124688,
+          "top3_gross_fraction": 0.493469,
+          "stops": 13
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 35,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "b1e34fadc5fc7c5216e59c141e394fd509710e4e1ccffc4f85d31145b87ee1c3",
+        "sha256_causal_native_zip": "a905fe724fbb3297a3c1881da953bb0457b5abb9e39e889b675ef2f62bd4d491"
+      },
+      "12p5": {
+        "original": {
+          "n": 35,
+          "return_pct": 12.696775,
+          "pf": 1.340958,
+          "maxdd_pct": 13.834101,
+          "net_USDT": 1269.677503,
+          "long_USDT": 197.2887,
+          "short_USDT": 1072.3888,
+          "top3_net_fraction": 1.984041,
+          "top3_gross_fraction": 0.504471,
+          "stops": 13
+        },
+        "causal_only_boundary_fix": {
+          "n": 35,
+          "return_pct": 12.696775,
+          "pf": 1.340958,
+          "maxdd_pct": 13.834101,
+          "net_USDT": 1269.677503,
+          "long_USDT": 197.2887,
+          "short_USDT": 1072.3888,
+          "top3_net_fraction": 1.984041,
+          "top3_gross_fraction": 0.504471,
+          "stops": 13
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 35,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "92820e31ae1a0f94e7ba05b3bc02420bf03e058b3ba9e3082637527468fe3b5b",
+        "sha256_causal_native_zip": "b9f827e8844aa068d3c894852072d085b86780dd2f45d95ee3acdffd7596a27a"
+      }
+    },
+    "SOL": {
+      "5": {
+        "original": {
+          "n": 26,
+          "return_pct": 22.135199,
+          "pf": 1.687898,
+          "maxdd_pct": 9.995653,
+          "net_USDT": 2213.51995,
+          "long_USDT": 3142.7243,
+          "short_USDT": -929.2043,
+          "top3_net_fraction": 1.429846,
+          "top3_gross_fraction": 0.582729,
+          "stops": 13
+        },
+        "causal_only_boundary_fix": {
+          "n": 26,
+          "return_pct": 22.135199,
+          "pf": 1.687898,
+          "maxdd_pct": 9.995653,
+          "net_USDT": 2213.51995,
+          "long_USDT": 3142.7243,
+          "short_USDT": -929.2043,
+          "top3_net_fraction": 1.429846,
+          "top3_gross_fraction": 0.582729,
+          "stops": 13
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 26,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "cf884908cee63666659858b1fa68fae9020419dc6e4f8e51fbfce1310e1e1e65",
+        "sha256_causal_native_zip": "8b8d9cb2d06b2392042d32e8b63288d6333ccbb9f02352dd7754966f0366d9d7"
+      },
+      "12p5": {
+        "original": {
+          "n": 26,
+          "return_pct": 14.544868,
+          "pf": 1.397882,
+          "maxdd_pct": 11.217182,
+          "net_USDT": 1454.48678,
+          "long_USDT": 2813.3939,
+          "short_USDT": -1358.9071,
+          "top3_net_fraction": 2.094037,
+          "top3_gross_fraction": 0.59603,
+          "stops": 13
+        },
+        "causal_only_boundary_fix": {
+          "n": 26,
+          "return_pct": 14.544868,
+          "pf": 1.397882,
+          "maxdd_pct": 11.217182,
+          "net_USDT": 1454.48678,
+          "long_USDT": 2813.3939,
+          "short_USDT": -1358.9071,
+          "top3_net_fraction": 2.094037,
+          "top3_gross_fraction": 0.59603,
+          "stops": 13
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 26,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "4e292c08fc7aad07fafc107a33c69fc4a0f5da47d2a7718dcda8f778481d227d",
+        "sha256_causal_native_zip": "9303d667aebf256081c249407dab2ead4429a3d05f359a2297cc39ccf3ca5ce1"
+      }
+    },
+    "LINK": {
+      "5": {
+        "original": {
+          "n": 22,
+          "return_pct": 22.670471,
+          "pf": 2.343658,
+          "maxdd_pct": 7.936968,
+          "net_USDT": 2267.047057,
+          "long_USDT": 2976.9977,
+          "short_USDT": -709.9507,
+          "top3_net_fraction": 1.011618,
+          "top3_gross_fraction": 0.579977,
+          "stops": 12
+        },
+        "causal_only_boundary_fix": {
+          "n": 22,
+          "return_pct": 22.670471,
+          "pf": 2.343658,
+          "maxdd_pct": 7.936968,
+          "net_USDT": 2267.047057,
+          "long_USDT": 2976.9977,
+          "short_USDT": -709.9507,
+          "top3_net_fraction": 1.011618,
+          "top3_gross_fraction": 0.579977,
+          "stops": 12
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 22,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "754470f1b5efce837da4800e951e35b81a7558f5bd6b7912d03eb096d6d9001d",
+        "sha256_causal_native_zip": "5cd4f8900b4dc5cabae0d1f774066ff32afdc4dd3e27ee66f05810e0b924086d"
+      },
+      "12p5": {
+        "original": {
+          "n": 22,
+          "return_pct": 17.752371,
+          "pf": 1.863183,
+          "maxdd_pct": 9.895102,
+          "net_USDT": 1775.237141,
+          "long_USDT": 2801.4651,
+          "short_USDT": -1026.228,
+          "top3_net_fraction": 1.298722,
+          "top3_gross_fraction": 0.601677,
+          "stops": 12
+        },
+        "causal_only_boundary_fix": {
+          "n": 22,
+          "return_pct": 17.752371,
+          "pf": 1.863183,
+          "maxdd_pct": 9.895102,
+          "net_USDT": 1775.237141,
+          "long_USDT": 2801.4651,
+          "short_USDT": -1026.228,
+          "top3_net_fraction": 1.298722,
+          "top3_gross_fraction": 0.601677,
+          "stops": 12
+        },
+        "delta_net_pct": 0.0,
+        "delta_pf": 0.0,
+        "changed_trade_receipts": {
+          "shared_entries": 22,
+          "removed_original_entries": 0,
+          "new_causal_entries": 0,
+          "changed_common_trades": 0,
+          "changed_trade_receipts": []
+        },
+        "sha256_original_native_zip": "0ff5ec7dab5fd123529aba757f87b94ab382ddb2326d7c2126edfd3eb0cc3322",
+        "sha256_causal_native_zip": "00376b6631dee6c9a113d4424b2a6ce007209d87b4a3beb26ed8454ae5c2b4f8"
+      }
+    }
+  },
+  "causal_boundary_changes_economics": false,
+  "research_narrow_gate": false,
+  "LIVE_ALLOWED": false,
+  "AUTO_PAPER_ALLOWED": false,
+  "original_native_zip_sha256": {
+    "2025_BTC_fee5": "6981af20e20020be254e9426879631aa91ee246dac6aa39b18c49f19e414d922",
+    "2026_caused_BTC_fee5": "2d7c5388a00768613b19a7adef4237c3eb2570103f727fcb29529886e4b80ffa",
+    "2025_BTC_fee12p5": "902bb4f7c1a4ced2f95f21b2221773b7b2828fc0b89edb33e0ad29da60d096da",
+    "2026_caused_BTC_fee12p5": "7565deb686555971762793e6ce7c056701874f53abdd8ec67759e4e3a1a81e2f",
+    "2025_ETH_fee5": "011fb44cf3bf9b353729f663190e5b0d1887bd4abd43b46262d8169c0b966ac6",
+    "2026_caused_ETH_fee5": "a905fe724fbb3297a3c1881da953bb0457b5abb9e39e889b675ef2f62bd4d491",
+    "2025_ETH_fee12p5": "827d81a14b672f4e00370185370c204f4676c3033c5170e617df0e758b317f93",
+    "2026_caused_ETH_fee12p5": "b9f827e8844aa068d3c894852072d085b86780dd2f45d95ee3acdffd7596a27a",
+    "2025_SOL_fee5": "46d72c3753b8030556396561fdc0dec6ad80c65c09089564776713884d78559f",
+    "2026_caused_SOL_fee5": "8b8d9cb2d06b2392042d32e8b63288d6333ccbb9f02352dd7754966f0366d9d7",
+    "2025_SOL_fee12p5": "f09e53108160ca639c080b10bfe3d06c0364f509fdad696a3483a7ba2fa8d2a2",
+    "2026_caused_SOL_fee12p5": "9303d667aebf256081c249407dab2ead4429a3d05f359a2297cc39ccf3ca5ce1",
+    "2025_LINK_fee5": "bc8abaa246ef28a7aa28a2f32bcb85bab6a85ffe1308dd00c288f465c7181f07",
+    "2026_caused_LINK_fee5": "5cd4f8900b4dc5cabae0d1f774066ff32afdc4dd3e27ee66f05810e0b924086d",
+    "2025_LINK_fee12p5": "26819b698fe3e2fa1b63deee23b793951d622a28486f9fb256e5f975f7aad43b",
+    "2026_caused_LINK_fee12p5": "00376b6631dee6c9a113d4424b2a6ce007209d87b4a3beb26ed8454ae5c2b4f8"
+  },
+  "critical_caveats": [
+    "Original 2025 history is earlier than author published strategy; cannot be labeled external OOS.",
+    "A196 old full-stake economic gate was FAILED; even 2025 2026 earnings do not authorize small deposit use.",
+    "One-line patched causal test copy is NOT the original author code and changes only time boundary.",
+    "Official 10-trade lookahead tests do NOT guarantee all callbacks are causally safe.",
+    "Original 2x near full margin is not 1% account risk; no live or PAPER order placed."
+  ]
+}
