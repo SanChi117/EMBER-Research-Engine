@@ -1,3 +1,7 @@
+> **⚠️ АРХИВНОЕ СВИДЕТЕЛЬСТВО, НЕ ТЕКУЩИЙ СТАТУС.** AUTHOR_ACCOUNT_BACKTEST_UNVERIFIED_EXECUTION — стресс 2024/2025 положителен, Jan–May2026 отрицателен. При исходном 5× liquidation/mark/order-fill не подтверждены. Не допускать к PAPER без нового протокола. [Текущая единая сводка](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md). Ни одна стратегия не `VERIFIED_FUTURES_CANDIDATE`.
+
+---
+
 # A238 — Risk_Stair_S5 с исходным общим счётом, нативный Binance USDT-M
 
 **31.10.2026. Шесть из шести Freqtrade native тестов завершились; все трейдовые архивы доступны. Не доказанный производственный trading edge.**
