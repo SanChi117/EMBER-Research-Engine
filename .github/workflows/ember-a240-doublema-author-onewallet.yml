@@ -49,7 +49,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python research/a240_doublema_author_wallet/a240_prepare_two.py --period 2025 --datadir a240-2025/data
+          python -m research.a240_doublema_author_wallet.a240_prepare_two --period 2025 --datadir a240-2025/data
       - name: Original BTC ETH shared wallet 2025 BASE and STRESS two native Freqtrade runs
         shell: bash
         run: |
@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python research/a240_doublema_author_wallet/a240_prepare_two.py --period 2026 --datadir a240-2026/data
+          python -m research.a240_doublema_author_wallet.a240_prepare_two --period 2026 --datadir a240-2026/data
       - name: Original BTC ETH shared wallet 2026 BASE and STRESS two native Freqtrade runs
         shell: bash
         run: |
