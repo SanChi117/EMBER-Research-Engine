@@ -20,12 +20,10 @@ SOURCE_RECEIPT=GEN/"A228_ORIGINAL_AND_MARKET_RECEIPTS.json"
 REPLAY=GEN/"native_backtests"
 STRATEGIES=(
     "DualTrendCompressionRestartShortV1Strategy",
-    "TrendFollowing",
-    "NASOSv7LongShort",
     "BearRegimeShortV1",
     "Risk_Stair_S5",
 )
-YEARS={"2025":"20250101-20260101"}  # 2026 blocked: genuine Binance 8h mark June missing 3 bars; genuine 1h mark 24 bars
+YEARS={"2024":"20240101-20250101", "2026_JAN_MAY":"20260101-20260601"}  # June excluded because actual mark unavailable
 COSTS={"base":0.0005,"stress":0.0011}
 
 
