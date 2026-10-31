@@ -1,0 +1,187 @@
+{
+  "cycle": "A245",
+  "group": "B",
+  "source": "GitHub Actions job 124669395722 run 41245981488 log summary",
+  "CI_conclusion": "success_does_not_mean_all_experiments_succeeded",
+  "expected": 18,
+  "complete": 12,
+  "blocked": 6,
+  "account": "Controlled BTC ETH SOL $1000 wallet, $100 stake, max3, not exact original author config",
+  "market": "Binance USDT-M Futures, actual archived 5m OHLC mark and funding",
+  "cost_scenarios": {
+    "base_fee_each_side": 0.0005,
+    "stress_fee_each_side": 0.0011
+  },
+  "artifact": {
+    "id": 13059429478,
+    "name": "a245-six-other-originals-group-B-native",
+    "digest": "sha256:ebbc148173aaefecdebd9628ef73ed22f0f0544a0b9cc5d5e60b8192d7b47471",
+    "bytes": 2040720
+  },
+  "records": [
+    {
+      "strategy": "VolatilitySystem",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": 17.622801314999997,
+      "native_max_drawdown_account": 0.15326559113809618,
+      "native_trade_count": 80,
+      "state": "COMPLETE"
+    },
+    {
+      "strategy": "FAdxSmaStrategy",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": -3.0350228430000006,
+      "native_max_drawdown_account": 0.03228664148886296,
+      "native_trade_count": 44,
+      "state": "COMPLETE"
+    },
+    {
+      "state": "BLOCKED",
+      "year": "2025",
+      "cost_model": "base",
+      "strategy": "FReinforcedStrategy",
+      "reason": "Cannot determine parameter space for adx_period (Freqtrade 2026.9 original strategy compatibility)"
+    },
+    {
+      "strategy": "VolatilitySystem",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": 16.166268094000003,
+      "native_max_drawdown_account": 0.15787493332397545,
+      "native_trade_count": 80,
+      "state": "COMPLETE"
+    },
+    {
+      "strategy": "FAdxSmaStrategy",
+      "timeframe": "1h",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": -3.5377971289999994,
+      "native_max_drawdown_account": 0.03719401819547372,
+      "native_trade_count": 44,
+      "state": "COMPLETE"
+    },
+    {
+      "state": "BLOCKED",
+      "year": "2025",
+      "cost_model": "stress",
+      "strategy": "FReinforcedStrategy",
+      "reason": "Cannot determine parameter space for adx_period (Freqtrade 2026.9 original strategy compatibility)"
+    },
+    {
+      "strategy": "VolatilitySystem",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": 17.148047603,
+      "native_max_drawdown_account": 0.10936631567782555,
+      "native_trade_count": 88,
+      "state": "COMPLETE"
+    },
+    {
+      "strategy": "FAdxSmaStrategy",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": 1.7854838539999998,
+      "native_max_drawdown_account": 0.020493960347396218,
+      "native_trade_count": 45,
+      "state": "COMPLETE"
+    },
+    {
+      "state": "BLOCKED",
+      "year": "2024",
+      "cost_model": "base",
+      "strategy": "FReinforcedStrategy",
+      "reason": "Cannot determine parameter space for adx_period (Freqtrade 2026.9 original strategy compatibility)"
+    },
+    {
+      "strategy": "VolatilitySystem",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": 15.62758473,
+      "native_max_drawdown_account": 0.11176603314733981,
+      "native_trade_count": 88,
+      "state": "COMPLETE"
+    },
+    {
+      "strategy": "FAdxSmaStrategy",
+      "timeframe": "1h",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": 1.043246737,
+      "native_max_drawdown_account": 0.021566280206482772,
+      "native_trade_count": 45,
+      "state": "COMPLETE"
+    },
+    {
+      "state": "BLOCKED",
+      "year": "2024",
+      "cost_model": "stress",
+      "strategy": "FReinforcedStrategy",
+      "reason": "Cannot determine parameter space for adx_period (Freqtrade 2026.9 original strategy compatibility)"
+    },
+    {
+      "strategy": "VolatilitySystem",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": 2.8137257549999988,
+      "native_max_drawdown_account": 0.06255860573809156,
+      "native_trade_count": 37,
+      "state": "COMPLETE"
+    },
+    {
+      "strategy": "FAdxSmaStrategy",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": -0.3768115429999999,
+      "native_max_drawdown_account": 0.02064501468727774,
+      "native_trade_count": 29,
+      "state": "COMPLETE"
+    },
+    {
+      "state": "BLOCKED",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "strategy": "FReinforcedStrategy",
+      "reason": "Cannot determine parameter space for adx_period (Freqtrade 2026.9 original strategy compatibility)"
+    },
+    {
+      "strategy": "VolatilitySystem",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": 2.2383134570000016,
+      "native_max_drawdown_account": 0.06407465459781142,
+      "native_trade_count": 37,
+      "state": "COMPLETE"
+    },
+    {
+      "strategy": "FAdxSmaStrategy",
+      "timeframe": "1h",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -0.6850928170000001,
+      "native_max_drawdown_account": 0.02355018774995982,
+      "native_trade_count": 29,
+      "state": "COMPLETE"
+    },
+    {
+      "state": "BLOCKED",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "strategy": "FReinforcedStrategy",
+      "reason": "Cannot determine parameter space for adx_period (Freqtrade 2026.9 original strategy compatibility)"
+    }
+  ],
+  "warning": "VolatilitySystem original source stoploss -1 and 2x DCA. Not verified liquidation/execution. FReinforced six blocked are NOT losses or zero-trade results.",
+  "verified_futures_candidate": false
+}
