@@ -1,3 +1,7 @@
+> **⚠️ ИСТОРИЧЕСКИЙ ЭКСПЕРИМЕНТ / НЕ ТЕКУЩАЯ СТРАТЕГИЯ — `ARCHIVE_SNAPSHOT_SUPERSEDED`.** Этот файл описывает частные проверки/гипотезы старого этапа. Из него нельзя выводить прибыльность original Binance USDT-M Futures, текущий рейтинг или торговое разрешение. [Единая исправленная сводка](RESEARCH_STATUS_CANONICAL.md); [неизменный мандат](RESEARCH_MANDATE_LOCKED.md). Исходные цифры оставлены только как архивный след.
+
+---
+
 # EMBER — A226–A227: latest fast-economics research checkpoint
 
 Date 2026-10-31. Scope LOCKED: genuine Binance USD-M Futures, multiple independent mechanisms, original ready code mandatory before any verified candidate. Price Action remains an *additional* stream. Prior `main/RESEARCH_MANDATE_LOCKED.md`, `main/RESEARCH_FAST_STABILITY_GATE_ONLY.md`, `main/RESEARCH_USER_VETO_A220.md` unchanged. No real or PAPER orders.
