@@ -161,6 +161,43 @@ def load_all(manifest):
     return candles, funding, receipts
 
 
+def risk_breaker_shadow(ret: pd.Series, exposure: pd.Series, cost_bps: float) -> dict:
+    """Counterfactual 1h-observed live-default 3% daily-loss / 10% HWM drawdown halt.
+
+    Not the exact daemon polling, not a fill guarantee. Force closing fees when
+    the first breaker breaches; subsequent periods remain in cash until manually
+    resumed (no fictional automatic reset).
+    """
+    equity = peak = start_day_equity = 1.0
+    previous_day = None
+    halted_at = None
+    reason = None
+    for ts, rate in ret.items():
+        if previous_day != ts.date():
+            previous_day = ts.date()
+            start_day_equity = equity
+        equity *= (1.0 + float(rate))
+        peak = max(peak, equity)
+        dd = 1.0 - equity / peak
+        daily_loss = 1.0 - equity / start_day_equity
+        if daily_loss > 0.03 or dd > 0.10:
+            halted_at = ts.isoformat()
+            reason = "daily_loss_gt_3pct" if daily_loss > 0.03 else "drawdown_gt_10pct"
+            # First observable next-open close after the threshold breach;
+            # optimistic (hourly OHLCV cannot capture sub-hour price/impact).
+            equity *= 1.0 - (cost_bps / 10_000.0) * float(exposure.loc[ts])
+            break
+    return {
+        "halted": halted_at is not None,
+        "first_halt_utc": halted_at,
+        "reason": reason,
+        "halted_return_pct": round((equity - 1.0) * 100.0, 5),
+        "polling_resolution": "one_hour_and_optimistic_fill",
+        "original_default_dd_limit_pct": 10.0,
+        "original_default_daily_loss_limit_pct": 3.0,
+    }
+
+
 def compute(params, source, candles, funding):
     windows = [
         ("2024", pd.Timestamp("2024-01-01T00:00:00Z"), pd.Timestamp("2025-01-01T00:00:00Z")),
@@ -225,6 +262,7 @@ def compute(params, source, candles, funding):
                 "cost_bps_base": float(turnover.sum() * BASE_BPS / 3.0),
                 "cost_bps_stress": float(turnover.sum() * STRESS_BPS / 3.0),
                 "settlements": len(settled),
+                "target": positions,  # retained only in-memory for risk-breaker audit
                 "turnover": float(turnover.sum()),
                 "held_hours": int((positions.abs() > 0).sum()),
                 "flips": int((np.sign(positions).diff().fillna(0) != 0).sum()),
@@ -240,7 +278,13 @@ def compute(params, source, candles, funding):
                 "marked_open_to_open_max_dd_pct": round(dd * 100, 5),
                 "sharpe_ann_hourly": round(float(ret.mean() / ret.std(ddof=0) * np.sqrt(365 * 24)), 5) if ret.std(ddof=0)>0 else None,
             }
+        exposure = sum(per[sym]["target"].abs() for sym in COINS) / 3.0
+        breaker = {
+            "base": risk_breaker_shadow(frame["base"], exposure, BASE_BPS),
+            "stress": risk_breaker_shadow(frame["stress"], exposure, STRESS_BPS),
+        }
         details[label] = {
+            "risk_breaker_shadow": breaker,
             "hours": int(active.sum()),
             "account_model": "single $3000 account, 3 equal-capital sleeves, no leverage",
             "scenarios": view,
@@ -271,6 +315,18 @@ def main():
         mod = importlib.util.module_from_spec(spec)
         sys.modules[spec.name] = mod
         spec.loader.exec_module(mod)
+        live_risk_sources = {
+            "live/tsmom_daemon.py": "f19895a124328cd52ba8232d3a6c5cc9f29e8e10",
+            "risk/manager.py": "398b5280d123120027f54be85ae80b22e16e9da5",
+        }
+        for name, expected_blob in live_risk_sources.items():
+            risk_data = fetch(f"https://raw.githubusercontent.com/yongzhe2160cs/trading-engine/{SOURCE_COMMIT}/{name}")
+            if blob_sha(risk_data) != expected_blob:
+                raise ValueError(f"Original operational risk source SHA changed {name}")
+            if name.startswith("risk/") and "max_total_dd" not in risk_data.decode("utf-8"):
+                raise ValueError("Risk manager source no longer contains DD tripwire")
+        if "max_total_dd: float = 0.10" not in cfg.decode("utf-8") or "max_daily_loss: float = 0.03" not in cfg.decode("utf-8"):
+            raise ValueError("Risk breaker default thresholds are not original")
         params = mod.TsmomParams(lookback=720, vol_window=336, target_vol=0.2, max_leverage=1.0, rebalance=24)
         candles, funding, receipts = load_all(manifest)
         results, prefix_probes = compute(params, mod, candles, funding)
@@ -290,6 +346,8 @@ def main():
         "verified_futures_candidate": False,
         "periods": results,
         "prefix_causality_probes": prefix_probes,
+        "original_live_risk_sources_sha_verified": True,
+        "risk_breaker_shadow_diagnostic_not_author_pnl": True,
         "no_orders": True,
     }
     path = HERE / "evidence" / "A221_TSMOM_REAL_BINANCE_REPLAY.json"
