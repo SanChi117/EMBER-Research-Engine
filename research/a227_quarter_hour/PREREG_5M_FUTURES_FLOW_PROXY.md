@@ -1,0 +1,17 @@
+# A227 — pre-registered cheap event screen for 15-minute opening order imbalance
+
+31 October 2026, **before any economic result**. Unchanged Binance USDT-M Futures mandate, user veto A220, economic-first A224. This is distinct from A207 generic order-flow pressure: time-locked **quarter-hour opening flow** with causally known execution time.
+
+**External primary research:** Chan Kim and Peter Reinhard Hansen, 2026, *The Quarter-Hour Effect: Periodic Algorithmic Trading and Return Predictability in Cryptocurrency Futures*, arXiv:2607.09426 (https://arxiv.org/abs/2607.09426). On six Binance perpetuals through Oct 2024, first **10 seconds** after minute 00/15/30/45 have elevated trade activity; early signed order flow forecasts 4–12h price movements, but fast 10-second predicted returns (~0.5bp) are smaller than ordinary taker fees. Academic *predictive regression is NOT a deployable trading strategy*, and no original executable full ledger identified.
+
+**Our deliberately CHEAP (and imperfect) proxy, NOT a reproduction of authors' 10-second estimator:** take first **fully closed 5-minute Binance USD-M 5m kline** at each quarter-hour boundary, calculate signed taker-buy flow `2*taker_buy_base/total_base_volume-1`; positive = long, negative = short. This tests whether the broader signal persists after a **5-minute observation delay**, enough to escape 10-second latency competition. Every original 5m kline from official Binance Vision monthly USD-M `BTCUSDT,ETHUSDT,SOLUSDT`, 2024-01–2026-09, record ZIP+CSV SHA and UTC grid. Real USD-M settled funding from A217 manifest, pinned authenticated. This proxy is weaker/different than the paper's raw 10-second imbalance; **if it fails, do not claim to refute the paper**. Never interpret a good 5m regression without valid fills as profit.
+
+**Two fixed hypotheses**, not free tuning:
+- Q1: hold at most 4 hours from next 5m open;
+- Q2: hold at most 8 hours from next 5m open.
+
+Signal at boundary bar **after it closes**; fill following 5m open; no simultaneous entries per coin, next signal after position exited. Hard structural stop: last 12 *fully completed* 5m bars' minimum for long, maximum for short (includes signal bar, known at signal close). No additional ATR/win rate/magnitude threshold, no fixed RR targets. Stop-first on 5m high/low, unfavorable open gap at real next open, timeout at horizon next open. Fee+execution cost 10.5bp/side BASE, 22.5bp/side STRESS, genuine signed funding events, 0.5% equity risk on structural stop, 1x max notional, no borrow or leverage, $1000 separate per-coin sleeve and each year independent. BTC+ETH+SOL aggregated account, no hidden coin/side selection.
+
+Years: 2024 discovery, 2025 and Jan–Sep 2026 chronological validation without tuning. Program must verify raw bar continuity, Binance USD-M venue, separate full trade journals, worst drawdown from adverse intrabar wick, exits, returns, cashflow. Smoke PASS if STRESS positive in both 2025 and 2026, trades each >=50, no ruin, worst sleeve DD not beyond 20%, plus 2024 reported without hiding negative. Pass stays `PROVISIONAL_EVENT_HYPOTHESIS` until actual first-10-second raw-trade source, original full code/strategy, genuine mark/liquidation and forward PAPER; **not VERIFIED**. Failure = `RESEARCH_NEGATIVE_5M_PROXY` (only for this specific 5m execution concept), no retuning 1m, thresholds, direction on seen history.
+
+None of user's live/PAPER tasks or accounts may be modified.
