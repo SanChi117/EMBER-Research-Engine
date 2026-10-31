@@ -1,0 +1,44 @@
+name: A238 Risk Stair S5 Original Shared Account USD-M
+on:
+  push:
+    branches: ['research/a238-risk-stair-author-account-20261031']
+    paths:
+      - 'research/a238_author_risk/**'
+      - '.github/workflows/ember-a238-risk-stair-author-account.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  risk_stair_author_native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pinned Freqtrade 2026.9 test environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'freqtrade==2026.9' technical pandas pyarrow
+          python -m freqtrade --version
+          python -m pip freeze > research/a228_five_original/native_pip_freeze.txt
+      - name: Genuine USD-M four-pair candles marks and official ADA funding with SHA
+        run: python -m research.a238_author_risk.a238_prepare_data
+      - name: Verify three original author config SHA and run 6 native tests
+        run: python -m research.a238_author_risk.a238_run_originals
+      - name: Preserve execution artifact and all warnings on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a238-risk-stair-original-four-pair-unlimited-stake
+          path: |
+            research/a228_five_original/native_pip_freeze.txt
+            research/a228_five_original/generated/A228_ORIGINAL_AND_MARKET_RECEIPTS.json
+            research/a228_five_original/generated/native_backtests_a238/**
+          retention-days: 30
+          compression-level: 6
+          if-no-files-found: warn
