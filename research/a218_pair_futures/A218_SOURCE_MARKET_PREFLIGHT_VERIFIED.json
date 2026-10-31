@@ -1,0 +1,37 @@
+{
+  "cycle": "A218",
+  "status": "BLOCKED_SOURCE_EXECUTION_ACCOUNTING",
+  "strategy": "djienne/pair_trading_NEDL/pair_trading.py",
+  "source_commit": "1823a2137d5b02a5649b32328d024057c968ada0",
+  "source_blob_sha": "65e7c6dd3b8d62067704ad2148082392bbc17814",
+  "config_blob_sha": "efbb698bc1072356051fcbc669943fddf1b3a6b7",
+  "market": "Binance USD-M Futures BTCUSDT ETHUSDT daily, NOT SPOT",
+  "period": "2023-09-01 to 2025-12-31 UTC, outcomes inspected 2024-01-01 to 2025-12-31",
+  "costs": "original 1 bp per unit of position delta; full cost model ABSENT",
+  "exchanges": "56 ZIP real Binance Vision with SHA256 matched to previously archived A217 manifest",
+  "source_daily_bars": 853,
+  "signal_rows_2024_2025": 730,
+  "nonzero_signal_days": 113,
+  "original_signal_transitions": 21,
+  "profitability_evaluated": false,
+  "full_two_perpetual_accounting": false,
+  "verified_edge": false,
+  "live_or_paper_orders": false,
+  "gate_failures": [
+    "no two-leg funding settlement",
+    "no mark collateral and liquidation audit",
+    "delta-weight fees omit actual daily weight rebalancing turnover",
+    "no terminal forced close",
+    "original signal at current closed candle not verified executable at same closing price",
+    "no realistic spread/slippage/stop-gap ledger"
+  ],
+  "verification": {
+    "github_actions_run": 41218765741,
+    "conclusion": "success",
+    "artifact_id": 13049061922,
+    "artifact_sha256": "eee0860a92e0f0fced362cb0d5411a0ccb7526119e070dea3d37e50e4b6f7ca1",
+    "run_url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41218765741",
+    "notice": "SUCCESS verifies controlled source preflight and BLOCKED verdict, NOT profit"
+  },
+  "rule": "Do not modify original to manufacture passing economics"
+}
