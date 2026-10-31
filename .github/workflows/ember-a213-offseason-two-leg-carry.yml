@@ -1,0 +1,114 @@
+name: "EMBER A213 off-season genuinely heldout 2023/24 2024/25 2025/26 two-leg basis carry"
+on:
+  push:
+    branches: [research/a213-two-leg-carry-offseason-heldout-20261031]
+    paths:
+      - ".github/workflows/ember-a213-offseason-two-leg-carry.yml"
+      - "research/strategy_research_reset_20261031/a213_*.py"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  two-leg-offseason-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Confirm off-season prereg and same original engine's unchanged trading math
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile research/strategy_research_reset_20261031/a213_offseason_same_two_leg_engine.py
+          test -s research/strategy_research_reset_20261031/A213_OFFSEASON_TWO_LEG_CARRY_HOLDOUT_PREREG_RU.md
+          python - <<'PY'
+          from pathlib import Path
+          import ast,hashlib
+          p=Path('research/strategy_research_reset_20261031')
+          a=ast.parse((p/'a212_real_spot_perp_funding_carry.py').read_text())
+          b=ast.parse((p/'a213_offseason_same_two_leg_engine.py').read_text())
+          def getfn(tree,name):
+              return next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name==name)
+          for name in ('parse_funding','klines'):
+              assert ast.dump(getfn(a,name),include_attributes=False)==ast.dump(getfn(b,name),include_attributes=False),(name,"SOURCE_OR_MATH_CHANGED")
+          # Replay differs ONLY in the two period boundary datetime calls.
+          ra=ast.dump(getfn(a,'replay'),include_attributes=False)
+          rb=ast.dump(getfn(b,'replay'),include_attributes=False)
+          ra=ra.replace("Constant(value=5), Constant(value=13)","Constant(value=10), Constant(value=1)")
+          ra=ra.replace("Name(id='year', ctx=Load()), Constant(value=10), Constant(value=1)",
+             "BinOp(left=Name(id='year', ctx=Load()), op=Add(), right=Constant(value=1)), Constant(value=5), Constant(value=1)")
+          # Textual fingerprint of pure core beyond date setup.
+          from hashlib import sha256
+          srcA=(p/'a212_real_spot_perp_funding_carry.py').read_text()
+          srcB=(p/'a213_offseason_same_two_leg_engine.py').read_text()
+          loA=srcA.split('    # BEFORE this hour')[1].split('\ndef main():')[0]
+          loB=srcB.split('    # BEFORE this hour')[1].split('\ndef main():')[0]
+          assert loA==loB,"ORIGINAL_TWO_LEG_EXECUTION_LOGIC_MODIFIED"
+          print('A213_UNMODIFIED_A212_FUNDING_HEDGE_CORE_SHA256',sha256(loA.encode()).hexdigest(),flush=True)
+          PY
+          mkdir -p a213-offseason
+      - name: Genuine Binance Oct-Apr 2023/24 2024/25 2025/26 spot-perp-mark-and-funding source
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 5100s python research/strategy_research_reset_20261031/a213_offseason_same_two_leg_engine.py \
+            --out a213-offseason 2>&1 | tee a213-offseason/A213-real-two-leg-offseason.log
+          grep -Fq A213_336_REAL_BINANCE_SOURCE_ZIPS_AND_48_OFFSEASON_HEDGE_LEDGERS_VERIFIED a213-offseason/A213-real-two-leg-offseason.log
+      - name: Re-open 48 original off-season hedge trade ledgers and check genuine source receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('a213-offseason')
+          p=root/'A213_REAL_TWO_LEG_OFFSEASON_2023_2024_2025_VERIFIED.json'
+          o=json.loads(p.read_text())
+          assert o['schema']=='A213_OFFSEASON_GENUINE_BOTH_SPOT_PERP_MARK_SETTLED_FUNDING_HOLDOUT'
+          assert len(o['source_zip_csv_sha256'])>=336
+          assert len(o['trade_log_sha256'])==48
+          assert o['execution_approval'] is False
+          for path,meta in o['trade_log_sha256'].items():
+              raw=(root/path).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==meta['sha256'],path
+              trades=json.loads(raw)
+              assert len(trades)==meta['n']
+              assert all(abs(t['net_pnl_USDT']-(t['price_basis_realized_USDT']+t['funding_USDT']-t['roundtrip_fees_USDT']))<1e-8 for t in trades)
+              assert all(trades[i]['open_ms']>=trades[i-1]['close_ms'] for i in range(1,len(trades)))
+          for y in (2023,2024,2025):
+              for coin in ('BTC','ETH','SOL','LINK'):
+                  assert o['source_integrity'][f'{y}-{coin}']['all_three_leg_hourly_prices_contiguous']
+          print('A213_336_SOURCE_SHAS_AND_48_REAL_TWO_LEG_HEDGE_LEDGERS_VERIFIED',flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A213-real-offseason-2023-2026-spot-perp-basis-funding-48-ledgers
+          path: |
+            a213-offseason/A213-real-two-leg-offseason.log
+            a213-offseason/A213_REAL_TWO_LEG_OFFSEASON_2023_2024_2025_VERIFIED.json
+            a213-offseason/A213_*_TWO_REAL_LEGS.json
+          retention-days: 30
+      - name: Persist independently verified heldout off-season economics
+        if: success()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          target=research/strategy_research_reset_20261031/A213_OFFSEASON_REAL_TWO_LEG_HOLDOUT_VERIFIED.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          git checkout -q -B a213-result FETCH_HEAD
+          cp a213-offseason/A213_REAL_TWO_LEG_OFFSEASON_2023_2024_2025_VERIFIED.json "$target"
+          git add "$target"
+          if git diff --staged --quiet; then echo A213_ALREADY_PERSISTED;exit 0;fi
+          git commit -qm "research(A213): real Oct-Apr independent off-season two-leg carry validation, unchanged economics"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          echo A213_TRUE_HOLDOUT_RESULTS_PERSISTED
