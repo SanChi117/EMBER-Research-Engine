@@ -1,9 +1,9 @@
 name: "EMBER A203 independent original dip_catcher 2025 May-Sep 4-pair 2-fee native holdout"
 on:
   push:
-    branches: [research/a203-2025-holdout-original-native-screen-20261031]
+    branches: [research/a203-dipcatcher-2025-independent-holdout-20261031]
     paths:
-      - ".github/workflows/ember-a203-2025-holdout-original-5m-native.yml"
+      - ".github/workflows/ember-a203-dipcatcher-2025-holdout-native.yml"
       - "research/native_candidate_screen_20261031/a203_*.py"
   workflow_dispatch:
 permissions:
