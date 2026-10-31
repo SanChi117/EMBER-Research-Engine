@@ -1,0 +1,39 @@
+{
+  "cycle": "A220",
+  "date": "2026-10-31",
+  "decision": "USER_REJECTED_ALL_THREE_BEFORE_ECONOMIC_TEST",
+  "active_candidates": 0,
+  "verified_futures_candidates": 0,
+  "mandate_remains_locked": true,
+  "market_scope": "Binance USDT-M Futures",
+  "candidates": [
+    {
+      "id": "C1",
+      "repository": "AbdullaE100/perp-quant-lab",
+      "status": "USER_REJECTED_PRE_BACKTEST",
+      "reason_as_supplied_by_user": "собирает мусор на графике",
+      "full_backtest_allowed": false,
+      "requeue_allowed": false,
+      "profitability_evaluated": false
+    },
+    {
+      "id": "C2",
+      "repository": "OctopusTakopi/funding-rate-alpha",
+      "status": "USER_REJECTED_PRE_BACKTEST",
+      "reason_as_supplied_by_user": "ломается как только есть хоть малейшая аномалия",
+      "full_backtest_allowed": false,
+      "requeue_allowed": false,
+      "profitability_evaluated": false
+    },
+    {
+      "id": "C3",
+      "repository": "agarwalchirag535-lab/smallcap-pump-reversal",
+      "status": "USER_REJECTED_PRE_BACKTEST",
+      "reason_as_supplied_by_user": "смысл отдавать рынку памп и забирать не гарантированный дамп, сомнительно",
+      "full_backtest_allowed": false,
+      "requeue_allowed": false,
+      "profitability_evaluated": false
+    }
+  ],
+  "next": "Search other genuinely different original Binance USDT-M Futures mechanisms with identifiable causal edge and robust risk model; never confuse user rejection with economic failure"
+}
