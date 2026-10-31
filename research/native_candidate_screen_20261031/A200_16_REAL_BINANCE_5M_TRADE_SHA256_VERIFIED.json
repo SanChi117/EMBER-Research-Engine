@@ -1,0 +1,23 @@
+{
+  "source_artifact_id": 13024651130,
+  "source_run": 41154025918,
+  "source_artifact_sha256": "b931dc3419a6f880e25b5d36308e941c78836df66c2fdc55ee8c1f64510cb19c",
+  "real_5m_16_trade_logs_sha256": {
+    "BTC_bigbear_base": "1c63b86793aa379707c32f8c8617c6bed24fee621df74b9c00dfc03f5233f39a",
+    "BTC_bigbear_stress": "7c4aaa357b0f64311a6c228a9b671dd9f2e9c501d86bbbba4461f0332797c41c",
+    "BTC_bigbull_base": "2630be25fc79a53d30698316a02dc329cf64cd286889c04e26cbb3e41fbb4867",
+    "BTC_bigbull_stress": "ca5c1f522cd9a15261dba0baeef398b58fa03d81a672cb917dbc7a384e2fc01e",
+    "ETH_bigbear_base": "56882c03d062c6572e7444eb6280abfe1ed058f126ffc3770970ba4e66a204a7",
+    "ETH_bigbear_stress": "0e4e5b9f9e5b9b623e62507f9e9131371311f1d70bd6f1865cdd0396ba0fbebb",
+    "ETH_bigbull_base": "a542641e72a7524bd876fe61ffef03b41f58970f0c367cb8897389535f2d75bf",
+    "ETH_bigbull_stress": "e796c4e5986e622c2c8223e2041109848aeb6cd1be616d7010b02b3a38e6532a",
+    "SOL_bigbear_base": "5b74d1f82106dc0bd756bba9e4aca5889275958e6b02273f218edd4e057dae8a",
+    "SOL_bigbear_stress": "752105445cfd01157bcec5e9be0bd54a9fbda9afbc3bf7cb5afbfb30cc213a27",
+    "SOL_bigbull_base": "211791094da6189bcaa70f4aa73632a2ac4f8c40a356d3958c4f819c6035f42f",
+    "SOL_bigbull_stress": "281208a5434fc4215cae7bae7f2fe32bb251d92ec5f6b28fc52a4c9635ed64e2",
+    "LINK_bigbear_base": "669d844f2a1202643a516338b0a0f8907ba604043acd1834cb4629a39e7fb94f",
+    "LINK_bigbear_stress": "1bd9c19e7cd122c761e81f90763fa949a458aaf8f0234542138ab4f55457a531",
+    "LINK_bigbull_base": "99ab123b7f7d8daa2f67e65cede7ce4571d297b13233e4a5a8dc57c1089b487e",
+    "LINK_bigbull_stress": "b87014c57f28aaf54dd2d49ae6bda7e9d9e0ca900e04c91f194cc883a5f57a1f"
+  }
+}

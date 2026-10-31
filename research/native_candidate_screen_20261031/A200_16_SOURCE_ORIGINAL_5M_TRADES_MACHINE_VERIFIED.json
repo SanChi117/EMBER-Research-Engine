@@ -1,0 +1,1085 @@
+{
+  "schema": "EMBER_A200_SOURCE_PINNED_GENIA_BIGBEAR_BIGBULL_15M_AUTHOR_BACKTEST_AND_GENUINE_5M_CONSERVATIVE_FILLS",
+  "source_repo": "genia503/mean-reversion-backtester",
+  "source_git_commit": "2325ebac97056e6a4f1f98483713513e86239074",
+  "original_file_blobs": {
+    "multicoin_backtest.py": "e33000063b93b825af720791b8282372b6460fdc",
+    "tpsl_backtest.py": "fe1ffc3b58d28f844667d1889c30161b38b36e6c"
+  },
+  "signal_methods_directly_author_code": true,
+  "original_author_backtest_method_directly_called": true,
+  "original_author_backtest_has_RANDOM_50_50_same_bar_order": true,
+  "independent_5m_trading_executor_not_author_native": true,
+  "time_window": "[2026-05-13,2026-10-01)",
+  "original_author_published": "2026-08-06",
+  "all_May_Sep_history_NOT_pristine_OOS": true,
+  "one_wallet_per_pattern_pair_no_combination": true,
+  "sim_wallet_USDT": 1000.0,
+  "fixed_stake_USDT": 100.0,
+  "price_data": "genuine Binance Vision USD-M 5m all four symbols source-audited A196",
+  "patterns": {
+    "BTC": {
+      "real_5m_file_sha256": "7475fa469cf2d61bd5adf16dae6178e88de75e78895a4977bcf5b57cb154a9ec",
+      "native_5m_candles": 44064,
+      "real_15m_grouped_candles": 14688,
+      "source_author_seed_random_baseline": {
+        "bigbear": [
+          {
+            "seed": 0,
+            "n": 15,
+            "net_USDT": -1.43,
+            "winrate": 0.26667,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 15,
+            "net_USDT": 1.47,
+            "winrate": 0.6,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 15,
+            "net_USDT": 0.89,
+            "winrate": 0.53333,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 15,
+            "net_USDT": -0.85,
+            "winrate": 0.33333,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 15,
+            "net_USDT": -1.43,
+            "winrate": 0.26667,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 15,
+            "net_USDT": -0.85,
+            "winrate": 0.33333,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 15,
+            "net_USDT": -0.27,
+            "winrate": 0.4,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 15,
+            "net_USDT": -0.85,
+            "winrate": 0.33333,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 15,
+            "net_USDT": -0.27,
+            "winrate": 0.4,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 15,
+            "net_USDT": 1.47,
+            "winrate": 0.6,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ],
+        "bigbull": [
+          {
+            "seed": 0,
+            "n": 2,
+            "net_USDT": -0.5,
+            "winrate": 0.0,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 2,
+            "net_USDT": 0.08,
+            "winrate": 0.5,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 2,
+            "net_USDT": 0.66,
+            "winrate": 1.0,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 2,
+            "net_USDT": -0.5,
+            "winrate": 0.0,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 2,
+            "net_USDT": -0.5,
+            "winrate": 0.0,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 2,
+            "net_USDT": 0.08,
+            "winrate": 0.5,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 2,
+            "net_USDT": 0.08,
+            "winrate": 0.5,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 2,
+            "net_USDT": 0.08,
+            "winrate": 0.5,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 2,
+            "net_USDT": -0.5,
+            "winrate": 0.0,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 2,
+            "net_USDT": 0.08,
+            "winrate": 0.5,
+            "first": "2026-06-07 22:00:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ]
+      },
+      "independent_strict_5m": {
+        "bigbear_base": {
+          "n": 15,
+          "net_USDT": -2.01066,
+          "wallet_return_pct": -0.201066,
+          "PF": 0.32998,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.31323,
+          "winning_trades": 3,
+          "winrate_pct": 20.0,
+          "top3_gross_wins_share": 1.0,
+          "total_fees_USDT": 1.41066,
+          "total_funding_USDT": 0.0,
+          "stops": 12,
+          "TPs": 3,
+          "TIMEOUTs": 0,
+          "original_signal_events": 20,
+          "eligible_nonbusy_signals_before_exclusions": 16,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 2,
+          "first_trade": "2026-05-15 13:45:00+00:00",
+          "last_trade": "2026-09-23 14:15:00+00:00"
+        },
+        "bigbear_stress": {
+          "n": 15,
+          "net_USDT": -4.877776,
+          "wallet_return_pct": -0.487778,
+          "PF": 0.09736,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.57188,
+          "winning_trades": 3,
+          "winrate_pct": 20.0,
+          "top3_gross_wins_share": 1.0,
+          "total_fees_USDT": 3.52748,
+          "total_funding_USDT": 0.0,
+          "stops": 12,
+          "TPs": 3,
+          "TIMEOUTs": 0,
+          "original_signal_events": 20,
+          "eligible_nonbusy_signals_before_exclusions": 16,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 2,
+          "first_trade": "2026-05-15 13:45:00+00:00",
+          "last_trade": "2026-09-23 14:15:00+00:00"
+        },
+        "bigbull_base": {
+          "n": 2,
+          "net_USDT": -0.50015,
+          "wallet_return_pct": -0.050015,
+          "PF": 0.0,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.10822,
+          "winning_trades": 0,
+          "winrate_pct": 0.0,
+          "top3_gross_wins_share": null,
+          "total_fees_USDT": 0.20015,
+          "total_funding_USDT": 0.0,
+          "stops": 2,
+          "TPs": 0,
+          "TIMEOUTs": 0,
+          "original_signal_events": 4,
+          "eligible_nonbusy_signals_before_exclusions": 2,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 2,
+          "first_trade": "2026-06-07 22:15:00+00:00",
+          "last_trade": "2026-08-19 15:30:00+00:00"
+        },
+        "bigbull_stress": {
+          "n": 2,
+          "net_USDT": -0.90065,
+          "wallet_return_pct": -0.090065,
+          "PF": 0.0,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.12835,
+          "winning_trades": 0,
+          "winrate_pct": 0.0,
+          "top3_gross_wins_share": null,
+          "total_fees_USDT": 0.5005,
+          "total_funding_USDT": 0.0,
+          "stops": 2,
+          "TPs": 0,
+          "TIMEOUTs": 0,
+          "original_signal_events": 4,
+          "eligible_nonbusy_signals_before_exclusions": 2,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 2,
+          "first_trade": "2026-06-07 22:15:00+00:00",
+          "last_trade": "2026-08-19 15:30:00+00:00"
+        }
+      }
+    },
+    "ETH": {
+      "real_5m_file_sha256": "3d98f34f33e22ecab0703501ad951e80196ae6789cdbb1cfde3d39b466cb183a",
+      "native_5m_candles": 44064,
+      "real_15m_grouped_candles": 14688,
+      "source_author_seed_random_baseline": {
+        "bigbear": [
+          {
+            "seed": 0,
+            "n": 45,
+            "net_USDT": -3.71,
+            "winrate": 0.28889,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 45,
+            "net_USDT": 0.93,
+            "winrate": 0.46667,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 45,
+            "net_USDT": -0.23,
+            "winrate": 0.42222,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 45,
+            "net_USDT": -0.23,
+            "winrate": 0.42222,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 45,
+            "net_USDT": -1.39,
+            "winrate": 0.37778,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 45,
+            "net_USDT": -0.81,
+            "winrate": 0.4,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 45,
+            "net_USDT": -2.55,
+            "winrate": 0.33333,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 45,
+            "net_USDT": -0.81,
+            "winrate": 0.4,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 45,
+            "net_USDT": -1.39,
+            "winrate": 0.37778,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 45,
+            "net_USDT": -0.23,
+            "winrate": 0.42222,
+            "first": "2026-05-15 13:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ],
+        "bigbull": [
+          {
+            "seed": 0,
+            "n": 6,
+            "net_USDT": -1.5,
+            "winrate": 0.0,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 6,
+            "net_USDT": -0.92,
+            "winrate": 0.16667,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 6,
+            "net_USDT": -0.34,
+            "winrate": 0.33333,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 6,
+            "net_USDT": -1.5,
+            "winrate": 0.0,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 6,
+            "net_USDT": -1.5,
+            "winrate": 0.0,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 6,
+            "net_USDT": -0.92,
+            "winrate": 0.16667,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 6,
+            "net_USDT": -0.92,
+            "winrate": 0.16667,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 6,
+            "net_USDT": -0.92,
+            "winrate": 0.16667,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 6,
+            "net_USDT": -1.5,
+            "winrate": 0.0,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 6,
+            "net_USDT": -0.92,
+            "winrate": 0.16667,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ]
+      },
+      "independent_strict_5m": {
+        "bigbear_base": {
+          "n": 45,
+          "net_USDT": -3.71136,
+          "wallet_return_pct": -0.371136,
+          "PF": 0.53622,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.50157,
+          "winning_trades": 13,
+          "winrate_pct": 28.8889,
+          "top3_gross_wins_share": 0.23077,
+          "total_fees_USDT": 4.11136,
+          "total_funding_USDT": 0.0,
+          "stops": 32,
+          "TPs": 13,
+          "TIMEOUTs": 0,
+          "original_signal_events": 54,
+          "eligible_nonbusy_signals_before_exclusions": 46,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 8,
+          "first_trade": "2026-05-15 13:45:00+00:00",
+          "last_trade": "2026-09-23 14:15:00+00:00"
+        },
+        "bigbear_stress": {
+          "n": 45,
+          "net_USDT": -14.007627,
+          "wallet_return_pct": -1.400763,
+          "PF": 0.11127,
+          "max_5m_adverse_mark_wallet_DD_pct": 1.45138,
+          "winning_trades": 10,
+          "winrate_pct": 22.2222,
+          "top3_gross_wins_share": 0.3,
+          "total_fees_USDT": 10.507,
+          "total_funding_USDT": 0.0,
+          "stops": 35,
+          "TPs": 10,
+          "TIMEOUTs": 0,
+          "original_signal_events": 54,
+          "eligible_nonbusy_signals_before_exclusions": 46,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 8,
+          "first_trade": "2026-05-15 13:45:00+00:00",
+          "last_trade": "2026-09-23 14:15:00+00:00"
+        },
+        "bigbull_base": {
+          "n": 6,
+          "net_USDT": -1.50045,
+          "wallet_return_pct": -0.150045,
+          "PF": 0.0,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.35884,
+          "winning_trades": 0,
+          "winrate_pct": 0.0,
+          "top3_gross_wins_share": null,
+          "total_fees_USDT": 0.60045,
+          "total_funding_USDT": 0.0,
+          "stops": 6,
+          "TPs": 0,
+          "TIMEOUTs": 0,
+          "original_signal_events": 7,
+          "eligible_nonbusy_signals_before_exclusions": 7,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 1,
+          "first_trade": "2026-05-23 20:45:00+00:00",
+          "last_trade": "2026-09-11 14:00:00+00:00"
+        },
+        "bigbull_stress": {
+          "n": 6,
+          "net_USDT": -2.701951,
+          "wallet_return_pct": -0.270195,
+          "PF": 0.0,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.45926,
+          "winning_trades": 0,
+          "winrate_pct": 0.0,
+          "top3_gross_wins_share": null,
+          "total_fees_USDT": 1.5015,
+          "total_funding_USDT": 0.0,
+          "stops": 6,
+          "TPs": 0,
+          "TIMEOUTs": 0,
+          "original_signal_events": 7,
+          "eligible_nonbusy_signals_before_exclusions": 7,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 1,
+          "first_trade": "2026-05-23 20:45:00+00:00",
+          "last_trade": "2026-09-11 14:00:00+00:00"
+        }
+      }
+    },
+    "SOL": {
+      "real_5m_file_sha256": "dcbb75dd55855e747409ba97e4caf7fa41525d4b949696f5521a0a474a173dac",
+      "native_5m_candles": 44064,
+      "real_15m_grouped_candles": 14688,
+      "source_author_seed_random_baseline": {
+        "bigbear": [
+          {
+            "seed": 0,
+            "n": 50,
+            "net_USDT": -5.54,
+            "winrate": 0.24,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 50,
+            "net_USDT": -0.9,
+            "winrate": 0.4,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 50,
+            "net_USDT": -1.48,
+            "winrate": 0.38,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 50,
+            "net_USDT": -2.06,
+            "winrate": 0.36,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 50,
+            "net_USDT": -3.22,
+            "winrate": 0.32,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 50,
+            "net_USDT": -2.06,
+            "winrate": 0.36,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 50,
+            "net_USDT": -4.38,
+            "winrate": 0.28,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 50,
+            "net_USDT": -2.64,
+            "winrate": 0.34,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 50,
+            "net_USDT": -3.22,
+            "winrate": 0.32,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 50,
+            "net_USDT": -2.06,
+            "winrate": 0.36,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ],
+        "bigbull": [
+          {
+            "seed": 0,
+            "n": 11,
+            "net_USDT": -1.59,
+            "winrate": 0.18182,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 11,
+            "net_USDT": 0.73,
+            "winrate": 0.54545,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 11,
+            "net_USDT": 0.73,
+            "winrate": 0.54545,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 11,
+            "net_USDT": -1.59,
+            "winrate": 0.18182,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 11,
+            "net_USDT": -1.59,
+            "winrate": 0.18182,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 11,
+            "net_USDT": -0.43,
+            "winrate": 0.36364,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 11,
+            "net_USDT": -0.43,
+            "winrate": 0.36364,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 11,
+            "net_USDT": -1.01,
+            "winrate": 0.27273,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 11,
+            "net_USDT": -1.01,
+            "winrate": 0.27273,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 11,
+            "net_USDT": 0.73,
+            "winrate": 0.54545,
+            "first": "2026-06-06 05:15:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ]
+      },
+      "independent_strict_5m": {
+        "bigbear_base": {
+          "n": 50,
+          "net_USDT": -6.7022,
+          "wallet_return_pct": -0.67022,
+          "PF": 0.32998,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.82754,
+          "winning_trades": 10,
+          "winrate_pct": 20.0,
+          "top3_gross_wins_share": 0.3,
+          "total_fees_USDT": 4.7022,
+          "total_funding_USDT": 0.0,
+          "stops": 40,
+          "TPs": 10,
+          "TIMEOUTs": 0,
+          "original_signal_events": 64,
+          "eligible_nonbusy_signals_before_exclusions": 55,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 9,
+          "first_trade": "2026-05-13 12:45:00+00:00",
+          "last_trade": "2026-09-30 14:30:00+00:00"
+        },
+        "bigbear_stress": {
+          "n": 50,
+          "net_USDT": -18.136353,
+          "wallet_return_pct": -1.813635,
+          "PF": 0.0634,
+          "max_5m_adverse_mark_wallet_DD_pct": 1.81364,
+          "winning_trades": 7,
+          "winrate_pct": 14.0,
+          "top3_gross_wins_share": 0.42857,
+          "total_fees_USDT": 11.98453,
+          "total_funding_USDT": 0.0,
+          "stops": 43,
+          "TPs": 7,
+          "TIMEOUTs": 0,
+          "original_signal_events": 64,
+          "eligible_nonbusy_signals_before_exclusions": 55,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 9,
+          "first_trade": "2026-05-13 12:45:00+00:00",
+          "last_trade": "2026-09-30 14:30:00+00:00"
+        },
+        "bigbull_base": {
+          "n": 11,
+          "net_USDT": -2.17067,
+          "wallet_return_pct": -0.217067,
+          "PF": 0.13199,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.26773,
+          "winning_trades": 1,
+          "winrate_pct": 9.0909,
+          "top3_gross_wins_share": 1.0,
+          "total_fees_USDT": 1.07067,
+          "total_funding_USDT": 0.0,
+          "stops": 10,
+          "TPs": 1,
+          "TIMEOUTs": 0,
+          "original_signal_events": 11,
+          "eligible_nonbusy_signals_before_exclusions": 11,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 2,
+          "first_trade": "2026-06-06 05:30:00+00:00",
+          "last_trade": "2026-09-25 11:15:00+00:00"
+        },
+        "bigbull_stress": {
+          "n": 11,
+          "net_USDT": -4.327876,
+          "wallet_return_pct": -0.432788,
+          "PF": 0.03894,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.46352,
+          "winning_trades": 1,
+          "winrate_pct": 9.0909,
+          "top3_gross_wins_share": 1.0,
+          "total_fees_USDT": 2.67733,
+          "total_funding_USDT": 0.0,
+          "stops": 10,
+          "TPs": 1,
+          "TIMEOUTs": 0,
+          "original_signal_events": 11,
+          "eligible_nonbusy_signals_before_exclusions": 11,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 2,
+          "first_trade": "2026-06-06 05:30:00+00:00",
+          "last_trade": "2026-09-25 11:15:00+00:00"
+        }
+      }
+    },
+    "LINK": {
+      "real_5m_file_sha256": "3c44da8a192230ad78b0bcc8c8ea71a60c1f44eca136ca09f6d3467c0334f197",
+      "native_5m_candles": 44064,
+      "real_15m_grouped_candles": 14688,
+      "source_author_seed_random_baseline": {
+        "bigbear": [
+          {
+            "seed": 0,
+            "n": 60,
+            "net_USDT": -6.3,
+            "winrate": 0.25,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 60,
+            "net_USDT": -2.24,
+            "winrate": 0.36667,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 60,
+            "net_USDT": -1.66,
+            "winrate": 0.38333,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 60,
+            "net_USDT": -2.82,
+            "winrate": 0.35,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 60,
+            "net_USDT": -4.56,
+            "winrate": 0.3,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 60,
+            "net_USDT": -2.24,
+            "winrate": 0.36667,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 60,
+            "net_USDT": -6.3,
+            "winrate": 0.25,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 60,
+            "net_USDT": -3.98,
+            "winrate": 0.31667,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 60,
+            "net_USDT": -3.4,
+            "winrate": 0.33333,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 60,
+            "net_USDT": -3.4,
+            "winrate": 0.33333,
+            "first": "2026-05-13 12:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ],
+        "bigbull": [
+          {
+            "seed": 0,
+            "n": 10,
+            "net_USDT": -1.34,
+            "winrate": 0.2,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 1,
+            "n": 10,
+            "net_USDT": 1.56,
+            "winrate": 0.7,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 2,
+            "n": 10,
+            "net_USDT": 0.98,
+            "winrate": 0.6,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 3,
+            "n": 10,
+            "net_USDT": -0.76,
+            "winrate": 0.3,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 4,
+            "n": 10,
+            "net_USDT": -1.34,
+            "winrate": 0.2,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 5,
+            "n": 10,
+            "net_USDT": -0.76,
+            "winrate": 0.3,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 6,
+            "n": 10,
+            "net_USDT": -0.18,
+            "winrate": 0.4,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 7,
+            "n": 10,
+            "net_USDT": -0.76,
+            "winrate": 0.3,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 8,
+            "n": 10,
+            "net_USDT": -0.18,
+            "winrate": 0.4,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          },
+          {
+            "seed": 9,
+            "n": 10,
+            "net_USDT": 1.56,
+            "winrate": 0.7,
+            "first": "2026-05-23 20:30:00+00:00",
+            "note": "ORIGINAL_AUTHOR_15M_RANDOM_SAME_BAR_50_50_REPLAY, seed fixed only for audit"
+          }
+        ]
+      },
+      "independent_strict_5m": {
+        "bigbear_base": {
+          "n": 60,
+          "net_USDT": -9.20295,
+          "wallet_return_pct": -0.920295,
+          "PF": 0.26398,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.9271,
+          "winning_trades": 10,
+          "winrate_pct": 16.6667,
+          "top3_gross_wins_share": 0.3,
+          "total_fees_USDT": 5.70295,
+          "total_funding_USDT": 0.0,
+          "stops": 50,
+          "TPs": 10,
+          "TIMEOUTs": 0,
+          "original_signal_events": 78,
+          "eligible_nonbusy_signals_before_exclusions": 65,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 13,
+          "first_trade": "2026-05-13 12:45:00+00:00",
+          "last_trade": "2026-09-30 14:30:00+00:00"
+        },
+        "bigbear_stress": {
+          "n": 60,
+          "net_USDT": -22.013904,
+          "wallet_return_pct": -2.20139,
+          "PF": 0.05991,
+          "max_5m_adverse_mark_wallet_DD_pct": 2.20821,
+          "winning_trades": 8,
+          "winrate_pct": 13.3333,
+          "top3_gross_wins_share": 0.375,
+          "total_fees_USDT": 14.4116,
+          "total_funding_USDT": 0.0,
+          "stops": 52,
+          "TPs": 8,
+          "TIMEOUTs": 0,
+          "original_signal_events": 78,
+          "eligible_nonbusy_signals_before_exclusions": 65,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 12,
+          "first_trade": "2026-05-13 12:45:00+00:00",
+          "last_trade": "2026-09-30 14:30:00+00:00"
+        },
+        "bigbull_base": {
+          "n": 10,
+          "net_USDT": -1.34044,
+          "wallet_return_pct": -0.134044,
+          "PF": 0.32998,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.50554,
+          "winning_trades": 2,
+          "winrate_pct": 20.0,
+          "top3_gross_wins_share": 1.0,
+          "total_fees_USDT": 0.94044,
+          "total_funding_USDT": 0.0,
+          "stops": 8,
+          "TPs": 2,
+          "TIMEOUTs": 0,
+          "original_signal_events": 13,
+          "eligible_nonbusy_signals_before_exclusions": 12,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 5,
+          "first_trade": "2026-05-23 20:45:00+00:00",
+          "last_trade": "2026-09-28 12:15:00+00:00"
+        },
+        "bigbull_stress": {
+          "n": 10,
+          "net_USDT": -4.503251,
+          "wallet_return_pct": -0.450325,
+          "PF": 0.0,
+          "max_5m_adverse_mark_wallet_DD_pct": 0.81432,
+          "winning_trades": 0,
+          "winrate_pct": 0.0,
+          "top3_gross_wins_share": null,
+          "total_fees_USDT": 2.5025,
+          "total_funding_USDT": 0.0,
+          "stops": 10,
+          "TPs": 0,
+          "TIMEOUTs": 0,
+          "original_signal_events": 13,
+          "eligible_nonbusy_signals_before_exclusions": 12,
+          "stop_and_target_same_5m_bar_conflicts_conservatively_stop_first": 4,
+          "first_trade": "2026-05-23 20:45:00+00:00",
+          "last_trade": "2026-09-28 12:15:00+00:00"
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Original author 2025-03 to 2026-03 candles not present, so 2025 claimed results not reproduced directly",
+    "Author published original multicoin logic has stochastic 50/50 ambiguous 15m TP/SL bars; 10 seeds audited",
+    "Independent strict stop-first uses genuine 5m trade-price bars, not 1m exchange order book",
+    "TP maker fill on touch is optimistic; limit queue not modeled",
+    "Funding settlement only when genuine 1h source record says non-zero; no 5m mark-price STOP trigger",
+    "Four 1000USDT separate model wallets, not one combined practical portfolio",
+    "No 15m multi-source library live execution equivalence or live fees confirmed",
+    "Only SHORT author patterns, not desired both LONG and SHORT"
+  ],
+  "fees": {
+    "base": {
+      "entry": 0.0005,
+      "tp": 0.0002,
+      "stop": 0.0005,
+      "slip": 0.0
+    },
+    "stress": {
+      "entry": 0.00125,
+      "tp": 0.0005,
+      "stop": 0.00125,
+      "slip": 0.0005
+    }
+  },
+  "predeclared_gate": {
+    "bigbear": {
+      "qualifying_pairs": {
+        "BTC": false,
+        "ETH": false,
+        "SOL": false,
+        "LINK": false
+      },
+      "count": 0,
+      "completed_4_pair_separate_wallet_trades_base": 170,
+      "trades_per_day_4_wallet_separate": 1.2057,
+      "predeclared_gate_pass": false
+    },
+    "bigbull": {
+      "qualifying_pairs": {
+        "BTC": false,
+        "ETH": false,
+        "SOL": false,
+        "LINK": false
+      },
+      "count": 0,
+      "completed_4_pair_separate_wallet_trades_base": 29,
+      "trades_per_day_4_wallet_separate": 0.2057,
+      "predeclared_gate_pass": false
+    }
+  },
+  "any_candidate_economic_pass": false
+}

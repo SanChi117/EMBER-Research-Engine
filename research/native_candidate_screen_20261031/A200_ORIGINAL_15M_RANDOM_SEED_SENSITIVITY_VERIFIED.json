@@ -1,0 +1,58 @@
+{
+  "BTC_bigbear": {
+    "min_original_author_seed_net_USDT": -1.43,
+    "max_original_author_seed_net_USDT": 1.47,
+    "max_minus_min_USDT": 2.9,
+    "native_5m_stop_first_base_net_USDT": -2.01066,
+    "original_author_seed0_net_USDT": -1.43
+  },
+  "BTC_bigbull": {
+    "min_original_author_seed_net_USDT": -0.5,
+    "max_original_author_seed_net_USDT": 0.66,
+    "max_minus_min_USDT": 1.16,
+    "native_5m_stop_first_base_net_USDT": -0.50015,
+    "original_author_seed0_net_USDT": -0.5
+  },
+  "ETH_bigbear": {
+    "min_original_author_seed_net_USDT": -3.71,
+    "max_original_author_seed_net_USDT": 0.93,
+    "max_minus_min_USDT": 4.64,
+    "native_5m_stop_first_base_net_USDT": -3.71136,
+    "original_author_seed0_net_USDT": -3.71
+  },
+  "ETH_bigbull": {
+    "min_original_author_seed_net_USDT": -1.5,
+    "max_original_author_seed_net_USDT": -0.34,
+    "max_minus_min_USDT": 1.16,
+    "native_5m_stop_first_base_net_USDT": -1.50045,
+    "original_author_seed0_net_USDT": -1.5
+  },
+  "SOL_bigbear": {
+    "min_original_author_seed_net_USDT": -5.54,
+    "max_original_author_seed_net_USDT": -0.9,
+    "max_minus_min_USDT": 4.64,
+    "native_5m_stop_first_base_net_USDT": -6.7022,
+    "original_author_seed0_net_USDT": -5.54
+  },
+  "SOL_bigbull": {
+    "min_original_author_seed_net_USDT": -1.59,
+    "max_original_author_seed_net_USDT": 0.73,
+    "max_minus_min_USDT": 2.32,
+    "native_5m_stop_first_base_net_USDT": -2.17067,
+    "original_author_seed0_net_USDT": -1.59
+  },
+  "LINK_bigbear": {
+    "min_original_author_seed_net_USDT": -6.3,
+    "max_original_author_seed_net_USDT": -1.66,
+    "max_minus_min_USDT": 4.64,
+    "native_5m_stop_first_base_net_USDT": -9.20295,
+    "original_author_seed0_net_USDT": -6.3
+  },
+  "LINK_bigbull": {
+    "min_original_author_seed_net_USDT": -1.34,
+    "max_original_author_seed_net_USDT": 1.56,
+    "max_minus_min_USDT": 2.9,
+    "native_5m_stop_first_base_net_USDT": -1.34044,
+    "original_author_seed0_net_USDT": -1.34
+  }
+}
