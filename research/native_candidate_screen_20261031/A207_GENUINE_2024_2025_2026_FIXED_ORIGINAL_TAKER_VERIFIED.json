@@ -1,0 +1,1791 @@
+{
+  "NOT_NATIVE_FREQTRADE": true,
+  "caveats": [
+    "Signal values are from original source; fixed parameters chosen before backtest, not selected by searching OOS",
+    "First 2024 history is fresh to EMBER as of prereg; May-Sep2025 and 2026 previously used by EMBER",
+    "5m OHLC SL-first cannot guarantee actual tick sequence; no real order book, maker queue or real spreads",
+    "Funding applied to genuine settled event timestamps during position; same-stop-bar funding timestamp uncertain",
+    "Wallet DD is realized trades only, not complete mark-to-market peak margin risk",
+    "No high leverage; raw 5m signal may persist over several candles; no after-test rewrites permitted",
+    "Even economic pass cannot approve trading before 1m execution and forward PAPER"
+  ],
+  "economic_pair_pass_all_three_years_both_fees": {
+    "BTC": false,
+    "ETH": false,
+    "LINK": false,
+    "SOL": false
+  },
+  "economic_research_gate": false,
+  "execution_approval": false,
+  "fix_vs_author": "Exact original signal function imported; fixed SL/TP source grid values used; new audited execution replaces OOS-selected source backtest",
+  "individual_trade_ledger_sha256": {
+    "A207_2024_BTC_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "50b3494049ac4a0b914de6100cb8a75bed1a485d8191d798506e0a67874bdc8e",
+      "trade_rows": 8
+    },
+    "A207_2024_BTC_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "a53ac7f9eadba4dae411d83cc757e425a496349f8e8d57ca90b7e121bed3bbca",
+      "trade_rows": 8
+    },
+    "A207_2024_ETH_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "4a83e8836bbcdf3abf9ab360aadf5185caea941c60000dd098c997e7ee31355d",
+      "trade_rows": 5
+    },
+    "A207_2024_ETH_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "435872be7311efe8dc9bc1761ed020c3733e39a4992ed878e34c4182b3c894fa",
+      "trade_rows": 5
+    },
+    "A207_2024_LINK_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "08298ae6645b03de8f19121352ac85543a17c868df31bb87b5e6663d5b5c993e",
+      "trade_rows": 9
+    },
+    "A207_2024_LINK_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "0fa596a87bf6574367d158b10e3f5f4d6b34f7df129d343a717083e4488ff30b",
+      "trade_rows": 9
+    },
+    "A207_2024_SOL_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "dd5afa534134d7b043afb5dd437e9e8a6dae2a0d4cca39591e4804e37d108ca3",
+      "trade_rows": 2
+    },
+    "A207_2024_SOL_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "96ffe770e9223597c471b9ffbf26abf2b6939ff70b571dc7c424b61ea8f21e75",
+      "trade_rows": 2
+    },
+    "A207_2025_BTC_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "8ad6cd7e3bdd03059061709db41b1681bcd326ca339b099136058ccc16f979ef",
+      "trade_rows": 38
+    },
+    "A207_2025_BTC_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "30112f5c529501d04affb240f87fc99b2fc03819564e4141ec26ce17808afe76",
+      "trade_rows": 38
+    },
+    "A207_2025_ETH_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "9f92b3a022d59c10a4acf4846b9d49126fa54d5004ff26c293aafe740a452880",
+      "trade_rows": 2
+    },
+    "A207_2025_ETH_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "147b05c602b52545073582cfc3bd3528f03c139cb575dd2660ac8eacd7b20894",
+      "trade_rows": 2
+    },
+    "A207_2025_LINK_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "5d25da50e45dc70abefa0d5bc8ec9d783936865c8300ca6e66d9a9e5f3257adc",
+      "trade_rows": 6
+    },
+    "A207_2025_LINK_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "9aa4d5b4cdc2f0751e83d15a81e2806d393d8ff3e66cab3569eb8a754535f53d",
+      "trade_rows": 6
+    },
+    "A207_2025_SOL_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "42750d6d9fab4fede10679d7205c791f7b79d0f450bd9e8357deab171fa3b084",
+      "trade_rows": 7
+    },
+    "A207_2025_SOL_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "825f090a6018be654ba1496711c7c4c48266fa1ea3916a3f9b11f906098a94c0",
+      "trade_rows": 7
+    },
+    "A207_2026_BTC_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "06eca71ba70ba5bb3a187bb391d4d0560445b727e84f65823818aa3da0425143",
+      "trade_rows": 24
+    },
+    "A207_2026_BTC_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "9d1336d344b57b04299e85f555eb65c7016cf6bb5eb9de87df067ffc2140d9c9",
+      "trade_rows": 24
+    },
+    "A207_2026_ETH_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "10e0654b035ae5c28bd86c9ab7dd4483cb4944e79bc2dc5cd242ca5296adb1b8",
+      "trade_rows": 5
+    },
+    "A207_2026_ETH_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "6db6eb38a5f51d781a10c2b0d7cca851bf5f7e3d2e964c084b023e69dc871cd7",
+      "trade_rows": 5
+    },
+    "A207_2026_LINK_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "25dfaa00c1986d89850a247e35790062442aa8818644f35ba94fc31db456f9a5",
+      "trade_rows": 49
+    },
+    "A207_2026_LINK_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "9862f396b5fbe25e54b448bba1a3977edb77ec3b789bdc3bb84c5f99fd1a9ddc",
+      "trade_rows": 49
+    },
+    "A207_2026_SOL_base_GENUINE_TRADE_LOG.json": {
+      "sha256": "b27295a1e704d1bbae896c16d9aa89286f7cd03b52875d5cceb4bf470e0aa3de",
+      "trade_rows": 23
+    },
+    "A207_2026_SOL_stress_GENUINE_TRADE_LOG.json": {
+      "sha256": "fe8bf38ef65c0fd0e754df23fac30fd5a10f10c2e137f0b572878c6c822a7ea1",
+      "trade_rows": 23
+    }
+  },
+  "original_signal_repo": "Gotodataru/binance-futures-backtest",
+  "outcomes": {
+    "2024": {
+      "BTC": {
+        "base": {
+          "commission_total_USDT": 0.800328,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 8
+          },
+          "funding_total_USDT": -0.015999,
+          "long_n": 3,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -1.025199,
+          "new_transition_events_while_flat": 8,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.3152,
+          "profit_factor": 0.4531,
+          "raw_persistent_signal_ratio": 0.5,
+          "raw_signal_bars": 18,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 5,
+          "signal_bars_encountered_when_flat": 8,
+          "top3_gross_win_share": 1.0,
+          "trades": 8,
+          "transition_signal_events": 9,
+          "wallet_realized_dd_pct": 0.110446,
+          "wallet_return_pct": -0.10252,
+          "win_rate_pct": 12.5
+        },
+        "stress": {
+          "commission_total_USDT": 2.000921,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 8
+          },
+          "funding_total_USDT": -0.015999,
+          "long_n": 3,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -2.54607,
+          "new_transition_events_while_flat": 8,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.3152,
+          "profit_factor": 0.205443,
+          "raw_persistent_signal_ratio": 0.5,
+          "raw_signal_bars": 18,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 5,
+          "signal_bars_encountered_when_flat": 8,
+          "top3_gross_win_share": 1.0,
+          "trades": 8,
+          "transition_signal_events": 9,
+          "wallet_realized_dd_pct": 0.254607,
+          "wallet_return_pct": -0.254607,
+          "win_rate_pct": 12.5
+        }
+      },
+      "ETH": {
+        "base": {
+          "commission_total_USDT": 0.500422,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 5
+          },
+          "funding_total_USDT": 0.00671,
+          "long_n": 1,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -0.393127,
+          "new_transition_events_while_flat": 5,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.197,
+          "profit_factor": 0.614313,
+          "raw_persistent_signal_ratio": 0.142857,
+          "raw_signal_bars": 7,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 4,
+          "signal_bars_encountered_when_flat": 5,
+          "top3_gross_win_share": 1.0,
+          "trades": 5,
+          "transition_signal_events": 6,
+          "wallet_realized_dd_pct": 0.07653,
+          "wallet_return_pct": -0.039313,
+          "win_rate_pct": 60.0
+        },
+        "stress": {
+          "commission_total_USDT": 1.251206,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 5
+          },
+          "funding_total_USDT": 0.00671,
+          "long_n": 1,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -1.344273,
+          "new_transition_events_while_flat": 5,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.197,
+          "profit_factor": 0.152602,
+          "raw_persistent_signal_ratio": 0.142857,
+          "raw_signal_bars": 7,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 4,
+          "signal_bars_encountered_when_flat": 5,
+          "top3_gross_win_share": 1.0,
+          "trades": 5,
+          "transition_signal_events": 6,
+          "wallet_realized_dd_pct": 0.152597,
+          "wallet_return_pct": -0.134427,
+          "win_rate_pct": 40.0
+        }
+      },
+      "LINK": {
+        "base": {
+          "commission_total_USDT": 0.900148,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 9
+          },
+          "funding_total_USDT": 0.01649,
+          "long_n": 3,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -1.432461,
+          "new_transition_events_while_flat": 9,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.3546,
+          "profit_factor": 0.394566,
+          "raw_persistent_signal_ratio": 0.56,
+          "raw_signal_bars": 25,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 6,
+          "signal_bars_encountered_when_flat": 9,
+          "top3_gross_win_share": 1.0,
+          "trades": 9,
+          "transition_signal_events": 11,
+          "wallet_realized_dd_pct": 0.143246,
+          "wallet_return_pct": -0.143246,
+          "win_rate_pct": 33.33333
+        },
+        "stress": {
+          "commission_total_USDT": 2.25052,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 9
+          },
+          "funding_total_USDT": 0.01649,
+          "long_n": 3,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -3.142976,
+          "new_transition_events_while_flat": 9,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.3546,
+          "profit_factor": 0.10381,
+          "raw_persistent_signal_ratio": 0.56,
+          "raw_signal_bars": 25,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 6,
+          "signal_bars_encountered_when_flat": 9,
+          "top3_gross_win_share": 1.0,
+          "trades": 9,
+          "transition_signal_events": 11,
+          "wallet_realized_dd_pct": 0.314298,
+          "wallet_return_pct": -0.314298,
+          "win_rate_pct": 33.33333
+        }
+      },
+      "SOL": {
+        "base": {
+          "commission_total_USDT": 0.200023,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 2
+          },
+          "funding_total_USDT": 0.011764,
+          "long_n": 1,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -0.579513,
+          "new_transition_events_while_flat": 2,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.0788,
+          "profit_factor": 0.0,
+          "raw_persistent_signal_ratio": 0.0,
+          "raw_signal_bars": 2,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 1,
+          "signal_bars_encountered_when_flat": 2,
+          "top3_gross_win_share": null,
+          "trades": 2,
+          "transition_signal_events": 2,
+          "wallet_realized_dd_pct": 0.057951,
+          "wallet_return_pct": -0.057951,
+          "win_rate_pct": 0.0
+        },
+        "stress": {
+          "commission_total_USDT": 0.500058,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 2
+          },
+          "funding_total_USDT": 0.011764,
+          "long_n": 1,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -0.959566,
+          "new_transition_events_while_flat": 2,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.0788,
+          "profit_factor": 0.0,
+          "raw_persistent_signal_ratio": 0.0,
+          "raw_signal_bars": 2,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 1,
+          "signal_bars_encountered_when_flat": 2,
+          "top3_gross_win_share": null,
+          "trades": 2,
+          "transition_signal_events": 2,
+          "wallet_realized_dd_pct": 0.095957,
+          "wallet_return_pct": -0.095957,
+          "win_rate_pct": 0.0
+        }
+      }
+    },
+    "2025": {
+      "BTC": {
+        "base": {
+          "commission_total_USDT": 3.801362,
+          "exit_reasons": {
+            "stop": 1,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 37
+          },
+          "funding_total_USDT": -0.014303,
+          "long_n": 17,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -7.333368,
+          "new_transition_events_while_flat": 38,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 1.4972,
+          "profit_factor": 0.129978,
+          "raw_persistent_signal_ratio": 0.424658,
+          "raw_signal_bars": 73,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 21,
+          "signal_bars_encountered_when_flat": 38,
+          "top3_gross_win_share": 0.75755,
+          "trades": 38,
+          "transition_signal_events": 42,
+          "wallet_realized_dd_pct": 0.739377,
+          "wallet_return_pct": -0.733337,
+          "win_rate_pct": 23.68421
+        },
+        "stress": {
+          "commission_total_USDT": 9.503583,
+          "exit_reasons": {
+            "stop": 1,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 37
+          },
+          "funding_total_USDT": -0.014303,
+          "long_n": 17,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -14.536499,
+          "new_transition_events_while_flat": 38,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 1.4972,
+          "profit_factor": 0.017541,
+          "raw_persistent_signal_ratio": 0.424658,
+          "raw_signal_bars": 73,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 21,
+          "signal_bars_encountered_when_flat": 38,
+          "top3_gross_win_share": 1.0,
+          "trades": 38,
+          "transition_signal_events": 42,
+          "wallet_realized_dd_pct": 1.45365,
+          "wallet_return_pct": -1.45365,
+          "win_rate_pct": 7.89474
+        }
+      },
+      "ETH": {
+        "base": {
+          "commission_total_USDT": 0.199814,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 2
+          },
+          "funding_total_USDT": 0.0,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -0.572608,
+          "new_transition_events_while_flat": 2,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.0788,
+          "profit_factor": 0.0,
+          "raw_persistent_signal_ratio": 0.6,
+          "raw_signal_bars": 5,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 0,
+          "signal_bars_encountered_when_flat": 2,
+          "top3_gross_win_share": null,
+          "trades": 2,
+          "transition_signal_events": 2,
+          "wallet_realized_dd_pct": 0.057261,
+          "wallet_return_pct": -0.057261,
+          "win_rate_pct": 0.0
+        },
+        "stress": {
+          "commission_total_USDT": 0.499434,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 2
+          },
+          "funding_total_USDT": 0.0,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -0.952064,
+          "new_transition_events_while_flat": 2,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.0788,
+          "profit_factor": 0.0,
+          "raw_persistent_signal_ratio": 0.6,
+          "raw_signal_bars": 5,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 0,
+          "signal_bars_encountered_when_flat": 2,
+          "top3_gross_win_share": null,
+          "trades": 2,
+          "transition_signal_events": 2,
+          "wallet_realized_dd_pct": 0.095206,
+          "wallet_return_pct": -0.095206,
+          "win_rate_pct": 0.0
+        }
+      },
+      "LINK": {
+        "base": {
+          "commission_total_USDT": 0.598867,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 6
+          },
+          "funding_total_USDT": -0.011512,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -1.117359,
+          "new_transition_events_while_flat": 6,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.2364,
+          "profit_factor": 0.481808,
+          "raw_persistent_signal_ratio": 0.588235,
+          "raw_signal_bars": 17,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 4,
+          "signal_bars_encountered_when_flat": 6,
+          "top3_gross_win_share": 1.0,
+          "trades": 6,
+          "transition_signal_events": 7,
+          "wallet_realized_dd_pct": 0.215402,
+          "wallet_return_pct": -0.111736,
+          "win_rate_pct": 50.0
+        },
+        "stress": {
+          "commission_total_USDT": 1.497936,
+          "exit_reasons": {
+            "stop": 2,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 4
+          },
+          "funding_total_USDT": -0.011512,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -2.761068,
+          "new_transition_events_while_flat": 6,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.2069,
+          "profit_factor": 0.190521,
+          "raw_persistent_signal_ratio": 0.588235,
+          "raw_signal_bars": 17,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 4,
+          "signal_bars_encountered_when_flat": 6,
+          "top3_gross_win_share": 1.0,
+          "trades": 6,
+          "transition_signal_events": 7,
+          "wallet_realized_dd_pct": 0.34087,
+          "wallet_return_pct": -0.276107,
+          "win_rate_pct": 16.66667
+        }
+      },
+      "SOL": {
+        "base": {
+          "commission_total_USDT": 0.699383,
+          "exit_reasons": {
+            "stop": 2,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 5
+          },
+          "funding_total_USDT": 0.009769,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -1.880542,
+          "new_transition_events_while_flat": 7,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.2315,
+          "profit_factor": 0.355768,
+          "raw_persistent_signal_ratio": 0.357143,
+          "raw_signal_bars": 14,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 5,
+          "signal_bars_encountered_when_flat": 7,
+          "top3_gross_win_share": 1.0,
+          "trades": 7,
+          "transition_signal_events": 9,
+          "wallet_realized_dd_pct": 0.211455,
+          "wallet_return_pct": -0.188054,
+          "win_rate_pct": 42.85714
+        },
+        "stress": {
+          "commission_total_USDT": 1.748607,
+          "exit_reasons": {
+            "stop": 2,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 5
+          },
+          "funding_total_USDT": 0.009769,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -3.169296,
+          "new_transition_events_while_flat": 7,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.2315,
+          "profit_factor": 0.170986,
+          "raw_persistent_signal_ratio": 0.357143,
+          "raw_signal_bars": 14,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 5,
+          "signal_bars_encountered_when_flat": 7,
+          "top3_gross_win_share": 1.0,
+          "trades": 7,
+          "transition_signal_events": 9,
+          "wallet_realized_dd_pct": 0.31693,
+          "wallet_return_pct": -0.31693,
+          "win_rate_pct": 28.57143
+        }
+      }
+    },
+    "2026": {
+      "BTC": {
+        "base": {
+          "commission_total_USDT": 2.399455,
+          "exit_reasons": {
+            "stop": 1,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 23
+          },
+          "funding_total_USDT": -0.00246,
+          "long_n": 11,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -3.325596,
+          "new_transition_events_while_flat": 24,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.9235,
+          "profit_factor": 0.257353,
+          "raw_persistent_signal_ratio": 0.525424,
+          "raw_signal_bars": 59,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 13,
+          "signal_bars_encountered_when_flat": 24,
+          "top3_gross_win_share": 0.771043,
+          "trades": 24,
+          "transition_signal_events": 28,
+          "wallet_realized_dd_pct": 0.368642,
+          "wallet_return_pct": -0.33256,
+          "win_rate_pct": 29.16667
+        },
+        "stress": {
+          "commission_total_USDT": 5.998763,
+          "exit_reasons": {
+            "stop": 1,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 23
+          },
+          "funding_total_USDT": -0.00246,
+          "long_n": 11,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -7.864696,
+          "new_transition_events_while_flat": 24,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.9235,
+          "profit_factor": 0.03907,
+          "raw_persistent_signal_ratio": 0.525424,
+          "raw_signal_bars": 59,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 13,
+          "signal_bars_encountered_when_flat": 24,
+          "top3_gross_win_share": 1.0,
+          "trades": 24,
+          "transition_signal_events": 28,
+          "wallet_realized_dd_pct": 0.789954,
+          "wallet_return_pct": -0.78647,
+          "win_rate_pct": 12.5
+        }
+      },
+      "ETH": {
+        "base": {
+          "commission_total_USDT": 0.500133,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 5
+          },
+          "funding_total_USDT": 0.009397,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -1.460334,
+          "new_transition_events_while_flat": 5,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.197,
+          "profit_factor": 0.0,
+          "raw_persistent_signal_ratio": 0.0,
+          "raw_signal_bars": 5,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 3,
+          "signal_bars_encountered_when_flat": 5,
+          "top3_gross_win_share": null,
+          "trades": 5,
+          "transition_signal_events": 5,
+          "wallet_realized_dd_pct": 0.146033,
+          "wallet_return_pct": -0.146033,
+          "win_rate_pct": 0.0
+        },
+        "stress": {
+          "commission_total_USDT": 1.250383,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 5
+          },
+          "funding_total_USDT": 0.009397,
+          "long_n": 2,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -2.410699,
+          "new_transition_events_while_flat": 5,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.197,
+          "profit_factor": 0.0,
+          "raw_persistent_signal_ratio": 0.0,
+          "raw_signal_bars": 5,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 3,
+          "signal_bars_encountered_when_flat": 5,
+          "top3_gross_win_share": null,
+          "trades": 5,
+          "transition_signal_events": 5,
+          "wallet_realized_dd_pct": 0.24107,
+          "wallet_return_pct": -0.24107,
+          "win_rate_pct": 0.0
+        }
+      },
+      "LINK": {
+        "base": {
+          "commission_total_USDT": 4.899819,
+          "exit_reasons": {
+            "stop": 6,
+            "stop_gap": 0,
+            "take": 2,
+            "timeout": 41
+          },
+          "funding_total_USDT": -0.019934,
+          "long_n": 16,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -7.202982,
+          "new_transition_events_while_flat": 49,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 1.778,
+          "profit_factor": 0.577567,
+          "raw_persistent_signal_ratio": 0.478632,
+          "raw_signal_bars": 117,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 33,
+          "signal_bars_encountered_when_flat": 49,
+          "top3_gross_win_share": 0.529054,
+          "trades": 49,
+          "transition_signal_events": 61,
+          "wallet_realized_dd_pct": 1.235852,
+          "wallet_return_pct": -0.720298,
+          "win_rate_pct": 38.77551
+        },
+        "stress": {
+          "commission_total_USDT": 12.249632,
+          "exit_reasons": {
+            "stop": 7,
+            "stop_gap": 0,
+            "take": 2,
+            "timeout": 40
+          },
+          "funding_total_USDT": -0.009934,
+          "long_n": 16,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -16.835847,
+          "new_transition_events_while_flat": 49,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 1.7558,
+          "profit_factor": 0.28502,
+          "raw_persistent_signal_ratio": 0.478632,
+          "raw_signal_bars": 117,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 33,
+          "signal_bars_encountered_when_flat": 49,
+          "top3_gross_win_share": 0.697656,
+          "trades": 49,
+          "transition_signal_events": 61,
+          "wallet_realized_dd_pct": 1.937067,
+          "wallet_return_pct": -1.683585,
+          "win_rate_pct": 30.61224
+        }
+      },
+      "SOL": {
+        "base": {
+          "commission_total_USDT": 2.301232,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 23
+          },
+          "funding_total_USDT": 0.008223,
+          "long_n": 6,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -2.46947,
+          "new_transition_events_while_flat": 23,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.9062,
+          "profit_factor": 0.52248,
+          "raw_persistent_signal_ratio": 0.4,
+          "raw_signal_bars": 45,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 17,
+          "signal_bars_encountered_when_flat": 23,
+          "top3_gross_win_share": 0.728824,
+          "trades": 23,
+          "transition_signal_events": 27,
+          "wallet_realized_dd_pct": 0.336841,
+          "wallet_return_pct": -0.246947,
+          "win_rate_pct": 34.78261
+        },
+        "stress": {
+          "commission_total_USDT": 5.753629,
+          "exit_reasons": {
+            "stop": 0,
+            "stop_gap": 0,
+            "take": 0,
+            "timeout": 23
+          },
+          "funding_total_USDT": 0.008223,
+          "long_n": 6,
+          "max_hold_min": 80.0,
+          "median_hold_min": 80.0,
+          "net_USDT": -6.842941,
+          "new_transition_events_while_flat": 23,
+          "p90_hold_min": 80.0,
+          "position_exposure_pct": 0.9062,
+          "profit_factor": 0.177024,
+          "raw_persistent_signal_ratio": 0.4,
+          "raw_signal_bars": 45,
+          "reenter_within_5m_pct": 0.0,
+          "short_n": 17,
+          "signal_bars_encountered_when_flat": 23,
+          "top3_gross_win_share": 0.950886,
+          "trades": 23,
+          "transition_signal_events": 27,
+          "wallet_realized_dd_pct": 0.717423,
+          "wallet_return_pct": -0.684294,
+          "win_rate_pct": 17.3913
+        }
+      }
+    }
+  },
+  "params": {
+    "fee_scenarios": {
+      "base": {
+        "fee_each_side": 0.0005,
+        "slippage_each_side": 0.0001
+      },
+      "stress": {
+        "fee_each_side": 0.00125,
+        "slippage_each_side": 0.0003
+      }
+    },
+    "hold_bars": 16,
+    "notional_USDT": 100.0,
+    "source": {
+      "atr_period": 14,
+      "confirm_bars": 3,
+      "ma_period": 15,
+      "threshold_high": 0.62
+    },
+    "stop_price": 0.01,
+    "target_price": 0.02,
+    "wallet_USDT": 1000.0
+  },
+  "period_each_year": "[May13,Oct01) UTC",
+  "schema": "A207_ORIGINAL_TAKER_SIGNAL_FIXED_PARAMETER_INDEPENDENT_REPLAY",
+  "source_blob": "b8a2840618c4fb02a2d90120deed5771b34bdbd6",
+  "source_commit": "5ed0d6e39d8a3e951bea40c66e2638c213012e1b",
+  "source_data_integrity": {
+    "2024-BTC": {
+      "first_open_utc": "2024-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 63263.2,
+      "last_open_utc": "2024-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2024-ETH": {
+      "first_open_utc": "2024-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 2597.85,
+      "last_open_utc": "2024-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2024-LINK": {
+      "first_open_utc": "2024-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 11.843,
+      "last_open_utc": "2024-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2024-SOL": {
+      "first_open_utc": "2024-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 152.523,
+      "last_open_utc": "2024-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2025-BTC": {
+      "first_open_utc": "2025-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 113975.8,
+      "last_open_utc": "2025-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2025-ETH": {
+      "first_open_utc": "2025-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 4141.1,
+      "last_open_utc": "2025-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2025-LINK": {
+      "first_open_utc": "2025-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 21.313,
+      "last_open_utc": "2025-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2025-SOL": {
+      "first_open_utc": "2025-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 208.58,
+      "last_open_utc": "2025-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2026-BTC": {
+      "first_open_utc": "2026-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 83555.3,
+      "last_open_utc": "2026-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2026-ETH": {
+      "first_open_utc": "2026-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 2683.56,
+      "last_open_utc": "2026-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2026-LINK": {
+      "first_open_utc": "2026-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 14.351,
+      "last_open_utc": "2026-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    },
+    "2026-SOL": {
+      "first_open_utc": "2026-05-01T00:00:00+00:00",
+      "funding_settlements": 459,
+      "input_candles_contiguous_no_gap": true,
+      "last_open_price": 117.99,
+      "last_open_utc": "2026-09-30T23:55:00+00:00",
+      "source_rows": 44064,
+      "taker_volume_from_genuine_binance_csv_column_9": true
+    }
+  },
+  "source_file": "strategy_2_taker_momentum/signals.py",
+  "source_trade_engine_used": false,
+  "source_zip_and_csv_sha256": {
+    "2024-BTC-funding-5": {
+      "csv_sha256": "a34fabae463dec2ecc27f818d6d5b4dbc25219c91ffaddd977efe9059006e10c",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "aef8c5fdce1493fd570b5829a72f2f17c7e459483390f25544d16c2a30be592e"
+    },
+    "2024-BTC-funding-6": {
+      "csv_sha256": "7c470eeee3147e084d6f1fb2daa77b1fd81a3b3dc9c4cb803473e9eca7cacb91",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "43fc4473820d1fb4fe340d1b1951a87555f6841aa352e684fa95d6adffce04c6"
+    },
+    "2024-BTC-funding-7": {
+      "csv_sha256": "60d8e545d10334fec77b28b698b694f5c2b968a1b37e68d0a909c5dd0417a138",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "acab0593c1452660ce74a6c239fb215c1192b0a9c6e8c1689e6495de40a0174b"
+    },
+    "2024-BTC-funding-8": {
+      "csv_sha256": "5031f1d1dde94295b621afcd52b5c4bd5c93cebaadcc0a984c9c0ed0f1324367",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "7003d29a43dd5f9357f838da8766834954939e22c1d80af682d9f33984f67b71"
+    },
+    "2024-BTC-funding-9": {
+      "csv_sha256": "5ba49e01519e554a26aa68bf57e94d745b504de738ff522cdd0781542efc626f",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "6ef23b02392b481ef9c3855434bf3644289fb6e228b4f7d9a0dfc6d3cdff1116"
+    },
+    "2024-BTC-kline-5": {
+      "csv_sha256": "62391c48380f0dbc9ec79d8bbf585e7f70e40daad314a190839f07332126a898",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-05.zip",
+      "zip_sha256": "219ce6bc8e85a9fa9088eda56a92f5c56361751dd8301dff5ed9fc1232b5c1a2"
+    },
+    "2024-BTC-kline-6": {
+      "csv_sha256": "2063acf156228ba822736bb134f0da3d8b1a80121e6812ec404723efd6ef2b02",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-06.zip",
+      "zip_sha256": "f49fdf9f3add26ba70f301cac7d9d3b2e0211eeaaf99f32fa1c92730deae6e8d"
+    },
+    "2024-BTC-kline-7": {
+      "csv_sha256": "8d58ba7f940ed11608fb7d5cc9c7eed6325947135a9b6f90cc21f2adce6d416f",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-07.zip",
+      "zip_sha256": "657f79d55b809ca18f242e950c916bbbe93c3d09697f0e330ba26b5a6a75a4e6"
+    },
+    "2024-BTC-kline-8": {
+      "csv_sha256": "e01b7bd0736c2d6c8d472cc4d9afcc5900d59a43ded495564c181fd7a0791c6f",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-08.zip",
+      "zip_sha256": "5804758756c980445eb6bbba96f10bd98bb7da471b6041bc31337cb0c7236a16"
+    },
+    "2024-BTC-kline-9": {
+      "csv_sha256": "baa78d02edb84da8df9fdc999799f1f4c10dd04b46a67d8debfc50754f55cdf1",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2024-09.zip",
+      "zip_sha256": "15ffdcf3d23f9fb6743c54d9d783cdc20373aaf8f60fd949a85653e7bee29170"
+    },
+    "2024-ETH-funding-5": {
+      "csv_sha256": "24c95ca7ba4b988ef32ec0630a8a45d65f2e8950562d319db9918872b05ae307",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "8350ab4d61b12ec61539611e30809039f54814213bc4c937609360b1ff28b5e0"
+    },
+    "2024-ETH-funding-6": {
+      "csv_sha256": "fb54578bc02f43acd34cf6675217b6a663effd31bf8a434b9495ef6da34a87e1",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "def13f4a478c28b0111fb24c57f95fcee80e71982ed74f12e465d20d328e2275"
+    },
+    "2024-ETH-funding-7": {
+      "csv_sha256": "32bdbd3ea7c5b67adb052a55461e683cd9fc8b0b6183243897dd397f10a6a655",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "9d236281ab6430250ad2b472cbbf03812a40aed42e73c8339fc6be55a2417a82"
+    },
+    "2024-ETH-funding-8": {
+      "csv_sha256": "69f71f0c8a87d5bda2e1810c3757fe6a40be2cb5243883ec27442ce9a78f43ae",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "e17684bc761924eb5e1912c52cfa997eddeb99da303e68e28f6f37369f672b9d"
+    },
+    "2024-ETH-funding-9": {
+      "csv_sha256": "fd880d5b9364768b9b3772d1608bae4890246d036ec0a01a9236b8937ab650b6",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "ffb6e7441053137cb7ca81cc83bcdd996612f7dbb15aa2e168a7ee521f8cbbca"
+    },
+    "2024-ETH-kline-5": {
+      "csv_sha256": "6d28cb5034a9b7931a254d9fc9270cb9294ee33dac3ad2c9ce1a05cedd42711a",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2024-05.zip",
+      "zip_sha256": "c89304e9ea46bb4c164bd239593587d40b7b4ccc8bcf41159f7c035cd4f7e61a"
+    },
+    "2024-ETH-kline-6": {
+      "csv_sha256": "8bbbb9297ccc868ae80c78c9654e3aca8a1f36ec78d9f7a6ccf309d518312d33",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2024-06.zip",
+      "zip_sha256": "8687fe1dec24ec105776408c1e2009f7bce8f3055067504b7fd8366e8992ed67"
+    },
+    "2024-ETH-kline-7": {
+      "csv_sha256": "5f6a06b9f6645db3794ee9cab577041bc984d42339d42e6d10dff35b75656421",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2024-07.zip",
+      "zip_sha256": "6232f987221a762ced83e01a342e20efd1c2512006c3179ce720249f4dcae34e"
+    },
+    "2024-ETH-kline-8": {
+      "csv_sha256": "c08b8d6e7334799859636ea13f31e42ac66c8cf0d35b80793be447703f91bca9",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2024-08.zip",
+      "zip_sha256": "ac7339c51ee1ddfb193a2ed60b94c37f26fd992153697cec5dfd7b3fe8442b7f"
+    },
+    "2024-ETH-kline-9": {
+      "csv_sha256": "dc1e0aa521748674406d98995ad03537d9f4851f4d28040776f2a9c2bbebd18e",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2024-09.zip",
+      "zip_sha256": "eada3d2be75540fcb1b5c460ae54dd8e6d19acf663999d1e74588f540af5c3ac"
+    },
+    "2024-LINK-funding-5": {
+      "csv_sha256": "a1b29a9e5027e0c3a3c979172d847d2956aabae622f543509cd908f9b17661bf",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "57e4ff08bdd4a70e775f722f0ef8a104e937e719f6cfdd6557c9628e2ef50895"
+    },
+    "2024-LINK-funding-6": {
+      "csv_sha256": "925d737bea5faa860ebad9014d9880fbdc08a487b270647fce387f8b615d4580",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "ed259e3baf5dd43e03751fdfc78b35e5978c7c7dd01a61b0dbe29d0d09b2de83"
+    },
+    "2024-LINK-funding-7": {
+      "csv_sha256": "27c0d0f54991aecdc4b797ff838bc1e10fd801ddc3d01e710fbc09a53bd72ca8",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "84fda29e97f5e126ab3d301d83aadd58a271b9cb7e128eae315629a43fec8040"
+    },
+    "2024-LINK-funding-8": {
+      "csv_sha256": "24165662be144e9f9daf080cb3b05eafa13cc5fc0a5c96b4637722d0f093934b",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "9cb25c7b945c3e0df7f40833e46c893ab10c9e4eff1fcbbd17967fe04571332d"
+    },
+    "2024-LINK-funding-9": {
+      "csv_sha256": "8993efb733b8cf081000c6821fc03c26d378eff744fab32828a4737890dbeea8",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "82f0d865cf2d02ab345c4254fe59ffeb3e5b6bae39bcb1a0d06dc67ff55a718a"
+    },
+    "2024-LINK-kline-5": {
+      "csv_sha256": "791b6645cc437b016f5ac473448b80d03c507d09bd9ddd1881347a4931ce9234",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2024-05.zip",
+      "zip_sha256": "138b6256b48125587510a55cab6526062ceffa2fe96f5e3ee5246f77100deb4a"
+    },
+    "2024-LINK-kline-6": {
+      "csv_sha256": "2fb5284f2c90c833de561f5699811d3ff6fc86acdffa6ca3c0a2c5d7f792f4df",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2024-06.zip",
+      "zip_sha256": "cef2fc472137070a2303bb84a33c3ab536ff87a6ed4ece490660cb2fb15679d7"
+    },
+    "2024-LINK-kline-7": {
+      "csv_sha256": "0156ad45e1fa85899bdb11ad70d8a590ca3d087a1161a3f860384203f6ce89bc",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2024-07.zip",
+      "zip_sha256": "049bd0c59723ae20b1a0fc385e2994d06cfe184641d12c12ab7a214ae27ca155"
+    },
+    "2024-LINK-kline-8": {
+      "csv_sha256": "1da9aed900225b11094e2935a9abc4fe9414bda0786ea58a2cc2297d059e7f5a",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2024-08.zip",
+      "zip_sha256": "9a89077ffb627d935ce0bf426d2d5b96a7e3bbc3bdb1249e840b2fa4a8b7155e"
+    },
+    "2024-LINK-kline-9": {
+      "csv_sha256": "42c1d9fe7825e073bcc296a13fd93983d6722b62c49087cb6ea2a69cc7d24450",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2024-09.zip",
+      "zip_sha256": "5fff5bee37892156f2b4c0e3eac49928f3a5cb3ab1bf2d389151ff2e4dfa2990"
+    },
+    "2024-SOL-funding-5": {
+      "csv_sha256": "84603b203a1b752d92dd711e3dee1e017298ba0c251532046bdae4f166b07369",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-05.zip",
+      "zip_sha256": "cdd788722e8b85fd6c9d992e7c1c767be87afc91db5b8c07751f898b373cbf29"
+    },
+    "2024-SOL-funding-6": {
+      "csv_sha256": "4eb1f03fd2dfd891197e9db64a191a3bdce05b9dcebdeb8f8fa7a3d552e7dbe1",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-06.zip",
+      "zip_sha256": "8da6c97d67718422a5df9a0d50e37849521fb54de87cbb3b3397e441439dfcc9"
+    },
+    "2024-SOL-funding-7": {
+      "csv_sha256": "0a7de0bd5ebff08f0f38d6076ddcbe55c80b48b91c4da745216ef89e30cefece",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-07.zip",
+      "zip_sha256": "2585a0db933c70b62c87cac509de42ac09b98d370238c0d8c68249a20bd2b9a3"
+    },
+    "2024-SOL-funding-8": {
+      "csv_sha256": "77dbd58ee7ed1935f724605a532d8cf65ca07baae31b665e8b4509adbdcb0b89",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-08.zip",
+      "zip_sha256": "ef076200aab768d33f71449957f6cd9c96c0da696708a5f561b97e7a0995e8d2"
+    },
+    "2024-SOL-funding-9": {
+      "csv_sha256": "a765eaf7581492b7e6459ea9aa6771f73e6a22479eb113f2d50fb41be2506bac",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2024-09.zip",
+      "zip_sha256": "7666e4d3e6ea6dd28011c508cf01421007521e98e96ea551f809836441b43ca0"
+    },
+    "2024-SOL-kline-5": {
+      "csv_sha256": "7732673debed88b217b4347fa99b058e1ee82de7499a3ddd47a9b4eb4dc0f303",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2024-05.zip",
+      "zip_sha256": "70677bc8c38db82a6cd8c815485eb440c101ff049c9c8ff007696c0444944264"
+    },
+    "2024-SOL-kline-6": {
+      "csv_sha256": "b7d2d22562d76dd1c5c5301519faea98262d884fe2ea46f3925aceace920f58c",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2024-06.zip",
+      "zip_sha256": "403f4ecc8a56603e3784ea3e087c56c7597b6a832fd11b26b9bccb0a82809c72"
+    },
+    "2024-SOL-kline-7": {
+      "csv_sha256": "af0b1382bc7069207364c2fcd5adfb000eb2323d2011ddb55c2437426a6d6252",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2024-07.zip",
+      "zip_sha256": "1cf50d1c0c02f02a66af61cf3a1fbe6b29b1c8ba1d6dba43c81074abda718215"
+    },
+    "2024-SOL-kline-8": {
+      "csv_sha256": "a616f2989a1615438ae0cf85261ac80dfd8138e95e5ca7390527d5e49a758990",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2024-08.zip",
+      "zip_sha256": "fc9d21b7e8b0bf8f35701d9f92ae2c293aa23e5631a5d051a07f10a4e51c5a08"
+    },
+    "2024-SOL-kline-9": {
+      "csv_sha256": "4add50140fb7649451abf0183a10ef88394b5c5a6102392efb8e1819adfade4d",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2024-09.zip",
+      "zip_sha256": "899d0ad7dd9d0bff796e54e08362d6fee88a24d11333e70b70655da0c3f81f78"
+    },
+    "2025-BTC-funding-5": {
+      "csv_sha256": "1b2173413c8c7094b9de3c7947cf5166a0f187ba7f5b780b1814f914da53a8fc",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "e7355e2775b88009c984db1783bb8ed6b5f24ede2b52bb764151b5722d6a5e42"
+    },
+    "2025-BTC-funding-6": {
+      "csv_sha256": "174f61370818411b81a865f699245222048fcace42ca37b2e59678c384a0b9fb",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "a1f4a40953740fa83ee9ad97776ff8325d1958654a67f1325614071a983819d4"
+    },
+    "2025-BTC-funding-7": {
+      "csv_sha256": "3a8c9ecc02b9c98e28d90d4899d7d2ab71968642ae48c2946fa33c838a067caa",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "b097dff828f6e43fece23db0d3cb98042a9d7bc19693b8cbfd051d88eb973b7b"
+    },
+    "2025-BTC-funding-8": {
+      "csv_sha256": "09ba18d84132b7f25a73f86b6d64670d276b7c724fdcd03849dc7e244b2631f7",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "1180129860b6e196e8d70bb9719e81573aa6b4acb423ba5ee7f82f10c836f7ab"
+    },
+    "2025-BTC-funding-9": {
+      "csv_sha256": "6abdd226245d7e1790d123116925af0b548218ffa345d81ccb7b40b0d1936118",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "21dc6570fc6bffad0e7b5f9e99211b82ad07c95ab4f18c3a2daa3b95ec98344c"
+    },
+    "2025-BTC-kline-5": {
+      "csv_sha256": "fd07a078a24ee9395f9d3f58c111902d33dc85505b0d45bb31e0a0e597581a4a",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-05.zip",
+      "zip_sha256": "073da284f178e72777abbfbcf79faa99fcf77bd69c4a678938abbf6cd7d14f5b"
+    },
+    "2025-BTC-kline-6": {
+      "csv_sha256": "022f1dcae7512287b12ab15977294944f83cfec1aa6ed90da8061348d520facc",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-06.zip",
+      "zip_sha256": "da39c04e24a90c87406b9030e1aaf376655ad59d4bc0496f38e4162a9babf514"
+    },
+    "2025-BTC-kline-7": {
+      "csv_sha256": "3fff70dfa4bdfa1a029af1d6b518ae71da84c8ecba27ac2c9e4bb922f19cf191",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-07.zip",
+      "zip_sha256": "2cea4750d51d9c064d674ec8d0d8d1f39448960284272fdc74698562c873bf0f"
+    },
+    "2025-BTC-kline-8": {
+      "csv_sha256": "04b5dc9681d1f9567ba5e8b7cef28878d1f1816abe83545c1e2589e29c02bb02",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-08.zip",
+      "zip_sha256": "7f78f6f88ae1946f8bd8312a37d1d74b24e24d6b13bc37d2909ad7c8c0c7e9ae"
+    },
+    "2025-BTC-kline-9": {
+      "csv_sha256": "cfc391e3023bf887e44dc76d43485e8e3667b78262791609d615059f159f0d0a",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2025-09.zip",
+      "zip_sha256": "dbfb8bc2f9343107c7a702acd6919d77060a8f7ea4b25359c71e5fc018a85209"
+    },
+    "2025-ETH-funding-5": {
+      "csv_sha256": "b2108a2ea1bdd1d6c2a59fb58cca8a819c16f4679b88ded85d473d8284fa5762",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "996aff38f046b50510301532ac5cbdca115afca971c49cb548f50e5d70e18d99"
+    },
+    "2025-ETH-funding-6": {
+      "csv_sha256": "b5b7342d5ae78f747a98e8c7aa402937c58225f91c1bed12f5743f56229b73fc",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "ae7ca242249ca3df06d1222a0c264fe83b18c4b2c19fe656e864f7d081d5e198"
+    },
+    "2025-ETH-funding-7": {
+      "csv_sha256": "11d07c705a92b5b4cf849566e9601f7be6c3bab95438bddfbe627b68a0cc7741",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "5f2d840c5669ca946529c33f6df32433c5d0cd973eb4adfd40459270c460e7f8"
+    },
+    "2025-ETH-funding-8": {
+      "csv_sha256": "642d525ad086a832921acc04050eae37b923f4a6ad0e94055467c7db8be555ff",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "c3fca21c71afb4962e89f8e3d84afe5832019ed8f570ee7c7c299f2436a28b62"
+    },
+    "2025-ETH-funding-9": {
+      "csv_sha256": "33573e23dbebae525a2cfea1b6dd56a0ad3abddbada7db741bf2b99d81cd3056",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "2fa09df245aadc73cf43f837a72c3009fcd7d10c8c4e3db48b2d1021c331841a"
+    },
+    "2025-ETH-kline-5": {
+      "csv_sha256": "6fa4aeef95d525ca9e37abfc784ec27dac3171b4e14a9d2723db480480c9a595",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2025-05.zip",
+      "zip_sha256": "478f3a5333295e8a28864ed3561f5597acdc9d2017077d2e9850ea30e435d2a6"
+    },
+    "2025-ETH-kline-6": {
+      "csv_sha256": "5d934177bfe937c567930af08472c3b9cbbb211d9a736d525a9c948cfaeca3b1",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2025-06.zip",
+      "zip_sha256": "a546295240e8786b3f48670ae5e24f79381b338af97ed904de02adc73c03ce83"
+    },
+    "2025-ETH-kline-7": {
+      "csv_sha256": "0d3fd53be4a9408011c7c7e88d0a42855ba9284c546b98fad3b2734932543939",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2025-07.zip",
+      "zip_sha256": "fd2af89a8b6dfddd3a2769bb5bd0244454340487a513ba99c86bb7425979c4d6"
+    },
+    "2025-ETH-kline-8": {
+      "csv_sha256": "2d69d7f37ce4c29c7be6e7404951f9d78a97385c93c67d34f891ef96abc65375",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2025-08.zip",
+      "zip_sha256": "f2d7687eecda432ce840b1320f868f56ab9ea0c2304b5fc83cefc5684696b344"
+    },
+    "2025-ETH-kline-9": {
+      "csv_sha256": "ac8005fdeae83098d4f0a3f44b83bbdfb8492e06c4d84ff904830b05c16bde37",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2025-09.zip",
+      "zip_sha256": "71ee9f99652c07dcea827cd8f870cce49e77203d4c938f80b1c15ac9a4cef473"
+    },
+    "2025-LINK-funding-5": {
+      "csv_sha256": "00820326bc6a00f00c1aa45cc79894a7eaef07ce2eb652d6b28dae67efa15ed9",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "7d3b60afb85860117409e2137884e2a01e45a22eb2e4d1353514244f83796002"
+    },
+    "2025-LINK-funding-6": {
+      "csv_sha256": "02045c006469ee05cbe0795e4fb0c76f8391b1992033a4350492b6a698f86190",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "cbdf6273e84d457b4915139e41a278629cbdfc02855e290b6d9ff34218eb36a5"
+    },
+    "2025-LINK-funding-7": {
+      "csv_sha256": "e36135402f376cf57c7049f2af2129d965b0bea4a9ad92b917c23b5d37dd5f99",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "56651da01247f19d5e63e6c40f8835934735e60915587068e325f2859101b7e4"
+    },
+    "2025-LINK-funding-8": {
+      "csv_sha256": "5973248474e705df668f0878ad43a9a22335396a7e1c728e13985bba88346a31",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "3fd351cfdd3aa11d1e280740f56a0a244112862fb3a583d7600d658339060f53"
+    },
+    "2025-LINK-funding-9": {
+      "csv_sha256": "6514f045035a78db9645e0457997fd510907959146029d27fcbf522cb0c44ae2",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "5b90724992ead316299b755ec6ff59e70adb6a61dbfa93b58942470a7cf091df"
+    },
+    "2025-LINK-kline-5": {
+      "csv_sha256": "93123d1f57932eb97e087009fd671e3aa2cf7f2fe580c8a7e6f126ff1abb0cc3",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2025-05.zip",
+      "zip_sha256": "df4b8b18811de77c95cc43447e04d8615afcd84218dae3f9d7f24e8270715197"
+    },
+    "2025-LINK-kline-6": {
+      "csv_sha256": "ddd11e2ba8f3e16b4bee13c177b891cb4cb51ba432fce51d45b20993b3dd2f58",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2025-06.zip",
+      "zip_sha256": "cf790451682a1cd984ecad6fff48527bb88239823d83f978f224516f47e6d785"
+    },
+    "2025-LINK-kline-7": {
+      "csv_sha256": "47bc246f025cdacfbabc68a6281733cb19b731d9c5223fafa03cbefab4ec0440",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2025-07.zip",
+      "zip_sha256": "7dd71063033210b2b69c2a50867ac5f47b8907c7099917e18711be8dec123e1f"
+    },
+    "2025-LINK-kline-8": {
+      "csv_sha256": "462070ff4b314e8b7c025e0ed64e88dcc3f7b221bfe6f42fa79e162d3f0e5805",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2025-08.zip",
+      "zip_sha256": "9e9cf4f36efbc2d0dadb824ac9b274e13f807865e877e6662575e1609abd3221"
+    },
+    "2025-LINK-kline-9": {
+      "csv_sha256": "3793549196cd913c326f20e53ec639ed400f220de5824f54ee1c4c07def054c7",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2025-09.zip",
+      "zip_sha256": "ddd13bd452dcd799c90b489328bfc12bb778a80301617569af0079003fa9699d"
+    },
+    "2025-SOL-funding-5": {
+      "csv_sha256": "a7fcb14cc35f5f44a0ea2d63dff74da1018890c648f193dc3a9d2c828039c0c8",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-05.zip",
+      "zip_sha256": "eb03fd0d0b31eef9ee05544ea8dcce097a807d3475f67d0a5f0859c487c5f5c3"
+    },
+    "2025-SOL-funding-6": {
+      "csv_sha256": "9f689a969b5b78a0a4159dd7cad4012e09125553e26ff120e0e126defb8b3a19",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-06.zip",
+      "zip_sha256": "4ccee0a6fd67cb775be49d124b9eb038f26acd09426fcb9aaf9d3de74cf3a24e"
+    },
+    "2025-SOL-funding-7": {
+      "csv_sha256": "0a573dd6a1ad0082c78357843e85e23f2c3846c78187174b00ffe19ef184200c",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-07.zip",
+      "zip_sha256": "66ce38d1a8bc4bdd53af29d8ea5c72493ed48fe9894ee5e9ff4600ccec864c4f"
+    },
+    "2025-SOL-funding-8": {
+      "csv_sha256": "156340e5ae9ab9073b8ce1a10efb08b2852546182dd1d5d3f7f4dd961db8bada",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-08.zip",
+      "zip_sha256": "fe9efc3abe1e4be2a2fa9a4008e6957856387f6783a06b97cac3ee271746915f"
+    },
+    "2025-SOL-funding-9": {
+      "csv_sha256": "138ccc19db09dd2d01be23e89b44d3727d800ec18ae232a3a116b66d85aeeb7a",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2025-09.zip",
+      "zip_sha256": "f953315124d20dab98ba710d108103fb4cf054d1535787fd76d35d6b9c18e534"
+    },
+    "2025-SOL-kline-5": {
+      "csv_sha256": "3a630e0d118c547f67e1c833c702b82499154f660d2630c5442f3b509051ff46",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2025-05.zip",
+      "zip_sha256": "7529a74ab947967b3e197b19bae8f2f8a44b5631e356613317e6e074e7b57770"
+    },
+    "2025-SOL-kline-6": {
+      "csv_sha256": "8dabcee64f08e93e76cacb8a248ae61ea499f250cb7eeff91cba1e553388bd00",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2025-06.zip",
+      "zip_sha256": "556c4bf5500f8e38cadd89239cf1b8f7cf84c66846e17d783b7e7d3f691978f3"
+    },
+    "2025-SOL-kline-7": {
+      "csv_sha256": "1b16b78a1bc1669e676d14f85ecc614a0b86171a2505f610b5b1527f891c00b5",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2025-07.zip",
+      "zip_sha256": "7c3e09670eaa371e8575989bab8c0e73552f44ff390743ab9bea85550f0643ed"
+    },
+    "2025-SOL-kline-8": {
+      "csv_sha256": "1056c1ce3305d1c46bd79c68f1bb0f2eedf02b807a5187de7273ddce64ef8e74",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2025-08.zip",
+      "zip_sha256": "e3e36ffade2e1919d2e07bbccaa291f9f00b1ad0c2059df167c7a42181dd7860"
+    },
+    "2025-SOL-kline-9": {
+      "csv_sha256": "f19c9810643978c141a16c0aaae089baa97e0ddeb903664f93f70dc374045822",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2025-09.zip",
+      "zip_sha256": "4de20e68d09fb85ac8c33aeeb47fa923690c9d9f15a598ff66c8001e36ff3bc9"
+    },
+    "2026-BTC-funding-5": {
+      "csv_sha256": "0652f44f188aa7e06fb7241913b911f9236d437a074f09b3a00a30802280ca50",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "445b65fd6b17bfcfb5e4d035db29fad34f729fa078f0449024db42621be84e6e"
+    },
+    "2026-BTC-funding-6": {
+      "csv_sha256": "10ea717c26b580f5502ebe35c4be852b5e1340dcfb4ab0f4b32e082ff3df7dfb",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "cff97ce688329592bccbbf5873b5c7021649e093f5f5806e332c5b4fb7fd6a00"
+    },
+    "2026-BTC-funding-7": {
+      "csv_sha256": "02908616d8425b90a33b4f9ed51ef063382b80a3f35b17e628413e90544ff4ff",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "e36fcc66f493d7d9ec348c852fc22e9f318c79cf7adae17398a3994ae0adc41e"
+    },
+    "2026-BTC-funding-8": {
+      "csv_sha256": "04b169161a02113cc6e8982ccc3ef7f5854821bcb07b4755d0d09bbbce46b338",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "7c108b3a02bd6dc7345ca7323e3a49664edcea0afdcf780ffb3b44762c45a964"
+    },
+    "2026-BTC-funding-9": {
+      "csv_sha256": "4fc56ed1f2ce7679a0911bfa432170e61fa159bbcc0668caa821f3d2c4a80aa2",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "913cd31b8f924a06717a2fac17f3df6132c24ccded209eb3e4ae7d83e1b247f2"
+    },
+    "2026-BTC-kline-5": {
+      "csv_sha256": "780e4e56138eeed3970e9d69a5feedbe7c52fe02322564ded858693fafc9ea1e",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-05.zip",
+      "zip_sha256": "b1a73378796bb62084c32ca5865903beeaf87d521d950d5e7776343f682dea93"
+    },
+    "2026-BTC-kline-6": {
+      "csv_sha256": "401ef34309db28705a30b23576510ea248f6fa16384f8e27322e75fa5cd18928",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-06.zip",
+      "zip_sha256": "782c555963c852ca768335de21d5743147e5d50bff449600f8fceb9ebe5273de"
+    },
+    "2026-BTC-kline-7": {
+      "csv_sha256": "565ed25f0e9a4274e93f22dcd22b5ef4095d4c01a382890127947833d646fe0f",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-07.zip",
+      "zip_sha256": "ec750f7aa69c8f842fa1464a90ad4aa92452cfa767df9e8d70dc484e466c8fc3"
+    },
+    "2026-BTC-kline-8": {
+      "csv_sha256": "2d40e3cfcbcc7d0d4b5463606c1effa9700645044f13706f618684793a7bfbd2",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-08.zip",
+      "zip_sha256": "14fd408e5d2902665c66b701e861b173568b66399e3fa462b94c766d209567d1"
+    },
+    "2026-BTC-kline-9": {
+      "csv_sha256": "352ed47646f15de25b327958b7fc0ccc767b6fbf5586fe9041d947ca7844fb8c",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/5m/BTCUSDT-5m-2026-09.zip",
+      "zip_sha256": "3a2d163a2bd28ca614fa0840a92ecbcde0d9c4962b278dd619d5bf81a9918e26"
+    },
+    "2026-ETH-funding-5": {
+      "csv_sha256": "ae197723dde6cc0893e974f02d3f30cc39afa5855bc5721129d5a80c741db570",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "ff926ad3fc48493c26c85af16620b19c695cc1854faa1e7f0ea2ab9fdafc2084"
+    },
+    "2026-ETH-funding-6": {
+      "csv_sha256": "ce6e43bde5e82f50da2ae05ca07394394cff681f7856f264461d4f1eb88b8e77",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "cc6fb028a811bc423b711f6b89de067bf92a2eda61303e1ce0b219b5d3210e47"
+    },
+    "2026-ETH-funding-7": {
+      "csv_sha256": "762a70b4bd63a2b7a1483ea91b2e5195a8ce4c10f932967b46a5109fae72a689",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "ece7f6c64d0e45fbd64929dec40bae525fe365381046e367de5ca0827bc623d3"
+    },
+    "2026-ETH-funding-8": {
+      "csv_sha256": "e81333c5828b7611cc27ce119b928525cd1697d6beb1037c6d7007f510f8e37b",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "8b843307038b3aedf725b1342003cce39f9526451ed92f407ca80bc637487839"
+    },
+    "2026-ETH-funding-9": {
+      "csv_sha256": "730266ab9c83238901af9960bbe8d8658018586a3d791a1932ea7259666a70e1",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/ETHUSDT/ETHUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "d1916b9181cf3507ad5a6522ac6587cd84a424941f1a2132ab887f768b5dd4de"
+    },
+    "2026-ETH-kline-5": {
+      "csv_sha256": "53ccaf0c7196bf3b2dfeccfff956828ed034dc195079c7501bc9b400b5fd85e3",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-05.zip",
+      "zip_sha256": "3a642e9db105c9002210fc4d7f5a99a527d6b52d63823ae17076c1e2d2578eda"
+    },
+    "2026-ETH-kline-6": {
+      "csv_sha256": "b238849627530f31687f4308a98852f3fcffa393683c8f74fe54581d87b98256",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-06.zip",
+      "zip_sha256": "f26819283e11870b0b206acea9e084bcd7e3c6a5fb2abb8800ac5a424959e49d"
+    },
+    "2026-ETH-kline-7": {
+      "csv_sha256": "80044e4f8f15c31a7519b468e23c7d8b66e0248e2045216b7d2b2736c239fe51",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-07.zip",
+      "zip_sha256": "2e9ba157f21fbcb97f108dd263d572cd0b4d6cc1db7cd54446f762f4ce3e6dda"
+    },
+    "2026-ETH-kline-8": {
+      "csv_sha256": "9c17f4a357326c7ff54abe9ddf0297c305f299d2ac6e93834d04df6b420d49c4",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-08.zip",
+      "zip_sha256": "c7ac44cb1ac58dd231b1a94c9d68907e2b3a8079dbf2dd8a5e744a6234766d47"
+    },
+    "2026-ETH-kline-9": {
+      "csv_sha256": "b83b1a75024d51f8b34b1edc69e4d393e913224393fd29bd095879619af490d7",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/ETHUSDT/5m/ETHUSDT-5m-2026-09.zip",
+      "zip_sha256": "143312487ffcc01c174156343fbf05ea48cbfa4e4602937caafb3e0ad3dbca9a"
+    },
+    "2026-LINK-funding-5": {
+      "csv_sha256": "ad7fd98d6fd4ec16e61f9fd5a9a5a95f705563d8ccc97454c96a08168168edf0",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "06536cdd66211e1a25629a54d489493aaab6b3613b9d2207a65af44a3826da1b"
+    },
+    "2026-LINK-funding-6": {
+      "csv_sha256": "a3ed864d1406410f03f47b615c47faa5ec54d2463c7954ae96dc3a9963d3e6e7",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "33654b89221e8e9c544632cdee76e38c3eedf40aa2c1536ead56e849781e8d07"
+    },
+    "2026-LINK-funding-7": {
+      "csv_sha256": "786eda9077c2de646ae1e5de58c304625f6404f0e9262ea3cd735c48919c2851",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "42f06dfc2f6ab34dda1a7ae739d978b11b05384e098be9d556abf9015414ba9f"
+    },
+    "2026-LINK-funding-8": {
+      "csv_sha256": "e3b77af60b12ffa10d2573adb4ae7aef42c8fc51e3496264d5450fdc68facf68",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "45134ee1041a243a361107c70d558b553c0919ee4f524c87364f4529f6971667"
+    },
+    "2026-LINK-funding-9": {
+      "csv_sha256": "2fb5ca8358c7930f6cf8bf8db255a596c87f13f651d31ca536db3e913010681d",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/LINKUSDT/LINKUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "9b171146a071a8223ccd8082927af5b8076b70deab0b95a80a249c0941cc5eb5"
+    },
+    "2026-LINK-kline-5": {
+      "csv_sha256": "60d7f474ee3e5e7d8c054c1d960692c8c4b19d512ae73d2662f244533979348a",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-05.zip",
+      "zip_sha256": "c0e69b6238a7e4a7a57589585902a44a71a3aa362256c39460875a0d4e7e42cb"
+    },
+    "2026-LINK-kline-6": {
+      "csv_sha256": "3591465482196ee367b26eef40272d7fd8bb2011de75d51c96bab7edcae1a8fe",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-06.zip",
+      "zip_sha256": "540c00109a81ea0e018ff110e7f75c619e5801d8c8cf8110f266ae493b2a9bec"
+    },
+    "2026-LINK-kline-7": {
+      "csv_sha256": "a39965f25db3a181745e4d2f3d8c7f84445d54d4af0a6788ac1ea9e856743f04",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-07.zip",
+      "zip_sha256": "ccf58557db3264763552fc4dfffe83e9de687ab3cbeb8d3442b1872adf24dabc"
+    },
+    "2026-LINK-kline-8": {
+      "csv_sha256": "390a0508161af29616bc04ee04cc5f02e5db699ce4023588a33c5922708ae41e",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-08.zip",
+      "zip_sha256": "346ab6faa2bea53aba539484aa09f7feef889b323e9be3ade43fa78f509ec023"
+    },
+    "2026-LINK-kline-9": {
+      "csv_sha256": "8e6d49b5357a92be87c6bd0d3cb6e512aacb2a789ecd9df4d6d3cee3834d4be8",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/LINKUSDT/5m/LINKUSDT-5m-2026-09.zip",
+      "zip_sha256": "69bf3e217716d7af3cbfe7c38258604bae18669a63ecc35444226b6f2cac8c08"
+    },
+    "2026-SOL-funding-5": {
+      "csv_sha256": "8a82f295a753ad9c850c6e99c0a9cdb774cfee7c0f43bf366b0092cbf6d6556a",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-05.zip",
+      "zip_sha256": "c13066e5f7c5d161dbebd488cbeaab1205688c6dc7f9fafcc8f94296f2c1e47b"
+    },
+    "2026-SOL-funding-6": {
+      "csv_sha256": "6cffa9dbfa23926961bec1b65300a10980aaa86d419014f79a6f8d9274cd8269",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-06.zip",
+      "zip_sha256": "8d32fa3153d54c58667650e8b2c65e489b3a433b775052a93208bf60541a40d3"
+    },
+    "2026-SOL-funding-7": {
+      "csv_sha256": "26641cedb876febeef34cff1f025bb39f490c29a3218b53ec8ecf9f5d178d307",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-07.zip",
+      "zip_sha256": "13f655eaa29865b16acc7bd97be74e212bc4c2139fc2f9ead4d150852c2a9ebb"
+    },
+    "2026-SOL-funding-8": {
+      "csv_sha256": "6e9494e0f229e692a0c108d8fe39832e0abbb1d55de2cce20fb3be54fa5f51e8",
+      "source_rows": 94,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-08.zip",
+      "zip_sha256": "593e99bb628c0b178a5a2c8f415e1ed489dfd7dea497366f1fee91b8768c704d"
+    },
+    "2026-SOL-funding-9": {
+      "csv_sha256": "15c5b43ef4f489da1371b1ff74aa54f718215cfda2a4bc90bb702fab45d1c881",
+      "source_rows": 91,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/fundingRate/SOLUSDT/SOLUSDT-fundingRate-2026-09.zip",
+      "zip_sha256": "8503ce0767496c63929bedc4f43307efcea8216d181a873b32a695f6d85092ef"
+    },
+    "2026-SOL-kline-5": {
+      "csv_sha256": "528f7f565c8d67376a45d76badc88890fc3098e09482446d02a4f686b539d117",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-05.zip",
+      "zip_sha256": "c878f5d988b90a6562259c9b98d709946c3c48b55b7e9c08affebe967238c3e6"
+    },
+    "2026-SOL-kline-6": {
+      "csv_sha256": "2ee3ed1b8ec507bd56569e9bf4fe9f4cd6f28bdc8ae60b3800092faf006aa1dd",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-06.zip",
+      "zip_sha256": "b1586ec5b540eb38bde1b39d3033f6cff16bb7e62a86f4775401a6134133acc3"
+    },
+    "2026-SOL-kline-7": {
+      "csv_sha256": "d076c41ed711c0ba3069eb7d1183271ebcb3f08fc3cf02c88567b3999f34e84c",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-07.zip",
+      "zip_sha256": "3e23ff1f6b8e99bfa5220b88b17d6397cec91d666a6bf50e5469080d4aedf11f"
+    },
+    "2026-SOL-kline-8": {
+      "csv_sha256": "a55e6d3467b7953af014d19b9009d5452284c4a399b573c21cb30c8787b182f6",
+      "source_rows": 8929,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-08.zip",
+      "zip_sha256": "45a0adfe5568c062a1f218b3e1761a9637f4d7801db70a6ec321dfb389b08d32"
+    },
+    "2026-SOL-kline-9": {
+      "csv_sha256": "83adfa31de378a36fdd3cbe7d420d689fceb1d8ce3e1d3c99988ae00888413a7",
+      "source_rows": 8641,
+      "source_url": "https://data.binance.vision/data/futures/um/monthly/klines/SOLUSDT/5m/SOLUSDT-5m-2026-09.zip",
+      "zip_sha256": "9b71841a30ba4e98cab7c3591240dcfccba0efde6889785b586f9af1e84079fe"
+    }
+  },
+  "tempo": {
+    "2024": {
+      "base": {
+        "all_four_occupied_lower_bound_pct": null,
+        "closed_per_day": 0.17021,
+        "median_position_exposure_fraction_sum": 0.00946,
+        "passes_no_instant_reentry": true,
+        "passes_no_persistent_4h_signal": true,
+        "passes_p90_hold": true,
+        "passes_trade_count": false
+      },
+      "stress": {
+        "all_four_occupied_lower_bound_pct": null,
+        "closed_per_day": 0.17021,
+        "median_position_exposure_fraction_sum": 0.00946,
+        "passes_no_instant_reentry": true,
+        "passes_no_persistent_4h_signal": true,
+        "passes_p90_hold": true,
+        "passes_trade_count": false
+      }
+    },
+    "2025": {
+      "base": {
+        "all_four_occupied_lower_bound_pct": null,
+        "closed_per_day": 0.37589,
+        "median_position_exposure_fraction_sum": 0.02044,
+        "passes_no_instant_reentry": true,
+        "passes_no_persistent_4h_signal": true,
+        "passes_p90_hold": true,
+        "passes_trade_count": false
+      },
+      "stress": {
+        "all_four_occupied_lower_bound_pct": null,
+        "closed_per_day": 0.37589,
+        "median_position_exposure_fraction_sum": 0.02014,
+        "passes_no_instant_reentry": true,
+        "passes_no_persistent_4h_signal": true,
+        "passes_p90_hold": true,
+        "passes_trade_count": false
+      }
+    },
+    "2026": {
+      "base": {
+        "all_four_occupied_lower_bound_pct": null,
+        "closed_per_day": 0.71631,
+        "median_position_exposure_fraction_sum": 0.03805,
+        "passes_no_instant_reentry": true,
+        "passes_no_persistent_4h_signal": true,
+        "passes_p90_hold": true,
+        "passes_trade_count": false
+      },
+      "stress": {
+        "all_four_occupied_lower_bound_pct": null,
+        "closed_per_day": 0.71631,
+        "median_position_exposure_fraction_sum": 0.03782,
+        "passes_no_instant_reentry": true,
+        "passes_no_persistent_4h_signal": true,
+        "passes_p90_hold": true,
+        "passes_trade_count": false
+      }
+    }
+  },
+  "tempo_research_gate": false,
+  "total_trades_per_year_fee": {
+    "2024": {
+      "base": 24,
+      "stress": 24
+    },
+    "2025": {
+      "base": 53,
+      "stress": 53
+    },
+    "2026": {
+      "base": 101,
+      "stress": 101
+    }
+  },
+  "years": [
+    2024,
+    2025,
+    2026
+  ]
+}
