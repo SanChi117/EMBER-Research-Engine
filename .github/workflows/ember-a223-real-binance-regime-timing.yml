@@ -1,0 +1,35 @@
+name: A223 Original 4H Regime Timestamp on Genuine Binance USD-M BTC
+
+on:
+  push:
+    branches:
+      - 'research/a223-price-action-structural-retest-independent-source-audit-20261031'
+    paths:
+      - 'research/a223_price_action/**'
+      - '.github/workflows/ember-a223-real-binance-regime-timing.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source_replay_real_btc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical layer
+        run: pip install numpy==2.1.3 pandas==2.2.3
+      - name: Pinned original RSI and 4H zone to 1H entry causality from real Binance monthly SHA
+        run: python research/a223_price_action/a223_original_d1_real_btc_early_signals.py
+      - name: Source-authenticated evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a223-real-binance-um-original-rsi-regime-anticipant-base-signals
+          path: research/a223_price_action/evidence/A223_D1_REAL_BTC_ORIGINAL_PREMATURE_GATE.json
+          if-no-files-found: warn
+          retention-days: 30
