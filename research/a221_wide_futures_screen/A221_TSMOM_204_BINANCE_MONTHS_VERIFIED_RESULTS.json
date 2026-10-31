@@ -1,0 +1,64 @@
+{
+  "cycle": "A221",
+  "date": "2026-10-31",
+  "candidate": "yongzhe2160cs/trading-engine ORIGINAL TSMOM 1h",
+  "original_commit": "efa37deac60fb9d91abcb181440c94f2f0eac4b8",
+  "signal_blob_sha": "af7d999ff114a872df6bfe65fb5376577451021b",
+  "market": "Binance USD-M BTCUSDT ETHUSDT SOLUSDT",
+  "source": "Binance Vision genuine 1h OHLCV and real fundingRate settlement, 2023-11..2026-09",
+  "sha_verified_month_zip_count": 204,
+  "verification_manifest": "research/a217_trendrider_original/evidence/source_manifest.json",
+  "github_run": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41224278324",
+  "github_run_conclusion": "success",
+  "artifact_id": 13051596030,
+  "artifact_zip_sha256": "e8cc3a80cf030a79d32b6cad37cbd74e7074c90781f3b825dd819a95625a528a",
+  "same_original_signals": true,
+  "independent_execution_method": "decision t at closed hour, target pos applied next hourly open; next-open-to-next-open returns; reverse funding at actual timestamp; terminal fee; 3 equal sleeves",
+  "capital_usdt": 3000,
+  "fee_slippage_base_bp_per_turnover": 10.5,
+  "fee_slippage_stress_bp_per_turnover": 22.5,
+  "constant_leverage_cap": 1,
+  "periods": {
+    "2024": {
+      "hours": 8784,
+      "net_base_pct": 1.74764,
+      "dd_base_pct": -15.80976,
+      "net_stress_pct": -0.90813,
+      "dd_stress_pct": -16.53228,
+      "sharpe_stress": 0.03332,
+      "actual_funding_simple_return_pct": -2.407351
+    },
+    "2025": {
+      "hours": 8760,
+      "net_base_pct": 17.46193,
+      "dd_base_pct": -12.10136,
+      "net_stress_pct": 14.01258,
+      "dd_stress_pct": -12.85924,
+      "sharpe_stress": 0.85082,
+      "actual_funding_simple_return_pct": -0.218549
+    },
+    "2026JanSep": {
+      "hours": 6552,
+      "net_base_pct": 12.41368,
+      "dd_base_pct": -12.52934,
+      "net_stress_pct": 8.66338,
+      "dd_stress_pct": -13.14188,
+      "sharpe_stress": 0.71459,
+      "actual_funding_simple_return_pct": -0.476141
+    }
+  },
+  "predeclared_screen": "stressed net positive in >=2 windows and each drawdown shallower than 25%; 2024 stress is negative; screen result conditional PASS 2/3, NOT final VERIFIED",
+  "status": "PROVISIONAL_REPLICATION_ECONOMICS_PASS_2_OF_3_UNTOUCHED_OOS_MISSING",
+  "limitations": [
+    "all history previously published/seen by strategy author",
+    "not exact original author close-to-close execution / uses independent next-open audit",
+    "synthetic expected fills based on OHLCV, actual fills/spread unknown",
+    "intrabar mark price/liquidation/maintenance margin not independently checked",
+    "no fresh chronological prospective OOS",
+    "portfolio risk from hourly open-to-open MTM, not worst intrabar mark risk",
+    "fixed target weights omit actual realized drift rehedge"
+  ],
+  "verified_futures_candidate": false,
+  "real_orders": false,
+  "paper_orders": false
+}
