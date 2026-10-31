@@ -1,3 +1,5 @@
+> **🔒 ОБЯЗАТЕЛЬНЫЙ И НЕИЗМЕННЫЙ МАНДАТ ИССЛЕДОВАНИЯ:** прежде чем начинать новый цикл стратегий, прочитай [RESEARCH_MANDATE_LOCKED.md](RESEARCH_MANDATE_LOCKED.md) и [машинный контракт](config/research_mandate.lock.json). Основная цель — найти доказуемо прибыльные ORIGINAL-стратегии Binance **USDT-M FUTURES**. Не переключать на Spot и не менять цели без явного решения пользователя. A214–A216 не использовать.
+
 # EMBER Research Engine 0.2.0
 
 EMBER is a **research-only** cryptocurrency strategy engine implementing the HYBRID v2 architecture from `docs/EMBER_ARCHITECTURE_SPEC.md`.
