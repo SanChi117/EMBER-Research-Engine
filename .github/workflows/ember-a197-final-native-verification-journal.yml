@@ -1,0 +1,103 @@
+name: "EMBER A197 independently verify three original DoubleMA source audits and append journal A197"
+on:
+  push:
+    branches: [research/a197-doublema-regime-and-bias-20261031]
+    paths:
+      - ".github/workflows/ember-a197-final-native-verification-journal.yml"
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  verify-and-anchor-A197:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: A197-Original-DoubleMA-Freqtrade2026-4-Official-Lookahead-Recursive-2-Pairs
+          run-id: 41149663096
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a197-official-bias-proof
+      - uses: actions/download-artifact@v4
+        with:
+          name: A197-Original-DoubleMA-2025-Alternate-Regime-8-Native-5m-Results
+          run-id: 41149728068
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a197-2025-original-economics
+      - uses: actions/download-artifact@v4
+        with:
+          name: A197-Original-DoubleMA-5m-Callback-CAUSAL-Fixed-One-Line-Vs-8-Original-Trade-ZIPs
+          run-id: 41150104935
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a197-callback-causal-proof
+      - name: Independently recalculate 16 genuine native ZIP receipts, original four official analyzers and per-source SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a197_finalize_three_native_tests.py \
+             --bias /tmp/a197-official-bias-proof \
+             --regime /tmp/a197-2025-original-economics \
+             --causal /tmp/a197-callback-causal-proof \
+             --output-dir research/doublema_native_oos_20261031 \
+             2>&1 | tee /tmp/a197-machine-verify.log
+          grep -Fq A197_THREE_ORIGINAL_NATIVE_AUDITS_16_ZIP_RECEIPTS_2025_PLUS_2026_AND_OFFICIAL_BIAS_VERIFIED /tmp/a197-machine-verify.log
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a197-before
+          grep -Fq 'INTEGRITY_PASS entries 196' /tmp/a197-before
+      - name: Record results A197 with explicit FAILED economic gate despite positive selective pairs
+        shell: bash
+        run: |
+          set -euo pipefail
+          summary="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('research/doublema_native_oos_20261031/A197_ALL_THREE_INDEPENDENT_SOURCE_RECEIPTS_MACHINE.json').read_text())
+          w=[]
+          for sym in ('BTC','ETH','SOL','LINK'):
+              v=d['alternate_2025_original_PnL'][sym]
+              w.append(f"{sym}: 2025 5bps N{v['5']['n']} net{v['5']['net_pct']:.3f}pct PF{v['5']['PF']:.3f} DD{v['5']['DD_pct']:.2f}pct; stress net{v['12p5']['net_pct']:.3f}pct DD{v['12p5']['DD_pct']:.2f}pct")
+          w.append(f"2025 predeclared ETH/SOL/LINK gate {d['alternate_2025_frozen_gate']}, threshold2/3 FAIL; another historical author-prepublication period is NOT OOS.")
+          w.append(f"2026 exactly ONE source callback candle-boundary change 8 genuine Freqtrade 5m replays, economically changed={d['causal_boundary_changes_economics']}; original vs fixed identical trade keys, exits PnL across all 8 receipts.")
+          w.append(f"Official lookahead check total20 ETH/SOL actual trades false_entry0 false_exit0 false_indicators0, recursive indicator length sensitivity ETH{d['recursive_variants_ETH']} SOL{d['recursive_variants_SOL']}.")
+          w.append("Research economic readiness FAIL; original near-full stake 2x, exchange order book and 1pct whole-account risk not verified; no 15m, no live/PAPER orders.")
+          print(' | '.join(w))
+          PY
+          )"
+          test -n "$summary"
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+             --action-id A197 \
+             --cycle DOUBLEMA_ORIGINAL_OFFICIAL_BIAS_ALTERNATE_2025_AND_CAUSAL_5M_REBUTTAL \
+             --planned "User approved autonomous next research cycle. No changes to original DoubleMA May12 author code SHA40af5c7 blob22ca6588. Three independently preregistered original-source tests: native official Freqtrade2026.4 lookahead/recursive on ETH/SOL real 2026 history, original source untouched 2025 Apr-Dec Binance USD-M 1h+4h with real 5m execution and both commission models over BTC ETH SOL LINK, and A188 one-line causality fixed TEST COPY direct 8 native 5m comparisons against original A196 archive, strict economic fail if fewer than2 of3 promising coins pass in different 2025 regime. NO 15m tune and NO orders." \
+             --executed "Source-pinned genuine Freqtrade2026.4. Native official audit CI#41149663096 SUCCESS artifact13023005264 sha256 116700cd2e78fe3fc52fd78333ba1de34bedb6e860043c4cab53573c9de68999. Native original 2025 CI#41149728068 SUCCESS artifact13022184367 sha256 bb1a20d559411458b8edcd04ebfe51b16263b1d36bbb2d24429760cac0a6e098; 180 original Binance Vision monthly ZIP, strictly continuous real one-hour OHLCV mark settled funding, real 5m Apr-Dec and exact original author strategy source, 8 native Freqtrade ZIP. Source-pinned A188 one-line causal patch test copy (no other trading rule changed) genuine 2026 native 5m CI#41150104935 SUCCESS artifact13023135446 sha256 d276977939bf5da19da4b2f8b525a2dea0f397a2f10d92b8a119cba253ff6768; 8 exact native causal ZIP. All 16 original+causal ZIP receipt PnL sums independently recalculated plus official 4 native analytical result JSON. Full findings: $summary" \
+             --result "ECONOMIC_GENERALIZATION_FAIL. 2025 alternate original author historical (NOT independent OOS) predeclared ETH/SOL/LINK 0/3 positive robust both commission scenarios and DD<15. BTC flips from losing 2026 to positive 2025, ETH 2025 DD21-24pct and SOL stress negative and LINK both negative. 2026 A188 previously confirmed potential use of incomplete current candle in custom callback; direct causal one-line 5m native comparison 8/8 trade results identical, so no measurable economic delta in A196 tested period. Official 20 checked ETH+SOL lookahead signals 0 bias detected but recursive 24 ETH and16 SOL columns sensitive to insufficient history. 2026 A196 crosspair economic gate1/3 previously FAIL. Original 2x near full equity stake unrealistic for small account; 2025 may be author in-sample. No LIVE, no AUTO PAPER, no 15m adaptation." \
+             --verdict DONE --cycle-result FAILED \
+             --countercheck "Independent audit workflow downloads and verifies three exact successful CI artifacts with immutable archive SHA256. Recomputes actual Freqtrade 2026.4 native source PnL sums of all 8 2025 +8 corrected2026 trade ZIPs and source SHA manifests, verifies Freqtrade native lookahead 10 original entries/market ZERO detected bias but no full callback guarantee, recursive sensitivity 24/16 as raw machine, original-vs-causal 2026 8 pairs exact PnL and entry/exit parity. No revision of author entry/exit rules or short disabling; no backtest curve-fitting. Simulation not proof of real limit fill, slippage or 1% wallet risk; don't claim profitability. The journal uses FAILED economic verdict despite technically successful CI." \
+             --evidence ../../research/doublema_native_oos_20261031/A197_OFFICIAL_BIAS_PRETEST_PROTOCOL_RU.md \
+             --evidence ../../research/doublema_native_oos_20261031/A197_2025_REGIME_PREREGISTERED_RU.md \
+             --evidence ../../research/doublema_native_oos_20261031/A197_CAUSAL_5M_CALLBACK_PREREGISTERED_RU.md \
+             --evidence ../../research/doublema_native_oos_20261031/A197_BIAS_AND_2025_RESULTS_RU.md \
+             --evidence ../../research/doublema_native_oos_20261031/A197_ALL_THREE_INDEPENDENT_SOURCE_RECEIPTS_MACHINE.json \
+             --evidence ../../research/doublema_native_oos_20261031/A197_2025_REAL_DATA_SOURCE_SHA_VERIFIED.json \
+             --evidence ../../research/doublema_native_oos_20261031/A197_NATIVE_16_ZIP_SHA_VERIFIED.json \
+             --evidence ../../research/doublema_native_oos_20261031/a197_finalize_three_native_tests.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a197-after
+          grep -Fq 'INTEGRITY_PASS entries 197' /tmp/a197-after
+      - name: Anchor independently verified three source artifacts and A197 permanent append-only row
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/doublema_native_oos_20261031/A197_BIAS_AND_2025_RESULTS_RU.md \
+                  research/doublema_native_oos_20261031/A197_ALL_THREE_INDEPENDENT_SOURCE_RECEIPTS_MACHINE.json \
+                  research/doublema_native_oos_20261031/A197_2025_REAL_DATA_SOURCE_SHA_VERIFIED.json \
+                  research/doublema_native_oos_20261031/A197_NATIVE_16_ZIP_SHA_VERIFIED.json \
+                  research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A197 original DoubleMA: 2025 economic gate 0/3 FAIL, official lookahead 20 clean, recursive sensitivity, causal 5m 8/8 same, no live"
+          git push origin HEAD:refs/heads/research/a197-doublema-regime-and-bias-20261031
