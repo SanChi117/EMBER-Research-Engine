@@ -1,0 +1,150 @@
+name: "EMBER A196 verify original 8x5m native receipts and 40x20 source causal audit; journal"
+on:
+  push:
+    branches: [research/a196-doublema-execution-causality-20261031]
+    paths:
+      - ".github/workflows/ember-a196-native-5m-verified-journal.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  close-A196-immutable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: A196-Original-DoubleMA-1h-vs-5m-4Pairs-8-Genuine-Freqtrade-2026
+          run-id: 41148069316
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a196-real-5m-native
+      - uses: actions/download-artifact@v4
+        with:
+          name: A196-Original-Source-Historical-Full-vs-Prefix-Causal-Replay-40-Snapshots
+          run-id: 41148182095
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a196-real-prefix
+      - name: Independently reread all native original 5m ZIP receipts, 1h diffs and 40x20 original source comparisons
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,zipfile
+          from pathlib import Path
+          root=Path('research/doublema_native_oos_20261031')
+          source=Path('/tmp/a196-real-5m-native')
+          prefix=Path('/tmp/a196-real-prefix')
+          a=source/'A196_5M_NATIVE_DETAIL_COMPARISON.json'
+          assert a.is_file(),('missing_native_receipts',list(source.rglob('*'))[:60])
+          obj=json.loads(a.read_text())
+          assert obj['schema']=='EMBER_A196_ORIGINAL_DOUBLEMA_1H_VS_5M_DETAIL_NATIVE'
+          assert obj['source_strategy_commit']=='40af5c7c1c44253766428cfb06babf22f9817aa4'
+          assert obj['source_blob']=='22ca6588bbd056e671783f676f1a4010cbfc1bb6'
+          assert obj['freqtrade']=='2026.4'
+          assert obj['window']=='[2026-05-13,2026-10-01)'
+          assert obj['frozen_gate_per_coin']=={'ETH':False,'SOL':True,'LINK':False}
+          assert obj['frozen_gate_at_least_2_of_3'] is False
+          sym={'BTC':(18,-18.46716,0.4789),
+               'ETH':(35,23.26309,1.78177),
+               'SOL':(26,22.13520,1.6879),
+               'LINK':(22,22.67047,2.34366)}
+          xdict={}
+          for s,(n,pct,pf) in sym.items():
+              assert set(obj['outcomes'][s])=={'5','12p5'}
+              for f in ('5','12p5'):
+                  z=obj['outcomes'][s][f]['five_minute']
+                  zipname=source/f'5m-detail-{s}-fee{f}.zip'
+                  assert zipname.is_file() and zipfile.is_zipfile(zipname),zipname
+                  b=zipname.read_bytes()
+                  assert hashlib.sha256(b).hexdigest()==obj['outcomes'][s][f]['source_detail_zip_sha256']
+                  with zipfile.ZipFile(zipname) as fzip:
+                      names=[t for t in fzip.namelist() if t.endswith('.json') and '_config' not in t]
+                      assert len(names)==1,names
+                      raw=json.loads(fzip.read(names[0]))['strategy']['VideoDoubleMaFuturesStrategy']
+                  assert raw['total_trades']==len(raw['trades'])==z['n']
+                  assert abs(raw['profit_total']*100-z['return_pct'])<0.0001
+                  assert abs(raw['profit_total_abs']-z['pnl_usd'])<0.0001
+                  assert abs(raw['profit_factor']-z['PF'])<0.0001
+                  assert abs(sum(t['profit_abs'] for t in raw['trades'])-raw['profit_total_abs'])<0.001
+                  assert all('2026-05-13'<=t['open_date'][:10]<'2026-10-01' for t in raw['trades'])
+                  assert obj['outcomes'][s][f]['diff']['matched_entry_timestamps']>=12
+                  xdict[f'{s}-{f}']=hashlib.sha256(b).hexdigest()
+              n0=obj['outcomes'][s]['5']['five_minute']
+              assert n0['n']==n and abs(n0['return_pct']-pct)<0.0001 and abs(n0['PF']-pf)<0.0001
+          psource=source/'data/A196_REAL_5M_SHA_MANIFEST.json'
+          if not psource.is_file():
+              psource=next(iter(source.rglob('A196_REAL_5M_SHA_MANIFEST.json')))
+          manifest=json.loads(psource.read_text())
+          assert len(manifest['symbols'])==4
+          for s in ('BTCUSDT','ETHUSDT','SOLUSDT','LINKUSDT'):
+              assert manifest['symbols'][s]['candles']==44064
+              sources=manifest['symbols'][s]['sources']
+              assert len(sources)==5
+              assert all(len(z['zip_sha256'])==64 for z in sources.values())
+          p=prefix/'A196_PREFIX_VS_FULL_ORIGINAL_SIGNAL_RECEIPTS.json'
+          assert p.is_file(),('prefix_receipt_missing',list(prefix.rglob('*'))[:60])
+          causal=json.loads(p.read_text())
+          assert causal['total_snapshots']==40
+          assert causal['mismatching_snapshots']==0
+          assert len(causal['probe_columns'])==20
+          assert all(v['mismatching_snapshots']==0 and v['evaluated_snapshots']==10 for v in causal['closed_1h_full_vs_prefix_probe'].values())
+          assert all(len(o['observations'])==10 for o in causal['closed_1h_full_vs_prefix_probe'].values())
+          assert (root/'A196_CAUSALITY_AND_EXECUTION_RESULTS_RU.md').stat().st_size>3000
+          (root/'11_A196_REAL_5M_NATIVE_VERIFIED.json').write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+          (root/'12_A196_PREFIX_ORIGINAL_CAUSAL_VERIFIED.json').write_text(json.dumps(causal,ensure_ascii=False,indent=2)+'\n')
+          (root/'13_A196_REAL_5M_SOURCE_SHA_VERIFIED.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          hashes={'schema':'EMBER_A196_ORIGINAL_5M_NATIVE_8_ZIP_SHA256',
+           'source_native_run':41148069316,
+           'source_native_artifact_id':13022036458,
+           'source_native_artifact_digest':'a2feb855954701193f82895820dc00c2dfa64c1a7ee270bab56ef9633bda0339',
+           'source_causal_run':41148182095,
+           'source_causal_artifact_id':13021044804,
+           'source_causal_artifact_digest':'1fea6180ff6047470e1f083c8ddcb305fdfea6aedb54075a24f1ef5791553f61',
+           'native_zip_sha256':xdict}
+          (root/'14_A196_EIGHT_NATIVE_SOURCE_SHA_VERIFIED.json').write_text(json.dumps(hashes,indent=2)+'\n')
+          print('A196_FROZEN_ORIGINAL_8_NATIVE_5M_ZIPS_40x20_PREFIX_INDEPENDENTLY_VERIFIED')
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/prev
+          grep -Fq 'INTEGRITY_PASS entries 195' /tmp/prev
+      - name: Append journal action A196; technical dual QA success but economic advance FAIL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A196 --cycle DOUBLEMA_EXACT_ORIGINAL_SOURCE_REAL_5M_EXECUTION_AND_40_PREFIX_CHECK \
+            --planned "Original May12 MirrorNew DoubleMA pinned blob, Freqtrade2026.4 1h versus genuine 5m-detail native intrabar backtesting 4 BTC ETH SOL LINK symbols, two unchanged trading fee scenarios 5 and12.5bps/side, same 1h/4h Binance OHLCV mark funding as A195 and original trade archive. Independently assess orig source full history versus as-of prefix at 10 historical moments per market x20 indicators=800 comparisons. Preregister at least2 of ETH SOL LINK passing both fee scenarios, PF1.25, N20, walletDD15pct, 70pct 5m to1h baseline return retention and top3 of gross winners below60pct; NO live, NO speedup retune." \
+            --executed "Original source Git blob22ca6588 and Freqtrade2026.4 pinned, no change to any source trading rules. Genuine Binance Vision USD-M May-Sep 5m original 20 monthly ZIP SHA256 with four full 44064-candle source series, plus A195 1h price/mark/funding. Native 5m run GitHub Actions #41148069316 SUCCESS artifact13022036458 sha256 a2feb855954701193f82895820dc00c2dfa64c1a7ee270bab56ef9633bda0339. Independently verified true eight native Freqtrade ZIP trade totals against prior A195 1h original ZIP. BASE BTC18 N -18.46716pct PF0.4789 DD25.05, ETH35 +23.26309pct PF1.78177 DD9.46, SOL26 +22.13520pct PF1.6879 DD10.00, LINK22 +22.67047pct PF2.34366 DD7.94. STRESS BTC18 -22.68750pct PF0.40734, ETH35 +12.69678pct PF1.34096 DD13.83, SOL26 +14.54487pct PF1.39788 DD11.22, LINK22 +17.75237pct PF1.86318 DD9.90. Cross check source 1h originals exit route changes among common entries BTC15 ETH18 SOL17 LINK17 base. Separate as-of 4h+1h prefix source comparison #41148182095 SUCCESS artifact13021044804 sha256 1fea6180ff6047470e1f083c8ddcb305fdfea6aedb54075a24f1ef5791553f61; original 4 coins*10 historical points*20 columns =800 comparisons, ZERO mismatch." \
+            --result "SOURCE_AND_ORIGINAL_NATIVE_EXECUTION_PROOF_PASS; CAUSAL_PREFIX_800_OF_800_NO_MISMATCH. ECONOMIC_PREDECLARED_ADVANCE_GATE_FAIL: ETH=false SOL=true LINK=false 1/3 vs required2/3. BTC remains losing at both cost scenarios. ETH 5m stress profit drops from +39.536pct 1h to +12.697pct. LINK stress +38.681 to +17.752pct. SOL original 1h+4h+source on 5m detail positive but concentration/prior historical fit and user small-account risk not solved. No full Freqtrade lookahead-analysis or recursive-analysis, no true broker bidask limit queue or price slippage, no genuine portfolio 1pct risk sizing, no real or PAPER orders. Recommend keep source for research only and no quick 15m remix after seeing 2026 sample." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Original unchanged source SHA, full true Freqtrade 2026.4 engine, distinct original A195 native reference ZIP, all 8 detailed ZIP receipts independently validated by identical PnL and trade counts, 20 original monthly Binance 5m OHLCV ZIP SHA complete, 40 independently truncated prefix and closed 4h at 20 indicator columns identical to full. 1h vs 5m changes close timestamp in many common trades and opens 35 ETH vs23 before, so 1h fills unreliable. Higher fee may change endogenous exit logic. A196 prefix only 40 sampled dates, NOT official full Freqtrade lookahead/recursive analysis. Freqtrade model still approximates limit fills; 5m OHLC ambiguous inside5m, no extra slip or tick order book, original risk near full wallet 2x, no small deposit recommendation." \
+            --evidence ../../research/doublema_native_oos_20261031/A196_5M_EXECUTION_PREREGISTERED_PROTOCOL_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/A196_CAUSALITY_AND_EXECUTION_RESULTS_RU.md \
+            --evidence ../../research/doublema_native_oos_20261031/11_A196_REAL_5M_NATIVE_VERIFIED.json \
+            --evidence ../../research/doublema_native_oos_20261031/12_A196_PREFIX_ORIGINAL_CAUSAL_VERIFIED.json \
+            --evidence ../../research/doublema_native_oos_20261031/13_A196_REAL_5M_SOURCE_SHA_VERIFIED.json \
+            --evidence ../../research/doublema_native_oos_20261031/14_A196_EIGHT_NATIVE_SOURCE_SHA_VERIFIED.json \
+            --evidence ../../research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py \
+            --evidence ../../research/doublema_native_oos_20261031/a196_original_causal_prefix_probe.py \
+            --evidence ../../research/doublema_native_oos_20261031/a196_compare_1h_to_5m_native.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/current
+          grep -Fq 'INTEGRITY_PASS entries 196' /tmp/current
+      - name: Commit machine evidence and permanent append-only audit A196
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/doublema_native_oos_20261031/11_A196_REAL_5M_NATIVE_VERIFIED.json \
+                  research/doublema_native_oos_20261031/12_A196_PREFIX_ORIGINAL_CAUSAL_VERIFIED.json \
+                  research/doublema_native_oos_20261031/13_A196_REAL_5M_SOURCE_SHA_VERIFIED.json \
+                  research/doublema_native_oos_20261031/14_A196_EIGHT_NATIVE_SOURCE_SHA_VERIFIED.json \
+                  research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A196 original DoubleMA 1h vs genuine 5m detail and 800 source causal comparisons: technical PASS economic GATE FAIL"
+          git push origin HEAD:refs/heads/research/a196-doublema-execution-causality-20261031
