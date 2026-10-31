@@ -1,0 +1,49 @@
+name: "EMBER A196 unchanged source 1h full-vs-prefix historical causality checks"
+on:
+  push:
+    branches: [research/a196-doublema-execution-causality-20261031]
+    paths:
+      - ".github/workflows/ember-a196-doublema-causal-prefix.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-strategy-prefix-asof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original strategy environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install "freqtrade==2026.4"
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/a196-prefix-original
+          test "$(git -C /tmp/a196-prefix-original rev-parse HEAD)" = 40af5c7c1c44253766428cfb06babf22f9817aa4
+      - name: Download validated real Binance 1h+4h and compare original source on full vs causal prefix
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a196-prefix-reports
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py \
+            --datadir a196-prefix-reports/data | tee a196-prefix-reports/source-check.log
+          python research/doublema_native_oos_20261031/a196_original_causal_prefix_probe.py \
+            --source /tmp/a196-prefix-original/user_data/strategies/VideoDoubleMaFuturesStrategy.py \
+            --datadir a196-prefix-reports/data \
+            --output a196-prefix-reports/A196_PREFIX_VS_FULL_ORIGINAL_SIGNAL_RECEIPTS.json \
+            2>&1 | tee a196-prefix-reports/original-causality.log
+          grep -Fq A196_ORIGINAL_CODE_PREFIX_COMPARISON_FINISHED a196-prefix-reports/original-causality.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A196-Original-Source-Historical-Full-vs-Prefix-Causal-Replay-40-Snapshots
+          path: |
+            a196-prefix-reports/*.log
+            a196-prefix-reports/*.json
+            a196-prefix-reports/data/A195_DATA_SHA_MANIFEST.json
+          retention-days: 30
