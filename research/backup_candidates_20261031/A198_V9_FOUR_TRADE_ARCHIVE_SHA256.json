@@ -1,0 +1,11 @@
+{
+  "source_run": 41151388321,
+  "artifact_id": 13022922905,
+  "artifact_zip_digest_sha256": "4820e053ba62b0be240bb7a5bdf107d77acb5501a5ba98e6beef625fd55595dc",
+  "four_trades_sha256": {
+    "author_original_6pct_target__base": "953f6f9063c4b0ed6b5d2a0bef5cdbcb9eb5afae3e78f867b31697e58b3cb4ee",
+    "author_original_6pct_target__stress": "2a38cc9f07b0ca31e3573e9e52f04e66d80b76705c3231c09e60f5475fba367d",
+    "external_1pct_cap__base": "177b3d725cb42d0efe2a703721f532d46686bb850183f7f08afac2b910e3678d",
+    "external_1pct_cap__stress": "ed298b308c383b2f9fac4d40dd2f9321a0bfaba7cde8df80d2ce5fb45a7686fa"
+  }
+}
