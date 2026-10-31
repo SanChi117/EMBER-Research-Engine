@@ -1,0 +1,100 @@
+{
+  "cycle": "A238",
+  "state": "NATIVE_ALL_COMPLETE_NOT_VERIFIED",
+  "run_id": 41243084798,
+  "job_id": 124660825492,
+  "workflow_commit": "d099ccbc2ca9ba80e0ca61a94e85f4725f99c0bb",
+  "market": "Binance USDT-M MAINNET genuine klines/funding/mark, TESTNET contract metadata",
+  "strategy": "Risk_Stair_S5",
+  "timeframe": "15m",
+  "leverage_original": 5,
+  "account": {
+    "wallet": 1000,
+    "stake": "unlimited",
+    "balance_ratio": 0.4,
+    "max_open_trades": 4,
+    "pairs": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT",
+      "SOL/USDT:USDT",
+      "ADA/USDT:USDT"
+    ]
+  },
+  "source_pins": {
+    "strategy": "9b6ba1f5466727da1e9446f4e283b1c555fca59b",
+    "experiment_manifest": "b07d45fe9485a0e71af6ff26f8cfd66af793f587",
+    "experiment_runner": "6e35055ecf8aa7e7ee247ddf5ac5f9b9a0d10c93",
+    "config": "ee0f8c8a4c1ad827a38109c7872c1f09ac7383f3"
+  },
+  "artifacts": [
+    {
+      "id": 13057784292,
+      "name": "a238-risk-stair-original-four-pair-unlimited-stake",
+      "bytes": 3477039,
+      "digest": "sha256:239d0c11a107bbd415082699b759820c4968575c0565b9de2757fcf7dcff6102"
+    }
+  ],
+  "limitations": [
+    "5x original leverage and dynamic isolated maintenance margin/liquidation not independently verified",
+    "Orderbook and real slippage absent; fee stress is fee surcharge, not actual fills",
+    "Experiment PowerShell path experiments differs from source risk_exp, exact historical CLI parity not proven",
+    "Already-known 2024/2025/2026 windows, no untouched OOS",
+    "Historical costs based on Freqtrade modeled funding"
+  ],
+  "results": [
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2025",
+      "cost_model": "base",
+      "native_profit_total_pct": 27.717989372,
+      "native_max_drawdown_account": 0.13512378145295165,
+      "native_trade_count": 148
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2025",
+      "cost_model": "stress",
+      "native_profit_total_pct": 11.803733237000003,
+      "native_max_drawdown_account": 0.16526917398872715,
+      "native_trade_count": 150
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2024",
+      "cost_model": "base",
+      "native_profit_total_pct": 39.962019941,
+      "native_max_drawdown_account": 0.08709615845555399,
+      "native_trade_count": 164
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2024",
+      "cost_model": "stress",
+      "native_profit_total_pct": 22.288099761999998,
+      "native_max_drawdown_account": 0.10194603357310998,
+      "native_trade_count": 167
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "base",
+      "native_profit_total_pct": 0.5202651220000001,
+      "native_max_drawdown_account": 0.0797100798217088,
+      "native_trade_count": 62
+    },
+    {
+      "strategy": "Risk_Stair_S5",
+      "timeframe": "15m",
+      "year": "2026_JAN_MAY",
+      "cost_model": "stress",
+      "native_profit_total_pct": -2.7431679989999997,
+      "native_max_drawdown_account": 0.09882747841411253,
+      "native_trade_count": 61
+    }
+  ]
+}
