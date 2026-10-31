@@ -1,0 +1,20 @@
+name: BLOCKED — user-rejected research A214-A216
+
+on:
+  push:
+    branches:
+      - 'research/a214-unlevered-monthly-momentum-portfolio-2022-2026-20261031'
+      - 'research/a215-edge-first-cross-family-economic-review-20261031'
+      - 'research/a216-preregistered-btc-voltarget-forward-20261031'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  user_rejected_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: STOP off-scope research
+        run: |
+          echo "::error title=STOP: rejected research branches::This branch is permanently rejected by the user. Do not run or merge A214-A216. See GitHub issue #9."
+          echo "Original mandate: discover and validate original Binance USDT-M FUTURES strategies, not independently substitute spot-only models."
+          exit 1
