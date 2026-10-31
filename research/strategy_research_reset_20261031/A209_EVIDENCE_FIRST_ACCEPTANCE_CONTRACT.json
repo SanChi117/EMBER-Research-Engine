@@ -1,0 +1,116 @@
+{
+  "protocol_id": "A209_EDGE_FIRST_20261031",
+  "status": "ACTIVE_RESEARCH_POLICY_NOT_VALIDATED_STRATEGY",
+  "scope": "EMBER Research Engine; independent crypto strategy discovery; no exchange orders",
+  "primary_objective": "Evidence for positive net expectation under realistic expenses with bounded portfolio drawdown and unattended operability",
+  "hard_research_gates": [
+    "Original source and data SHA provenance or explicitly labelled independent causal replay",
+    "Causal timestamps: indicators only after source candles close; simulate entry strictly after signal known",
+    "Complete fills/positions/funding/fees/slippage and worst-case no-fill/gap documented; fail closed on missing data",
+    "Chronological preregistration before scoring; no hyperopt on claimed test windows",
+    "Reference baseline at comparable capital at risk; cash, spot buy-and-hold and applicable simple-rule benchmark",
+    "Risk measured at portfolio level when aggregate portfolio claimed; no arithmetic sum of separate wallets mislabelled as portfolio",
+    "Several non-overlapping market regimes and independent forward/PAPER; enumerate prior tests and multiple comparisons",
+    "Safety check: stop, liquidation, collateral, min notional, API error, delayed data and unattended state management",
+    "No live order or current PAPER scheduler modification without separate explicit request"
+  ],
+  "not_hard_constraints": [
+    "Target X percent return by date Y",
+    "3-5 trades per day",
+    "Minimum one trade per day",
+    "5m or 15m chart required",
+    "Fixed TP 1-2 percent of price",
+    "Compulsory long plus short",
+    "Compulsory 4h price zone in every strategy",
+    "Compulsory 20-30x leverage",
+    "Fixed reward-risk exactly 2",
+    "Any single nominal deposit-pump target"
+  ],
+  "strategy_families": [
+    {
+      "id": "trend",
+      "examples": [
+        "daily time-series momentum",
+        "hourly/daily Donchian breakout",
+        "volatility managed trend"
+      ]
+    },
+    {
+      "id": "regime",
+      "examples": [
+        "trending vs ranging vs hold cash"
+      ]
+    },
+    {
+      "id": "swing_reversion",
+      "examples": [
+        "event reversal",
+        "causal mean reversion"
+      ]
+    },
+    {
+      "id": "cross_section",
+      "examples": [
+        "ranked liquidity-screened portfolio rotation"
+      ]
+    },
+    {
+      "id": "carry",
+      "examples": [
+        "spot-perpetual funding hedge",
+        "basis/carry with two-leg execution"
+      ]
+    }
+  ],
+  "metrics": [
+    "cash_net_USDT",
+    "wallet_net_return_pct",
+    "portfolio_CAGR_when_full_calendar",
+    "portfolio_max_mark_to_market_drawdown_pct",
+    "benchmark_net_return_pct",
+    "max_single_trade_loss_USDT",
+    "worst_gap_loss_USDT",
+    "calmar",
+    "profit_factor_if_statistically_defined",
+    "number_completed_trades",
+    "effective_number_independent_samples",
+    "time_in_market_pct",
+    "share_profit_top3_wins",
+    "commissions_paid_USDT",
+    "funding_paid_USDT",
+    "extra_slippage_sensitivity",
+    "rolling_OOS_return_and_drawdown",
+    "positive_negative_years",
+    "unseen_forward_PAPER_results"
+  ],
+  "status_values": [
+    "SOURCE_ONLY",
+    "BLOCKED",
+    "SOURCE_VERIFIED",
+    "RESEARCH_NEGATIVE",
+    "INSUFFICIENT_EVIDENCE",
+    "PROVISIONAL_RESEARCH_EDGE",
+    "FORWARD_PAPER_VALIDATED"
+  ],
+  "decision_rules": [
+    "NEVER infer profitable from successful CI or from original author's README",
+    "NO fixed trade count per day veto; insufficient sample size leads INSUFFICIENT_EVIDENCE, not manufactured trades",
+    "Do not claim PROVISIONAL_RESEARCH_EDGE unless source, expenses, benchmark and chrono data are verified and no disqualifying execution defect exists",
+    "Do not claim FORWARD_PAPER_VALIDATED from backtest data, even if several years",
+    "PROVISIONAL_RESEARCH_EDGE not equivalent to trading approval",
+    "Carry cannot claim net returns from funding-only series absent spot/perp basis and hedge-leg costs",
+    "Do not optimize on already used 2024/2025/2026 windows and call them unseen",
+    "Maximize risk-adjusted robustness, not raw CAGR from extreme leverage"
+  ],
+  "research_test_horizon": {
+    "used_EMBER_market_windows": [
+      "2024-05-13..2024-09-30",
+      "2025-05-13..2025-09-30",
+      "2026-05-13..2026-09-30"
+    ],
+    "status": "NOT_PRISTINE_OOS",
+    "next_unseen_test": "future chronological forward PAPER or otherwise verifiably untouched market data"
+  },
+  "execution_approval": false,
+  "existing_automations_unchanged": true
+}
