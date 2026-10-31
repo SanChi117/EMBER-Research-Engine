@@ -1,3 +1,44 @@
-# A231 — восстановление очереди повторной проверки
+# A231 — полное возвращение прежних кандидатов на независимую переоценку
 
-Предыдущие отрицательные результаты не считаются окончательными без аудита паритета с оригиналом. Пользовательский запрет A220 сохраняется. Реальные сделки и PAPER не менялись.
+31 октября 2026. Решение пользователя: **вернуть все потенциально прибыльные ранее исключённые оригиналы**. Статус `REOPEN` означает только повторный аудит, не признание доходности. Старые отрицательные тесты сохраняются, PAPER/биржевые ордера не трогаются. Цель `RESEARCH_MANDATE_LOCKED.md` неизменна. Три прямых запрета `RESEARCH_USER_VETO_A220.md` по-прежнему обязательны.
+
+## Уже доказанное: прежний тестер был неполным
+
+[Корректирующий CI A230](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41236167218) завершил **22 из 22** родных Freqtrade-прогонов неизменённых авторских исходников. Включены прежде пропущенные protections; добавлен genuine 5m detail для стратегий 15m/1h/4h. При STRESS 0.11% на сторону результаты 2025: TrendFollowing **−71.41% → −28.41%**, Risk_Stair_S5 **+19.14% → +12.36%**, DualTrend **+5.74% → +8.09%**, BearRegime **+3.27% → +3.83%**. На 2024 Risk S5 **+0.93% → −3.65%**. Прежние A228–A229 нельзя использовать как окончательные вердикты. В DualTrend оригинальный `pd.merge_asof` 4h BTC без переноса до 4h CLOSE даёт подозрение на использование незавершённой 4h свечи: положительный PnL такого оригинала НЕ подтверждён. BearRegime использует BTC mom20d=480 часов, но startup=250 часов.
+
+## ВОЗВРАЩЕНЫ для source/author/config/data/parity переоценки — приоритет P0/P1
+
+| № | Стратегия / источник | Старый цикл | Почему вернуть; какой следующий критерий |
+|---|---|---|---|
+| 01 | **Double MA Futures** — MirrorNew/2026DoubleMaFuturesStrategy | A188–A197 | В оригинальных 5m-прогонах 2026 ETH/SOL/LINK положительны, а в 2025 BTC/ETH положительны; старый 2-of-3 gate слишком узок. Проверить авторские protections, startup, весь точный оригинальный портфель, каузальность и full risk |
+| 02 | **HERMES SuperTrend 4h** — chrysek70/hermes-trading | A192 | Авторские 48 месяцев 20-fold WF BTC+ETH +40.99%, PF2.48, DD9.61; вход по тому же close и стоп по high/low текущей свечи не доказали реальную исполнимость. Нужен независимый next-open и 1m fill |
+| 03 | **APEX no-pyramid** — EstebanSP23/crypto_systematic_research | A192 | Авторская 27/27 sensitivity положительная, но 2025 отрицательный; не было полного независимого 8-парного source-native выполнения с funding/slippage |
+| 04 | **DualTrendCompressionRestartShortV1** — wangc-joker/ft_userdata | A228–A230 | На 2025 +8.09% STRESS, на Jan–May2026 +6.28%, на 2024 −2.59%; ПЕРВЫЙ ШАГ — устранить или доказательно исключить 4h BTC lookahead, отдельный causal research variant |
+| 05 | **BearRegimeShortV1** — IvPalmer/Master-Trader | A228–A230 | Два года небольшого плюса, 2026 только 4 сделки; пересчитать с требуемым прогревом BTC >=480 часов, полным оригинальным universe |
+| 06 | **Risk_Stair_S5** — linhuang1212-coder/crypto-quant-trading | A228–A230 | 2025 +12.36% STRESS, 2024/2026 отрицательные; оригинальный 5x должен пройти официальный mark/liquidation и полноценный авторский universe |
+| 07 | **TrendFollowing** — krantikaridev/freqtrade | A228–A230 | Неполный тест изначально преувеличил просадку. Восстановить оригинальные 33 пары и его protections, не менять сигналы |
+| 08 | **NASOSv7LongShort** — remiotore/ccxt-freqtrade | A228–A230 | 3 majors не равны 33 Freqle; фактический `use_custom_stoploss=False`, не принимать написанный, но отключённый стоп |
+| 09 | **dip_catcher** — viktors1982/trading | A202–A203 | 2026 экономический PASS3/4, 2025 FAIL0/4; оригинальный SL8% цены, slots 98%; проверить полный состав и заполнение ордеров, нельзя выбирать только 2026 |
+| 10 | **TSMOM** — yongzhe2160cs/trading-engine | A221 | Без safety breaker 2025 +14% и 2026 +8.66% STRESS; штатная защита останавливает весь счёт и превращает оба года в минус. Проверить ТОЛЬКО авторский штатный restart protocol, не отключать breaker |
+| 11 | **SingleB_FixedRR** — liu57liu456/backtest-autopsy | A189/A191 | ETH Binance 2026 STRESS −0.42%, а автор заявлял OKX 10-coins; с одним ETH нельзя судить об оригинальном портфеле |
+| 12 | **SOL Trend Pullback V9** — kboranyldz/sol-trading-research | A198 | В старой независимой модели лишь 12 сделок, а реальный авторский mark-stop и 15s runtime не воспроизведены |
+| 13 | **Octopus multi-perp trend CTA** — OctopusTakopi/crypto-trend-following | A221 | Авторский perp portfolio 788 контрактов/DD≈30%, капитал $100k; проверить фактический USD-M состав и минимальный рабочий капитал; это НЕ veto-источник funding-rate-alpha |
+| 14 | **MsSupportResistanceV1** — fortunato/pymarket-structure | A189/A190 | Авторские 404 сделок и PF1.38, но полный оригинальный Freqtrade класс не опубликован; вернуть в SOURCE RECOVERY, не подменять самодельным |
+| 15 | **XRP funding MR / OI momentum** — Gotodataru/binance-futures-backtest | A223 | Заявление автора +0.19% OOS на 44 сделки, данных BIGdatabaseBinance в репо нет; воспроизвести по настоящему USD-M при неизменных сигналах |
+| 16 | **MTF PA scanner** — Acekiller88/crypto-signal-scanner | A222 | Полная структура BOS/FVG, но source может fallback в Spot: только подлинный USD-M, без молчаливого fallback |
+| 17 | **HERMES Quattro Donchian** — EstebanSP23/crypto_systematic_research | A192 | Автор +1107%, но DD37.5% и 4 пирамидальных добора: только risk/liquidation-screen, не для PAPER без полного риска |
+| 18 | **nateemma mean-reversion** — nateemma/strategies | A193 | Авторские OOS выигрыши концентрируются в ZEC с неизвестной доступной ликвидностью; нужны исторические spread/orderbook |
+| 19 | **RSI/ADX scalper** — jiangkaili/binance-trader-bot | A193 | Авторский PnL не учитывает входные комиссии; ETH cross-pair отрицателен, BTC/авторское расписание проверить отдельно |
+| 20 | **FAdxSma / FReinforced** — freqtrade/freqtrade-strategies | A199 | 4 major-парные старые native эксперименты отрицательны либо N мало; полный конфиг и author timeframe/fee parity не установлены |
+
+**Другая очередь / условно, не запускать автоматически**: `AggressiveSupportResistanceScalper` Meszqt (A205/A206: лишь 7 сделок на 4 пары за 141 день, возможная утечка full-series, проблемы лимитного исполнения); BIGBEAR/BIGBULL genia503 (A200: исходный выбор TP или SL внутри свечи случайный); momentum wick/RSI (A201: исходные большие стопы); TrendRider darkvolg (A217: послеиздержечная проверка отрицательна); Revelio sweep→BOS (A222: отрицательные 2024/25); Pranay FVG/OB (A222: same-close fill); TrendFutures Kureshi25 (A210–A211: автор сам признавал сильный полный убыток); `MsFilterV6` fortunato (missing class и top3 дают 96% прибыли); A212–A213 spot/perp carry (модель positive, но доказанное нарушение isolated short collateral, только отдельный двухногий research).
+
+**НЕ включать в очередь экономических испытаний до исправления оригинала**: `denniskid2520/btcusdt-research-archive` (A223: 59/59 первых 1h сигналов преждевременно используют незавершённую 4h свечу), `kiattisakph/crypto-scalp-bot` (A208: неверный timestamp сигнала), SPOT-only BinHV45 (вне Binance USD-M), наши A194/A225–A227 самодельные гипотезы (не существующие оригинальные стратегии), и опубликованно убыточный A51Strategy без новой независимой информации. Три USER_VETO A220 исключены при любых условиях.
+
+## ИСПРАВЛЕННЫЙ ПОРЯДОК — не новая торговая система
+
+Для каждого оригинала: (1) pin source+config+author universe+portfolio risk; (2) source chronology, HTF close, lookahead/recursive; (3) воспроизвести именно авторский базовый бэктест, проверить parity по сделкам; (4) воспроизвести неизменённый original на реальных Binance USD-M с корректными native protections, 1m/5m, funding/mark, slippage, order nonfill, margin/liquidation; (5) раздельное чистое PnL и drawdown, independent OOS/forward. Для отрицательных прошлых тестов объяснить разницу до повторного verdict. **Отрицательный отдельный год не является автоматическим FAIL, как и один положительный год не является PASS.** Считать net expectation/variance/stress/общий OOS и worst DD. Не оптимизировать на уже увиденных периодах. `VERIFIED` только после forward, до того `PROVISIONAL`.
+
+**Пока выполнено:** найден реестр и завершён A230 corrected пяти оригиналов. Это **не означает, что все старые стратегии уже экономически перепроверены**. 0 подтверждённых прибыльных. Реальные и действующие PAPER без изменений.
+
+Источники: https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41236167218 , https://github.com/SanChi117/EMBER-Research-Engine/blob/research/a223-price-action-structural-retest-independent-source-audit-20261031/research/backup_candidates_20261031/A192_RESERVE_CANDIDATES_RU.md , https://github.com/SanChi117/EMBER-Research-Engine/blob/research/a223-price-action-structural-retest-independent-source-audit-20261031/research/doublema_native_oos_20261031/A197_BIAS_AND_2025_RESULTS_RU.md .
