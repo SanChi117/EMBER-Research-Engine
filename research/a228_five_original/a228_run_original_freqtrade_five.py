@@ -41,7 +41,23 @@ def config_for_run():
         "name":"binance",
         "key":"",
         "secret":"",
-        "ccxt_config":{"enableRateLimit":True},
+        "ccxt_config":{
+          "enableRateLimit":True,
+          "options":{"fetchMarkets":["linear"],"fetchCurrencies":False},
+          "urls":{"api":{
+            "fapiPublic":"https://testnet.binancefuture.com/fapi/v1",
+            "fapiPublicV2":"https://testnet.binancefuture.com/fapi/v2",
+            "fapiPublicV3":"https://testnet.binancefuture.com/fapi/v3"
+          }}
+        },
+        "ccxt_async_config":{
+          "options":{"fetchMarkets":["linear"],"fetchCurrencies":False},
+          "urls":{"api":{
+            "fapiPublic":"https://testnet.binancefuture.com/fapi/v1",
+            "fapiPublicV2":"https://testnet.binancefuture.com/fapi/v2",
+            "fapiPublicV3":"https://testnet.binancefuture.com/fapi/v3"
+          }}
+        },
         "pair_whitelist":["BTC/USDT:USDT","ETH/USDT:USDT","SOL/USDT:USDT"],
         "pair_blacklist":[]
       },
@@ -160,6 +176,7 @@ def main():
             "strategy_runs":[],"warnings":["There is no independent orderbook/slippage fill replay",
                 "Funding and mark are genuine input; fill prices are modelled by Freqtrade",
                 "One-year runs reset wallet; 3 majors differ from Freqle 33-pair league",
+                "IMPORTANT: official Binance FUTURES TESTNET public exchangeInfo only for CCXT contract metadata due to mainnet HTTP451; prices/mark/funding remain genuine mainnet USD-M archives; precision/limits require later mainnet parity",
                 "Risk_Stair S5 native 5x can liquidate; OHLC backtest is insufficient margin-tier verification"]}
     for year,timerange in YEARS.items():
         for scenario,fee in COSTS.items():
