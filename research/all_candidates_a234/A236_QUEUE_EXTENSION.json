@@ -1,0 +1,36 @@
+{
+  "base_register": "A234: 74 records",
+  "extension_count": 2,
+  "combined_records": 76,
+  "independent_verified": 0,
+  "entries": [
+    {
+      "id": "R075",
+      "name": "V5 Crypto Scalper — perp Momentum theoretical",
+      "source": "knacker65/v5-crypto-scalper",
+      "pinned_commit": "eafcdbbdcc60d8b1ac3b7377c5220e886a1fc3d6",
+      "source_blob": "ddc817afd9a0ba0baa2967868bdd98d0bad2e58c",
+      "file": "backtest_perps.py",
+      "lane": "TRANSFER",
+      "status": "REVIEW_OPEN_SOURCE_ONLY",
+      "verified": false,
+      "new_native_backtest_completed": false,
+      "evidence": "README claims Momentum long+short +$415 in 1095d 3x theoretical perp replay; funding omitted, fills and genuine USD-M OHLCV not established",
+      "next_required_check": "Restore source pickle provenance and original perps simulator ledger; causal fill + funding/margin; only then independent Binance USD-M test"
+    },
+    {
+      "id": "R076",
+      "name": "Crypto Stat Arb — spot mean reversion gross edge",
+      "source": "billybraith17/crypto-stat-arb",
+      "pinned_commit": "19f51e8c1b091245579cd06172c3d0bd3d083c85",
+      "source_blob": "d891587a07e08fcdf74055b0b750106ba4e5e64f",
+      "file": "README.md",
+      "lane": "TRANSFER",
+      "status": "REVIEW_OPEN_SOURCE_ONLY",
+      "verified": false,
+      "new_native_backtest_completed": false,
+      "evidence": "Kraken spot 1h mean reversion gross gain smaller than execution costs; author explicitly proposes perps as future research rather than proven result",
+      "next_required_check": "Find full live-ready original futures implementation; if absent record SOURCE/MARKET block, never transplant spot profitability to USD-M"
+    }
+  ]
+}
