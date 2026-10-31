@@ -40,7 +40,7 @@ def main():
     assert official["any_official_entry_or_indicator_bias"] is False
     assert alt["source_original_blob"]==BLOB and fix["original_source_blob"]==BLOB
     assert alt["not_genuine_post_publication_OOS"] is True
-    assert alt["pre_registered_gate_pass_2_of_3"]==sum(alt["pre_registered_gate"].values())>=2
+    assert alt["pre_registered_gate_pass_2_of_3"]==(sum(alt["pre_registered_gate"].values())>=2)
     assert set(alt["outcomes"])==set(PAIRS) and set(fix["outcomes"])==set(PAIRS)
     for mode in ('lookahead','recursive'):
         for p in ('ETH','SOL'):
