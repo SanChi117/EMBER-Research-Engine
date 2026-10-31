@@ -1,0 +1,164 @@
+name: "EMBER A199 independent 16 ZIP original Futures proof and audit chain v2"
+on:
+  push:
+    branches: [research/a199-futures-source-5m-1h-native-screen-20261031]
+    paths:
+      - ".github/workflows/ember-a199-independent-16zip-journal-v2.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  independent-original-futures-audit-A199:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: A199-FAdxSmaStrategy-8-Original-Futures-Freqtrade2026-4-Native-Real-Binance
+          run-id: 41152472760
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a199-original-fadx
+      - uses: actions/download-artifact@v4
+        with:
+          name: A199-FReinforcedStrategy-8-Original-Futures-Freqtrade2026-4-Native-Real-Binance
+          run-id: 41152731921
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a199-metadata-compat-freinforced
+      - name: Independently re-verify source provenance all 16 genuine Freqtrade zip PnLs and two frozen gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,zipfile
+          from pathlib import Path
+          base=Path("research/native_candidate_screen_20261031")
+          roots={
+            "FAdxSmaStrategy":Path("/tmp/a199-original-fadx"),
+            "FReinforcedStrategy":Path("/tmp/a199-metadata-compat-freinforced")}
+          source_blobs={
+            "FAdxSmaStrategy":"3bb13caf079e8360a959c3ad4dd2b2507f3045c0",
+            "FReinforcedStrategy":"11bfdde9fcecf772a2d223c88b9ee62bfd8737d3"}
+          allshas={};allout={};manifests={}
+          for strategy,root in roots.items():
+            file=root/f"A199_{strategy}_EIGHT_NATIVE_RESULTS.json"
+            assert file.is_file(),("MISSING_AUTHOR_NATIVE_MACHINE",file,list(root.rglob("*"))[:25])
+            info=json.loads(file.read_text())
+            assert info["strategy"]==strategy
+            assert info["engine"]=="freqtrade==2026.4"
+            assert info["original_source_commit"]=="f3340ce11f5bdf62f598522e64d1f5638eaa13f5"
+            assert info["wallet_each_pair"]==1000 and info["stake_USDT"]==100
+            assert set(info["outcomes"])=={"BTC","ETH","SOL","LINK"}
+            assert not info["overall_initial_advancement"]
+            gate={}
+            total=0
+            for sym in ("BTC","ETH","SOL","LINK"):
+              assert set(info["outcomes"][sym])=={"5","12p5"}
+              fee_gates=[]
+              for fee in ("5","12p5"):
+                path=root/f"{strategy}-{sym}-fee{fee}.zip"
+                assert path.is_file() and zipfile.is_zipfile(path),("MISSING_NATIVE_ZIP",path)
+                raw=path.read_bytes()
+                sha=hashlib.sha256(raw).hexdigest()
+                with zipfile.ZipFile(path) as z:
+                  docs=[q for q in z.namelist() if q.endswith(".json") and "_config" not in q]
+                  assert len(docs)==1,docs
+                  payload=json.loads(z.read(docs[0]))["strategy"][strategy]
+                x=info["outcomes"][sym][fee]
+                assert len(payload["trades"])==payload["total_trades"]==x["trades"]
+                assert abs(sum(z["profit_abs"] for z in payload["trades"])-payload["profit_total_abs"])<0.02
+                assert abs(payload["profit_total"]*100-x["net_pct"])<0.0001
+                assert abs(payload["profit_factor"]-x["profit_factor"])<0.0001
+                assert abs(payload["max_drawdown_account"]*100-x["wallet_max_dd_pct"])<0.0001
+                assert sha==x["native_zip_sha256"]
+                assert all("2026-05-13"<=t["open_date"][:10]<"2026-10-01" for t in payload["trades"])
+                fee_gates.append(x["trades"]>=35 and x["net_pct"]>0 and
+                  x["profit_factor"]>=1.2 and x["wallet_max_dd_pct"]<15 and
+                  x["top3_gross_wins_share"] is not None and x["top3_gross_wins_share"]<.60)
+                allshas[f"{strategy}-{sym}-fee{fee}"]=sha
+              gate[sym]=all(fee_gates)
+              total+=info["outcomes"][sym]["5"]["trades"]
+            assert gate==info["predeclared_pair_gate"]
+            assert not any(gate.values()),(strategy,gate)
+            assert info["base_trades_across_four_separate_pair_wallets"]==total
+            assert info["predeclared_frequency_gate_1_per_day_four"]==(total>=141)
+            if strategy=="FAdxSmaStrategy":assert total==23
+            if strategy=="FReinforcedStrategy":assert total==281
+            original=(root/"data/A195_DATA_SHA_MANIFEST.json")
+            detail=(root/"data/A196_REAL_5M_SHA_MANIFEST.json")
+            assert original.is_file() and detail.is_file()
+            manifests[strategy]=(json.loads(original.read_text()),json.loads(detail.read_text()))
+            allout[strategy]={"N_native_four_pair_independent_wallets":total,
+              "per_pair":info["outcomes"],"frozen_gate":gate,
+              "2026_sample_screen_economic_decision":"FAIL"}
+            if strategy=="FReinforcedStrategy":
+              compat=(root/"A199-three-metadata-compatibility.log")
+              assert compat.is_file() and "A199_COMPAT_ONLY_THREE_INT_PARAMETER_SPACE_ANNOTATIONS_PASS" in compat.read_text()
+              assert "915eb861e6b1e6244ba669a25f0806d4b36378b95615df1f05c392bf64a98c17" in compat.read_text()
+          assert manifests["FAdxSmaStrategy"]==manifests["FReinforcedStrategy"],"BINANCE_SOURCE_SHA_DIFFER"
+          output={"schema":"EMBER_A199_16_SOURCE_PINNED_GENUINE_NATIVE_FREQTRADE_TRADE_ARCHIVES_INDEPENDENTLY_VERIFIED",
+            "source_repository":"freqtrade/freqtrade-strategies",
+            "source_commit":"f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+            "source_git_blobs":source_blobs,
+            "engine":"freqtrade==2026.4","period":"[2026-05-13,2026-10-01)",
+            "model":"4 separate $1000 native Freqtrade wallet accounts, $100 stake, no leverage increase",
+            "fadx_original_byte_identical":True,
+            "freinforced_original_byte_identical":False,
+            "freinforced_metadata_only_patched_sha256":"915eb861e6b1e6244ba669a25f0806d4b36378b95615df1f05c392bf64a98c17",
+            "all_study_wallets_independent":True,
+            "two_fee_models":True,"candidate_futures_5m_and_1h":allout,
+            "economic_advance":False,"LIVE_ALLOWED":False,"PAPER_AUTO_ORDERS_ALLOWED":False,
+            "limitations":["Freqtrade candle-based fills not exchange guaranteed","No extra bidask spread slippage modeled",
+              "May-Sep2026 already examined in previous research","5m original code requires 3 IntParameter hyperopt space metadata fixes to run engine",
+              "Results negative for 5m across all pairs; no leverage or 15m optimization performed"]}
+          (base/"A199_16_REAL_FREQTRADE_NATIVE_TRADES_MACHINE_VERIFIED.json").write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n")
+          (base/"A199_16_ACTUAL_NATIVE_ZIP_SHA256.json").write_text(json.dumps(allshas,ensure_ascii=False,indent=2)+"\n")
+          (base/"A199_BINANCE_5M_1H_SOURCE_SHA_PARITY.json").write_text(json.dumps({
+            "A195_1h_mark_funding":manifests["FAdxSmaStrategy"][0],
+            "A196_5m_genuine_OHLCV":manifests["FAdxSmaStrategy"][1]},ensure_ascii=False,indent=2)+"\n")
+          print("A199_16_REAL_NATIVE_FREQTRADE_ZIPS_PLUS_SHA_INDEPENDENTLY_VERIFIED",
+            json.dumps({s:r["N_native_four_pair_independent_wallets"] for s,r in allout.items()}))
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a198-ledger
+          grep -Fq 'INTEGRITY_PASS entries 198' /tmp/a198-ledger
+      - name: Append permanent A199 audit with source-pinned actual Freqtrade and honest economic failure
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A199 \
+            --cycle OFFICIAL_PUBLIC_FREQTRADE_NATIVE_FUTURES_5M_AND_1H_SOURCE_SCREEN_WITH_FINITE_STAKES \
+            --planned "After A198 V9 4/4 economic FAIL, select two independent public native futures Freqtrade source strategies before results: FReinforcedStrategy 5m EMA 8/21 with resampled SMA50 1h and ADX exit, and FAdxSmaStrategy 1h ADX30+SMA12/48 crossover; 4 real Binance USD-M BTC ETH SOL LINK independent wallets each 1000USDT and fixed100USDT stake, no leverage increase, both native Long+Short, 0.05pct and 0.125pct fee per fill, genuine 5m and 1h mark funding. Frozen gate >=2/4 profitable positive PF1.2 at both fees N35 per pair wallet DD15pct top3 gross winning share below60pct; >=141 trades across four 141day pairs. No parameter retuning, no live or PAPER orders." \
+            --executed "Original source pinned freqtrade/freqtrade-strategies git f3340ce11f5bdf62f598522e64d1f5638eaa13f5; FAdxSmaStrategy exact byte-original blob3bb13caf... native Freqtrade2026.4 run41152472760 SUCCESS artifact13023278793 sha256 29da1eeb1bd52c8f820c4c1e402a30d7d067d4ea000252adbb507eacbe289eab; four pairs x two costs native 1h plus genuine 5m detail: only23 combined trades, 0/4 gate. FReinforcedStrategy exact author blob11bfdde9... cannot instantiate in Freqtrade2026.4 due missing hyperopt space on3 IntParameter metadata; separately built isolated test copy adding only explicit space buy on adx14 EMAshort8 EMAlong21, same original numeric strategy; patched sha256 915eb861e6b1e6244ba669a25f0806d4b36378b95615df1f05c392bf64a98c17. Native 5m run41152731921 SUCCESS artifact13023678426 sha256 98609265416dd84a13e0ace9790e20c2a84846d0a282b31bad10a6334c675440: 281 combined trades on four separate wallets at both costs, 0/4 gate. All actual16 native ZIP raw receipts independently reopened and checked against Freqtrade net/PF/DD/count and exact ZIP SHA, Binance SHA manifest parity both independent source runs. All four 5m pair profits negative at both commissions." \
+            --result "SOURCE_REPRODUCIBILITY_PASS_FADX_ORIGINAL; FREINFORCED_TECHNICAL_METADATA_3_LINE_COMPAT_SHIM_REQUIRED_AND_PASSED; ECONOMIC_GATE_FAIL_BOTH_CANDIDATES. FAdxSma BTC4 N -0.120979pct ETH6 -0.750933pct SOL4 -0.383959pct LINK9 +0.336837pct, 23/141d all-wallet trades. FReinforced 5m BTC66 -0.333973pct PF0.57925, ETH83 -0.878769pct PF0.41052, SOL65 -1.135266pct PF0.23458, LINK67 -0.782389pct PF0.46291, all even more negative under increased fees and N281/141d approx1.99 per day aggregated separate wallets. Both 0/4 pass, do not adapt via hindsight, zero live/PAPER orders." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "Native Freqtrade 2026.4 engine with authentic Binance monthly 1h+5m price, mark and funding SHA receipts identical to A195/A196; 16 native ZIP PnL and trade receipts independently rechecked. 5m original not executable due 3 hyperopt missing spaces; the FReinforced copy has exactly 3 metadata-only modifications and not original byte-identical; cannot claim Freqtrade original unchanged file parity. Each wallet 1000USDT and one 100USDT position, not one aggregated portfolio; no slippage or orderbook, study 2026 history already inspected and not pristine OOS. No claim economic benefit from frequencies or leverage; source authors educational example strategy not validated profitable." \
+            --evidence ../../research/native_candidate_screen_20261031/A199_ORIGINAL_FUTURES_SOURCE_PREREGISTERED_RU.md \
+            --evidence ../../research/native_candidate_screen_20261031/A199_SOURCE_CANDIDATES_SHORTLIST_RU.md \
+            --evidence ../../research/native_candidate_screen_20261031/A199_NATIVE_FUTURES_SOURCE_SCREEN_RESULTS_RU.md \
+            --evidence ../../research/native_candidate_screen_20261031/A199_16_REAL_FREQTRADE_NATIVE_TRADES_MACHINE_VERIFIED.json \
+            --evidence ../../research/native_candidate_screen_20261031/A199_16_ACTUAL_NATIVE_ZIP_SHA256.json \
+            --evidence ../../research/native_candidate_screen_20261031/A199_BINANCE_5M_1H_SOURCE_SHA_PARITY.json \
+            --evidence ../../research/native_candidate_screen_20261031/a199_native_original_futures_offline.py \
+            --evidence ../../research/native_candidate_screen_20261031/a199_freinforced_metadata_compat_only.py \
+            --evidence ../../research/native_candidate_screen_20261031/a199_parse_original_native.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a199-new-ledger
+          grep -Fq 'INTEGRITY_PASS entries 199' /tmp/a199-new-ledger
+      - name: Commit independent 16 trade ZIP SHA original-verification and append A199 audit log
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/native_candidate_screen_20261031/A199_16_REAL_FREQTRADE_NATIVE_TRADES_MACHINE_VERIFIED.json \
+            research/native_candidate_screen_20261031/A199_16_ACTUAL_NATIVE_ZIP_SHA256.json \
+            research/native_candidate_screen_20261031/A199_BINANCE_5M_1H_SOURCE_SHA_PARITY.json \
+            research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A199 actual 16 source-pinned native futures Freqtrade ZIP receipts both strategies economic FAIL; SHA audit chain199"
+          git push origin HEAD:refs/heads/research/a199-futures-source-5m-1h-native-screen-20261031
