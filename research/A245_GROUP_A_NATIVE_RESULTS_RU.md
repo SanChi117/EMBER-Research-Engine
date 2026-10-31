@@ -1,3 +1,7 @@
+> **⚠️ АРХИВНЫЙ ОТЧЁТ ТОЛЬКО ГРУППЫ A.** Упоминание ниже «group B ещё выполняется» устарело. [Текущий исправленный статус](https://github.com/SanChi117/EMBER-Research-Engine/blob/main/RESEARCH_STATUS_CANONICAL.md): A245 = **30 завершённых расчетов, 6 BLOCKED**, несмотря на 2/2 CI SUCCESS. Ни одна стратегия не VERIFIED.
+
+---
+
 # A245 group A — 18 завершённых нативных проверок трёх ДРУГИХ оригиналов
 
 Дата 31 октября 2026. [GitHub Actions run 41245981488](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41245981488), job 124669395539 SUCCESS, **18 из 18 complete, blocked 0**. Настоящие Binance mainnet USD-M 5m и настоящие mark/funding из архива, SHA-квитанции, оригинальные стратегии Git SHA, Freqtrade 2026.9. Одновременно **контрольный общий** BTC/ETH/SOL кошелёк $1000, ставка $100, max3, а не author config. 2024/2025/январь-май2026. Каждый год — отдельный reset. Стресс-комиссия 0,11% на сторону, базовая 0,05% на сторону.
