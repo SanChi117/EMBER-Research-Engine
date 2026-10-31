@@ -1,3 +1,9 @@
+> **⚠️ АРХИВНЫЙ СНИМОК / ARCHIVE_SNAPSHOT_SUPERSEDED.** Этот отчёт создан ассистентом в промежуточный момент и **НЕ является действующим статусом**. Часть формулировок о готовности, полноте, количестве тестов и запусках уже устарела. **Использовать исключительно [текущий исправленный реестр](RESEARCH_STATUS_CANONICAL.md).**
+>
+> Мандат [LOCKED](RESEARCH_MANDATE_LOCKED.md) и запреты пользователя не изменены. Этот файл хранится только для проверки старых выводов, не как рекомендация к PAPER/live.
+
+---
+
 # A239 — контрольный срез полной переоценки перспективных оригиналов (31 октября 2026)
 
 **Статус: НЕ ЗАКРЫТО.** Пользователь требует пересмотреть все потенциально перспективные стратегии прежних циклов, не ограничиваясь одной. Locked scope `RESEARCH_MANDATE_LOCKED.md`: Binance USDT-M Futures, original pinned SHA, causal native historical returns + real funding/mark, independent execution/margin, no new invented strategy, no live or active PAPER changes.
