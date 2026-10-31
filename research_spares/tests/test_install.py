@@ -3,7 +3,7 @@ import ember_spares
 
 class PackageTests(unittest.TestCase):
     def test_package_has_no_auto_execution(self):
-        self.assertEqual(ember_spares.__version__,'0.1.0')
+        self.assertEqual(ember_spares.__version__,'0.2.0')
         self.assertFalse(hasattr(ember_spares,'place_order'))
         self.assertFalse(hasattr(ember_spares,'run_backtest'))
 
