@@ -1,0 +1,27 @@
+{
+  "cycle": "A219",
+  "status": "REJECTED_SOURCE_VENUE_MISMATCH",
+  "date_utc": "2026-10-31",
+  "original_repo": "juriok/chart-pattern-backtester",
+  "original_commit": "2972c880144997ec305dc3dac23d78ee5a831176",
+  "market_required": "Binance USDT-M perpetual futures",
+  "data_source_actual": "CCXT Binance default SPOT, BTC/USDT with futures-colon symbols explicitly excluded",
+  "source_verification": {
+    "files_sha_verified": 4,
+    "source_code_checks": 8,
+    "all_checks_passed": true,
+    "report": "research/a219_chart_patterns_venue/ORIGINAL_VENUE_AUDIT_RU.md"
+  },
+  "author_claimed_return_not_reproduced": true,
+  "author_report_is_not_futures_verified": true,
+  "no_economic_backtest_performed": true,
+  "futures_edge_proved": false,
+  "no_trading": true,
+  "other_framework_research": "analogdada/perplab provides futures engine; author explicitly disclaims proven strategy edges",
+  "ci": {
+    "run_id": 41219075765,
+    "result": "success",
+    "url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41219075765"
+  },
+  "next": "Search another truly USD-M-native original pattern/regime strategy, no retrofitting rejected source and no spot-only replacement"
+}
