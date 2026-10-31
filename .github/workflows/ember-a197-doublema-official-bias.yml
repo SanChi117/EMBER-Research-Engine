@@ -1,0 +1,131 @@
+name: "EMBER A197 original DoubleMA official Freqtrade lookahead & recursive bias audit"
+on:
+  push:
+    branches: [research/a197-doublema-regime-and-bias-20261031]
+    paths:
+      - ".github/workflows/ember-a197-doublema-official-bias.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-official-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install true unchanged 2026.4 backtest+analysis engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'freqtrade==2026.4'
+          python -c "from importlib.metadata import version; assert version('freqtrade')=='2026.4'"
+          git -c credential.helper= clone --depth 1 --quiet https://github.com/MirrorNew/2026DoubleMaFuturesStrategy.git /tmp/a197-original
+          test "$(git -C /tmp/a197-original rev-parse HEAD)" = '40af5c7c1c44253766428cfb06babf22f9817aa4'
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('/tmp/a197-original')
+          s=(root/'user_data/strategies/VideoDoubleMaFuturesStrategy.py').read_bytes()
+          sha=hashlib.sha1(b'blob '+str(len(s)).encode()+bytes([0])+s).hexdigest()
+          assert sha=='22ca6588bbd056e671783f676f1a4010cbfc1bb6',sha
+          c=json.loads((root/'config/config_okx_futures_eth_only_binance_data.json').read_text())
+          assert c['max_open_trades']==1 and c['dry_run_wallet']==10000 and c['stake_amount']=='unlimited'
+          p=Path('a197-native-audit');p.mkdir(exist_ok=True)
+          for s in ('ETH','SOL'):
+              z=json.loads(json.dumps(c))
+              z['exchange']['name']='binance'
+              z['exchange']['pair_whitelist']=[f'{s}/USDT:USDT']
+              z['exchange']['ccxt_config']={};z['exchange']['ccxt_async_config']={}
+              for key in ('key','secret','password'):z['exchange'][key]=''
+              z['dry_run']=True
+              z['telegram']['enabled']=False
+              z['api_server']['enabled']=False
+              z['bot_name']=f'A197_NATIVE_ORIGINAL_BIAS_{s}'
+              (p/f'config-{s}.json').write_text(json.dumps(z,indent=2))
+          print('A197_SOURCE_BLOB_BYTE_IDENTICAL_AUTHOR_MAY12')
+          PY
+      - name: Source audit authentic historical Binance monthly OHLCV mark funding
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py --datadir a197-native-audit/data | tee a197-native-audit/market-source-qa.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a197-native-audit/market-source-qa.log
+      - name: Run EXACT upstream Freqtrade LookaheadAnalysis class on original source, without trading
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in ETH SOL; do
+             timeout 420s python research/doublema_native_oos_20261031/a197_official_bias_audit.py \
+               --mode lookahead --config "a197-native-audit/config-$sym.json" \
+               --userdir /tmp/a197-original/user_data \
+               --datadir "$GITHUB_WORKSPACE/a197-native-audit/data" \
+               --time 20260513-20261001 --fee 0.0005 \
+               --out "a197-native-audit/official-lookahead-$sym.json" \
+               2>&1 | tee "a197-native-audit/official-lookahead-$sym.log"
+             grep -Fq A197_OFFICIAL_FREQTRADE_ANALYSIS_COMPLETED "a197-native-audit/official-lookahead-$sym.log"
+          done
+      - name: Run EXACT upstream Freqtrade RecursiveAnalysis class, four history-depths
+        shell: bash
+        run: |
+          set -euo pipefail
+          for sym in ETH SOL; do
+             timeout 420s python research/doublema_native_oos_20261031/a197_official_bias_audit.py \
+               --mode recursive --config "a197-native-audit/config-$sym.json" \
+               --userdir /tmp/a197-original/user_data \
+               --datadir "$GITHUB_WORKSPACE/a197-native-audit/data" \
+               --time 20260513-20261001 --fee 0.0005 \
+               --out "a197-native-audit/official-recursive-$sym.json" \
+               2>&1 | tee "a197-native-audit/official-recursive-$sym.log"
+             grep -Fq A197_OFFICIAL_FREQTRADE_ANALYSIS_COMPLETED "a197-native-audit/official-recursive-$sym.log"
+          done
+      - name: Verify not skipped and machine audit four exact official runs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('a197-native-audit')
+          allruns={}
+          for mode in ('lookahead','recursive'):
+              for sym in ('ETH','SOL'):
+                  doc=p/f'official-{mode}-{sym}.json'
+                  assert doc.is_file(),doc
+                  x=json.loads(doc.read_text())
+                  assert x['engine']=='freqtrade==2026.4' and x['mode']==mode
+                  assert x['pair']==f'{sym}/USDT:USDT'
+                  assert x['offline_metadata_only'] is True
+                  if mode=='lookahead':
+                      assert x['analyzed_signals']>=3
+                      assert x['failed_bias_check'] is False
+                  else:
+                      assert len(x['startup_candles_tested'])>=4
+                      assert isinstance(x['recursive_differences'],dict)
+                  allruns[f'{mode}-{sym}']=x
+          res={'schema':'EMBER_A197_ORIGINAL_DOUBLEMA_4_OFFICIAL_BIAS_METHOD_RUNS',
+               'source_git_blob':'22ca6588bbd056e671783f676f1a4010cbfc1bb6',
+               'freqtrade':'2026.4','lookahead_and_recursive':allruns,
+               'any_official_entry_or_indicator_bias':any(x.get('has_bias') for name,x in allruns.items() if name.startswith('lookahead')),
+               'limitations':['Original callback logic not all covered by official LookaheadAnalysis',
+                              'Official Freqtrade changes order model and wallet for lookahead and outputs must NOT be used as economic PnL',
+                              'Recursive testing sensitive to startup history length, not independent profitability',
+                              'No real orders, no 15m retune']}
+          (p/'A197_FOUR_OFFICIAL_FREQTRADE_METHOD_RESULTS.json').write_text(json.dumps(res,ensure_ascii=False,indent=2)+'\n')
+          print('A197_FOUR_GENUINE_OFFICIAL_FREQTRADE_BIAS_METHODS_COMPLETE')
+          print(json.dumps({'detected_bias':res['any_official_entry_or_indicator_bias'],
+                            'counts':{k:(v.get('analyzed_signals'),v.get('indicators_with_recursive_variation')) for k,v in allruns.items()}},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A197-Original-DoubleMA-Freqtrade2026-4-Official-Lookahead-Recursive-2-Pairs
+          path: |
+            a197-native-audit/*.json
+            a197-native-audit/*.log
+            a197-native-audit/data/A195_DATA_SHA_MANIFEST.json
+          retention-days: 30
