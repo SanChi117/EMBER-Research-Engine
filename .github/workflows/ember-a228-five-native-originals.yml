@@ -6,6 +6,8 @@ on:
       - 'research/a228-five-original-native-freqtrade-replay-20261031'
     paths:
       - 'research/a228_five_original/**'
+      - 'research/a217_trendrider_original/evidence/source_manifest.json'
+      - 'research/a221_wide_futures_screen/a221_tsmom_genuine_futures.py'
       - '.github/workflows/ember-a228-five-native-originals.yml'
   workflow_dispatch:
 
