@@ -1,0 +1,112 @@
+name: "EMBER A198 SOL V9 genuine original StrategyEngine with independently declared 5m research replay"
+on:
+  push:
+    branches: [research/a198-sol-pullback-v9-original-signal-20261031]
+    paths:
+      - ".github/workflows/ember-a198-original-v9-source-replay.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  immutable-source-authentic-market-standalone-4-scenarios:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Lock original V9 exact code source and standalone research dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'pandas>=2.0,<3' 'numpy>=1.26,<3' 'requests>=2.30,<3'
+          git -c credential.helper= clone --quiet --depth 1 https://github.com/kboranyldz/sol-trading-research.git /tmp/a198-v9-original
+          test "$(git -C /tmp/a198-v9-original rev-parse HEAD)" = df3dcb722f1814f9eccf5ebd72facced13063a3e
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p=Path('/tmp/a198-v9-original/src/sol_pullback_core_v9.py')
+          b=p.read_bytes()
+          h=hashlib.sha1(b'blob '+str(len(b)).encode()+bytes([0])+b).hexdigest()
+          assert h=='b18ac10938e6aa91dfa42293a5da6fb6d545039d',h
+          print('A198_EXACT_V9_AUTHOR_SOURCE_BLOB_PIN_CONFIRMED',h)
+          PY
+      - name: Download and verify original Binance Vision futures OHLCV mark funding 2026 Mar-Sep
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p a198-v9-independent
+          python research/doublema_native_oos_20261031/a195_prepare_crosspair.py --datadir a198-v9-independent/data \
+            2>&1 | tee a198-v9-independent/A198-1h-authentic-source.log
+          grep -Fq A195_ALL_4_SYMBOLS_CONTINUOUS_SOURCE_QUALITY_OK a198-v9-independent/A198-1h-authentic-source.log
+      - name: Extend original SOL BTC 4h 600-bar regime warmup using genuine Jan-Feb-Mar original monthly Binance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/backup_candidates_20261031/a198_extend_v9_600bar_4h_warmup.py --datadir a198-v9-independent/data \
+            2>&1 | tee a198-v9-independent/A198-4h-600bar-warmup-sha.log
+          grep -Fq A198_2026_TRUE_SOL_BTC_1H_4H_WARMUP_GAPLESS_PASS a198-v9-independent/A198-4h-600bar-warmup-sha.log
+      - name: Download and verify real May-Sep original Binance 5m price OHLCV for intrabar proxy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/doublema_native_oos_20261031/a196_prepare_real_5m_detail.py --datadir a198-v9-independent/data \
+            2>&1 | tee a198-v9-independent/A198-5m-real-source.log
+          grep -Fq A196_FOUR_TRUE_5M_BINANCE_DATASETS_INTEGRITY_PASS a198-v9-independent/A198-5m-real-source.log
+      - name: Independently call EXACT author V9 source signals and own explicit 5m execution simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          env -u BINANCE_API_KEY -u BINANCE_API_SECRET -u LIVE_TRADING \
+             python research/backup_candidates_20261031/a198_v9_source_signals_proxy_replay.py \
+               --source /tmp/a198-v9-original/src/sol_pullback_core_v9.py \
+               --datadir a198-v9-independent/data \
+               --output a198-v9-independent \
+               2>&1 | tee a198-v9-independent/A198-signals-trades-validation.log
+          grep -Fq A198_ORIGINAL_SOURCE_SIGNAL_FOUR_INDEPENDENT_PROXY_BACKTESTS_DONE a198-v9-independent/A198-signals-trades-validation.log
+      - name: Verify all four independent receipts against original source output, risk scenarios and source integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          p=Path('a198-v9-independent')
+          m=json.loads((p/'A198_V9_ORIGINAL_SIGNALS_INDEPENDENT_EXECUTION_PROXY_RESULTS.json').read_text())
+          assert m['upstream_blob']=='b18ac10938e6aa91dfa42293a5da6fb6d545039d'
+          assert m['actual_V9_native_historical_backtester_provided_by_author'] is False
+          assert m['signal_source'].startswith('unchanged import StrategyEngine')
+          assert len(m['scenarios'])==4
+          for label,stat in m['scenarios'].items():
+              r=json.loads((p/(label+'__trades.json')).read_text())
+              assert len(r)==stat['trades']
+              assert abs(sum(t['pnl'] for t in r)-stat['net_USDT'])<.01
+              assert all(t['source_signal']=='PULLBACK_4' for t in r)
+              assert all('2026-05-13'<=t['entry'][:10]<'2026-10-01' for t in r)
+              assert stat['max_drawdown_pct']>=0
+              assert stat['ending_USDT']>0
+          h=json.loads((p/'data/A198_2026_SOL_BTC_JAN_SEP_TRUE_WARMUP_SOURCE_SHA.json').read_text())
+          assert len(h['checks'])==2
+          for sym in ('BTCUSDT','SOLUSDT'):
+              assert h['checks'][sym]['author_600_bars_4h_fully_present']
+              assert h['checks'][sym]['pre_eval_4h_warmup_candles']>=600
+          orig=json.loads((p/'data/A195_DATA_SHA_MANIFEST.json').read_text())
+          det=json.loads((p/'data/A196_REAL_5M_SHA_MANIFEST.json').read_text())
+          assert len(orig['data'])==4 and len(det['symbols'])==4
+          print('A198_SOURCE_PINNED_ORIGINAL_SIGNAL_FOUR_REPLAYS_AND_AUTHENTIC_SHA_VERIFIED')
+          print(json.dumps({name:{'N':d['trades'],'net_pct':d['return_pct'],'PF':d['profit_factor'],'DD':d['max_drawdown_pct']} for name,d in m['scenarios'].items()},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: A198-SOL-V9-Original-Source-Signals-4-Independent-5m-Execution-Proxies-Real-Binance
+          path: |
+            a198-v9-independent/*.json
+            a198-v9-independent/*.log
+            a198-v9-independent/data/A195_DATA_SHA_MANIFEST.json
+            a198-v9-independent/data/A196_REAL_5M_SHA_MANIFEST.json
+            a198-v9-independent/data/A198_2026_SOL_BTC_JAN_SEP_TRUE_WARMUP_SOURCE_SHA.json
+          retention-days: 30
