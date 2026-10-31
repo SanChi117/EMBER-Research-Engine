@@ -1,0 +1,70 @@
+name: A228 Five Native Freqtrade Results — Exact Economics From Archived Trades
+
+on:
+  push:
+    branches:
+      - 'research/a228-five-original-native-freqtrade-replay-20261031'
+    paths:
+      - '.github/workflows/ember-a228-final-economics-from-native-artifact.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify_original_trade_economics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exact prior native Freqtrade output, not a re-simulation
+        uses: actions/download-artifact@v4
+        with:
+          name: a228-five-original-usdm-native-freqtrade-2025-26-verified-results
+          run-id: 41234973955
+          github-token: ${{ github.token }}
+          path: prior_native_results
+      - name: Calculate original strategy annual net equity from actual Freqtrade profits
+        run: |
+          python - <<'PY'
+          import json, pathlib, zipfile
+          root=pathlib.Path("prior_native_results")
+          files=list(root.rglob("A228_FIVE_NATIVE_REPLAY_STATUS.json"))
+          print("FOUND_NATIVE_STATUS",list(map(str,files)),flush=True)
+          if len(files)!=1:
+              raise SystemExit("Exactly one native status needed")
+          d=json.loads(files[0].read_text())
+          out=[]
+          for row in d["strategy_runs"]:
+              if row["state"]!="NATIVE_FREQTRADE_BACKTEST_COMPLETE":
+                  raise SystemExit("Cannot mix BLOCKED with real profits")
+              profit=row.get("native_profit_total_abs_usdt")
+              if profit is None:
+                  raise SystemExit("Actual Freqtrade 'profit_total_abs' missing for "+row["strategy"])
+              denom=1000
+              roi=100*float(profit)/denom
+              dd=row.get("native_max_drawdown_account")
+              out.append({"strategy":row["strategy"],"year":row["year"],
+                  "cost":row["cost_model"],"net_usdt":round(float(profit),4),
+                  "net_equity_pct":round(roi,4),
+                  "max_drawdown_pct":round(float(dd)*100,4) if dd is not None else None,
+                  "trades":row.get("native_trade_count"),
+                  "profit_factor":row.get("native_profit_factor"),
+                  "win_count":row.get("native_wins"),"loss_count":row.get("native_losses")})
+          dest=pathlib.Path("A228_VALIDATED_NATIVE_FIVE_ECONOMICS.json")
+          dest.write_text(json.dumps({"no_paper_or_real_orders":True,
+              "source_run":41234973955,"market":"Binance real USDT-M BTC,ETH,SOL 5m+mark+funding",
+              "metadata_only":"OFFICIAL BINANCE FUTURES TESTNET, not mainnet precision parity",
+              "period":"2025 Jan-Dec","fee_base_per_side":0.0005,"fee_stress_per_side":0.0011,
+              "strategies":out},indent=2,ensure_ascii=False)+"\n")
+          print("A228_NATIVE_FINAL_ECONOMIC_MATRIX",json.dumps(out,ensure_ascii=False),flush=True)
+          PY
+      - name: Archive trustworthy economic table from previous unchanged native Freqtrade trade reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a228-exact-source-native-five-net-pnl-from-freqtrade
+          path: A228_VALIDATED_NATIVE_FIVE_ECONOMICS.json
+          if-no-files-found: warn
+          retention-days: 30
