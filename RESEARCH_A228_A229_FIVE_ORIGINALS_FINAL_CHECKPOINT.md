@@ -1,3 +1,7 @@
+> **⚠️ АРХИВНОЕ / НЕ ТЕКУЩЕЕ — `ARCHIVE_SNAPSHOT_SUPERSEDED`.** Прежние shortlist, исходный скрининг и попытки паритета могут использовать неправильный TF/пары/капитал. Показатели не равны подтверждённому авторскому futures account. Ошибочно трактованные или устаревшие выводы ассистента исправляются только через [единую актуальную сводку](RESEARCH_STATUS_CANONICAL.md). Исходный текст ниже сохранён для аудита; не считать экономический или PAPER PASS доказанным.
+
+---
+
 # A228/A229: РЕАЛЬНАЯ НЕЗАВИСИМАЯ ПРОВЕРКА ПЯТИ ГОТОВЫХ ОРИГИНАЛОВ
 
 Дата: 2026-10-31. В отличие от опубликованных на Freqle результатов 2022–2024, это **собственные нативные Freqtrade тесты пяти НЕИЗМЕНЁННЫХ готовых original** на SHA-проверенных Binance MAINNET USDT-M OHLCV, mark/funding BTC ETH SOL. Binance TESTNET использовался **только для справочника market metadata** из-за HTTP451 на GitHub CI. Исключён июнь 2026: отсутствуют 3 официальные 8h mark candles / 24 1h mark candles. Комиссии BASE 0.05%/side, STRESS 0.11%/side; STRESS — замена более дорогими fee, НЕ реалистичный orderbook slippage; 5x liquidation/margin tiers не аудированы, без forward. No live/PAPER orders.
