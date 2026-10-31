@@ -1,0 +1,129 @@
+name: "EMBER A198 independent verify V9 4 actual trade logs and append SHA journal action"
+on:
+  push:
+    branches: [research/a198-sol-pullback-v9-original-signal-20261031]
+    paths:
+      - ".github/workflows/ember-a198-v9-independent-verification-journal.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  original-source-V9-verified-artifact-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: A198-SOL-V9-Original-Source-Signals-4-Independent-5m-Execution-Proxies-Real-Binance
+          run-id: 41151388321
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/a198-original-source-four-results
+      - name: Independently verify four actual source-signal V9 proxy trade logs, all SHA and cost math
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,shutil
+          from pathlib import Path
+          p=Path('/tmp/a198-original-source-four-results')
+          dest=Path('research/backup_candidates_20261031')
+          machine=json.loads((p/'A198_V9_ORIGINAL_SIGNALS_INDEPENDENT_EXECUTION_PROXY_RESULTS.json').read_text())
+          assert machine['schema']=='EMBER_A198_ORIGINAL_SOURCE_SIGNAL_AND_CUSTOM_EXECUTION_V9_4_SCENARIOS'
+          assert machine['upstream_commit']=='df3dcb722f1814f9eccf5ebd72facced13063a3e'
+          assert machine['upstream_blob']=='b18ac10938e6aa91dfa42293a5da6fb6d545039d'
+          assert machine['actual_V9_native_historical_backtester_provided_by_author'] is False
+          assert machine['one_h_signals_checked']==3383
+          funnel=machine['signal_funnel']
+          assert funnel['approved_LONG']==6 and funnel['approved_SHORT']==10
+          assert funnel['raw_NO_TRADE']==3367
+          assert machine['robust_both_fee_models_AND_risk_sizing'] is False
+          targets={
+              'author_original_6pct_target__base':(-14.8038,0.60711,23.17669),
+              'author_original_6pct_target__stress':(-19.4321,0.52138,26.54349),
+              'external_1pct_cap__base':(-2.3803,0.71488,4.48192),
+              'external_1pct_cap__stress':(-3.7017,0.59693,5.55326),
+          }
+          assert set(machine['scenarios'])==set(targets)
+          assert len(machine['pre_registered_basic_gate'])==4 and all(not z for z in machine['pre_registered_basic_gate'].values())
+          sha={}
+          for label,(ret,pf,dd) in targets.items():
+              z=machine['scenarios'][label]
+              file=p/(label+'__trades.json')
+              deals=json.loads(file.read_text())
+              assert z['trades']==len(deals)==12
+              assert abs(z['return_pct']-ret)<0.0001 and abs(z['profit_factor']-pf)<0.0001 and abs(z['max_drawdown_pct']-dd)<0.0001
+              assert abs(sum(t['pnl'] for t in deals)-z['net_USDT'])<0.01
+              assert abs(z['ending_USDT']-1000-z['net_USDT'])<0.01
+              assert all(t['source_signal']=='PULLBACK_4' and t['entry']>t['signal_bar'] for t in deals)
+              assert all(t['initial_risk_usdt']>0 and t['leverage'] in (1,2,3) for t in deals)
+              if label.startswith('external_1pct_cap'):
+                  assert all(t['initial_risk_usdt']<=10.01 for t in deals),('external_cap',label)
+              sha[label]=hashlib.sha256(file.read_bytes()).hexdigest()
+              shutil.copyfile(file,dest/(f'A198_{label}_VERIFIED_TRADES.json'))
+          h=json.loads((p/'data/A198_2026_SOL_BTC_JAN_SEP_TRUE_WARMUP_SOURCE_SHA.json').read_text())
+          assert len(h['checks'])==2 and h['checks']['SOLUSDT']['author_600_bars_4h_fully_present']
+          assert h['checks']['BTCUSDT']['author_600_bars_4h_fully_present']
+          for sym in ('SOLUSDT','BTCUSDT'):
+              assert h['checks'][sym]['pre_eval_4h_warmup_candles']>=600
+              assert h['checks'][sym]['March_overlap_audit']>0
+              assert all(len(x['zip_sha256'])==64 for x in h['checks'][sym]['sources'].values())
+          old=json.loads((p/'data/A195_DATA_SHA_MANIFEST.json').read_text())
+          detail=json.loads((p/'data/A196_REAL_5M_SHA_MANIFEST.json').read_text())
+          assert len(old['source_shas'])==4 and len(detail['symbols'])==4
+          assert detail['symbols']['SOLUSDT']['candles']==44064
+          assert all(len(x['zip_sha256'])==64 for x in detail['symbols']['SOLUSDT']['sources'].values())
+          (dest/'A198_V9_ORIGINAL_AUTHOR_SIGNALS_MACHINE_VERIFIED.json').write_text(json.dumps(machine,ensure_ascii=False,indent=2)+'\n')
+          (dest/'A198_V9_REAL_2026_SOURCE_SHA_VERIFIED.json').write_text(json.dumps({
+              'jan_sep_true_SOL_BTC_warmup':h,
+              'base_Mar_Sep_A195_SHA':old,
+              'real_5m_A196_SHA':detail},ensure_ascii=False,indent=2)+'\n')
+          (dest/'A198_V9_FOUR_TRADE_ARCHIVE_SHA256.json').write_text(json.dumps({
+             'source_run':41151388321,
+             'artifact_id':13022922905,
+             'artifact_zip_digest_sha256':'4820e053ba62b0be240bb7a5bdf107d77acb5501a5ba98e6beef625fd55595dc',
+             'four_trades_sha256':sha},indent=2)+'\n')
+          print('A198_FOUR_ORIGINAL_SOURCE_SIGNAL_PROXY_TRADE_RECEIPTS_INDEPENDENTLY_VERIFIED')
+          PY
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a197-prev
+          grep -Fq 'INTEGRITY_PASS entries 197' /tmp/a197-prev
+      - name: Record completed A198 economically FAILED, honest proxy not native source backtester
+        shell: bash
+        run: |
+          set -euo pipefail
+          python research/mtf-element-audit-v1/tools/auditlog.py record \
+            --action-id A198 \
+            --cycle SOL_V9_ORIGINAL_SOURCE_SIGNAL_5M_INDEPENDENT_PROXY_2026 \
+            --planned "User approved after A197 DoubleMA economic gate failure. Examine publicly published SOL Trend Pullback V9 WITHOUT replacing academic EMBER or optimizing known data; pin actual author git and source SHA. Call exact original StrategyEngine.build_evidence, add_indicators, required_leverage and source exit/trailing methods on public Binance USD-M native SOL BTC closed 1h and strictly 4h regime; independently implement explicitly-limited conservative 5m execution proxy for 2026May13-Sep30; 6pct author risk and external 1pct risk cap x base/stress fee+slippage; no live, no scheduler changes. Pre-registered net positive PF>=1.2 DD<15pct N>=20 and distributed wins top3<60pct in ALL four models, otherwise economic reject." \
+            --executed "Original author commit df3dcb722f1814f9eccf5ebd72facced13063a3e git blob b18ac10938e6aa91dfa42293a5da6fb6d545039d exact pin. Public author has no standalone V9 historical native backtester; available Sweep script missing helper modules and tests different strategy. Reused audited real Binance Vision 1h SOL/BTC and 5m SOL, SHA checked, added genuine Jan-Feb-Mar monthly data so 600 original 4h context available May13, checked exact March overlap; confirmed 3383 closed 1h evaluations: 16 original signals 6 long10 short, 3367 no trade. Source-derived flow optional OI/taker unavailable point in time and intentionally set original FlowFeatures() null, NOT fake data. Four scenarios on isolated original-entry source with custom conservative stop-first 5m trading-price proxy, mark STOP and intrabar exact live polling unavailable. CI#41151388321 SUCCESS artifact13022922905 SHA 4820e053ba62b0be240bb7a5bdf107d77acb5501a5ba98e6beef625fd55595dc. Independently re-read all four 12-trade receipts, verifies sum of net PnL and source SHA." \
+            --result "TECHNICAL_SOURCE_SIGNALS_AND_PROXY_REPLAY_PASS but ECONOMIC_GATE_FAIL_4_OF_4. Author approx6pct risk: base 12 trades -14.8038pct PF.60711 maxDD23.17669pct; stress 12 trades -19.4321pct PF.52138 DD26.54349pct. Separate externally risk capped1pct: base 12 trades -2.3803pct PF.71488 DD4.48192pct; stress 12 trades -3.7017pct PF.59693 DD5.55326pct. Gross signal frequency16 per141days ~0.11/day insufficient user target3-5/day. These reject proxy execution outcomes on inspected 2026 period; NOT scientific invalidation of any author V9 runtime owing missing point-in-time flow, 5m mark stop, 15sec trailing, orderbook/spread/live fills and full original backtester. No live trade, no autonomous paper order." \
+            --verdict DONE --cycle-result FAILED \
+            --countercheck "No claims of source V9 native trade-economics parity: original source only supplies bot, not included executable V9 backtester, our proxy explicitly distinct. Source signal class is exact byte-verified, source 1h and SOL BTC 4h closed-only, genuine 600bar prior context, verified real Binance Vision ZIP SHA and March data overlap; external 1pct size overlay NOT original risk. At least four net losses, sample N12 too small for proof of durable negative; valid scientific conclusion is NO positive evidence for user deployment, not guaranteed strategy unprofitable in future. No 15m tweak/hybrid/SMOKE change." \
+            --evidence ../../research/backup_candidates_20261031/A198_V9_ORIGINAL_SIGNAL_INDEPENDENT_PROXY_PREREG_RU.md \
+            --evidence ../../research/backup_candidates_20261031/A198_SOL_V9_INDEPENDENT_ORIGINAL_SOURCE_RESULTS_RU.md \
+            --evidence ../../research/backup_candidates_20261031/A198_V9_ORIGINAL_AUTHOR_SIGNALS_MACHINE_VERIFIED.json \
+            --evidence ../../research/backup_candidates_20261031/A198_V9_REAL_2026_SOURCE_SHA_VERIFIED.json \
+            --evidence ../../research/backup_candidates_20261031/A198_V9_FOUR_TRADE_ARCHIVE_SHA256.json \
+            --evidence ../../research/backup_candidates_20261031/A198_author_original_6pct_target__base_VERIFIED_TRADES.json \
+            --evidence ../../research/backup_candidates_20261031/A198_external_1pct_cap__base_VERIFIED_TRADES.json \
+            --evidence ../../research/backup_candidates_20261031/a198_extend_v9_600bar_4h_warmup.py \
+            --evidence ../../research/backup_candidates_20261031/a198_v9_source_signals_proxy_replay.py
+          python research/mtf-element-audit-v1/tools/auditlog.py verify | tee /tmp/a198-audit
+          grep -Fq 'INTEGRITY_PASS entries 198' /tmp/a198-audit
+      - name: Commit independent machine verification and append A198 immutable SHA audit chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/backup_candidates_20261031/A198_*VERIFIED*.json \
+                  research/backup_candidates_20261031/A198_V9_FOUR_TRADE_ARCHIVE_SHA256.json \
+                  research/mtf-element-audit-v1/ЖУРНАЛ_ДЕЙСТВИЙ.jsonl
+          git commit -m "A198 SOL V9 original-source signals: authentic Binance 5m proxy, 16 signals 12 trades four economic FAIL, audit 198"
+          git push origin HEAD:refs/heads/research/a198-sol-pullback-v9-original-signal-20261031
