@@ -1,0 +1,47 @@
+name: A235 Native Timeframe Parity — 3 frozen original USD-M strategies
+on:
+  push:
+    branches:
+      - 'research/a235-native-timeframe-parity-20261031'
+    paths:
+      - 'research/a235_timeframe_parity/**'
+      - '.github/workflows/ember-a235-native-timeframe-parity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  three_original_tf_parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Exact frozen research runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'freqtrade==2026.9' technical pandas pyarrow
+          python -m freqtrade --version
+          python -m pip freeze > research/a228_five_original/native_pip_freeze.txt
+      - name: Pinned unchanged original source and genuine MAINNET Binance USDT-M klines mark funding
+        run: python research/a228_five_original/a228_prepare_pinned_originals_and_real_futures.py
+      - name: Preflight native source TF and run 18 predeclared 3-market/3-period experiments
+        run: python research/a235_timeframe_parity/a235_run_originals.py
+      - name: Upload receipts and complete modeled Freqtrade trade logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a235-native-tf-parity-originals-4h-15m-5m
+          path: |
+            research/a228_five_original/native_pip_freeze.txt
+            research/a228_five_original/generated/A228_ORIGINAL_AND_MARKET_RECEIPTS.json
+            research/a228_five_original/generated/native_backtests_a235/**
+          retention-days: 30
+          compression-level: 6
+          if-no-files-found: warn
