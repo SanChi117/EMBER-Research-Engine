@@ -1,0 +1,123 @@
+{
+  "scope": "source checks only; bool probe uses Python bool, parameter runtime type not proven",
+  "pandas_version": "2.2.3",
+  "sources": [
+    {
+      "name": "winner",
+      "commit": "82c6955a15f80196d1e0ae8320b2c41432980b40",
+      "blob": "585df3f6198837230816c73fe59957996f45d13a",
+      "url": "https://github.com/win-boom/BTCquant/blob/82c6955a15f80196d1e0ae8320b2c41432980b40/user_data/strategies/winner_strat.py",
+      "sha_verified": true,
+      "syntax_valid": true,
+      "class_name": "Winner15m",
+      "attributes": {
+        "timeframe": "15m",
+        "can_short": true,
+        "startup_candle_count": 200,
+        "stoploss": -0.025,
+        "use_exit_signal": false,
+        "max_open_trades": 10
+      }
+    },
+    {
+      "name": "mtf_hybrid",
+      "commit": "82c6955a15f80196d1e0ae8320b2c41432980b40",
+      "blob": "92a23a6d8fe5ea5e0314183c9deecc87d3bfeec6",
+      "url": "https://github.com/win-boom/BTCquant/blob/82c6955a15f80196d1e0ae8320b2c41432980b40/user_data/strategies/mtf_hybrid_strategy.py",
+      "sha_verified": true,
+      "syntax_valid": true,
+      "class_name": "MTF_Hybrid",
+      "attributes": {
+        "timeframe": "15m",
+        "can_short": true,
+        "startup_candle_count": 500,
+        "stoploss": -0.025,
+        "use_exit_signal": false,
+        "max_open_trades": 8
+      }
+    },
+    {
+      "name": "ftr",
+      "commit": "210952246ae457a5f6d5e089ddea8b4960a71775",
+      "blob": "6e80c0b96754c21744726120b6904f940621ec01",
+      "url": "https://github.com/hrodrig/freqhub-strategies/blob/210952246ae457a5f6d5e089ddea8b4960a71775/strategies/FreqHub.Strategy.FailureToReturn/FailureToReturnStrategy.py",
+      "sha_verified": true,
+      "syntax_valid": true,
+      "class_name": "FailureToReturnStrategy",
+      "attributes": {
+        "timeframe": "1h",
+        "can_short": false,
+        "startup_candle_count": 200,
+        "stoploss": -0.08,
+        "use_exit_signal": true
+      }
+    },
+    {
+      "name": "fvg",
+      "commit": "9d66f71ce21f2f65feaad6bb967215be22a3cfd6",
+      "blob": "e9f94dd1fd06dea9de68e7ea86ca12d13a4283ce",
+      "url": "https://github.com/jaredrsommer/freqtradestrategies/blob/9d66f71ce21f2f65feaad6bb967215be22a3cfd6/FVGChannel.py",
+      "sha_verified": true,
+      "syntax_valid": true,
+      "class_name": "FVGChannel",
+      "attributes": {
+        "timeframe": "1h",
+        "stoploss": -0.1
+      }
+    },
+    {
+      "name": "volatility",
+      "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "blob": "15ce2473f3f60bd33c4a67b0b8b228e379850f19",
+      "url": "https://github.com/freqtrade/freqtrade-strategies/blob/f3340ce11f5bdf62f598522e64d1f5638eaa13f5/user_data/strategies/futures/VolatilitySystem.py",
+      "sha_verified": true,
+      "syntax_valid": true,
+      "class_name": "VolatilitySystem",
+      "attributes": {
+        "timeframe": "1h",
+        "can_short": true,
+        "stoploss": -1,
+        "position_adjustment_enable": true
+      }
+    }
+  ],
+  "ftr_session_probe": [
+    {
+      "python_bool_flag": true,
+      "session_input": [
+        false,
+        true
+      ],
+      "original_expression": [
+        true,
+        true
+      ],
+      "logical_not_comparator": [
+        false,
+        true
+      ]
+    },
+    {
+      "python_bool_flag": false,
+      "session_input": [
+        false,
+        true
+      ],
+      "original_expression": [
+        true,
+        true
+      ],
+      "logical_not_comparator": [
+        true,
+        true
+      ]
+    }
+  ],
+  "mtf_minimum_history_observation": {
+    "ema_bars": 19200,
+    "lag_bars": 96,
+    "startup_bars": 500,
+    "note": "EMA19200 at 15m is not an EMA200 calculated on daily closes; neutral fallback can admit signals while EMA missing."
+  },
+  "volatility_adjustment_observation": "guard allows at most 2 successful entries per trade in inspected method, not unlimited DCA"
+}

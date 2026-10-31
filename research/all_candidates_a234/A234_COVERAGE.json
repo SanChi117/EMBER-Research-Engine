@@ -1,0 +1,691 @@
+{
+  "scope": "URL census of selected historical reports; not exhaustive all-repository/all-chat census",
+  "documents_read": 15,
+  "registry_records": 74,
+  "records_may_group_related_variants": true,
+  "coverage_counts": {
+    "REGISTERED": 32,
+    "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED": 21
+  },
+  "sources": [
+    {
+      "source": "Acekiller88/crypto-signal-scanner",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [Acekiller88/crypto-signal-scanner](https://github.com/Acekiller88/crypto-signal-scanner/tree/431c79bb45fb31ca9609c48ccc0f17376731b9da) `431c79b` | Структура 4h→1h→15m, подтверждаемые свинги, BOS/CHoCH, FVG/OB/sweep, структурный SL/TP, исходник replay+costs. `scanner/structure.py` `448f8cc2cf6bd8be68954302fa89a9120fd7ecb9`; `scanner/replay.py` `33e24e5322f041e4d9f4068620a0f17054e1e1d7` | `SOURCE_ONLY_WORTH_PARITY_AUDIT`, не прибыльный доказанно. `scanner/market_data.py` `9f7a592ece56133d51e912c894cdf0b6f392cd92`: при блоке futures API HTTP451 **может перейти на Spot-маркет как degraded source**. Исторический реплей с таким фолбеком не годится для USD-M net результатов. `scanner/costs.py` `64cd7d7199eba3c202bf4ef9bd3bbc8ba65e3f14` моделирует интервал funding, но реальные rates/mark нужны отдельно | Отключать только fallback в изолированном research; сравнить торговый паритет, многолетний genuine Futures after-cost, причинность и жизненный цикл сигналов; не менять действующий PAPER |"
+        }
+      ]
+    },
+    {
+      "source": "Adeline117/Strategy-project",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [Adeline117/Strategy-project](https://github.com/Adeline117/Strategy-project) | Контртренд по funding zscore | В историческом OOS 2021/22 минус, сильная зависимость от режима и оптимизированных параметров |"
+        }
+      ]
+    },
+    {
+      "source": "DylanSiegel/GO-Microstructures",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [DylanSiegel/GO-Microstructures](https://github.com/DylanSiegel/GO-Microstructures) | Hawkes order-flow, aggTrades Futures | Код потока и моделей есть, но нет полноценного послеиздержечного portfolio fills/queue, повторяет часть исследовательских источников A207; **не готовая стратегия** |"
+        }
+      ]
+    },
+    {
+      "source": "EstebanSP23/crypto_systematic_research",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A192_RESERVE_CANDIDATES_RU.md",
+          "blob": "53eb2d99ea27edfcf883cdabad1a5ab021a1db02",
+          "excerpt": "- Repo https://github.com/EstebanSP23/crypto_systematic_research pinned main **5df0c43f6d48b7d8dbb74843d6747e5ddbb6819b**."
+        },
+        {
+          "document": "RESEARCH_A231_REEVALUATION_QUEUE.md",
+          "blob": "3b01a159339579d9e8feccc390424f96b1942295",
+          "excerpt": "**Важная source-to-market коррекция: HERMES и APEX были ошибочно записаны как готовые Binance USD-M исходники.** [HERMES source `hermes_trading/data.py`](https://github.com/chrysek70/hermes-trading/blob/702ee511c669fb521744270e8b3cb9e8964ac998/hermes_trading/data.py) содержит `_BASE = \".../data/spot/monthly/klines\"`. [APEX source `1_data/README.md`](https://github.com/EstebanSP23/crypto_systematic_research/blob/5df0c43f6d48b7d8dbb74843d6747e5ddbb6819b/1_data/README.md) **прямо сообщает**, что research использовал Binance SPOT OHLCV, тогда как live использовал BloFin perpetual; `02_apex_no_pyramid/walkforward.py` вызывает `ccxt.binance()` без futures option. Их авторские 48mo/WF и grid результаты **не** подтверждают Binance USD-M. Оставить в `TRANSFER_SPOT_TO_USDM_RESEARCH_ONLY` для отдельного заранее зафиксированного исследования, **не** ставить выше настоящих USD-M оригиналов, не называть native futures-победителями."
+        }
+      ]
+    },
+    {
+      "source": "Gotodataru/binance-futures-backtest",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 9 | [Gotodataru/binance-futures-backtest](https://github.com/Gotodataru/binance-futures-backtest/tree/5ed0d6e39d8a3e951bea40c66e2638c213012e1b) `5ed0d6e` | funding MR, 5m taker momentum, OI divergence; true Binance USD-M | `GENERAL_RESEARCH_TRACK_SOURCE_ONLY`: NOT separate price action breakout/retest mechanism. Reported 0.19% OOS XRP with 44 trades for funding-MR is small and insufficient; private data folder `BIGdatabaseBinance` not shipped. Keep general search alive, no false positive |"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/Gotodataru/binance-futures-backtest"
+        }
+      ]
+    },
+    {
+      "source": "HodlHook/momentum-breakout-postmortem",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 8 | [HodlHook/momentum-breakout-postmortem](https://github.com/HodlHook/momentum-breakout-postmortem/tree/c93da60b7fada886c71bf1973a0159978c5fe2ba) `c93da60` | Qullamaggie impulse→tight consolidation→price breakout | `EXTERNAL_NEGATIVE_OOS`: ~671k optimized configs, pinned 3 variants failed un-touched 2024-07→2026-07 OOS (V1 −0.26R on 575 trades, V2 −0.13R, V3 −0.33R). Dataset earlier spot/perp splice and survivorship bias acknowledged; negative independent author evidence, **not our market backtest**. Do not resurrect on already-seen history |"
+        }
+      ]
+    },
+    {
+      "source": "Kureshi25/cryptobot",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [Kureshi25/cryptobot](https://github.com/Kureshi25/cryptobot) | Donchian | A211 настоящие USD-M native отрицательные |"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/Kureshi25/cryptobot"
+        },
+        {
+          "document": "research/strategy_research_reset_20261031/A210_DIFFERENT_FAMILIES_FIRST_SOURCE_AUDIT_RU.md",
+          "blob": "0122aeab1b6932c895fc38f940839dbe51f8d45f",
+          "excerpt": "Публичный источник: [`Kureshi25/cryptobot`](https://github.com/Kureshi25/cryptobot), pinned ***original files***:"
+        }
+      ]
+    },
+    {
+      "source": "MG-Trading-Terminal/trading-strategy",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [MG-Trading-Terminal/trading-strategy](https://github.com/MG-Trading-Terminal/trading-strategy) | OI/позиционирование толпы | Документы без исполнимой оригинальной стратегии; собственный честный OOS «barrel» снизился до +0.08%/сделку prefees, ниже условного breakeven, ранние красивые цифры опровергнуты |"
+        }
+      ]
+    },
+    {
+      "source": "MiltonTulli/trading-bot",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [MiltonTulli/trading-bot](https://github.com/MiltonTulli/trading-bot) | BTC breakout+volume | Автор признаёт SAME-CLOSE fill/lookahead, funding/slippage не в PnL, 3240+ проверенных конфигураций; заголовок «$10k->$229k» **не верифицирован** |"
+        }
+      ]
+    },
+    {
+      "source": "MirrorNew/2026DoubleMaFuturesStrategy",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [MirrorNew/2026DoubleMaFuturesStrategy](https://github.com/MirrorNew/2026DoubleMaFuturesStrategy) | Double MA | A188–A197 native causal & robustness gates fail; **не повторять** |"
+        }
+      ]
+    },
+    {
+      "source": "Mykola-Quant/retail-crypto-alpha",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [Mykola-Quant/retail-crypto-alpha](https://github.com/Mykola-Quant/retail-crypto-alpha/tree/417490bb6bd2d61a987dd11ac30eea1bcb0f6b97) `417490b` | Binance futures OHLCV исследования liquidity sweeps, Monday range, FVG, CVD, каскадов; `monday_range_sweep_backtest.py` `4002373cf05ef1c06928884859f81c055a7547d2`, `multi_fvg_backtest.py` `4f660db6aacff3cdf7897627bba951b27b754b88` | `EXTERNAL_NEGATIVE_EVIDENCE`: автор сам сообщает, что протестированные price action / microstructure идеи не дали значимого устойчивого чистого OOS при round-trip ≈0.13%; это **чужой отчёт**, не наш EMBER backtest. Нельзя обобщать на весь PA | Не брать старые проваленные конкретные варианты как «новые». Сохранить как важную проверку ложных открытий |"
+        }
+      ]
+    },
+    {
+      "source": "OctopusTakopi/crypto-trend-following",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [OctopusTakopi/crypto-trend-following](https://github.com/OctopusTakopi/crypto-trend-following) | 788-contract CTA trend, long+short | Оригинал полноценнее других (actual perps/funding, point-in-time); но средний 143-контрактный portfolio, $100k baseline, net Sharpe 1.04, DD −30.1%, нет margin/liquidation полной модели. **Отложен, не второй независимый механизм** относительно TSMOM |"
+        }
+      ]
+    },
+    {
+      "source": "OfficialGIGA/freqtrade-ml-strategy",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/OfficialGIGA/freqtrade-ml-strategy/blob/main/RESULTS.md"
+        }
+      ]
+    },
+    {
+      "source": "PVinh-Quant/Kairos-v2",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [PVinh-Quant/Kairos-v2](https://github.com/PVinh-Quant/Kairos-v2), [zabor-crypto/zaBor](https://github.com/zabor-crypto/zaBor) | Исследовательские инфраструктуры | Предназначены для анализа и управления риском, **не готовые independently profitable original стратегии** |"
+        }
+      ]
+    },
+    {
+      "source": "SC4RECOIN/simple-crypto-breakout-strategy",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 7 | [SC4RECOIN/simple-crypto-breakout-strategy](https://github.com/SC4RECOIN/simple-crypto-breakout-strategy/tree/ddb51cd8aead017c5f08fec628eece142b3a175d) `ddb51cd` | Previous-day high/low breakout, long & short, 2% stop | `REJECT_SOURCE_VENUE_MISMATCH`: `backtester/backtest.py` blob `b1503a9778c5e5f68f241d040551a714c9e213aa` uses Binance `Client.get_historical_klines` **SPOT**, while `config.json` `32d28e17681e9a8b177f723a43b6af3ec8947ab4` trades FTX `ETH-PERP`; 2020 single year result and parameter optimizer, no USD-M funding/margin. Do not promote attractive +304% author return |"
+        }
+      ]
+    },
+    {
+      "source": "SebastianBoehler/MarketTensor",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [SebastianBoehler/MarketTensor](https://github.com/SebastianBoehler/MarketTensor) | ML-regime и OHLCV+OI | Историческое Sharpe лучшей ML стратегии всего 0.0828 против 0.0822 для majority baseline — нет полезной разницы |"
+        }
+      ]
+    },
+    {
+      "source": "Superior-Trade/superior-skills",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/Superior-Trade/superior-skills"
+        }
+      ]
+    },
+    {
+      "source": "Superjojo74/nautilus-perp-funding",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [Superjojo74/nautilus-perp-funding](https://github.com/Superjojo74/nautilus-perp-funding) | Funding settlement addon NautilusTrader | Инженерно полезная библиотека, **не стратегия**; может помочь будущему testing QA |"
+        }
+      ]
+    },
+    {
+      "source": "aayanvatsa04/btc-perpetual-funding-arbitrage",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/aayanvatsa04/btc-perpetual-funding-arbitrage"
+        }
+      ]
+    },
+    {
+      "source": "analogdada/perplab",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a219_chart_patterns_venue/ORIGINAL_VENUE_AUDIT_RU.md",
+          "blob": "015a21c31ff6296050c47dd2022104e5a1a7ab69",
+          "excerpt": "**Отдельно найден [analogdada/perplab](https://github.com/analogdada/perplab/tree/68251be7e1b4c0ade110bd4e097d524c6ce2acbc)** — явно Binance USD-M futures framework с моделированием расходов, но автор прямо пишет `the engine, not the edges`. Это **возможный инструмент тестирования, а не новая якобы прибыльная стратегия**. Не расходовать цикл на 7 исходных textbook templates без гипотезы и экономического доказательства."
+        }
+      ]
+    },
+    {
+      "source": "behlulgoker/price-action-engine",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [behlulgoker/price-action-engine](https://github.com/behlulgoker/price-action-engine/tree/29495f82fade64b3daf11a18abe86a5041f6cd3a) `29495f8` | JS BOS/MSS, OB/FVG, UI и backtest. `backtestEngine.js` `da91a07473405a03583f2e85287f8f28ebf6080a` | `REJECT_VENUE_MISMATCH`: `scannerEngine.js` `e28db9293b1440e95d1b8f51d9ef71d773142bbd` прямо обращается к `https://api.binance.com/api/v3/klines` — **SPOT**; нет доказанного full Binance USD-M original dataset/economics. Подписанные POS FVG не доказательство торговли | Не брать как кандидата futures. Отдельные математические реализации могут быть учебными, без торгового статуса |"
+        }
+      ]
+    },
+    {
+      "source": "billybraith17/crypto-stat-arb",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/billybraith17/crypto-stat-arb"
+        }
+      ]
+    },
+    {
+      "source": "bockuden/crypto-cointegration-research",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [bockuden/crypto-cointegration-research](https://github.com/bockuden/crypto-cointegration-research) | Spot/perp basis | У автора тяжёлый отрицательный послеиздержечный результат; близко к A212/213, не новая независимая идея |"
+        }
+      ]
+    },
+    {
+      "source": "chiragbitoni/binance-paper-trading-lab",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [chiragbitoni/binance-paper-trading-lab](https://github.com/chiragbitoni/binance-paper-trading-lab/tree/a22419f6ab198cfbc7aef79b5914c1413b56cd60) `a22419f` | Качественная инфраструктура PAPER, отдельная 3× futures-sim, объём/свечная дельта и Sweep-reclaim | `TOOL_AND_SOURCE_ONLY`: главная историческая стратегия Spot, в отдельном Futures simulator нет завершённого full positive OOS и real order fills. Не отменяет основной PA поиск, но не кандидата «прибыльный» | Можно использовать лишь идеи проверки parity, без импорта spot-сигналов |"
+        }
+      ]
+    },
+    {
+      "source": "chrysek70/hermes-trading",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A192_RESERVE_CANDIDATES_RU.md",
+          "blob": "53eb2d99ea27edfcf883cdabad1a5ab021a1db02",
+          "excerpt": "- Repo https://github.com/chrysek70/hermes-trading , pinned upstream main **702ee511c669fb521744270e8b3cb9e8964ac998**."
+        },
+        {
+          "document": "RESEARCH_A231_REEVALUATION_QUEUE.md",
+          "blob": "3b01a159339579d9e8feccc390424f96b1942295",
+          "excerpt": "**Важная source-to-market коррекция: HERMES и APEX были ошибочно записаны как готовые Binance USD-M исходники.** [HERMES source `hermes_trading/data.py`](https://github.com/chrysek70/hermes-trading/blob/702ee511c669fb521744270e8b3cb9e8964ac998/hermes_trading/data.py) содержит `_BASE = \".../data/spot/monthly/klines\"`. [APEX source `1_data/README.md`](https://github.com/EstebanSP23/crypto_systematic_research/blob/5df0c43f6d48b7d8dbb74843d6747e5ddbb6819b/1_data/README.md) **прямо сообщает**, что research использовал Binance SPOT OHLCV, тогда как live использовал BloFin perpetual; `02_apex_no_pyramid/walkforward.py` вызывает `ccxt.binance()` без futures option. Их авторские 48mo/WF и grid результаты **не** подтверждают Binance USD-M. Оставить в `TRANSFER_SPOT_TO_USDM_RESEARCH_ONLY` для отдельного заранее зафиксированного исследования, **не** ставить выше настоящих USD-M оригиналов, не называть native futures-победителями."
+        }
+      ]
+    },
+    {
+      "source": "denniskid2520/btcusdt-perp-live",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 1 | [denniskid2520/btcusdt-research-archive](https://github.com/denniskid2520/btcusdt-research-archive/tree/66410a708fe5c4ff0d2762fbe764cc25b51ae7e3) `66410a7`; [production](https://github.com/denniskid2520/btcusdt-perp-live/tree/599e466c5653a634c49c558fed6cb1553e04cb1d) `599e466` | 4h RSI regime → 1h BTC pullback/breakout + two stops, claimed 6yr WFO | **`BLOCKED_SOURCE_CAUSALITY`**: `src/research/strategy_c_v2_execution_layer.py` original git blob `c90f162d8cddca544d7e8b604eee7682398f24a4` starts 4h RSI-dependent zone at `bars_4h[zone_start_idx].timestamp` (bar OPEN), chooses earliest 1h bar and `run_v2_backtest` enters next hour open. First 1h entry can be **3h before 4h RSI close became known**. Independent pinned original AST chronology proof: [CI](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41226670044); artificial timestamp example **not PnL**. A second check on authenticated market hours separately counts affected base signals. Research archive has 6,427 parameter searches; published +566% and DD −12.7% are **unverified claims**, not ours. Current production source differs from archival research; this proof is only about the named research layer. |"
+        }
+      ]
+    },
+    {
+      "source": "denniskid2520/btcusdt-research-archive",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 1 | [denniskid2520/btcusdt-research-archive](https://github.com/denniskid2520/btcusdt-research-archive/tree/66410a708fe5c4ff0d2762fbe764cc25b51ae7e3) `66410a7`; [production](https://github.com/denniskid2520/btcusdt-perp-live/tree/599e466c5653a634c49c558fed6cb1553e04cb1d) `599e466` | 4h RSI regime → 1h BTC pullback/breakout + two stops, claimed 6yr WFO | **`BLOCKED_SOURCE_CAUSALITY`**: `src/research/strategy_c_v2_execution_layer.py` original git blob `c90f162d8cddca544d7e8b604eee7682398f24a4` starts 4h RSI-dependent zone at `bars_4h[zone_start_idx].timestamp` (bar OPEN), chooses earliest 1h bar and `run_v2_backtest` enters next hour open. First 1h entry can be **3h before 4h RSI close became known**. Independent pinned original AST chronology proof: [CI](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41226670044); artificial timestamp example **not PnL**. A second check on authenticated market hours separately counts affected base signals. Research archive has 6,427 parameter searches; published +566% and DD −12.7% are **unverified claims**, not ours. Current production source differs from archival research; this proof is only about the named research layer. |"
+        }
+      ]
+    },
+    {
+      "source": "djienne/pair_trading_NEDL",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a218_pair_futures/ACCOUNTING_SOURCE_AUDIT_RU.md",
+          "blob": "1ff384aa1fcb61f6ba9c88167946861d8841efb4",
+          "excerpt": "Дата: 2026-10-31. Исследование **исключительно Binance USDT-M Futures**. Оригинал [djienne/pair_trading_NEDL](https://github.com/djienne/pair_trading_NEDL/tree/1823a2137d5b02a5649b32328d024057c968ada0); git commit `1823a2137d5b02a5649b32328d024057c968ada0`, `pair_trading.py` blob `65e7c6dd3b8d62067704ad2148082392bbc17814`, `backtest.py` blob `48bcb2417fb3798349df9be97244ddb829e19121`, `config.json` blob `efbb698bc1072356051fcbc669943fddf1b3a6b7`. Оригинал не изменён и не объявлен прибыльным."
+        }
+      ]
+    },
+    {
+      "source": "fmzquant/strategies",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 5 | [fmzquant/strategies — Support Resistance breakout](https://github.com/fmzquant/strategies/blob/master/Support-Resistance-breakout.md) blob `3f06d43dc265beb4f4844b3ab6c8c9406527da4b` | Native Pine v4 Binance Futures 4h confirmed fractal levels + trend flip | `REJECT_MISSING_STRUCTURAL_STOP`: genuine **`Futures_Binance`** in header (good venue), but `strategy.close` only on opposite trend, **no initial stop / tail gap/risk cap**, no commission/funding or multi-year archive; only month 2022 shown. Not user-level acceptable original autonomous future system |"
+        }
+      ]
+    },
+    {
+      "source": "fortunato/pymarket-structure",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [fortunato/pymarket-structure](https://github.com/fortunato/pymarket-structure) | 4h zones / wave retest | +70.32% авторский пример, но **нет оригинального source самой Freqtrade стратегии**; материал только trade JSON/4h candles, params прямо curve-fit; экономически не проверял |"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "Репозиторий `https://github.com/fortunato/pymarket-structure`, публичные 15 файлов `refs/freqtrade/backtest_results/{strategy}-{coin}USDT-4h-trades.json`. Простая арифметическая сверка `profit_abs`, не проверка корректности генерации входов."
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/fortunato/pymarket-structure/blob/main/refs/freqtrade/README.md"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/fortunato/pymarket-structure/blob/main/src/market_structure/freqtrade.py"
+        }
+      ]
+    },
+    {
+      "source": "francisx1999/crypto-trading-bot-postmortem",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/francisx1999/crypto-trading-bot-postmortem"
+        }
+      ]
+    },
+    {
+      "source": "freqtrade/freqtrade-strategies",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [freqtrade/freqtrade-strategies/VolatilitySystem](https://github.com/freqtrade/freqtrade-strategies/blob/main/user_data/strategies/futures/VolatilitySystem.py) | 1h ATR shock, 2x futures | Настоящий original SHORT/LONG, но stoploss=−1 (100% цены), разрешённый DCA stake и 2×; блок по tail risk до дорогого теста |"
+        }
+      ]
+    },
+    {
+      "source": "gmchun83/binancefuturebot",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [gmchun83/binancefuturebot](https://github.com/gmchun83/binancefuturebot/tree/e7e94a44c3b656b252a2192e5ed0512b7ea5e10c) `e7e94a4` | Прямой Binance USD-M breakout swing → 1.5/2/3R частичные цели, стопы | `SOURCE_ONLY_UNVERIFIED`: в репозитории только `binancefuturebot.py`, README и env, без исходного воспроизводимого бэктеста/журнала и доказанной устойчивости. Шаг реализации и расходы в реальном исполнении недоказаны | Нужны original causal code audit и настоящий USD-M source-native replay, не считать прибыльным |"
+        }
+      ]
+    },
+    {
+      "source": "hroussel18/Revelio_Improved_Strategy",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [hroussel18/Revelio_Improved_Strategy](https://github.com/hroussel18/Revelio_Improved_Strategy/tree/823f81c93afe82e704f4e40d4c6f3744db2790b4) `823f81c` | Original BTC 1h sweep → reclaim → confirmed swing BOS, wick-based SL, trailing 1R, both sides. `src/strategy.py` blob `a47e25730bd4e161cbb53d023b3fe99ce51568cb`; `src/indicators.py` `c6517e5b7ce1e48c4eafb4e6d363b4eca28998c0`. Симметричный pivot подтверждается **5 баров спустя**, без future-сигнала | `REJECT_NATIVE_DIAGNOSTIC_NEGATIVE`, **не подтверждённый edge**: оригинальный backtester `968f364db6bc4d04b01b6e549f68ad90a62d802e` исполняет на том же **closing price** после формирования BOS; README demo на синтетике, не полноценный futures funding/margin. Настоящий USD-M preflight отдельным CI, ещё НЕ реальный net PnL | Модельная гипотеза пригодна к формальному тесту next-open на BTC USD-M со всеми издержками. Параметры locked, source SHA pinned. Нельзя публиковать её как прибыльную до гейтов |"
+        },
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [hroussel18/Revelio_Improved_Strategy V2](https://github.com/hroussel18/Revelio_Improved_Strategy) | Retracement into FVG/OB в рамках того же семейства | `DEFER_SAME_PROJECT_NEW_RULES`: не запускать V1+V2+ML+разные exit с одним и тем же историческим PnL и затем выбирать лучший — multiple testing. V1 неизменён и проходит source gate первым | Если V1 не имеет доходности, V2 только с новой до-теста гипотезой |"
+        }
+      ]
+    },
+    {
+      "source": "jiangkaili/binance-trader-bot",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "**Источник:** https://github.com/jiangkaili/binance-trader-bot"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/jiangkaili/binance-trader-bot"
+        }
+      ]
+    },
+    {
+      "source": "joseph280/crypto-backtest-lab",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 10 | [joseph280/crypto-backtest-lab](https://github.com/joseph280/crypto-backtest-lab/tree/e5ea9679c5a80bb68dbb76c2f5d29650704ac5ba) `e5ea967` | futures cost/cross-validation research engine | `TEST_TOOL_NOT_EDGE`: demo runs **synthetic candles and intentionally planted edge**, positive synthetic Sharpe cannot count as authentic strategy |"
+        }
+      ]
+    },
+    {
+      "source": "juriok/chart-pattern-backtester",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [juriok/chart-pattern-backtester](https://github.com/juriok/chart-pattern-backtester) | Формации 4h | Отброшен в A219 как SPOT-data disguised as Futures |"
+        },
+        {
+          "document": "research/a219_chart_patterns_venue/ORIGINAL_VENUE_AUDIT_RU.md",
+          "blob": "015a21c31ff6296050c47dd2022104e5a1a7ab69",
+          "excerpt": "Дата 2026-10-31. Перед созданием новой ветки прочитан неизменный `main/RESEARCH_MANDATE_LOCKED.md`. Оригинал, **не отредактированный**: [juriok/chart-pattern-backtester](https://github.com/juriok/chart-pattern-backtester/tree/2972c880144997ec305dc3dac23d78ee5a831176) commit `2972c880144997ec305dc3dac23d78ee5a831176`; `config.py`, `data/fetcher.py`, `main.py`, `backtest/portfolio.py`."
+        }
+      ]
+    },
+    {
+      "source": "kboranyldz/sol-trading-research",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/kboranyldz/sol-trading-research"
+        }
+      ]
+    },
+    {
+      "source": "knacker65/v5-crypto-scalper",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/knacker65/v5-crypto-scalper"
+        }
+      ]
+    },
+    {
+      "source": "liu57liu456/backtest-autopsy",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/liu57liu456/backtest-autopsy/blob/master/strategy/SingleB_FixedRR.py"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/liu57liu456/backtest-autopsy/blob/master/README.md"
+        }
+      ]
+    },
+    {
+      "source": "mamipour/lead-lag-trader",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [mamipour/lead-lag-trader](https://github.com/mamipour/lead-lag-trader) | Межмонетная реакция | Основная эмпирика Kraken Futures и DD −47%; не наш USD-M оригинал |"
+        }
+      ]
+    },
+    {
+      "source": "nateemma/strategies",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A193_SMALL_BANKROLL_SCALPING_RESEARCH_RU.md",
+          "blob": "08626d9314bbb5d3a7e4ee10cd9e954660cfb720",
+          "excerpt": "- https://github.com/nateemma/strategies/blob/master/us_spot_market_study.md"
+        }
+      ]
+    },
+    {
+      "source": "pranay123-stack/Algorithmic-Trading-Projects",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [pranay123-stack/Algorithmic-Trading-Projects](https://github.com/pranay123-stack/Algorithmic-Trading-Projects/tree/013acaa94a1e58c16579b5a368ed13b4cede5350) `013acaa` | ICT FVG/OB/Sweep + EMA bias, futures data через CCXT `defaultType:future`, original `strategy_final.py` `e72845a614f58371cc6495434ea8ca28af065999` | **`REJECT_ORIGINAL_SAME_BAR_FILL`**: `backtester.py` `cd57266447cbbcdac323ae26e710b4adc04452cd` устанавливает `current_price=df.close[i]`, `signal=df.signal[i]`, затем исполняет вход `entry_price=current_price` на той же закрывающейся сигнальной свече. Разделит 2024 «forward +25.7%» невозможно считать подтверждённой исполненной экономикой; данные real futures не спасают timing | Не подгонять и не рекламировать +25.7%. Исправление превращает оригинальный тест в новый, требующий отдельного паритета; низкий приоритет |"
+        }
+      ]
+    },
+    {
+      "source": "spagnola-analytics/intraday-strategies",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 11 | [spagnola-analytics/intraday-strategies](https://github.com/spagnola-analytics/intraday-strategies/tree/6041dfef19c8cb4efe4c4b07def09ea8fc59863d) `6041dfe` | ORB, MSB+OB, pullbacks, S/R | `WRONG_MARKET`: original Polygon MES/E-mini index futures, NOT Binance USD-M; port before original market proof would be self-authored adaptation; do not classify ready crypto candidate |"
+        }
+      ]
+    },
+    {
+      "source": "stockalgo/stolgo",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 2 | [stockalgo/stolgo](https://github.com/stockalgo/stolgo/tree/1b99e2c8e677084247c60c6bfe3d951fcdb3466c) `1b99e2c` | 21-day daily S/R break on BTC 1h; `examples/pa/btc_21d_sr_intraday.py` blob `fc8b8d3acc34ec80dedb7ae6798ec90e39e88f80` | `SOURCE_ONLY_EXECUTION_RISK_BLOCK`: `prior_rolling_max/min` uses prior completed days (correct prerequisite), but example passes `fill_on='close'`; `lib/stolgo/core/engine.py` blob `0c5f7e84abe2446cb8b1f37b1eb11c3b525378ff` executes matching at next bar, `lib/stolgo/oms/fill_model.py` `80faa4f2f34e03225dc51a9271407f6d8f5c5436` fills its close. `lib/stolgo/trade/bracket.py` `b539244f8bd43656167d2b8038fc6e7e1953eaf6` sees candle wick trigger on a bar but requests market close **after** observing that candle — subsequent fill can be at NEXT bar close, **not original stop price**. Funding and margin not implemented in the illustrated example; market comes from Bandl, USD-M provenance unconfirmed. Without independent bracket-fill model and futures replay no verified net edge. |"
+        },
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 3 | [stockalgo/stolgo — failed_break and intraday_breakout](https://github.com/stockalgo/stolgo/tree/1b99e2c8e677084247c60c6bfe3d951fcdb3466c/examples/pa) | 7-day daily range failed breakout or breakout | `SOURCE_ONLY`: original examples `failed_break.py` blob `2754b3a11465029be55783bb4510ab32b12401db`, `intraday_breakout.py` blob `eff2b4f5d257f5ecf086bda4e0e49c88aae94ce1`, **only synthetic fixtures** by default. Not separate profitability proofs; same engine/fill guard as №2. |"
+        },
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 4 | [stockalgo/stolgo — consolidation breakout](https://github.com/stockalgo/stolgo/blob/1b99e2c8e677084247c60c6bfe3d951fcdb3466c/examples/pa/btc_consolidation_pa.py) blob `8d2a064a4d95aec6bf0bf8510f6a2873434624c` | 7-day compression→break, 4R target | `SOURCE_ONLY`: BTCUSDT daily with Bandl, no established USD-M source, same delayed candle-close bracket model. This is not independent validation even though risk is expressed as % |"
+        }
+      ]
+    },
+    {
+      "source": "traderhydr/krpticz",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a222_price_action/A222_PRICE_ACTION_8_ORIGINAL_SOURCE_SEMANTIC_SCREEN_RU.md",
+          "blob": "f94e78ec63c8b0917f87fb3e279d87d5c467ee56",
+          "excerpt": "| [traderhydr/krpticz](https://github.com/traderhydr/krpticz/tree/32266e7e61093640257bab58597c3006f2d7f2ba) `32266e7` | Zenith SMC-lite и GEM fib retracement с ATR/структурными SL, публичный код бота | `REJECT_VENUE_DEFAULT_AND_UNPROVEN_OOS`: default `BloFin`, Binance — fallback; сигналы Cornix, высокие 10–15× плечи, многократно оптимизированные параметры 20d/6m, недостаточно достоверной независимой USD-M source parity | Не проверять заявленную доходность как Binance-native edge |"
+        }
+      ]
+    },
+    {
+      "source": "tsuithomas/crypto_research_order_book_imbalance",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [tsuithomas/crypto_research_order_book_imbalance](https://github.com/tsuithomas/crypto_research_order_book_imbalance) | L2 order-book microprice | Вывод сильно зависит от предположений о maker/limit fills, без проверенного исторического orderbook FIFO/очереди нельзя измерить реализуемый edge |"
+        }
+      ]
+    },
+    {
+      "source": "xujaan/futurabot",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [xujaan/futurabot](https://github.com/xujaan/futurabot) | Комплекс SMC/OBI/CVD/VPIN + runner | Много эвристик без достаточного оригинального независимого USD-M OOS journal; не тратить время на «добавим ещё индикаторы» |"
+        }
+      ]
+    },
+    {
+      "source": "ycchew/CQ_breakout_strategy",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a223_price_action/A223_TWELVE_ORIGINAL_SOURCE_SCREEN_AND_GATES_RU.md",
+          "blob": "7d5019ffead80403030c40750ce2b5a24556c31c",
+          "excerpt": "| 12 | [ycchew/CQ_breakout_strategy](https://github.com/ycchew/CQ_breakout_strategy/tree/626a865f18c7effbd37719a32f3dccfec4ad3bc2) `626a865` | Qullamaggie breakout + episodic pivot, grid optimizer | `UNPROVEN_USDM_AND_OPTIMIZATION`: original multiasset and equity gap/catalyst logic, Yahoo dataset. No untouched USD-M net and heavy parameter tuning; do not mistake for market-ready crypto PA |"
+        }
+      ]
+    },
+    {
+      "source": "yongzhe2160cs/trading-engine",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "[Оригинал](https://github.com/yongzhe2160cs/trading-engine/tree/efa37deac60fb9d91abcb181440c94f2f0eac4b8), исходники `strategy/tsmom.py` blob `af7d999ff114a872df6bfe65fb5376577451021b`, `config/settings.py` blob `579df537946b20ce2c8ca55d4a8ab47629b769ba`, параметры original deploy `720h/336h/20% vol/1x cap/daily rebalance`. Реальные BTC/ETH/SOL USD-M; истинные fundingRate settlement, 204 ZIP verified SHA против A217, 3 отдельных $3000 portfolio years. Программная CI-проверка и полные поступления: [run 41224708395](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41224708395)."
+        },
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "Из `config/settings.py` документированы `max_daily_loss=0.03`, `max_total_dd=0.10`, `RISK=RiskParams()`; [оригинальный RiskManager](https://github.com/yongzhe2160cs/trading-engine/blob/efa37deac60fb9d91abcb181440c94f2f0eac4b8/risk/manager.py) blob `398b5280d123120027f54be85ae80b22e16e9da5` при нарушении **латчит `_halted`**; [оригинальный daemon](https://github.com/yongzhe2160cs/trading-engine/blob/efa37deac60fb9d91abcb181440c94f2f0eac4b8/live/tsmom_daemon.py) blob `f19895a124328cd52ba8232d3a6c5cc9f29e8e10` gates all rebalances. В независимом модельном 1h risk shadow после нарушения переводим счёт в cash до разрешения оператора; flatten cost положителен. Это **не** идентичный live path (там poll mid-window, реальные спреды, ликвидация); знак и наличие нарушения доказаны на модельной линии, а точность конкретных fills не гарантирована."
+        },
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "Из `config/settings.py` документированы `max_daily_loss=0.03`, `max_total_dd=0.10`, `RISK=RiskParams()`; [оригинальный RiskManager](https://github.com/yongzhe2160cs/trading-engine/blob/efa37deac60fb9d91abcb181440c94f2f0eac4b8/risk/manager.py) blob `398b5280d123120027f54be85ae80b22e16e9da5` при нарушении **латчит `_halted`**; [оригинальный daemon](https://github.com/yongzhe2160cs/trading-engine/blob/efa37deac60fb9d91abcb181440c94f2f0eac4b8/live/tsmom_daemon.py) blob `f19895a124328cd52ba8232d3a6c5cc9f29e8e10` gates all rebalances. В независимом модельном 1h risk shadow после нарушения переводим счёт в cash до разрешения оператора; flatten cost положителен. Это **не** идентичный live path (там poll mid-window, реальные спреды, ликвидация); знак и наличие нарушения доказаны на модельной линии, а точность конкретных fills не гарантирована."
+        }
+      ]
+    },
+    {
+      "source": "younghwan91/quantbox-engine",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [younghwan91/quantbox-engine](https://github.com/younghwan91/quantbox-engine) | Фьючерсный тестер | GitHub исходник не доступен по найденному названию, без доверенного SHA не использовать |"
+        }
+      ]
+    },
+    {
+      "source": "zabor-crypto/zaBor",
+      "coverage_status": "UNCLASSIFIED_SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        {
+          "document": "research/a221_wide_futures_screen/A221_FINAL_23_SOURCE_SCREEN_AND_FUTURES_RISK_PARITY_RU.md",
+          "blob": "30bfc748bc1ae144c9056d0431f61fb7bf1b2d5d",
+          "excerpt": "| [PVinh-Quant/Kairos-v2](https://github.com/PVinh-Quant/Kairos-v2), [zabor-crypto/zaBor](https://github.com/zabor-crypto/zaBor) | Исследовательские инфраструктуры | Предназначены для анализа и управления риском, **не готовые independently profitable original стратегии** |"
+        }
+      ]
+    },
+    {
+      "source": "zevrichards/freqtrade-strategies",
+      "coverage_status": "REGISTERED",
+      "evidence": [
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/zevrichards/freqtrade-strategies/blob/main/BinHV45_Regime_5m.py"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/zevrichards/freqtrade-strategies/blob/main/BinHV45_Regime_5m_v4.py"
+        },
+        {
+          "document": "research/backup_candidates_20261031/A189_RU_CANDIDATE_REGISTRY.md",
+          "blob": "7198b7273d3bc1e933aa13196ef00ea1c82f0702",
+          "excerpt": "- https://github.com/zevrichards/freqtrade-strategies/blob/main/INTELLIGENCE_REPORT.md"
+        }
+      ]
+    }
+  ],
+  "remaining_scope": [
+    "Other branches and historical handoffs not fully inventoried",
+    "Bare author-only references require repository resolution",
+    "Grouped variants require individual source IDs before economic tests",
+    "Early EMBER/SMOKE internal variants: legacy evidence audit, not new original candidates"
+  ]
+}

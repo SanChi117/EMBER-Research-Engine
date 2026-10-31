@@ -1,0 +1,32 @@
+[
+  {
+    "name": "winner",
+    "commit": "82c6955a15f80196d1e0ae8320b2c41432980b40",
+    "blob": "585df3f6198837230816c73fe59957996f45d13a",
+    "url": "https://github.com/win-boom/BTCquant/blob/82c6955a15f80196d1e0ae8320b2c41432980b40/user_data/strategies/winner_strat.py"
+  },
+  {
+    "name": "mtf_hybrid",
+    "commit": "82c6955a15f80196d1e0ae8320b2c41432980b40",
+    "blob": "92a23a6d8fe5ea5e0314183c9deecc87d3bfeec6",
+    "url": "https://github.com/win-boom/BTCquant/blob/82c6955a15f80196d1e0ae8320b2c41432980b40/user_data/strategies/mtf_hybrid_strategy.py"
+  },
+  {
+    "name": "ftr",
+    "commit": "210952246ae457a5f6d5e089ddea8b4960a71775",
+    "blob": "6e80c0b96754c21744726120b6904f940621ec01",
+    "url": "https://github.com/hrodrig/freqhub-strategies/blob/210952246ae457a5f6d5e089ddea8b4960a71775/strategies/FreqHub.Strategy.FailureToReturn/FailureToReturnStrategy.py"
+  },
+  {
+    "name": "fvg",
+    "commit": "9d66f71ce21f2f65feaad6bb967215be22a3cfd6",
+    "blob": "e9f94dd1fd06dea9de68e7ea86ca12d13a4283ce",
+    "url": "https://github.com/jaredrsommer/freqtradestrategies/blob/9d66f71ce21f2f65feaad6bb967215be22a3cfd6/FVGChannel.py"
+  },
+  {
+    "name": "volatility",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "blob": "15ce2473f3f60bd33c4a67b0b8b228e379850f19",
+    "url": "https://github.com/freqtrade/freqtrade-strategies/blob/f3340ce11f5bdf62f598522e64d1f5638eaa13f5/user_data/strategies/futures/VolatilitySystem.py"
+  }
+]
