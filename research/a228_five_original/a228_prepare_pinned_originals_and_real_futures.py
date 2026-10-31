@@ -182,6 +182,7 @@ def store_native_market(candles,marks,settlements):
     from freqtrade.data.history.datahandlers.featherdatahandler import FeatherDataHandler
     from freqtrade.enums import CandleType
     datadir=OUT/"binance"
+    (datadir/"futures").mkdir(parents=True,exist_ok=True)
     dh=FeatherDataHandler(datadir)
     sizes={}
     for sym in COINS:
