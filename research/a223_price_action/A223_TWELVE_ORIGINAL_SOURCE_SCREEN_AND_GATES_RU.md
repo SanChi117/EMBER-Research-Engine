@@ -1,3 +1,5 @@
+> **ФИНАЛ A223: реальный audit исходного BTC Futures кода доказал преждевременное 4H-разрешение для ВСЕХ 59 из 59 первых часовых входных сигналов (2024:28/28, 2025:18/18, 2026 Jan–Sep:13/13).** Проверены **35 настоящих Binance USD-M monthly ZIP по SHA**. [Проверенный CI](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41226851100) · [машинная зафиксированная запись](A223_59_OF_59_ORIGINAL_PREMATURE_BTC_ZONE_ENTRIES_VERIFIED.json). Это не реальный PnL и не проверка production-бота; первичная авторская история с этим research source **не прошла контроль причинности**. **0 verified futures strategies.**
+
 # A223 — широкий аудит PA-оригиналов (пробой/ретест/зона), только Binance USD-M Futures
 
 31.10.2026 · Изменение цели **ЗАПРЕЩЕНО**. Прочитаны `main/RESEARCH_MANDATE_LOCKED.md`, `main/RESEARCH_USER_VETO_A220.md` и `main/RESEARCH_PRICE_ACTION_ADDITIVE_TRACK.md`. **Price Action — ДОПОЛНИТЕЛЬНОЕ направление**, прежний общий поиск других семей остаётся. Отклонённые A220 источники не перезапускать.
