@@ -31,6 +31,7 @@ jobs:
           set -euo pipefail
           python - <<'PY'
           import json,hashlib,shutil
+          from datetime import datetime
           from pathlib import Path
           p=Path('/tmp/a198-original-source-four-results')
           dest=Path('research/backup_candidates_20261031')
@@ -61,7 +62,7 @@ jobs:
               assert abs(z['return_pct']-ret)<0.0001 and abs(z['profit_factor']-pf)<0.0001 and abs(z['max_drawdown_pct']-dd)<0.0001
               assert abs(sum(t['pnl'] for t in deals)-z['net_USDT'])<0.01
               assert abs(z['ending_USDT']-1000-z['net_USDT'])<0.01
-              assert all(t['source_signal']=='PULLBACK_4' and t['entry']>t['signal_bar'] for t in deals)
+              assert all(t['source_signal']=='PULLBACK_4' and datetime.fromisoformat(t['entry'].replace('Z','+00:00'))>datetime.fromisoformat(t['signal_bar'].replace('Z','+00:00')) for t in deals)
               assert all(t['initial_risk_usdt']>0 and t['leverage'] in (1,2,3) for t in deals)
               if label.startswith('external_1pct_cap'):
                   assert all(t['initial_risk_usdt']<=10.01 for t in deals),('external_cap',label)
