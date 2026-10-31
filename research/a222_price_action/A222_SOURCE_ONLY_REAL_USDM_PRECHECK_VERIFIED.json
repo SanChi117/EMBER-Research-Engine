@@ -1,0 +1,49 @@
+{
+  "cycle": "A222",
+  "date_utc": "2026-10-31",
+  "mandate_locked_main": true,
+  "price_action_additive_only": true,
+  "existing_search_filters_unchanged": true,
+  "source": "hroussel18/Revelio_Improved_Strategy",
+  "pinned_commit": "823f81c93afe82e704f4e40d4c6f3744db2790b4",
+  "original_signal_blobs": {
+    "config.py": "4de45902752b815e28332aca8bcf6f59e3fbb5f6",
+    "src/strategy.py": "a47e25730bd4e161cbb53d023b3fe99ce51568cb",
+    "src/indicators.py": "c6517e5b7ce1e48c4eafb4e6d363b4eca28998c0",
+    "src/backtester.py": "968f364db6bc4d04b01b6e549f68ad90a62d802e"
+  },
+  "native_market": "Binance USD-M Futures BTCUSDT 1h, genuine Binance Vision SHA-attested month files",
+  "binance_month_zip_sha_verified_count": 204,
+  "causal_prefix_probes": 6,
+  "period_signal_counts": {
+    "2024": {
+      "raw_signals": 109,
+      "long": 49,
+      "short": 60
+    },
+    "2025": {
+      "raw_signals": 100,
+      "long": 49,
+      "short": 51
+    },
+    "2026_jan_sep": {
+      "raw_signals": 67,
+      "long": 32,
+      "short": 35
+    }
+  },
+  "original_risk": "BTCUSD 2pct equity risk, sweep wick structural stop, 1R stepped trailing",
+  "notes": [
+    "Signal counts are raw original sweep->BOS candidates, NOT executed trades, win rates or profits",
+    "Original backtester enters at same closing bar; independent next-open execution not yet completed",
+    "Original source has synthetic-data demo; that is not the authentic USD-M economic test",
+    "Funding ZIP files have genuine SHA receipts, but real funding cash ledger not included in this stage",
+    "Mark, margin, actual gap and liquidation controls not assessed"
+  ],
+  "status": "SOURCE_CAUSALITY_PASS_PNL_UNVERIFIED",
+  "economic_replay_finished": false,
+  "verified_futures_candidate": false,
+  "simulated_orders_created": false,
+  "github_actions_url": "https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41225610635",
+  "github_actions_result": "success"
+}
