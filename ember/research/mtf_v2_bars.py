@@ -26,6 +26,10 @@ class FlowBar:
     volume: float
     taker_buy: float
 
+    def as_v1(self):
+        from ember.research.initiative_transition import Bar
+        return Bar(self.ts, self.open, self.high, self.low, self.close, self.volume)
+
 
 @dataclass(frozen=True)
 class Context:
