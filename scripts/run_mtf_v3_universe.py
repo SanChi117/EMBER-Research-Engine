@@ -84,7 +84,7 @@ def describe(events: list[dict], labels: dict[str,dict], horizon: str = "12") ->
         if label and label["status"]=="LABELED" and horizon in label["forward_close_returns_pct"]:
             selected.append((event,label))
     n=len(selected)
-    values=[l["forward_close_returns_pct"][horizon] for _,l in selected]
+    values=[lab["forward_close_returns_pct"][horizon] for _,lab in selected]
     if not n:
         return {"total":len(events),"matured":0,"avg_forward_directional_pct":None}
     vals=sorted(values)
@@ -99,8 +99,8 @@ def describe(events: list[dict], labels: dict[str,dict], horizon: str = "12") ->
         "median_forward_directional_pct":vals[n//2],
         "negative_after_hypothetical_035pct_cost":sum(x<=.35 for x in values),
         "mean_after_hypothetical_035pct_cost":sum(values)/n-.35,
-        "mean_future_MFE_pct":sum(l["forward_max_favorable_pct"][horizon] for _,l in selected)/n,
-        "mean_future_MAE_pct":sum(l["forward_max_adverse_pct"][horizon] for _,l in selected)/n,
+        "mean_future_MFE_pct":sum(lab["forward_max_favorable_pct"][horizon] for _,lab in selected)/n,
+        "mean_future_MAE_pct":sum(lab["forward_max_adverse_pct"][horizon] for _,lab in selected)/n,
     }
 
 
@@ -109,9 +109,9 @@ def ci_by_utc_day(events: list[dict], label_by_id: dict[str,dict],
     """Cluster bootstrap at UTC-day level; descriptive, NOT independent OOS."""
     buckets: dict[int,list[float]] = defaultdict(list)
     for e in events:
-        l=label_by_id.get(e["event_id"])
-        if l and l["status"]=="LABELED" and horizon in l["forward_close_returns_pct"]:
-            buckets[e["event_at"]//86400000].append(l["forward_close_returns_pct"][horizon])
+        lab=label_by_id.get(e["event_id"])
+        if lab and lab["status"]=="LABELED" and horizon in lab["forward_close_returns_pct"]:
+            buckets[e["event_at"]//86400000].append(lab["forward_close_returns_pct"][horizon])
     days=list(sorted(buckets))
     if len(days)<10:
         return {"days":len(days),"block_bootstrap_mean_95pct":None}
@@ -149,14 +149,14 @@ def run(data_dir: Path,out_dir: Path) -> dict:
         for z_event in z_events:
             all_zone_events.append({"symbol":symbol,**z_event})
         all_contacts.extend(e.as_dict() for e in contacts)
-        all_labels.extend(l.as_dict() for l in labels)
+        all_labels.extend(lab.as_dict() for lab in labels)
         symbol_status[symbol]={
             "source_1h_bars":len(one),"source_4h_bars":len(four),
             "source_1h_start":one[0].ts,"source_4h_start":four[0].ts,
             "source_last_closed_at":one[-1].ts+H1,
             "zone_births":len(zones),"zone_events":len(z_events),
             "unique_contact_episodes":len(contacts),
-            "label_matured":sum(l.status=="LABELED" for l in labels),
+            "label_matured":sum(lab.status=="LABELED" for lab in labels),
             "tf_parity":agreement,
         }
 
@@ -169,7 +169,7 @@ def run(data_dir: Path,out_dir: Path) -> dict:
     jsonl("zone_events.jsonl",all_zone_events)
     jsonl("all_contacts.jsonl",all_contacts)
     jsonl("forward_labels_NOT_TRADING.jsonl",all_labels)
-    by_id={l["event_id"]:l for l in all_labels}
+    by_id={lab["event_id"]:lab for lab in all_labels}
     high_effort=[
         e for e in all_contacts
         if e["effort_volume_ratio"]>=1.15 and e["penetration_atr4"]>0
