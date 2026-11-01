@@ -16,11 +16,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from research.a228_five_original.a228_prepare_pinned_originals_and_real_futures import (
-    aggregate_5m, to_candle_frame,
-)
 from research.a221_wide_futures_screen.a221_tsmom_genuine_futures import (
-    blob_sha, fetch,
+    blob_sha,
+    fetch,
+)
+from research.a228_five_original.a228_prepare_pinned_originals_and_real_futures import (
+    aggregate_5m,
+    to_candle_frame,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -188,7 +190,6 @@ def store_data(grouped):
 
 
 def main():
-    from concurrent.futures import ThreadPoolExecutor
     OUT.mkdir(parents=True,exist_ok=True)
     pinned=verify_original()
     tasks=[(typ,sym,y,m) for typ in ("kline","mark","funding")
