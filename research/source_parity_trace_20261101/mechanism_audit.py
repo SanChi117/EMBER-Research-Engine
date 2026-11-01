@@ -397,10 +397,14 @@ def main():
     with tempfile.TemporaryDirectory(prefix="ember_mechanism_originals_") as tmp:
         p07repo=clone_and_check(Path(tmp),"P07")
         p10repo=clone_and_check(Path(tmp),"P10")
-        p06repo=clone_and_check(Path(tmp),"P06")
         report["p07"]=p07(p07repo,df)
         report["p10"]=p10(p10repo,df)
-        report["p06"]=p06(p06repo,df)
+        if "--skip-p06" in sys.argv:
+            report["p06"]={"status":"DEPENDENCY_UNAVAILABLE_PY310_TALIB_SOURCE_WHEEL_TIMEOUT",
+                           "first20":[],"native_framework_verified":False}
+        else:
+            p06repo=clone_and_check(Path(tmp),"P06")
+            report["p06"]=p06(p06repo,df)
     target=Path(__file__).resolve().parent/"MECHANISM_CARDS_LOCAL.json"
     target.write_text(json.dumps(report,indent=2,ensure_ascii=False))
     print("EMBER_MECHANISM_AUDIT="+json.dumps(report,ensure_ascii=False,allow_nan=False))
