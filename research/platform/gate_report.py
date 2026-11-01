@@ -9,7 +9,8 @@ import argparse
 import json
 import sys
 from datetime import datetime, timezone
-from decimal import Decimal as D, InvalidOperation
+from decimal import Decimal as D
+from decimal import InvalidOperation
 from pathlib import Path
 
 from .paper_ledger import JsonlPaperLedgerStore
