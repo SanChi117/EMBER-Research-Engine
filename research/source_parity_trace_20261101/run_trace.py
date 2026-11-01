@@ -357,8 +357,18 @@ def main() -> None:
             except Exception as exc:
                 report["results"][key] = {"status": "BLOCKED_RUNTIME", "error": repr(exc)}
     out = HERE / "TRACE_RESULT_LOCAL.json"
-    out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-    print("EMBER_PARITY_REPORT=" + json.dumps(report, ensure_ascii=False))
+    def serialize_numpy(value):
+        if isinstance(value, np.generic):
+            return value.item()
+        if isinstance(value, (datetime, pd.Timestamp)):
+            return value.isoformat()
+        raise TypeError(f"not serializable: {type(value).__name__}")
+
+    out.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False, default=serialize_numpy),
+        encoding="utf-8",
+    )
+    print("EMBER_PARITY_REPORT=" + json.dumps(report, ensure_ascii=False, default=serialize_numpy))
     if not all(report["results"][k].get("first20_match_independent", False) for k in ("P07", "P10")):
         raise AssertionError("P07/P10 exact first20 native-vs-independent comparison failed")
 
