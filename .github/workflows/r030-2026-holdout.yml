@@ -1,0 +1,54 @@
+name: EMBER R030 Original USD-M June-Oct 2026 Forward Holdout (NO TRADES)
+
+on:
+  push:
+    branches:
+      - research/r030-2026jun-oct-original-futures-oos-20261101
+    paths:
+      - "research/r030_oos_20261101/**"
+      - ".github/workflows/r030-2026-holdout.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-original-usdm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned native Freqtrade research engine
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "freqtrade==2026.9" technical pandas pyarrow pytest ruff
+          python -m freqtrade --version
+          python -m pip freeze > research/r030_oos_20261101/native_environment_pip_freeze.txt
+      - name: Source freeze and causal validation
+        run: |
+          ruff check research/r030_oos_20261101/r030_prepare.py research/r030_oos_20261101/r030_run_oos.py research/r030_oos_20261101/test_r030_oos.py
+          python -m pytest research/r030_oos_20261101/test_r030_oos.py -v
+      - name: Original genuine Binance USD-M 5m/mark/funding May-Oct 2026, SHA and source pin
+        run: |
+          python -m research.r030_oos_20261101.r030_prepare
+      - name: Original unmodified 1h Freqtrade VolatilitySystem Base 0.05% / Stress 0.11%
+        run: |
+          python -m research.r030_oos_20261101.r030_run_oos
+      - name: Full original trade records, market SHA receipts and all negative/blocked results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-r030-original-usdm-jun-oct-2026-holdout
+          path: |
+            research/r030_oos_20261101/native_environment_pip_freeze.txt
+            research/r030_oos_20261101/generated/R030_OOS_SOURCE_RECEIPTS.json
+            research/r030_oos_20261101/generated/R030_OOS_NATIVE_RESULTS.json
+            research/r030_oos_20261101/generated/backtests/**
+          if-no-files-found: warn
+          retention-days: 90
