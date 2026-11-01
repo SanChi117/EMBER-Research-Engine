@@ -9,11 +9,11 @@ from __future__ import annotations
 
 import argparse
 import json
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.run_mtf_v3_universe import DATA_DIR, SEED, load_batched
+from scripts.run_mtf_v3_universe import DATA_DIR, load_batched
 
 H1 = 3_600_000
 
