@@ -7,7 +7,6 @@ python scripts/run_initiative_transition.py --out-dir /tmp/ember-initiative
 from __future__ import annotations
 
 import argparse
-import csv
 import hashlib
 import json
 from collections import Counter
