@@ -214,7 +214,6 @@ def write_feather(raw):
 
 
 def main():
-    from research.a228_five_original import a228_prepare_pinned_originals_and_real_futures as base
     OUT.mkdir(parents=True,exist_ok=True)
     src=pinned_source()
     tasks=[(kind,sym,y,m) for y,m in month_iterator() for sym in COINS
