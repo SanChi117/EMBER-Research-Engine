@@ -10,6 +10,8 @@ import csv
 import hashlib
 import io
 import json
+import urllib.error
+import urllib.request
 import zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -162,6 +164,95 @@ def download(spec):
                 "complete_8h_groups_reconstructed":count_filled,
                 "archive_rows":len(samples),
             })
+        # One additional original source path, without interpolation:
+        # an exact UTC-day original Binance Vision daily MARK archive, or
+        # the official historical USD-M markPriceKlines REST endpoint.
+        missing_now=[t for t in wanted if t not in partial]
+        if missing_now:
+            days=sorted({pd.Timestamp(t,unit="ms",tz="UTC").strftime("%Y-%m-%d")
+                         for t in missing_now})
+            official_recovery=[]
+            for day in days:
+                day_start=pd.Timestamp(day+"T00:00:00Z")
+                day_ms=int(day_start.timestamp()*1000)
+                # Prefer daily ZIP from same official Binance Vision, when
+                # the monthly archive has an omitted day.
+                day_rows=None
+                for timeframe,interval,count in (("1h",3_600_000,8),
+                                                  ("5m",300_000,96)):
+                    daily=("https://data.binance.vision/data/futures/um/daily/"
+                           f"markPriceKlines/{sym}/{timeframe}/"
+                           f"{sym}-{timeframe}-{day}.zip")
+                    try:
+                        raw_daily,receipt_daily=csv_from_binance(daily)
+                    except (OSError,ValueError,urllib.error.HTTPError) as exc:
+                        official_recovery.append({"daily_source_blocked":daily,
+                                                  "type":type(exc).__name__})
+                        continue
+                    source=rows_candles(raw_daily,("mark",sym,y,m))
+                    lookup={z[0]:z for z in source}
+                    complete=True
+                    recon={}
+                    for k in range(3):
+                        bucket_start=day_ms+k*8*3_600_000
+                        group=[lookup.get(bucket_start+j*interval) for j in range(count)]
+                        if any(z is None for z in group):
+                            complete=False
+                            break
+                        recon[bucket_start]=(
+                            bucket_start,group[0][1],max(z[2] for z in group),
+                            min(z[3] for z in group),group[-1][4],
+                            sum(z[5] for z in group),
+                        )
+                    if complete:
+                        partial.update({t:r for t,r in recon.items() if t in wanted})
+                        official_recovery.append({
+                            "full_day_from_original_daily_mark":daily,
+                            "sha256":receipt_daily["zip_sha256"],
+                            "native_resolution":timeframe,
+                        })
+                        day_rows=source
+                        break
+                if day_rows is not None:
+                    continue
+                # Official futures API, raw payload SHA saved. If REST access
+                # is blocked this remains explicit DATA_BLOCKED.
+                api=("https://fapi.binance.com/fapi/v1/markPriceKlines?"
+                     f"symbol={sym}&interval=1h&startTime={day_ms}"
+                     f"&endTime={day_ms+86_400_000-1}&limit=100")
+                try:
+                    req=urllib.request.Request(api,headers={
+                        "User-Agent":"EMBER-original-futures-data-audit/1.0"
+                    })
+                    with urllib.request.urlopen(req,timeout=25) as response:
+                        api_bytes=response.read()
+                    api_raw=json.loads(api_bytes)
+                    if not isinstance(api_raw,list) or len(api_raw)!=24:
+                        raise ValueError("official mark API not 24 complete hourly bars")
+                    api_lookup={}
+                    for z in api_raw:
+                        t=int(z[0]);op,high,low,cl=map(float,z[1:5])
+                        if not(low>0 and low<=min(op,cl)<=max(op,cl)<=high):
+                            raise ValueError("invalid official futures mark OHLC")
+                        api_lookup[t]=(t,op,high,low,cl,0.)
+                    if set(api_lookup)!=set(day_ms+j*3_600_000 for j in range(24)):
+                        raise ValueError("API mark archive incomplete UTC day")
+                    for k in range(3):
+                        t=day_ms+k*8*3_600_000
+                        group=[api_lookup[t+j*3_600_000] for j in range(8)]
+                        if t in wanted:
+                            partial[t]=(t,group[0][1],max(z[2] for z in group),
+                                        min(z[3] for z in group),
+                                        group[-1][4],0.)
+                    official_recovery.append({
+                        "genuine_usdm_mark_historical_api":api,
+                        "raw_response_sha256":hashlib.sha256(api_bytes).hexdigest(),
+                        "all_24_hourly_bars_validated":True,
+                    })
+                except (OSError,ValueError,urllib.error.HTTPError) as exc:
+                    official_recovery.append({"api_source_blocked":api,
+                                              "error":str(exc)[:300]})
+            backups.extend(official_recovery)
         if len(partial)!=expected_n:
             missing=[str(pd.Timestamp(t,unit="ms",tz="UTC"))
                      for t in wanted if t not in partial]
