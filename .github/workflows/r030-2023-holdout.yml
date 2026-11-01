@@ -5,7 +5,7 @@ on:
     branches:
       - research/r030-2023jun-oct-independent-source-20261101
     paths:
-      - "research/r030_oos_20261101/**"
+      - "research/r030_oos_20261101/*.py"
       - ".github/workflows/r030-2023-holdout.yml"
   workflow_dispatch:
 
