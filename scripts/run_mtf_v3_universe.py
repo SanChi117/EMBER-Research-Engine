@@ -128,6 +128,90 @@ def ci_by_utc_day(events: list[dict], label_by_id: dict[str,dict],
     }
 
 
+
+def matched_pressure_difference(
+    events: list[dict], labels: dict[str,dict], *,
+    strict_symbol_match: bool,
+) -> dict:
+    """Exploratory ex-ante feature matched pairs: never match on a future label.
+
+    Pair HIGH-EFFORT reclaim contacts inside source family/side/week, with
+    same symbol if strict_symbol_match=True. Pair on nearest prior-known
+    volume ratio and penetration in ATR units; no control reuse.
+    Directional return is only a subsequent 12h label, NOT trade PnL.
+    """
+    pools: dict[tuple,dict[str,list[dict]]] = defaultdict(lambda:{"yes":[],"no":[]})
+    for e in events:
+        lab=labels.get(e["event_id"])
+        if not lab or lab["status"]!="LABELED" or "12" not in lab["forward_close_returns_pct"]:
+            continue
+        if not(e["effort_volume_ratio"]>=1.15 and e["penetration_atr4"]>0
+               and e["reclaimed_zone_at_close"]):
+            continue
+        key=(e["zone_family"],e["side"],e["event_at"]//(7*86400000))
+        if strict_symbol_match:
+            key=key+(e["symbol"],)
+        pools[key]["yes" if e["aggressor_pressure"]>=.04 else "no"].append(e)
+    pairs=[]
+    for key,split in pools.items():
+        yes=sorted(split["yes"],key=lambda e:(e["event_at"],e["event_id"]))
+        no=split["no"][:]
+        for e in yes:
+            if not no:
+                break
+            score=lambda b: (
+                abs(e["effort_volume_ratio"]-b["effort_volume_ratio"])
+                + abs(e["penetration_atr4"]-b["penetration_atr4"])
+                + abs(e["zone_4h_age"]-b["zone_4h_age"])*.01
+            )
+            j=min(range(len(no)),key=lambda i:(score(no[i]),no[i]["event_id"]))
+            ctrl=no.pop(j)
+            diff=(
+                labels[e["event_id"]]["forward_close_returns_pct"]["12"]
+                -labels[ctrl["event_id"]]["forward_close_returns_pct"]["12"]
+            )
+            pairs.append({
+                "treated_id":e["event_id"],"control_id":ctrl["event_id"],
+                "treated_symbol":e["symbol"],"control_symbol":ctrl["symbol"],
+                "matched_family":e["zone_family"],"matched_side":e["side"],
+                "treated_day":e["event_at"]//86400000,
+                "difference_in_future_12h_directional_pct":diff,
+                "feature_distance":score(ctrl),
+            })
+    if not pairs:
+        return {"pairs":0,"mean_difference_pct":None}
+    d=[x["difference_in_future_12h_directional_pct"] for x in pairs]
+    grouped: dict[int,list[float]]=defaultdict(list)
+    for pair in pairs:
+        grouped[pair["treated_day"]].append(pair["difference_in_future_12h_directional_pct"])
+    days=list(sorted(grouped))
+    bounds=None
+    if len(days)>=10:
+        rng=random.Random(SEED+11)
+        bootstrap=[]
+        for _ in range(300):
+            sampled=[rng.choice(days) for _ in days]
+            vals=[x for day in sampled for x in grouped[day]]
+            bootstrap.append(sum(vals)/len(vals))
+        bootstrap.sort()
+        bounds=[bootstrap[7],bootstrap[292]]
+    d.sort()
+    return {
+        "pairs":len(pairs),
+        "distinct_treated_symbols":len({x["treated_symbol"] for x in pairs}),
+        "distinct_utc_days":len(days),
+        "positive_pair_fraction":sum(x>0 for x in d)/len(d),
+        "mean_difference_pct":sum(d)/len(d),
+        "median_pair_difference_pct":d[len(d)//2],
+        "day_cluster_bootstrap_95pct":bounds,
+        "matching":(
+            "same family+side+calendar week"
+            +("+same symbol" if strict_symbol_match else "")
+            +", nearest prior-known volume ratio, sweep penetration and zone age"
+        ),
+        "warning":"Matching is observational; do not interpret effect as proven causal or executable",
+    }
+
 def run(data_dir: Path,out_dir: Path) -> dict:
     out_dir.mkdir(parents=True,exist_ok=True)
     pool,receipts=load_batched(data_dir)
@@ -224,6 +308,10 @@ def run(data_dir: Path,out_dir: Path) -> dict:
         "descriptive_12h_per_symbol":by_symbol,
         "descriptive_by_month":by_month,
         "predeclared_diagnostics":group_stats,
+        "matched_taker_pressure_contrast": {
+            "symbol_faithful":matched_pressure_difference(all_contacts,by_id,strict_symbol_match=True),
+            "cross_symbol_within_week":matched_pressure_difference(all_contacts,by_id,strict_symbol_match=False),
+        },
         "warnings":[
             "Only curated currently visible USD-M contract symbols; historical delisting survivorship bias NOT solved.",
             "Not source-native SMOKE zone parity: source-derived geometry with event-time lifecycle, different dedup/score/departure.",
@@ -257,6 +345,7 @@ def main() -> None:
         "max_same_utc_day_events":result["max_same_utc_day_events"],
         "predeclared_diagnostics":result["predeclared_diagnostics"],
         "descriptive_by_month":result["descriptive_by_month"],
+        "matched_taker_pressure_contrast":result["matched_taker_pressure_contrast"],
     },ensure_ascii=False,sort_keys=True))
 
 
