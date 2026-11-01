@@ -152,3 +152,22 @@ def test_no_orders_or_paper_actions_in_research_modules() -> None:
         source = getsource(module)
         assert "create_order(" not in source
         assert "api_key =" not in source
+
+
+def test_execution_only_ablation_keeps_h1_flow_but_not_third_gate() -> None:
+    bars = sample()
+    strict, _ = detect("TESTUSDT", bars, execution_mode="m15_break")
+    direct, _ = detect("TESTUSDT", bars, execution_mode="next_m15_open")
+    assert len(strict) == 1 and len(direct) == 1
+    d = direct[0]
+    assert d.confirm_1h_close == d.trigger_15m_close
+    assert d.eligible_entry_at == d.trigger_15m_close
+    assert d.parent_4h_close < d.attempt_1h_close
+    assert d.model == "MTF_V2_FLOW_DIRECT"
+    assert d.stop == strict[0].stop
+    assert d.target == strict[0].target
+
+
+def test_invalid_execution_policy_rejected() -> None:
+    with pytest.raises(ValueError, match="execution mode"):
+        detect("TESTUSDT", sample(), execution_mode="unrecognized")
