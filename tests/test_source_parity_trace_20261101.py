@@ -35,6 +35,9 @@ def test_real_usdtm_native_signal_source_trace():
                 "daily_counts": v.get("long_daily_decisions_by_symbol"),
                 "sample": v.get("first20", v.get("native_signal_trace", []))[:2],
                 "first20_match": v.get("first20_match_independent"),
+                "native_trades": (v.get("native_execution_trace") or {}).get("closed_trades_total"),
+                "extra_exit_fee_by_symbol": (v.get("native_execution_trace") or {}).get("by_symbol"),
+                "first2_trades": (v.get("native_execution_trace") or {}).get("first20_closed_trades", [])[:2],
             }
             for k, v in report["results"].items()
         }
