@@ -1,0 +1,46 @@
+name: EMBER V3 50-Futures POI Registry (RESEARCH ONLY)
+
+on:
+  push:
+    branches:
+      - research/mtf-v3-structural-universe-20261101
+    paths:
+      - "ember/research/mtf_v3_*.py"
+      - "scripts/run_mtf_v3_universe.py"
+      - "tests/test_mtf_v3_*.py"
+      - ".github/workflows/mtf-v3-universe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Static validation
+        run: |
+          ruff check ember/research/mtf_v3_zones.py ember/research/mtf_v3_registry.py scripts/run_mtf_v3_universe.py tests/test_mtf_v3_zones.py tests/test_mtf_v3_registry.py
+      - name: Pure tests and causal as-of invariants
+        run: |
+          python -m pytest tests/test_mtf_v3_zones.py tests/test_mtf_v3_registry.py -v
+      - name: Fifty-futures archived research replay
+        run: |
+          python -m scripts.run_mtf_v3_universe --out-dir results/mtf_v3
+      - name: Full research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-mtf-v3-50-futures-POI-events
+          path: results/mtf_v3/
+          if-no-files-found: warn
+          retention-days: 90
