@@ -48,7 +48,7 @@ class Entry:
         return record
 
 
-def detect(symbol: str, source: Sequence[FlowBar], *, require_flow: bool = True) -> tuple[list[Entry], list[dict]]:
+def detect(symbol: str, source: Sequence[FlowBar], *, require_flow: bool = True, execution_mode: str = "m15_break") -> tuple[list[Entry], list[dict]]:
     """D1 context / 4H structural pivot / 1H transfer / 15m execution.
 
     Failed seller/buyer effort:
@@ -63,6 +63,8 @@ def detect(symbol: str, source: Sequence[FlowBar], *, require_flow: bool = True)
     structural TP: opposite previously confirmed 4H pivot.
     Flow-disabled run is a controlled ablation, NOT an optimized strategy.
     """
+    if execution_mode not in ("m15_break", "next_m15_open"):
+        raise ValueError("unknown execution mode")
     validate(source)
     one, four = aggregate(source, H1), aggregate(source, H4)
     from ember.research.mtf_v2_bars import D1
@@ -96,6 +98,35 @@ def detect(symbol: str, source: Sequence[FlowBar], *, require_flow: bool = True)
                         state["confirm_flow"] = fraction
                         state["response"] = progress
                         events.append({"event": "H1_TRANSFER", "time": now, "symbol": symbol, "side": state["side"], "attempt": state["attempt"], "response_atr4": progress})
+                        if execution_mode == "next_m15_open":
+                            # An execution-policy ablation, not post-hoc entry optimization:
+                            # 15m determines next OPEN only, without adding another
+                            # confirmation condition after the 1H transfer.
+                            stop = state["extreme"] - sign * .15 * state["atr"]
+                            target = state["target"]
+                            risk = sign * (bar.close - stop)
+                            room = sign * (target - bar.close)
+                            rr = room / risk if risk > 0 else -1
+                            if risk > 0 and risk <= 2.5 * state["atr"] and rr >= 1.25:
+                                tag = ("MTF_V2_FLOW_DIRECT" if require_flow else "MTF_V2_PRICE_DIRECT")
+                                fraction15 = bar.taker_buy / bar.volume if bar.volume else .5
+                                entries.append(
+                                    Entry(
+                                        symbol, state["side"], tag, state["parent_close"], state["pivot_at"],
+                                        state["attempt"], now, now, now, state["daily"],
+                                        state["boundary"], target, state["extreme"], state["attempt_flow"],
+                                        fraction, fraction15, state["volume_ratio"], progress, bar.close,
+                                        stop, target, rr,
+                                        ("H4_PIVOT_KNOWN_BEFORE_CONTEST", "H1_FAILED_AGGRESSOR_EFFORT",
+                                         "H1_SUBSEQUENT_TRANSFER", "M15_NEXT_OPEN_EXECUTION_ONLY",
+                                         "H4_PARENT_RISK_AND_TARGET", "D1_ASOF",
+                                         "H1_TAKER_FLOW" if require_flow else "PRICE_ONLY_CONTROL"),
+                                    )
+                                )
+                                events.append({"event": "ENTRY_READY", "time": now, "symbol": symbol, "side": state["side"], "attempt": state["attempt"], "rr": rr})
+                            else:
+                                events.append({"event": "REJECTED", "time": now, "symbol": symbol, "side": state["side"], "attempt": state["attempt"], "reason": "H4_STRUCTURAL_GEOMETRY", "rr": rr})
+                            state = None
             continue
 
         if state is not None and state["stage"] == "AWAIT_M15":
