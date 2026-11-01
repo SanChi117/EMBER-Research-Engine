@@ -67,6 +67,23 @@ def run(directory: Path, out_dir: Path) -> dict:
             by_model_common.setdefault(model, []).extend(
                 x for x in result if x.decision_at >= common_start
             )
+            # Second exploratory policy: after the same H1 transfer,
+            # use 15m for NEXT OPEN execution only (no third hard signal).
+            direct, direct_events = detect(symbol, bars, require_flow=flow, execution_mode="next_m15_open")
+            direct_model = "MTF_V2_FLOW_DIRECT" if flow else "MTF_V2_PRICE_DIRECT"
+            for d in direct:
+                assert d.parent_4h_close <= d.attempt_1h_close - 3_600_000
+                assert d.attempt_1h_close < d.confirm_1h_close == d.trigger_15m_close
+                assert d.trigger_15m_close == d.eligible_entry_at
+            direct_outcomes = simulate(direct, bars)
+            symbol_report[direct_model] = summarize(direct_outcomes)
+            accepted.extend(d.as_dict() for d in direct)
+            events.extend({"model": direct_model, **e} for e in direct_events)
+            outcomes.extend(x.as_dict() for x in direct_outcomes)
+            by_model.setdefault(direct_model, []).extend(direct_outcomes)
+            by_model_common.setdefault(direct_model, []).extend(
+                x for x in direct_outcomes if x.decision_at >= common_start
+            )
         original = v1_same_data(symbol, bars)
         symbol_report["V1_4H_ONLY"] = summarize(original)
         by_model.setdefault("V1_4H_ONLY", []).extend(original)
@@ -121,7 +138,7 @@ def run(directory: Path, out_dir: Path) -> dict:
                 ),
             }
             for symbol in SYMBOLS
-            for name in ("MTF_V2_FLOW", "MTF_V2_PRICE_ONLY")
+            for name in ("MTF_V2_FLOW", "MTF_V2_PRICE_ONLY", "MTF_V2_FLOW_DIRECT", "MTF_V2_PRICE_DIRECT")
         },
         "calendar_diagnostics": {
             f"{name}_{period}": summarize(
@@ -140,6 +157,7 @@ def run(directory: Path, out_dir: Path) -> dict:
             "V1 4H detector and MTF V2 differ in logic and warmup; common-window stats are descriptive comparison only.",
             "No exchange fee tier, funding, mark liquidation, L2 queue, opening fill certainty, portfolio drawdown or capital ledger.",
             "One month plus 15 days of source history; low trade counts can make results meaningless.",
+            "NEXT_M15_OPEN execution ablation was specified after observed strict-mode scarcity; not untouched OOS or independent validation.",
             "Taker-buy share measures executed aggressive buy volume, not full causal identification of control.",
             "No post-result threshold tuning. No live or PAPER integration.",
         ],
