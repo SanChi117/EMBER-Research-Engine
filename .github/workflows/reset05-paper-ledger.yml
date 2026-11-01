@@ -1,0 +1,30 @@
+name: RESET-05 Part 2 PAPER Ledger
+
+on:
+  push:
+    branches: [research/reset05-ledger-part2-20261101]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  paper-ledger:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Lint ledger + witness tests
+        run: ruff check research/platform/paper_ledger.py tests/test_reset05_paper_ledger.py tests/test_reset05_witness.py
+      - name: Ledger corruption/restart + existing causal/risk regressions
+        run: python -m pytest tests/test_reset05_paper_ledger.py tests/test_reset05_witness.py tests/test_risk_guard.py tests/test_reboot_platform.py -q
