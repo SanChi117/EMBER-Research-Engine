@@ -1,0 +1,19 @@
+{
+  "exchange": "BINANCE",
+  "market": "USDT_M_FUTURES",
+  "reason": "Owner TЗ-2 2026-11-01: ten mechanism pairs plus BTC ETH context",
+  "symbols": [
+    "SOLUSDT",
+    "LINKUSDT",
+    "AVAXUSDT",
+    "NEARUSDT",
+    "SUIUSDT",
+    "ARBUSDT",
+    "APTUSDT",
+    "INJUSDT",
+    "TIAUSDT",
+    "DOGEUSDT",
+    "BTCUSDT",
+    "ETHUSDT"
+  ]
+}

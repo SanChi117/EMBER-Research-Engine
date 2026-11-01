@@ -1,0 +1,32 @@
+name: TZ-2 Flow Collector — manual smoke and CI
+
+on:
+  push:
+    branches: [research/flow-collector-tz2-20261102]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  collector-contract:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check research/platform/flow_ledger.py research/platform/flow_collector.py research/platform/flow_liquidations.py research/platform/verify_flows.py tests/test_flow_collector.py
+      - name: Collector source-mock, SHA tamper and coverage checks
+        run: python -m pytest tests/test_flow_collector.py tests/test_reset06.py tests/test_reset05_paper_ledger.py -q
+      - name: Integrity CLI smoke on empty new disk (not 7-day acceptance)
+        run: python -m research.platform.verify_flows /tmp/ember-new-flow-journal
