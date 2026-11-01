@@ -1,0 +1,50 @@
+name: EMBER V3 Initiative Failure — 50 Futures Causal Audit (RESEARCH ONLY)
+
+on:
+  push:
+    branches:
+      - research/initiative-failure-causal-audit-20261101
+    paths:
+      - "scripts/audit_initiative_failure.py"
+      - "tests/test_audit_initiative_failure.py"
+      - ".github/workflows/initiative-failure-causal-audit.yml"
+      - "research/initiative_failure_20261101/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-archived-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Causal invariants and static analysis
+        run: |
+          ruff check scripts/audit_initiative_failure.py tests/test_audit_initiative_failure.py
+          python -m pytest tests/test_audit_initiative_failure.py -v
+      - name: Freeze original source V3 contact registry and forward labels
+        run: |
+          python -m scripts.run_mtf_v3_universe --out-dir results/initiative_failure
+      - name: Replay ORIGINAL V3 price-only and taker-confirmed hypothetical trades
+        run: |
+          python -m scripts.run_mtf_v3_transfers --out-dir results/initiative_failure
+      - name: Audit ex-ante initiative evidence and subsequent false vs durable outcomes
+        run: |
+          python -m scripts.audit_initiative_failure --out-dir results/initiative_failure
+      - name: Evidence — archive original ledger and feature/outcome diagnosis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-v3-initiative-failure-causal-diagnostic
+          path: results/initiative_failure/
+          retention-days: 90
+          if-no-files-found: warn
