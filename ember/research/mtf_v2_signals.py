@@ -6,7 +6,13 @@ from dataclasses import asdict, dataclass
 from typing import Sequence
 
 from ember.research.mtf_v2_bars import (
-    H1, H4, M15, FlowBar, aggregate, contexts, validate,
+    H1,
+    H4,
+    M15,
+    FlowBar,
+    aggregate,
+    contexts,
+    validate,
 )
 
 
