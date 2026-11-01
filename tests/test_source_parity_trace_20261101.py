@@ -45,6 +45,9 @@ def test_real_usdtm_native_signal_source_trace():
     else:
         summary = proc.stdout[-1500:] + proc.stderr[-1500:]
     warnings.warn("Source signal trace SUMMARY: " + summary[:8000], stacklevel=1)
+    if lines:
+        native_trades = report["results"]["P07"]["native_execution_trace"]["first20_closed_trades"]
+        warnings.warn("P07_NATIVE_FIRST20_TRADES=" + json.dumps(native_trades), stacklevel=1)
     assert proc.returncode == 0, proc.stdout[-15000:] + proc.stderr[-15000:]
     assert lines, "Runner did not emit a JSON report"
     assert all("error" not in v for v in report["results"].values()), summary
