@@ -1,0 +1,51 @@
+name: R030 Original FUTURES PnL Attribution (Source-Native Archived Artifacts Only)
+
+on:
+  push:
+    branches:
+      - research/r030-2023jun-oct-independent-source-20261101
+    paths:
+      - "scripts/audit_r030_forced_terminal_exits.py"
+      - ".github/workflows/r030-pnl-attribution.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audited-native-archive-attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Reuse original A245 Group B 2024–2026 native Freqtrade trades
+        uses: actions/download-artifact@v4
+        with:
+          name: a245-six-other-originals-group-B-native
+          run-id: 41245981488
+          github-token: \${{ secrets.GITHUB_TOKEN }}
+          repository: SanChi117/EMBER-Research-Engine
+          path: audit_native_archives/A245
+      - name: Reuse frozen independent 2023 original R030 result
+        uses: actions/download-artifact@v4
+        with:
+          name: ember-r030-original-usdm-jun-oct-2023-holdout
+          run-id: 41319667310
+          github-token: \${{ secrets.GITHUB_TOKEN }}
+          repository: SanChi117/EMBER-Research-Engine
+          path: audit_native_archives/OOS2023
+      - name: Independent source-native exit-reason/reconciliation audit
+        run: |
+          python scripts/audit_r030_forced_terminal_exits.py --root audit_native_archives --output results/R030_ALL_PERIODS_NATIVE_PNL_ATTRIBUTION.json
+      - name: Archive reproducible JSON attribution with entire baseline intact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: R030_SOURCE_NATIVE_FORCE_EXIT_CAUSAL_ATTRIBUTION
+          path: results/
+          if-no-files-found: warn
+          retention-days: 90
