@@ -240,7 +240,9 @@ def evaluate_one(card,timeline):
                     if ambiguous_tp2_be else
                     "BE_AFTER_TP1" if first_be is not None else
                     "NO_BE_IN_25H")
-    if ambiguous_tp1_be:
+    if tp2 is None:
+        tp2_class="NO_PREKNOWN_TP2"
+    elif ambiguous_tp1_be:
         tp2_class="UNKNOWN_TP1_BE_SAME_BAR"
     elif first_tp2 is not None:
         tp2_class="TP2_BEFORE_BE"  # iff far target traversed first
@@ -248,8 +250,6 @@ def evaluate_one(card,timeline):
         tp2_class="UNKNOWN_TP2_BE_SAME_BAR"
     elif first_be is not None:
         tp2_class="BE_BEFORE_TP2"
-    elif tp2 is None:
-        tp2_class="NO_PREKNOWN_TP2"
     else:
         tp2_class="NEITHER_TO_25H"
     return {
