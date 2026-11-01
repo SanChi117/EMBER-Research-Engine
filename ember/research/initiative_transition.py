@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from bisect import bisect_right
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
 from typing import Sequence
 
 BAR_MS = 4 * 60 * 60 * 1000
