@@ -1,0 +1,52 @@
+name: EMBER 2025 ORIGINAL Binance USD-M NEW PERIOD — Initiative (RESEARCH ONLY)
+
+on:
+  push:
+    branches:
+      - research/initiative-failure-causal-audit-20261101
+    paths:
+      - "scripts/collect_initiative_oos_2025.py"
+      - "tests/test_collect_initiative_oos_2025.py"
+      - ".github/workflows/initiative-oos-2025.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  new-period-original-binance-futures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Frozen source and entry-clock invariant tests
+        run: |
+          ruff check scripts/collect_initiative_oos_2025.py tests/test_collect_initiative_oos_2025.py scripts/audit_initiative_reassertion.py tests/test_audit_initiative_reassertion.py
+          python -m pytest tests/test_collect_initiative_oos_2025.py tests/test_audit_initiative_reassertion.py -v
+      - name: Fetch ONLY preregistered 2025 original USD-M Binance Vision ZIP + CHECKSUM
+        run: |
+          python -m scripts.collect_initiative_oos_2025 --out-dir results/initiative_oos_2025/source
+      - name: Original unchanged V3 2025 as-of zones and events
+        run: |
+          python -m scripts.run_mtf_v3_universe --data-dir results/initiative_oos_2025/source --out-dir results/initiative_oos_2025/ledger
+      - name: Original unchanged V3 2025 price-only and taker transfer replay
+        run: |
+          python -m scripts.run_mtf_v3_transfers --data-dir results/initiative_oos_2025/source --out-dir results/initiative_oos_2025/ledger
+      - name: Frozen previously authored 3H old-side reassertion comparison
+        run: |
+          python -m scripts.audit_initiative_reassertion --data-dir results/initiative_oos_2025/source --out-dir results/initiative_oos_2025/ledger
+      - name: Archive all original SHA, converted source and actual event-to-outcome receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-initiative-2025-new-period-original-USD-M
+          path: results/initiative_oos_2025/
+          if-no-files-found: warn
+          retention-days: 90
