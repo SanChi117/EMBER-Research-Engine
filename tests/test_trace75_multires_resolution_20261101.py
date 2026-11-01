@@ -18,9 +18,11 @@ def test_price_path_75_resolution_pinned_real_binance_all_bars_parity():
     a=json.loads(row.split("=",1)[1])
     assert a["n_selected_from_experimental_model"]==75
     assert a["matched_bars_to_pinned_higher_resolution"]=={
-        "H1_matched":1875,"5m_matched":44,"1m_matched":22}
+        "H1_matched":1875,"5m_matched":44,"1m_matched":22,
+        "extra_5m_matched":1}
     assert len(a["case_results"])==75
     assert a["counts"]["TP1_BE_SAME_SECOND_UNRESOLVED"]==8
+    assert a["counts"].get("TP2_BE_SAME_BAR_UNRESOLVED",0)==0
     assert a["tp2_vs_be_counts"]["NO_PREKNOWN_TP2"]==5
     for q in a["case_results"]:
         assert q["tp1_first_touch_ms"] is not None
