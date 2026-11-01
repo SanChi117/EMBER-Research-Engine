@@ -136,7 +136,57 @@ def test_p07(repo: Path, df: pd.DataFrame) -> dict:
         rows += collect(signals, sub, sym)
     rows.sort(key=lambda row: (row.split()[1], row.split()[0]))
     match = rows[:20] == EXPECTED_P07 and len(rows) == 134
-    return {"n": len(rows), "first20_match_independent": match, "first20": rows[:20]}
+    # Native simulator *diagnostic trace* with author defaults, no funding feed.
+    # This is not a valid after-cost portfolio backtest or Binance fill parity.
+    from perplab.engine.cost_model import CostConfig, CostModel
+    from perplab.engine.simulator import Simulator
+
+    first_trades = []
+    exec_by_symbol = {}
+    for sym in ("BTCUSDT", "ETHUSDT", "SOLUSDT"):
+        sub = prepare(df, sym, "1h")
+        inp = sub.copy()
+        inp["open_time"] = pd.to_datetime(inp.open_time, unit="ms", utc=True)
+        sim = Simulator(
+            inp, cost_model=CostModel(CostConfig()), funding_rates=None,
+        ).run(PullbackRetest(), initial_capital=10000.0, position_size_pct=0.1)
+        total_gross = sum(t.gross_pnl for t in sim.trades)
+        total_cost = sum(sim.cost_breakdown.values())
+        ending_observed = float(sim.equity_curve["equity"].iloc[-1])
+        ending_consistent = 10000.0 + total_gross - total_cost
+        overcharge = ending_consistent - ending_observed
+        exit_fees = sum(t.costs for t in sim.trades)
+        assert abs(overcharge - exit_fees) < 0.000001, (
+            sym, overcharge, exit_fees
+        )
+        exec_by_symbol[sym] = {
+            "closed_trades": len(sim.trades),
+            "extra_exit_fee_usd": round(overcharge, 6),
+            "expected_extra_fee_usd": round(exit_fees, 6),
+            "cash_identity_mismatch_confirmed": overcharge > 0,
+            "entry_and_exit_fee_bookkeeping_only": True,
+        }
+        for trade in sim.trades:
+            first_trades.append({
+                "symbol": sym,
+                "entry_at": trade.entry_time.isoformat(),
+                "exit_at": trade.exit_time.isoformat(),
+                "side": trade.side,
+                "entry_price": round(trade.entry_price, 6),
+                "exit_price": round(trade.exit_price, 6),
+                "exit_reason": trade.exit_reason,
+                "exit_fee_usd": round(trade.costs, 6),
+            })
+    first_trades.sort(key=lambda x: (x["entry_at"], x["symbol"]))
+    return {
+        "n": len(rows), "first20_match_independent": match, "first20": rows[:20],
+        "native_execution_trace": {
+            "status": "ACCOUNTING_INTEGRITY_WARNING_NO_FUNDING_NO_LIQUIDATION",
+            "first20_closed_trades": first_trades[:20],
+            "closed_trades_total": len(first_trades),
+            "by_symbol": exec_by_symbol,
+        },
+    }
 
 
 def test_p10(repo: Path, df: pd.DataFrame) -> dict:
