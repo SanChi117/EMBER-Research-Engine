@@ -1,0 +1,46 @@
+name: TCFI 24 Binance Futures Comparison 1D4H with and without 1H Failure
+
+on:
+  push:
+    branches:
+      - research/trend-continuation-failed-counterinitiative-20261101
+    paths:
+      - "research/trend_counterinitiative_20261101/*.py"
+      - ".github/workflows/tcfi-futures-compare-20261101.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  matched-asof-futures-trend-1h:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    env:
+      NO_ORDERS: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install reproducible strictly research dependencies
+        run: |
+          python -m pip install "pandas==2.3.3" "pytest==8.4.2"
+          python -m pip freeze > research/trend_counterinitiative_20261101/environment_pip_freeze.txt
+      - name: Test as-of signal clock, gaps, funding and censoring
+        run: |
+          python -m compileall -q research/trend_counterinitiative_20261101
+          python -m pytest research/trend_counterinitiative_20261101/test_tcfi_futures_comparison.py -q
+      - name: SHA256 official Binance Futures 24 pairs, 2024 and 2025, then independent paired comparison
+        run: |
+          python -m research.trend_counterinitiative_20261101.tcfi_futures_comparison --workers 22 --out-dir research/trend_counterinitiative_20261101/generated
+      - name: Archive all complete source receipts, every trade and both positive or negative economic outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TCFI_24_BINANCE_2024_2025_FUTURES_PREREG_COMPARISON
+          path: |
+            research/trend_counterinitiative_20261101/environment_pip_freeze.txt
+            research/trend_counterinitiative_20261101/generated/*
+          if-no-files-found: warn
+          retention-days: 90
