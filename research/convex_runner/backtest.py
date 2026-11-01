@@ -287,7 +287,7 @@ def run_one(
             q, risk = proposal
             unit = risk / q
             positions[symbol] = {
-                "entry": entry, "stop": stop, "q": q,
+                "entry": entry, "stop": stop, "q": q, "sign": sign,
                 "risk": risk, "open_ms": ts, "armed": False,
                 "tp": entry + D(sign) * D(2) * unit,
                 "trigger": entry + D(sign) * unit,
