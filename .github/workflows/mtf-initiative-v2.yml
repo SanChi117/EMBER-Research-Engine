@@ -1,4 +1,5 @@
 name: EMBER MTF V2 research evidence (NO TRADING)
+# This workflow runs only in the isolated research branch; no exchange credentials.
 
 on:
   push:
