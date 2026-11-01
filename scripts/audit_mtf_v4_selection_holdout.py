@@ -66,8 +66,20 @@ def run(out_dir: Path) -> dict:
         counts["wrong_geometry"] += stats["active_geometry_mismatch"]
         for difference in mismatches[:3]:
             if len(mismatch_examples) < 50:
+                original = difference.get("v3")
+                nearest = []
+                if original:
+                    center = (original["low"] + original["high"]) / 2
+                    for native_zone in item["zones"]:
+                        native_center = (native_zone["low"] + native_zone["high"]) / 2
+                        if (native_zone["kind"] == original["kind"]
+                            and abs(native_center - center) / max(center, 1e-9) < .0006):
+                            nearest.append(native_zone)
                 mismatch_examples.append({
                     "symbol": item["symbol"], "n": item["n"], **difference,
+                    "source_generation_window_eligible":
+                        "|".join(map(str, difference["key"])) in set(item["eligible_keys"]),
+                    "native_nearby_levels": nearest[:5],
                 })
     report = {
         "status": "V4_4H_ZONE_SELECTION_HOLDOUT_ONLY",
