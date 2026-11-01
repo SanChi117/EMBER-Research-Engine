@@ -127,28 +127,56 @@ def download(spec):
     expected_days=pd.Period(month,freq="M").days_in_month
     expected_n=expected_days*(288 if typ=="kline" else 3 if typ=="mark" else 3)
     if typ=="mark" and len(parsed)!=expected_n:
-        # Only real complete 1h mark, NEVER interpolate mark price.
-        backup=("https://data.binance.vision/data/futures/um/monthly/"
-                f"markPriceKlines/{sym}/1h/{sym}-1h-{month}.zip")
-        hourly,backup_receipt=csv_from_binance(backup)
-        hours=rows_candles(hourly,("mark",sym,y,m))
-        if len(hours)!=expected_days*24:
-            raise ValueError(f"missing official 8h/1h mark {sym} {month}")
-        if any(b[0]-a[0]!=3_600_000 for a,b in zip(hours,hours[1:])):
-            raise ValueError(f"gapped official 1h mark {sym} {month}")
-        merged=[]
-        for i in range(0,len(hours),8):
-            candles=hours[i:i+8]
-            if len(candles)!=8 or candles[0][0]%(8*3_600_000)!=0:
-                raise ValueError(f"bad 1h->8h mark group {sym}")
-            merged.append((candles[0][0],candles[0][1],
-                           max(x[2] for x in candles),
-                           min(x[3] for x in candles),
-                           candles[-1][4],sum(x[5] for x in candles)))
-        receipt["partial_eighthour"]=receipt.copy()
-        receipt.update(backup_receipt)
-        receipt["reconstructed_from_genuine_complete_1h_mark"]=True
-        parsed=merged
+        # Source recovery is purely data integrity, not strategy tuning.
+        # Keep each complete published 8h bar. For a missing 8h bucket,
+        # accept ONLY exact 8 complete original 1h candles OR 96 complete
+        # original 5m mark candles. No interpolation, last-price, SPOT or
+        # trading-price substitution.
+        partial={x[0]:x for x in parsed}
+        backups=[]
+        step=8*3_600_000
+        start=int(pd.Timestamp(f"{month}-01T00:00:00Z").timestamp()*1000)
+        wanted=[start+i*step for i in range(expected_n)]
+        for smaller,period_ms,count in (("1h",3_600_000,8),("5m",300_000,96)):
+            missing=[t for t in wanted if t not in partial]
+            if not missing:
+                break
+            backup=("https://data.binance.vision/data/futures/um/monthly/"
+                    f"markPriceKlines/{sym}/{smaller}/{sym}-{smaller}-{month}.zip")
+            raw_fallback, source_receipt=csv_from_binance(backup)
+            samples=rows_candles(raw_fallback,("mark",sym,y,m))
+            sample_map={b[0]:b for b in samples}
+            count_filled=0
+            for t in missing:
+                segment=[sample_map.get(t+j*period_ms) for j in range(count)]
+                if any(x is None for x in segment):
+                    continue
+                merged=(t,segment[0][1],max(x[2] for x in segment),
+                        min(x[3] for x in segment),segment[-1][4],
+                        sum(x[5] for x in segment))
+                partial[t]=merged
+                count_filled+=1
+            backups.append({
+                "verified_original_backup":source_receipt,
+                "raw_mark_resolution":smaller,
+                "complete_8h_groups_reconstructed":count_filled,
+                "archive_rows":len(samples),
+            })
+        if len(partial)!=expected_n:
+            missing=[str(pd.Timestamp(t,unit="ms",tz="UTC"))
+                     for t in wanted if t not in partial]
+            raise ValueError(
+                f"INCOMPLETE_OFFICIAL_MARK_NO_IMPUTATION {sym} {month} "
+                f"native={len(parsed)} after_fallback={len(partial)}/{expected_n} "
+                f"missing={missing[:20]} receipt={backups}"
+            )
+        parsed=[partial[t] for t in wanted]
+        receipt["source_native_8h_original"]={
+            "url":receipt["url"],"sha":receipt["zip_sha256"],
+            "rows":len(data),
+        }
+        receipt["genuine_complete_smaller_mark_backups"]=backups
+        receipt["mark_source_recovery"]="native if available, else complete 1h/5m only"
     if typ=="funding":
         if len(parsed)<expected_days*2:
             raise ValueError(f"funding settlement count inadequate {sym} {month} {len(parsed)}")
