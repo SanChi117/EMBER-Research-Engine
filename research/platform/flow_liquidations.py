@@ -97,6 +97,8 @@ def run_liquidation_stream(store: FlowStore, symbols: tuple[str, ...]) -> None:
         raise RuntimeError("LIQ_SNAPSHOT_PARTIAL: websocket-client missing") from exc
 
     endpoint = ws_url(symbols)
+    consecutive_failures = 0
+    last_partial_hour = None
     while True:
         now = int(time.time() * 1000)
         store.append("liquidations", event_id=f"liq:restart:{now}",
@@ -107,6 +109,7 @@ def run_liquidation_stream(store: FlowStore, symbols: tuple[str, ...]) -> None:
         try:
             ws = websocket.create_connection(endpoint, timeout=45,
                                              enable_multithread=True)
+            consecutive_failures = 0
             try:
                 ws.ping(b"ember-collector-ping")
                 next_ping = time.monotonic() + 30
@@ -165,8 +168,9 @@ def run_liquidation_stream(store: FlowStore, symbols: tuple[str, ...]) -> None:
                 ws.close()
         except LiquidationSchemaDrift:
             raise
-        except (OSError, ConnectionError) as exc:
+        except (OSError, ConnectionError, websocket.WebSocketException) as exc:
             stamp = int(time.time() * 1000)
+            consecutive_failures += 1
             store.append(
                 "liquidations", event_id=f"liq:gap:{stamp}",
                 event_type="GAP",
@@ -174,7 +178,15 @@ def run_liquidation_stream(store: FlowStore, symbols: tuple[str, ...]) -> None:
                          "observed_at_ms": stamp,
                          "reason": "WEBSOCKET_DISCONNECTED_" + type(exc).__name__},
             )
-            time.sleep(5)
+            if consecutive_failures >= 3:
+                hour = stamp // 3_600_000
+                if hour != last_partial_hour:
+                    mark_partial(
+                        store, observed_at_ms=stamp,
+                        reason="REPEATED_WEBSOCKET_FAILURE_" + type(exc).__name__,
+                    )
+                    last_partial_hour = hour
+            time.sleep(min(60, 5 * 2 ** min(consecutive_failures - 1, 4)))
 
 
 def main() -> None:
