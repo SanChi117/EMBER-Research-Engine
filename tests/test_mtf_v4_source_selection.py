@@ -1,10 +1,10 @@
 """Research-only 4H source selection-port invariants."""
 from ember.research.mtf_v2_bars import H4, FlowBar
+from ember.research.mtf_v3_zones import Zone
 from ember.research.mtf_v4_source_selection import (
     native_midpoint_dedup,
     source_visible_active_zones,
 )
-from ember.research.mtf_v3_zones import Zone
 
 
 def bars(n: int = 160) -> list[FlowBar]:
