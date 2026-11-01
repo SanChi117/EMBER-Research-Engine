@@ -3,6 +3,7 @@
 No real exchange orders; not a profitability or OOS test.
 """
 import json
+import warnings
 import subprocess
 import sys
 from pathlib import Path
@@ -25,6 +26,7 @@ def test_original_execution_ledger_with_real_funding():
                    for k,v in report["p07"].items()},
            "p10":{k:v for k,v in report["p10"].items() if k not in
                   {"first20_original_trades","same_vs_next_first5_diffs"}}}
-    print("EMBER_EXECUTION_REPLAY_SUMMARY="+json.dumps(small,ensure_ascii=False))
+    warnings.warn("EMBER_EXECUTION_REPLAY_SUMMARY="+json.dumps(small,ensure_ascii=False),stacklevel=1)
+    warnings.warn("P10_ENTRY_STRESS_DIFFS="+json.dumps(report["p10"]["same_vs_next_first5_diffs"][:5],ensure_ascii=False),stacklevel=1)
     assert report["p10"]["all_trade_events_equal_independent"]
     assert all(v["native_trade_event_parity"] for v in report["p07"].values())
