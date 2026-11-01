@@ -106,7 +106,7 @@ def test_confirmed_pivot_not_available_before_two_right_4h_bars() -> None:
 
 
 def test_daily_state_cannot_see_future_or_partial_day() -> None:
-    days = [FlowBar(i * D1, 100, 101, 99, 100 + i * .1, 100, 50) for i in range(25)]
+    days = [FlowBar(i * D1, 100, 101, 99, 100 + i * .01, 100, 50) for i in range(25)]
     asof = 21 * D1 + 12 * H1
     before = daily_regime(days, asof)
     mutated = days[:]
