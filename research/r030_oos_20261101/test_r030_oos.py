@@ -6,16 +6,16 @@ from research.r030_oos_20261101.r030_run_oos import BLOB, git_blob, summarize
 
 
 def test_frozen_holdout_precedes_any_outcome():
-    assert MONTHS == tuple((2026,m) for m in range(5,11))
+    assert MONTHS == tuple((2023,m) for m in range(5,11))
     assert SYMS == ("BTCUSDT","ETHUSDT","SOLUSDT")
     assert BLOB == "15ce2473f3f60bd33c4a67b0b8b228e379850f19"
 
 
 def test_candle_month_and_utc_rejection():
-    raw=[["1780272000000","100","105","95","102","50"]]
-    assert len(rows_candles(raw,("kline","BTCUSDT",2026,6)))==1
+    raw=[["1685577600000","100","105","95","102","50"]]
+    assert len(rows_candles(raw,("kline","BTCUSDT",2023,6)))==1
     with pytest.raises(ValueError,match="unexpected candle month"):
-        rows_candles(raw,("kline","BTCUSDT",2026,7))
+        rows_candles(raw,("kline","BTCUSDT",2023,7))
 
 
 def test_unmodified_source_sha():
