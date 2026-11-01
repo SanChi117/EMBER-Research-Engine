@@ -1,0 +1,57 @@
+name: R030 Original Continuous 2023-2026 USD-M One Wallet (No Live Orders)
+
+on:
+  push:
+    branches:
+      - research/r030-continuous-native-2023-2026-20261101
+    paths:
+      - "research/r030_continuous_20261101/*.py"
+      - ".github/workflows/r030-continuous-2023-2026.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-original-no-year-reset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    env:
+      FREQTRADE__EXCHANGE__KEY: ""
+      FREQTRADE__EXCHANGE__SECRET: ""
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned research engine, offline only no user exchange credentials
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "freqtrade==2026.9" "technical" "pandas" "pyarrow" "pytest"
+          python -m freqtrade --version
+          python -m pip freeze > research/r030_continuous_20261101/pip_freeze.txt
+      - name: Validate source pins, date windows, 2023/24/25 rollover and native PnL accounting
+        run: |
+          python -m compileall -q research/r030_continuous_20261101
+          python -m pytest research/r030_continuous_20261101/test_original_continuous.py -q
+      - name: 333 original official Binance futures USD-M archives, price, mark, funding
+        run: |
+          python -m research.r030_continuous_20261101.prepare_original_continuous
+      - name: One continuous original Freqtrade isolated futures wallet 2023-06 to 2026-06 BASE and STRESS
+        run: |
+          python -m research.r030_continuous_20261101.run_original_continuous
+      - name: Preserve complete original SHA receipts, trade orders, outcomes and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: R030_ORIGINAL_NATIVE_ONE_CONTINUOUS_2023_2026_ALL_EVIDENCE
+          path: |
+            research/r030_continuous_20261101/pip_freeze.txt
+            research/r030_continuous_20261101/generated/R030_CONTINUOUS_SOURCE_SHA_RECEIPTS.json
+            research/r030_continuous_20261101/generated/R030_NATIVE_SINGLE_ACCOUNT_CONFIG.json
+            research/r030_continuous_20261101/generated/R030_CONTINUOUS_NATIVE_FINAL_RESULTS.json
+            research/r030_continuous_20261101/generated/continuous_backtests/**
+          if-no-files-found: warn
+          retention-days: 90
+          compression-level: 6
