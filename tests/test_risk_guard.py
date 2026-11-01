@@ -65,7 +65,7 @@ def test_source_must_be_trusted_and_not_halted():
 
 def test_stale_or_future():
     assert verdict(replace(request(), quote_observed_at_ms=NOW + 1)).reason == "FUTURE_INPUT"
-    assert verdict(replace(request(), quote_observed_at_ms=NOW - 20000)).reason == "STALE_INPUT"
+    assert verdict(replace(request(), quote_observed_at_ms=NOW - 20000, signal_confirmed_at_ms=NOW - 21000)).reason == "STALE_INPUT"
     assert verdict(snap=replace(account(), observed_at_ms=NOW - 20000)).reason == "STALE_INPUT"
     assert verdict(replace(request(), signal_confirmed_at_ms=NOW + 1)).reason == "FUTURE_INPUT"
 
@@ -105,5 +105,5 @@ def test_stop_geometry_allowlist_and_invalid_numeric_input():
 
 def test_missing_or_invalid_limits_are_blocked():
     assert verdict(policy=replace(config(), max_positions=0)).reason == "INVALID_RISK_POLICY_OR_SNAPSHOT"
-    assert verdict(policy=None if False else replace(config(), max_data_lag_ms=-1)).reason == "INVALID_RISK_POLICY_OR_SNAPSHOT"
+    assert verdict(policy=replace(config(), max_data_lag_ms=-1)).reason == "INVALID_RISK_POLICY_OR_SNAPSHOT"
     assert assess_paper_risk(request(), account(), None, now_ms=NOW).reason == "UNREGISTERED_LIMITS"
