@@ -32,8 +32,8 @@ from run_trace import CSV, clone_and_check, fmt, prepare
 
 SOURCE_SHA256 = "b885da6dc7e80ea81c7bfb97ec1fb3da615e31824af48625f81cdd376d9a7ee7"
 SYMBOLS = ("BTCUSDT", "ETHUSDT", "SOLUSDT")
-LADDER_LOOKBACK = {"1h": 240, "4h": 180, "1d": 180}
-SCENARIO_HOURS = (72, 168)
+LADDER_LOOKBACK = {"1h": 240, "4h": 180, "1d": 30}
+SCENARIO_HOURS = (72, 168)  # immutable descriptive horizons, not optimized
 P06_SIGNAL = "2026-10-02T08:59Z"
 
 
