@@ -70,7 +70,7 @@ def summarize(data:dict,source:str,fee:float) -> dict:
     fills=[t.get("orders") for t in trades]
     result={
         "status":"NATIVE_2026_JUN_OCT_OOS_COMPLETED_UNVERIFIED_LIQUIDATION",
-        "period":"2026-06-01 UTC to 2026-11-01 UTC",
+        "period":"2023-06-01 UTC to 2023-11-01 UTC",
         "source_pin_blob":BLOB,
         "native_data_source":source,
         "strategy":"VolatilitySystem",
@@ -122,7 +122,7 @@ def main()->None:
             "--strategy-path",str(OUT/"strategies"),
             "--strategy","VolatilitySystem",
             "--timeframe","1h","--timeframe-detail","5m",
-            "--timerange","20260601-20261101",
+            "--timerange","20230601-20231101",
             "--fee",str(fee),"--max-open-trades","3",
             "--export","trades","--backtest-directory",str(dest),"--cache","none",
         ]
