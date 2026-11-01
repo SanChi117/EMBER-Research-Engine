@@ -69,7 +69,7 @@ def summarize(data:dict,source:str,fee:float) -> dict:
     levers=[t.get("leverage") for t in trades]
     fills=[t.get("orders") for t in trades]
     result={
-        "status":"NATIVE_2026_JUN_OCT_OOS_COMPLETED_UNVERIFIED_LIQUIDATION",
+        "status":"NATIVE_2023_JUN_OCT_OOS_COMPLETED_UNVERIFIED_LIQUIDATION",
         "period":"2023-06-01 UTC to 2023-11-01 UTC",
         "source_pin_blob":BLOB,
         "native_data_source":source,
