@@ -1,5 +1,5 @@
 """Original Binance USD-M monthly kline parser: no substitution or future stamps."""
-from datetime import datetime, timezone
+from datetime import datetime
 
 import pytest
 
