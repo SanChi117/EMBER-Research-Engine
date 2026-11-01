@@ -110,6 +110,44 @@ def run(data_dir: Path, out_dir: Path) -> dict:
             for regime in ("UP", "DOWN", "RANGE", "UNKNOWN")
         },
     }
+    valid = [x for x in all_outcomes if x["stress_pct"] is not None]
+    positives = sorted((x["stress_pct"] for x in valid if x["stress_pct"] > 0), reverse=True)
+    total_winning = sum(positives)
+    attribution = {
+        "by_symbol": {
+            symbol: summarize_group([x for x in all_outcomes if x["symbol"] == symbol])
+            for symbol in sorted(per_symbol)
+        },
+        "by_side": {
+            side: summarize_group([x for x in all_outcomes if x["side"] == side])
+            for side in ("long", "short")
+        },
+        "by_exit_reason": {
+            reason: summarize_group([x for x in all_outcomes if x["exit_reason"] == reason])
+            for reason in sorted({x["exit_reason"] for x in all_outcomes})
+        },
+        "group_side": {
+            f"{group}_{side}": summarize_group([
+                x for x in all_outcomes
+                if x["research_group"] == group and x["side"] == side
+            ])
+            for group in ("primary", "weak_diagnostic", "cross_symbol_explored")
+            for side in ("long", "short")
+        },
+        "sum_equal_notional_stress_pct_points": sum(x["stress_pct"] for x in valid),
+        "positive_winners_top_5_share": (
+            sum(positives[:5]) / total_winning if total_winning > 0 else None
+        ),
+        "median_stress_pct": (
+            sorted(x["stress_pct"] for x in valid)[len(valid) // 2] if valid else None
+        ),
+        "worst_trade_stress_pct": min((x["stress_pct"] for x in valid), default=None),
+        "best_trade_stress_pct": max((x["stress_pct"] for x in valid), default=None),
+        "note": (
+            "Equal notional event attribution, NOT capital-ledger PnL. "
+            "Overlapping events, funding, liquidity and mark liquidation unmodeled."
+        ),
+    }
     report = {
         "study": "INITIATIVE_TRANSITION_EXPLORATORY_V1",
         "validation": "NO_NATIVE_PARITY_NO_EXECUTABLE_FUTURES_PNL",
@@ -124,6 +162,7 @@ def run(data_dir: Path, out_dir: Path) -> dict:
             "daily": "ex-ante closed 1D regime is a descriptive partition; not a filter",
         },
         "manifest": manifest,
+        "attribution": attribution,
         "symbol_results": per_symbol,
         "groups": {k: summarize_group(v) for k, v in selections.items()},
         "attempts": len(all_attempts),
@@ -152,7 +191,8 @@ def main() -> None:
     report = run(args.data_dir, args.out_dir)
     print(json.dumps(
         {"accepted": report["accepted_decisions"], "attempts": report["attempts"],
-         "groups": report["groups"], "out_dir": str(args.out_dir)},
+         "groups": report["groups"], "attribution": report["attribution"],
+         "out_dir": str(args.out_dir)},
         ensure_ascii=False, indent=2
     ))
 
