@@ -136,9 +136,10 @@ def registry(symbol: str, one: Sequence[FlowBar], four: Sequence[FlowBar],
             pressure = b.taker_buy / b.volume if b.volume else .5
             # Positive when attempted aggressor is aligned with pressure toward the zone breach.
             aggressor_pressure = (1-2*pressure) if sign == 1 else (2*pressure-1)
-            close_pos = (b.close-b.low)/(b.high-b.low) if sign == 1 else (b.high-b.close)/(b.high-b.low)
-            if b.high == b.low:
-                close_pos = .5
+            close_pos = .5 if b.high == b.low else (
+                (b.close-b.low)/(b.high-b.low) if sign == 1
+                else (b.high-b.close)/(b.high-b.low)
+            )
             outer = z.low if sign == 1 else z.high
             penetration = max(0,(outer-b.low) if sign == 1 else (b.high-outer))/max(atr[k],1e-12)
             reclaimed = b.close > z.low if sign == 1 else b.close < z.high
