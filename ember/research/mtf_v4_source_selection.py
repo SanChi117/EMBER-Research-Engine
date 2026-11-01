@@ -14,6 +14,19 @@ from ember.research.mtf_v3_zones import Zone, build_source_zones, source_pivots
 FAMILIES = ("order_block", "swing", "fvg")
 
 
+def native_midpoint_dedup(candidates: Sequence[Zone]) -> list[Zone]:
+    """Exact original Array.filter(findIndex) semantics, NOT greedy dedup."""
+    valid = [z for z in candidates if z.high > z.low]
+    return [
+        z for i, z in enumerate(valid)
+        if not any(
+            prior.kind == z.kind
+            and abs(prior.midpoint-z.midpoint) / max(z.midpoint, 1e-9) < .0006
+            for prior in valid[:i]
+        )
+    ]
+
+
 def source_visible_active_zones(bars: Sequence[FlowBar]) -> list[dict]:
     """Source windows -> ordered *including inactive* -> dedup -> active.
 
@@ -69,17 +82,11 @@ def source_visible_active_zones(bars: Sequence[FlowBar]) -> list[dict]:
             if zone:
                 candidates.append(zone)
 
-    # Source: .filter(... same-side midpoint within 0.06%) BEFORE sorting
-    # and WITHOUT filtering inactive source levels first.
-    chosen: list[Zone] = []
-    for z in candidates:
-        if any(
-            other.kind == z.kind
-            and abs(other.midpoint - z.midpoint) / max(z.midpoint, 1e-9) < .0006
-            for other in chosen
-        ):
-            continue
-        chosen.append(z)
+    # Source: .filter((item,index,all) => all.findIndex(...) === index)
+    # compares against ALL earlier candidates, including ones excluded by
+    # that same filter. Filtering against only accepted candidates is WRONG
+    # when A ~ B, B ~ C, but A !~ C (non-transitive midpoint proximity).
+    chosen = native_midpoint_dedup(candidates)
 
     # Source zoneStillActive checks ALL subsequent closes after origin candle,
     # including those *prior to zone confirmation*.
