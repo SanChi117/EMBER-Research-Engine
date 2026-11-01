@@ -167,6 +167,29 @@ def location_snapshot(h4,index,side,level,a):
     }
 
 
+def h4_boundary_provenance(h4,break_i,side,level):
+    """Is the H4 range edge also a confirmed 2L/2R H4 pivot?
+
+    Only fully closed bars before the breakout are used. A label, not
+    a mandatory filter or source-original trading entry rule.
+    """
+    matches=[]
+    for j in range(max(2,break_i-RANGE_H4_BARS),break_i-2):
+        price=h4[j]["high"] if side==1 else h4[j]["low"]
+        if abs(price-level)>1e-8:
+            continue
+        if all(price>h4[k]["high"] if side==1 else price<h4[k]["low"]
+               for k in range(j-2,j+3) if k!=j):
+            matches.append({
+                "pivot_H4_index":j,
+                "confirmed_H4_close_ms":h4[j+2]["end"],
+            })
+    return {
+        "prior_range_edge_is_confirmed_H4_pivot":bool(matches),
+        "matches":matches,
+    }
+
+
 def candidate_state_from_breaks(f,h4,breaks,d,symbol):
     """A single active H4 breakout state; H1 retest is only the trigger.
     If a breakout is not retested within next 12 H1 candles: NO ENTRY.
@@ -206,6 +229,24 @@ def candidate_state_from_breaks(f,h4,breaks,d,symbol):
                     state["confirmation_H1_close_price"]=bar["close"]
                     state["confirmation_H1_retest_extreme"]=probe
                     state["age_H1_bars"]=age
+                    state["retest_contact_grade"]=(
+                        "ACTUAL_H4_LEVEL_WICK_TOUCH"
+                        if side*(probe-level)<=0
+                        else "NEAR_H4_LEVEL_ONLY_NOT_REAL_TOUCH"
+                    )
+                    state["retest_depth_H4_ATR"]=side*(probe-level)/a
+                    state["break_origin_provenance"]=h4_boundary_provenance(
+                        h4,b["h4_break_i"],side,level)
+                    regime=state["d1_at_break"].get("regime_proxy")
+                    state["d1_relation_to_breakout"]=(
+                        "AGREES" if (
+                            (side==1 and regime=="UP_BIASED")
+                            or (side==-1 and regime=="DOWN_BIASED"))
+                        else "OPPOSES" if (
+                            (side==1 and regime=="DOWN_BIASED")
+                            or (side==-1 and regime=="UP_BIASED"))
+                        else "MIXED"
+                    )
                     state["signal_in_4H_hour_index"]=(
                         bar["t"]%H4_MS)//H1_MS
                     state["position_in_h4_entry_context"]="H1_TRIGGER_AFTER_CLOSED_H4_BREAK"
@@ -308,6 +349,16 @@ def run():
         "symbol_counts":diagnostics,
         "entry_candidates_count":len(entries),
         "entry_side_counts":dict(Counter(x["break"]["side"] for x in entries)),
+        "entry_real_H4_level_touch_count":sum(
+            x["retest_contact_grade"]=="ACTUAL_H4_LEVEL_WICK_TOUCH"
+            for x in entries),
+        "entry_only_near_H4_level_count":sum(
+            x["retest_contact_grade"]=="NEAR_H4_LEVEL_ONLY_NOT_REAL_TOUCH"
+            for x in entries),
+        "entries_with_confirmed_H4_swing_pivot":sum(
+            x["break_origin_provenance"][
+                "prior_range_edge_is_confirmed_H4_pivot"]
+            for x in entries),
         "entry_retest_age_H1_median":median(
             x["age_H1_bars"] for x in entries) if entries else None,
         "D1_regime_at_entry_counts":dict(Counter(
