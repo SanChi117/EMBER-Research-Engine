@@ -32,6 +32,7 @@ class Zone:
     available_at: int
     parent_event: str
     broken_at: int | None = None
+    expires_at: int | None = None
     retests: list[int] = field(default_factory=list)
 
     @property
@@ -39,7 +40,9 @@ class Zone:
         return (self.low + self.high) / 2
 
     def known_active(self, time: int) -> bool:
-        return self.available_at <= time and (self.broken_at is None or time < self.broken_at)
+        return (self.available_at <= time
+                and (self.broken_at is None or time < self.broken_at)
+                and (self.expires_at is None or time < self.expires_at))
 
     def to_dict(self) -> dict:
         return {
@@ -52,6 +55,7 @@ class Zone:
             "available_at": self.available_at,
             "parent_event": self.parent_event,
             "broken_at": self.broken_at,
+            "expires_at": self.expires_at,
             "retests": self.retests,
         }
 
@@ -197,4 +201,16 @@ def build_source_zones(bars: Sequence[FlowBar]) -> tuple[list[Zone], list[dict]]
                 born("demand","fvg",prev2.high,bar.low,i,i,"THREE_CANDLE_GAP")
             elif bar.high < prev2.low and prev2.low-bar.high >= threshold:
                 born("supply","fvg",bar.high,prev2.low,i,i,"THREE_CANDLE_GAP")
+    # SMOKE snapshot windows: last 24 structure events, last 20 confirmed
+    # pivots, last 180 FVG source bars. Expiry is evaluated point-in-time.
+    # For OB, this is count of unique sourced zone births, not yet strict
+    # source-event parity when two BOS breaks reuse the same origin candle.
+    for family, keep in (("order_block", 24), ("swing", 20)):
+        members = [z for z in zones if z.family == family]
+        for offset, z in enumerate(members):
+            if offset + keep < len(members):
+                z.expires_at = members[offset + keep].available_at
+    for z in zones:
+        if z.family == "fvg":
+            z.expires_at = z.available_at + 180 * H4
     return zones, events
