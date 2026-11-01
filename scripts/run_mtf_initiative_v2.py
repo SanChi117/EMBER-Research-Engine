@@ -161,7 +161,10 @@ def main() -> None:
         {
             "status": report["status"], "totals": report["totals"],
             "common_window": report["common_window_after_v1_warmup"],
-            "by_symbol": report["by_symbol"], "out_dir": str(args.out_dir),
+            "by_symbol": report["by_symbol"],
+            "event_funnel": report["flow_regime"],
+            "rejection_reasons": report["rejections"],
+            "out_dir": str(args.out_dir),
         },
         ensure_ascii=False, sort_keys=True,
     ))
