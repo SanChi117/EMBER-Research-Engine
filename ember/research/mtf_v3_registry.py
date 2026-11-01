@@ -203,8 +203,8 @@ def _label(event: Contact, one: Sequence[FlowBar], i: int) -> LabeledEvent:
             continue
         # horizon end: close of the horizon-th next fully closed 1H candle.
         future[str(horizon)] = sign*(segment[-1].close-price)/price*100
-        mfe[str(horizon)] = max(sign*(x.high-price)/price*100 if sign == 1 else sign*(price-x.low)/price*100 for x in segment)
-        mae[str(horizon)] = min(sign*(x.low-price)/price*100 if sign == 1 else sign*(price-x.high)/price*100 for x in segment)
+        mfe[str(horizon)] = max((x.high-price)/price*100 if sign == 1 else (price-x.low)/price*100 for x in segment)
+        mae[str(horizon)] = min((x.low-price)/price*100 if sign == 1 else (price-x.high)/price*100 for x in segment)
     transfer_at = None
     # The label becomes known ONLY AFTER future confirmation closes.
     for j in range(i+1,min(i+4,len(one))):
