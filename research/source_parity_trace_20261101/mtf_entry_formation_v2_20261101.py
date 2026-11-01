@@ -359,6 +359,17 @@ def run():
             x["break_origin_provenance"][
                 "prior_range_edge_is_confirmed_H4_pivot"]
             for x in entries),
+        "true_wick_touch_and_confirmed_H4_pivot":sum(
+            x["retest_contact_grade"]=="ACTUAL_H4_LEVEL_WICK_TOUCH"
+            and x["break_origin_provenance"][
+                "prior_range_edge_is_confirmed_H4_pivot"]
+            for x in entries),
+        "true_wick_touch_and_D1_agrees":sum(
+            x["retest_contact_grade"]=="ACTUAL_H4_LEVEL_WICK_TOUCH"
+            and x["d1_relation_to_breakout"]=="AGREES" for x in entries),
+        "entry_D1_relation":dict(Counter(
+            x["d1_relation_to_breakout"] for x in entries)),
+        "do_not_call_near_zone_an_exact_retest":True,
         "entry_retest_age_H1_median":median(
             x["age_H1_bars"] for x in entries) if entries else None,
         "D1_regime_at_entry_counts":dict(Counter(
