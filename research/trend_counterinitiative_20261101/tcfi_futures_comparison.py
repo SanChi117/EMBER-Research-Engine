@@ -438,6 +438,52 @@ def boot_week_difference(events:list[dict],cost:str)->dict:
             "causal_warning":"Selection groups share same entry-clock/risk, but this observational filter test does NOT prove mechanistic causation or portfolio edge."}
 
 
+
+def pnl_mechanism_diagnostics(events:list[dict],cost:str):
+    """Secondary descriptive diagnostics, NOT another signal/threshold optimization."""
+    confirmed=[e for e in events if e["closed"] and e["confirmed_1h"]]
+    values=sorted((e[cost+"_net_pct"] for e in confirmed),reverse=True)
+    winners=[v for v in values if v>0]
+    top5=sum(winners[:5])
+    whole=sum(values)
+    pair_rows=[]
+    for sym in SYMS:
+        x=[e for e in events if e["closed"] and e["symbol"]==sym]
+        c=[e[cost+"_net_pct"] for e in x if e["confirmed_1h"]]
+        u=[e[cost+"_net_pct"] for e in x if not e["confirmed_1h"]]
+        pair_rows.append({
+            "symbol":sym,"confirmed_n":len(c),"unconfirmed_n":len(u),
+            "confirmed_mean_net_pct":round(sum(c)/len(c),7) if c else None,
+            "unconfirmed_mean_net_pct":round(sum(u)/len(u),7) if u else None,
+            "pair_delta_mean_pct":round(sum(c)/len(c)-sum(u)/len(u),7)
+                                   if c and u else None,
+        })
+    matched=[p for p in pair_rows if p["confirmed_n"]>=2 and p["unconfirmed_n"]>=2]
+    positive=sum(p["pair_delta_mean_pct"]>0 for p in matched)
+    side_metrics={
+        side:summary([e for e in confirmed if e["side"]==side],cost,True)
+        for side in ("LONG","SHORT")
+    }
+    gross_conc=top5/sum(winners) if winners else None
+    return {
+        "confirmed_top5_winners_total_net_pct_notional_sum":round(top5,7),
+        "confirmed_total_net_pct_notional_sum":round(whole,7),
+        "confirmed_top5_share_of_gross_positive_trade_pnl":round(gross_conc,7)
+                                                         if gross_conc is not None else None,
+        "confirmed_median_net_pct":values[len(values)//2] if values else None,
+        "confirmed_top5_withheld_pnl_mean_pct":round(
+            (whole-top5)/(len(values)-min(5,len(winners))),7
+        ) if len(values)>min(5,len(winners)) else None,
+        "matched_pairs_min2_per_arm":len(matched),
+        "matched_pairs_positive_filter_delta":positive,
+        "per_symbol_groups":pair_rows,
+        "by_direction_confirmed":side_metrics,
+        "warning":"Top-five-withheld is a descriptive stress check on outcome concentration, "
+                  "NOT a separate executable strategy. Number of symbols is NOT independent "
+                  "evidence because contracts share BTC/systemic market trends.",
+    }
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--out-dir",type=Path,required=True)
@@ -470,6 +516,7 @@ def main():
                 "confirmed_realized":summary([e for e in group if e["confirmed_1h"]],cost,True),
                 "unconfirmed_realized":summary([e for e in group if not e["confirmed_1h"]],cost,True),
                 "week_bootstrap_confirmed_minus_unconfirmed":boot_week_difference(group,cost),
+                "mechanism_and_symbol_diagnostics":pnl_mechanism_diagnostics(group,cost),
             }
     a.out_dir.mkdir(parents=True,exist_ok=True)
     with (a.out_dir/"ALL_ORIGINAL_EVENT_TRADE_LEDGER.csv").open("w",newline="",encoding="utf-8") as fd:
