@@ -15,6 +15,7 @@ from pathlib import Path
 
 from ember.research.mtf_v2_bars import H4, FlowBar
 from ember.research.mtf_v3_zones import build_source_zones
+from ember.research.mtf_v4_source_selection import source_visible_active_zones
 from scripts.run_mtf_v3_universe import DATA_DIR, load_batched
 
 SOURCE_DIR = Path("research/mtf_v4_native_smoke/source")
@@ -160,6 +161,8 @@ def run(out_dir: Path, data_dir: Path) -> dict:
     per_snapshot = []
     sample = []
     discrepancy_counts: Counter[str] = Counter()
+    corrected_counts: Counter[str] = Counter()
+    corrected_examples = []
     family_totals: dict[str, Counter[str]] = {
         family: Counter() for family in FAMILIES
     }
@@ -168,6 +171,17 @@ def run(out_dir: Path, data_dir: Path) -> dict:
         symbol, n, asof = item["symbol"], item["n"], item["asof"]
         replica = candidates[(symbol, n)]
         stats, diffs = compare(item["zones"], replica)
+        corrected = source_visible_active_zones(pool[symbol]["4h"][:n])
+        corrected_stats, corrected_diffs = compare(item["zones"], corrected)
+        for field in ("native_active", "exact_active_matches",
+                      "native_only_active", "replica_only_active",
+                      "active_geometry_mismatch"):
+            corrected_counts[field] += corrected_stats[field]
+        for difference in corrected_diffs[:2]:
+            if len(corrected_examples) < 50:
+                corrected_examples.append({
+                    "symbol": symbol, "n": n, "asof": asof, **difference,
+                })
         row = {"symbol": symbol, "n": n, "asof": asof, **stats}
         per_snapshot.append(row)
         for field in (
@@ -206,6 +220,15 @@ def run(out_dir: Path, data_dir: Path) -> dict:
         "overall": dict(overall),
         "family_totals": {k: dict(v) for k, v in family_totals.items()},
         "discrepancy_types": dict(discrepancy_counts),
+        "corrected_source_selection": {
+            "counts": dict(corrected_counts),
+            "pass": not (
+                corrected_counts["native_only_active"]
+                or corrected_counts["replica_only_active"]
+                or corrected_counts["active_geometry_mismatch"]
+            ),
+            "mismatch_examples": corrected_examples,
+        },
         "limitations": [
             "Zone parity is not native trading strategy or exchange execution parity.",
             "Repeated as-of snapshots for same symbol are not independent observations.",
@@ -230,6 +253,7 @@ def run(out_dir: Path, data_dir: Path) -> dict:
         "overall": summary["overall"],
         "by_family": summary["family_totals"],
         "types": summary["discrepancy_types"],
+        "corrected_source_selection": summary["corrected_source_selection"],
     }, sort_keys=True))
     return summary
 
@@ -239,7 +263,9 @@ def main() -> None:
     parser.add_argument("--out-dir", type=Path, default=Path("results/mtf_v4_parity"))
     parser.add_argument("--data-dir", type=Path, default=DATA_DIR)
     args = parser.parse_args()
-    run(args.out_dir, args.data_dir)
+    summary = run(args.out_dir, args.data_dir)
+    if not summary["corrected_source_selection"]["pass"]:
+        raise SystemExit("CORRECTED_SOURCE_SELECTION_PARITY_FAILED")
 
 
 if __name__ == "__main__":
