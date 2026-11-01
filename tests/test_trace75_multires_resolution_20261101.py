@@ -21,6 +21,7 @@ def test_price_path_75_resolution_pinned_real_binance_all_bars_parity():
         "H1_matched":1875,"5m_matched":44,"1m_matched":22}
     assert len(a["case_results"])==75
     assert a["counts"]["TP1_BE_SAME_SECOND_UNRESOLVED"]==8
+    assert a["tp2_vs_be_counts"]["NO_PREKNOWN_TP2"]==5
     for q in a["case_results"]:
         assert q["tp1_first_touch_ms"] is not None
         assert q["tp1_first_touch_resolution"] in ("5m","1m","1s")
@@ -32,3 +33,18 @@ def test_price_path_75_resolution_pinned_real_binance_all_bars_parity():
     summary={k:v for k,v in a.items() if k!="case_results"}
     warnings.warn("EMBER_TRACE75_FINE_SUMMARY="+json.dumps(
         summary,ensure_ascii=False),stacklevel=1)
+
+    detail=[{
+        "id":q["id"],"symbol":q["symbol"],"direction":q["direction"],
+        "tp1_at":q["tp1_first_touch_ms"],"entry":q["entry"],
+        "tp1":q["tp1"],"tp2":q["tp2"],"atr":q["atr"],
+        "be_at":q["first_post_tp1_BE_ms"],
+        "be_resolution":q["be_time_resolution"],
+        "tp2_before_be_at":q["first_tp2_before_be_ms"],
+        "status":q["event_class"],"tp2_class":q["tp2_vs_BE_class"],
+        "max_before_be_ATR":q[
+            "certified_max_extension_beyond_TP1_before_BE_ATR"],
+        "atr_thresholds":q["certified_atr_thresholds_before_BE"],
+    } for q in a["case_results"]]
+    warnings.warn("EMBER_TRACE75_FINE_CASES="+json.dumps(
+        detail,ensure_ascii=False,separators=(",",":")),stacklevel=1)
