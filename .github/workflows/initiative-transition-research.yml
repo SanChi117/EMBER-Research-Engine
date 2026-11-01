@@ -1,0 +1,46 @@
+name: Initiative transition research evidence (NO TRADING)
+
+on:
+  push:
+    branches:
+      - research/initiative-transition-v1-20261101
+    paths:
+      - ember/research/initiative_transition.py
+      - tests/test_initiative_transition.py
+      - scripts/run_initiative_transition.py
+      - .github/workflows/initiative-transition-research.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install research package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Static check
+        run: |
+          ruff check ember/research/initiative_transition.py scripts/run_initiative_transition.py tests/test_initiative_transition.py
+      - name: Unit and causality tests
+        run: |
+          python -m pytest tests/test_initiative_transition.py -v
+      - name: Archived futures data replay
+        run: |
+          python -m scripts.run_initiative_transition --out-dir results/initiative_transition
+      - name: Preserve full evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: initiative-transition-v1-evidence
+          path: results/initiative_transition/
+          if-no-files-found: warn
+          retention-days: 90
