@@ -88,12 +88,16 @@ def p07_replay(sub, orig_signals, funding, *, apply_funding):
         if pos is not None and bool(exits.iloc[i]):
             next_bar = i+1 < len(x)
             exit_price = float(x.open.iat[i+1] if next_bar else x.close.iat[i])
-            exit_ms = int(x.open_time.iat[i+1] if next_bar else x.close_time.iat[i])
+            # SOURCE endpoint anomaly: last bar uses close price with OPEN timestamp.
+            # Preserve author timestamp *only for native event parity*; funding
+            # recognizes the actual last candle close as the temporal boundary.
+            exit_ms = int(x.open_time.iat[i+1] if next_bar else x.open_time.iat[i])
+            funding_exit_ms = exit_ms if next_bar else int(x.close_time.iat[i])
             gross = pos["side"] * pos["units"] * (exit_price-pos["entry_price"])
             exit_fee = 0.0004 * pos["notional"]
             funding_cost, settlements = fund_for_trade(
                 funding,pos["symbol"],pos["side"],pos["notional"],
-                pos["entry_time"],exit_ms) if apply_funding else (0.,0)
+                pos["entry_time"],funding_exit_ms) if apply_funding else (0.,0)
             cash += gross-exit_fee-funding_cost
             ledger.append({
                 **pos, "exit_time":exit_ms, "exit_price":exit_price, "gross":gross,
@@ -117,11 +121,12 @@ def p07_replay(sub, orig_signals, funding, *, apply_funding):
                  "entry_fee":fee,"friction":friction}
     if pos is not None:
         exit_price=float(x.close.iat[-1])
-        exit_ms=int(x.close_time.iat[-1])
+        exit_ms=int(x.open_time.iat[-1])  # native source tags last CLOSE as last OPEN
+        funding_exit_ms=int(x.close_time.iat[-1])
         gross=pos["side"]*pos["units"]*(exit_price-pos["entry_price"])
         exit_fee=.0004*pos["notional"]
         funding_cost,settlements = fund_for_trade(
-            funding,pos["symbol"],pos["side"],pos["notional"],pos["entry_time"],exit_ms
+            funding,pos["symbol"],pos["side"],pos["notional"],pos["entry_time"],funding_exit_ms
         ) if apply_funding else (0.,0)
         cash+=gross-exit_fee-funding_cost
         ledger.append({**pos,"exit_time":exit_ms,"exit_price":exit_price,
