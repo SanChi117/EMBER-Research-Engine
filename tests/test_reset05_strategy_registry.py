@@ -27,14 +27,14 @@ def isolated(tmp_path):
 
 def test_two_registered_candidates_validate_with_immutable_receipts():
     assert set(path.stem for path in (REGISTRY / "strategies").glob("*.json")) == {
-        "H1_CARRY_001", "VIRTUAL_MECH_920"
+        "H1_CARRY_001", "VIRTUAL_MECH_920", "CONVEX_RUNNER_001"
     }
-    assert r.verify_registry(REGISTRY) == "76055470cfc7ad0b7c82e55deeafd2b264f3b83bd103b3171af8dd8b90eb511e"
-    assert len((REGISTRY / "registry_witness.jsonl").read_text().splitlines()) == 2
+    assert r.verify_registry(REGISTRY) == "7b37c738dbd24ab2d8e667591fdf19488017f1217c6c35c350699184d282f471"
+    assert len((REGISTRY / "registry_witness.jsonl").read_text().splitlines()) == 4
 
 
 def test_both_candidates_block_paper_and_live():
-    for key in ("H1_CARRY_001", "VIRTUAL_MECH_920"):
+    for key in ("H1_CARRY_001", "VIRTUAL_MECH_920", "CONVEX_RUNNER_001"):
         doc = load(key)
         assert doc["market"]["scope"] == "BINANCE_USDT_M_FUTURES"
         assert doc["eligibility"]["paper_allowed"] is False
@@ -48,8 +48,12 @@ def test_virtual_920_owner_limits_are_exact_not_inferred():
     assert doc["risk"]["per_trade_risk_fraction"] == "0.04"
     assert doc["risk"]["per_trade_risk_usdt"] == "36.8"
     assert doc["risk"]["kill_equity_usdt"] == "736"
-    assert doc["risk"]["max_notional_usdt"] is None
-    assert doc["risk"]["max_leverage"] is None
+    assert doc["risk"]["max_notional_usdt"] == "2760"
+    assert doc["risk"]["max_leverage"] == "3"
+    assert doc["risk"]["max_drawdown_fraction"] == "0.20"
+    assert doc["risk"]["regime_state"] == "NEUTRAL"
+    assert doc["risk"]["ladder_fractions"] == ["0.02", "0.03", "0.04"]
+    assert doc["version"] == "1.1"
     assert doc["execution"]["max_open_positions"] == 1
     assert doc["execution"]["order_type"] == "LIMIT_ONLY"
     assert len(doc["universe"]["tradable_symbols"]) == 10
@@ -60,7 +64,8 @@ def test_virtual_920_owner_limits_are_exact_not_inferred():
         x["symbol"] == "OPUSDT" and x["blocked_through_utc_date"] == "2026-11-03"
         for x in doc["universe"]["exclusions"]
     )
-    assert "APPROVED_MAX_NOTIONAL_USDT_NOT_FOUND_IN_ACCOUNT_AUDIT" in doc["eligibility"]["block_reasons"]
+    assert "APPROVED_MAX_NOTIONAL_USDT_NOT_FOUND_IN_ACCOUNT_AUDIT" not in doc["eligibility"]["block_reasons"]
+    assert "OWNER_ENTRY_EXIT_RULES_NOT_PINNED" in doc["eligibility"]["block_reasons"]
     assert "2908" in " ".join(doc["evidence"]["unresolved"])
     assert "15000" in " ".join(doc["evidence"]["unresolved"])
 
@@ -82,7 +87,10 @@ def test_gate_thresholds_are_preregistered_and_identical():
         assert gates["laboratory_pf_strictly_greater_than"] == "1.2"
         assert gates["paper_min_closed_trades"] == 100
         assert gates["paper_min_calendar_days"] == 30
-        assert gates["paper_max_drawdown_fraction"] is None
+        if key == "VIRTUAL_MECH_920":
+            assert gates["paper_max_drawdown_fraction"] == "0.20"
+        else:
+            assert gates["paper_max_drawdown_fraction"] is None
 
 
 def test_mutating_existing_manifest_breaks_sha_witness(tmp_path):
@@ -181,12 +189,11 @@ def test_no_float_cost_leverage_notional_accepted():
         r.validate_entry(doc)
 
 
-def test_history_guard_rejects_any_modified_registered_file(monkeypatch):
+def test_history_guard_allows_only_witnessed_reset06_amendment(monkeypatch):
     def fake_run(*_args, **_kwargs):
         return SimpleNamespace(stdout="M\tresearch/registry/strategies/VIRTUAL_MECH_920.json\n")
     monkeypatch.setattr(r.subprocess, "run", fake_run)
-    with pytest.raises(r.RegistryError, match="REGISTERED_FILE_WAS_EDITED"):
-        r.verify_history(REGISTRY)
+    r.verify_history(REGISTRY)
 
 
 def test_unique_parent_and_version_contract():
@@ -215,3 +222,27 @@ def test_no_planner_or_order_clients_in_validator():
     assert not hasattr(r, "place_order")
     assert not hasattr(r, "order_api")
     assert not hasattr(r, "binance_client")
+
+
+def test_history_guard_rejects_other_registered_file_edits(monkeypatch):
+    def fake_run(*_args, **_kwargs):
+        return SimpleNamespace(stdout="M\tresearch/registry/strategies/H1_CARRY_001.json\n")
+    monkeypatch.setattr(r.subprocess, "run", fake_run)
+    with pytest.raises(r.RegistryError, match="UNAUTHORIZED_REGISTERED_FILE_EDIT"):
+        r.verify_history(REGISTRY)
+
+
+def test_reset06_amendment_receipt_cannot_be_silently_removed(tmp_path):
+    root = isolated(tmp_path)
+    witness = root / "registry_witness.jsonl"
+    witness.write_text("\n".join(witness.read_text().splitlines()[:2]) + "\n")
+    with pytest.raises(r.RegistryError, match="REGISTERED_SOURCE_TAMPERED"):
+        r.verify_registry(root)
+
+
+def test_convex_runner_is_only_blocked_skeleton():
+    doc = load("CONVEX_RUNNER_001")
+    assert doc["eligibility"]["status"] == "BLOCKED_UNTIL_BACKTEST"
+    assert not doc["eligibility"]["paper_allowed"]
+    assert not doc["eligibility"]["live_allowed"]
+    assert doc["risk"]["max_leverage"] == "15"

@@ -102,7 +102,10 @@ def _decimal(value: object, *, nullable=False, positive=False, nonnegative=False
 
 
 def validate_entry(doc: dict) -> None:
-    _require_exact(doc, MANDATORY)
+    revision = doc.get("version")
+    _require_exact(doc, MANDATORY if revision is None else MANDATORY | {"version"})
+    if revision is not None and revision not in ("1.0", "1.1"):
+        fail("UNSUPPORTED_STRATEGY_VERSION")
     if doc["schema"] != "EMBER_STRATEGY_PREREG_V1":
         fail("REGISTRY_SCHEMA_VERSION")
     strategy_id = doc["strategy_id"]
@@ -181,7 +184,20 @@ def validate_entry(doc: dict) -> None:
     ):
         fail("INVALID_POSITION_COUNT")
     risk = doc["risk"]
-    _require_exact(risk, RISK_FIELDS)
+    if strategy_id == "VIRTUAL_MECH_920" and revision == "1.1":
+        _require_exact(risk, RISK_FIELDS | {
+            "regime_state", "ladder_fractions", "ratchet_floor_usdt",
+            "ratchet_bonus_fraction",
+        })
+        if (
+            risk["regime_state"] != "NEUTRAL"
+            or risk["ladder_fractions"] != ["0.02", "0.03", "0.04"]
+            or _decimal(risk["ratchet_floor_usdt"]) != Decimal("1104")
+            or _decimal(risk["ratchet_bonus_fraction"]) != Decimal("0.08")
+        ):
+            fail("RAMP_OWNER_CONTRACT_MISMATCH")
+    else:
+        _require_exact(risk, RISK_FIELDS)
     initial = _decimal(risk["initial_equity_usdt"], nullable=True, positive=True)
     fraction = _decimal(risk["per_trade_risk_fraction"], nullable=True, positive=True)
     budget = _decimal(risk["per_trade_risk_usdt"], nullable=True, positive=True)
@@ -226,7 +242,7 @@ def validate_entry(doc: dict) -> None:
     eligibility = doc["eligibility"]
     _require_exact(eligibility, frozenset({"status", "paper_allowed", "live_allowed", "block_reasons"}))
     if (
-        eligibility["status"] not in ("ECONOMIC_NOT_TESTED", "BLOCKED_INCOMPLETE_REGISTRATION")
+        eligibility["status"] not in ("ECONOMIC_NOT_TESTED", "BLOCKED_INCOMPLETE_REGISTRATION", "BLOCKED_UNTIL_BACKTEST")
         or eligibility["paper_allowed"] is not False
         or eligibility["live_allowed"] is not False
         or type(eligibility["block_reasons"]) is not list
@@ -255,6 +271,23 @@ def validate_entry(doc: dict) -> None:
             or not any(x["symbol"] == "OPUSDT" and x["blocked_through_utc_date"] == "2026-11-03" for x in exclusions)
         ):
             fail("OWNER_VIRTUAL_CONTRACT_MISMATCH")
+    if strategy_id == "VIRTUAL_MECH_920" and revision == "1.1":
+        if (
+            cap != Decimal("2760") or leverage != Decimal("3")
+            or dd != Decimal("0.20") or gate_dd != Decimal("0.20")
+            or "OWNER_ENTRY_EXIT_RULES_NOT_PINNED" not in eligibility["block_reasons"]
+            or "RISK_DENIALS_NOT_YET_PERSISTED_TO_EXECUTABILITY" not in eligibility["block_reasons"]
+            or any(x in eligibility["block_reasons"] for x in (
+                "APPROVED_MAX_NOTIONAL_USDT_NOT_FOUND_IN_ACCOUNT_AUDIT",
+                "MAX_LEVERAGE_UNREGISTERED", "MAX_DRAWDOWN_GATE_UNREGISTERED",
+            ))
+        ):
+            fail("VIRTUAL_920_REVISION_POLICY_MISMATCH")
+    if strategy_id == "CONVEX_RUNNER_001" and (
+        revision != "1.0" or eligibility["status"] != "BLOCKED_UNTIL_BACKTEST"
+        or "BACKTEST_2024_2026_REQUIRED" not in eligibility["block_reasons"]
+    ):
+        fail("CONVEX_RUNNER_MUST_REMAIN_BLOCKED")
     if strategy_id == "H1_CARRY_001" and eligibility["status"] != "ECONOMIC_NOT_TESTED":
         fail("H1_NOT_ECONOMICALLY_TESTED")
 
@@ -263,63 +296,116 @@ def git_blob_sha(raw: bytes) -> str:
     return hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\x00" + raw).hexdigest()
 
 
+def _receipts(root: Path) -> list[dict]:
+    path = root / "registry_witness.jsonl"
+    try:
+        data = path.read_bytes()
+        if data and not data.endswith(b"\n"):
+            fail("TORN_REGISTRY_WITNESS_TAIL")
+        rows = [
+            json.loads(line.decode("utf-8"), object_pairs_hook=_no_dupe_pairs, parse_constant=_nonfinite)
+            for line in data.splitlines()
+        ]
+        if any(line != sha_ledger.canonical(row) for line, row in zip(data.splitlines(), rows)):
+            fail("NONCANONICAL_REGISTRY_WITNESS")
+        sha_ledger.verify(rows)
+        return rows
+    except (OSError, ValueError, TypeError, KeyError, UnicodeError) as exc:
+        raise RegistryError("BROKEN_REGISTRY_WITNESS") from exc
+
+
 def verify_registry(root: Path) -> str:
     root = Path(root)
-    folder = root / "strategies"
-    receipt_file = root / "registry_witness.jsonl"
-    try:
-        receipts = [
-            json.loads(line, object_pairs_hook=_no_dupe_pairs, parse_constant=_nonfinite)
-            for line in receipt_file.read_text(encoding="utf-8").splitlines()
-        ]
-        head = sha_ledger.verify(receipts)
-    except (OSError, ValueError, KeyError, TypeError) as exc:
-        raise RegistryError("BROKEN_REGISTRY_WITNESS") from exc
-    manifests = sorted(folder.glob("*.json"))
-    if len(manifests) != len(receipts) or not manifests:
-        fail("REGISTRY_FILE_COUNT_WITNESS_MISMATCH")
-    names = set()
-    pins = set()
+    receipts = _receipts(root)
+    manifest_folder = root / "strategies"
+    current: dict[str, dict] = {}
+    registered: set[str] = set()
+    amend_count = 0
     for row in receipts:
         payload = row.get("payload", {})
-        if row.get("event_type") != "STRATEGY_REGISTERED" or not isinstance(payload, dict):
-            fail("INVALID_REGISTRY_RECEIPT_TYPE")
-        if set(payload) != {"strategy_id", "path", "git_blob_sha", "registered_on_utc"}:
+        if not isinstance(payload, dict):
             fail("INVALID_REGISTRY_RECEIPT_FIELDS")
-        name = payload["strategy_id"]
-        if name in names or payload["path"] in pins or not STRATEGY_RE.fullmatch(name):
-            fail("DUPLICATE_STRATEGY_OR_PATH")
-        names.add(name)
-        pins.add(payload["path"])
-        if payload["path"] != f"strategies/{name}.json":
-            fail("REGISTRY_PATH_NOT_CANONICAL")
+        kind = row.get("event_type")
+        if kind == "STRATEGY_REGISTERED":
+            if set(payload) != {"strategy_id", "path", "git_blob_sha", "registered_on_utc"}:
+                fail("INVALID_REGISTRY_RECEIPT_FIELDS")
+            strategy_id = payload["strategy_id"]
+            if type(strategy_id) is not str or not STRATEGY_RE.fullmatch(strategy_id):
+                fail("INVALID_STRATEGY_ID")
+            if strategy_id in registered:
+                fail("DUPLICATE_STRATEGY_OR_PATH")
+            if payload["path"] != f"strategies/{strategy_id}.json":
+                fail("REGISTRY_PATH_NOT_CANONICAL")
+            if type(payload["git_blob_sha"]) is not str or not SHA1_RE.fullmatch(payload["git_blob_sha"]):
+                fail("INVALID_REGISTERED_BLOB")
+            registered.add(strategy_id)
+            current[strategy_id] = payload
+        elif kind == "STRATEGY_AMENDED":
+            if set(payload) != {
+                "strategy_id", "path", "previous_blob_sha", "git_blob_sha",
+                "registered_on_utc", "version", "authority",
+            }:
+                fail("INVALID_AMEND_RECEIPT")
+            name = payload["strategy_id"]
+            if name != "VIRTUAL_MECH_920" or name not in current:
+                fail("UNAUTHORIZED_STRATEGY_AMENDMENT")
+            if (
+                payload["path"] != current[name]["path"]
+                or payload["previous_blob_sha"] != current[name]["git_blob_sha"]
+                or payload["version"] != "1.1"
+                or not isinstance(payload["authority"], str)
+                or not payload["authority"].strip()
+                or type(payload["git_blob_sha"]) is not str
+                or not SHA1_RE.fullmatch(payload["git_blob_sha"])
+            ):
+                fail("UNAUTHORIZED_STRATEGY_AMENDMENT")
+            amend_count += 1
+            if amend_count != 1:
+                fail("MULTIPLE_UNAUTHORIZED_AMENDMENTS")
+            current[name] = payload
+        else:
+            fail("INVALID_REGISTRY_RECEIPT_TYPE")
+    manifests = sorted(manifest_folder.glob("*.json"))
+    if not current or {p.name for p in manifests} != {
+        f"{name}.json" for name in current
+    }:
+        fail("REGISTRY_FILE_COUNT_WITNESS_MISMATCH")
+    for name, payload in current.items():
         path = root / payload["path"]
         raw = path.read_bytes()
         if git_blob_sha(raw) != payload["git_blob_sha"]:
             fail("REGISTERED_SOURCE_TAMPERED")
-        record = parse_canonical(raw)
-        validate_entry(record)
-        if record["strategy_id"] != name or record["registered_on_utc"] != payload["registered_on_utc"]:
+        doc = parse_canonical(raw)
+        validate_entry(doc)
+        if doc["strategy_id"] != name or doc["registered_on_utc"] != payload["registered_on_utc"]:
             fail("RECEIPT_RECORD_MISMATCH")
-    if set(manifests) != {root / x for x in pins}:
-        fail("UNWITNESSED_REGISTRY_FILE")
-    for path in manifests:
-        doc = parse_canonical(path.read_bytes())
+        if "version" in payload and doc.get("version") != payload["version"]:
+            fail("REGISTERED_VERSION_MISMATCH")
         parent = doc["parent_strategy_id"]
-        if parent is not None and parent not in names:
+        if parent is not None and parent not in current:
             fail("UNKNOWN_PARENT_STRATEGY")
-    return head
+    return sha_ledger.verify(receipts)
 
 
 def verify_history(root: Path) -> None:
-    # New strategies must be ADDED, never edited/deleted/renamed in later commits.
-    # This is an operational CI gate; not a GitHub branch-protection ruleset.
+    # A single owner-authorized amendment of VIRTUAL_MECH_920 requires a
+    # STRATEGY_AMENDED SHA witness. All other edits/deletes remain forbidden.
     root = Path(root)
-    command = ["git", "log", "--format=", "--name-status", "--diff-filter=DMRT",
-               "--", str(root / "strategies")]
-    result = subprocess.run(command, text=True, capture_output=True, check=True)
-    if result.stdout.strip():
-        fail("REGISTERED_FILE_WAS_EDITED_OR_REMOVED_IN_GIT_HISTORY")
+    result = subprocess.run(
+        ["git", "log", "--format=", "--name-status", "--diff-filter=DMRT",
+         "--", str(root / "strategies")],
+        text=True, capture_output=True, check=True,
+    )
+    changes = [line.strip().split("\t") for line in result.stdout.splitlines() if line.strip()]
+    if changes != [["M", str(root / "strategies" / "VIRTUAL_MECH_920.json")]]:
+        if changes:
+            fail("UNAUTHORIZED_REGISTERED_FILE_EDIT")
+    receipt_count = sum(
+        row.get("event_type") == "STRATEGY_AMENDED" for row in _receipts(root)
+    )
+    if receipt_count != len(changes):
+        fail("GIT_MUTATION_WITNESS_MISMATCH")
+
 
 
 def main() -> None:
