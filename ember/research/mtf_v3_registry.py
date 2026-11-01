@@ -119,7 +119,23 @@ def registry(symbol: str, one: Sequence[FlowBar], four: Sequence[FlowBar],
             continue
         parent_time = four_closes[k]
         if parent_time not in active_cache:
-            active_cache[parent_time] = [z for z in zones if z.known_active(known_at)]
+            candidates = [z for z in zones if z.known_active(known_at)]
+            # Source snapshot collects OB before swing before FVG and removes
+            # near-identical same-side zones within 0.06% of midpoint.
+            # Strict native parity still requires the SMOKE score ordering and
+            # the inclusion of inactive duplicates in source dedup.
+            order = {"order_block": 0, "swing": 1, "fvg": 2}
+            candidates.sort(key=lambda z: (order.get(z.family, 99), z.available_at, z.zone_id))
+            visible: list[Zone] = []
+            for z in candidates:
+                if any(
+                    other.kind == z.kind
+                    and abs(other.midpoint-z.midpoint)/max(abs(z.midpoint), 1e-9) < .0006
+                    for other in visible
+                ):
+                    continue
+                visible.append(z)
+            active_cache[parent_time] = visible
         active = active_cache[parent_time]
         volume_mean = sum(x.volume for x in one[i-20:i])/20
         if volume_mean <= 0:
