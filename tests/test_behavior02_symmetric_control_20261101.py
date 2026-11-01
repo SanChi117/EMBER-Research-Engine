@@ -13,9 +13,9 @@ def test_symmetric_1atr_4h_control_older_and_newer_6_future_pairs():
                      text=True,timeout=240)
     assert x.returncode==0,x.stderr[-8000:]+x.stdout[-1000:]
     tag="EMBER_BEHAVIOR02_SYMMETRIC="
-    l=next((z for z in x.stdout.splitlines() if z.startswith(tag)),None)
-    assert l
-    out=json.loads(l.split("=",1)[1])
+    record=next((z for z in x.stdout.splitlines() if z.startswith(tag)),None)
+    assert record
+    out=json.loads(record.split("=",1)[1])
     assert out["total_impulse_events_checked"]==973
     assert len(out["complete_case_level_audit"])==973
     for q in out["complete_case_level_audit"]:
