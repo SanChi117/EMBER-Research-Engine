@@ -7,6 +7,7 @@ on:
     paths:
       - "ember/research/mtf_v3_*.py"
       - "scripts/run_mtf_v3_universe.py"
+      - "scripts/run_mtf_v3_transfers.py"
       - "tests/test_mtf_v3_*.py"
       - ".github/workflows/mtf-v3-universe.yml"
   workflow_dispatch:
@@ -29,13 +30,16 @@ jobs:
           pip install -e ".[dev]"
       - name: Static validation
         run: |
-          ruff check ember/research/mtf_v3_zones.py ember/research/mtf_v3_registry.py scripts/run_mtf_v3_universe.py tests/test_mtf_v3_zones.py tests/test_mtf_v3_registry.py
+          ruff check ember/research/mtf_v3_zones.py ember/research/mtf_v3_registry.py scripts/run_mtf_v3_universe.py tests/test_mtf_v3_zones.py tests/test_mtf_v3_registry.py scripts/run_mtf_v3_transfers.py tests/test_mtf_v3_transfers.py
       - name: Pure tests and causal as-of invariants
         run: |
-          python -m pytest tests/test_mtf_v3_zones.py tests/test_mtf_v3_registry.py -v
+          python -m pytest tests/test_mtf_v3_zones.py tests/test_mtf_v3_registry.py tests/test_mtf_v3_transfers.py -v
       - name: Fifty-futures archived research replay
         run: |
           python -m scripts.run_mtf_v3_universe --out-dir results/mtf_v3
+      - name: Confirmed H1 transfer and H4 structural-risk diagnostic
+        run: |
+          python -m scripts.run_mtf_v3_transfers --out-dir results/mtf_v3
       - name: Full research evidence
         if: always()
         uses: actions/upload-artifact@v4
