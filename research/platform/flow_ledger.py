@@ -5,14 +5,13 @@ External Git/S3 witnesses are required to detect deletion of a VALID tail.
 """
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import re
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-
-import fcntl
 
 from . import sha_ledger
 from .market_contract import timestamp
