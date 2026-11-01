@@ -391,13 +391,19 @@ def verify_history(root: Path) -> None:
     # A single owner-authorized amendment of VIRTUAL_MECH_920 requires a
     # STRATEGY_AMENDED SHA witness. All other edits/deletes remain forbidden.
     root = Path(root)
+    repo_root = Path(__file__).resolve().parents[2]
+    try:
+        relative = root.resolve().relative_to(repo_root.resolve())
+    except ValueError:
+        fail("REGISTRY_OUTSIDE_GIT_ROOT")
+    strategy_dir = relative / "strategies"
     result = subprocess.run(
         ["git", "log", "--format=", "--name-status", "--diff-filter=DMRT",
-         "--", str(root / "strategies")],
-        text=True, capture_output=True, check=True,
+         "--", str(strategy_dir)],
+        cwd=repo_root, text=True, capture_output=True, check=True,
     )
     changes = [line.strip().split("\t") for line in result.stdout.splitlines() if line.strip()]
-    if changes != [["M", str(root / "strategies" / "VIRTUAL_MECH_920.json")]]:
+    if changes != [["M", str(strategy_dir / "VIRTUAL_MECH_920.json")]]:
         if changes:
             fail("UNAUTHORIZED_REGISTERED_FILE_EDIT")
     receipt_count = sum(

@@ -236,7 +236,7 @@ def test_reset06_amendment_receipt_cannot_be_silently_removed(tmp_path):
     root = isolated(tmp_path)
     witness = root / "registry_witness.jsonl"
     witness.write_text("\n".join(witness.read_text().splitlines()[:2]) + "\n")
-    with pytest.raises(r.RegistryError, match="REGISTERED_SOURCE_TAMPERED"):
+    with pytest.raises(r.RegistryError, match="REGISTRY_FILE_COUNT_WITNESS_MISMATCH"):
         r.verify_registry(root)
 
 

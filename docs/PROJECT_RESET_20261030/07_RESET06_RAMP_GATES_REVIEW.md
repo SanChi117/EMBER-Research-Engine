@@ -32,7 +32,7 @@ authenticated journal adapters are not built yet.
 
 Ratchet: risk = (920 × ladder fraction) +
 0.08 × max(0, equity_current - 1104).
-At equity 1200 and stage 2%, it is 25.08 USDT; at 1104 it is 18.4.
+At equity 1200 and stage 2%, it is 26.08 USDT; at 1104 it is 18.4.
 The bonus cannot alter kill 736, DD 20%, max nominal 2760, max 3x.
 An optional remaining-series budget further caps this proposal.
 Stop and gap risk require conservative separate execution testing.

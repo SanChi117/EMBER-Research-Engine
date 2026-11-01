@@ -87,7 +87,7 @@ def test_ratchet_boundaries_at_1104_and_1200():
         (D("1103.99"), D("18.4")),
         (D("1104"), D("18.4")),
         (D("1104.01"), D("18.4008")),
-        (D("1200"), D("25.08")),
+        (D("1200"), D("26.08")),
     ]:
         verdict = r.propose_paper_budget(
             equity_current=equity, peak_equity=equity
