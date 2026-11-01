@@ -31,6 +31,7 @@ ONE = tuple(ROOT / f"binance_1m_trace75_batch_{i:02d}_20261101.csv"
             for i in range(6))
 SECOND = tuple(ROOT / f"binance_1s_trace75_batch_{suffix}_20261101.csv"
                for suffix in ("00", "01a", "01b", "02a", "02b"))
+EXTRA = ROOT / "binance_1m_T028_tp2_be_collision_20261101.csv"
 ONE_MIN_MS = 60000
 FIVE_MIN_MS = 300000
 
@@ -86,11 +87,12 @@ def actual_h1():
     }
 
 
-def validate_data(allcases, five, one, second):
+def validate_data(allcases, five, one, second, extra):
     assert len(allcases)==75
     assert len(five)==75
     assert len(one)==44
     assert len(second)==22
+    assert list(extra)==["T028"]
     h1=actual_h1()
     check_counts=Counter()
     for card in allcases:
@@ -135,8 +137,12 @@ def validate_data(allcases, five, one, second):
                 ensure_matching(aggregated(secondbars),minbars[first1],
                                 ("1m_1s_continuous_contract",name))
                 check_counts["1m_matched"]+=1
+    extra_min=extra["T028"]
+    target=next(b for b in five["T028"] if b["t"]==extra_min[0]["t"])
+    ensure_matching(aggregated(extra_min),target,("5m_T028_after_TP1",))
+    check_counts["extra_5m_matched"]+=1
     assert check_counts=={"H1_matched":1875,"5m_matched":44,
-                         "1m_matched":22},check_counts
+                         "1m_matched":22,"extra_5m_matched":1},check_counts
     return dict(check_counts)
 
 
@@ -152,27 +158,38 @@ def extended(bar,level,side):
     return max(0.0,side*((bar["h"] if side==1 else bar["l"])-level))
 
 
-def full_timeline(card,five,one,seconds):
+def full_timeline(card,five,one,seconds,extra):
     name=card["tracker_id"]
     b5=five[name]
     side=1 if card["direction"]=="LONG" else -1
     k=next(j for j,b in enumerate(b5[:12])
            if hit_tp1(b,card["tp1"],side))
     if name not in one:
-        return [(b, "5m") for b in b5]
-    minute=one[name]
-    expanded=[]
-    if name not in seconds:
-        expanded=[(b,"1m") for b in minute]
+        timeline=[(b,"5m") for b in b5]
     else:
-        mid=next(i for i,b in enumerate(minute)
-                 if hit_tp1(b,card["tp1"],side))
-        expanded=([(b,"1m") for b in minute[:mid]]
-                  +[(b,"1s") for b in seconds[name]]
-                  +[(b,"1m") for b in minute[mid+1:]])
-    return ([(b,"5m") for b in b5[:k]]
-            + expanded
-            + [(b,"5m") for b in b5[k+1:]])
+        minute=one[name]
+        if name not in seconds:
+            expanded=[(b,"1m") for b in minute]
+        else:
+            mid=next(i for i,b in enumerate(minute)
+                     if hit_tp1(b,card["tp1"],side))
+            expanded=([(b,"1m") for b in minute[:mid]]
+                      +[(b,"1s") for b in seconds[name]]
+                      +[(b,"1m") for b in minute[mid+1:]])
+        timeline=([(b,"5m") for b in b5[:k]]
+                  + expanded
+                  + [(b,"5m") for b in b5[k+1:]])
+    # T028: one post-TP1 five-minute bar crossed BOTH TP2 and BE.
+    # Frozen Binance 1m children show BE earlier than TP2; unlike high/low
+    # guessing this sequence is actual time-resolved candle evidence.
+    if name in extra:
+        at=extra[name][0]["t"]
+        points=[i for i,(b,res) in enumerate(timeline)
+                if res=="5m" and b["t"]==at]
+        assert len(points)==1,(name,at,points)
+        p=points[0]
+        timeline=timeline[:p]+[(b,"1m") for b in extra[name]]+timeline[p+1:]
+    return timeline
 
 
 def evaluate_one(card,timeline):
@@ -283,8 +300,9 @@ def run():
     five=read_batches(FIVE,300,FIVE_MIN_MS)
     one=read_batches(ONE,5,ONE_MIN_MS)
     sec=read_batches(SECOND,60,1000)
-    matched=validate_data(items,five,one,sec)
-    paths=[evaluate_one(c,full_timeline(c,five,one,sec))
+    extra=read_batches((EXTRA,),5,ONE_MIN_MS)
+    matched=validate_data(items,five,one,sec,extra)
+    paths=[evaluate_one(c,full_timeline(c,five,one,sec,extra))
            for c in items]
     status=Counter(c["event_class"] for c in paths)
     reach=Counter(c["tp2_vs_BE_class"] for c in paths)
@@ -313,6 +331,7 @@ def run():
         "assumptions":"Price-level touches only; intra-1s collisions remain unresolved; do not interpret as actual fills, risk-adjusted PnL, causal original 6-way source code, or profitability. User proposed BE only as optional scenario.",
     }
     assert status["TP1_BE_SAME_SECOND_UNRESOLVED"]==8,status
+    assert status["TP2_BE_SAME_BAR_UNRESOLVED"]==0,status
     assert sum(status.values())==75
     assert sum(reach.values())==75
     return result
