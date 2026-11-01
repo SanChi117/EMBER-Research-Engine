@@ -1,0 +1,30 @@
+name: RISK-CARCASE-01 (PAPER preflight)
+
+on:
+  push:
+    branches: [research/risk-first-20261101]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  risk-preflight:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Lint risk scaffold
+        run: ruff check research/platform/risk_guard.py tests/test_risk_guard.py
+      - name: Adversarial risk and existing causal tests
+        run: python -m pytest tests/test_risk_guard.py tests/test_reboot_platform.py -q
