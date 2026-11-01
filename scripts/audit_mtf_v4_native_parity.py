@@ -178,6 +178,14 @@ def run(out_dir: Path, data_dir: Path) -> dict:
         for family in FAMILIES:
             family_totals[family].update(stats["by_family"][family])
         discrepancy_counts.update(d["type"] for d in diffs)
+        for d in diffs:
+            if d["type"] == "V3_ACTIVE_NOT_NATIVE_ACTIVE":
+                state = (
+                    "NATIVE_INACTIVE" if d["native_inactive_or_missing"] is not None
+                    else "ABSENT_FROM_NATIVE_OUTPUT"
+                )
+                discrepancy_counts[f"V3_EXTRA_CAUSE_{state}"] += 1
+                discrepancy_counts[f"V3_EXTRA_{d['key'][0]}_{state}"] += 1
         for d in diffs[:4]:
             if len(sample) < 120:
                 sample.append({"symbol": symbol, "n": n, "asof": asof, **d})
