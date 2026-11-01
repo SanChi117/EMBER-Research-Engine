@@ -154,18 +154,21 @@ def path_scenario(
                     "reached_stage":stage,"full_horizon":True,
                     "terminal_at":fmt(int(bar.close_time)),"events":events}
         if next_hit:
+            # Before TP1 the hypothetical protective order is at the INITIAL
+            # stop, but immediately AFTER TP1 it would be BE. A candle
+            # spanning both TP1 and BE cannot prove the sequence, even if
+            # its extremum also reaches TP2 or TP3. Do not report full ladder.
+            if stage==0 and price_barrier_visited(bar,entry,direction,False):
+                events.append({"tp":1,"touched_bar_close":fmt(int(bar.close_time))})
+                return {"status":"AMBIGUOUS_NEW_BE_VS_TP_TOUCH_SAME_H1",
+                        "reached_stage":1,"full_horizon":True,
+                        "first_uncertain_at":fmt(int(bar.close_time)),"events":events}
             while stage<3 and price_barrier_visited(bar,target_prices[stage],direction,True):
                 stage+=1
                 events.append({"tp":stage,"touched_bar_close":fmt(int(bar.close_time))})
                 if stage==3:
                     return {"status":"TP3_ALL_LEVELS_TOUCHED_IN_ORDER","reached_stage":3,
                             "full_horizon":True,"events":events}
-            # A price-level BE becomes a candidate after TP1; the same candle
-            # might have been below BE BEFORE or AFTER TP1. Do not guess.
-            if price_barrier_visited(bar,entry,direction,False):
-                return {"status":"AMBIGUOUS_NEW_BE_VS_TP_TOUCH_SAME_H1",
-                        "reached_stage":stage,"full_horizon":True,
-                        "first_uncertain_at":fmt(int(bar.close_time)),"events":events}
     return {"status":"HORIZON_NO_TERMINAL_TOUCH","reached_stage":stage,
             "full_horizon":True,"events":events}
 
