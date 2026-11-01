@@ -231,7 +231,8 @@ def download(spec):
                         raise ValueError("official mark API not 24 complete hourly bars")
                     api_lookup={}
                     for z in api_raw:
-                        t=int(z[0]);op,high,low,cl=map(float,z[1:5])
+                        t=int(z[0])
+                        op,high,low,cl=map(float,z[1:5])
                         if not(low>0 and low<=min(op,cl)<=max(op,cl)<=high):
                             raise ValueError("invalid official futures mark OHLC")
                         api_lookup[t]=(t,op,high,low,cl,0.)
