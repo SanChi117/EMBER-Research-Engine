@@ -100,6 +100,7 @@ def run(out_dir: Path) -> dict:
         "accept_selection_presence_geometry": report["accept_selection_presence_geometry"],
         "counts": report["counts"],
         "contract_count": report["contract_count"],
+        "mismatch_examples": mismatch_examples[:10],
     }, sort_keys=True))
     return report
 
