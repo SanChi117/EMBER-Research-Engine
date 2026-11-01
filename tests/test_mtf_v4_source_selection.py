@@ -9,7 +9,7 @@ def bars(n: int = 160) -> list[FlowBar]:
         for i in range(n)
     ]
     result[10] = FlowBar(10 * H4, 101, 104, 97, 100, 200, 100)
-    result[20] = FlowBar(20 * H4, 100, 105, 101.5, 104, 200, 100)
+    result[20] = FlowBar(20 * H4, 100, 105, 99, 104, 200, 100)
     return result
 
 
