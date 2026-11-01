@@ -1,6 +1,10 @@
 """Research-only 4H source selection-port invariants."""
 from ember.research.mtf_v2_bars import H4, FlowBar
-from ember.research.mtf_v4_source_selection import source_visible_active_zones
+from ember.research.mtf_v4_source_selection import (
+    native_midpoint_dedup,
+    source_visible_active_zones,
+)
+from ember.research.mtf_v3_zones import Zone
 
 
 def bars(n: int = 160) -> list[FlowBar]:
@@ -25,3 +29,16 @@ def test_incomplete_future_cannot_change_snapshot_levels() -> None:
     future = bars(170)
     future[-1] = FlowBar(169 * H4, 100, 250, 50, 120, 1000, 500)
     assert first == source_visible_active_zones(future[:120])
+
+
+def test_original_nontransitive_findindex_dedup_chain() -> None:
+    def level(i: int, price: float) -> Zone:
+        return Zone(
+            f"z{i}", "demand", "swing", price - .5, price + .5,
+            i * H4, (i + 1) * H4, "test",
+        )
+    a = level(0, 100.0)
+    b = level(1, 100.05)
+    c = level(2, 100.10)
+    # A excludes B; B (though excluded) still excludes C in TS findIndex.
+    assert [z.zone_id for z in native_midpoint_dedup([a, b, c])] == ["z0"]
