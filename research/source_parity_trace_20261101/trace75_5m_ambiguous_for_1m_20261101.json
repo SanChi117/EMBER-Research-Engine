@@ -1,0 +1,445 @@
+{
+  "count": 44,
+  "events": [
+    {
+      "id": "T001",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1788853800000,
+      "entry": 78292.8,
+      "tp1": 78150,
+      "tp2": 77663.1,
+      "first5mIndex": 10
+    },
+    {
+      "id": "T003",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789135200000,
+      "entry": 79208,
+      "tp1": 79391.4,
+      "tp2": 79476,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T004",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789409700000,
+      "entry": 78911,
+      "tp1": 78966,
+      "tp2": 78969.6,
+      "first5mIndex": 3
+    },
+    {
+      "id": "T005",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789416900000,
+      "entry": 79184.8,
+      "tp1": 79391.4,
+      "tp2": 79476,
+      "first5mIndex": 3
+    },
+    {
+      "id": "T006",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1789459200000,
+      "entry": 76895.2,
+      "tp1": 76837.8,
+      "tp2": 76760,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T007",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1789473900000,
+      "entry": 76899.9,
+      "tp1": 76837.8,
+      "tp2": 76760,
+      "first5mIndex": 1
+    },
+    {
+      "id": "T009",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789722000000,
+      "entry": 78228.9,
+      "tp1": 78343.8,
+      "tp2": 78543.9,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T010",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1790487300000,
+      "entry": 84455.3,
+      "tp1": 84524,
+      "tp2": 84584.6,
+      "first5mIndex": 7
+    },
+    {
+      "id": "T011",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1790560800000,
+      "entry": 83650,
+      "tp1": 83587,
+      "tp2": 83450.1,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T012",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1790784000000,
+      "entry": 84104.8,
+      "tp1": 84106.8,
+      "tp2": 84154.9,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T014",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1791108000000,
+      "entry": 85189.7,
+      "tp1": 85224,
+      "tp2": 85265.3,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T015",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1791392400000,
+      "entry": 83343.9,
+      "tp1": 83337.5,
+      "tp2": 83325.1,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T019",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1791986400000,
+      "entry": 82282.3,
+      "tp1": 82244,
+      "tp2": 82241.5,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T022",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1792391700000,
+      "entry": 82748.8,
+      "tp1": 82859.6,
+      "tp2": 82900.5,
+      "first5mIndex": 7
+    },
+    {
+      "id": "T023",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1792476000000,
+      "entry": 81682.2,
+      "tp1": 81637.7,
+      "tp2": 81586.5,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T025",
+      "symbol": "BTCUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1792692000000,
+      "entry": 81176.5,
+      "tp1": 81149.8,
+      "tp2": 81146.4,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T027",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1793120700000,
+      "entry": 80619.7,
+      "tp1": 80620.1,
+      "tp2": 80699.8,
+      "first5mIndex": 1
+    },
+    {
+      "id": "T028",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1793153100000,
+      "entry": 80912.5,
+      "tp1": 80920,
+      "tp2": 80999.9,
+      "first5mIndex": 1
+    },
+    {
+      "id": "T029",
+      "symbol": "BTCUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1793182800000,
+      "entry": 81515.6,
+      "tp1": 81537.9,
+      "tp2": 81950,
+      "first5mIndex": 4
+    },
+    {
+      "id": "T030",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1788444000000,
+      "entry": 2428.75,
+      "tp1": 2429.33,
+      "tp2": 2462.78,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T031",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1788447600000,
+      "entry": 2488.33,
+      "tp1": 2490.24,
+      "tp2": 2534.22,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T032",
+      "symbol": "ETHUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1788991200000,
+      "entry": 2460.58,
+      "tp1": 2459,
+      "tp2": 2453.03,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T034",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789664400000,
+      "entry": 2469.47,
+      "tp1": 2474.18,
+      "tp2": 2478.3,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T036",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789959600000,
+      "entry": 2660.76,
+      "tp1": 2662,
+      "tp2": 2666,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T038",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1790488800000,
+      "entry": 2703.82,
+      "tp1": 2705.98,
+      "tp2": 2706.7,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T040",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1790947800000,
+      "entry": 2753.7,
+      "tp1": 2762.85,
+      "tp2": 2764.09,
+      "first5mIndex": 6
+    },
+    {
+      "id": "T041",
+      "symbol": "ETHUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1790968200000,
+      "entry": 2663.64,
+      "tp1": 2663.27,
+      "tp2": 2662.76,
+      "first5mIndex": 2
+    },
+    {
+      "id": "T042",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1791079500000,
+      "entry": 2693.63,
+      "tp1": 2694.64,
+      "tp2": 2695,
+      "first5mIndex": 1
+    },
+    {
+      "id": "T046",
+      "symbol": "ETHUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1792692000000,
+      "entry": 2378.85,
+      "tp1": 2376.18,
+      "tp2": 2370.74,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T047",
+      "symbol": "ETHUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1793181600000,
+      "entry": 2372.44,
+      "tp1": 2372.46,
+      "tp2": 2383.32,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T049",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1788447600000,
+      "entry": 104.77,
+      "tp1": 104.98,
+      "tp2": null,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T051",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1789003800000,
+      "entry": 100.95,
+      "tp1": 100.81,
+      "tp2": 100.19,
+      "first5mIndex": 6
+    },
+    {
+      "id": "T052",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1789056000000,
+      "entry": 99.69,
+      "tp1": 99.65,
+      "tp2": 99.14,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T053",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1789135200000,
+      "entry": 104.82,
+      "tp1": 105.19,
+      "tp2": 105.62,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T058",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1789870800000,
+      "entry": 110.16,
+      "tp1": 110.06,
+      "tp2": 105.37,
+      "first5mIndex": 4
+    },
+    {
+      "id": "T061",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1790298000000,
+      "entry": 117.31,
+      "tp1": 117.73,
+      "tp2": 117.95,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T062",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1790568000000,
+      "entry": 119.82,
+      "tp1": 119.78,
+      "tp2": 118.14,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T064",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1791084600000,
+      "entry": 120.37,
+      "tp1": 120.55,
+      "tp2": 120.71,
+      "first5mIndex": 6
+    },
+    {
+      "id": "T069",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1792173600000,
+      "entry": 103.64,
+      "tp1": 103.63,
+      "tp2": 103.46,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T070",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1792515600000,
+      "entry": 106.46,
+      "tp1": 106.49,
+      "tp2": 106.94,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T071",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1792605600000,
+      "entry": 108.54,
+      "tp1": 108.6,
+      "tp2": 108.65,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T073",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1792656000000,
+      "entry": 104.39,
+      "tp1": 104.06,
+      "tp2": 103.82,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T074",
+      "symbol": "SOLUSDT",
+      "dir": "SHORT",
+      "firstTP5m": 1792843200000,
+      "entry": 101.46,
+      "tp1": 101.32,
+      "tp2": 101.16,
+      "first5mIndex": 0
+    },
+    {
+      "id": "T075",
+      "symbol": "SOLUSDT",
+      "dir": "LONG",
+      "firstTP5m": 1793181600000,
+      "entry": 102.93,
+      "tp1": 103.1,
+      "tp2": 104.04,
+      "first5mIndex": 0
+    }
+  ]
+}
