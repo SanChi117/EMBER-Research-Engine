@@ -39,7 +39,7 @@ class Bar:
     ts: int
     o: D
     h: D
-    l: D
+    low: D
     c: D
 
 
@@ -52,7 +52,7 @@ def _atr_series(bars: list[Bar]) -> list[D | None]:
     tr: list[D] = []
     for i, bar in enumerate(bars):
         prev = bars[i - 1].c if i else bar.c
-        tr.append(max(bar.h - bar.l, abs(bar.h - prev), abs(bar.l - prev)))
+        tr.append(max(bar.h - bar.low, abs(bar.h - prev), abs(bar.low - prev)))
         if i == 13:
             result[i] = sum(tr[-14:], D("0")) / D(14)
         elif i > 13:
@@ -80,8 +80,8 @@ def _fractal_last_confirmed(
     if pivot >= 2:
         candidate = bars[pivot]
         others = [bars[k] for k in (pivot - 2, pivot - 1, pivot + 1, pivot + 2)]
-        if candidate.l < min(b.l for b in others):
-            last_low = candidate.l
+        if candidate.low < min(b.low for b in others):
+            last_low = candidate.low
         if candidate.h > max(b.h for b in others):
             last_high = candidate.h
     return last_low, last_high
@@ -107,7 +107,7 @@ def prepare_signals(bars: list[Bar], side: str):
         prev = bars[i - BACK_WINDOW:i]
         breached = (
             bar.c > max(b.h for b in prev) if side == "LONG"
-            else bar.c < min(b.l for b in prev)
+            else bar.c < min(b.low for b in prev)
         )
         if not breached:
             continue
@@ -117,7 +117,7 @@ def prepare_signals(bars: list[Bar], side: str):
         prior = bars[i - RANGE_WINDOW:i]
         if is_chop(
             atrs[i] / bar.c, ratios,
-            max(b.h for b in prior), min(b.l for b in prior), bars[i - 1].c,
+            max(b.h for b in prior), min(b.low for b in prior), bars[i - 1].c,
         ):
             signals[bar.ts + STEP] = {"reason": "SKIPPED_CHOP"}
             continue
@@ -300,14 +300,14 @@ def run_one(
             if bar is None:
                 continue
             p = positions[symbol]
-            if (sign == 1 and bar.l <= p["stop"]) or (
+            if (sign == 1 and bar.low <= p["stop"]) or (
                 sign == -1 and bar.h >= p["stop"]
             ):
                 finish(symbol, p["stop"], ts, "STOP")
                 continue
             if not p["armed"] and (
                 (sign == 1 and bar.h >= p["tp"])
-                or (sign == -1 and bar.l <= p["tp"])
+                or (sign == -1 and bar.low <= p["tp"])
             ):
                 finish(symbol, p["tp"], ts, "TP_2R_BEFORE_RUNNER")
                 continue
@@ -333,7 +333,7 @@ def run_one(
                 continue
             if not p["armed"] and (
                 (sign == 1 and bar.h >= p["trigger"])
-                or (sign == -1 and bar.l <= p["trigger"])
+                or (sign == -1 and bar.low <= p["trigger"])
             ):
                 p["armed"] = True
                 be = _be_price(p["entry"], sign)
