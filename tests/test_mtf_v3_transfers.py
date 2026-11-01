@@ -11,9 +11,9 @@ def example(side: str = "long"):
     bars=[FlowBar(i*H1,100,101,99,100,100,50) for i in range(50)]
     sign=1 if side=="long" else -1
     bars[10]=FlowBar(10*H1,100,101.5,98.5,100.5 if sign==1 else 99.5,100,30 if sign==1 else 70)
-    bars[11]=FlowBar(11*H1,100.5 if sign==1 else 99.5,103,97,101.5 if sign==1 else 98.5,100,75 if sign==1 else 25)
-    bars[12]=FlowBar(12*H1,101.5 if sign==1 else 98.5,103,97,101.5 if sign==1 else 98.5,100,60 if sign==1 else 40)
-    bars[13]=FlowBar(13*H1,101 if sign==1 else 99,108 if sign==1 else 101,95 if sign==1 else 93,105 if sign==1 else 95,100,70 if sign==1 else 30)
+    bars[11]=FlowBar(11*H1,100.5 if sign==1 else 99.5,103 if sign==1 else 101,99 if sign==1 else 97,101.5 if sign==1 else 98.5,100,75 if sign==1 else 25)
+    bars[12]=FlowBar(12*H1,101.5 if sign==1 else 98.5,103 if sign==1 else 100,99 if sign==1 else 97,101.5 if sign==1 else 98.5,100,60 if sign==1 else 40)
+    bars[13]=FlowBar(13*H1,101 if sign==1 else 99,108 if sign==1 else 101,99.3 if sign==1 else 93,105 if sign==1 else 95,100,70 if sign==1 else 30)
     event={
         "symbol":"TESTUSDT","event_id":"test-1","event_at":11*H1,
         "side":side,"zone_family":"swing","zone_id":"level-1",
