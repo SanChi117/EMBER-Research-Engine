@@ -6,6 +6,7 @@ Supported writer host: POSIX/Linux (fcntl lock + fsync).
 """
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import re
@@ -13,8 +14,6 @@ from contextlib import contextmanager
 from decimal import Decimal
 from pathlib import Path
 from typing import Protocol
-
-import fcntl
 
 from . import sha_ledger
 from .market_contract import DataUntrusted, timestamp
