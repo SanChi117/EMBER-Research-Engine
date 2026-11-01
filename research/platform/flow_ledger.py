@@ -158,6 +158,10 @@ class FlowStore:
                 raise sha_ledger.LedgerError("DUPLICATE_FLOW_EVENT")
             if any(r["event_type"] == "SCHEMA_DRIFT" for r in flattened):
                 raise sha_ledger.LedgerError("FLOW_HALTED_SCHEMA_DRIFT")
+            # Once a newer monthly shard exists, never append to an
+            # older shard, even if a caller supplies an old observed clock.
+            if all_rows and filename < max(all_rows):
+                raise sha_ledger.LedgerError("OLD_FLOW_SHARD_IS_IMMUTABLE")
             current = all_rows.get(filename, ())
             new = sha_ledger.extend(current, event_id=event_id,
                                     event_type=event_type, payload=data)[-1]

@@ -271,3 +271,21 @@ def test_no_trading_order_api_in_collector():
     assert not hasattr(flow_collector, "place_order")
     assert not hasattr(flow_liquidations, "place_order")
     assert Decimal("1.2").is_finite()
+
+
+def test_single_symbol_under_95pct_rejects_even_when_pool_average_passes():
+    store, symbols, start, end = synthetic_week(oi_missing=10)
+    result = v.coverage_report(store, symbols, start_ms=start, end_ms=end)
+    assert result["oi"]["coverage_rate"] > "0.950000"
+    assert result["oi"]["per_symbol"]["SOLUSDT"]["status"] == "IN_PROGRESS"
+    assert result["seven_day_acceptance"] == "IN_PROGRESS"
+
+
+def test_older_month_is_frozen_after_new_month_created(tmp_path):
+    store = FlowStore(tmp_path)
+    november = 1793491230000
+    december = 1796083230000
+    event(store, "oi", "OI_SNAPSHOT", "first", november)
+    event(store, "oi", "OI_SNAPSHOT", "second", december)
+    with pytest.raises(ValueError, match="OLD_FLOW_SHARD_IS_IMMUTABLE"):
+        event(store, "oi", "OI_SNAPSHOT", "retroactive", november + 30_000)

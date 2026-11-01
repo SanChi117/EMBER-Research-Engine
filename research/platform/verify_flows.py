@@ -36,6 +36,7 @@ def coverage_report(
         raise FlowVerificationError("HALTED_SCHEMA_DRIFT_PRESENT")
     slots = tuple(range(start_ms, end_ms, HOUR_MS))
     missing = {}
+    per_symbol_oi = {}
     valid_oi = 0
     marked = 0
     for symbol in symbols:
@@ -58,11 +59,25 @@ def coverage_report(
         }
         missed = sorted(set(slots) - observed)
         missing[symbol] = missed
-        valid_oi += len(set(slots) & observed)
-        marked += len(set(missed) & gaps)
+        valid_for_symbol = len(set(slots) & observed)
+        gaps_for_symbol = len(set(missed) & gaps)
+        per_symbol_oi[symbol] = {
+            "observed_slots": valid_for_symbol,
+            "missing_slots": len(missed),
+            "gap_marked_slots": gaps_for_symbol,
+            "unmarked_missing_slots": len(missed) - gaps_for_symbol,
+            "coverage_rate": f"{valid_for_symbol / len(slots):.6f}",
+            "status": "PASS" if valid_for_symbol / len(slots) >= .95
+            and gaps_for_symbol == len(missed) else "IN_PROGRESS",
+        }
+        valid_oi += valid_for_symbol
+        marked += gaps_for_symbol
     expected = len(slots) * len(symbols)
     oi_rate = valid_oi / expected
     oi_unmarked = (expected - valid_oi) - marked
+    oi_all_symbols_ok = all(
+        report["status"] == "PASS" for report in per_symbol_oi.values()
+    )
 
     funding = entries["funding"]
     funding_status = {}
@@ -145,7 +160,8 @@ def coverage_report(
             "missing_slots": expected - valid_oi,
             "gap_marked_slots": marked,
             "unmarked_missing_slots": oi_unmarked,
-            "status": "PASS" if oi_rate >= .95 and oi_unmarked == 0
+            "per_symbol": per_symbol_oi,
+            "status": "PASS" if oi_all_symbols_ok
             else "IN_PROGRESS",
         },
         "funding": {
@@ -163,10 +179,10 @@ def coverage_report(
             "status": liq_status,
         },
         "seven_day_acceptance": (
-            "PASS" if oi_rate >= .95 and oi_unmarked == 0
+            "PASS" if oi_all_symbols_ok
             and funding_ok and liq_status == "PASS"
             else "PARTIAL_LIQUIDATIONS" if (
-                oi_rate >= .95 and oi_unmarked == 0
+                oi_all_symbols_ok
                 and funding_ok and liq_status == "LIQ_SNAPSHOT_PARTIAL"
             ) else "IN_PROGRESS"
         ),
