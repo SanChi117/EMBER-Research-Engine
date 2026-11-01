@@ -35,3 +35,7 @@ def test_entry_requires_prior_closed_h4_break_and_h1_retest():
              if k!="all_H4_originated_events"}
     warnings.warn("EMBER_MTF_ENTRY_V2_SUMMARY="+json.dumps(
         compact,ensure_ascii=False),stacklevel=1)
+
+    warnings.warn("EMBER_MTF_ENTRY_V2_RECORDS="+json.dumps(
+        data["all_H4_originated_events"],ensure_ascii=False,
+        separators=(",",":")),stacklevel=1)
