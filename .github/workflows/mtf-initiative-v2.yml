@@ -1,0 +1,46 @@
+name: EMBER MTF V2 research evidence (NO TRADING)
+
+on:
+  push:
+    branches:
+      - research/mtf-initiative-v2-20261101
+    paths:
+      - "ember/research/mtf_v2_*.py"
+      - "scripts/run_mtf_initiative_v2.py"
+      - "tests/test_mtf_initiative_v2.py"
+      - ".github/workflows/mtf-initiative-v2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Static code review
+        run: |
+          ruff check ember/research/mtf_v2_bars.py ember/research/mtf_v2_signals.py ember/research/mtf_v2_evaluation.py scripts/run_mtf_initiative_v2.py tests/test_mtf_initiative_v2.py
+      - name: Verify causal event machine
+        run: |
+          python -m pytest tests/test_mtf_initiative_v2.py -v
+      - name: Replay real archived USD-M 15m candles
+        run: |
+          python -m scripts.run_mtf_initiative_v2 --out-dir results/mtf_v2
+      - name: Preserve immutable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-mtf-v2-six-futures-evidence
+          path: results/mtf_v2/
+          if-no-files-found: warn
+          retention-days: 90
