@@ -143,7 +143,7 @@ def detect(symbol: str, source: Sequence[FlowBar], *, require_flow: bool = True)
         if j < 21:
             continue
         hour = one[j]
-        pi = bisect_right(times, now) - 1
+        pi = bisect_right(times, hour.ts) - 1
         if pi < 0:
             continue
         parent = parents[pi]
