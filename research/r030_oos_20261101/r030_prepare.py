@@ -30,7 +30,7 @@ from research.a228_five_original.a228_prepare_pinned_originals_and_real_futures 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT/"research/r030_oos_20261101/generated"
 SYMS = ("BTCUSDT", "ETHUSDT", "SOLUSDT")
-MONTHS = tuple((2026,m) for m in range(5,11))
+MONTHS = tuple((2023,m) for m in range(5,11))
 SRC_REPO="freqtrade/freqtrade-strategies"
 SRC_COMMIT="f3340ce11f5bdf62f598522e64d1f5638eaa13f5"
 SRC_PATH="user_data/strategies/futures/VolatilitySystem.py"
@@ -288,7 +288,7 @@ def store_data(grouped):
     for sym in SYMS:
         pair=sym.replace("USDT","/USDT:USDT")
         source=to_candle_frame(grouped[sym]["kline"],"5m",sym)
-        if source.index.min()!=pd.Timestamp("2026-05-01T00:00:00Z") or source.index.max()!=pd.Timestamp("2026-10-31T23:55:00Z"):
+        if source.index.min()!=pd.Timestamp("2023-05-01T00:00:00Z") or source.index.max()!=pd.Timestamp("2023-10-31T23:55:00Z"):
             raise ValueError(f"frozen period differs {sym}")
         for tf in ("5m","1h","4h"):
             b=aggregate_5m(source,tf).reset_index()
