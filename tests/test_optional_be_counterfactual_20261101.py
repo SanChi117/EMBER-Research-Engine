@@ -11,7 +11,7 @@ def test_optional_be_counterfactual_only_after_unambiguous_tp1():
        "source_parity_trace_20261101"/"optional_be_counterfactual_20261101.py")
     r=subprocess.run([sys.executable,str(p)],capture_output=True,text=True,timeout=240)
     assert r.returncode==0,r.stdout[-9000:]+r.stderr[-9000:]
-    lines=[l for l in r.stdout.splitlines() if l.startswith("EMBER_OPTIONAL_BE_RESULT=")]
+    lines=[line for line in r.stdout.splitlines() if line.startswith("EMBER_OPTIONAL_BE_RESULT=")]
     assert len(lines)==1
     x=json.loads(lines[0].split("=",1)[1])
     assert x["all_early_entries"]==120
