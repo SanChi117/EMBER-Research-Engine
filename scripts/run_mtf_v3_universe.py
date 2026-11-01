@@ -159,11 +159,12 @@ def matched_pressure_difference(
         for e in yes:
             if not no:
                 break
-            score=lambda b: (
-                abs(e["effort_volume_ratio"]-b["effort_volume_ratio"])
-                + abs(e["penetration_atr4"]-b["penetration_atr4"])
-                + abs(e["zone_4h_age"]-b["zone_4h_age"])*.01
-            )
+            def score(b: dict) -> float:
+                return (
+                    abs(e["effort_volume_ratio"]-b["effort_volume_ratio"])
+                    + abs(e["penetration_atr4"]-b["penetration_atr4"])
+                    + abs(e["zone_4h_age"]-b["zone_4h_age"])*.01
+                )
             j=min(range(len(no)),key=lambda i:(score(no[i]),no[i]["event_id"]))
             ctrl=no.pop(j)
             diff=(
