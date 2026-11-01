@@ -131,7 +131,7 @@ def run(directory: Path, out_dir: Path) -> dict:
             for period in ("early", "late")
         },
         "rejections": dict(sorted(Counter(
-            (x["model"], x.get("reason", "NA"))
+            f"{x['model']}:{x.get('reason', 'NA')}"
             for x in events if x["event"] in ("REJECTED", "EXPIRED")
         ).items())),
         "warnings": [
