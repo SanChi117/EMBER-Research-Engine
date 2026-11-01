@@ -1,0 +1,3 @@
+# RESET-07 — immutable pre-run registration
+
+Owner RESET-07 dated 2026-11-02. The parameters are frozen in `research/convex_runner/preregistration.json` BEFORE historical provider retrieval. Fractal swing 2-left/2-right, 365 day required ATR percentile history, prior 120 bars breakout, next-bar open, strict stop-first, BE next bar, static 1.75ATR, 4bps/2bps per side. No runtime strategy execution. 2023 warmup required for full 2024 signals if available; absent history is honestly skipped. Four separate runs: long/short and 1%/2% equity. Do not mutate specs after seeing results. The test cannot conclude profit without verified full source files; no tuning or selective coin dropping. CONVEX_RUNNER_001 remains BLOCKED_UNTIL_BACKTEST.
