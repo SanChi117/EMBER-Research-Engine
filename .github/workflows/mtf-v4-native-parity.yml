@@ -1,0 +1,47 @@
+name: EMBER V4 Native SMOKE POI Parity (RESEARCH ONLY)
+
+on:
+  push:
+    branches:
+      - research/mtf-v4-source-native-parity-20261101
+    paths:
+      - "research/mtf_v4_native_smoke/**"
+      - "scripts/audit_mtf_v4_native_parity.py"
+      - "tests/test_mtf_v4_native_parity.py"
+      - ".github/workflows/mtf-v4-native-parity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Verify original source bytes and tests
+        run: |
+          ruff check scripts/audit_mtf_v4_native_parity.py tests/test_mtf_v4_native_parity.py
+          python -m pytest tests/test_mtf_v4_native_parity.py -v
+      - name: Compare all 50 contracts at frozen six-snapshot as-of times
+        run: |
+          python -m scripts.audit_mtf_v4_native_parity --out-dir results/mtf_v4_parity
+      - name: Preserve native-to-replica source parity findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ember-mtf-v4-original-smoke-source-parity
+          path: results/mtf_v4_parity/
+          if-no-files-found: warn
+          retention-days: 90
