@@ -6,8 +6,16 @@ from dataclasses import replace
 import pytest
 
 from ember.research.mtf_v2_bars import (
-    D1, H1, H4, M15, FlowBar, aggregate, confirmed_pivots,
-    contexts, daily_regime, validate,
+    D1,
+    H1,
+    H4,
+    M15,
+    FlowBar,
+    aggregate,
+    confirmed_pivots,
+    contexts,
+    daily_regime,
+    validate,
 )
 from ember.research.mtf_v2_evaluation import simulate
 from ember.research.mtf_v2_signals import detect
