@@ -626,8 +626,6 @@ def main() -> None:
     parser.add_argument("--stdout", action="store_true")
     args = parser.parse_args()
 
-    import hashlib
-
     prereg_bytes = Path(args.window_prereg).read_bytes()
     prereg = json.loads(prereg_bytes)
     if (prereg.get("experiment") != "RESET08_WINDOW_GATED_CONVEX_FROZEN_20261102"
