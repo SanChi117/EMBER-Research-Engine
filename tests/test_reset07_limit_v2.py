@@ -113,8 +113,26 @@ def test_no_order_before_alert(monkeypatch):
 
 
 def test_expiry_censored_at_end_of_window(monkeypatch):
-    monkeypatch.setattr(v2, "prepare_signals", mock_alarm)
-    result = v2.run_one(target_portfolio(3), side="LONG", fraction=D("0.01"))
+    start = old.END - 3 * old.STEP
+
+    def alarm(bars, _side):
+        if bars[0].c == D("106"):
+            return {}
+        return {
+            start: {
+                "limit": D("95"), "stop": D("80"),
+                "pivot": D("80"), "signal_time": start - old.STEP,
+            }
+        }
+
+    monkeypatch.setattr(v2, "prepare_signals", alarm)
+    portfolio = {
+        name: [old.Bar(start + i * old.STEP, D("105"), D("110"),
+                       D("100"), D("105" if name == "SOLUSDT" else "106"))
+               for i in range(3)]
+        for name in old.SYMBOLS
+    }
+    result = v2.run_one(portfolio, side="LONG", fraction=D("0.01"))
     assert result["signals_expired_unfilled"] == 0
     assert result["signals_right_censored_end"] == 1
 
