@@ -1,0 +1,29 @@
+{
+  "experiment_id": "RESET07_V2_LIMIT_TOUCH_20261102",
+  "source": "owner revised RESET-07 dated 2026-11-02 section 5.1",
+  "status": "FROZEN_BEFORE_SECOND_EXECUTION",
+  "purpose": "New post-first-run hypothesis; modify entry execution from next-bar market fill to limit-order conditional historical touch. Not an unbiased confirmation of original strategy.",
+  "prior_first_run_commit": "256acd42b37fd6ae4597833d49dea67a3accd587",
+  "source_raw_sha_manifest": "research/convex_runner/raw_sha256_manifest.json",
+  "universe": "same ten USD-M symbols as RESET07 v1",
+  "risk_scenarios": [
+    "LONG_1pct",
+    "LONG_2pct",
+    "SHORT_1pct",
+    "SHORT_2pct"
+  ],
+  "only_changed_mechanism": "entry execution by limit touch and expiry, NOT random 36pct sampling",
+  "limit_price": "IMPLEMENTER_ASSUMPTION (owner did NOT provide level): LONG previous 120 completed 4h-bar HIGH breakout threshold; SHORT prior 120-bar LOW threshold. Not signal close and not next bar open.",
+  "limit_order_activation": "Signal confirmed at close of 4h bar; limit active from immediately following 4h bar open, never before signal",
+  "limit_order_ttl": "7 calendar days = 42 consecutive 4h bars; expiry after 42nd bar without touch",
+  "fill_condition": "LONG 4h LOW <= limit, SHORT 4h HIGH >= limit, after activation; assumed fill at exact limit upon touch; 4h OHLC cannot establish queue execution",
+  "same_candle_ambiguity": "If touched limit and would hit stop on same 4h bar, assume pessimistic STOP-first after assumed fill; record ambiguous marker",
+  "costs": "retain original 4bps commission and 2bps adverse slippage per side: entry effective fill at +/-2bps from limit in accounting, which is a price impact cost model not a literal maker-limit execution price",
+  "budget": "Max 6 filled open tickets / 10pct equity reserved stop risk; check upon fill; pending orders do not reserve capital; one pending limit or live position per symbol",
+  "gap": "No fabrication in data gaps; no fill if no observed 4h bar; pending expires at exact TTL; force liquidation on delisting unresolved",
+  "other_parameters": "unchanged from RESET07 frozen v1 (including existing conservative bar-runner and kill-touch statistical convention); fidelity deviations are independently disclosed",
+  "fill_rate_denominator": "placed eligible limit orders excluding pre-signal filter skips; budget skip upon touch counted as not filled, separately audited",
+  "owner_archive_rate": "36pct reference is NOT a verified limit fill statistic; counts closed outcomes rather than confirmed fills",
+  "live_allowed": false,
+  "paper_allowed": false
+}

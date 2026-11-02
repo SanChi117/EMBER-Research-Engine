@@ -1,0 +1,19 @@
+name: RESET-07 raw Binance data QA (before outcome)
+on:
+  push:
+    branches: [research/reset07-convex-runner-backtest-20261102]
+  workflow_dispatch:
+jobs:
+  sha-audit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10","3.11","3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify raw source schema, UTC bars, gaps, SHA256
+        run: python -m research.convex_runner.data_contract

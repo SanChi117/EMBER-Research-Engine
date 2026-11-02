@@ -1,0 +1,47 @@
+{
+  "id": "RESET07_CONVEX_RUNNER_FROZEN_20261102",
+  "date": "2026-11-02",
+  "status": "PRE_REGISTERED_NO_RESULT",
+  "live_allowed": false,
+  "market": "BINANCE_USDT_M_FUTURES",
+  "window_start_ms": 1704067200000,
+  "window_end_exclusive_ms": 1793491200000,
+  "symbols": [
+    "SOLUSDT",
+    "LINKUSDT",
+    "AVAXUSDT",
+    "NEARUSDT",
+    "SUIUSDT",
+    "ARBUSDT",
+    "APTUSDT",
+    "INJUSDT",
+    "TIAUSDT",
+    "DOGEUSDT"
+  ],
+  "scenarios": [
+    "LONG_1pct",
+    "LONG_2pct",
+    "SHORT_1pct",
+    "SHORT_2pct"
+  ],
+  "data": "Binance USD-M /fapi/v1/klines 4h and 1d; 2024-01-01 through 2026-10-31 UTC; raw SHA256; 2023 warmup if available; GAP never interpolated",
+  "initial_equity_usdt": "920",
+  "max_leverage": "15",
+  "risk_fractions": [
+    "0.01",
+    "0.02"
+  ],
+  "commission_bps_each_side": "4",
+  "slippage_bps_each_side": "2",
+  "funding_in_pnl": false,
+  "trigger": "4h CLOSED bar breakout previous 120 contiguous 4h highs for LONG, lows for SHORT. Enter next 4h OPEN; one trade per symbol",
+  "swing": "Last fractal pivot 2-left+2-right confirmed at close pivot+2, based only on previous bars",
+  "stop": "Swing extremum +/-1.75 Wilder ATR(14,4h); short symmetric",
+  "chop": "Previous 2190 fully-closed 4h ATR14/close values, nearest-rank P20; AND previous 180 4h high-low range / previous close <0.15. Need 365d full history; else skip",
+  "runner": "+1R favorable excursion triggers BE+fees starting next bar and removes +2R TP; before state change initial TP +2R. Stop-first on same-bar collision, fill gap at adverse opening price",
+  "exit": "Runner stop or close beyond last confirmed 4h fractal swing; settle open positions at last eligible close",
+  "position_sizing": "Decimal quantity based on modeled per-unit stop and both fees/slip; cap 15x current realized portfolio equity",
+  "series": "6 concurrent positions and reserved stop risk <=10% equity; SKIPPED_BUDGET on violation, alpha symbol order",
+  "verdict": "PF>1.3 both risks, >=60 trades, DD<=30%, top5 profit share<60%, 2024 and 2025-2026 nonnegative; LOTTERY PF<=1.0 or <30 or kill touch or <=3 explain gross profit; else GRAY",
+  "note": "No parameter adaptation after observing results. Entry is an alarm, not proven edge. No live trading."
+}
