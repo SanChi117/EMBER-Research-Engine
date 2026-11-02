@@ -1,0 +1,20 @@
+name: RESET-08 BTC source QA
+on:
+  push:
+    branches: [research/reset08-window-gated-runner-20261102]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  btc-audit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check BTC UM 1d/4h raw data SHA256, UTC, OHLC, gaps
+        run: python -m research.convex_runner.reset08_btc_contract

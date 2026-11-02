@@ -1,0 +1,48 @@
+{
+  "experiment": "RESET08_WINDOW_GATED_CONVEX_FROZEN_20261102",
+  "locked_before_BTC_fetch": true,
+  "branch": "research/reset08-window-gated-runner-20261102",
+  "owner_TZ": "RESET-08 2026-11-02",
+  "data": "Existing SHA-pinned 20 alt arrays + ONLY new BTCUSDT 1d/4h from Binance USD-M; 2023 warmup, 2024..2026 Oct evaluation.",
+  "reference_model": "RESET-07 §5.1 LIMIT-touch 7d; preserve ticket, fees, stop, runner and existing kill-touch behavior, no optimization",
+  "window": {
+    "timezone": "UTC",
+    "day_D": "Use only completed day D-1 candles for conditions; never D",
+    "btc": "BTC daily close[D-1] > SMA50 inclusive of D-1 AND BTC close[D-1]/close[D-31] >1",
+    "breadth": "At least 6 of exactly 10 alt symbols with close[D-1]/close[D-31]>1; newly-listed or insufficient histories count FALSE",
+    "volatility": "For each completed day t, cross-asset median among >=6 valid ATR14 Wilder 1d(t)/close(t) from existing alt arrays; compare value D-1 strictly > median of preceding 365 daily cross-sectional medians D-366..D-2; require all 365 days or unclassifiable",
+    "hysteresis": "Start CLOSED. 3 true opens; >=2 false closes; otherwise retain. Unclassifiable days disallow entries in both arms and reset CLOSED.",
+    "entry": "At NEXT 4h opening after completed breakout alarm, check day's gate. Place LIMIT only in qualifying regime, same old price/TTL. Pending LIMIT canceled upon regime mismatch before touch on subsequent bars, exits for filled tickets always unconditional.",
+    "control": "CONTROL means opposite of OPEN on classifiable days; no entries if unclassifiable.",
+    "calendar": "2024-01-01 .. 2026-10-31: share open days / 1035 total days, report unclassifiable separately",
+    "reference_windows": [
+      "2024-07..2024-09",
+      "2026-05..2026-07",
+      "2026-10"
+    ]
+  },
+  "runs": [
+    {
+      "name": "PRIMARY",
+      "side": "LONG",
+      "risk": "0.01",
+      "regime": "OPEN"
+    },
+    {
+      "name": "SECONDARY",
+      "side": "LONG",
+      "risk": "0.02",
+      "regime": "OPEN"
+    },
+    {
+      "name": "CONTROL",
+      "side": "LONG",
+      "risk": "0.01",
+      "regime": "CLOSED"
+    }
+  ],
+  "verdict": "WINDOW_WORKS if PRIMARY PF>1.3, >=40 closed tickets, CONTROL PF<=1.05, PRIMARY DD<=30%, 15%-40% open days inclusive. WINDOW_DEAD if PRIMARY PF<=1.3 OR CONTROL PF>1.05 OR PRIMARY N<40 OR window share>60%. Otherwise GAP_NOT_PROVEN.",
+  "caveats": "Rule designed from known winning windows, results in-sample, pass only hypothesis for prospective forward testing; 4h OHLC limit touch only, same old TP and kill fidelity caveats.",
+  "LIVE_BLOCKED": true,
+  "PAPER_BLOCKED": true
+}
