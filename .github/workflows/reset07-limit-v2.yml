@@ -1,0 +1,45 @@
+name: RESET-07 Sec 5.1 Limit Fill Addendum
+on:
+  push:
+    branches: [research/reset07-convex-runner-backtest-20261102]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  limit-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup
+        run: pip install pytest ruff
+      - name: Lint, SHA256, 9 new tests plus 6 baseline tests
+        run: |
+          ruff check research/convex_runner/backtest_limit_v2.py tests/test_reset07_limit_v2.py
+          python -m research.convex_runner.data_contract --manifest research/convex_runner/raw_sha256_manifest.json > reset07_v2_source_sha.txt
+          python -m pytest tests/test_reset07.py tests/test_reset07_limit_v2.py -q
+      - name: Frozen LIMIT+7-day TTL economic trial
+        run: |
+          python -m research.convex_runner.backtest_limit_v2 --limit-prereg research/convex_runner/limit_v2_preregistration.json --sha-manifest research/convex_runner/raw_sha256_manifest.json --summary-path reset07_limit_v2_full.json --stdout | tee reset07_limit_v2_verdict.txt
+      - name: Determinism (second identical rerun, not parameter tuning)
+        if: matrix.python-version == '3.11'
+        run: |
+          cp reset07_limit_v2_full.json reset07_limit_v2_first.json
+          python -m research.convex_runner.backtest_limit_v2 --limit-prereg research/convex_runner/limit_v2_preregistration.json --sha-manifest research/convex_runner/raw_sha256_manifest.json --summary-path reset07_limit_v2_full.json --stdout > reset07_limit_v2_repeat.txt
+          cmp reset07_limit_v2_first.json reset07_limit_v2_full.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reset07-limit-v2-py${{ matrix.python-version }}
+          path: |
+            reset07_v2_source_sha.txt
+            reset07_limit_v2_full.json
+            reset07_limit_v2_verdict.txt
+            reset07_limit_v2_repeat.txt
+          retention-days: 90
