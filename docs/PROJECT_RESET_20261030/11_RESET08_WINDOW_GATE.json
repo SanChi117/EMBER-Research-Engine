@@ -1,0 +1,425 @@
+{
+  "model": "RESET08_WINDOW_GATED_RUNNER",
+  "classification": "WINDOW_DEAD",
+  "source_data": "BINANCE_USDT_M_FUTURES_2023_WARMUP_2024_2026",
+  "preregistered_commit": "45b52ddcb3e06e0596f5150d83080849d13f5606",
+  "pinned_source_commit": "691a4d9216e10fc23b432deccda38786a9cfb003",
+  "code_ci_run": 41370714287,
+  "alt_manifest_sha256": "386bfb2ddc6e22f9d71995e1db14a74cb3b24329b2cbc5990bc8bd0f73643dd8",
+  "btc_manifest_sha256": "72d6924a01327c839e706f29f10c142182e22ddb6f33b3ba0aa701ce00a1c7a0",
+  "window": {
+    "days_open": 218,
+    "days_total": 1035,
+    "days_unclassifiable": 14,
+    "window_share": "0.2106280193236714975845410628",
+    "windows": [
+      {
+        "days": 4,
+        "end": "2024-01-20",
+        "start": "2024-01-17"
+      },
+      {
+        "days": 1,
+        "end": "2024-02-03",
+        "start": "2024-02-03"
+      },
+      {
+        "days": 42,
+        "end": "2024-04-03",
+        "start": "2024-02-22"
+      },
+      {
+        "days": 6,
+        "end": "2024-04-10",
+        "start": "2024-04-05"
+      },
+      {
+        "days": 16,
+        "end": "2024-06-08",
+        "start": "2024-05-24"
+      },
+      {
+        "days": 1,
+        "end": "2024-06-14",
+        "start": "2024-06-14"
+      },
+      {
+        "days": 38,
+        "end": "2024-12-21",
+        "start": "2024-11-14"
+      },
+      {
+        "days": 15,
+        "end": "2025-02-02",
+        "start": "2025-01-19"
+      },
+      {
+        "days": 23,
+        "end": "2025-06-07",
+        "start": "2025-05-16"
+      },
+      {
+        "days": 15,
+        "end": "2025-08-15",
+        "start": "2025-08-01"
+      },
+      {
+        "days": 57,
+        "end": "2026-10-21",
+        "start": "2026-08-26"
+      }
+    ]
+  },
+  "reference_periods": {
+    "anti_2026_oct": {
+      "days": 31,
+      "days_open": 21,
+      "end": "2026-10-31",
+      "share": "0.6774193548387096774193548387",
+      "start": "2026-10-01"
+    },
+    "owner_2024_jul_sep": {
+      "days": 92,
+      "days_open": 0,
+      "end": "2024-09-30",
+      "share": "0",
+      "start": "2024-07-01"
+    },
+    "owner_2026_may_jul": {
+      "days": 92,
+      "days_open": 0,
+      "end": "2026-07-31",
+      "share": "0",
+      "start": "2026-05-01"
+    }
+  },
+  "scenarios": [
+    {
+      "annual_return_percent": {
+        "2024": "-3.803777808031941146072227740",
+        "2025": "-5.443837282058485080761592180",
+        "2026": "1.727656356933586083733841600"
+      },
+      "average_R": "-0.1502540059025989014927743143",
+      "cancelled_regime": 1,
+      "fill_evidence": "FOUR_HOUR_OHLC_TOUCH_NOT_QUEUE_EXECUTION",
+      "final_equity_usdt": "851.2844935762183003863952241",
+      "gross_loss_usdt": "227.1733282621483022907680179",
+      "gross_profit_usdt": "158.4578218383666026771632420",
+      "initial_equity_usdt": "920",
+      "kill_touch": false,
+      "limit_price_assumption": "PREVIOUS_20D_HIGH_LOW",
+      "limit_touch_rate": "0.6621621621621621621621621622",
+      "max_dd_fraction": "0.1525526629179983159504565392",
+      "max_losing_streak": 11,
+      "more_than_60pct_fill_explanation": ">=60pct reflects pullback retest at the previous 20-day breakout level in 4h OHLC; historic 36pct is NOT a verified fill baseline. A touched OHLC bar need not mean an exchange queue fill.",
+      "pf": "0.6975194801720431508373337976",
+      "required_regime": "OPEN",
+      "risk_fraction": "0.01",
+      "scenario_name": "PRIMARY",
+      "side": "LONG",
+      "signals_budget_touch_rejected": 17,
+      "signals_expired_unfilled": 7,
+      "signals_limit_filled": 49,
+      "signals_limit_placed": 74,
+      "signals_right_censored_end": 0,
+      "skipped_budget": 17,
+      "skipped_regime": 662,
+      "top3_share_of_gross_profit": "0.3259050048687074571394568816",
+      "top5_share_of_gross_profit": "0.4707420158652851694832764517",
+      "top5_trades": [
+        {
+          "cause": "TP_2R_BEFORE_RUNNER",
+          "close_ms": 1709136000000,
+          "entry": "0.0917283420",
+          "exit": "0.1127151594017221677294467075",
+          "net_R": "1.990068720093938835400249239",
+          "open_ms": 1709020800000,
+          "pnl_usdt": "18.30863222486423728568229300",
+          "quantity": "875.7999135063608679290917367",
+          "risk_usdt": "9.200000000000000000000000000",
+          "runner_armed": false,
+          "side": "LONG",
+          "symbol": "DOGEUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1733745600000,
+          "entry": "19.0728138",
+          "exit": "24.4081174",
+          "net_R": "2.020538950386829000778838629",
+          "open_ms": 1732996800000,
+          "pnl_usdt": "17.64904242426782941307826705",
+          "quantity": "3.318792222956763068422080348",
+          "risk_usdt": "8.734819203009646524653352456",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "LINKUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1788739200000,
+          "entry": "0.1099419840",
+          "exit": "0.1751849560",
+          "net_R": "1.874284956421839500117094044",
+          "open_ms": 1788235200000,
+          "pnl_usdt": "15.68452254858557977327128718",
+          "quantity": "240.8226983315337797014589037",
+          "risk_usdt": "8.368269987360189292880598692",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "ARBUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1789848000000,
+          "entry": "8.19863940",
+          "exit": "10.08998160",
+          "net_R": "1.423161664004430093150971585",
+          "open_ms": 1789761600000,
+          "pnl_usdt": "12.06672410258839215876001653",
+          "quantity": "6.404751998526978962011473667",
+          "risk_usdt": "8.478814745919708964016726597",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "AVAXUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1733083200000,
+          "entry": "6.22844544000",
+          "exit": "8.00709826000",
+          "net_R": "1.253806865780959388711219294",
+          "open_ms": 1732348800000,
+          "pnl_usdt": "10.88383318150886344752222562",
+          "quantity": "6.138797130423177776884253035",
+          "risk_usdt": "8.680629751321104900236825535",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "TIAUSDT"
+        }
+      ],
+      "trades": 49,
+      "win_rate": "0.4489795918367346938775510204"
+    },
+    {
+      "annual_return_percent": {
+        "2024": "-5.982192399516383887250392420",
+        "2025": "-10.71649389770836311616041801",
+        "2026": "2.192607386130080573591079800"
+      },
+      "average_R": "-0.1502540059025989014927743142",
+      "cancelled_regime": 1,
+      "fill_evidence": "FOUR_HOUR_OHLC_TOUCH_NOT_QUEUE_EXECUTION",
+      "final_equity_usdt": "789.2028836767844200938931128",
+      "gross_loss_usdt": "423.3497418505687475043910236",
+      "gross_profit_usdt": "292.5526255273531675982841364",
+      "initial_equity_usdt": "920",
+      "kill_touch": false,
+      "limit_price_assumption": "PREVIOUS_20D_HIGH_LOW",
+      "limit_touch_rate": "0.6621621621621621621621621622",
+      "max_dd_fraction": "0.2704971239186065332072788077",
+      "max_losing_streak": 11,
+      "more_than_60pct_fill_explanation": ">=60pct reflects pullback retest at the previous 20-day breakout level in 4h OHLC; historic 36pct is NOT a verified fill baseline. A touched OHLC bar need not mean an exchange queue fill.",
+      "pf": "0.6910424091639496034634083230",
+      "required_regime": "OPEN",
+      "risk_fraction": "0.02",
+      "scenario_name": "SECONDARY",
+      "side": "LONG",
+      "signals_budget_touch_rejected": 17,
+      "signals_expired_unfilled": 7,
+      "signals_limit_filled": 49,
+      "signals_limit_placed": 74,
+      "signals_right_censored_end": 0,
+      "skipped_budget": 17,
+      "skipped_regime": 662,
+      "top3_share_of_gross_profit": "0.3384668362837948260479296746",
+      "top5_share_of_gross_profit": "0.4856419263777858510905324885",
+      "top5_trades": [
+        {
+          "cause": "TP_2R_BEFORE_RUNNER",
+          "close_ms": 1709136000000,
+          "entry": "0.0917283420",
+          "exit": "0.1127151594017221677294467075",
+          "net_R": "1.990068720093938835400249239",
+          "open_ms": 1709020800000,
+          "pnl_usdt": "36.61726444972847457136458599",
+          "quantity": "1751.599827012721735858183473",
+          "risk_usdt": "18.40000000000000000000000000",
+          "runner_armed": false,
+          "side": "LONG",
+          "symbol": "DOGEUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1733745600000,
+          "entry": "19.0728138",
+          "exit": "24.4081174",
+          "net_R": "2.020538950386829000778838629",
+          "open_ms": 1732996800000,
+          "pnl_usdt": "33.45301502335362469475979404",
+          "quantity": "6.290630586354181874697852955",
+          "risk_usdt": "16.55648113932626621190377287",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "LINKUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1788739200000,
+          "entry": "0.1099419840",
+          "exit": "0.1751849560",
+          "net_R": "1.874284956421839500117094044",
+          "open_ms": 1788235200000,
+          "pnl_usdt": "28.94908213567888029684487323",
+          "quantity": "444.4888935917327439264154030",
+          "risk_usdt": "15.44540067746422235912944071",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "ARBUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1789848000000,
+          "entry": "8.19863940",
+          "exit": "10.08998160",
+          "net_R": "1.423161664004430093150971586",
+          "open_ms": 1789761600000,
+          "pnl_usdt": "22.55380782466422150319176438",
+          "quantity": "11.97106559421755373295186940",
+          "risk_usdt": "15.84767802218850016278042758",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "AVAXUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1733083200000,
+          "entry": "6.22844544000",
+          "exit": "8.00709826000",
+          "net_R": "1.253806865780959388711219294",
+          "open_ms": 1732348800000,
+          "pnl_usdt": "20.50265119455759955209144207",
+          "quantity": "11.56408906864271681195025970",
+          "risk_usdt": "16.35232008542807081708341310",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "TIAUSDT"
+        }
+      ],
+      "trades": 49,
+      "win_rate": "0.4489795918367346938775510204"
+    },
+    {
+      "annual_return_percent": {
+        "2024": "4.524327707712991486237962700",
+        "2025": "5.038302014911983386108692300",
+        "2026": "-3.364514948978813126598507020"
+      },
+      "average_R": "0.06435856714758204430124329041",
+      "cancelled_regime": 3,
+      "fill_evidence": "FOUR_HOUR_OHLC_TOUCH_NOT_QUEUE_EXECUTION",
+      "final_equity_usdt": "976.0892588724939994676705334",
+      "gross_loss_usdt": "528.6805247177920120040805183",
+      "gross_profit_usdt": "584.7697835902860114717510509",
+      "initial_equity_usdt": "920",
+      "kill_touch": false,
+      "limit_price_assumption": "PREVIOUS_20D_HIGH_LOW",
+      "limit_touch_rate": "0.6954022988505747126436781609",
+      "max_dd_fraction": "0.1848621425322613733570277074",
+      "max_losing_streak": 6,
+      "more_than_60pct_fill_explanation": ">=60pct reflects pullback retest at the previous 20-day breakout level in 4h OHLC; historic 36pct is NOT a verified fill baseline. A touched OHLC bar need not mean an exchange queue fill.",
+      "pf": "1.106092916705101380520184413",
+      "required_regime": "CLOSED",
+      "risk_fraction": "0.01",
+      "scenario_name": "CONTROL",
+      "side": "LONG",
+      "signals_budget_touch_rejected": 36,
+      "signals_expired_unfilled": 14,
+      "signals_limit_filled": 121,
+      "signals_limit_placed": 174,
+      "signals_right_censored_end": 0,
+      "skipped_budget": 36,
+      "skipped_regime": 212,
+      "top3_share_of_gross_profit": "0.1768946231686386276343957814",
+      "top5_share_of_gross_profit": "0.2471854341066770958302742133",
+      "top5_trades": [
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1727380800000,
+          "entry": "1.0728145200",
+          "exit": "1.6392720800",
+          "net_R": "4.232072187602272861562569212",
+          "open_ms": 1726372800000,
+          "pnl_usdt": "36.71067334494443910553824228",
+          "quantity": "64.93180816525768583202430817",
+          "risk_usdt": "8.674396777183348488146877374",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "SUIUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1779811200000,
+          "entry": "1.73134620",
+          "exit": "2.65046980",
+          "net_R": "3.748945735954632890878687657",
+          "open_ms": 1779336000000,
+          "pnl_usdt": "35.29218072027483023652532402",
+          "quantity": "38.47100636820875652065756192",
+          "risk_usdt": "9.413894786953489109819859065",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "NEARUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1788120000000,
+          "entry": "76.50529800",
+          "exit": "101.66966200",
+          "net_R": "3.283961823696892711546847828",
+          "open_ms": 1783512000000,
+          "pnl_usdt": "31.43977644339073490613395827",
+          "quantity": "1.252925463210870986844429088",
+          "risk_usdt": "9.573733840790410909170216280",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "SOLUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1747051200000,
+          "entry": "0.3246649200",
+          "exit": "0.4395120800",
+          "net_R": "2.442056530615834398852190530",
+          "open_ms": 1745380800000,
+          "pnl_usdt": "22.32559524121957755524961502",
+          "quantity": "194.9127377088404186319031639",
+          "risk_usdt": "9.142128759644044843763261456",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "ARBUSDT"
+        },
+        {
+          "cause": "RUNNER_4H_SWING_CLOSE",
+          "close_ms": 1752840000000,
+          "entry": "3.0996198000",
+          "exit": "3.8477303000",
+          "net_R": "1.946834636162024823630666541",
+          "open_ms": 1752120000000,
+          "pnl_usdt": "18.77834705940288636903627665",
+          "quantity": "25.19462218990253311778771044",
+          "risk_usdt": "9.645578885129339332011717014",
+          "runner_armed": true,
+          "side": "LONG",
+          "symbol": "SUIUSDT"
+        }
+      ],
+      "trades": 121,
+      "win_rate": "0.5289256198347107438016528926"
+    }
+  ],
+  "live_allowed": false,
+  "paper_allowed": false,
+  "full_event_journal": "CI_RUN_41370714287_ARTIFACTS"
+}
