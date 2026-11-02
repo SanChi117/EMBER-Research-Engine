@@ -187,7 +187,7 @@ def _year(t: int) -> int:
 
 def run_one(
     bars_by_symbol: dict[str, list[Bar]], *,
-    side: str, fraction: D, *, calendar_by_day: dict[int, dict],
+    side: str, fraction: D, calendar_by_day: dict[int, dict],
     required_regime: str,
 ) -> dict:
     if side != "LONG" or required_regime not in ("OPEN", "CLOSED"):
