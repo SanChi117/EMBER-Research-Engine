@@ -1,0 +1,45 @@
+name: RESET-08 Window-Gated Convex Runner
+on:
+  push:
+    branches: [research/reset08-window-gated-runner-20261102]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  locked-window:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10','3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: pip install ruff pytest
+      - name: Verify source hashes, lint and causal negative cases
+        run: |
+          ruff check research/convex_runner/reset08_window.py research/convex_runner/reset08_runner.py research/convex_runner/reset08_btc_contract.py tests/test_reset08.py
+          python -m research.convex_runner.reset08_btc_contract > btc_sha_audit.txt
+          python -m pytest tests/test_reset08.py tests/test_reset07.py tests/test_reset07_limit_v2.py -q
+      - name: Exactly 3 locked LONG portfolio scenarios, no tuning
+        run: |
+          python -m research.convex_runner.reset08_runner --sha-manifest research/convex_runner/raw_sha256_manifest.json --btc-sha research/convex_runner/reset08_btc_sha256.json --window-prereg research/convex_runner/reset08_preregistration.json --summary-path reset08_results.json --stdout | tee reset08_verdict.txt
+      - name: Bit-identical full JSON replay from same files
+        if: matrix.python-version == '3.11'
+        run: |
+          cp reset08_results.json reset08_first.json
+          python -m research.convex_runner.reset08_runner --sha-manifest research/convex_runner/raw_sha256_manifest.json --btc-sha research/convex_runner/reset08_btc_sha256.json --window-prereg research/convex_runner/reset08_preregistration.json --summary-path reset08_results.json --stdout > reset08_repeat.txt
+          cmp reset08_first.json reset08_results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reset08-evidence-py${{ matrix.python-version }}
+          path: |
+            btc_sha_audit.txt
+            reset08_results.json
+            reset08_verdict.txt
+            reset08_repeat.txt
+          retention-days: 90
