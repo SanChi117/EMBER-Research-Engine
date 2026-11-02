@@ -5,10 +5,8 @@ import json
 from decimal import Decimal as D
 from pathlib import Path
 
-import pytest
-
-from research.convex_runner import backtest_limit_v2 as v2
 from research.convex_runner import backtest as old
+from research.convex_runner import backtest_limit_v2 as v2
 
 ROOT = Path(__file__).resolve().parents[1]
 
