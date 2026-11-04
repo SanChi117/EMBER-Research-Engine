@@ -1,90 +1,59 @@
-# MSR-04 — frozen accumulation anchor versus later BOS pivot
+# EMBER MSR-04 — единый аудит ошибок чтения рынка и исправлений
 
-**Status: RESEARCH_ONLY / CAUSAL_AUDIT / NO_EXPERT_TRUTH / NO_TRADES.**
-Date: 2026-11-04. Builds on MSR-01, MSR-02 and MSR-03 without modifying
-their original signals or the SMOKE/PAPER automations.
+**Дата:** 04.11.2026. **Статус:** исследовательская диагностика, НЕ торговая стратегия, НЕ доказательство экспертной правильности или прибыли.
 
-## Input and evidence
-- Fixed original cohort: 19 Binance USD-M pairs × 1500 15m bars = 28500.
-- Original MSR-01 event log: 10990 events, 1072 accumulation locks,
-  639 sweep returns, 374 post-sweep FVG, 234 machine-labelled BOS.
-- MSR-01 event artifact: https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41857673432/artifacts/13337344184.
-- Source event log SHA-256 validated locally:
-  `8fcaa7e22cf591c8bef31f99e1017535260311f3333afe90a0fdbaf7e6ad349e`.
-- Original Binance Vision ZIP and published CHECKSUM **not independently verified**.
-- Current GitHub workflow regenerates the event stream from the pinned source
-  CSV fixtures; it does not require access to future prices or live market data.
+## Проверенные данные
+19 пар Binance USD-M Futures по 1500 закрытых свечей 15m = **28 500** свечей (1–16 августа 2026). Оригинальный неизменённый журнал содержит **10 990 событий**, из которых 1072 накопления, 639 выносов с возвратом, 374 FVG и **234 локальных BOS**. По паре, времени и направлению уникальных BOS **210**.
 
-## Measured mismatches
+Хэш оригинального журнала SHA256: **8fcaa7e22cf591c8bef31f99e1017535260311f3333afe90a0fdbaf7e6ad349e**. Данные исходно из публичного коннектора Binance Futures; опубликованные Binance Vision ZIP/CHECKSUM для этих CSV независимо не сверены.
 
-| Issue | Result |
+## Обнаруженные несоответствия
+
+| Проблема | Результат |
 |---|---:|
-| Total original BOS event records | 234 |
-| Unique symbol+time+direction | 210 |
-| Pivot at sweep is not pivot available at accumulation lock | **206/234 (88.0%)** |
-| Pivot **price** at sweep differs from price available at lock | **203/234 (86.8%)** |
-| Original pivot was internal to locked accumulation range | 212/234 |
-| Used pivot confirmed on the sweep candle | 29/234 |
-| Last confirmed 1H swing passed at BOS (MSR-02 proxy) | 65/234 |
-| Last confirmed 4H swing passed at BOS (MSR-02 proxy) | 11/234 |
-| Blind cases with fewer than 20 visible closed 4H candles | 41/180 |
+| BOS опирался на pivot, выбранный ПОСЛЕ фиксации накопления | **206 из 234 (88,0%)** |
+| Цена этого pivot отличается от цены уровня на момент накопления | **203 из 234 (86,8%)** |
+| Pivot находится внутри исходного диапазона | **212 из 234** |
+| Pivot подтверждён непосредственно на свече выноса | **29 из 234** |
+| Дубли BOS на одной паре/свече/направлении | **24 записи** |
+| Проход последнего подтверждённого 1H swing на момент BOS | **65 из 234** |
+| Проход последнего подтверждённого 4H swing на момент BOS | **11 из 234** |
+| Слепых окон с менее 20 видимыми закрытыми свечами 4H | **41 из 180** |
 
-In the independent event-log audit, the median **absolute** change in reference
-price was 0.768 ATR(1H); 154/234 exceeded 0.5 ATR(1H), and 91/234
-exceeded 1 ATR(1H).
+Медианное абсолютное смещение старой и новой ценовой опоры — **0,768 ATR(1H)**. В 154 случаях больше 0,5 ATR, в 91 больше 1 ATR.
 
-Example: AAVEUSDT box locked at 2026-08-01T15:00Z used a 91.78
-existing high pivot, whereas the later sweep-time high reference was 90.50.
-Do **not** infer that the frozen 91.78 level was or was not passed on BOS:
-the events.jsonl source does not contain the BOS candle close.
+Это **не** означает 203 ложных BOS: поздний локальный уровень может быть пробит корректно. Но такой сигнал **не эквивалентен** пробою уровня, известного при накоплении. Журнал событий не содержит фактическую цену закрытия BOS, поэтому нельзя без дополнительного чтения исходных 15m CSV заявить, что старый уровень был пройден.
 
-## What the current code FIXES
+## Что исправлено и зачем
 
-- Adds a **read-only** historical ledger of both time-stamped references:
-  the pivot already known at accumulation lock, and the pivot used at sweep.
-- Rejects orphan/chronologically invalid event sequences and mismatched
-  sweep/BOS references instead of silently accepting corrupted data.
-- Preserves absent anchor as MISSING/UNKNOWN, not an invented negative.
-- Reports reselected anchor and actual **price** change separately;
-  identical price with a new pivot timestamp still counts as reselection.
-- Publishes event and data receipts, duplication counters, independent tests.
-- Leaves original MSR-01 recognition unchanged, so previous failures
-  are not erased by after-the-fact parameter adjustment.
+- **Временная причинность:** раздельно сохранены моменты известности pivot при накоплении и при выносе; будущие события не могут заменить прошлую опору.
+- **Ценовая причинность:** теперь отдельно указаны старый уровень, новый уровень, реальное изменение цены и размер смещения в ATR.
+- **Название структуры:** MSR-03 разделяет локальный 15m BOS и геометрические пересечения подтверждённых 1H/4H swing; неизвестная HTF-опора помечается UNKNOWN.
+- **Повторные события:** опубликованы 234 исходных записи и 210 уникальных моментов без искусственного увеличения независимого N.
+- **Контроль ошибок:** без A/M, при подмене цены уровня, будущем pivot либо нарушенной хронологии модуль отказывает, а не продолжает анализ.
+- **Сохранность эксперимента:** старый распознаватель MSR-01 и все отрицательные тесты остались без изменений. Всё перечисленное относится к отдельному read-only исследовательскому модулю, не к торговому ядру.
 
-## Tests and limits
+## Проверки
 
-- Local event-log audit code and its own regression set: 11/11 PASS.
-- GitHub branch includes `anchor_lock_audit_v04.py`,
-  `test_anchor_lock_v04.py` and workflow
-  `.github/workflows/msr04_anchor_lock.yml`.
-- The workflow asserts original 19/28500/234/210/206/203/212/29 counts
-  and exports full `anchor_ledger.csv` for independent inspection.
-- **CI status is not asserted until the workflow completes.**
-- No independent reviewer labels exist for 180 blind chart cases.
-- A local pivot crossing is not identical to verified 1H/4H structure.
-- The original trading signal is deliberately **not** replaced yet.
-- No tick-level order simulation, fees, funding, profitable edge or real
-  orders follow from this audit.
+Локальный пакет MSR-04: **11/11 unittest PASS**, включая причинность при дописывании будущих событий, отказ при испорченном журнале, пустую опору и независимое восстановление 234/210/206/203/212/29 по исходному SHA. В этой ветке добавлены исходник anchor_lock_audit_v04.py, тест test_anchor_lock_v04.py и workflow msr04_anchor_lock.yml. Workflow должен заново выполнить real19 replay по закреплённым CSV и выгрузить построчный журнал; **CI MSR-04 пока отдельно не подтверждён как PASS**.
 
-## Still required — and why
+## Что осталось и почему
 
-1. **Restore BOS closes** from the identical pinned 15m CSV and test whether
-   they really crossed the reference frozen **at lock**. Event-only logs
-   cannot answer that question. Separately compare 1H/4H pivots frozen at
-   lock and sweep.
-2. **Blind human review** of candidate and control charts (ideally two
-   independent reviewers) before the machine flags are revealed. 41 of 180
-   windows need longer past-only 4H context. Only then compute matching
-   precision/recall with stratification.
-3. **Correct the core event taxonomy** after labels: LOCAL_BOS_15M,
-   BOS_1H, BOS_4H, UNKNOWN; do not retroactively rename original outcomes.
-4. **Check overlapping episodes** beyond exact same-time duplicate signals.
-5. **Reproduce original AMD/FVG/CRT implementations** without substituting
-   convenient ATR proxies; freeze source SHA and use independent OOS windows.
-6. **Validate original data and execution** using official Vision checksums,
-   actual funding, 1m/tick stop/TP ordering and agreed 50% TP1/50% remainder.
-   Only after semantic validation should a trading backtest be considered.
+| Приоритет | Что сделать | Причина |
+|---|---|---|
+| P0 | По исходным 15m CSV вычислить цену BOS-close относительно старого frozen-at-lock pivot | В event-only журнале отсутствует цена BOS-close |
+| P0 | Слепая независимая разметка 180 графиков двумя рецензентами | Пока нет экспертных yes/no/uncertain; 41 графику не хватает 4H-контекста |
+| P0 | После разметки обновить таксономию LOCAL_BOS_15M / BOS_1H / BOS_4H / UNKNOWN | Нельзя называть локальное подтверждение доказанным HTF-переломом |
+| P1 | Дедуплицировать целые эпизоды, а не только сигналы на одной свече | Разные candidate_id и моменты одного движения могут коррелировать |
+| P1 | Проверить определения накопления, sweep, FVG и CRT по оригинальным исходникам | Сейчас ATR- и диапазонные условия — приближённые прокси |
+| P1 | Проверить Binance Vision CHECKSUM и независимые периоды 2024–2026 | Окно 16 дней не доказывает устойчивость |
+| P2 | Лишь после семантической проверки тестировать лимитки, SL/TP и расходы на 1m/tick | До корректного чтения рынка торговые метрики преждевременны |
 
-**Decision:** meaningful failure of structural-reference parity has been
-identified. Accuracy of market reading and positive economic edge are **not**
-established. Neither SMOKE, real orders, nor PAPER/Automations were changed.
+## Итог
+
+**Обнаружено подтверждённое несоответствие цены и времени выбора опорного уровня. Исправлена исследовательская диагностика, но не доказана семантическая правильность модели.** Основной MSR-01, SMOKE, PAPER, планировщики и реальные ордера не менялись. Статус VERIFIED_FUTURES_CANDIDATE остаётся 0.
+
+[Изменения MSR-04 (PR №21)](https://github.com/SanChi117/EMBER-Research-Engine/pull/21).
+[Предыдущий MSR-03 (PR №20)](https://github.com/SanChi117/EMBER-Research-Engine/pull/20).
+[Исходные 180 слепых графиков](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41862767920/artifacts/13341460953).
+[Исходные журналы событий MSR-01](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41857673432/artifacts/13337344184).
