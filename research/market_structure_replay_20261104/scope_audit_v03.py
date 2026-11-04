@@ -38,6 +38,9 @@ def scope_rows(bars, events):
              'sweep_at':t,'bos_at':s,'side':d,'bos_close':p,
              '15m_pivot':float(e['reference']),
              '15m_pivot_known_at':e['pivot_known_at'],
+             'box_known_at':box['known_at'],
+             'pivot_known_after_box_lock':e['pivot_known_at']>box['known_at'],
+             'pivot_confirmed_on_sweep_bar':e['pivot_known_at']==t,
              'pivot_inside_locked_range':float(box['level_low'])<=float(e['reference'])<=float(box['level_high'])}
         if e['pivot_known_at']>t:
             raise ValueError('pivot from future used by sweep')
@@ -105,6 +108,8 @@ def run(paths, blind_dir, out):
         '1h_changed_after_sweep':sum(x['1h_reference_changed'] for x in rows),
         '4h_changed_after_sweep':sum(x['4h_reference_changed'] for x in rows),
         'inside_box':sum(x['pivot_inside_locked_range'] for x in rows),
+        'pivot_known_after_box_lock':sum(x['pivot_known_after_box_lock'] for x in rows),
+        'pivot_confirmed_on_sweep_bar':sum(x['pivot_confirmed_on_sweep_bar'] for x in rows),
         'blind_cases':len(blind),
         'blind_h4_short_lt5':sum(x['4h_visible']<5 for x in blind),
         'blind_h4_short_lt20':sum(x['4h_visible']<20 for x in blind),
