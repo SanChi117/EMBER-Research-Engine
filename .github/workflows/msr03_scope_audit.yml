@@ -42,6 +42,8 @@ jobs:
           s=json.loads(Path('results/msr03_scope/summary.json').read_text())
           assert s['total_bos']==234,s
           assert s['inside_box']==212,s
+          assert s['pivot_known_after_box_lock']==206,s
+          assert s['pivot_confirmed_on_sweep_bar']==29,s
           assert s['blind_cases']==180,s
           assert s['blind_h4_short_lt5']==7,s
           assert s['blind_h4_short_lt20']==41,s
