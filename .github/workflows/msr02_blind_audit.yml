@@ -1,0 +1,88 @@
+name: MSR-02 Offline Blind Audit (research only)
+on:
+  push:
+    branches: [research/msr02-blind-annotation-audit-20261104]
+  pull_request:
+    branches: [research/market-structure-replay-offline-20261104]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  blinded-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Original MSR-01 anti-leakage tests
+        working-directory: research/market_structure_replay_20261104
+        run: python -m unittest discover -s . -p test_replay.py -v
+      - name: Build 180 blind real-market chart snapshots
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python blind_audit_v02.py build \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr02
+      - name: Independently compare 15m signals to closed 1H/4H pivots
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python htf_pivot_compare_v02.py \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr02/htf_pivot_comparison.json
+      - name: Validate blind/sealed split and source count
+        run: |
+          python - <<'PY'
+          import csv,json
+          from pathlib import Path
+          root=Path('results/msr02')
+          p=root/'blind_review'
+          html=list((p/'cases').glob('*.html'))
+          assert len(html)==180, len(html)
+          with (p/'labels_template.csv').open(encoding='utf-8-sig') as f:
+              rows=list(csv.DictReader(f))
+          assert len(rows)==180 and len({x['case_id'] for x in rows})==180
+          sealed=json.loads((root/'sealed_model_evidence/sealed_flags.json').read_text())
+          assert len(sealed['cases'])==180
+          diagnostics=json.loads((root/'sealed_model_evidence/machine_diagnostics.json').read_text())
+          assert diagnostics['bars']==28500
+          piv=json.loads((root/'htf_pivot_comparison.json').read_text())['total']
+          assert piv['bos']==234, piv
+          assert piv['broken_15m_pivot_inside_locked_range']==212, piv
+          assert piv['passed_last_confirmed_1h_pivot']==65, piv
+          assert piv['passed_last_confirmed_4h_pivot']==11, piv
+          assert piv['passed_both_1h_4h']==6, piv
+          assert len(diagnostics['records'])==19
+          assert all(x['bars']==1500 for x in diagnostics['records'])
+          for path in html:
+              data=path.read_text()
+              assert 'model_flags' not in data
+              assert 'source_event' not in data
+              assert 'sampling_stratum' not in data
+          idx=(p/'index.html').read_text()
+          assert 'model_flags' not in idx
+          assert 'sampling_stratum' not in idx
+          print('PASS: real 19 pairs, 180 blind charts, separated sealed labels')
+          PY
+      - name: Publish research summary in Actions log
+        run: cat results/msr02/RESULTS_RU.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Blind review packet (NO model flags)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSR02-180-BLIND-CHARTS
+          path: results/msr02/blind_review/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Sealed machine evidence (DO NOT OPEN before labeling)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSR02-SEALED-MACHINE-DIAGNOSTICS
+          path: |
+            results/msr02/sealed_model_evidence/
+            results/msr02/RESULTS_RU.md
+            results/msr02/htf_pivot_comparison.json
+          retention-days: 30
+          if-no-files-found: error
