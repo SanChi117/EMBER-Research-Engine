@@ -1,0 +1,61 @@
+name: MSR-05 Frozen BOS Causal Replay (research only)
+on:
+  push:
+    branches: [research/msr05-frozen-bos-and-blind-review-20261104]
+  pull_request:
+    branches: [research/msr04-frozen-anchor-structure-replay-20261104]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-bos-counterfactual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: MSR05 unit regressions
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python -m unittest discover -s . -p test_replay.py -v
+          python -m unittest discover -s . -p test_scope_v03.py -v
+          python -m unittest discover -s . -p test_anchor_lock_v04.py -v
+          python -m unittest discover -s . -p test_frozen_bos_v05.py -v
+      - name: Recompute frozen-anchor BOS on immutable 19 original 15m CSV
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python frozen_bos_counterfactual_v05.py \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr05_frozen_bos
+      - name: Gate original-event parity, frozen results and data receipts
+        run: |
+          python - <<'PY'
+          import json,csv,hashlib
+          from pathlib import Path
+          root=Path('results/msr05_frozen_bos')
+          s=json.loads((root/'summary.json').read_text())
+          assert (s['sweeps'],s['original_bos'],s['frozen_bos']) == (639,234,144),s
+          assert s['status_counts']=={
+            'BOTH':132,'ONLY_ORIGINAL':102,'ONLY_FROZEN':12,
+            'NO_HIT_FULL_WINDOW':382,'CENSORED_NO_HIT':11
+          },s
+          assert s['original_bos_did_not_cross_frozen_at_original_time']==149
+          assert s['original_bos_crossed_frozen_at_original_time']==85
+          assert s['unique_original_symbol_time_side']==210
+          assert s['unique_frozen_symbol_time_side']==136
+          assert s['frozen_missing']==0
+          assert s['censored_sweeps']==15
+          assert len(s['source_receipts'])==19 and sum(x['bars'] for x in s['source_receipts'])==28500
+          with (root/'sweep_counterfactual_ledger.csv').open() as f:
+            assert len(list(csv.DictReader(f)))==639
+          print('PASS: 19 sources, 28,500 closed bars, all 639 sweeps; original 234/234 exact event-time parity')
+          PY
+      - name: Evidence packet — do not use for live orders
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSR05-FROZEN-BOS-639-LEDGER
+          path: results/msr05_frozen_bos/
+          retention-days: 30
+          if-no-files-found: error
