@@ -82,3 +82,12 @@
 
 Исходный репозиторий: [черновой PR MSR-06](https://github.com/SanChi117/EMBER-Research-Engine/pull/23).
 Торговые контуры и планировщики **не изменялись**.
+
+## GitHub CI — подтвердили независимым пересчётом (04.11.2026)
+
+**SUCCESS: [MSR-06 Causal Crossing & Scope Controls, run 41914060875](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41914060875)**.
+Публичный исследовательский журнал: [artifact MSR06-639-CROSSING-GEOMETRY](https://github.com/SanChi117/EMBER-Research-Engine/actions/runs/41914060875/artifacts/13363507090); 639 строк и summary.json; ZIP digest SHA256: `f4be715cd5a6d09cfe6da5a84ec65cc1eac8178d71424cd38ed3a579e8129fe5`.
+
+Gate на неизменённых 19 × 1500 исходных свечах воспроизвёл **234 старых BOS, 216 свежих, 18 несвежих, 144 frozen BOS, 48 новых внешних пересечений, 615/639 и 639/639 внутренних опор**. В частности, правило кластеризации 4 часа даёт 478 групп, 6 часов — 440. Исходная классификация не переписывалась.
+
+**Технический CI PASS ≠ семантический accuracy PASS.** Две независимые экспертные разметки по 180 графикам по-прежнему отсутствуют, тест только исследовательский.
