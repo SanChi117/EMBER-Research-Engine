@@ -28,6 +28,11 @@ jobs:
               times=[int(r["time"]) for r in rows]
               assert all(times[i]-times[i-1]==900000 for i in range(1,len(times)))
               receipts.append(dict(name=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest(),rows=len(rows)))
+          context=Path("research/market_structure_replay_20261104/msr05_4h_context_only_20260720_20260816.csv")
+          with context.open(newline="") as fp:
+              h4=list(csv.DictReader(fp))
+          assert len(h4)==3154 and len({x["symbol"] for x in h4})==19
+          print("PASS: 3154 historical 4H context bars (never input to 15m signal recognizer)")
           Path("MSR05_SOURCE_RECEIPTS.json").write_text(json.dumps(receipts,indent=2))
           print("PASS 19 immutable real CSV fixtures, 28500 15m bars")
           PY
@@ -38,5 +43,6 @@ jobs:
           path: |
             research/market_structure_replay_20261104/fixtures/*_15m_20260801_20260816.csv
             MSR05_SOURCE_RECEIPTS.json
+            research/market_structure_replay_20261104/msr05_4h_context_only_20260720_20260816.csv
           retention-days: 30
           if-no-files-found: error
