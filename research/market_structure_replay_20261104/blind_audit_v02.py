@@ -209,6 +209,7 @@ def score(sealed,labels,out):
     flags={x["case_id"]:x["model_flags"] for x in data["cases"]}
     report={k:Counter() for k in FLAGS}
     seen=set()
+    annotated=set()
     with labels.open(encoding="utf-8-sig",newline="") as f:
         for row in csv.DictReader(f):
             id=row["case_id"]
@@ -218,11 +219,13 @@ def score(sealed,labels,out):
                 a=row.get(key,"").strip().lower()
                 if a not in ("yes","no","uncertain",""):raise ValueError("invalid answer "+a)
                 if a in ("uncertain",""):continue
+                annotated.add(id)
                 positive=flags[id][key]
                 report[key]["agreement" if positive==(a=="yes") else "disagreement"]+=1
                 if positive and a=="no":report[key]["machine_yes_expert_no"]+=1
                 if not positive and a=="yes":report[key]["machine_no_expert_yes"]+=1
-    result={"status":"BLIND_AGREEMENT_ONLY_NOT_MARKET_TRUTH","submitted":len(seen),
+    if not annotated:raise ValueError("no independent yes/no annotations supplied")
+    result={"status":"BLIND_AGREEMENT_ONLY_NOT_MARKET_TRUTH","submitted":len(annotated),
             "not_population_precision_recall":True,
             "comparison":{k:dict(v) for k,v in report.items()}}
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
