@@ -1,0 +1,57 @@
+name: MSR-06 Causal Crossing & Scope Controls (research only)
+on:
+  push:
+    branches: [research/msr06-crossing-blind-validation-20261104]
+  pull_request:
+    branches: [research/msr05-frozen-bos-and-blind-review-20261104]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: MSR06 no-lookahead regression unit checks
+        working-directory: research/market_structure_replay_20261104
+        run: python -m unittest discover -s . -p test_scope_quality_v06.py -v
+      - name: Reproduce 639 sweeps on exact original 19 USD-M 15m fixtures
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python scope_quality_v06.py \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr06
+      - name: Gate immutable source count, original BOS parity and new crossing findings
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          root=Path('results/msr06')
+          d=json.loads((root/'summary.json').read_text())
+          expected={'sweeps':639,'original_bos':234,'frozen_bos':144,
+                    'original_new_crossing':216,'original_stale_confirmation':18,
+                    'frozen_new_crossing':144,'frozen_stale_confirmation':0,
+                    'old_inside_box':615,'frozen_inside_box':639,
+                    'original_qualified_at_sweep':25,
+                    'original_qualified_before_sweep':8,
+                    'frozen_qualified_at_sweep':0,
+                    'range_edge_new_crossing':48}
+          assert {k:d[k] for k in expected} == expected, d
+          assert d['episode_sensitivity_same_symbol_side']['4']==478
+          assert d['episode_sensitivity_same_symbol_side']['6']==440
+          assert len(d['source_receipts'])==19 and sum(x['bars'] for x in d['source_receipts'])==28500
+          with (root/'scope_checks_639.csv').open(newline='') as f:
+              assert len(list(csv.DictReader(f)))==639
+          print('PASS: 19 immutable USD-M fixtures, 639 sweeps, fresh crossing geometry')
+          PY
+      - name: Upload research only geometry audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSR06-639-CROSSING-GEOMETRY
+          path: results/msr06/
+          retention-days: 30
+          if-no-files-found: error
