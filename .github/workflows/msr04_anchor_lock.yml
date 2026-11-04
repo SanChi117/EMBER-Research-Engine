@@ -1,0 +1,55 @@
+name: MSR-04 Frozen Anchor Audit (research only)
+on:
+  push:
+    branches: [research/msr04-frozen-anchor-structure-replay-20261104]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  msr04:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Causal audit unit tests
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python -m unittest discover -s . -p test_replay.py -v
+          python -m unittest discover -s . -p test_scope_v03.py -v
+          python -m unittest discover -s . -p test_anchor_lock_v04.py -v
+      - name: Replay 19 immutable Binance Futures fixtures
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python anchor_lock_audit_v04.py \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr04
+      - name: Verify source coverage and fixed event receipts
+        run: |
+          python - <<'PY'
+          import json,csv
+          from pathlib import Path
+          s=json.loads(Path('results/msr04/summary.json').read_text())
+          assert len(s['source_receipts'])==19
+          assert sum(x['bars'] for x in s['source_receipts'])==28500
+          assert s['bos']==234,s
+          assert s['unique_symbol_time_direction']==210,s
+          assert s['reselected']==206,s
+          assert s['price_changed']==203,s
+          assert s['inside_box']==212,s
+          assert s['on_sweep']==29,s
+          with open('results/msr04/anchor_ledger.csv') as f:
+              assert len(list(csv.DictReader(f)))==234
+          print('MSR-04 PASS — technical scope only, not expert truth or profitable model')
+          PY
+      - name: Upload evidence ledger
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSR04-FROZEN-ANCHOR-LEDGER
+          path: results/msr04/
+          retention-days: 30
+          if-no-files-found: error
