@@ -2,6 +2,8 @@ name: MSR-02 Offline Blind Audit (research only)
 on:
   push:
     branches: [research/msr02-blind-annotation-audit-20261104]
+  pull_request:
+    branches: [research/market-structure-replay-offline-20261104]
   workflow_dispatch:
 
 permissions:
