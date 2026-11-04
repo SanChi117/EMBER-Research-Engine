@@ -1,5 +1,9 @@
 name: EMBER Market Structure Replay (offline, research only)
 on:
+  pull_request:
+    paths:
+      - "research/market_structure_replay_20261104/**"
+      - ".github/workflows/msr_offline_replay.yml"
   push:
     branches:
       - research/market-structure-replay-offline-20261104
