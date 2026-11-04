@@ -1,0 +1,41 @@
+name: EMBER Market Structure Replay (offline, research only)
+on:
+  pull_request:
+    paths:
+      - "research/market_structure_replay_20261104/**"
+      - ".github/workflows/msr_offline_replay.yml"
+  push:
+    branches:
+      - research/market-structure-replay-offline-20261104
+    paths:
+      - "research/market_structure_replay_20261104/**"
+      - ".github/workflows/msr_offline_replay.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  causal-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline causal and input-integrity tests
+        run: python -m unittest discover -s research/market_structure_replay_20261104 -p 'test*.py' -v
+      - name: Replay frozen 19-symbol real futures 15m samples
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python replay.py --csv fixtures/*_15m_20260801_20260816.csv --out results/real19 --allow-future-diagnostics
+          python report_replay.py --audit results/real19/source_audit.json --out results/real19/REPORT_RU.md
+          cat results/real19/REPORT_RU.md
+      - name: Upload independent audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: msr-real19-asof-202608
+          path: |
+            research/market_structure_replay_20261104/results/real19/
+          retention-days: 30
