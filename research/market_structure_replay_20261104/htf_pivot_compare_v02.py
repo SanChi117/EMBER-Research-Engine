@@ -69,8 +69,6 @@ def audit(paths):
                 count['no_confirmed_4h_pivot'] += 1
             if passed1 and passed4:
                 count['passed_both_1h_4h'] += 1
-            if e['reference'] >= e.get('level_low', float('-inf')):
-                pass  # the frozen range is joined by candidate_id below
         a = {e['candidate_id']: e for e in events
              if e['event'] == 'ACCUMULATION_LOCKED'}
         for e in events:
