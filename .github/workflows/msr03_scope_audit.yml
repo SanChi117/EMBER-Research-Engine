@@ -1,0 +1,60 @@
+name: MSR-03 Causal Scope Audit (research only)
+on:
+  push:
+    branches: [research/msr03-structure-scope-audit-20261104]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  causal-structure-scope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Replay baseline and MSR-03 leakage tests
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python -m unittest discover -s . -p test_replay.py -v
+          python -m unittest discover -s . -p test_scope_v03.py -v
+      - name: Reproduce locked 180 blind charts without opening sealed machine labels
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python blind_audit_v02.py build \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr03_orig_blind
+      - name: Independently classify HTF scope using pivots frozen before the sweep
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python scope_audit_v03.py \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --blind-dir ../../results/msr03_orig_blind/blind_review \
+            --out ../../results/msr03_scope
+      - name: Gate fixed original data and unchanged local BOS
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('results/msr03_scope/summary.json').read_text())
+          assert s['total_bos']==234,s
+          assert s['inside_box']==212,s
+          assert s['blind_cases']==180,s
+          assert s['blind_h4_short_lt5']==7,s
+          assert s['blind_h4_short_lt20']==41,s
+          assert s['blind_h4_short_lt36']==75,s
+          assert len(s['sources'])==19,s
+          assert sum(x['15m_bars'] for x in s['sources'])==28500
+          assert (Path('results/msr03_scope/scope_ledger.jsonl').read_text().count('\n')==234)
+          print('PASS: causal HTF scope ledger, original BOS 234/234, 180 blind cases')
+          PY
+      - name: Upload causal audit ledger (NO TRADES)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSR03-ASOF-SCOPE-LEDGER
+          path: results/msr03_scope/
+          retention-days: 30
+          if-no-files-found: error
