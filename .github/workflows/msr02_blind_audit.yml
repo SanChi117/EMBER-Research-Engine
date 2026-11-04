@@ -27,6 +27,12 @@ jobs:
           python blind_audit_v02.py build \
             --csv fixtures/*_15m_20260801_20260816.csv \
             --out ../../results/msr02
+      - name: Independently compare 15m signals to closed 1H/4H pivots
+        working-directory: research/market_structure_replay_20261104
+        run: |
+          python htf_pivot_compare_v02.py \
+            --csv fixtures/*_15m_20260801_20260816.csv \
+            --out ../../results/msr02/htf_pivot_comparison.json
       - name: Validate blind/sealed split and source count
         run: |
           python - <<'PY'
@@ -43,6 +49,12 @@ jobs:
           assert len(sealed['cases'])==180
           diagnostics=json.loads((root/'sealed_model_evidence/machine_diagnostics.json').read_text())
           assert diagnostics['bars']==28500
+          piv=json.loads((root/'htf_pivot_comparison.json').read_text())['total']
+          assert piv['bos']==234, piv
+          assert piv['broken_15m_pivot_inside_locked_range']==212, piv
+          assert piv['passed_last_confirmed_1h_pivot']==65, piv
+          assert piv['passed_last_confirmed_4h_pivot']==11, piv
+          assert piv['passed_both_1h_4h']==6, piv
           assert len(diagnostics['records'])==19
           assert all(x['bars']==1500 for x in diagnostics['records'])
           for path in html:
@@ -71,5 +83,6 @@ jobs:
           path: |
             results/msr02/sealed_model_evidence/
             results/msr02/RESULTS_RU.md
+            results/msr02/htf_pivot_comparison.json
           retention-days: 30
           if-no-files-found: error
