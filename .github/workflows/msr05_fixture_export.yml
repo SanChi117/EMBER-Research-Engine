@@ -3,6 +3,8 @@ on:
   push:
     branches: [research/msr05-frozen-bos-and-blind-review-20261104]
   workflow_dispatch:
+  pull_request:
+    branches: [research/msr04-frozen-anchor-structure-replay-20261104]
 permissions:
   contents: read
 jobs:
